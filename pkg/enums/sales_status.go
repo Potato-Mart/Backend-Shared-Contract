@@ -6,19 +6,17 @@ package enums
 //
 // Allowed transitions (enforced by the order service):
 //
-//		PENDING    -> CONFIRMED, CANCELLED
-//	    CONFIRMED  -> PAID, CANCELLED
-//		PAID       -> PROCESSING, REFUNDED, CANCELLED
-//		PROCESSING -> SHIPPED, REFUNDED
-
-// 已檢貨(單據已列印)
-// 打包
-
-//		SHIPPED    -> COMPLETED, DELIVERED, REFUNDED
-//		DELIVERED  -> COMPLETED, REFUNDED
-//		COMPLETED  -> REFUNDED
-//		CANCELLED  -> (terminal)
-//		REFUNDED   -> (terminal)
+//		PENDING    	->	CONFIRMED, CANCELLED
+//	    CONFIRMED  	->	PAID, CANCELLED
+//		PAID       	->	PROCESSING, REFUNDED, CANCELLED
+//		PROCESSING 	->	PICKING, REFUNDED
+// 		PICKING		->	PACKED, REFUNDED (單據已列印)
+//		PACKED		->	SHIPPED, REFUNDED
+//		SHIPPED    	->	COMPLETED, DELIVERED, REFUNDED
+//		DELIVERED  	->	COMPLETED, REFUNDED
+//		COMPLETED  	->	REFUNDED
+//		CANCELLED  	->	(terminal)
+//		REFUNDED   	->	(terminal)
 
 type SalesOrderStatus string
 
@@ -27,6 +25,8 @@ const (
 	SalesOrderStatusConfirmed  SalesOrderStatus = "CONFIRMED"
 	SalesOrderStatusPaid       SalesOrderStatus = "PAID"
 	SalesOrderStatusProcessing SalesOrderStatus = "PROCESSING"
+	SalesOrderStatusPicking    SalesOrderStatus = "PICKING"
+	SalesOrderStatusPacked     SalesOrderStatus = "PACKED"
 	SalesOrderStatusShipped    SalesOrderStatus = "SHIPPED"
 	SalesOrderStatusDelivered  SalesOrderStatus = "DELIVERED"
 	SalesOrderStatusCompleted  SalesOrderStatus = "COMPLETED"
@@ -37,8 +37,8 @@ const (
 // IsValid reports whether s is a known SalesOrderStatus.
 func (s SalesOrderStatus) IsValid() bool {
 	switch s {
-	case SalesOrderStatusPending, SalesOrderStatusConfirmed, SalesOrderStatusPaid,
-		SalesOrderStatusProcessing, SalesOrderStatusShipped, SalesOrderStatusDelivered,
+	case SalesOrderStatusPending, SalesOrderStatusConfirmed, SalesOrderStatusPaid, SalesOrderStatusProcessing,
+		SalesOrderStatusPicking, SalesOrderStatusPacked, SalesOrderStatusShipped, SalesOrderStatusDelivered,
 		SalesOrderStatusCompleted, SalesOrderStatusCancelled, SalesOrderStatusRefunded:
 		return true
 	}
@@ -65,7 +65,9 @@ var allowedSalesTransitions = map[SalesOrderStatus][]SalesOrderStatus{
 	SalesOrderStatusPending:    {SalesOrderStatusConfirmed, SalesOrderStatusCancelled},
 	SalesOrderStatusConfirmed:  {SalesOrderStatusPaid, SalesOrderStatusCancelled},
 	SalesOrderStatusPaid:       {SalesOrderStatusProcessing, SalesOrderStatusRefunded, SalesOrderStatusCancelled},
-	SalesOrderStatusProcessing: {SalesOrderStatusShipped, SalesOrderStatusRefunded},
+	SalesOrderStatusProcessing: {SalesOrderStatusPicking, SalesOrderStatusRefunded},
+	SalesOrderStatusPicking:    {SalesOrderStatusPacked, SalesOrderStatusRefunded},
+	SalesOrderStatusPacked:     {SalesOrderStatusShipped, SalesOrderStatusRefunded},
 	SalesOrderStatusShipped:    {SalesOrderStatusDelivered, SalesOrderStatusCompleted, SalesOrderStatusRefunded},
 	SalesOrderStatusDelivered:  {SalesOrderStatusCompleted, SalesOrderStatusRefunded},
 	SalesOrderStatusCompleted:  {SalesOrderStatusRefunded},

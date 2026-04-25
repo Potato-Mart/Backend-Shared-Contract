@@ -10,7 +10,7 @@ type Product struct {
 	ID             string            `json:"id"`
 	SKU            string            `json:"category"`
 	Name           string            `json:"name"`
-	EnName         string            `json:"en_name,omitempty"`
+	OtherNames     []string          `json:"other_names,omitempty"`
 	Brand          string            `json:"brand,omitempty"`
 	Catalogue      string            `json:"catalogue,omitempty"`
 	Storage        enums.StorageType `json:"storage,omitempty"`
@@ -19,7 +19,7 @@ type Product struct {
 	Status         string            `json:"status,omitempty"`
 	CurrentStock   int               `json:"current_stock,omitempty"`
 	AvgWeeklySales float64           `json:"avg_weekly_sales,omitempty"`
-	ImageURL       string            `json:"image_url,omitempty"`
+	CoverURL       string            `json:"cover_url,omitempty"`
 	ImageURLs      []string          `json:"image_urls,omitempty"`
 	CreatedAt      time.Time         `json:"created_at,omitempty"`
 	UpdatedAt      time.Time         `json:"updated_at,omitempty"`
