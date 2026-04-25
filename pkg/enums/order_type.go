@@ -8,7 +8,7 @@ const (
 	OrderTypeB2B    OrderType = "B2B"
 	OrderTypeRelay  OrderType = "RELAY"
 	OrderTypeManual OrderType = "MANUAL"
-	OrderTypeImport OrderType = "import"
+	OrderTypeImport OrderType = "IMPORT"
 )
 
 // IsValid reports whether p is a known OrderType.

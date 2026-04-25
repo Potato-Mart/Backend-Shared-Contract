@@ -14,75 +14,7 @@ github.com/Potato-Mart/Backend-Shared-Contract
 ## 目錄結構
 
 ```text
-shared-contract-go/
-├── README.md
-├── go.mod
-├── go.sum
-├── /docs
-│   ├── architecture.md
-│   ├── versioning.md
-│   └── error-handling.md
-├── /pkg
-│   ├── /common
-│   │   ├── address.go
-│   │   ├── audit.go
-│   │   ├── money.go
-│   │   ├── pagination.go
-│   │   └── metadata.go
-│   │
-│   ├── /enums
-│   │   ├── order.go
-│   │   ├── customer.go
-│   │   ├── warehouse.go
-│   │   ├── cms.go
-│   │   └── storage.go
-│   │
-│   ├── /errors
-│   │   ├── code.go
-│   │   ├── error.go
-│   │   └── response.go
-│   │
-│   ├── /contracts
-│   │   ├── /shared
-│   │   │   ├── health.go
-│   │   │   └── media.go
-│   │   │
-│   │   ├── /identity
-│   │   │   └── user.go
-│   │   │
-│   │   ├── /customer
-│   │   │   ├── customer.go
-│   │   │   └── address.go
-│   │   │
-│   │   ├── /order
-│   │   │   ├── order.go
-│   │   │   ├── payment.go
-│   │   │   ├── cart.go
-│   │   │   └── history.go
-│   │   │
-│   │   ├── /promotion
-│   │   │   ├── coupon.go
-│   │   │   └── promotion.go
-│   │   │
-│   │   ├── /shipping
-│   │   │   ├── zone.go
-│   │   │   └── rate.go
-│   │   │
-│   │   ├── /warehouse
-│   │   │   ├── depot.go
-│   │   │   ├── inbound.go
-│   │   │   ├── picking.go
-│   │   │   └── shipment.go
-│   │   │
-│   │   └── /cms
-│   │       ├── page.go
-│   │       └── setting.go
-│   │
-│   └── /versioning
-│       └── version.go
-└── /examples
-    ├── order_example.go
-    └── error_example.go
+在後續的更新後會加上
 ```
 
 ## 使用方式
@@ -97,47 +29,8 @@ require github.com/Potato-Mart/Backend-Shared-Contract v0.1.0
 
 ```go
 import (
-    "github.com/Potato-Mart/Backend-Shared-Contract/pkg/dto"
     "github.com/Potato-Mart/Backend-Shared-Contract/pkg/enums"
 )
-```
-
-## 使用範例
-
-以下示範另一個後端服務如何直接使用共用的 DTO、列舉型別與錯誤碼：
-
-```go
-package handler
-
-import (
-    "net/http"
-
-    "github.com/gin-gonic/gin"
-
-    "github.com/Potato-Mart/Backend-Shared-Contract/pkg/apierror"
-    "github.com/Potato-Mart/Backend-Shared-Contract/pkg/dto"
-    "github.com/Potato-Mart/Backend-Shared-Contract/pkg/enums"
-)
-
-func CreateOrder(c *gin.Context) {
-    var req dto.CreateOrderRequest
-    if err := c.ShouldBindJSON(&req); err != nil {
-        c.JSON(http.StatusBadRequest, apierror.ErrInvalidRequest.ToResponse())
-        return
-    }
-
-    if req.PaymentMethod != enums.PaymentMethodCard {
-        c.JSON(http.StatusBadRequest, apierror.ErrInvalidPaymentMethod.ToResponse())
-        return
-    }
-
-    resp := dto.CreateOrderResponse{
-        OrderID: "ORD-20250101-0001",
-        Status:  enums.OrderStatusPending,
-    }
-
-    c.JSON(http.StatusOK, resp)
-}
 ```
 
 ## 版本管理
