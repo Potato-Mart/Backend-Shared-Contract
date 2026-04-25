@@ -12,6 +12,8 @@ const (
 	PaymentMethodLinePay      PaymentMethod = "LINE_PAY"
 	PaymentMethodECPay        PaymentMethod = "EC_PAY"
 	PaymentMethodManual       PaymentMethod = "MANUAL"
+
+	// Manual pay will add period
 )
 
 // IsValid reports whether p is a known PaymentMethod.
