@@ -8,7 +8,7 @@
 ## 模組路徑
 
 ```text
-github.com/Potato-Mart/Backend-Shared-Contract
+github.com/Potato-Mart/Backend-Shared-Contract/v2
 ````
 
 ## 目錄結構
@@ -22,14 +22,14 @@ github.com/Potato-Mart/Backend-Shared-Contract
 在使用方服務的 `go.mod` 中加入：
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract v0.1.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v2 v0.1.0
 ```
 
 接著匯入所需套件，例如：
 
 ```go
 import (
-    "github.com/Potato-Mart/Backend-Shared-Contract/pkg/enums"
+    "github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/enums"
 )
 ```
 

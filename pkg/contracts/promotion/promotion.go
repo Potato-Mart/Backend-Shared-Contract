@@ -3,7 +3,7 @@ package promotion
 //import (
 //	"time"
 //
-//	"github.com/Potato-Mart/Backend-Shared-Contract/pkg/enums"
+//	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/enums"
 //)
 //
 //type Promotion struct {

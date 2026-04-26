@@ -3,8 +3,8 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/enums"
 )
 
 // Customer is the public projection of a user account. Secret fields such
