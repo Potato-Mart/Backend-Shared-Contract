@@ -10,6 +10,7 @@ type Product struct {
 	ID              string            `json:"id"`
 	Code            string            `json:"code"`
 	SKU             string            `json:"sku"`
+	Barcode         string            `json:"barcode"`
 	Name            string            `json:"name"`
 	OtherNames      []string          `json:"other_names,omitempty"`
 	Brand           string            `json:"brand,omitempty"`
