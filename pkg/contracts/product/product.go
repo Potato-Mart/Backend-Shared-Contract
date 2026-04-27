@@ -24,6 +24,7 @@ type Product struct {
 	CoverURL        string            `json:"cover_url,omitempty"`
 	ImageURLs       []string          `json:"image_urls,omitempty"`
 	PlacingAreaCode string            `json:"placing_area_code,omitempty"`
+	ExpiredAt       time.Time         `json:"expired_at,omitempty"`
 	CreatedAt       time.Time         `json:"created_at,omitempty"`
 	UpdatedAt       time.Time         `json:"updated_at,omitempty"`
 }
