@@ -22,7 +22,7 @@ type CartItem struct {
 
 type CartProduct struct {
 	ID       string `json:"id,omitempty"`
-	SKU      string `json:"category,omitempty"`
+	SKU      string `json:"sku,omitempty"`
 	Name     string `json:"name"`
 	Brand    string `json:"brand,omitempty"`
 	ImageURL string `json:"image_url,omitempty"`

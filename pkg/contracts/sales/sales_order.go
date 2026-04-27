@@ -69,7 +69,7 @@ type OrderItem struct {
 
 type ProductSnapshot struct {
 	ID         string   `json:"id,omitempty"`
-	SKU        string   `json:"category,omitempty"`
+	SKU        string   `json:"sku,omitempty"`
 	Name       string   `json:"name"`
 	OtherNames []string `json:"other_names,omitempty"`
 	Brand      string   `json:"brand,omitempty"`

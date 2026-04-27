@@ -25,7 +25,7 @@ type Receipt struct {
 type ReceiptItem struct {
 	ID           string `json:"id,omitempty"`
 	ProductID    string `json:"product_id,omitempty"`
-	SKU          string `json:"category,omitempty"`
+	SKU          string `json:"sku,omitempty"`
 	ProductName  string `json:"product_name,omitempty"`
 	OrderedQty   int    `json:"ordered_qty"`
 	ReceivedQty  int    `json:"received_qty"`
