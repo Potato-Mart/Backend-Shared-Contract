@@ -8,7 +8,6 @@ import (
 
 type Product struct {
 	ID              string            `json:"id"`
-	Code            string            `json:"code,omitempty"`
 	SKU             string            `json:"category"`
 	Name            string            `json:"name"`
 	OtherNames      []string          `json:"other_names,omitempty"`
