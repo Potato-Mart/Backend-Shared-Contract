@@ -19,22 +19,38 @@ This module follows semantic versioning for shared backend contracts.
    go vet ./...
    ```
 
-3. Prepare the version, commit, and tag:
+3. Prepare the version, commit, and tag.
+
+   From PowerShell:
 
    ```powershell
    ./scripts/Publish-ContractVersion.ps1 -Bump minor -Push
    ```
 
-   Or use an explicit version:
+   From Git Bash, Linux, macOS, or GitHub Actions-style shell:
+
+   ```bash
+   bash scripts/publish-contract-version.sh --bump minor --push
+   ```
+
+   Or use an explicit version.
 
    ```powershell
    ./scripts/Publish-ContractVersion.ps1 -Version v2.2.0 -CommitMessage "chore(release): v2.2.0" -Push
    ```
 
-   To use AI-polished release notes locally, set `OPENAI_API_KEY` and run:
+   ```bash
+   bash scripts/publish-contract-version.sh --version v2.2.0 --message "chore(release): v2.2.0" --push
+   ```
+
+   To use AI-polished release notes locally, set `OPENAI_API_KEY` and run one of these:
 
    ```powershell
    ./scripts/Publish-ContractVersion.ps1 -Version v3.1.0 -UseAIReleaseNotes -Push
+   ```
+
+   ```bash
+   bash scripts/publish-contract-version.sh --version v3.1.0 --use-ai-release-notes --push
    ```
 
 4. Pushing the tag triggers `.github/workflows/release.yml`, which runs tests, generates release notes, and creates or updates the GitHub Release.
@@ -48,6 +64,16 @@ This module follows semantic versioning for shared backend contracts.
 - `-Push`: push the commit and tag.
 - `-DryRun`: validate the requested version without changing files.
 - `-UseAIReleaseNotes`: polish deterministic release notes through OpenAI. Requires `OPENAI_API_KEY`.
+
+Bash equivalents:
+
+- `--bump major|minor|patch`
+- `--version vX.Y.Z`
+- `--no-commit`
+- `--no-tag`
+- `--push`
+- `--dry-run`
+- `--use-ai-release-notes`
 
 ## AI Release Notes
 
