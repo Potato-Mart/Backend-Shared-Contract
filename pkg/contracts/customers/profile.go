@@ -3,8 +3,8 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
 )
 
 // CustomerProfile is the unified CRM entity for wholesale and retail customers.
@@ -12,10 +12,10 @@ import (
 // hub for loyalty, RFM analytics, marketing, subscriptions, and referrals.
 // Uniqueness: (customer_name, phone, segment).
 type CustomerProfile struct {
-	ID           string                      `json:"id"`
-	CustomerName string                      `json:"customer_name"`
-	Phone        string                      `json:"phone"`
-	Segment      enums.CustomerSegment       `json:"segment"`
+	ID           string                `json:"id"`
+	CustomerName string                `json:"customer_name"`
+	Phone        string                `json:"phone"`
+	Segment      enums.CustomerSegment `json:"segment"`
 
 	// ── Aggregated order statistics (synced, not manually edited) ─────
 	OrderCount     int          `json:"order_count"`
@@ -30,16 +30,16 @@ type CustomerProfile struct {
 	StatsSyncedAt  *time.Time   `json:"stats_synced_at,omitempty"`
 
 	// ── CRM fields (manually edited, never overwritten by sync) ───────
-	Notes        string                      `json:"notes,omitempty"`
-	Tags         []string                    `json:"tags,omitempty"`
-	SalesRep     string                      `json:"sales_rep,omitempty"`
-	Tier         string                      `json:"tier,omitempty"`          // CRM cooperation level: VIP / A / B / C
-	PaymentTerms string                      `json:"payment_terms,omitempty"` // e.g. "NET30"
-	TaxID        string                      `json:"tax_id,omitempty"`        // ABN / tax number
-	ContactPerson string                     `json:"contact_person,omitempty"`
-	Email        string                      `json:"email,omitempty"`
-	Status       enums.CustomerProfileStatus `json:"status"`
-	Hidden       bool                        `json:"hidden,omitempty"`
+	Notes         string                      `json:"notes,omitempty"`
+	Tags          []string                    `json:"tags,omitempty"`
+	SalesRep      string                      `json:"sales_rep,omitempty"`
+	Tier          string                      `json:"tier,omitempty"`          // CRM cooperation level: VIP / A / B / C
+	PaymentTerms  string                      `json:"payment_terms,omitempty"` // e.g. "NET30"
+	TaxID         string                      `json:"tax_id,omitempty"`        // ABN / tax number
+	ContactPerson string                      `json:"contact_person,omitempty"`
+	Email         string                      `json:"email,omitempty"`
+	Status        enums.CustomerProfileStatus `json:"status"`
+	Hidden        bool                        `json:"hidden,omitempty"`
 
 	// ── B2B-specific fields ───────────────────────────────────────────
 	NameEN          string          `json:"name_en,omitempty"`
@@ -54,14 +54,14 @@ type CustomerProfile struct {
 	FreightRule     common.Metadata `json:"freight_rule,omitempty"`
 
 	// ── RFM analytics (computed by sync job) ─────────────────────────
-	RecencyDays   *int              `json:"recency_days,omitempty"`
-	RFMR          *int              `json:"rfm_r,omitempty"`
-	RFMF          *int              `json:"rfm_f,omitempty"`
-	RFMM          *int              `json:"rfm_m,omitempty"`
-	RFMScore      string            `json:"rfm_score,omitempty"`   // e.g. "545"
-	RFMSegment    string            `json:"rfm_segment,omitempty"` // e.g. "VIP" / "沉睡"
-	ChurnRisk     enums.ChurnRisk   `json:"churn_risk,omitempty"`
-	AvgRepeatDays *float64          `json:"avg_repeat_days,omitempty"`
+	RecencyDays   *int            `json:"recency_days,omitempty"`
+	RFMR          *int            `json:"rfm_r,omitempty"`
+	RFMF          *int            `json:"rfm_f,omitempty"`
+	RFMM          *int            `json:"rfm_m,omitempty"`
+	RFMScore      string          `json:"rfm_score,omitempty"`   // e.g. "545"
+	RFMSegment    string          `json:"rfm_segment,omitempty"` // e.g. "VIP" / "沉睡"
+	ChurnRisk     enums.ChurnRisk `json:"churn_risk,omitempty"`
+	AvgRepeatDays *float64        `json:"avg_repeat_days,omitempty"`
 
 	// ── Marketing consent ─────────────────────────────────────────────
 	AcceptsEmailMarketing bool       `json:"accepts_email_marketing"`

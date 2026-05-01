@@ -3,8 +3,8 @@ package promotion
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
 )
 
 // Promotion is the rule-based, auto-applied discount engine entity.

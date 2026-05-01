@@ -3,8 +3,8 @@ package loyalty
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
 )
 
 // LoyaltyLedgerEntry is a single points transaction for a customer.

@@ -3,7 +3,7 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
 )
 
 type Cart struct {

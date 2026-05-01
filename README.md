@@ -12,7 +12,7 @@
 ## 模組路徑
 
 ```text
-github.com/Potato-Mart/Backend-Shared-Contract/v2
+github.com/Potato-Mart/Backend-Shared-Contract/v3
 ````
 
 ## 目錄結構

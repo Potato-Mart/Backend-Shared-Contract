@@ -3,7 +3,7 @@ package category
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
 )
 
 // SKU corresponds to one of the top-level SKU codes that

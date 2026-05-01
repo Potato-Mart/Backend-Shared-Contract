@@ -3,7 +3,7 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
 )
 
 // WholesaleTierPreset defines the freight rules for a wholesale shipping tier.
@@ -14,9 +14,9 @@ type WholesaleTierPreset struct {
 	Label   string `json:"label"`
 
 	// Bulk (per-box) freight rules
-	BulkPerBox      common.Money  `json:"bulk_per_box"`
-	BulkFreeAbove   *common.Money `json:"bulk_free_above,omitempty"`
-	BulkMinOrder    *common.Money `json:"bulk_min_order,omitempty"`
+	BulkPerBox    common.Money  `json:"bulk_per_box"`
+	BulkFreeAbove *common.Money `json:"bulk_free_above,omitempty"`
+	BulkMinOrder  *common.Money `json:"bulk_min_order,omitempty"`
 
 	// Pallet freight rules
 	PalletFlat      common.Money  `json:"pallet_flat"`
