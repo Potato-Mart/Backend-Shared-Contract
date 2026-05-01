@@ -21,7 +21,7 @@ on:
         default: false
         type: boolean
       use_ai_notes:
-        description: "Use OpenAI to polish release notes when OPENAI_API_KEY is configured"
+        description: "Use Copilot to polish release notes when GH_COPILOT_TOKEN is configured"
         required: false
         default: true
         type: boolean
