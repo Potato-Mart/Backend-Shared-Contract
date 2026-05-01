@@ -20,11 +20,6 @@ on:
         required: false
         default: false
         type: boolean
-      use_ai_notes:
-        description: "Use Copilot to polish release notes when GH_PAT_FOR_COPILOT is configured"
-        required: false
-        default: true
-        type: boolean
 
 permissions:
   contents: write
@@ -76,33 +71,29 @@ jobs:
       - name: Test contracts
         run: go test ./...
 
-      - name: Generate release notes
-        shell: bash
-        run: bash scripts/get-contract-release-notes.sh --version "${{ steps.version.outputs.version }}" --output release-notes.md
-
-      - name: Polish release notes with Copilot
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.use_ai_notes == true }}
-        env:
-          GH_COPILOT_TOKEN: ${{ secrets.GH_PAT_FOR_COPILOT }}
-          USE_AI_NOTES: ${{ github.event_name != 'workflow_dispatch' || inputs.use_ai_notes }}
+      - name: Generate release notes from commit messages
         shell: bash
         run: |
           set -euo pipefail
 
-          if [[ -z "$GH_COPILOT_TOKEN" ]]; then
-            echo "GH_PAT_FOR_COPILOT is not configured; keeping deterministic notes."
-            exit 0
+          version="${{ steps.version.outputs.version }}"
+          previous_tag="$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || true)"
+
+          if [[ -n "$previous_tag" ]]; then
+            range="$previous_tag..HEAD"
+          else
+            range="HEAD"
           fi
 
-          if [[ "$USE_AI_NOTES" != "true" ]]; then
-            echo "AI release notes disabled; keeping deterministic notes."
-            exit 0
-          fi
+          {
+            echo "## $version"
+            echo ""
+            git log --no-merges --pretty=format:"- %s (%h)" "$range"
+            echo ""
+          } > release-notes.md
 
-          bash scripts/get-ai-contract-release-notes.sh \
-            --version "${{ steps.version.outputs.version }}" \
-            --input release-notes.md \
-            --output release-notes.md
+          echo "Generated release notes:"
+          cat release-notes.md
 
       - name: Create or update GitHub release
         env:

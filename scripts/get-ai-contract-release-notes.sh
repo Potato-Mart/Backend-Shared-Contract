@@ -5,16 +5,15 @@ version=""
 input_path=""
 output_path=""
 previous_tag=""
-# Default to a model supported by GitHub Copilot
-model="${GH_COPILOT_MODEL:-gpt-4o}"
+model="${ANTHROPIC_MODEL:-claude-sonnet-4-6}"
 
 usage() {
   cat <<'USAGE'
 Usage:
   bash scripts/get-ai-contract-release-notes.sh --version v3.0.0 --input release-notes.md --output release-notes.md
 
-Polishes deterministic release notes using GitHub Copilot.
-Requires GH_COPILOT_TOKEN.
+Polishes deterministic release notes using the Anthropic API.
+Requires ANTHROPIC_API_KEY.
 USAGE
 }
 
@@ -62,8 +61,8 @@ if [[ -z "$input_path" || -z "$output_path" ]]; then
   exit 1
 fi
 
-if [[ -z "${GH_COPILOT_TOKEN:-}" ]]; then
-  echo "GH_COPILOT_TOKEN is required." >&2
+if [[ -z "${ANTHROPIC_API_KEY:-}" ]]; then
+  echo "ANTHROPIC_API_KEY is required." >&2
   exit 1
 fi
 
@@ -130,30 +129,23 @@ Diff summary:
 
 payload = {
     "model": model,
+    "max_tokens": 1024,
+    "system": "Write accurate, concise contract release notes for backend engineers.",
     "messages": [
-        {
-            "role": "system",
-            "content": "Write accurate, concise contract release notes for backend engineers."
-        },
         {
             "role": "user",
             "content": prompt
         }
     ],
-    "temperature": 0.2
 }
 
 request = urllib.request.Request(
-    "https://api.githubcopilot.com/chat/completions",
+    "https://api.anthropic.com/v1/messages",
     data=json.dumps(payload).encode("utf-8"),
     headers={
-        "Authorization": f"Bearer {os.environ['GH_COPILOT_TOKEN']}",
-        "Content-Type": "application/json",
-        # Required headers — Copilot API rejects requests without these
-        "Copilot-Integration-Id": "vscode-chat",
-        "Editor-Version": "vscode/1.90.0",
-        "Editor-Plugin-Version": "copilot-chat/0.1.0",
-        "User-Agent": "GitHubCopilotChat/0.1.0",
+        "x-api-key": os.environ["ANTHROPIC_API_KEY"],
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json",
     },
     method="POST",
 )
@@ -163,16 +155,18 @@ try:
         data = json.loads(response.read().decode("utf-8"))
 except urllib.error.HTTPError as e:
     body = e.read().decode("utf-8", errors="replace")
-    print(f"HTTP {e.code} from Copilot API: {body}", file=sys.stderr)
+    print(f"HTTP {e.code} from Anthropic API: {body}", file=sys.stderr)
     sys.exit(1)
 except Exception as e:
-    print(f"Error calling Copilot API: {e}", file=sys.stderr)
+    print(f"Error calling Anthropic API: {e}", file=sys.stderr)
     sys.exit(1)
 
-text = data.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
+# Anthropic Messages API returns: { "content": [{ "type": "text", "text": "..." }] }
+blocks = data.get("content", [])
+text = "\n".join(b.get("text", "") for b in blocks if b.get("type") == "text").strip()
 
 if not text:
-    print(f"Copilot response did not contain release note text. Full response: {json.dumps(data)}", file=sys.stderr)
+    print(f"Anthropic response did not contain text. Full response: {json.dumps(data)}", file=sys.stderr)
     sys.exit(1)
 
 directory = os.path.dirname(output_path)
