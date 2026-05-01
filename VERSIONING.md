@@ -11,15 +11,7 @@ This module follows semantic versioning for shared backend contracts.
 ## Release Flow
 
 1. Make contract changes.
-2. Run tests:
-
-   ```powershell
-   $env:GOCACHE="$PWD\.gocache"
-   go test ./...
-   go vet ./...
-   ```
-
-3. Prepare the version, commit, and tag.
+2. Prepare the version, commit, and tag.
 
    From PowerShell:
 
@@ -53,7 +45,7 @@ This module follows semantic versioning for shared backend contracts.
    bash scripts/publish-contract-version.sh --version v3.1.0 --use-ai-release-notes --push
    ```
 
-4. Pushing the tag triggers `.github/workflows/release.yml`, which runs tests, generates release notes, and creates or updates the GitHub Release.
+3. Pushing the tag triggers `.github/workflows/release.yml`, which runs tests, generates release notes, and creates or updates the GitHub Release.
 
 ## Useful Script Options
 
