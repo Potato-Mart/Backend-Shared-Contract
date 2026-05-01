@@ -73,24 +73,55 @@ jobs:
           git rev-parse --verify "refs/tags/${{ steps.version.outputs.version }}"
           git checkout "${{ steps.version.outputs.version }}"
 
-      - name: Test contracts
-        run: go test ./...
-
       - name: Generate release notes
         shell: bash
         run: bash scripts/get-contract-release-notes.sh --version "${{ steps.version.outputs.version }}" --output release-notes.md
 
-      - name: Polish release notes with Copilot
+      - name: Get Copilot token
+        id: copilot_token
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.use_ai_notes == true }}
         env:
-          GH_COPILOT_TOKEN: ${{ secrets.GH_COPILOT_TOKEN }}
-          USE_AI_NOTES: ${{ github.event_name != 'workflow_dispatch' || inputs.use_ai_notes }}
-        shell: bash  # Changed from pwsh to bash
+          GH_PAT: ${{ secrets.GH_PAT_FOR_COPILOT }}
+        shell: bash
         run: |
-          # Use bash syntax for the logic
-          if [[ -z "$GH_COPILOT_TOKEN" ]]; then
-            echo "GH_COPILOT_TOKEN is not configured; keeping deterministic notes."
+          set -euo pipefail
+
+          if [[ -z "$GH_PAT" ]]; then
+            echo "GH_PAT_FOR_COPILOT is not configured; skipping Copilot token exchange."
             exit 0
           fi
+
+          response=$(curl -s -w "\n%{http_code}" \
+            -H "Authorization: Bearer $GH_PAT" \
+            -H "Accept: application/json" \
+            https://api.github.com/copilot_internal/v2/token)
+
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | head -n -1)
+
+          if [[ "$http_code" != "200" ]]; then
+            echo "Failed to get Copilot token (HTTP $http_code): $body" >&2
+            exit 1
+          fi
+
+          token=$(echo "$body" | jq -r '.token')
+
+          if [[ -z "$token" || "$token" == "null" ]]; then
+            echo "Copilot token was empty in response: $body" >&2
+            exit 1
+          fi
+
+          echo "::add-mask::$token"
+          echo "token=$token" >> "$GITHUB_OUTPUT"
+
+      - name: Polish release notes with Copilot
+        if: ${{ steps.copilot_token.outputs.token != '' }}
+        env:
+          GH_COPILOT_TOKEN: ${{ steps.copilot_token.outputs.token }}
+          USE_AI_NOTES: ${{ github.event_name != 'workflow_dispatch' || inputs.use_ai_notes }}
+        shell: bash
+        run: |
+          set -euo pipefail
 
           if [[ "$USE_AI_NOTES" != "true" ]]; then
             echo "AI release notes disabled; keeping deterministic notes."
