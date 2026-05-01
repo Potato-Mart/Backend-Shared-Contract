@@ -5,15 +5,16 @@ version=""
 input_path=""
 output_path=""
 previous_tag=""
-model="${OPENAI_RELEASE_NOTES_MODEL:-gpt-5}"
+# Default to a model supported by GitHub Copilot Extensions/API
+model="${GH_COPILOT_MODEL:-gpt-4o}"
 
 usage() {
   cat <<'USAGE'
 Usage:
   bash scripts/get-ai-contract-release-notes.sh --version v3.0.0 --input release-notes.md --output release-notes.md
 
-Polishes deterministic release notes using the OpenAI Responses API.
-Requires OPENAI_API_KEY.
+Polishes deterministic release notes using GitHub Copilot.
+Requires GH_COPILOT_TOKEN.
 USAGE
 }
 
@@ -61,8 +62,8 @@ if [[ -z "$input_path" || -z "$output_path" ]]; then
   exit 1
 fi
 
-if [[ -z "${OPENAI_API_KEY:-}" ]]; then
-  echo "OPENAI_API_KEY is required." >&2
+if [[ -z "${GH_COPILOT_TOKEN:-}" ]]; then
+  echo "GH_COPILOT_TOKEN is required." >&2
   exit 1
 fi
 
@@ -126,37 +127,44 @@ Diff summary:
 {diff_stat}
 """
 
+# Payload configured for the GitHub Copilot Chat API / OpenAI Chat format
 payload = {
     "model": model,
-    "instructions": "Write accurate, concise contract release notes for backend engineers.",
-    "input": prompt,
-    "text": {"verbosity": "medium"},
+    "messages": [
+        {
+            "role": "system",
+            "content": "Write accurate, concise contract release notes for backend engineers."
+        },
+        {
+            "role": "user",
+            "content": prompt
+        }
+    ],
+    "temperature": 0.2
 }
 
 request = urllib.request.Request(
-    "https://api.openai.com/v1/responses",
+    "https://api.githubcopilot.com/chat/completions",
     data=json.dumps(payload).encode("utf-8"),
     headers={
-        "Authorization": f"Bearer {os.environ['OPENAI_API_KEY']}",
+        "Authorization": f"Bearer {os.environ['GH_COPILOT_TOKEN']}",
         "Content-Type": "application/json",
     },
     method="POST",
 )
 
-with urllib.request.urlopen(request, timeout=120) as response:
-    data = json.loads(response.read().decode("utf-8"))
+try:
+    with urllib.request.urlopen(request, timeout=120) as response:
+        data = json.loads(response.read().decode("utf-8"))
+except Exception as e:
+    print(f"Error calling Copilot API: {e}", file=sys.stderr)
+    sys.exit(1)
 
-text = data.get("output_text", "")
-if not text:
-    chunks = []
-    for item in data.get("output", []):
-        for content in item.get("content", []):
-            if "text" in content:
-                chunks.append(content["text"])
-    text = "\n".join(chunks).strip()
+# Extract content from the Chat Completion response format
+text = data.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
 
 if not text:
-    raise RuntimeError("OpenAI response did not contain release note text.")
+    raise RuntimeError("Copilot response did not contain release note text.")
 
 directory = os.path.dirname(output_path)
 if directory:
