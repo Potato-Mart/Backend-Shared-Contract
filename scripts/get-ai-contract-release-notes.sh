@@ -5,7 +5,7 @@ version=""
 input_path=""
 output_path=""
 previous_tag=""
-# Default to a model supported by GitHub Copilot Extensions/API
+# Default to a model supported by GitHub Copilot
 model="${GH_COPILOT_MODEL:-gpt-4o}"
 
 usage() {
@@ -81,6 +81,7 @@ import json
 import os
 import subprocess
 import sys
+import urllib.error
 import urllib.request
 
 version, input_path, output_path, previous_tag, commit_range, model = sys.argv[1:]
@@ -127,7 +128,6 @@ Diff summary:
 {diff_stat}
 """
 
-# Payload configured for the GitHub Copilot Chat API / OpenAI Chat format
 payload = {
     "model": model,
     "messages": [
@@ -149,6 +149,11 @@ request = urllib.request.Request(
     headers={
         "Authorization": f"Bearer {os.environ['GH_COPILOT_TOKEN']}",
         "Content-Type": "application/json",
+        # Required headers — Copilot API rejects requests without these
+        "Copilot-Integration-Id": "vscode-chat",
+        "Editor-Version": "vscode/1.90.0",
+        "Editor-Plugin-Version": "copilot-chat/0.1.0",
+        "User-Agent": "GitHubCopilotChat/0.1.0",
     },
     method="POST",
 )
@@ -156,15 +161,19 @@ request = urllib.request.Request(
 try:
     with urllib.request.urlopen(request, timeout=120) as response:
         data = json.loads(response.read().decode("utf-8"))
+except urllib.error.HTTPError as e:
+    body = e.read().decode("utf-8", errors="replace")
+    print(f"HTTP {e.code} from Copilot API: {body}", file=sys.stderr)
+    sys.exit(1)
 except Exception as e:
     print(f"Error calling Copilot API: {e}", file=sys.stderr)
     sys.exit(1)
 
-# Extract content from the Chat Completion response format
 text = data.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
 
 if not text:
-    raise RuntimeError("Copilot response did not contain release note text.")
+    print(f"Copilot response did not contain release note text. Full response: {json.dumps(data)}", file=sys.stderr)
+    sys.exit(1)
 
 directory = os.path.dirname(output_path)
 if directory:
@@ -173,4 +182,6 @@ if directory:
 with open(output_path, "w", encoding="utf-8") as f:
     f.write(text)
     f.write("\n")
+
+print("Release notes written successfully.")
 PY
