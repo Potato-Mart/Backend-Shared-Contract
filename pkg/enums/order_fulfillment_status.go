@@ -3,12 +3,12 @@ package enums
 type FulfillmentStatus string
 
 const (
-	FulfillmentStatusUnfulfilled    FulfillmentStatus = "UNFULFILLED"
-	FulfillmentStatusPickingPrinted FulfillmentStatus = "PICKING_PRINTED"
-	FulfillmentStatusPacking        FulfillmentStatus = "PACKING"
-	FulfillmentStatusPacked         FulfillmentStatus = "PACKED"
-	FulfillmentStatusPartial        FulfillmentStatus = "PARTIAL"
-	FulfillmentStatusFulfilled      FulfillmentStatus = "FULFILLED"
+	FulfillmentStatusUnfulfilled    FulfillmentStatus = "unfulfilled"
+	FulfillmentStatusPickingPrinted FulfillmentStatus = "picking_printed"
+	FulfillmentStatusPacking        FulfillmentStatus = "packing"
+	FulfillmentStatusPacked         FulfillmentStatus = "packed"
+	FulfillmentStatusPartial        FulfillmentStatus = "partial"
+	FulfillmentStatusFulfilled      FulfillmentStatus = "fulfilled"
 )
 
 // IsValid reports whether p is a known FulfillmentStatus.

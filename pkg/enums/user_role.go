@@ -6,8 +6,8 @@ package enums
 type UserRole string
 
 const (
-	UserRoleAdmin  UserRole = "ADMIN"
-	UserRoleClient UserRole = "CLIENT"
+	UserRoleAdmin  UserRole = "admin"
+	UserRoleClient UserRole = "user"
 )
 
 // IsValid reports whether r is a known UserRole value.

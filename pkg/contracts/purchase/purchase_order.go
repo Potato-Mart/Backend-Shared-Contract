@@ -3,6 +3,7 @@ package purchase
 import (
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/common"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/enums"
 )
 
@@ -13,10 +14,10 @@ type Order struct {
 	Status       enums.PurchaseOrderStatus `json:"status"`
 	Currency     string                    `json:"currency"`
 	Items        []OrderItem               `json:"items"`
-	Subtotal     float64                   `json:"subtotal"`
-	TaxAmount    float64                   `json:"tax_amount"`
-	ShippingCost float64                   `json:"shipping_cost,omitempty"`
-	Total        float64                   `json:"total"`
+	Subtotal     common.Money              `json:"subtotal"`
+	TaxAmount    common.Money              `json:"tax_amount"`
+	ShippingCost *common.Money             `json:"shipping_cost,omitempty"`
+	Total        common.Money              `json:"total"`
 	Reference    string                    `json:"reference,omitempty"`
 	SupplierRef  string                    `json:"supplier_ref,omitempty"`
 	ExpectedAt   *time.Time                `json:"expected_at,omitempty"`
@@ -33,23 +34,23 @@ type Order struct {
 type OrderItem struct {
 	ID           string          `json:"id,omitempty"`
 	Product      ProductSnapshot `json:"product"`
-	UnitCost     float64         `json:"unit_cost"`
+	UnitCost     common.Money    `json:"unit_cost"`
 	OrderedQty   int             `json:"ordered_qty"`
 	ReceivedQty  int             `json:"received_qty"`
 	RejectedQty  int             `json:"rejected_qty,omitempty"`
-	LineTotal    float64         `json:"line_total"`
+	LineTotal    common.Money    `json:"line_total"`
 	LocationCode string          `json:"location_code,omitempty"`
 	Note         string          `json:"note,omitempty"`
 	ExpireAt     time.Time       `json:"expire_at"`
 }
 
 type ProductSnapshot struct {
-	ID         string   `json:"id,omitempty"`
-	SKU        string   `json:"sku,omitempty"`
-	Name       string   `json:"name"`
-	OtherNames []string `json:"other_names,omitempty"`
-	Brand      string   `json:"brand,omitempty"`
-	ImageURL   string   `json:"image_url,omitempty"`
-	Storage    string   `json:"storage,omitempty"`
-	Barcode    string   `json:"barcode,omitempty"`
+	ID         string                 `json:"id,omitempty"`
+	SKU        string                 `json:"sku,omitempty"`
+	Name       string                 `json:"name"`
+	OtherNames []common.LocalizedName `json:"other_names,omitempty"`
+	Brand      string                 `json:"brand,omitempty"`
+	ImageURL   string                 `json:"image_url,omitempty"`
+	Storage    string                 `json:"storage,omitempty"`
+	Barcode    string                 `json:"barcode,omitempty"`
 }

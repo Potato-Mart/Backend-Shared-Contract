@@ -3,8 +3,8 @@ package enums
 type PackingDiscrepancyKind string
 
 const (
-	PackingDiscrepancyKindShortage   PackingDiscrepancyKind = "SHORTAGE"
-	PackingDiscrepancyKindOverweight PackingDiscrepancyKind = "OVERWEIGHT"
+	PackingDiscrepancyKindShortage   PackingDiscrepancyKind = "shortage"
+	PackingDiscrepancyKindOverweight PackingDiscrepancyKind = "overweight"
 )
 
 // IsValid reports whether s is a known PackingDiscrepancyKind.

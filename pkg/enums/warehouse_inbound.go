@@ -3,8 +3,8 @@ package enums
 type InboundReceiptStatus string
 
 const (
-	InboundReceiptStatusDraft     InboundReceiptStatus = "DRAFT"
-	InboundReceiptStatusConfirmed InboundReceiptStatus = "CONFIRMED"
+	InboundReceiptStatusDraft     InboundReceiptStatus = "draft"
+	InboundReceiptStatusConfirmed InboundReceiptStatus = "confirmed"
 )
 
 // IsValid reports whether s is a known InboundReceiptStatus.

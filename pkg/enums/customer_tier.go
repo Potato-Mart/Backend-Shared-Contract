@@ -3,10 +3,10 @@ package enums
 type CustomerTier string
 
 const (
-	CustomerTierStandard CustomerTier = "STANDARD"
-	CustomerTierSilver   CustomerTier = "SILVER"
-	CustomerTierGold     CustomerTier = "GOLD"
-	CustomerTierPlatinum CustomerTier = "PLATINUM"
+	CustomerTierStandard CustomerTier = "standard"
+	CustomerTierSilver   CustomerTier = "silver"
+	CustomerTierGold     CustomerTier = "gold"
+	CustomerTierPlatinum CustomerTier = "platinum"
 )
 
 // IsValid reports whether p is a known CustomerTier.

@@ -2,15 +2,15 @@ package enums
 
 // DiscountType controls how the discount's Value is interpreted.
 //
-//	PERCENTAGE    -> Value is a percentage 0..100 applied to the
+//	percentage    -> Value is a percentage 0..100 applied to the
 //	                 eligible subtotal, capped by MaxDiscountAmount.
-//	FIXED_AMOUNT  -> Value is a flat amount in the store's currency.
+//	fixed_amount  -> Value is a flat amount in the store's currency.
 type DiscountType string
 
 const (
-	DiscountTypePercentage   DiscountType = "PERCENTAGE"
-	DiscountTypeFixedAmount  DiscountType = "FIXED_AMOUNT"
-	DiscountTypeFreeShipping DiscountType = "FREE_SHIPPING"
+	DiscountTypePercentage   DiscountType = "percentage"
+	DiscountTypeFixedAmount  DiscountType = "fixed_amount"
+	DiscountTypeFreeShipping DiscountType = "free_shipping"
 )
 
 func (d DiscountType) IsValid() bool {
@@ -27,9 +27,9 @@ func (d DiscountType) String() string { return string(d) }
 type DiscountScope string
 
 const (
-	DiscountScopeAll      DiscountScope = "ALL"
-	DiscountScopeCategory DiscountScope = "CATEGORY"
-	DiscountScopeProduct  DiscountScope = "PRODUCT"
+	DiscountScopeAll      DiscountScope = "all"
+	DiscountScopeCategory DiscountScope = "category"
+	DiscountScopeProduct  DiscountScope = "product"
 )
 
 func (d DiscountScope) IsValid() bool {

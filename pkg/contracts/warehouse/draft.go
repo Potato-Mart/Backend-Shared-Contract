@@ -1,0 +1,53 @@
+package warehouse
+
+import (
+	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/enums"
+)
+
+// WMSDraft is an uncommitted batch of inbound or outbound stock movements
+// created by a warehouse operator on a PDA or desktop. On submission the draft
+// is converted into inbound or outbound warehouse records by the owning service.
+type WMSDraft struct {
+	ID          string               `json:"id"`
+	Type        enums.WMSDraftType   `json:"type"`
+	Operator    string               `json:"operator"`
+	DepotID     string               `json:"depot_id,omitempty"`
+	Reference   string               `json:"reference,omitempty"` // supplier PO / order number
+	Items       []WMSDraftItem       `json:"items"`
+	ItemCount   int                  `json:"item_count"`
+	TotalQty    int                  `json:"total_qty"`
+	Status      enums.WMSDraftStatus `json:"status"`
+	Note        string               `json:"note,omitempty"`
+	SubmittedAt *time.Time           `json:"submitted_at,omitempty"`
+	CreatedAt   time.Time            `json:"created_at"`
+	UpdatedAt   time.Time            `json:"updated_at"`
+}
+
+// WMSDraftItem is the schema for each element of WMSDraft.Items.
+type WMSDraftItem struct {
+	SKU          string `json:"sku"`
+	ProductName  string `json:"product_name,omitempty"`
+	Barcode      string `json:"barcode,omitempty"`
+	LocationCode string `json:"location_code,omitempty"`
+	Qty          int    `json:"qty"`
+	ExpiryYM     string `json:"expiry_ym,omitempty"` // "YYYY-MM"
+}
+
+// OrderPackingProgress persists per-SKU scan progress for the packing
+// screen so it survives page reloads, status reversions, and re-packs.
+// Rows are deleted when an order is marked packed; reopening for re-pack
+// intentionally retains them so the operator resumes from where they left off.
+type OrderPackingProgress struct {
+	ID                 string    `json:"id"`
+	OrderNumber        string    `json:"order_number"`
+	OrderDate          time.Time `json:"order_date"`
+	SKU                string    `json:"sku"`
+	ProductName        string    `json:"product_name,omitempty"`
+	OrderedQty         int       `json:"ordered_qty"`
+	ScannedQty         int       `json:"scanned_qty"`
+	MergedToFrozenQty  int       `json:"merged_to_frozen_qty"`
+	FrozenConfirmedQty int       `json:"frozen_confirmed_qty"`
+	UpdatedAt          time.Time `json:"updated_at"`
+}

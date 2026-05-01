@@ -1,0 +1,128 @@
+name: Release Contract
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version tag to release, for example v2.2.0"
+        required: true
+        type: string
+      draft:
+        description: "Create release as draft"
+        required: false
+        default: false
+        type: boolean
+      prerelease:
+        description: "Mark release as prerelease"
+        required: false
+        default: false
+        type: boolean
+      use_ai_notes:
+        description: "Use OpenAI to polish release notes when OPENAI_API_KEY is configured"
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build release notes and publish GitHub release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Resolve release version
+        id: version
+        shell: pwsh
+        run: |
+          if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+            $version = "${{ inputs.version }}"
+          } else {
+            $version = "${{ github.ref_name }}"
+          }
+
+          if ($version -notmatch '^v\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$') {
+            throw "Version '$version' is not valid semver. Expected vMAJOR.MINOR.PATCH."
+          }
+
+          "version=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Checkout requested tag for manual release
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        shell: pwsh
+        run: |
+          git fetch --tags
+          git rev-parse --verify "refs/tags/${{ steps.version.outputs.version }}"
+          git checkout "${{ steps.version.outputs.version }}"
+
+      - name: Test contracts
+        run: go test ./...
+
+      - name: Generate release notes
+        shell: pwsh
+        run: ./scripts/Get-ContractReleaseNotes.ps1 -Version '${{
+          steps.version.outputs.version }}' -OutputPath release-notes.md
+
+      - name: Polish release notes with Copilot
+        env:
+          # You will need to create this secret from a PAT with Copilot permissions
+          GH_COPILOT_TOKEN: ${{ secrets.GH_COPILOT_TOKEN }}
+          USE_AI_NOTES: ${{ github.event_name != 'workflow_dispatch' ||
+            inputs.use_ai_notes }}
+        shell: pwsh
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:GH_COPILOT_TOKEN)) {
+            Write-Host "GH_COPILOT_TOKEN is not configured; keeping deterministic notes."
+            exit 0
+          }
+
+          if ($env:USE_AI_NOTES -ne "true") {
+            Write-Host "AI release notes disabled; keeping deterministic notes."
+            exit 0
+          }
+
+          # Update your script call to use the new token
+          ./scripts/Get-CopilotContractReleaseNotes.ps1 -Version '${{ steps.version.outputs.version }}' -InputPath release-notes.md -OutputPath release-notes.md
+
+      - name: Create or update GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+          DRAFT: ${{ github.event_name == 'workflow_dispatch' && inputs.draft || false }}
+          PRERELEASE: ${{ github.event_name == 'workflow_dispatch' && inputs.prerelease ||
+            contains(steps.version.outputs.version, '-') }}
+        shell: pwsh
+        run: |
+          $args = @("release", "view", $env:VERSION)
+          gh @args *> $null
+          $exists = $LASTEXITCODE -eq 0
+
+          if ($exists) {
+            gh release edit $env:VERSION --title $env:VERSION --notes-file release-notes.md
+          } else {
+            $createArgs = @("release", "create", $env:VERSION, "--title", $env:VERSION, "--notes-file", "release-notes.md)
+
+            if ($env:DRAFT -eq "true") {
+              $createArgs += "--draft"
+            }
+
+            if ($env:PRERELEASE -eq "true") {
+              $createArgs += "--prerelease"
+            }
+
+            gh @createArgs
+          }

@@ -3,8 +3,8 @@ package enums
 type OutboundShipmentStatus string
 
 const (
-	OutboundShipmentStatusPacked     OutboundShipmentStatus = "PACKED"
-	OutboundShipmentStatusDispatched OutboundShipmentStatus = "DISPATCHED"
+	OutboundShipmentStatusPacked     OutboundShipmentStatus = "packed"
+	OutboundShipmentStatusDispatched OutboundShipmentStatus = "dispatched"
 )
 
 // IsValid reports whether s is a known OutboundShipmentStatus.

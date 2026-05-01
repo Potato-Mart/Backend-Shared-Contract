@@ -3,12 +3,12 @@ package enums
 type OrderType string
 
 const (
-	OrderTypeOnline OrderType = "ONLINE"
-	OrderTypePOS    OrderType = "POS"
-	OrderTypeB2B    OrderType = "B2B"
-	OrderTypeRelay  OrderType = "RELAY"
-	OrderTypeManual OrderType = "MANUAL"
-	OrderTypeImport OrderType = "IMPORT"
+	OrderTypeOnline OrderType = "online"
+	OrderTypePOS    OrderType = "pos"
+	OrderTypeB2B    OrderType = "b2b"
+	OrderTypeRelay  OrderType = "relay"
+	OrderTypeManual OrderType = "manual"
+	OrderTypeImport OrderType = "import"
 )
 
 // IsValid reports whether p is a known OrderType.

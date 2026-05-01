@@ -9,7 +9,7 @@ package enums
 //		PENDING    	->	CONFIRMED, CANCELLED
 //	    CONFIRMED  	->	PAID, CANCELLED
 //		PAID       	->	PROCESSING, REFUNDED, CANCELLED
-//		PROCESSING 	->	PICKING, REFUNDED
+//		PROCESSING 	->	PICKING, REFUNDED (一旦我們開始拿貨品絕對不能更改，如果整單取消有歸位費用{比例扣費})
 // 		PICKING		->	PACKED, REFUNDED (單據已列印)
 //		PACKED		->	SHIPPED, REFUNDED
 //		SHIPPED    	->	COMPLETED, DELIVERED, REFUNDED
@@ -21,17 +21,17 @@ package enums
 type SalesOrderStatus string
 
 const (
-	SalesOrderStatusPending    SalesOrderStatus = "PENDING"
-	SalesOrderStatusConfirmed  SalesOrderStatus = "CONFIRMED"
-	SalesOrderStatusPaid       SalesOrderStatus = "PAID"
-	SalesOrderStatusProcessing SalesOrderStatus = "PROCESSING"
-	SalesOrderStatusPicking    SalesOrderStatus = "PICKING"
-	SalesOrderStatusPacked     SalesOrderStatus = "PACKED"
-	SalesOrderStatusShipped    SalesOrderStatus = "SHIPPED"
-	SalesOrderStatusDelivered  SalesOrderStatus = "DELIVERED"
-	SalesOrderStatusCompleted  SalesOrderStatus = "COMPLETED"
-	SalesOrderStatusCancelled  SalesOrderStatus = "CANCELLED"
-	SalesOrderStatusRefunded   SalesOrderStatus = "REFUNDED"
+	SalesOrderStatusPending    SalesOrderStatus = "pending"
+	SalesOrderStatusConfirmed  SalesOrderStatus = "confirmed"
+	SalesOrderStatusPaid       SalesOrderStatus = "paid"
+	SalesOrderStatusProcessing SalesOrderStatus = "processing"
+	SalesOrderStatusPicking    SalesOrderStatus = "picking"
+	SalesOrderStatusPacked     SalesOrderStatus = "packed"
+	SalesOrderStatusShipped    SalesOrderStatus = "shipped"
+	SalesOrderStatusDelivered  SalesOrderStatus = "delivered"
+	SalesOrderStatusCompleted  SalesOrderStatus = "completed"
+	SalesOrderStatusCancelled  SalesOrderStatus = "cancelled"
+	SalesOrderStatusRefunded   SalesOrderStatus = "refunded"
 )
 
 // IsValid reports whether s is a known SalesOrderStatus.

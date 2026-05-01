@@ -1,39 +1,94 @@
 package promotion
 
-//import (
-//	"time"
-//
-//	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/enums"
-//)
-//
-//type Promotion struct {
-//	ID                 string                        `json:"id"`
-//	Name               string                        `json:"name"`
-//	Description        string                        `json:"description,omitempty"`
-//	Type               enums.PromotionType           `json:"type"`
-//	MinCartAmount      float64                       `json:"min_cart_amount,omitempty"`
-//	MinCartQty         int                           `json:"min_cart_qty,omitempty"`
-//	RequiredProductIDs []string                      `json:"required_product_ids,omitempty"`
-//	RequiredQtyEach    int                           `json:"required_qty_each"`
-//	DiscountType       enums.PromotionDiscountType   `json:"discount_type,omitempty"`
-//	DiscountValue      float64                       `json:"discount_value,omitempty"`
-//	MaxDiscount        float64                       `json:"max_discount,omitempty"`
-//	DiscountTarget     enums.PromotionDiscountTarget `json:"discount_target,omitempty"`
-//	GiftProductID      string                        `json:"gift_product_id,omitempty"`
-//	GiftQty            int                           `json:"gift_qty,omitempty"`
-//	AddonProductID     string                        `json:"addon_product_id,omitempty"`
-//	AddonPrice         float64                       `json:"addon_price,omitempty"`
-//	AddonMaxQty        int                           `json:"addon_max_qty,omitempty"`
-//	BundlePrice        float64                       `json:"bundle_price,omitempty"`
-//	Priority           int                           `json:"priority"`
-//	IsStackable        bool                          `json:"is_stackable"`
-//	UsageLimit         int                           `json:"usage_limit,omitempty"`
-//	UsedCount          int                           `json:"used_count"`
-//	PerCustomerLimit   int                           `json:"per_customer_limit"`
-//	StartsAt           *time.Time                    `json:"starts_at,omitempty"`
-//	ExpiresAt          *time.Time                    `json:"expires_at,omitempty"`
-//	IsActive           bool                          `json:"is_active"`
-//	OrderTypes         []enums.OrderType             `json:"order_types,omitempty"`
-//	CreatedAt          time.Time                     `json:"created_at"`
-//	UpdatedAt          time.Time                     `json:"updated_at"`
-//}
+import (
+	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/enums"
+)
+
+// Promotion is the rule-based, auto-applied discount engine entity.
+// It covers all promotion types: auto_discount, spend_gift, addon_purchase,
+// bogo, bundle, and tiered_pricing.
+type Promotion struct {
+	ID          string              `json:"id"`
+	Name        string              `json:"name"`
+	Description string              `json:"description,omitempty"`
+	Type        enums.PromotionType `json:"type"`
+
+	// ── Trigger conditions ────────────────────────────────────────────
+	MinCartAmount      *common.Money `json:"min_cart_amount,omitempty"`
+	MinCartQty         int           `json:"min_cart_qty,omitempty"`
+	RequiredProductIDs []string      `json:"required_product_ids,omitempty"`
+	RequiredQtyEach    int           `json:"required_qty_each"`
+
+	// RequiredQtyMode controls whether RequiredQtyEach applies per product
+	// or as a combined total across all required products.
+	RequiredQtyMode enums.PromotionQtyMode `json:"required_qty_mode,omitempty"`
+	// RequiredQtyPerProduct overrides per-SKU qty when mode is PER_PRODUCT
+	// and quantities differ across products. Map key is SKU, value is qty.
+	RequiredQtyPerProduct common.Metadata `json:"required_qty_per_product,omitempty"`
+	// RequiredQtyCombined is the total quantity threshold for COMBINED mode.
+	RequiredQtyCombined int `json:"required_qty_combined,omitempty"`
+
+	// ── auto_discount ─────────────────────────────────────────────────
+	DiscountType   enums.DiscountType            `json:"discount_type,omitempty"`
+	DiscountValue  string                        `json:"discount_value,omitempty"`
+	MaxDiscount    *common.Money                 `json:"max_discount,omitempty"`
+	DiscountTarget enums.PromotionDiscountTarget `json:"discount_target,omitempty"`
+
+	// ── spend_gift / bogo ─────────────────────────────────────────────
+	GiftProductID string `json:"gift_product_id,omitempty"`
+	GiftQty       int    `json:"gift_qty,omitempty"`
+	// GiftOptional allows the customer to decline the free gift at cart.
+	GiftOptional bool `json:"gift_optional,omitempty"`
+	// GiftTiers enables multiple spend thresholds for spend_gift promotions.
+	GiftTiers []GiftTier `json:"gift_tiers,omitempty"`
+
+	// ── addon_purchase ────────────────────────────────────────────────
+	AddonProductID   string                      `json:"addon_product_id,omitempty"`
+	AddonPrice       *common.Money               `json:"addon_price,omitempty"`
+	AddonMaxQty      int                         `json:"addon_max_qty,omitempty"`
+	AddonTriggerMode enums.PromotionAddonTrigger `json:"addon_trigger_mode,omitempty"`
+
+	// ── bundle ────────────────────────────────────────────────────────
+	BundlePrice *common.Money `json:"bundle_price,omitempty"`
+
+	// ── tiered_pricing ────────────────────────────────────────────────
+	PricingTiers      []PricingTier `json:"pricing_tiers,omitempty"`
+	PricingMixAllowed bool          `json:"pricing_mix_allowed,omitempty"`
+
+	// ── Control ───────────────────────────────────────────────────────
+	Priority         int        `json:"priority"`
+	IsStackable      bool       `json:"is_stackable"`
+	UsageLimit       int        `json:"usage_limit,omitempty"`
+	UsedCount        int        `json:"used_count"`
+	PerCustomerLimit int        `json:"per_customer_limit"`
+	StartsAt         *time.Time `json:"starts_at,omitempty"`
+	ExpiresAt        *time.Time `json:"expires_at,omitempty"`
+	IsActive         bool       `json:"is_active"`
+	Channels         []string   `json:"channels,omitempty"` // e.g. ["online","pos"]
+
+	// Source tracking for promotions synced from external systems.
+	Source    string `json:"source,omitempty"`
+	SourceRef string `json:"source_ref,omitempty"`
+
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+// GiftTier defines a single spend threshold and its associated free gift
+// for spend_gift tier promotions.
+type GiftTier struct {
+	MinAmount     common.Money `json:"min_amount"`
+	GiftProductID string       `json:"gift_product_id"`
+	GiftQty       int          `json:"gift_qty"`
+}
+
+// PricingTier defines a quantity break-point for tiered_pricing promotions.
+// Either UnitPrice or TotalPrice should be set, not both.
+type PricingTier struct {
+	Qty        int           `json:"qty"`
+	UnitPrice  *common.Money `json:"unit_price,omitempty"`
+	TotalPrice *common.Money `json:"total_price,omitempty"`
+}

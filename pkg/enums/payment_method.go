@@ -5,13 +5,13 @@ package enums
 type PaymentMethod string
 
 const (
-	PaymentMethodCard         PaymentMethod = "CARD"
-	PaymentMethodCash         PaymentMethod = "CASH"
-	PaymentMethodQR           PaymentMethod = "QR"
-	PaymentMethodBankTransfer PaymentMethod = "BANK_TRANSFER"
-	PaymentMethodLinePay      PaymentMethod = "LINE_PAY"
-	PaymentMethodECPay        PaymentMethod = "EC_PAY"
-	PaymentMethodManual       PaymentMethod = "MANUAL"
+	PaymentMethodCard         PaymentMethod = "card"
+	PaymentMethodCash         PaymentMethod = "cash"
+	PaymentMethodQR           PaymentMethod = "qr"
+	PaymentMethodBankTransfer PaymentMethod = "bank_transfer"
+	PaymentMethodLinePay      PaymentMethod = "line_pay"
+	PaymentMethodECPay        PaymentMethod = "ecpay"
+	PaymentMethodManual       PaymentMethod = "manual"
 
 	// Manual pay will add period
 )

@@ -6,12 +6,12 @@ package enums
 type PaymentStatus string
 
 const (
-	PaymentStatusUnpaid          PaymentStatus = "UNPAID"
-	PaymentStatusPending         PaymentStatus = "PENDING"
-	PaymentStatusPaid            PaymentStatus = "PAID"
-	PaymentStatusPartiallyPaid   PaymentStatus = "PARTIALLY_PAID"
-	PaymentStatusRefunded        PaymentStatus = "REFUNDED"
-	PaymentStatusPartialRefunded PaymentStatus = "PARTIALLY_REFUNDED"
+	PaymentStatusUnpaid          PaymentStatus = "unpaid"
+	PaymentStatusPending         PaymentStatus = "pending"
+	PaymentStatusPaid            PaymentStatus = "paid"
+	PaymentStatusPartiallyPaid   PaymentStatus = "partially_paid"
+	PaymentStatusRefunded        PaymentStatus = "refunded"
+	PaymentStatusPartialRefunded PaymentStatus = "partially_refunded"
 )
 
 // IsValid reports whether p is a known PaymentStatus.

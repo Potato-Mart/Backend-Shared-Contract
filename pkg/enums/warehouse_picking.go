@@ -3,10 +3,10 @@ package enums
 type PickingListStatus string
 
 const (
-	PickingListStatusPending    PickingListStatus = "PENDING"
-	PickingListStatusInProgress PickingListStatus = "IN_PROGRESS"
-	PickingListStatusComplete   PickingListStatus = "COMPLETE"
-	PickingListStatusCancelled  PickingListStatus = "CANCELLED"
+	PickingListStatusPending    PickingListStatus = "pending"
+	PickingListStatusInProgress PickingListStatus = "in_progress"
+	PickingListStatusComplete   PickingListStatus = "complete"
+	PickingListStatusCancelled  PickingListStatus = "cancelled"
 )
 
 // IsValid reports whether s is a known PickingListStatus.
@@ -24,10 +24,10 @@ func (s PickingListStatus) String() string { return string(s) }
 type PickingItemStatus string
 
 const (
-	PickingItemStatusPending  PickingItemStatus = "PENDING"
-	PickingItemStatusPartial  PickingItemStatus = "PARTIAL"
-	PickingItemStatusComplete PickingItemStatus = "COMPLETE"
-	PickingItemStatusSkipped  PickingItemStatus = "SKIPPED"
+	PickingItemStatusPending  PickingItemStatus = "pending"
+	PickingItemStatusPartial  PickingItemStatus = "partial"
+	PickingItemStatusComplete PickingItemStatus = "complete"
+	PickingItemStatusSkipped  PickingItemStatus = "skipped"
 )
 
 // IsValid reports whether s is a known InboundReceiptStatus.

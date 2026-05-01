@@ -3,6 +3,7 @@ package warehouse
 import (
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/common"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/enums"
 )
 
@@ -34,8 +35,8 @@ type PackingDiscrepancy struct {
 	OrderedQty    int                          `json:"ordered_qty"`
 	ScannedQty    int                          `json:"scanned_qty"`
 	DiffQty       int                          `json:"diff_qty"`
-	UnitPrice     float64                      `json:"unit_price,omitempty"`
-	RefundAmount  float64                      `json:"refund_amount,omitempty"`
+	UnitPrice     *common.Money                `json:"unit_price,omitempty"`
+	RefundAmount  *common.Money                `json:"refund_amount,omitempty"`
 	ReturnToStock bool                         `json:"return_to_stock"`
 	Notified      bool                         `json:"notified"`
 	RecordedAt    time.Time                    `json:"recorded_at"`

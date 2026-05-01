@@ -7,9 +7,10 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v2/pkg/enums"
 )
 
-// Customer is the public projection of a user account. Secret fields such
-// as password hashes and refresh token material never appear here —
-// they live only inside the service that manages identity.
+// Customer is the public projection of a B2C user account linked to auth.users.
+// Secret fields such as password hashes and refresh token material never
+// appear here — they live only inside the service that manages identity.
+// For wholesale/CRM profiles see CustomerProfile in profile.go.
 type Customer struct {
 	ID               string             `json:"id"`
 	AuthUserID       string             `json:"auth_user_id,omitempty"`
@@ -17,14 +18,17 @@ type Customer struct {
 	Phone            string             `json:"phone,omitempty"`
 	FirstName        string             `json:"first_name,omitempty"`
 	LastName         string             `json:"last_name,omitempty"`
+	DateOfBirth      *time.Time         `json:"date_of_birth,omitempty"`
+	Notes            string             `json:"notes,omitempty"`
+	Source           string             `json:"source,omitempty"` // "online" | "pos" | "import"
 	Role             enums.UserRole     `json:"role"`
 	CustomerType     enums.CustomerType `json:"customer_type,omitempty"`
 	Active           bool               `json:"active"`
 	Points           int                `json:"points"`
 	Tier             enums.CustomerTier `json:"tier"`
-	TierSpend        float64            `json:"tier_spend"`
+	TierSpend        common.Money       `json:"tier_spend"`
 	TotalOrders      int                `json:"total_orders"`
-	TotalSpend       float64            `json:"total_spend"`
+	TotalSpend       common.Money       `json:"total_spend"`
 	LastOrderAt      *time.Time         `json:"last_order_at,omitempty"`
 	Tags             []string           `json:"tags,omitempty"`
 	DefaultShipping  *DefaultShipping   `json:"default_shipping,omitempty"`
