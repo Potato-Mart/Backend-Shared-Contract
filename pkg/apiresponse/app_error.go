@@ -51,6 +51,18 @@ const (
 	CodeDiscountMinNotMet    Code = "DISCOUNT_MIN_NOT_MET"
 	CodeDiscountCodeTaken    Code = "DISCOUNT_CODE_TAKEN"
 	CodeDiscountInapplicable Code = "DISCOUNT_INAPPLICABLE"
+
+	// Payment terminal (EFTPOS) - covers MX51 SCI / Spice / SPI and any
+	// other terminal-backed provider. Codes are wire-stable so POS
+	// clients can switch on them to drive the recovery / re-pair UX.
+	CodeTerminalNotConnected   Code = "TERMINAL_NOT_CONNECTED"   // device offline (MX51: device_not_connected, 424)
+	CodeTerminalUnpaired       Code = "TERMINAL_UNPAIRED"        // pairing no longer active (MX51: no_active_pairings_found, 401)
+	CodeTerminalOutcomeUnknown Code = "TERMINAL_OUTCOME_UNKNOWN" // result_financial_status = UNKNOWN; needs override flow
+	CodeTerminalSignatureFail  Code = "TERMINAL_SIGNATURE_FAIL"  // signature declined by merchant
+	CodeTerminalTimeout        Code = "TERMINAL_TIMEOUT"         // polling-loop timeout; override dialog must be shown
+	CodePairingNotFound        Code = "PAIRING_NOT_FOUND"        // pairing code unknown (MX51: pairing_not_found, 404)
+	CodePairingExpired         Code = "PAIRING_EXPIRED"          // pairing already progressed/expired/revoked (MX51: pairing_not_initial, 422)
+	CodePairingForbidden       Code = "PAIRING_FORBIDDEN"        // wrong tenant/key for environment (MX51: pairing_route_forbidden / test_api_key_forbidden_for_live_pairing, 403)
 )
 
 // HTTPStatus returns the preferred HTTP status code for an error Code.
@@ -59,20 +71,28 @@ func (c Code) HTTPStatus() int {
 	case CodeBadRequest, CodeValidation, CodeOrderEmpty, CodeOrderInvalidTransition,
 		CodeOrderTerminal, CodeInsufficientStock, CodeStorageMismatch,
 		CodeDiscountInactive, CodeDiscountNotStarted, CodeDiscountExpired,
-		CodeDiscountExhausted, CodeDiscountMinNotMet, CodeDiscountInapplicable:
+		CodeDiscountExhausted, CodeDiscountMinNotMet, CodeDiscountInapplicable,
+		CodeTerminalSignatureFail:
 		return 400
 	case CodeUnauthorized, CodeAuthInvalidCredentials, CodeAuthInvalidToken,
-		CodeAuthExpiredToken, CodeAuthWrongPortal, CodeAuthAccountDisabled:
+		CodeAuthExpiredToken, CodeAuthWrongPortal, CodeAuthAccountDisabled,
+		CodeTerminalUnpaired:
 		return 401
-	case CodeForbidden:
+	case CodeForbidden, CodePairingForbidden:
 		return 403
-	case CodeNotFound, CodeDiscountNotFound:
+	case CodeNotFound, CodeDiscountNotFound, CodePairingNotFound:
 		return 404
 	case CodeConflict, CodeUserEmailTaken, CodeSKUCodeTaken,
 		CodePlacingAreaCodeTaken, CodeProductCodeTaken, CodeDiscountCodeTaken:
 		return 409
+	case CodePairingExpired:
+		return 422
 	case CodeTooManyRequests:
 		return 429
+	case CodeTerminalNotConnected:
+		return 424
+	case CodeTerminalOutcomeUnknown, CodeTerminalTimeout:
+		return 504
 	default:
 		return 500
 	}

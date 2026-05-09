@@ -28,6 +28,15 @@ type Order struct {
 	DiscountAmount    common.Money             `json:"discount_amount"`
 	ShippingAmount    common.Money             `json:"shipping_amount"`
 	TaxAmount         common.Money             `json:"tax_amount"`
+	// TipAmount and SurchargeAmount surface card-terminal-applied
+	// extras (most commonly returned by MX51 SCI in
+	// result_amounts.tip_amount / surcharge_amount). They are part of
+	// the customer-paid total and must appear on tax invoices.
+	// Cashout is intentionally not on Order - it is a parallel cash
+	// withdrawal that does not change the order's payable total - and
+	// lives only on Payment / TerminalTransaction.
+	TipAmount         common.Money             `json:"tip_amount,omitempty"`
+	SurchargeAmount   common.Money             `json:"surcharge_amount,omitempty"`
 	Total             common.Money             `json:"total"`
 	CouponCode        string                   `json:"coupon_code,omitempty"`
 	AppliedPromotions []AppliedPromotion       `json:"applied_promotions,omitempty"`
