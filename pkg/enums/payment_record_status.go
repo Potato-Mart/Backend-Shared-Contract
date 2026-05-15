@@ -15,14 +15,13 @@ const (
 
 	// AwaitingAction is the state where the terminal has paused and is
 	// waiting for the POS or merchant to take an action - signature
-	// approval, MOTO card entry, or the override decision after a
-	// timeout. Maps to MX51 SCI's AWAITING_POS.
+	// approval, MOTO card entry, AVS review, or the recovery decision
+	// after a timeout.
 	PaymentRecordStatusAwaitingAction PaymentRecordStatus = "awaiting_action"
 
 	// Unknown is used when the terminal could not confirm the outcome
-	// (network drop, terminal offline) and the recovery / override flow
-	// has not yet been resolved by the merchant. Maps to MX51 SCI's
-	// result_financial_status = UNKNOWN. Required for SCI certification.
+	// (network drop, terminal offline, missing webhook) and the recovery
+	// flow has not yet been resolved by the merchant.
 	PaymentRecordStatusUnknown PaymentRecordStatus = "unknown"
 )
 

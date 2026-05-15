@@ -1,7 +1,6 @@
 package enums
 
 // PaymentMethod tracks the money payment methods.
-
 type PaymentMethod string
 
 const (
@@ -15,13 +14,12 @@ const (
 
 	// EFTPOS-terminal-backed methods. These are distinct from the
 	// generic Card method so settlement reports and refund flows can
-	// reconcile against the terminal provider (e.g. MX51 SCI splits
-	// purchase / cashout / MOTO into separate transaction blocks).
+	// reconcile against the terminal provider. Adyen Terminal API also
+	// treats purchase, cashback/cashout, refund/reversal, and MOTO as
+	// separate request modes.
 	PaymentMethodEFTPOS  PaymentMethod = "eftpos"
 	PaymentMethodMOTO    PaymentMethod = "moto"
 	PaymentMethodCashout PaymentMethod = "cashout"
-
-	// Manual pay will add period
 )
 
 // IsValid reports whether p is a known PaymentMethod.
