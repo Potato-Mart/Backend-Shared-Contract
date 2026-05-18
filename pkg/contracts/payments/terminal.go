@@ -1,17 +1,16 @@
 // Package payments contains the shared contracts for EFTPOS payment
 // terminals and the transactions they process.
 //
-// The package is provider-agnostic but is shaped to fit MX51 SCI's
-// surface area (pairing, polled transactions, settlement, override
-// flow). Other providers - MX51 Spice, MX51 SPI, or future PaaS - reuse
-// the same types by setting Terminal.Provider.
+// The package is provider-aware but SDK-free. The current terminal
+// contract is shaped for Adyen Terminal API / Cloud Device API while
+// staying small enough for other terminal providers to reuse through
+// Terminal.Provider and Metadata.
 //
-// Secrets policy: this package never holds API keys, signing secrets,
-// or any credential material. The provider-side secrets (e.g. MX51
-// Signing Secret Part A and Part B, or the SCI Pairing API Key) live
-// exclusively in the secret store of the service that signs the
-// outbound HTTP calls. Only public, non-secret identifiers - pairing
-// id, key id, base url, tid - are carried on the wire.
+// Secrets policy: this package never holds API keys, HMAC keys, or any
+// credential material. Provider-side secrets live exclusively in the
+// secret store of the service that signs or sends outbound calls. Only
+// public, non-secret identifiers such as merchant account, POIID, SaleID,
+// ServiceID, PSP reference, and terminal base URL are carried here.
 package payments
 
 import (
@@ -21,72 +20,77 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
 )
 
-// Terminal is a paired EFTPOS device. There is one Terminal per
-// successful pairing; an unpair flips Status to Unpaired but the row
-// is kept so historical TerminalTransactions stay joinable.
-//
-// For MX51 SCI specifically, the fields PairingID, KeyID, TID and
-// SciAPIBaseURL all come from the POST /v1/progress-pairing response
-// and are mandatory for any subsequent transaction call. SciAPIBaseURL
-// in particular is per-pairing - different terminals can return
-// different URLs - and must be stored alongside the pairing row.
+// Terminal is an EFTPOS device registered for POS use. For Adyen, POIID
+// is the terminal identifier used in SaleToPOIRequest.MessageHeader and
+// in Cloud Device API paths. MerchantAccount identifies the Adyen
+// merchant account that owns the device, and SaleID identifies the POS
+// system component sending Terminal API requests.
 type Terminal struct {
 	ID       string                 `json:"id"`
 	TenantID string                 `json:"tenant_id"`
 	StoreID  string                 `json:"store_id,omitempty"`
 	Provider enums.TerminalProvider `json:"provider"`
 
+	ConnectionMode enums.TerminalConnectionMode `json:"connection_mode,omitempty"`
+
 	// Provider-side identifiers. All are non-secret and safe to
 	// transport in API responses.
-	PairingID        string `json:"pairing_id"`
-	KeyID            string `json:"key_id"`
-	TID              string `json:"tid,omitempty"`
-	PairingNickname  string `json:"pairing_nickname,omitempty"`
+	MerchantAccount  string `json:"merchant_account,omitempty"`
+	POIID            string `json:"poi_id,omitempty"`
+	SaleID           string `json:"sale_id,omitempty"`
 	TerminalNickname string `json:"terminal_nickname,omitempty"`
 
-	// SciAPIBaseURL is the per-pairing base URL returned at pairing
-	// time. All subsequent SCI API calls for this terminal must be
-	// directed at this URL.
-	SciAPIBaseURL string `json:"sci_api_base_url,omitempty"`
+	// TerminalAPIBaseURL optionally pins the regional endpoint used by
+	// the service layer. For Adyen AU live traffic this can be
+	// https://terminal-api-live-au.adyen.com or the Cloud Device API
+	// equivalent. Leave empty when the Adyen SDK/environment config owns
+	// endpoint selection.
+	TerminalAPIBaseURL string `json:"terminal_api_base_url,omitempty"`
 
 	Status enums.TerminalStatus `json:"status"`
 
-	PairedAt   *time.Time `json:"paired_at,omitempty"`
-	UnpairedAt *time.Time `json:"unpaired_at,omitempty"`
-	LastSeenAt *time.Time `json:"last_seen_at,omitempty"`
+	RegisteredAt   *time.Time `json:"registered_at,omitempty"`
+	DeregisteredAt *time.Time `json:"deregistered_at,omitempty"`
+	LastSeenAt     *time.Time `json:"last_seen_at,omitempty"`
 
 	Metadata common.Metadata `json:"metadata,omitempty"`
 
 	common.AuditFields
 }
 
-// PairingStartRequest initiates a pairing flow on the merchant's POS.
-// The pairing code is read off the EFTPOS terminal screen by the
-// merchant and typed into the POS.
-type PairingStartRequest struct {
-	TenantID        string                 `json:"tenant_id"`
-	StoreID         string                 `json:"store_id,omitempty"`
+// RegisterTerminalRequest saves a provider terminal association for a
+// tenant/store. Adyen terminals are registered from merchant account,
+// POIID, SaleID, and connection mode selected during setup.
+type RegisterTerminalRequest struct {
+	TenantID           string                       `json:"tenant_id"`
+	StoreID            string                       `json:"store_id,omitempty"`
+	Provider           enums.TerminalProvider       `json:"provider"`
+	ConnectionMode     enums.TerminalConnectionMode `json:"connection_mode,omitempty"`
+	MerchantAccount    string                       `json:"merchant_account,omitempty"`
+	POIID              string                       `json:"poi_id,omitempty"`
+	SaleID             string                       `json:"sale_id,omitempty"`
+	TerminalNickname   string                       `json:"terminal_nickname,omitempty"`
+	TerminalAPIBaseURL string                       `json:"terminal_api_base_url,omitempty"`
+	Metadata           common.Metadata              `json:"metadata,omitempty"`
+}
+
+// RegisterTerminalResponse is returned after a terminal association is
+// stored and can be used by the POS.
+type RegisterTerminalResponse struct {
+	Terminal Terminal `json:"terminal"`
+}
+
+// TerminalConnectionInfo is a lightweight liveness check returned by a
+// provider status call, such as Adyen's connected terminals or device
+// status endpoints.
+type TerminalConnectionInfo struct {
+	TerminalID      string                 `json:"terminal_id"`
 	Provider        enums.TerminalProvider `json:"provider"`
-	PairingCode     string                 `json:"pairing_code"`
-	PairingNickname string                 `json:"pairing_nickname,omitempty"`
-}
-
-// PairingStartResponse is returned to the POS once the pairing has
-// progressed on the provider side. ConfirmationCode is shown on the
-// terminal at the same time and the merchant must verify they match
-// before confirming on the device. The pairing only becomes Active
-// once the merchant confirms on the terminal itself.
-type PairingStartResponse struct {
-	Terminal         Terminal `json:"terminal"`
-	ConfirmationCode string   `json:"confirmation_code"`
-}
-
-// PairingInfo is the lightweight liveness check returned by the
-// provider-equivalent of MX51's GET /v1/pairing-info. Use it before
-// navigating to the pairing screen and before initiating a transaction.
-type PairingInfo struct {
-	TerminalID string               `json:"terminal_id"`
-	PairingID  string               `json:"pairing_id"`
-	Status     enums.TerminalStatus `json:"status"`
-	CheckedAt  time.Time            `json:"checked_at"`
+	MerchantAccount string                 `json:"merchant_account,omitempty"`
+	POIID           string                 `json:"poi_id,omitempty"`
+	Status          enums.TerminalStatus   `json:"status"`
+	Connected       bool                   `json:"connected"`
+	ProviderStatus  string                 `json:"provider_status,omitempty"`
+	CheckedAt       time.Time              `json:"checked_at"`
+	Metadata        common.Metadata        `json:"metadata,omitempty"`
 }

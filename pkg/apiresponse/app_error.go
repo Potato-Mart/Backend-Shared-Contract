@@ -1,8 +1,8 @@
 // Package apiresponse defines the canonical error codes that every
 // service in the MeatAndMe backend returns. Holding these codes in a
 // shared module means API consumers (web, mobile, future
-// microservices) can switch on stable string codes instead of
-// matching message strings.
+// microservices) can switch on stable string codes instead of matching
+// message strings.
 package apiresponse
 
 type Code string
@@ -52,17 +52,15 @@ const (
 	CodeDiscountCodeTaken    Code = "DISCOUNT_CODE_TAKEN"
 	CodeDiscountInapplicable Code = "DISCOUNT_INAPPLICABLE"
 
-	// Payment terminal (EFTPOS) - covers MX51 SCI / Spice / SPI and any
-	// other terminal-backed provider. Codes are wire-stable so POS
-	// clients can switch on them to drive the recovery / re-pair UX.
-	CodeTerminalNotConnected   Code = "TERMINAL_NOT_CONNECTED"   // device offline (MX51: device_not_connected, 424)
-	CodeTerminalUnpaired       Code = "TERMINAL_UNPAIRED"        // pairing no longer active (MX51: no_active_pairings_found, 401)
-	CodeTerminalOutcomeUnknown Code = "TERMINAL_OUTCOME_UNKNOWN" // result_financial_status = UNKNOWN; needs override flow
-	CodeTerminalSignatureFail  Code = "TERMINAL_SIGNATURE_FAIL"  // signature declined by merchant
-	CodeTerminalTimeout        Code = "TERMINAL_TIMEOUT"         // polling-loop timeout; override dialog must be shown
-	CodePairingNotFound        Code = "PAIRING_NOT_FOUND"        // pairing code unknown (MX51: pairing_not_found, 404)
-	CodePairingExpired         Code = "PAIRING_EXPIRED"          // pairing already progressed/expired/revoked (MX51: pairing_not_initial, 422)
-	CodePairingForbidden       Code = "PAIRING_FORBIDDEN"        // wrong tenant/key for environment (MX51: pairing_route_forbidden / test_api_key_forbidden_for_live_pairing, 403)
+	// Payment terminal (EFTPOS). Codes are wire-stable so POS clients
+	// can switch on them to drive retry, status-check, and recovery UX.
+	CodeTerminalNotConnected    Code = "TERMINAL_NOT_CONNECTED"
+	CodeTerminalNotRegistered   Code = "TERMINAL_NOT_REGISTERED"
+	CodeTerminalOutcomeUnknown  Code = "TERMINAL_OUTCOME_UNKNOWN"
+	CodeTerminalSignatureFail   Code = "TERMINAL_SIGNATURE_FAIL"
+	CodeTerminalTimeout         Code = "TERMINAL_TIMEOUT"
+	CodeTerminalRequestRejected Code = "TERMINAL_REQUEST_REJECTED"
+	CodeTerminalBusy            Code = "TERMINAL_BUSY"
 )
 
 // HTTPStatus returns the preferred HTTP status code for an error Code.
@@ -72,21 +70,19 @@ func (c Code) HTTPStatus() int {
 		CodeOrderTerminal, CodeInsufficientStock, CodeStorageMismatch,
 		CodeDiscountInactive, CodeDiscountNotStarted, CodeDiscountExpired,
 		CodeDiscountExhausted, CodeDiscountMinNotMet, CodeDiscountInapplicable,
-		CodeTerminalSignatureFail:
+		CodeTerminalSignatureFail, CodeTerminalRequestRejected:
 		return 400
 	case CodeUnauthorized, CodeAuthInvalidCredentials, CodeAuthInvalidToken,
-		CodeAuthExpiredToken, CodeAuthWrongPortal, CodeAuthAccountDisabled,
-		CodeTerminalUnpaired:
+		CodeAuthExpiredToken, CodeAuthWrongPortal, CodeAuthAccountDisabled:
 		return 401
-	case CodeForbidden, CodePairingForbidden:
+	case CodeForbidden:
 		return 403
-	case CodeNotFound, CodeDiscountNotFound, CodePairingNotFound:
+	case CodeNotFound, CodeDiscountNotFound, CodeTerminalNotRegistered:
 		return 404
 	case CodeConflict, CodeUserEmailTaken, CodeSKUCodeTaken,
-		CodePlacingAreaCodeTaken, CodeProductCodeTaken, CodeDiscountCodeTaken:
+		CodePlacingAreaCodeTaken, CodeProductCodeTaken, CodeDiscountCodeTaken,
+		CodeTerminalBusy:
 		return 409
-	case CodePairingExpired:
-		return 422
 	case CodeTooManyRequests:
 		return 429
 	case CodeTerminalNotConnected:

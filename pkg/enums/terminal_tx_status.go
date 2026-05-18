@@ -1,18 +1,18 @@
 package enums
 
-// TerminalTxStatus is the polling-loop state of a transaction created
-// on a payment terminal.
+// TerminalTxStatus is the lifecycle state of a transaction created on a
+// payment terminal.
 //
-// MX51 SCI surfaces three native states - PENDING, AWAITING_POS,
-// FINALISED - mapped here to Pending, AwaitingPOS, and Finalised.
-// OverridePending and OverrideResolved capture the mandatory recovery
-// flow when the API stops responding within the POS-defined timeout
-// and the merchant must manually confirm the outcome.
+// Pending covers a request accepted by the provider but not yet resolved,
+// including Adyen cloud async calls waiting for an event notification or
+// transaction status request. AwaitingAction covers terminal or merchant
+// interaction such as signature, MOTO entry, AVS review, or manual
+// recovery after a timeout.
 type TerminalTxStatus string
 
 const (
 	TerminalTxStatusPending          TerminalTxStatus = "pending"
-	TerminalTxStatusAwaitingPOS      TerminalTxStatus = "awaiting_pos"
+	TerminalTxStatusAwaitingAction   TerminalTxStatus = "awaiting_action"
 	TerminalTxStatusFinalised        TerminalTxStatus = "finalised"
 	TerminalTxStatusOverridePending  TerminalTxStatus = "override_pending"
 	TerminalTxStatusOverrideResolved TerminalTxStatus = "override_resolved"
@@ -21,14 +21,15 @@ const (
 // IsValid reports whether s is a known TerminalTxStatus.
 func (s TerminalTxStatus) IsValid() bool {
 	switch s {
-	case TerminalTxStatusPending, TerminalTxStatusAwaitingPOS, TerminalTxStatusFinalised,
+	case TerminalTxStatusPending, TerminalTxStatusAwaitingAction, TerminalTxStatusFinalised,
 		TerminalTxStatusOverridePending, TerminalTxStatusOverrideResolved:
 		return true
 	}
 	return false
 }
 
-// IsTerminal reports whether polling should stop in this state.
+// IsTerminal reports whether transaction status checks should stop in
+// this state.
 func (s TerminalTxStatus) IsTerminal() bool {
 	return s == TerminalTxStatusFinalised || s == TerminalTxStatusOverrideResolved
 }
