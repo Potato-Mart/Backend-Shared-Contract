@@ -1,0 +1,41 @@
+package identity
+
+import (
+	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
+)
+
+// Role is the projection of a role definition stored in mgmt_roles.
+//
+// The role enum value (Key) is the wire-stable identifier used by JWT
+// claims and middleware checks; Permissions is the list of permission
+// strings granted to anyone holding this role.
+//
+// IsSystem marks the seven built-in roles that the platform ships with
+// (superAdmin, admin, sales, warehouse, warehouseOperator, marketing,
+// customer). System roles cannot be deleted but their permissions can
+// be tweaked by a superAdmin.
+type Role struct {
+	Key         enums.UserRole `json:"key"`
+	Label       string         `json:"label"`
+	Description string         `json:"description,omitempty"`
+	Permissions []string       `json:"permissions"`
+	IsSystem    bool           `json:"is_system"`
+	CreatedAt   time.Time      `json:"created_at"`
+	UpdatedAt   time.Time      `json:"updated_at"`
+}
+
+// Permission is the projection of a permission definition stored in
+// mgmt_permissions. Permissions are addressed by a stable dotted key
+// (e.g. "customer.write", "promotion.publish") and grouped by module
+// for the admin UI.
+type Permission struct {
+	Key         string    `json:"key"`
+	Label       string    `json:"label"`
+	Description string    `json:"description,omitempty"`
+	Module      string    `json:"module"`
+	IsSystem    bool      `json:"is_system"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at"`
+}
