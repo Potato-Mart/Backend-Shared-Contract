@@ -17,13 +17,16 @@ import (
 // customer). System roles cannot be deleted but their permissions can
 // be tweaked by a superAdmin.
 type Role struct {
-	Key         enums.UserRole `json:"key"`
-	Label       string         `json:"label"`
-	Description string         `json:"description,omitempty"`
-	Permissions []string       `json:"permissions"`
-	IsSystem    bool           `json:"is_system"`
-	CreatedAt   time.Time      `json:"created_at"`
-	UpdatedAt   time.Time      `json:"updated_at"`
+	Key                         enums.UserRole `json:"key"`
+	Label                       string         `json:"label"`
+	Description                 string         `json:"description,omitempty"`
+	Permissions                 []string       `json:"permissions"`
+	IsSystem                    bool           `json:"is_system"`
+	OwnerID                     string         `json:"owner_id,omitempty"`
+	LeastPrivilegeJustification string         `json:"least_privilege_justification,omitempty"`
+	AccessReviewedAt            *time.Time     `json:"access_reviewed_at,omitempty"`
+	CreatedAt                   time.Time      `json:"created_at"`
+	UpdatedAt                   time.Time      `json:"updated_at"`
 }
 
 // Permission is the projection of a permission definition stored in
@@ -31,11 +34,13 @@ type Role struct {
 // (e.g. "customer.write", "promotion.publish") and grouped by module
 // for the admin UI.
 type Permission struct {
-	Key         string    `json:"key"`
-	Label       string    `json:"label"`
-	Description string    `json:"description,omitempty"`
-	Module      string    `json:"module"`
-	IsSystem    bool      `json:"is_system"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
+	Key         string                  `json:"key"`
+	Label       string                  `json:"label"`
+	Description string                  `json:"description,omitempty"`
+	Module      string                  `json:"module"`
+	IsSystem    bool                    `json:"is_system"`
+	RiskLevel   enums.SecurityRiskLevel `json:"risk_level,omitempty"`
+	RequiresMFA bool                    `json:"requires_mfa,omitempty"`
+	CreatedAt   time.Time               `json:"created_at"`
+	UpdatedAt   time.Time               `json:"updated_at"`
 }

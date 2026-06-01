@@ -34,4 +34,6 @@ type CustomerIdentity struct {
 	Label             string                     `json:"label,omitempty"`
 	Verified          bool                       `json:"verified"`
 	CreatedAt         time.Time                  `json:"created_at"`
+
+	common.DataProtectionFields
 }

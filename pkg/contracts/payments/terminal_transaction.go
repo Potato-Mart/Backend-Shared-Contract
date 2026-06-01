@@ -81,6 +81,7 @@ type TerminalTransaction struct {
 	Metadata common.Metadata `json:"metadata,omitempty"`
 
 	common.AuditFields
+	common.DataProtectionFields
 }
 
 // CreateTerminalTransactionRequest is the input the POS submits to

@@ -72,4 +72,6 @@ type Payment struct {
 	RefundReason string          `json:"refund_reason,omitempty"`
 	Metadata     common.Metadata `json:"metadata,omitempty"`
 	CreatedAt    time.Time       `json:"created_at"`
+
+	common.DataProtectionFields
 }

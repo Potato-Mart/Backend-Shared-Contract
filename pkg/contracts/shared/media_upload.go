@@ -1,6 +1,10 @@
 package shared
 
-import "time"
+import (
+	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
+)
 
 // MediaUploadRequest is the body of POST /media/upload-url. The client
 // describes the file it intends to upload and the server returns a
@@ -31,6 +35,8 @@ type MediaUploadRequest struct {
 	// on Finalize.
 	AttachToType string `json:"attach_to_type,omitempty"`
 	AttachToID   string `json:"attach_to_id,omitempty"`
+
+	common.DataProtectionFields
 }
 
 // MediaUploadResponse is what the server returns for an upload request.

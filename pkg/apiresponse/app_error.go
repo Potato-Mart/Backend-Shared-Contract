@@ -19,11 +19,14 @@ const (
 	CodeTooManyRequests Code = "TOO_MANY_REQUESTS"
 
 	// Auth
-	CodeAuthInvalidCredentials Code = "AUTH_INVALID_CREDENTIALS"
-	CodeAuthInvalidToken       Code = "AUTH_INVALID_TOKEN"
-	CodeAuthExpiredToken       Code = "AUTH_EXPIRED_TOKEN"
-	CodeAuthWrongPortal        Code = "AUTH_WRONG_PORTAL"
-	CodeAuthAccountDisabled    Code = "AUTH_ACCOUNT_DISABLED"
+	CodeAuthInvalidCredentials  Code = "AUTH_INVALID_CREDENTIALS"
+	CodeAuthInvalidToken        Code = "AUTH_INVALID_TOKEN"
+	CodeAuthExpiredToken        Code = "AUTH_EXPIRED_TOKEN"
+	CodeAuthWrongPortal         Code = "AUTH_WRONG_PORTAL"
+	CodeAuthAccountDisabled     Code = "AUTH_ACCOUNT_DISABLED"
+	CodeAuthMFARequired         Code = "AUTH_MFA_REQUIRED"
+	CodeAuthReauthRequired      Code = "AUTH_REAUTH_REQUIRED"
+	CodeSecurityPolicyViolation Code = "SECURITY_POLICY_VIOLATION"
 
 	// User
 	CodeUserEmailTaken Code = "USER_EMAIL_TAKEN"
@@ -73,9 +76,10 @@ func (c Code) HTTPStatus() int {
 		CodeTerminalSignatureFail, CodeTerminalRequestRejected:
 		return 400
 	case CodeUnauthorized, CodeAuthInvalidCredentials, CodeAuthInvalidToken,
-		CodeAuthExpiredToken, CodeAuthWrongPortal, CodeAuthAccountDisabled:
+		CodeAuthExpiredToken, CodeAuthWrongPortal, CodeAuthAccountDisabled,
+		CodeAuthMFARequired, CodeAuthReauthRequired:
 		return 401
-	case CodeForbidden:
+	case CodeForbidden, CodeSecurityPolicyViolation:
 		return 403
 	case CodeNotFound, CodeDiscountNotFound, CodeTerminalNotRegistered:
 		return 404
