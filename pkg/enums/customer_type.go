@@ -7,7 +7,7 @@ type CustomerType string
 
 const (
 	CustomerTypeIndividual CustomerType = "INDIVIDUAL"
-	CustomerTypeWholesaler CustomerType = "COMPANY"
+	CustomerTypeWholesaler CustomerType = "WHOLESALER"
 )
 
 // IsValid reports whether c is a known CustomerType.
