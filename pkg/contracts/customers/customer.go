@@ -36,7 +36,6 @@ type Customer struct {
 	DefaultShipping   *DefaultShipping            `json:"default_shipping,omitempty"`
 	ShippingList      []Shipping                  `json:"shipping_list,omitempty"`
 	AcceptsMarketing  bool                        `json:"accepts_marketing"`
-	IsActive          bool                        `json:"is_active"`
 	CreatedAt         time.Time                   `json:"created_at"`
 	UpdatedAt         time.Time                   `json:"updated_at"`
 
