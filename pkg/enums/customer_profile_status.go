@@ -5,13 +5,14 @@ package enums
 type CustomerSegment string
 
 const (
+	CustomerSegmentRegular   CustomerSegment = "REGULAR"
 	CustomerSegmentWholesale CustomerSegment = "WHOLESALE"
 	CustomerSegmentRetail    CustomerSegment = "RETAIL"
 )
 
 func (c CustomerSegment) IsValid() bool {
 	switch c {
-	case CustomerSegmentWholesale, CustomerSegmentRetail:
+	case CustomerSegmentRegular, CustomerSegmentWholesale, CustomerSegmentRetail:
 		return true
 	}
 	return false
