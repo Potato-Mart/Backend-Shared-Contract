@@ -6,6 +6,7 @@ package enums
 type PaymentStatus string
 
 const (
+	PaymentStatusUnknown         PaymentStatus = "unknown"
 	PaymentStatusUnpaid          PaymentStatus = "unpaid"
 	PaymentStatusPending         PaymentStatus = "pending"
 	PaymentStatusPaid            PaymentStatus = "paid"
@@ -17,7 +18,7 @@ const (
 // IsValid reports whether p is a known PaymentStatus.
 func (p PaymentStatus) IsValid() bool {
 	switch p {
-	case PaymentStatusUnpaid, PaymentStatusPending, PaymentStatusPaid,
+	case PaymentStatusUnknown, PaymentStatusUnpaid, PaymentStatusPending, PaymentStatusPaid,
 		PaymentStatusPartiallyPaid, PaymentStatusRefunded, PaymentStatusPartialRefunded:
 		return true
 	}

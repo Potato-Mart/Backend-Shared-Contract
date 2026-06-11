@@ -10,16 +10,15 @@ import (
 
 // Settlement is an end-of-day reconciliation/batch close
 // (Type = SettlementTypeSettlement) or a read-only summary
-// (Type = SettlementTypeEnquiry). For Adyen Terminal API this maps to
-// ReconciliationRequest and GetTotals-style flows.
+// (Type = SettlementTypeEnquiry).
 type Settlement struct {
 	ID                   string                          `json:"id"`
 	TerminalID           string                          `json:"terminal_id"`
 	ProviderSettlementID string                          `json:"provider_settlement_id,omitempty"`
-	MerchantAccount      string                          `json:"merchant_account,omitempty"`
-	POIID                string                          `json:"poi_id,omitempty"`
-	ServiceID            string                          `json:"service_id,omitempty"`
-	SaleID               string                          `json:"sale_id,omitempty"`
+	ProviderMerchantID   string                          `json:"provider_merchant_id,omitempty"`
+	ProviderTerminalID   string                          `json:"provider_terminal_id,omitempty"`
+	ProviderRequestID    string                          `json:"provider_request_id,omitempty"`
+	MerchantReference    string                          `json:"merchant_reference,omitempty"`
 	Type                 enums.SettlementType            `json:"type"`
 	EnquiryDate          *common.Date                    `json:"enquiry_date,omitempty"`
 	Status               enums.TerminalTxStatus          `json:"status"`
@@ -62,12 +61,12 @@ type SettlementTotals struct {
 // other than today; omit it for "today's" enquiry or for a real
 // settlement.
 type CreateSettlementRequest struct {
-	TerminalID     string                       `json:"terminal_id"`
-	Type           enums.SettlementType         `json:"type"`
-	EnquiryDate    *common.Date                 `json:"enquiry_date,omitempty"`
-	ConnectionMode enums.TerminalConnectionMode `json:"connection_mode,omitempty"`
-	ServiceID      string                       `json:"service_id,omitempty"`
-	IdempotencyKey string                       `json:"idempotency_key,omitempty"`
+	TerminalID        string                       `json:"terminal_id"`
+	Type              enums.SettlementType         `json:"type"`
+	EnquiryDate       *common.Date                 `json:"enquiry_date,omitempty"`
+	ConnectionMode    enums.TerminalConnectionMode `json:"connection_mode,omitempty"`
+	ProviderRequestID string                       `json:"provider_request_id,omitempty"`
+	IdempotencyKey    string                       `json:"idempotency_key,omitempty"`
 }
 
 // CheckSettlementStatusRequest asks the backend to refresh settlement

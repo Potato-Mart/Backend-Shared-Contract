@@ -7,13 +7,13 @@ package enums
 type TerminalProvider string
 
 const (
-	TerminalProviderAdyenTerminalAPI TerminalProvider = "adyen_terminal_api"
+	TerminalProviderMx51 TerminalProvider = "mx51"
 )
 
 // IsValid reports whether p is a known TerminalProvider.
 func (p TerminalProvider) IsValid() bool {
 	switch p {
-	case TerminalProviderAdyenTerminalAPI:
+	case TerminalProviderMx51:
 		return true
 	}
 	return false

@@ -1,10 +1,7 @@
 package enums
 
 // TerminalTxType is the kind of transaction submitted to the payment
-// terminal. The values map to the shared POS operations used by Adyen
-// Terminal API: PaymentRequest for purchases, unreferenced refunds,
-// cashbacks/cashouts and MOTO; ReversalRequest for referenced refunds;
-// and ReconciliationRequest/GetTotals-style settlement operations.
+// terminal.
 type TerminalTxType string
 
 const (

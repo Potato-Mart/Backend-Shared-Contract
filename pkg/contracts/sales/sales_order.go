@@ -29,8 +29,7 @@ type Order struct {
 	ShippingAmount    common.Money             `json:"shipping_amount"`
 	TaxAmount         common.Money             `json:"tax_amount"`
 	// TipAmount and SurchargeAmount surface card-terminal-applied
-	// extras (for example, Adyen Terminal API tip/surcharge result
-	// fields). They are part of the customer-paid total and must appear
+	// extras. They are part of the customer-paid total and must appear
 	// on tax invoices.
 	// Cashout is intentionally not on Order - it is a parallel cash
 	// withdrawal that does not change the order's payable total - and

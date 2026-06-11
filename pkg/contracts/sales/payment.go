@@ -4,24 +4,11 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
+	paymentcontracts "github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/contracts/payments"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
 )
 
 // Payment is the order-level record of money received against an order.
-// It is method-agnostic: cash, card, EFTPOS, MOTO, QR, bank transfer all
-// share this shape.
-//
-// For terminal-backed payments (Method = eftpos / moto / cashout) the
-// instrument-level state lives on payments.TerminalTransaction and is
-// linked back via TerminalID + TerminalTransactionID. The split lets the
-// terminal lifecycle stay separate from the merchant's "did we get the
-// money" view of the world.
-//
-// Amount on this struct is the total amount received from the customer
-// for this payment line. The component breakdown (Tip, Surcharge,
-// Cashout, MOTO) is captured separately because terminal providers such
-// as Adyen report applied components separately, and those applied
-// values are the source of truth for tax invoices and refund math.
 type Payment struct {
 	ID      string       `json:"id"`
 	OrderID string       `json:"order_id"`
@@ -34,17 +21,10 @@ type Payment struct {
 	// Deprecated: use Amount.Currency.
 	Currency string `json:"currency,omitempty"`
 
-	Method               enums.PaymentMethod       `json:"method"`
-	Status               enums.PaymentRecordStatus `json:"status"`
-	Gateway              string                    `json:"gateway,omitempty"`
-	GatewayTransactionID string                    `json:"gateway_transaction_id,omitempty"`
-
-	// Adyen reconciliation references. PSPReference is the primary
-	// Adyen payment identifier and TenderReference is the terminal-side
-	// identifier. Together they form POITransactionID.TransactionID as
-	// "<tenderReference>.<pspReference>".
-	PSPReference    string `json:"psp_reference,omitempty"`
-	TenderReference string `json:"tender_reference,omitempty"`
+	Method            enums.PaymentMethod                `json:"method"`
+	Status            enums.PaymentRecordStatus          `json:"status"`
+	Provider          string                             `json:"provider,omitempty"`
+	ProviderReference *paymentcontracts.PaymentReference `json:"provider_reference,omitempty"`
 
 	// Terminal linkage, populated for eftpos / moto / cashout methods.
 	TerminalID            string `json:"terminal_id,omitempty"`

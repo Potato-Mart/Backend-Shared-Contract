@@ -1,8 +1,7 @@
 package enums
 
-// TerminalRefundType distinguishes Adyen's two in-person refund paths:
-// a referenced refund using a ReversalRequest, or an unreferenced refund
-// using a PaymentRequest with PaymentType=Refund.
+// TerminalRefundType distinguishes referenced and unreferenced in-person
+// refund paths.
 type TerminalRefundType string
 
 const (

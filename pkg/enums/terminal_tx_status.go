@@ -3,14 +3,13 @@ package enums
 // TerminalTxStatus is the lifecycle state of a transaction created on a
 // payment terminal.
 //
-// Pending covers a request accepted by the provider but not yet resolved,
-// including Adyen cloud async calls waiting for an event notification or
-// transaction status request. AwaitingAction covers terminal or merchant
-// interaction such as signature, MOTO entry, AVS review, or manual
-// recovery after a timeout.
+// Pending covers a request accepted by the provider but not yet resolved.
+// AwaitingAction covers terminal or merchant interaction such as signature,
+// MOTO entry, AVS review, or manual recovery after a timeout.
 type TerminalTxStatus string
 
 const (
+	TerminalTxStatusUnknown          TerminalTxStatus = "unknown"
 	TerminalTxStatusPending          TerminalTxStatus = "pending"
 	TerminalTxStatusAwaitingAction   TerminalTxStatus = "awaiting_action"
 	TerminalTxStatusFinalised        TerminalTxStatus = "finalised"
@@ -21,7 +20,7 @@ const (
 // IsValid reports whether s is a known TerminalTxStatus.
 func (s TerminalTxStatus) IsValid() bool {
 	switch s {
-	case TerminalTxStatusPending, TerminalTxStatusAwaitingAction, TerminalTxStatusFinalised,
+	case TerminalTxStatusUnknown, TerminalTxStatusPending, TerminalTxStatusAwaitingAction, TerminalTxStatusFinalised,
 		TerminalTxStatusOverridePending, TerminalTxStatusOverrideResolved:
 		return true
 	}

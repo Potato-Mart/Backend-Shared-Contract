@@ -1,8 +1,7 @@
 package enums
 
 // TerminalConnectionMode describes how the POS backend talks to the
-// payment terminal. Adyen Terminal API supports cloud sync, cloud async,
-// and local terminal communication.
+// payment terminal.
 type TerminalConnectionMode string
 
 const (

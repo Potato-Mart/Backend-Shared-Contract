@@ -14,9 +14,7 @@ const (
 
 	// EFTPOS-terminal-backed methods. These are distinct from the
 	// generic Card method so settlement reports and refund flows can
-	// reconcile against the terminal provider. Adyen Terminal API also
-	// treats purchase, cashback/cashout, refund/reversal, and MOTO as
-	// separate request modes.
+	// reconcile against the terminal provider.
 	PaymentMethodEFTPOS  PaymentMethod = "eftpos"
 	PaymentMethodMOTO    PaymentMethod = "moto"
 	PaymentMethodCashout PaymentMethod = "cashout"
