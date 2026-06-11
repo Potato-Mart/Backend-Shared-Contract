@@ -7,12 +7,12 @@
 
 ## 最新版本
 
-### V3.10.0
+### V4.0.0
 
 ## 模組路徑
 
 ```text
-github.com/Potato-Mart/Backend-Shared-Contract/v3
+github.com/Potato-Mart/Backend-Shared-Contract/v4
 ````
 
 ## 目錄結構
@@ -26,14 +26,14 @@ github.com/Potato-Mart/Backend-Shared-Contract/v3
 在使用方服務的 `go.mod` 中加入：
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v3 v3.10.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v4 v4.0.0
 ```
 
 接著匯入所需套件，例如：
 
 ```go
 import (
-    "github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
+    "github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
 )
 ```
 
@@ -42,3 +42,5 @@ import (
 本模組一經發布後，遵循版本控制。
 凡是對任何已匯出的內容有破壞性的改變，皆必須升版為新的主版本（major version）。
 自 V3.0.0 開始，所有的發布內容會自動化生成
+
+自 V4.0.0 開始，付費接口已經泛化，可用任何第三方進行合作
