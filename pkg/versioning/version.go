@@ -2,6 +2,6 @@ package versioning
 
 const (
 	ModuleName    = "Backend-Shared-Contract"
-	ModuleVersion = "v4.2.0"
-	MajorVersion  = "v4"
+	ModuleVersion = "v5.0.0"
+	MajorVersion  = "v5"
 )

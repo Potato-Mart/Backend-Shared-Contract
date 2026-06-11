@@ -3,7 +3,7 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
 )
 
 // SecurityPolicySettings is the shared shape for backend-enforced security

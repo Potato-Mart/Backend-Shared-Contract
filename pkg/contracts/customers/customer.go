@@ -3,8 +3,8 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
 // Customer is the public projection of a B2C user account linked to auth.users.

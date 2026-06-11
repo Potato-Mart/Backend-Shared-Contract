@@ -3,8 +3,8 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
 // AccessLogEntry records read/list/search/export access to protected data.

@@ -3,8 +3,8 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
 // WarehouseLayout is the root 3D scene description for a depot. There is

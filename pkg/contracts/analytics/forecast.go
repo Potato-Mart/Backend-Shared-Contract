@@ -3,7 +3,7 @@ package analytics
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
 )
 
 // AlertLevel classifies the urgency of a stock-out forecast.
@@ -13,6 +13,7 @@ const (
 	AlertLevelOK       AlertLevel = "OK"
 	AlertLevelWarning  AlertLevel = "WARNING"
 	AlertLevelCritical AlertLevel = "CRITICAL"
+	AlertLevelExpired  AlertLevel = "EXPIRED"
 )
 
 // SKUDemandForecast holds the latest AI-generated stock-out prediction for

@@ -3,7 +3,7 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
 // LoginSession is a non-secret projection of an active staff or

@@ -3,7 +3,7 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
 )
 
 // LoyaltyStatus groups the loyalty-programme state of a customer: points

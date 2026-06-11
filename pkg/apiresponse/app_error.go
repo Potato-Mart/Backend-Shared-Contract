@@ -17,6 +17,7 @@ const (
 	CodeUnauthorized    Code = "UNAUTHORIZED"
 	CodeForbidden       Code = "FORBIDDEN"
 	CodeTooManyRequests Code = "TOO_MANY_REQUESTS"
+	CodeRequestTooLarge Code = "REQUEST_BODY_TOO_LARGE"
 
 	// Auth
 	CodeAuthInvalidCredentials  Code = "AUTH_INVALID_CREDENTIALS"
@@ -87,6 +88,8 @@ func (c Code) HTTPStatus() int {
 		CodePlacingAreaCodeTaken, CodeProductCodeTaken, CodeDiscountCodeTaken,
 		CodeTerminalBusy:
 		return 409
+	case CodeRequestTooLarge:
+		return 413
 	case CodeTooManyRequests:
 		return 429
 	case CodeTerminalNotConnected:
