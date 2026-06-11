@@ -27,5 +27,5 @@ type WholesaleTierPreset struct {
 	SortOrder int  `json:"sort_order"`
 	IsSystem  bool `json:"is_system"` // system presets cannot be deleted
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }

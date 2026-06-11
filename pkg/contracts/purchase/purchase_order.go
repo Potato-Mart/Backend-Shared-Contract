@@ -29,7 +29,7 @@ type Order struct {
 	Note         string                    `json:"note,omitempty"`
 	InternalNote string                    `json:"internal_note,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 type OrderItem struct {

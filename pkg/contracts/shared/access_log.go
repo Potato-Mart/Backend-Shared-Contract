@@ -12,16 +12,16 @@ import (
 type AccessLogEntry struct {
 	ID         string    `json:"id"`
 	OccurredAt time.Time `json:"occurred_at"`
-	ActorRef
+	ActorRef `bson:",inline"`
 	Action      string `json:"action"`             // e.g. "customer.read" or "order.export"
 	Resource    string `json:"resource,omitempty"` // e.g. "customer:cust_123"
 	ResourceID  string `json:"resource_id,omitempty"`
 	RecordCount int    `json:"record_count,omitempty"`
-	RequestContext
-	RecordOutcome
+	RequestContext `bson:",inline"`
+	RecordOutcome `bson:",inline"`
 	RiskLevel     enums.SecurityRiskLevel `json:"risk_level,omitempty"`
 	IntegrityHash string                  `json:"integrity_hash,omitempty"`
 	Metadata      common.Metadata         `json:"metadata,omitempty"`
 
-	common.DataProtectionFields
+	common.DataProtectionFields `bson:",inline"`
 }

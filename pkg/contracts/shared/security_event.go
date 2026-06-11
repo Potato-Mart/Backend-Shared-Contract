@@ -20,9 +20,9 @@ type SecurityEvent struct {
 	Severity      enums.SecurityEventSeverity `json:"severity"`
 	Status        enums.SecurityEventStatus   `json:"status"`
 	RiskLevel     enums.SecurityRiskLevel     `json:"risk_level,omitempty"`
-	ActorRef
+	ActorRef `bson:",inline"`
 	SubjectUserID string `json:"subject_user_id,omitempty"`
-	RequestContext
+	RequestContext `bson:",inline"`
 	Resource           string                      `json:"resource,omitempty"`
 	ResourceID         string                      `json:"resource_id,omitempty"`
 	RelatedAuditLogID  string                      `json:"related_audit_log_id,omitempty"`
@@ -33,7 +33,7 @@ type SecurityEvent struct {
 	Resolution         string                      `json:"resolution,omitempty"`
 	Metadata           common.Metadata             `json:"metadata,omitempty"`
 
-	common.DataProtectionFields
+	common.DataProtectionFields `bson:",inline"`
 }
 
 // SecurityIncident groups one or more security events into an incident
@@ -61,7 +61,7 @@ type SecurityIncident struct {
 	NotificationDueAt  *time.Time                  `json:"notification_due_at,omitempty"`
 	Metadata           common.Metadata             `json:"metadata,omitempty"`
 
-	common.DataProtectionFields
+	common.DataProtectionFields `bson:",inline"`
 }
 
 // EvidenceRecord tracks security evidence and chain-of-custody metadata.
@@ -78,7 +78,7 @@ type EvidenceRecord struct {
 	ChainOfCustody []CustodyEvent  `json:"chain_of_custody,omitempty"`
 	Metadata       common.Metadata `json:"metadata,omitempty"`
 
-	common.DataProtectionFields
+	common.DataProtectionFields `bson:",inline"`
 }
 
 type CustodyEvent struct {

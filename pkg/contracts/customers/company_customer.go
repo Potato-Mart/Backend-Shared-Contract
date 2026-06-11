@@ -47,8 +47,8 @@ type CompanyCustomer struct {
 	// ── Referral ──────────────────────────────────────────────────────
 	Referral *Referral `json:"referral,omitempty"`
 
-	common.AuditFields
-	common.DataProtectionFields
+	common.AuditFields `bson:",inline"`
+	common.DataProtectionFields `bson:",inline"`
 }
 
 // WholesaleTerms groups the B2B price-tier configuration and freight terms

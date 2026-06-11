@@ -32,7 +32,7 @@ type WarehouseLayout struct {
 	IsPublished     bool           `json:"is_published"`
 	PublishedAt     *time.Time     `json:"published_at,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 // LayoutNode is a single element in the warehouse 3D hierarchy:
@@ -62,7 +62,7 @@ type LayoutNode struct {
 	SortOrder  int                  `json:"sort_order,omitempty"`
 	IsActive   bool                 `json:"is_active"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 // ModelAsset references a 3D model file stored elsewhere (object storage,

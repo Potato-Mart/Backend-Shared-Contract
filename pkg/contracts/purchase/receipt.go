@@ -20,7 +20,7 @@ type Receipt struct {
 	Note        string                    `json:"note,omitempty"`
 	Items       []ReceiptItem             `json:"items"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 type ReceiptItem struct {

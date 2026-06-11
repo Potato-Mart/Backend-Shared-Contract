@@ -16,7 +16,7 @@ type Cart struct {
 	Subtotal   common.Money `json:"subtotal"`
 	ExpiresAt  time.Time    `json:"expires_at"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 type CartItem struct {

@@ -36,7 +36,7 @@ type MediaUploadRequest struct {
 	AttachToType string `json:"attach_to_type,omitempty"`
 	AttachToID   string `json:"attach_to_id,omitempty"`
 
-	common.DataProtectionFields
+	common.DataProtectionFields `bson:",inline"`
 }
 
 // MediaUploadResponse is what the server returns for an upload request.

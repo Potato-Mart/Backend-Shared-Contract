@@ -22,5 +22,5 @@ type UserProfile struct {
 	PasswordChangedAt       *time.Time                   `json:"password_changed_at,omitempty"`
 	AccessReviewedAt        *time.Time                   `json:"access_reviewed_at,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }

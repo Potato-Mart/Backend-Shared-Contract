@@ -20,5 +20,5 @@ type LoyaltyTier struct {
 	IsActive              bool            `json:"is_active"`
 	IsSystem              bool            `json:"is_system"` // system tiers cannot be deleted
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }

@@ -58,7 +58,7 @@ type Order struct {
 	PickingPrintedAt *time.Time `json:"picking_printed_at,omitempty"`
 	PackedAt         *time.Time `json:"packed_at,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 type OrderItem struct {

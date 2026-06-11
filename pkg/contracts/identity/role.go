@@ -27,7 +27,7 @@ type Role struct {
 	LeastPrivilegeJustification string         `json:"least_privilege_justification,omitempty"`
 	AccessReviewedAt            *time.Time     `json:"access_reviewed_at,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 // Permission is the projection of a permission definition stored in
@@ -43,5 +43,5 @@ type Permission struct {
 	RiskLevel   enums.SecurityRiskLevel `json:"risk_level,omitempty"`
 	RequiresMFA bool                    `json:"requires_mfa,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }

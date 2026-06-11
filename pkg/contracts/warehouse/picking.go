@@ -17,7 +17,7 @@ type PickingList struct {
 	Note        string                  `json:"note,omitempty"`
 	Items       []PickingListItem       `json:"items,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 type PickingListItem struct {

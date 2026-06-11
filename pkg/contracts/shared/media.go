@@ -41,6 +41,6 @@ type Media struct {
 	Status      MediaStatus `json:"status,omitempty"`
 	PurgedAt    *time.Time  `json:"purged_at,omitempty"`
 
-	common.AuditFields
-	common.DataProtectionFields
+	common.AuditFields `bson:",inline"`
+	common.DataProtectionFields `bson:",inline"`
 }

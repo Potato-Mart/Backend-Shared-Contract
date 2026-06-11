@@ -30,5 +30,5 @@ type Product struct {
 	PlacingAreaCode string                 `json:"placing_area_code,omitempty"`
 	ExpiredAt       time.Time              `json:"expired_at,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }

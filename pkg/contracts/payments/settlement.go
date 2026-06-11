@@ -40,7 +40,7 @@ type Settlement struct {
 
 	Metadata common.Metadata `json:"metadata,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 // SettlementTotals is the per-category roll-up reported on settlement

@@ -42,5 +42,5 @@ type SecurityPolicySettings struct {
 	ReviewedBy                       string          `json:"reviewed_by,omitempty"`
 	Metadata                         common.Metadata `json:"metadata,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }

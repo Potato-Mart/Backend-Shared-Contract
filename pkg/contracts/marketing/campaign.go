@@ -22,7 +22,7 @@ type MarketingCampaign struct {
 	SentAt         *time.Time                    `json:"sent_at,omitempty"`
 	Metadata       common.Metadata               `json:"metadata,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 // MarketingCampaignRecipient is the delivery record for a single recipient

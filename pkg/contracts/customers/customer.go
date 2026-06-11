@@ -35,6 +35,6 @@ type Customer struct {
 	DefaultShipping *common.ContactAddress  `json:"default_shipping,omitempty"`
 	ShippingList    []common.ContactAddress `json:"shipping_list,omitempty"`
 
-	common.AuditFields
-	common.DataProtectionFields
+	common.AuditFields `bson:",inline"`
+	common.DataProtectionFields `bson:",inline"`
 }

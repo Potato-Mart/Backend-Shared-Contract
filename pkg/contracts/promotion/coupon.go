@@ -13,18 +13,18 @@ type Coupon struct {
 	ID          string `json:"id"`
 	Code        string `json:"code"`
 	Description string `json:"description,omitempty"`
-	DiscountSpec
+	DiscountSpec `bson:",inline"`
 
 	MinOrderAmount    *common.Money `json:"min_order_amount,omitempty"`
 	MaxDiscountAmount *common.Money `json:"max_discount_amount,omitempty"`
-	UsageLimits
-	ActiveWindow
+	UsageLimits `bson:",inline"`
+	ActiveWindow `bson:",inline"`
 
 	AppliesTo   enums.CouponAppliesTo `json:"applies_to"`
 	ProductIDs  []string              `json:"product_ids,omitempty"`
 	CategoryIDs []string              `json:"category_ids,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 // CustomerCoupon is an assignment of a coupon to a specific customer,

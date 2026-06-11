@@ -23,7 +23,7 @@ type WMSDraft struct {
 	Note        string               `json:"note,omitempty"`
 	SubmittedAt *time.Time           `json:"submitted_at,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 // WMSDraftItem is the schema for each element of WMSDraft.Items.

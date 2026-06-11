@@ -35,5 +35,5 @@ type CustomerIdentity struct {
 	Verified          bool                       `json:"verified"`
 	CreatedAt         time.Time                  `json:"created_at"`
 
-	common.DataProtectionFields
+	common.DataProtectionFields `bson:",inline"`
 }

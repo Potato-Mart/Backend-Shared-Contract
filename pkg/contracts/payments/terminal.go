@@ -33,7 +33,7 @@ type Terminal struct {
 
 	Metadata common.Metadata `json:"metadata,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 // RegisterTerminalRequest saves a provider terminal association for a

@@ -19,7 +19,7 @@ type Depot struct {
 	// 3D viewer. Empty when no layout has been built yet.
 	LayoutID string `json:"layout_id,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 type PostcodeRule struct {

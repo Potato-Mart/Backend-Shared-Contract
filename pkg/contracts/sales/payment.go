@@ -53,5 +53,5 @@ type Payment struct {
 	Metadata     common.Metadata `json:"metadata,omitempty"`
 	CreatedAt    time.Time       `json:"created_at"`
 
-	common.DataProtectionFields
+	common.DataProtectionFields `bson:",inline"`
 }

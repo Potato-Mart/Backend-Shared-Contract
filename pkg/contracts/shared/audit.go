@@ -16,17 +16,17 @@ import (
 type AuditLogEntry struct {
 	ID         string    `json:"id"`
 	OccurredAt time.Time `json:"occurred_at"`
-	ActorRef
+	ActorRef `bson:",inline"`
 	Action     string `json:"action"`             // dotted key e.g. "customer.update"
 	Resource   string `json:"resource,omitempty"` // dotted key e.g. "customer:cust_123"
 	ResourceID string `json:"resource_id,omitempty"`
-	RequestContext
-	RecordOutcome
+	RequestContext `bson:",inline"`
+	RecordOutcome `bson:",inline"`
 	RiskLevel     enums.SecurityRiskLevel `json:"risk_level,omitempty"`
 	IntegrityHash string                  `json:"integrity_hash,omitempty"`
 	Diff          common.Metadata         `json:"diff,omitempty"` // arbitrary before/after fragments
 
-	common.DataProtectionFields
+	common.DataProtectionFields `bson:",inline"`
 }
 
 // AuditOutcome is a coarse success/failure flag for audit reporting.

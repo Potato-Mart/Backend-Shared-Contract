@@ -30,7 +30,7 @@ type Promotion struct {
 	RequiredQtyCombined int `json:"required_qty_combined,omitempty"`
 
 	// ── auto_discount ─────────────────────────────────────────────────
-	DiscountSpec
+	DiscountSpec `bson:",inline"`
 	MaxDiscount    *common.Money                 `json:"max_discount,omitempty"`
 	DiscountTarget enums.PromotionDiscountTarget `json:"discount_target,omitempty"`
 
@@ -58,15 +58,15 @@ type Promotion struct {
 	// ── Control ───────────────────────────────────────────────────────
 	Priority    int  `json:"priority"`
 	IsStackable bool `json:"is_stackable"`
-	UsageLimits
-	ActiveWindow
+	UsageLimits `bson:",inline"`
+	ActiveWindow `bson:",inline"`
 	Channels []enums.OrderType `json:"channels,omitempty"` // e.g. ["online","pos"]
 
 	// Source tracking for promotions synced from external systems.
 	Source    string `json:"source,omitempty"`
 	SourceRef string `json:"source_ref,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 // GiftTier defines a single spend threshold and its associated free gift

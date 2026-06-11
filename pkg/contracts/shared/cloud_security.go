@@ -31,5 +31,5 @@ type CloudServiceSecurityProfile struct {
 	ConfigurationBaseline string          `json:"configuration_baseline,omitempty"`
 	Metadata              common.Metadata `json:"metadata,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }

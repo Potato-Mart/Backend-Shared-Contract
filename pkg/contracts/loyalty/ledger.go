@@ -40,7 +40,7 @@ type LoyaltyPromotion struct {
 	MinOrderAmount *common.Money                `json:"min_order_amount,omitempty"`
 	IsActive       bool                         `json:"is_active"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 // CustomerCheckIn records a daily check-in for streak-based point awards.

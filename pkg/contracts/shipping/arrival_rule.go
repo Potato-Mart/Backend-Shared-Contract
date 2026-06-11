@@ -24,7 +24,7 @@ type ShippingArrivalRule struct {
 	IsActive   bool             `json:"is_active"`
 	SortOrder  int              `json:"sort_order"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 // ShippingArrivalBlacklist lists calendar dates on which warehouse arrivals

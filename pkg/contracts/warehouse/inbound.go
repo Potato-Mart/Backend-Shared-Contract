@@ -18,7 +18,7 @@ type InboundReceipt struct {
 	Note        string                     `json:"note,omitempty"`
 	ConfirmedAt *time.Time                 `json:"confirmed_at,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 type InboundItem struct {

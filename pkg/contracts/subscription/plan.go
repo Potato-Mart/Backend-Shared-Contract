@@ -21,7 +21,7 @@ type SubscriptionPlan struct {
 	IsActive        bool             `json:"is_active"`
 	SortOrder       int              `json:"sort_order"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
 
 // CustomerSubscription is an active subscription between a customer and a plan.
@@ -39,5 +39,5 @@ type CustomerSubscription struct {
 	CyclesCompleted   int                      `json:"cycles_completed"`
 	Note              string                   `json:"note,omitempty"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }

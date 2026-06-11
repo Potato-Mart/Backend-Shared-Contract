@@ -16,5 +16,5 @@ type VolumeDiscountTier struct {
 	IsActive        bool                          `json:"is_active"`
 	SortOrder       int                           `json:"sort_order"`
 
-	common.AuditFields
+	common.AuditFields `bson:",inline"`
 }
