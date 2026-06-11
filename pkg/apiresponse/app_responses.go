@@ -2,6 +2,11 @@ package apiresponse
 
 // APIResponse is the canonical envelope for every JSON response.
 // Exactly one of Data or Error is populated.
+//
+// This includes internal service-to-service endpoints (the token endpoint
+// in serviceauth, the stockops endpoints and the pricing quote endpoint):
+// their responses are wrapped in this same {success,data,error} envelope,
+// so service clients unwrap Data exactly like user-facing clients do.
 type APIResponse struct {
 	Success bool   `json:"success"`
 	Data    any    `json:"data,omitempty"`

@@ -64,6 +64,11 @@ func JoinScopes(scopes []Scope) string {
 	return strings.Join(parts, " ")
 }
 
+// PathToken is the full request path of the service-token endpoint
+// (client-credentials grant) served by Backend-Management. Peer services
+// POST a ServiceTokenRequest here to obtain a short-lived service token.
+const PathToken = "/v1/internal/token"
+
 // ServiceTokenRequest is the client-credentials grant body for
 // POST /v1/internal/token, issued by Backend-Management.
 type ServiceTokenRequest struct {
