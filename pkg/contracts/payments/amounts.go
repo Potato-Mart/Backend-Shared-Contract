@@ -4,10 +4,8 @@ package payments
 // minor units (cents for AUD). The same shape is used both for what the
 // POS requested and for what the terminal/provider actually applied.
 //
-// Adyen Terminal API carries some amounts as decimal major units in the
-// request/response models, while AdditionalResponse and internal order
-// math commonly use minor units. The shared contract stays in minor
-// units so services do not lose precision at boundaries.
+// The shared contract stays in minor units so services do not lose
+// precision at boundaries.
 //
 // Result amounts are the source of truth for tax invoices, receipts, and
 // refund calculations. In particular, when refunding a transaction that
