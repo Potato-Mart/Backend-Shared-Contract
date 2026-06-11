@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
 )
 
 // Settlement is an end-of-day reconciliation/batch close

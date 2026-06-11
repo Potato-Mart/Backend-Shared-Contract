@@ -1,10 +1,8 @@
 package category
 
 import (
-	"time"
-
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
 )
 
 // SKU corresponds to one of the top-level SKU codes that
@@ -17,6 +15,6 @@ type SKU struct {
 	OtherNames []common.LocalizedName `json:"other_names,omitempty"`
 	Products   []string               `json:"products,omitempty"`
 	SortOrder  int                    `json:"sort_order"`
-	CreatedAt  time.Time              `json:"created_at"`
-	UpdatedAt  time.Time              `json:"updated_at"`
+
+	common.AuditFields
 }

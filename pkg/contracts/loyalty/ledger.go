@@ -3,8 +3,8 @@ package loyalty
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
 )
 
 // LoyaltyLedgerEntry is a single points transaction for a customer.
@@ -39,8 +39,8 @@ type LoyaltyPromotion struct {
 	TargetTierKeys []string                     `json:"target_tier_keys,omitempty"` // for TIER_SPECIFIC
 	MinOrderAmount *common.Money                `json:"min_order_amount,omitempty"`
 	IsActive       bool                         `json:"is_active"`
-	CreatedAt      time.Time                    `json:"created_at"`
-	UpdatedAt      time.Time                    `json:"updated_at"`
+
+	common.AuditFields
 }
 
 // CustomerCheckIn records a daily check-in for streak-based point awards.

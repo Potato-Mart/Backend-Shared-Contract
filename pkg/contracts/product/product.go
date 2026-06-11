@@ -3,8 +3,8 @@ package product
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
 )
 
 type Product struct {
@@ -29,6 +29,6 @@ type Product struct {
 	ImageURLs       []string               `json:"image_urls,omitempty"`
 	PlacingAreaCode string                 `json:"placing_area_code,omitempty"`
 	ExpiredAt       time.Time              `json:"expired_at,omitempty"`
-	CreatedAt       time.Time              `json:"created_at,omitempty"`
-	UpdatedAt       time.Time              `json:"updated_at,omitempty"`
+
+	common.AuditFields
 }

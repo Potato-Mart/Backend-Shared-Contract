@@ -3,7 +3,7 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
 )
 
 // SecurityPolicySettings is the shared shape for backend-enforced security
@@ -41,6 +41,6 @@ type SecurityPolicySettings struct {
 	LastReviewedAt                   *time.Time      `json:"last_reviewed_at,omitempty"`
 	ReviewedBy                       string          `json:"reviewed_by,omitempty"`
 	Metadata                         common.Metadata `json:"metadata,omitempty"`
-	CreatedAt                        time.Time       `json:"created_at"`
-	UpdatedAt                        time.Time       `json:"updated_at"`
+
+	common.AuditFields
 }

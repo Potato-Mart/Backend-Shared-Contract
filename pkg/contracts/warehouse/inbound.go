@@ -3,7 +3,8 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
 )
 
 type InboundReceipt struct {
@@ -16,8 +17,8 @@ type InboundReceipt struct {
 	Status      enums.InboundReceiptStatus `json:"status"`
 	Note        string                     `json:"note,omitempty"`
 	ConfirmedAt *time.Time                 `json:"confirmed_at,omitempty"`
-	CreatedAt   time.Time                  `json:"created_at"`
-	UpdatedAt   time.Time                  `json:"updated_at"`
+
+	common.AuditFields
 }
 
 type InboundItem struct {

@@ -3,7 +3,7 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
 )
 
 // UserDevice is a non-secret projection of a browser, mobile app, or
@@ -13,10 +13,10 @@ import (
 type UserDevice struct {
 	ID                 string                      `json:"id"`
 	UserID             string                      `json:"user_id"`
-	Portal             string                      `json:"portal,omitempty"` // "control" | "store" | "partner"
+	Portal             enums.Portal                `json:"portal,omitempty"`
 	DeviceKey          string                      `json:"device_key,omitempty"`
 	DeviceName         string                      `json:"device_name,omitempty"`
-	DeviceType         string                      `json:"device_type,omitempty"` // "desktop" | "mobile" | "tablet" | "api"
+	DeviceType         enums.DeviceType            `json:"device_type,omitempty"`
 	OS                 string                      `json:"os,omitempty"`
 	Browser            string                      `json:"browser,omitempty"`
 	UserAgent          string                      `json:"user_agent,omitempty"`
@@ -47,13 +47,13 @@ type DeviceIP struct {
 // identified request from a device/IP pair. Consumers can use it to maintain
 // device inventories, IP history, and security alerts.
 type UserDeviceSeenEvent struct {
-	UserID    string    `json:"user_id"`
-	SessionID string    `json:"session_id,omitempty"`
-	Portal    string    `json:"portal,omitempty"`
-	DeviceID  string    `json:"device_id,omitempty"`
-	DeviceKey string    `json:"device_key,omitempty"`
-	IPAddress string    `json:"ip_address,omitempty"`
-	UserAgent string    `json:"user_agent,omitempty"`
-	SeenAt    time.Time `json:"seen_at"`
-	RequestID string    `json:"request_id,omitempty"`
+	UserID    string       `json:"user_id"`
+	SessionID string       `json:"session_id,omitempty"`
+	Portal    enums.Portal `json:"portal,omitempty"`
+	DeviceID  string       `json:"device_id,omitempty"`
+	DeviceKey string       `json:"device_key,omitempty"`
+	IPAddress string       `json:"ip_address,omitempty"`
+	UserAgent string       `json:"user_agent,omitempty"`
+	SeenAt    time.Time    `json:"seen_at"`
+	RequestID string       `json:"request_id,omitempty"`
 }

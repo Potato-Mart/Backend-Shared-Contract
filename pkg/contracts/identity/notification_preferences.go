@@ -1,6 +1,10 @@
 package identity
 
-import "time"
+import (
+	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
+)
 
 // UserNotificationPreferences captures the account-level notification choices
 // for a user. Services may treat a missing preference bundle as "use defaults".
@@ -41,8 +45,8 @@ type UserNotificationTopics struct {
 // NotificationQuietHours lets clients mute non-urgent notifications during a
 // local time window. Timezone should be an IANA name such as "Australia/Sydney".
 type NotificationQuietHours struct {
-	Enabled   bool   `json:"enabled"`
-	StartTime string `json:"start_time,omitempty"` // "HH:MM"
-	EndTime   string `json:"end_time,omitempty"`   // "HH:MM"
-	Timezone  string `json:"timezone,omitempty"`
+	Enabled   bool             `json:"enabled"`
+	StartTime common.TimeOfDay `json:"start_time,omitempty"`
+	EndTime   common.TimeOfDay `json:"end_time,omitempty"`
+	Timezone  string           `json:"timezone,omitempty"` // IANA name, e.g. "Australia/Sydney"
 }

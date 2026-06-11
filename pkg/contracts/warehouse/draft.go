@@ -3,7 +3,8 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
 )
 
 // WMSDraft is an uncommitted batch of inbound or outbound stock movements
@@ -21,8 +22,8 @@ type WMSDraft struct {
 	Status      enums.WMSDraftStatus `json:"status"`
 	Note        string               `json:"note,omitempty"`
 	SubmittedAt *time.Time           `json:"submitted_at,omitempty"`
-	CreatedAt   time.Time            `json:"created_at"`
-	UpdatedAt   time.Time            `json:"updated_at"`
+
+	common.AuditFields
 }
 
 // WMSDraftItem is the schema for each element of WMSDraft.Items.

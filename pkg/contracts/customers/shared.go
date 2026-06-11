@@ -3,7 +3,7 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
 )
 
 // LoyaltyStatus groups the loyalty-programme state of a customer: points
@@ -39,12 +39,4 @@ type MarketingConsent struct {
 	Line      bool       `json:"line"`
 	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 	Source    string     `json:"source,omitempty"` // "website" | "pos" | "import" | "manual"
-}
-
-// Shipping pairs an optional contact with an optional delivery address.
-// It is used both for a customer's default shipping target and for the
-// entries of the saved shipping list.
-type Shipping struct {
-	Contact *common.Recipient `json:"contact,omitempty"`
-	Address *common.Address   `json:"address,omitempty"`
 }

@@ -3,7 +3,7 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
 )
 
 // MediaUploadRequest is the body of POST /media/upload-url. The client

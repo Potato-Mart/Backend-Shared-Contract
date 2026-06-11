@@ -3,7 +3,8 @@ package purchase
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
 )
 
 type Receipt struct {
@@ -18,8 +19,8 @@ type Receipt struct {
 	ConfirmedAt *time.Time                `json:"confirmed_at,omitempty"`
 	Note        string                    `json:"note,omitempty"`
 	Items       []ReceiptItem             `json:"items"`
-	CreatedAt   time.Time                 `json:"created_at"`
-	UpdatedAt   time.Time                 `json:"updated_at"`
+
+	common.AuditFields
 }
 
 type ReceiptItem struct {

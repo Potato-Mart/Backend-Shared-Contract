@@ -3,7 +3,7 @@ package analytics
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
 )
 
 // AlertLevel classifies the urgency of a stock-out forecast.
@@ -37,6 +37,6 @@ type SKUDemandForecast struct {
 
 // DailyPrediction is one element in SKUDemandForecast.PredictedDaily.
 type DailyPrediction struct {
-	Date string  `json:"date"` // "YYYY-MM-DD"
-	Qty  float64 `json:"qty"`
+	Date common.Date `json:"date"`
+	Qty  float64     `json:"qty"`
 }

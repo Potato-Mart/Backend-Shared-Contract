@@ -1,10 +1,8 @@
 package promotion
 
 import (
-	"time"
-
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
 )
 
 // Promotion is the rule-based, auto-applied discount engine entity.
@@ -32,8 +30,7 @@ type Promotion struct {
 	RequiredQtyCombined int `json:"required_qty_combined,omitempty"`
 
 	// ── auto_discount ─────────────────────────────────────────────────
-	DiscountType   enums.DiscountType            `json:"discount_type,omitempty"`
-	DiscountValue  string                        `json:"discount_value,omitempty"`
+	DiscountSpec
 	MaxDiscount    *common.Money                 `json:"max_discount,omitempty"`
 	DiscountTarget enums.PromotionDiscountTarget `json:"discount_target,omitempty"`
 
@@ -59,22 +56,17 @@ type Promotion struct {
 	PricingMixAllowed bool          `json:"pricing_mix_allowed,omitempty"`
 
 	// ── Control ───────────────────────────────────────────────────────
-	Priority         int        `json:"priority"`
-	IsStackable      bool       `json:"is_stackable"`
-	UsageLimit       int        `json:"usage_limit,omitempty"`
-	UsedCount        int        `json:"used_count"`
-	PerCustomerLimit int        `json:"per_customer_limit"`
-	StartsAt         *time.Time `json:"starts_at,omitempty"`
-	ExpiresAt        *time.Time `json:"expires_at,omitempty"`
-	IsActive         bool       `json:"is_active"`
-	Channels         []string   `json:"channels,omitempty"` // e.g. ["online","pos"]
+	Priority    int  `json:"priority"`
+	IsStackable bool `json:"is_stackable"`
+	UsageLimits
+	ActiveWindow
+	Channels []enums.OrderType `json:"channels,omitempty"` // e.g. ["online","pos"]
 
 	// Source tracking for promotions synced from external systems.
 	Source    string `json:"source,omitempty"`
 	SourceRef string `json:"source_ref,omitempty"`
 
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	common.AuditFields
 }
 
 // GiftTier defines a single spend threshold and its associated free gift

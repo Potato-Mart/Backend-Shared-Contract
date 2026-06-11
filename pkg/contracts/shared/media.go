@@ -3,7 +3,7 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
 )
 
 // MediaStatus controls visibility and lifecycle of a media row.
@@ -39,11 +39,8 @@ type Media struct {
 	Height      int         `json:"height,omitempty"`
 	Folder      string      `json:"folder,omitempty"`
 	Status      MediaStatus `json:"status,omitempty"`
-	CreatedAt   time.Time   `json:"created_at"`
-	CreatedBy   string      `json:"created_by,omitempty"`
-	UpdatedAt   time.Time   `json:"updated_at,omitempty"`
-	DeletedAt   *time.Time  `json:"deleted_at,omitempty"`
 	PurgedAt    *time.Time  `json:"purged_at,omitempty"`
 
+	common.AuditFields
 	common.DataProtectionFields
 }

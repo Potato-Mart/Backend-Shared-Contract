@@ -3,7 +3,8 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
 )
 
 // UserProfile is the public projection of a user account. Secret fields such
@@ -20,6 +21,6 @@ type UserProfile struct {
 	LastLoginAt             *time.Time                   `json:"last_login_at,omitempty"`
 	PasswordChangedAt       *time.Time                   `json:"password_changed_at,omitempty"`
 	AccessReviewedAt        *time.Time                   `json:"access_reviewed_at,omitempty"`
-	CreatedAt               time.Time                    `json:"created_at"`
-	UpdatedAt               time.Time                    `json:"updated_at"`
+
+	common.AuditFields
 }

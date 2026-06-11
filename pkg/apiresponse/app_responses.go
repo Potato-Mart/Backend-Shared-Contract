@@ -3,15 +3,12 @@ package apiresponse
 // APIResponse is the canonical envelope for every JSON response.
 // Exactly one of Data or Error is populated.
 type APIResponse struct {
-	Success bool        `json:"success"`
-	Data    interface{} `json:"data,omitempty"`
-	Error   *APIError   `json:"error,omitempty"`
+	Success bool   `json:"success"`
+	Data    any    `json:"data,omitempty"`
+	Error   *Error `json:"error,omitempty"`
 }
 
-// APIError is the JSON shape of an error response. The Code field is
-// a stable machine-readable identifier; Message is human-readable.
-type APIError struct {
-	Code    string            `json:"code"`
-	Message string            `json:"message"`
-	Details map[string]string `json:"details,omitempty"`
-}
+// APIError is an alias of Error kept for backward compatibility; the two
+// types previously duplicated each other field-for-field. The JSON shape
+// is unchanged.
+type APIError = Error

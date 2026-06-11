@@ -3,7 +3,8 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
 )
 
 // Role is the projection of a role definition stored in mgmt_roles.
@@ -25,8 +26,8 @@ type Role struct {
 	OwnerID                     string         `json:"owner_id,omitempty"`
 	LeastPrivilegeJustification string         `json:"least_privilege_justification,omitempty"`
 	AccessReviewedAt            *time.Time     `json:"access_reviewed_at,omitempty"`
-	CreatedAt                   time.Time      `json:"created_at"`
-	UpdatedAt                   time.Time      `json:"updated_at"`
+
+	common.AuditFields
 }
 
 // Permission is the projection of a permission definition stored in
@@ -41,6 +42,6 @@ type Permission struct {
 	IsSystem    bool                    `json:"is_system"`
 	RiskLevel   enums.SecurityRiskLevel `json:"risk_level,omitempty"`
 	RequiresMFA bool                    `json:"requires_mfa,omitempty"`
-	CreatedAt   time.Time               `json:"created_at"`
-	UpdatedAt   time.Time               `json:"updated_at"`
+
+	common.AuditFields
 }

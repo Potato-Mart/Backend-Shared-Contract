@@ -1,9 +1,7 @@
 package loyalty
 
 import (
-	"time"
-
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
 )
 
 // LoyaltyTier defines the rules for a membership tier in the loyalty programme.
@@ -21,6 +19,6 @@ type LoyaltyTier struct {
 	SortOrder             int             `json:"sort_order"`
 	IsActive              bool            `json:"is_active"`
 	IsSystem              bool            `json:"is_system"` // system tiers cannot be deleted
-	CreatedAt             time.Time       `json:"created_at"`
-	UpdatedAt             time.Time       `json:"updated_at"`
+
+	common.AuditFields
 }

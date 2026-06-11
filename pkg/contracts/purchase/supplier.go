@@ -1,12 +1,10 @@
 package purchase
 
-import "time"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
 
+// Supplier is the supplier snapshot carried on purchase orders.
+// The contact fields come from common.PartyRef (id / name / phone / email).
 type Supplier struct {
-	SupplierID    string    `json:"supplier_id,omitempty"`
-	SupplierName  string    `json:"supplier_name,omitempty"`
-	SupplierPhone string    `json:"supplier_phone,omitempty"`
-	SupplierEmail string    `json:"supplier_email,omitempty"`
-	CreatedAt     time.Time `json:"created_at"`
-	UpdatedAt     time.Time `json:"updated_at"`
+	common.PartyRef
+	common.AuditFields
 }

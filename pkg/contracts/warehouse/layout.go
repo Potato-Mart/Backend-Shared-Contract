@@ -3,8 +3,8 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
 )
 
 // WarehouseLayout is the root 3D scene description for a depot. There is
@@ -31,8 +31,8 @@ type WarehouseLayout struct {
 	Note            string         `json:"note,omitempty"`
 	IsPublished     bool           `json:"is_published"`
 	PublishedAt     *time.Time     `json:"published_at,omitempty"`
-	CreatedAt       time.Time      `json:"created_at"`
-	UpdatedAt       time.Time      `json:"updated_at"`
+
+	common.AuditFields
 }
 
 // LayoutNode is a single element in the warehouse 3D hierarchy:
@@ -61,8 +61,8 @@ type LayoutNode struct {
 	LocationID string               `json:"location_id,omitempty"` // links a BIN node to a StockLocation
 	SortOrder  int                  `json:"sort_order,omitempty"`
 	IsActive   bool                 `json:"is_active"`
-	CreatedAt  time.Time            `json:"created_at"`
-	UpdatedAt  time.Time            `json:"updated_at"`
+
+	common.AuditFields
 }
 
 // ModelAsset references a 3D model file stored elsewhere (object storage,

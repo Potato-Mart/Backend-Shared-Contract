@@ -3,7 +3,8 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
 )
 
 type PickingList struct {
@@ -15,8 +16,8 @@ type PickingList struct {
 	AssignedTo  string                  `json:"assigned_to,omitempty"`
 	Note        string                  `json:"note,omitempty"`
 	Items       []PickingListItem       `json:"items,omitempty"`
-	CreatedAt   time.Time               `json:"created_at"`
-	UpdatedAt   time.Time               `json:"updated_at"`
+
+	common.AuditFields
 }
 
 type PickingListItem struct {

@@ -1,9 +1,7 @@
 package wholesale
 
 import (
-	"time"
-
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
 )
 
 // WholesaleTierPreset defines the freight rules for a wholesale shipping tier.
@@ -26,8 +24,8 @@ type WholesaleTierPreset struct {
 	// Surcharge when no forklift is available at delivery address
 	NoForkliftSurcharge common.Money `json:"no_forklift_surcharge"`
 
-	SortOrder int       `json:"sort_order"`
-	IsSystem  bool      `json:"is_system"` // system presets cannot be deleted
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	SortOrder int  `json:"sort_order"`
+	IsSystem  bool `json:"is_system"` // system presets cannot be deleted
+
+	common.AuditFields
 }

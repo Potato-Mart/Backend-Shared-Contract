@@ -3,8 +3,9 @@ package purchase
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
 )
 
 type Order struct {
@@ -27,30 +28,19 @@ type Order struct {
 	CompletedAt  *time.Time                `json:"completed_at,omitempty"`
 	Note         string                    `json:"note,omitempty"`
 	InternalNote string                    `json:"internal_note,omitempty"`
-	CreatedAt    time.Time                 `json:"created_at"`
-	UpdatedAt    time.Time                 `json:"updated_at"`
+
+	common.AuditFields
 }
 
 type OrderItem struct {
-	ID           string          `json:"id,omitempty"`
-	Product      ProductSnapshot `json:"product"`
-	UnitCost     common.Money    `json:"unit_cost"`
-	OrderedQty   int             `json:"ordered_qty"`
-	ReceivedQty  int             `json:"received_qty"`
-	RejectedQty  int             `json:"rejected_qty,omitempty"`
-	LineTotal    common.Money    `json:"line_total"`
-	LocationCode string          `json:"location_code,omitempty"`
-	Note         string          `json:"note,omitempty"`
-	ExpireAt     time.Time       `json:"expire_at"`
-}
-
-type ProductSnapshot struct {
-	ID         string                 `json:"id,omitempty"`
-	SKU        string                 `json:"sku,omitempty"`
-	Name       string                 `json:"name"`
-	OtherNames []common.LocalizedName `json:"other_names,omitempty"`
-	Brand      string                 `json:"brand,omitempty"`
-	ImageURL   string                 `json:"image_url,omitempty"`
-	Storage    string                 `json:"storage,omitempty"`
-	Barcode    string                 `json:"barcode,omitempty"`
+	ID           string           `json:"id,omitempty"`
+	Product      product.Snapshot `json:"product"`
+	UnitCost     common.Money     `json:"unit_cost"`
+	OrderedQty   int              `json:"ordered_qty"`
+	ReceivedQty  int              `json:"received_qty"`
+	RejectedQty  int              `json:"rejected_qty,omitempty"`
+	LineTotal    common.Money     `json:"line_total"`
+	LocationCode string           `json:"location_code,omitempty"`
+	Note         string           `json:"note,omitempty"`
+	ExpireAt     time.Time        `json:"expire_at"`
 }

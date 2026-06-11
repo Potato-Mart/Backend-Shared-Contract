@@ -3,8 +3,8 @@ package marketing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v3/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v4/pkg/enums"
 )
 
 // MarketingCampaign records a single EDM / SMS / LINE push broadcast.
@@ -20,10 +20,9 @@ type MarketingCampaign struct {
 	RecipientCount int                           `json:"recipient_count"`
 	Status         enums.MarketingCampaignStatus `json:"status"`
 	SentAt         *time.Time                    `json:"sent_at,omitempty"`
-	CreatedBy      string                        `json:"created_by,omitempty"`
 	Metadata       common.Metadata               `json:"metadata,omitempty"`
-	CreatedAt      time.Time                     `json:"created_at"`
-	UpdatedAt      time.Time                     `json:"updated_at"`
+
+	common.AuditFields
 }
 
 // MarketingCampaignRecipient is the delivery record for a single recipient
