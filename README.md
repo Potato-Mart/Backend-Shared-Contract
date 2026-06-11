@@ -7,7 +7,7 @@
 
 ## 最新版本
 
-### V4.0.0
+### V4.1.0
 
 ## 模組路徑
 
@@ -26,7 +26,7 @@ github.com/Potato-Mart/Backend-Shared-Contract/v4
 在使用方服務的 `go.mod` 中加入：
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v4 v4.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v4 v4.1.0
 ```
 
 接著匯入所需套件，例如：
