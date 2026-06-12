@@ -2,6 +2,7 @@ package category
 
 import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/product"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
@@ -13,7 +14,7 @@ type SKU struct {
 	Code       string                 `json:"code"`
 	Storage    enums.StorageType      `json:"storage"`
 	OtherNames []common.LocalizedName `json:"other_names,omitempty"`
-	Products   []string               `json:"products,omitempty"`
+	Products   []product.Snapshot     `json:"products,omitempty"`
 	SortOrder  int                    `json:"sort_order"`
 
 	common.AuditFields `bson:",inline"`
