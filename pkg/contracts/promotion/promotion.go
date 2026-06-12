@@ -14,6 +14,28 @@ type Promotion struct {
 	Description string              `json:"description,omitempty"`
 	Type        enums.PromotionType `json:"type"`
 
+	// ── Classification & targeting (additive, v5.2.0) ─────────────────
+	// Class separates standing promotions (常態特價, normal_promotion)
+	// from time-boxed special campaigns (特殊活動, special_campaign).
+	// Empty is read as normal_promotion so existing documents keep their
+	// behaviour; see EffectiveClass.
+	Class enums.PromotionClass `json:"class,omitempty"`
+	// TargetScope narrows the promotion to one product or one category
+	// subtree. Empty / "all" keeps the legacy cart-wide behaviour.
+	// SKU-level targeting is deliberately not supported.
+	TargetScope enums.DiscountScope `json:"target_scope,omitempty"`
+	// TargetProductID is required when TargetScope is "product".
+	TargetProductID string `json:"target_product_id,omitempty"`
+	// TargetCategoryKey is required when TargetScope is "category". It
+	// references a node of the ops product-category tree by key; the
+	// promotion applies to every product whose category path contains
+	// the key (see TargetIncludesDescendants).
+	TargetCategoryKey string `json:"target_category_key,omitempty"`
+	// TargetIncludesDescendants controls whether a category target also
+	// covers descendant categories. nil means true (the default rule:
+	// category promotions apply to the whole subtree).
+	TargetIncludesDescendants *bool `json:"target_includes_descendants,omitempty"`
+
 	// ── Trigger conditions ────────────────────────────────────────────
 	MinCartAmount      *common.Money `json:"min_cart_amount,omitempty"`
 	MinCartQty         int           `json:"min_cart_qty,omitempty"`
@@ -67,6 +89,30 @@ type Promotion struct {
 	SourceRef string `json:"source_ref,omitempty"`
 
 	common.AuditFields `bson:",inline"`
+}
+
+// EffectiveClass returns the promotion class, defaulting empty (legacy
+// documents written before v5.2.0) to normal_promotion.
+func (p Promotion) EffectiveClass() enums.PromotionClass {
+	if p.Class == enums.PromotionClassSpecialCampaign {
+		return enums.PromotionClassSpecialCampaign
+	}
+	return enums.PromotionClassNormal
+}
+
+// IncludesDescendants reports whether a category-targeted promotion
+// also covers descendant categories. Defaults to true when unset.
+func (p Promotion) IncludesDescendants() bool {
+	if p.TargetIncludesDescendants == nil {
+		return true
+	}
+	return *p.TargetIncludesDescendants
+}
+
+// IsTargeted reports whether the promotion is narrowed to a product or
+// category rather than the legacy cart-wide behaviour.
+func (p Promotion) IsTargeted() bool {
+	return p.TargetScope == enums.DiscountScopeProduct || p.TargetScope == enums.DiscountScopeCategory
 }
 
 // GiftTier defines a single spend threshold and its associated free gift

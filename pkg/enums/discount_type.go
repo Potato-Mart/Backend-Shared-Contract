@@ -5,17 +5,21 @@ package enums
 //	percentage    -> Value is a percentage 0..100 applied to the
 //	                 eligible subtotal, capped by MaxDiscountAmount.
 //	fixed_amount  -> Value is a flat amount in the store's currency.
+//	fixed_price   -> Value is the final sale price (major units) of the
+//	                 targeted product; only meaningful on promotions with
+//	                 target_scope=product or target_scope=category.
 type DiscountType string
 
 const (
 	DiscountTypePercentage   DiscountType = "percentage"
 	DiscountTypeFixedAmount  DiscountType = "fixed_amount"
 	DiscountTypeFreeShipping DiscountType = "free_shipping"
+	DiscountTypeFixedPrice   DiscountType = "fixed_price"
 )
 
 func (d DiscountType) IsValid() bool {
 	switch d {
-	case DiscountTypePercentage, DiscountTypeFixedAmount, DiscountTypeFreeShipping:
+	case DiscountTypePercentage, DiscountTypeFixedAmount, DiscountTypeFreeShipping, DiscountTypeFixedPrice:
 		return true
 	}
 	return false

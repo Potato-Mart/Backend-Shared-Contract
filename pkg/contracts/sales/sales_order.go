@@ -17,6 +17,8 @@ type Order struct {
 	FulfillmentStatus enums.FulfillmentStatus `json:"fulfillment_status"`
 	Customer          common.PartyRef         `json:"customer"`
 	Items             []OrderItem             `json:"items"`
+	// Device => OrderTypeOnline OrderType = "online" should have multiple device detected
+	// iOS / Android / PC / Mobile Web / Tablet
 
 	// ── Shipping & billing ────────────────────────────────────────────
 	Shipping         common.ContactAddress    `json:"shipping"`

@@ -27,6 +27,12 @@ type QuoteLine struct {
 	SKU            string `json:"sku,omitempty"`
 	UnitPriceMinor int64  `json:"unit_price_minor" binding:"gte=0"`
 	Qty            int    `json:"qty" binding:"required,gt=0"`
+	// CategoryPath is the product's canonical category key chain
+	// (root→leaf, leaf last), as denormalised on the product master.
+	// Optional and additive (v5.2.0): when present, category-targeted
+	// promotions are evaluated against the line; when absent, only
+	// product-targeted promotions can match it.
+	CategoryPath []string `json:"category_path,omitempty"`
 }
 
 // QuoteRequest asks Management to price a cart: which coupon and promotions
