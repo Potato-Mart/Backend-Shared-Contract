@@ -12,7 +12,7 @@ type Receipt struct {
 	OrderID     string                    `json:"order_id"`
 	DepotID     string                    `json:"depot_id,omitempty"`
 	Reference   string                    `json:"reference,omitempty"`
-	Supplier    string                    `json:"supplier,omitempty"`
+	SupplierID  string                    `json:"supplier_id,omitempty"`
 	Operator    string                    `json:"operator,omitempty"`
 	Status      enums.PurchaseOrderStatus `json:"status"`
 	ReceivedAt  *time.Time                `json:"received_at,omitempty"`

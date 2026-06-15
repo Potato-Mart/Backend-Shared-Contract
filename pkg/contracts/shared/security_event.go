@@ -17,21 +17,21 @@ type SecurityEvent struct {
 	Category           string                      `json:"category"` // e.g. "auth", "access", "data", "cloud", "payment"
 	Title              string                      `json:"title"`
 	Description        string                      `json:"description,omitempty"`
-	Severity      enums.SecurityEventSeverity `json:"severity"`
-	Status        enums.SecurityEventStatus   `json:"status"`
-	RiskLevel     enums.SecurityRiskLevel     `json:"risk_level,omitempty"`
-	ActorRef `bson:",inline"`
-	SubjectUserID string `json:"subject_user_id,omitempty"`
-	RequestContext `bson:",inline"`
-	Resource           string                      `json:"resource,omitempty"`
-	ResourceID         string                      `json:"resource_id,omitempty"`
-	RelatedAuditLogID  string                      `json:"related_audit_log_id,omitempty"`
-	RelatedAccessLogID string                      `json:"related_access_log_id,omitempty"`
-	EvidenceIDs        []string                    `json:"evidence_ids,omitempty"`
-	AssignedTo         string                      `json:"assigned_to,omitempty"`
-	ResolvedAt         *time.Time                  `json:"resolved_at,omitempty"`
-	Resolution         string                      `json:"resolution,omitempty"`
-	Metadata           common.Metadata             `json:"metadata,omitempty"`
+	Severity           enums.SecurityEventSeverity `json:"severity"`
+	Status             enums.SecurityEventStatus   `json:"status"`
+	RiskLevel          enums.SecurityRiskLevel     `json:"risk_level,omitempty"`
+	ActorRef           `bson:",inline"`
+	SubjectUserID      string `json:"subject_user_id,omitempty"`
+	RequestContext     `bson:",inline"`
+	Resource           string          `json:"resource,omitempty"`
+	ResourceID         string          `json:"resource_id,omitempty"`
+	RelatedAuditLogID  string          `json:"related_audit_log_id,omitempty"`
+	RelatedAccessLogID string          `json:"related_access_log_id,omitempty"`
+	EvidenceIDs        []string        `json:"evidence_ids,omitempty"`
+	AssignedTo         string          `json:"assigned_to,omitempty"`
+	ResolvedAt         *time.Time      `json:"resolved_at,omitempty"`
+	Resolution         string          `json:"resolution,omitempty"`
+	Metadata           common.Metadata `json:"metadata,omitempty"`
 
 	common.DataProtectionFields `bson:",inline"`
 }

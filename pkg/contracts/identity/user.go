@@ -18,9 +18,12 @@ type UserProfile struct {
 	UserRole                enums.UserRole               `json:"user_role"`
 	MFAEnabled              bool                         `json:"mfa_enabled,omitempty"`
 	NotificationPreferences *UserNotificationPreferences `json:"notification_preferences,omitempty"`
-	LastLoginAt             *time.Time                   `json:"last_login_at,omitempty"`
-	PasswordChangedAt       *time.Time                   `json:"password_changed_at,omitempty"`
-	AccessReviewedAt        *time.Time                   `json:"access_reviewed_at,omitempty"`
+
+	// User Operations
+	UserDevice        UserDevice `json:"user_device,omitempty"`
+	LastLoginAt       *time.Time `json:"last_login_at,omitempty"`
+	PasswordChangedAt *time.Time `json:"password_changed_at,omitempty"`
+	AccessReviewedAt  *time.Time `json:"access_reviewed_at,omitempty"`
 
 	common.AuditFields `bson:",inline"`
 }

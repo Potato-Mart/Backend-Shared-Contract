@@ -5,8 +5,9 @@ import (
 )
 
 type CategoryTag struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID           string `json:"id"`
+	Name         string `json:"name"`
+	CollectionID string `json:"collection_id"`
 
 	common.AuditFields `bson:",inline"`
 }

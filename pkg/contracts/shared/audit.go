@@ -14,17 +14,17 @@ import (
 // (login, role change, refund issued, etc.). Reads are never audited
 // here – use access logs for that.
 type AuditLogEntry struct {
-	ID         string    `json:"id"`
-	OccurredAt time.Time `json:"occurred_at"`
-	ActorRef `bson:",inline"`
-	Action     string `json:"action"`             // dotted key e.g. "customer.update"
-	Resource   string `json:"resource,omitempty"` // dotted key e.g. "customer:cust_123"
-	ResourceID string `json:"resource_id,omitempty"`
+	ID             string    `json:"id"`
+	OccurredAt     time.Time `json:"occurred_at"`
+	ActorRef       `bson:",inline"`
+	Action         string `json:"action"`             // dotted key e.g. "customer.update"
+	Resource       string `json:"resource,omitempty"` // dotted key e.g. "customer:cust_123"
+	ResourceID     string `json:"resource_id,omitempty"`
 	RequestContext `bson:",inline"`
-	RecordOutcome `bson:",inline"`
-	RiskLevel     enums.SecurityRiskLevel `json:"risk_level,omitempty"`
-	IntegrityHash string                  `json:"integrity_hash,omitempty"`
-	Diff          common.Metadata         `json:"diff,omitempty"` // arbitrary before/after fragments
+	RecordOutcome  `bson:",inline"`
+	RiskLevel      enums.SecurityRiskLevel `json:"risk_level,omitempty"`
+	IntegrityHash  string                  `json:"integrity_hash,omitempty"`
+	Diff           common.Metadata         `json:"diff,omitempty"` // arbitrary before/after fragments
 
 	common.DataProtectionFields `bson:",inline"`
 }

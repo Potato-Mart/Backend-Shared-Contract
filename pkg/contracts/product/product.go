@@ -17,6 +17,7 @@ type Product struct {
 	Barcode         string                 `json:"barcode,omitempty"`
 	OtherNames      []common.LocalizedName `json:"other_names,omitempty"`
 	Brand           string                 `json:"brand,omitempty"`
+	Vendor          string                 `json:"vendor,omitempty"`
 	Catalogue       string                 `json:"catalogue,omitempty"`
 	Storage         enums.StorageType      `json:"storage,omitempty"`
 	Status          string                 `json:"status,omitempty"`

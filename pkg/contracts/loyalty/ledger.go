@@ -13,7 +13,7 @@ import (
 // are still available for FIFO redemption.
 type LoyaltyLedgerEntry struct {
 	ID                 string                    `json:"id"`
-	CustomerProfileID  string                    `json:"customer_profile_id"`
+	CustomerID         string                    `json:"customer_id"`
 	Delta              int                       `json:"delta"`
 	Reason             enums.LoyaltyLedgerReason `json:"reason"`
 	RelatedOrderID     string                    `json:"related_order_id,omitempty"`

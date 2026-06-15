@@ -34,15 +34,6 @@ type UserDevice struct {
 	RevokedReason      string                      `json:"revoked_reason,omitempty"`
 }
 
-// DeviceIP records one IP address observed for a device with enough metadata
-// to answer when it first and last appeared.
-type DeviceIP struct {
-	IPAddress   string    `json:"ip_address"`
-	FirstSeenAt time.Time `json:"first_seen_at"`
-	LastSeenAt  time.Time `json:"last_seen_at"`
-	SeenCount   int       `json:"seen_count,omitempty"`
-}
-
 // UserDeviceSeenEvent is emitted when a known user authenticates or makes an
 // identified request from a device/IP pair. Consumers can use it to maintain
 // device inventories, IP history, and security alerts.
