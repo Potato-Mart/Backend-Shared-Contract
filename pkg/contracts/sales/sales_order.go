@@ -5,6 +5,7 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/shared"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
@@ -17,8 +18,7 @@ type Order struct {
 	FulfillmentStatus enums.FulfillmentStatus `json:"fulfillment_status"`
 	Customer          common.PartyRef         `json:"customer"`
 	Items             []OrderItem             `json:"items"`
-	// Device => OrderTypeOnline OrderType = "online" should have multiple device detected
-	// iOS / Android / PC / Mobile Web / Tablet
+	SourceDevice      SourceDevice            `json:"source_device,omitempty"`
 
 	// ── Shipping & billing ────────────────────────────────────────────
 	Shipping         common.ContactAddress    `json:"shipping"`
@@ -82,4 +82,20 @@ type AppliedPromotion struct {
 	DiscountType   enums.DiscountType `json:"discount_type,omitempty"`
 	DiscountValue  string             `json:"discount_value,omitempty"`
 	DiscountAmount *common.Money      `json:"discount_amount,omitempty"`
+}
+
+type SourceDevice struct {
+	Type     enums.OrderSourceDeviceType `json:"type,omitempty"`
+	LocalID  string                      `json:"local_id,omitempty"`
+	DeviceID string                      `json:"device_id,omitempty"`
+	Name     string                      `json:"name,omitempty"`
+
+	// Metadata stores source-specific details that should not become first-class
+	// contract fields yet, for example app_version, terminal_id, store_id,
+	// operator_id, forwarded_for, device_model, or network_interface.
+	Metadata common.Metadata `json:"metadata,omitempty"`
+
+	// DeviceRecord carries shared fingerprint/request attributes such as
+	// device_key, ip_address, user_agent, os, and browser.
+	shared.DeviceRecord `bson:",inline"`
 }
