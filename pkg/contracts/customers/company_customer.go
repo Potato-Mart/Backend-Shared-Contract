@@ -11,14 +11,11 @@ import (
 // customers. It is separate from Customer (which is auth-linked B2C) and
 // serves as the hub for loyalty, RFM analytics, marketing, subscriptions,
 // and referrals.
-// Uniqueness: (customer_name, phone, segment).
+// Uniqueness: (name, phone, segment).
 type CompanyCustomer struct {
-	ID              string                `json:"id"`
+	common.PartyRef `bson:",inline"` // id / name / phone / email
 	AuthUserID      string                `json:"auth_user_id,omitempty"`
-	CustomerName    string                `json:"customer_name"`
 	NameEN          string                `json:"name_en,omitempty"`
-	Phone           string                `json:"phone"`
-	Email           string                `json:"email,omitempty"`
 	CustomerProfile CustomerProfile       `json:"customer_profile"`
 	ContactPerson   string                `json:"contact_person,omitempty"`
 	DateOfBirth     *time.Time            `json:"date_of_birth,omitempty"` // contact's birth date, used for birthday bonus points

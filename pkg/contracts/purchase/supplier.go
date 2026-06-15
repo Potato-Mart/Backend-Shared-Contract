@@ -2,18 +2,18 @@ package purchase
 
 import "github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
 
-// Supplier is the supplier snapshot carried on purchase orders.
-// The contact fields come from common.PartyRef (id / name / phone / email).
+// Supplier is the full supplier record. A supplier is a company, so it
+// carries the complete organisation profile via common.CompanyDetail
+// (which embeds PartyRef for id / name / phone / email, plus registration,
+// tax, addresses, branding and other company fields).
 type Supplier struct {
-	ID                 string `json:"id,omitempty"`
-	Name               string `json:"name,omitempty"`
-	common.PartyRef    `bson:",inline"`
-	common.AuditFields `bson:",inline"`
+	common.CompanyDetail `bson:",inline"`
+	common.AuditFields   `bson:",inline"`
 }
 
+// SupplierSnapshot is the lightweight supplier reference embedded on
+// purchase orders. It shares the same identity/contact base as Supplier.
 type SupplierSnapshot struct {
-	SupplierID         string `json:"supplier_id,omitempty"`
-	SupplierName       string `json:"supplier_name,omitempty"`
 	common.PartyRef    `bson:",inline"`
 	common.AuditFields `bson:",inline"`
 }

@@ -3,9 +3,13 @@ package common
 // CompanyDetail contains the shared public and administrative details for a company.
 // It is intended for invoices, purchase orders, fulfilment paperwork, supplier/customer
 // profiles, and other contracts that need consistent organisation information.
+//
+// It embeds PartyRef for the company's identity and primary contact
+// (id / name / phone / email) and adds the richer organisation fields, so it
+// can be embedded wherever full company information is required.
 type CompanyDetail struct {
-	CompanyID          string `json:"company_id,omitempty"`
-	CompanyName        string `json:"company_name"`
+	PartyRef `bson:",inline"` // company id / name / phone / email
+
 	TradingName        string `json:"trading_name,omitempty"`
 	LegalName          string `json:"legal_name,omitempty"`
 	CompanyDescription string `json:"company_description,omitempty"`
@@ -17,9 +21,7 @@ type CompanyDetail struct {
 	TaxRegistered       bool   `json:"tax_registered,omitempty"`
 	BusinessNumberLabel string `json:"business_number_label,omitempty"`
 
-	// Primary contact details.
-	CompanyEmail         string `json:"company_email,omitempty"`
-	CompanyPhone         string `json:"company_phone,omitempty"`
+	// Additional contact details (primary phone/email come from PartyRef).
 	CompanyWebsite       string `json:"company_website,omitempty"`
 	CompanyContactPerson string `json:"company_contact_person,omitempty"`
 
