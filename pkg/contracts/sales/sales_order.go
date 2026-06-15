@@ -15,6 +15,7 @@ type Order struct {
 	Channel           enums.OrderType         `json:"channel"`
 	Status            enums.SalesOrderStatus  `json:"status"`
 	PaymentStatus     enums.PaymentStatus     `json:"payment_status"`
+	PaymentMethod     enums.PaymentMethod     `json:"payment_method"`
 	FulfillmentStatus enums.FulfillmentStatus `json:"fulfillment_status"`
 	Customer          common.PartyRef         `json:"customer"`
 	Items             []OrderItem             `json:"items"`

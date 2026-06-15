@@ -9,6 +9,8 @@ const (
 	PaymentMethodQR           PaymentMethod = "qr"
 	PaymentMethodBankTransfer PaymentMethod = "bank_transfer"
 	PaymentMethodLinePay      PaymentMethod = "line_pay"
+	PaymentMethodApplePay     PaymentMethod = "apple_pay"
+	PaymentMethodGooglePay    PaymentMethod = "google_pay"
 	PaymentMethodECPay        PaymentMethod = "ecpay"
 	PaymentMethodManual       PaymentMethod = "manual"
 

@@ -7,7 +7,7 @@
 
 ## 最新版本
 
-### V5.5.0
+### V5.5.1
 
 ## 模組路徑
 
@@ -26,7 +26,7 @@ github.com/Potato-Mart/Backend-Shared-Contract/v5
 在使用方服務的 `go.mod` 中加入：
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v5 v5.5.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v5 v5.5.1
 ```
 
 接著匯入所需套件，例如：
