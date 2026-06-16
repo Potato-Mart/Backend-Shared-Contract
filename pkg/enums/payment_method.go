@@ -26,8 +26,8 @@ const (
 func (p PaymentMethod) IsValid() bool {
 	switch p {
 	case PaymentMethodCard, PaymentMethodCash, PaymentMethodQR, PaymentMethodBankTransfer,
-		PaymentMethodLinePay, PaymentMethodECPay, PaymentMethodManual,
-		PaymentMethodEFTPOS, PaymentMethodMOTO, PaymentMethodCashout:
+		PaymentMethodLinePay, PaymentMethodApplePay, PaymentMethodGooglePay, PaymentMethodECPay,
+		PaymentMethodManual, PaymentMethodEFTPOS, PaymentMethodMOTO, PaymentMethodCashout:
 		return true
 	}
 	return false
