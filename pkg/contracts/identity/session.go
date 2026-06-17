@@ -3,6 +3,7 @@ package identity
 import (
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/shared"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
@@ -29,6 +30,7 @@ type LoginSession struct {
 	RefreshTokenRotatedAt *time.Time               `json:"refresh_token_rotated_at,omitempty"`
 	RevokedAt             *time.Time               `json:"revoked_at,omitempty"`
 	RevokedReason         string                   `json:"revoked_reason,omitempty"`
+	History               []shared.HistoryEntry    `json:"history,omitempty"`
 }
 
 // AuthTokenPair is returned on successful login or refresh.

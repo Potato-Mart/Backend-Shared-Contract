@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/shared"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
@@ -17,6 +18,7 @@ type InboundReceipt struct {
 	Status      enums.InboundReceiptStatus `json:"status"`
 	Note        string                     `json:"note,omitempty"`
 	ConfirmedAt *time.Time                 `json:"confirmed_at,omitempty"`
+	History     []shared.HistoryEntry      `json:"history,omitempty"`
 
 	common.AuditFields `bson:",inline"`
 }

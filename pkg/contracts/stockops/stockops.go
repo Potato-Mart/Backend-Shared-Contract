@@ -2,8 +2,8 @@
 // that Backend-Operations exposes to other services (currently Commerce, at
 // checkout) over the service-to-service auth flow. See ADR 0001.
 //
-// These are intentionally minimal and transport-only: the rich domain types
-// (lots, items, movements) stay private to Operations.
+// These are intentionally minimal and transport-only. Stock movement read
+// models that need to be shared across services live in contracts/warehouse.
 package stockops
 
 // Full request paths for the internal stock operations, as mounted by

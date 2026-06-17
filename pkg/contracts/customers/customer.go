@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/shared"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
@@ -33,6 +34,7 @@ type Customer struct {
 	// ── Shipping ──────────────────────────────────────────────────────
 	DefaultShipping *common.ContactAddress  `json:"default_shipping,omitempty"`
 	ShippingList    []common.ContactAddress `json:"shipping_list,omitempty"`
+	History         []shared.HistoryEntry   `json:"history,omitempty"`
 
 	common.AuditFields          `bson:",inline"`
 	common.DataProtectionFields `bson:",inline"`

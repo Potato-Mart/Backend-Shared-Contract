@@ -32,6 +32,7 @@ type SecurityEvent struct {
 	ResolvedAt         *time.Time      `json:"resolved_at,omitempty"`
 	Resolution         string          `json:"resolution,omitempty"`
 	Metadata           common.Metadata `json:"metadata,omitempty"`
+	History            []HistoryEntry  `json:"history,omitempty"`
 
 	common.DataProtectionFields `bson:",inline"`
 }
@@ -60,6 +61,7 @@ type SecurityIncident struct {
 	NotifiableBreach   bool                        `json:"notifiable_breach,omitempty"`
 	NotificationDueAt  *time.Time                  `json:"notification_due_at,omitempty"`
 	Metadata           common.Metadata             `json:"metadata,omitempty"`
+	History            []HistoryEntry              `json:"history,omitempty"`
 
 	common.DataProtectionFields `bson:",inline"`
 }

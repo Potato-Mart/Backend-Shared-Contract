@@ -2,6 +2,7 @@ package promotion
 
 import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/shared"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
@@ -52,7 +53,7 @@ type Promotion struct {
 	RequiredQtyCombined int `json:"required_qty_combined,omitempty"`
 
 	// ── auto_discount ─────────────────────────────────────────────────
-	DiscountSpec `bson:",inline"`
+	DiscountSpec   `bson:",inline"`
 	MaxDiscount    *common.Money                 `json:"max_discount,omitempty"`
 	DiscountTarget enums.PromotionDiscountTarget `json:"discount_target,omitempty"`
 
@@ -78,15 +79,16 @@ type Promotion struct {
 	PricingMixAllowed bool          `json:"pricing_mix_allowed,omitempty"`
 
 	// ── Control ───────────────────────────────────────────────────────
-	Priority    int  `json:"priority"`
-	IsStackable bool `json:"is_stackable"`
-	UsageLimits `bson:",inline"`
+	Priority     int  `json:"priority"`
+	IsStackable  bool `json:"is_stackable"`
+	UsageLimits  `bson:",inline"`
 	ActiveWindow `bson:",inline"`
-	Channels []enums.OrderType `json:"channels,omitempty"` // e.g. ["online","pos"]
+	Channels     []enums.OrderType `json:"channels,omitempty"` // e.g. ["online","pos"]
 
 	// Source tracking for promotions synced from external systems.
-	Source    string `json:"source,omitempty"`
-	SourceRef string `json:"source_ref,omitempty"`
+	Source    string                `json:"source,omitempty"`
+	SourceRef string                `json:"source_ref,omitempty"`
+	History   []shared.HistoryEntry `json:"history,omitempty"`
 
 	common.AuditFields `bson:",inline"`
 }

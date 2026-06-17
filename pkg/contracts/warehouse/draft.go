@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/shared"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
@@ -11,17 +12,18 @@ import (
 // created by a warehouse operator on a PDA or desktop. On submission the draft
 // is converted into inbound or outbound warehouse records by the owning service.
 type WMSDraft struct {
-	ID          string               `json:"id"`
-	Type        enums.WMSDraftType   `json:"type"`
-	Operator    string               `json:"operator"`
-	DepotID     string               `json:"depot_id,omitempty"`
-	Reference   string               `json:"reference,omitempty"` // supplier PO / order number
-	Items       []WMSDraftItem       `json:"items"`
-	ItemCount   int                  `json:"item_count"`
-	TotalQty    int                  `json:"total_qty"`
-	Status      enums.WMSDraftStatus `json:"status"`
-	Note        string               `json:"note,omitempty"`
-	SubmittedAt *time.Time           `json:"submitted_at,omitempty"`
+	ID          string                `json:"id"`
+	Type        enums.WMSDraftType    `json:"type"`
+	Operator    string                `json:"operator"`
+	DepotID     string                `json:"depot_id,omitempty"`
+	Reference   string                `json:"reference,omitempty"` // supplier PO / order number
+	Items       []WMSDraftItem        `json:"items"`
+	ItemCount   int                   `json:"item_count"`
+	TotalQty    int                   `json:"total_qty"`
+	Status      enums.WMSDraftStatus  `json:"status"`
+	Note        string                `json:"note,omitempty"`
+	SubmittedAt *time.Time            `json:"submitted_at,omitempty"`
+	History     []shared.HistoryEntry `json:"history,omitempty"`
 
 	common.AuditFields `bson:",inline"`
 }

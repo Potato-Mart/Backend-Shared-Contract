@@ -61,6 +61,8 @@ type Order struct {
 	PickingPrintedAt *time.Time `json:"picking_printed_at,omitempty"`
 	PackedAt         *time.Time `json:"packed_at,omitempty"`
 
+	History []shared.HistoryEntry `json:"history,omitempty"`
+
 	common.AuditFields `bson:",inline"`
 }
 

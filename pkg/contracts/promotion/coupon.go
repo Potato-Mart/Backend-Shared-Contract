@@ -4,25 +4,27 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/shared"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
 // Coupon is a code-based discount that customers enter at checkout.
 // Unlike Promotion (auto-applied rule), a coupon is manually redeemed.
 type Coupon struct {
-	ID          string `json:"id"`
-	Code        string `json:"code"`
-	Description string `json:"description,omitempty"`
+	ID           string `json:"id"`
+	Code         string `json:"code"`
+	Description  string `json:"description,omitempty"`
 	DiscountSpec `bson:",inline"`
 
 	MinOrderAmount    *common.Money `json:"min_order_amount,omitempty"`
 	MaxDiscountAmount *common.Money `json:"max_discount_amount,omitempty"`
-	UsageLimits `bson:",inline"`
-	ActiveWindow `bson:",inline"`
+	UsageLimits       `bson:",inline"`
+	ActiveWindow      `bson:",inline"`
 
 	AppliesTo   enums.CouponAppliesTo `json:"applies_to"`
 	ProductIDs  []string              `json:"product_ids,omitempty"`
 	CategoryIDs []string              `json:"category_ids,omitempty"`
+	History     []shared.HistoryEntry `json:"history,omitempty"`
 
 	common.AuditFields `bson:",inline"`
 }

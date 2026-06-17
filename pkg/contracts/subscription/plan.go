@@ -5,6 +5,7 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/shared"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
@@ -38,6 +39,7 @@ type CustomerSubscription struct {
 	CancelledAt       *time.Time               `json:"cancelled_at,omitempty"`
 	CyclesCompleted   int                      `json:"cycles_completed"`
 	Note              string                   `json:"note,omitempty"`
+	History           []shared.HistoryEntry    `json:"history,omitempty"`
 
 	common.AuditFields `bson:",inline"`
 }

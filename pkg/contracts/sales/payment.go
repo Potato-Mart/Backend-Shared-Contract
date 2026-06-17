@@ -5,6 +5,7 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
 	paymentcontracts "github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/payments"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/shared"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
@@ -46,12 +47,13 @@ type Payment struct {
 	// outcome stayed unknown after provider status checks.
 	RecoveryDecision enums.RecoveryDecision `json:"recovery_decision,omitempty"`
 
-	PaidAt       *time.Time      `json:"paid_at,omitempty"`
-	RefundedAt   *time.Time      `json:"refunded_at,omitempty"`
-	RefundAmount *common.Money   `json:"refund_amount,omitempty"`
-	RefundReason string          `json:"refund_reason,omitempty"`
-	Metadata     common.Metadata `json:"metadata,omitempty"`
-	CreatedAt    time.Time       `json:"created_at"`
+	PaidAt       *time.Time            `json:"paid_at,omitempty"`
+	RefundedAt   *time.Time            `json:"refunded_at,omitempty"`
+	RefundAmount *common.Money         `json:"refund_amount,omitempty"`
+	RefundReason string                `json:"refund_reason,omitempty"`
+	Metadata     common.Metadata       `json:"metadata,omitempty"`
+	History      []shared.HistoryEntry `json:"history,omitempty"`
+	CreatedAt    time.Time             `json:"created_at"`
 
 	common.DataProtectionFields `bson:",inline"`
 }

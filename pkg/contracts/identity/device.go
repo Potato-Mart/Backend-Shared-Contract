@@ -28,6 +28,7 @@ type UserDevice struct {
 	LastRiskReviewedAt  *time.Time                  `json:"last_risk_reviewed_at,omitempty"`
 	RevokedAt           *time.Time                  `json:"revoked_at,omitempty"`
 	RevokedReason       string                      `json:"revoked_reason,omitempty"`
+	History             []shared.HistoryEntry       `json:"history,omitempty"`
 	shared.DeviceRecord `bson:",inline"`
 }
 

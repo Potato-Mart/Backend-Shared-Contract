@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/shared"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
@@ -16,6 +17,7 @@ type PickingList struct {
 	AssignedTo  string                  `json:"assigned_to,omitempty"`
 	Note        string                  `json:"note,omitempty"`
 	Items       []PickingListItem       `json:"items,omitempty"`
+	History     []shared.HistoryEntry   `json:"history,omitempty"`
 
 	common.AuditFields `bson:",inline"`
 }

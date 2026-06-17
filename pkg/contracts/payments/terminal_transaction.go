@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/shared"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
@@ -56,9 +57,10 @@ type TerminalTransaction struct {
 	LastStatusCheckedAt *time.Time `json:"last_status_checked_at,omitempty"`
 	FinalisedAt         *time.Time `json:"finalised_at,omitempty"`
 
-	Metadata common.Metadata `json:"metadata,omitempty"`
+	Metadata common.Metadata       `json:"metadata,omitempty"`
+	History  []shared.HistoryEntry `json:"history,omitempty"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields          `bson:",inline"`
 	common.DataProtectionFields `bson:",inline"`
 }
 

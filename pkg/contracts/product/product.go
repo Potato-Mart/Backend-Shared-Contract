@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/shared"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
@@ -55,6 +56,9 @@ type Product struct {
 
 	PlacingAreaCode string    `json:"placing_area_code,omitempty"`
 	ExpiredAt       time.Time `json:"expired_at,omitempty"`
+	// History is for product master-data changes only. Stock changes should
+	// be represented as warehouse.StockMovement records.
+	History []shared.HistoryEntry `json:"history,omitempty"`
 
 	common.AuditFields `bson:",inline"`
 }

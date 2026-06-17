@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/shared"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
@@ -21,6 +22,7 @@ type OutboundShipment struct {
 	TrackingNumber string                       `json:"tracking_number,omitempty"`
 	Note           string                       `json:"note,omitempty"`
 	DispatchedAt   *time.Time                   `json:"dispatched_at,omitempty"`
+	History        []shared.HistoryEntry        `json:"history,omitempty"`
 	CreatedAt      time.Time                    `json:"created_at"`
 }
 

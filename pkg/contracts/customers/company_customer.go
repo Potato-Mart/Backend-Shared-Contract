@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/shared"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
@@ -13,7 +14,7 @@ import (
 // and referrals.
 // Uniqueness: (name, phone, segment).
 type CompanyCustomer struct {
-	common.PartyRef `bson:",inline"` // id / name / phone / email
+	common.PartyRef `bson:",inline"`      // id / name / phone / email
 	AuthUserID      string                `json:"auth_user_id,omitempty"`
 	NameEN          string                `json:"name_en,omitempty"`
 	CustomerProfile CustomerProfile       `json:"customer_profile"`
@@ -37,7 +38,8 @@ type CompanyCustomer struct {
 	RFM *RFMMetrics `json:"rfm,omitempty"`
 
 	// ── Referral ──────────────────────────────────────────────────────
-	Referral *Referral `json:"referral,omitempty"`
+	Referral *Referral             `json:"referral,omitempty"`
+	History  []shared.HistoryEntry `json:"history,omitempty"`
 
 	common.AuditFields          `bson:",inline"`
 	common.DataProtectionFields `bson:",inline"`

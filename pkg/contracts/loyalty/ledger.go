@@ -21,9 +21,38 @@ type LoyaltyLedgerEntry struct {
 	BalanceAfter       int                       `json:"balance_after"`
 	Remaining          int                       `json:"remaining"` // unspent from this earn row (FIFO)
 	ExpiresAt          *time.Time                `json:"expires_at,omitempty"`
+	Allocations        []LoyaltyPointAllocation  `json:"allocations,omitempty"`
 	Note               string                    `json:"note,omitempty"`
 	CreatedBy          string                    `json:"created_by,omitempty"`
 	CreatedAt          time.Time                 `json:"created_at"`
+}
+
+// LoyaltyPointAllocation shows which earned points row was consumed by a
+// redemption or expiry ledger entry.
+type LoyaltyPointAllocation struct {
+	LedgerEntryID string     `json:"ledger_entry_id"`
+	Points        int        `json:"points"`
+	ExpiresAt     *time.Time `json:"expires_at,omitempty"`
+}
+
+// LoyaltyPointBucket is one currently available points batch for display in
+// customer-facing and admin expiry views.
+type LoyaltyPointBucket struct {
+	Points              int                       `json:"points"`
+	ExpiresAt           *time.Time                `json:"expires_at,omitempty"`
+	SourceLedgerEntryID string                    `json:"source_ledger_entry_id"`
+	Reason              enums.LoyaltyLedgerReason `json:"reason"`
+	RelatedOrderID      string                    `json:"related_order_id,omitempty"`
+	RelatedOrderNumber  string                    `json:"related_order_number,omitempty"`
+}
+
+// LoyaltyBalanceBreakdown is a projected view of active point buckets.
+type LoyaltyBalanceBreakdown struct {
+	CustomerID     string               `json:"customer_id"`
+	TotalPoints    int                  `json:"total_points"`
+	ExpiringPoints int                  `json:"expiring_points"`
+	Buckets        []LoyaltyPointBucket `json:"buckets,omitempty"`
+	CalculatedAt   time.Time            `json:"calculated_at"`
 }
 
 // LoyaltyPromotion is a time-limited points multiplier event.

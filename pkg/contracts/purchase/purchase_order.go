@@ -5,6 +5,7 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/shared"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
 )
 
@@ -28,6 +29,7 @@ type Order struct {
 	CompletedAt  *time.Time                `json:"completed_at,omitempty"`
 	Note         string                    `json:"note,omitempty"`
 	InternalNote string                    `json:"internal_note,omitempty"`
+	History      []shared.HistoryEntry     `json:"history,omitempty"`
 
 	common.AuditFields `bson:",inline"`
 }
