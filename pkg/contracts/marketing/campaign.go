@@ -3,9 +3,9 @@ package marketing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/enums"
 )
 
 // MarketingCampaign records a single EDM / SMS / LINE push broadcast.
@@ -33,9 +33,7 @@ type MarketingCampaignRecipient struct {
 	ID                string                         `json:"id"`
 	CampaignID        string                         `json:"campaign_id"`
 	CustomerProfileID string                         `json:"customer_profile_id,omitempty"`
-	Email             string                         `json:"email,omitempty"`
-	Phone             string                         `json:"phone,omitempty"`
-	LineID            string                         `json:"line_id,omitempty"`
+	Contacts          common.ContactChannels         `json:"contacts,omitempty"`
 	CustomerName      string                         `json:"customer_name,omitempty"`
 	Status            enums.MarketingRecipientStatus `json:"status"`
 	SentAt            *time.Time                     `json:"sent_at,omitempty"`

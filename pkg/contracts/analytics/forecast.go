@@ -3,7 +3,7 @@ package analytics
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/common"
 )
 
 // AlertLevel classifies the urgency of a stock-out forecast.

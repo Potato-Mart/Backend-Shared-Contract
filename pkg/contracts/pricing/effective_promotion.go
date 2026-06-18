@@ -13,7 +13,7 @@ package pricing
 // every service agrees on the outcome.
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/contracts/promotion"
 )
 
 // PathEffectivePromotion is the full request path of the internal

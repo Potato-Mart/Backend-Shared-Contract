@@ -3,8 +3,8 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/enums"
 )
 
 // WarehouseLayout is the root 3D scene description for a depot. There is
@@ -20,12 +20,12 @@ type WarehouseLayout struct {
 	Version         int            `json:"version"`
 	Origin          common.Vector3 `json:"origin"`
 	Size            common.Size3D  `json:"size"`
-	UpAxis          string         `json:"up_axis,omitempty"`        // "Y" (default for Three.js) or "Z"
-	UnitScale       float64        `json:"unit_scale,omitempty"`     // scene units per metre, default 1.0
+	UpAxis          string         `json:"up_axis,omitempty"`    // "Y" (default for Three.js) or "Z"
+	UnitScale       float64        `json:"unit_scale,omitempty"` // scene units per metre, default 1.0
 	BackgroundColor string         `json:"background_color,omitempty"`
 	FloorTextureURL string         `json:"floor_texture_url,omitempty"`
 	GridSizeMM      int64          `json:"grid_size_mm,omitempty"`
-	PrimaryModel    *ModelAsset    `json:"primary_model,omitempty"`  // optional GLB shell of the floor plan
+	PrimaryModel    *ModelAsset    `json:"primary_model,omitempty"` // optional GLB shell of the floor plan
 	Walls           []LayoutWall   `json:"walls,omitempty"`
 	Cameras         []CameraPreset `json:"cameras,omitempty"`
 	Note            string         `json:"note,omitempty"`
@@ -56,8 +56,8 @@ type LayoutNode struct {
 	Shape      enums.ShapeType      `json:"shape,omitempty"`
 	Transform  common.Transform     `json:"transform"`
 	Size       common.Size3D        `json:"size"`
-	Color      string               `json:"color,omitempty"`     // hex like "#3b82f6"
-	Model      *ModelAsset          `json:"model,omitempty"`     // optional model override for this node
+	Color      string               `json:"color,omitempty"`       // hex like "#3b82f6"
+	Model      *ModelAsset          `json:"model,omitempty"`       // optional model override for this node
 	LocationID string               `json:"location_id,omitempty"` // links a BIN node to a StockLocation
 	SortOrder  int                  `json:"sort_order,omitempty"`
 	IsActive   bool                 `json:"is_active"`

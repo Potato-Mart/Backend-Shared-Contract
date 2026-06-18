@@ -7,12 +7,12 @@
 
 ## 最新版本
 
-### V5.6.0
+### V6.0.0
 
 ## 模組路徑
 
 ```text
-github.com/Potato-Mart/Backend-Shared-Contract/v5
+github.com/Potato-Mart/Backend-Shared-Contract/v6
 ````
 
 ## 目錄結構
@@ -26,35 +26,18 @@ github.com/Potato-Mart/Backend-Shared-Contract/v5
 在使用方服務的 `go.mod` 中加入：
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v5 v5.6.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v6 v6.0.0
 ```
 
 接著匯入所需套件，例如：
 
 ```go
 import (
-    "github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
+    "github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/enums"
 )
 ```
 
 ## 版本管理
 
 本模組一經發布後，遵循版本控制。
-凡是對任何已匯出的內容有破壞性的改變，皆必須升版為新的主版本（major version）。
-
-自 V3.0.0 開始，所有的發布內容會自動化生成
-
-自 V4.0.0 開始，付費接口已經泛化，可用任何第三方進行合作
-
-自 V5.0.0 開始
-
-- `pkg/contracts/stockops`：新增內部庫存端點路徑常數 `PathReserve`、`PathCommit`、`PathRelease`（提供方 Backend-Operations）。
-- `pkg/serviceauth`：新增服務權杖端點路徑常數 `PathToken`（提供方 Backend-Management）。
-- `pkg/contracts/pricing`：新增跨服務報價契約 `QuoteRequest` / `QuoteResponse` 與路徑常數 `PathQuote`（提供方 Backend-Management、使用方 Backend-Commerce，scope `pricing:quote`）。
-- `pkg/apiresponse`：於 `APIResponse` 文件註解明示內部服務間端點（token、stockops、pricing）同樣使用此回應信封。
-
-自 V5.6.0 開始
-
-- `pkg/contracts/shared`：新增 `HistoryEntry` / `HistoryChange`，供高風險流程物件呈現狀態與風險歷史。
-- `pkg/contracts/warehouse`：新增 `StockMovement` 庫存異動讀取契約，可連結採購單、收貨單、銷售單與損耗紀錄。
-- `pkg/contracts/loyalty`：新增點數分攤與到期桶狀摘要契約，支援每批點數獨立到期與兌換追蹤。
+凡是對任何已匯出的內容有破壞性的改變，皆必須升版為新的主版本（major version）

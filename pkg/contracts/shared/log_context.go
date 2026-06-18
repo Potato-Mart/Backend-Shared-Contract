@@ -1,6 +1,6 @@
 package shared
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/enums"
 
 // ActorRef identifies the authenticated principal that performed an
 // action. It is shared by audit, access, and security records.

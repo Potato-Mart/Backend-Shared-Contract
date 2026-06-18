@@ -1,14 +1,14 @@
 package purchase
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/common"
 
-// Supplier is the full supplier record. A supplier is a company, so it
-// carries the complete organisation profile via common.CompanyDetail
+// Supplier is the full supplier record. A supplier is an organisation, so it
+// carries the complete organisation profile via common.OrganisationDetail
 // (which embeds PartyRef for id / name / phone / email, plus registration,
-// tax, addresses, branding and other company fields).
+// tax, addresses, branding and other organisation fields).
 type Supplier struct {
-	common.CompanyDetail `bson:",inline"`
-	common.AuditFields   `bson:",inline"`
+	common.OrganisationDetail `bson:",inline"`
+	common.AuditFields        `bson:",inline"`
 }
 
 // SupplierSnapshot is the lightweight supplier reference embedded on

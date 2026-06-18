@@ -29,6 +29,24 @@ const (
 	CodeAuthReauthRequired      Code = "AUTH_REAUTH_REQUIRED"
 	CodeSecurityPolicyViolation Code = "SECURITY_POLICY_VIOLATION"
 
+	// Identity/access
+	// CodeIdentityAccountTypeNotAllowed means the account type cannot enter the requested portal.
+	CodeIdentityAccountTypeNotAllowed Code = "IDENTITY_ACCOUNT_TYPE_NOT_ALLOWED"
+	// CodeIdentityPortalAccessDenied means portal admission failed.
+	CodeIdentityPortalAccessDenied Code = "IDENTITY_PORTAL_ACCESS_DENIED"
+	// CodeIdentityPortalAccessRevoked means portal access has been revoked.
+	CodeIdentityPortalAccessRevoked Code = "IDENTITY_PORTAL_ACCESS_REVOKED"
+	// CodeIdentityAccountSuspended means the account/persona is suspended.
+	CodeIdentityAccountSuspended Code = "IDENTITY_ACCOUNT_SUSPENDED"
+	// CodeIdentityAuthIdentityDisabled means the selected auth identity is disabled.
+	CodeIdentityAuthIdentityDisabled Code = "IDENTITY_AUTH_IDENTITY_DISABLED"
+	// CodeIdentityMFARequired means stronger authentication is required.
+	CodeIdentityMFARequired Code = "IDENTITY_MFA_REQUIRED"
+	// CodeIdentityWholesaleOrganisationNotApproved means the wholesale organisation is not approved.
+	CodeIdentityWholesaleOrganisationNotApproved Code = "IDENTITY_WHOLESALE_ORGANISATION_NOT_APPROVED"
+	// CodeIdentityWholesaleMembershipRequired means a valid wholesale membership is required.
+	CodeIdentityWholesaleMembershipRequired Code = "IDENTITY_WHOLESALE_MEMBERSHIP_REQUIRED"
+
 	// User
 	CodeUserEmailTaken Code = "USER_EMAIL_TAKEN"
 
@@ -78,9 +96,14 @@ func (c Code) HTTPStatus() int {
 		return 400
 	case CodeUnauthorized, CodeAuthInvalidCredentials, CodeAuthInvalidToken,
 		CodeAuthExpiredToken, CodeAuthWrongPortal, CodeAuthAccountDisabled,
-		CodeAuthMFARequired, CodeAuthReauthRequired:
+		CodeAuthMFARequired, CodeAuthReauthRequired,
+		CodeIdentityAuthIdentityDisabled, CodeIdentityMFARequired:
 		return 401
-	case CodeForbidden, CodeSecurityPolicyViolation:
+	case CodeForbidden, CodeSecurityPolicyViolation,
+		CodeIdentityAccountTypeNotAllowed, CodeIdentityPortalAccessDenied,
+		CodeIdentityPortalAccessRevoked, CodeIdentityAccountSuspended,
+		CodeIdentityWholesaleOrganisationNotApproved,
+		CodeIdentityWholesaleMembershipRequired:
 		return 403
 	case CodeNotFound, CodeDiscountNotFound, CodeTerminalNotRegistered:
 		return 404

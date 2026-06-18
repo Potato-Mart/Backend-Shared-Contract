@@ -10,8 +10,8 @@
 package pricing
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/contracts/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/enums"
 )
 
 // PathQuote is the full request path of the internal pricing quote endpoint.

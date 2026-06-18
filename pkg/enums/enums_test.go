@@ -16,16 +16,20 @@ func TestExportedEnumsValidateKnownValues(t *testing.T) {
 		valid   []stringEnum
 		invalid stringEnum
 	}{
+		{name: "AccountStatus", valid: []stringEnum{AccountStatusPending, AccountStatusActive, AccountStatusSuspended, AccountStatusClosed, AccountStatusDeleted}, invalid: AccountStatus("__invalid__")},
+		{name: "AccountType", valid: []stringEnum{AccountTypeAdminUser, AccountTypeGeneralCustomer, AccountTypeWholesaleCustomer}, invalid: AccountType("__invalid__")},
 		{name: "AuthAssuranceLevel", valid: []stringEnum{AuthAssuranceLevel1, AuthAssuranceLevel2, AuthAssuranceLevel3}, invalid: AuthAssuranceLevel("__invalid__")},
+		{name: "AuthIdentityProvider", valid: []stringEnum{AuthIdentityProviderPassword, AuthIdentityProviderGoogle, AuthIdentityProviderApple, AuthIdentityProviderAzureAD, AuthIdentityProviderOkta, AuthIdentityProviderPasskey, AuthIdentityProviderServiceToken}, invalid: AuthIdentityProvider("__invalid__")},
+		{name: "AuthIdentityStatus", valid: []stringEnum{AuthIdentityStatusActive, AuthIdentityStatusDisabled, AuthIdentityStatusRevoked}, invalid: AuthIdentityStatus("__invalid__")},
 		{name: "AuthMethod", valid: []stringEnum{AuthMethodPassword, AuthMethodMFA, AuthMethodPasskey, AuthMethodSSO, AuthMethodRefreshToken, AuthMethodAPIKey}, invalid: AuthMethod("__invalid__")},
 		{name: "CameraProjection", valid: []stringEnum{CameraPerspective, CameraOrthographic}, invalid: CameraProjection("__invalid__")},
 		{name: "ChurnRisk", valid: []stringEnum{ChurnRiskLow, ChurnRiskMedium, ChurnRiskHigh}, invalid: ChurnRisk("__invalid__")},
 		{name: "CouponAppliesTo", valid: []stringEnum{CouponAppliesToAll, CouponAppliesToSpecificProducts, CouponAppliesToSpecificCategories}, invalid: CouponAppliesTo("__invalid__")},
 		{name: "CouponSource", valid: []stringEnum{CouponSourceManual, CouponSourceRFMComeback, CouponSourceBirthday, CouponSourceReferral, CouponSourceSignupBonus, CouponSourceCampaign}, invalid: CouponSource("__invalid__")},
 		{name: "CustomerActivityType", valid: []stringEnum{CustomerActivityTypeNote, CustomerActivityTypeCall, CustomerActivityTypeEmail, CustomerActivityTypeSMS, CustomerActivityTypeLine, CustomerActivityTypeOrder, CustomerActivityTypeComplaint, CustomerActivityTypeReturn, CustomerActivityTypeRefund, CustomerActivityTypePointsAdjust, CustomerActivityTypeTierChange, CustomerActivityTypeStatusChange, CustomerActivityTypeReferral, CustomerActivityTypeCampaign}, invalid: CustomerActivityType("__invalid__")},
+		{name: "CustomerAcquisitionSource", valid: []stringEnum{CustomerAcquisitionSourceOnline, CustomerAcquisitionSourcePOS, CustomerAcquisitionSourceImport, CustomerAcquisitionSourceManual, CustomerAcquisitionSourcePhone}, invalid: CustomerAcquisitionSource("__invalid__")},
 		{name: "CustomerIdentityKind", valid: []stringEnum{CustomerIdentityKindPhone, CustomerIdentityKindEmail, CustomerIdentityKindLine, CustomerIdentityKindMemberCard, CustomerIdentityKindPOSID, CustomerIdentityKindExternal}, invalid: CustomerIdentityKind("__invalid__")},
-		{name: "CustomerProfileStatus", valid: []stringEnum{CustomerProfileStatusActive, CustomerProfileStatusInactive, CustomerProfileStatusBlocked}, invalid: CustomerProfileStatus("__invalid__")},
-		{name: "CustomerSegment", valid: []stringEnum{CustomerSegmentWholesale, CustomerSegmentRetail}, invalid: CustomerSegment("__invalid__")},
+		{name: "CustomerStatus", valid: []stringEnum{CustomerStatusActive, CustomerStatusInactive, CustomerStatusBlocked, CustomerStatusClosed}, invalid: CustomerStatus("__invalid__")},
 		{name: "CustomerTier", valid: []stringEnum{CustomerTierStandard, CustomerTierSilver, CustomerTierGold, CustomerTierPlatinum}, invalid: CustomerTier("__invalid__")},
 		{name: "DamageStage", valid: []stringEnum{DamageStageInbound, DamageStagePicking, DamageStagePacking, DamageStageStorage}, invalid: DamageStage("__invalid__")},
 		{name: "DataClassification", valid: []stringEnum{DataClassificationPublic, DataClassificationInternal, DataClassificationConfidential, DataClassificationRestricted}, invalid: DataClassification("__invalid__")},
@@ -35,6 +39,7 @@ func TestExportedEnumsValidateKnownValues(t *testing.T) {
 		{name: "DiscountType", valid: []stringEnum{DiscountTypePercentage, DiscountTypeFixedAmount, DiscountTypeFreeShipping, DiscountTypeFixedPrice}, invalid: DiscountType("__invalid__")},
 		{name: "FulfillmentStatus", valid: []stringEnum{FulfillmentStatusUnfulfilled, FulfillmentStatusPickingPrinted, FulfillmentStatusPacking, FulfillmentStatusPacked, FulfillmentStatusPartial, FulfillmentStatusFulfilled}, invalid: FulfillmentStatus("__invalid__")},
 		{name: "InboundReceiptStatus", valid: []stringEnum{InboundReceiptStatusDraft, InboundReceiptStatusConfirmed}, invalid: InboundReceiptStatus("__invalid__")},
+		{name: "IdentityDomain", valid: []stringEnum{IdentityDomainCustomer, IdentityDomainWorkforce, IdentityDomainPartner, IdentityDomainService}, invalid: IdentityDomain("__invalid__")},
 		{name: "LayoutNodeType", valid: []stringEnum{LayoutNodeZone, LayoutNodeAisle, LayoutNodeRack, LayoutNodeShelf, LayoutNodeBin}, invalid: LayoutNodeType("__invalid__")},
 		{name: "LoyaltyLedgerReason", valid: []stringEnum{LoyaltyLedgerReasonOrder, LoyaltyLedgerReasonBirthday, LoyaltyLedgerReasonRedeem, LoyaltyLedgerReasonAdminAdjust, LoyaltyLedgerReasonExpired, LoyaltyLedgerReasonReferral, LoyaltyLedgerReasonSignupBonus, LoyaltyLedgerReasonTierUpgrade, LoyaltyLedgerReasonManual}, invalid: LoyaltyLedgerReason("__invalid__")},
 		{name: "LoyaltyPromotionTarget", valid: []stringEnum{LoyaltyPromotionTargetAll, LoyaltyPromotionTargetWholesale, LoyaltyPromotionTargetRetail, LoyaltyPromotionTargetTierSpecific}, invalid: LoyaltyPromotionTarget("__invalid__")},
@@ -52,6 +57,7 @@ func TestExportedEnumsValidateKnownValues(t *testing.T) {
 		{name: "PickingItemStatus", valid: []stringEnum{PickingItemStatusPending, PickingItemStatusPartial, PickingItemStatusComplete, PickingItemStatusSkipped}, invalid: PickingItemStatus("__invalid__")},
 		{name: "PickingListStatus", valid: []stringEnum{PickingListStatusPending, PickingListStatusInProgress, PickingListStatusComplete, PickingListStatusCancelled}, invalid: PickingListStatus("__invalid__")},
 		{name: "Portal", valid: []stringEnum{PortalControl, PortalStore, PortalPartner}, invalid: Portal("__invalid__")},
+		{name: "PortalAccessStatus", valid: []stringEnum{PortalAccessStatusPending, PortalAccessStatusActive, PortalAccessStatusSuspended, PortalAccessStatusRevoked}, invalid: PortalAccessStatus("__invalid__")},
 		{name: "PromotionAddonTrigger", valid: []stringEnum{PromotionAddonTriggerAmount, PromotionAddonTriggerRequiredProducts}, invalid: PromotionAddonTrigger("__invalid__")},
 		{name: "PromotionClass", valid: []stringEnum{PromotionClassNormal, PromotionClassSpecialCampaign}, invalid: PromotionClass("__invalid__")},
 		{name: "PromotionDiscountTarget", valid: []stringEnum{PromotionDiscountTargetCart, PromotionDiscountTargetRequiredItems}, invalid: PromotionDiscountTarget("__invalid__")},
@@ -79,6 +85,8 @@ func TestExportedEnumsValidateKnownValues(t *testing.T) {
 		{name: "UserPreferredLanguage", valid: []stringEnum{PreferredLanguageEnglish, PreferredLanguageTraditionalChinese, PreferredLanguageSimplifiedChinese}, invalid: UserPreferredLanguage("__invalid__")},
 		{name: "UserRole", valid: []stringEnum{UserRoleSuperAdmin, UserRoleAdmin, UserRoleSales, UserRoleWarehouse, UserRoleWarehouseOperator, UserRoleMarketing, UserRoleCustomer, UserRoleClient}, invalid: UserRole("__invalid__")},
 		{name: "VolumeDiscountAppliesTo", valid: []stringEnum{VolumeDiscountAppliesToAll, VolumeDiscountAppliesToWholesale, VolumeDiscountAppliesToRetail}, invalid: VolumeDiscountAppliesTo("__invalid__")},
+		{name: "WholesaleMembershipStatus", valid: []stringEnum{WholesaleMembershipStatusPending, WholesaleMembershipStatusActive, WholesaleMembershipStatusSuspended, WholesaleMembershipStatusRevoked}, invalid: WholesaleMembershipStatus("__invalid__")},
+		{name: "WholesaleOrganisationStatus", valid: []stringEnum{WholesaleOrganisationStatusPending, WholesaleOrganisationStatusApproved, WholesaleOrganisationStatusSuspended, WholesaleOrganisationStatusRejected, WholesaleOrganisationStatusClosed}, invalid: WholesaleOrganisationStatus("__invalid__")},
 		{name: "WMSDraftStatus", valid: []stringEnum{WMSDraftStatusDraft, WMSDraftStatusSubmitted, WMSDraftStatusCancelled}, invalid: WMSDraftStatus("__invalid__")},
 		{name: "WMSDraftType", valid: []stringEnum{WMSDraftTypeInbound, WMSDraftTypeOutbound}, invalid: WMSDraftType("__invalid__")},
 	}
@@ -98,6 +106,112 @@ func TestExportedEnumsValidateKnownValues(t *testing.T) {
 				t.Fatalf("%T(%q) should be invalid", tt.invalid, reflect.ValueOf(tt.invalid).String())
 			}
 		})
+	}
+}
+
+func TestAccountTypePortalAdmission(t *testing.T) {
+	allowed := map[AccountType]Portal{
+		AccountTypeAdminUser:         PortalControl,
+		AccountTypeGeneralCustomer:   PortalStore,
+		AccountTypeWholesaleCustomer: PortalPartner,
+	}
+
+	for accountType, portal := range allowed {
+		if !accountType.IsAllowedInPortal(portal) {
+			t.Fatalf("%s should be allowed in %s", accountType, portal)
+		}
+	}
+
+	rejected := []struct {
+		accountType AccountType
+		portal      Portal
+	}{
+		{AccountTypeAdminUser, PortalStore},
+		{AccountTypeAdminUser, PortalPartner},
+		{AccountTypeGeneralCustomer, PortalControl},
+		{AccountTypeGeneralCustomer, PortalPartner},
+		{AccountTypeWholesaleCustomer, PortalControl},
+		{AccountTypeWholesaleCustomer, PortalStore},
+	}
+
+	for _, tt := range rejected {
+		if tt.accountType.IsAllowedInPortal(tt.portal) {
+			t.Fatalf("%s should not be allowed in %s", tt.accountType, tt.portal)
+		}
+	}
+}
+
+func TestPortalAccountTypeHelpers(t *testing.T) {
+	tests := []struct {
+		portal      Portal
+		accountType AccountType
+	}{
+		{PortalControl, AccountTypeAdminUser},
+		{PortalStore, AccountTypeGeneralCustomer},
+		{PortalPartner, AccountTypeWholesaleCustomer},
+	}
+
+	for _, tt := range tests {
+		if !tt.portal.RequiresAccountType(tt.accountType) {
+			t.Fatalf("%s should require %s", tt.portal, tt.accountType)
+		}
+
+		required, ok := tt.portal.RequiredAccountType()
+		if !ok {
+			t.Fatalf("%s should have a required account type", tt.portal)
+		}
+		if required != tt.accountType {
+			t.Fatalf("%s required account type = %s, want %s", tt.portal, required, tt.accountType)
+		}
+
+		want := []AccountType{tt.accountType}
+		if got := tt.portal.AllowedAccountTypes(); !reflect.DeepEqual(got, want) {
+			t.Fatalf("%s allowed account types = %#v, want %#v", tt.portal, got, want)
+		}
+		if got := AccountTypesForPortal(tt.portal); !reflect.DeepEqual(got, want) {
+			t.Fatalf("AccountTypesForPortal(%s) = %#v, want %#v", tt.portal, got, want)
+		}
+	}
+
+	if _, ok := Portal("__invalid__").RequiredAccountType(); ok {
+		t.Fatal("invalid portal should not have a required account type")
+	}
+	if got := Portal("__invalid__").AllowedAccountTypes(); got != nil {
+		t.Fatalf("invalid portal allowed account types = %#v, want nil", got)
+	}
+}
+
+func TestPortalAccessStatusCanAccess(t *testing.T) {
+	if !PortalAccessStatusActive.CanAccess() {
+		t.Fatal("active portal access should allow access")
+	}
+
+	for _, status := range []PortalAccessStatus{
+		PortalAccessStatusPending,
+		PortalAccessStatusSuspended,
+		PortalAccessStatusRevoked,
+	} {
+		if status.CanAccess() {
+			t.Fatalf("%s should not allow access", status)
+		}
+	}
+}
+
+func TestAccountStatusTerminalState(t *testing.T) {
+	for _, status := range []AccountStatus{AccountStatusClosed, AccountStatusDeleted} {
+		if !status.IsTerminal() {
+			t.Fatalf("%s should be terminal", status)
+		}
+	}
+
+	for _, status := range []AccountStatus{
+		AccountStatusPending,
+		AccountStatusActive,
+		AccountStatusSuspended,
+	} {
+		if status.IsTerminal() {
+			t.Fatalf("%s should not be terminal", status)
+		}
 	}
 }
 

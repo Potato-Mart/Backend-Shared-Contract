@@ -3,10 +3,10 @@ package subscription
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/enums"
 )
 
 // SubscriptionPlan defines a recurring purchase option for a product.

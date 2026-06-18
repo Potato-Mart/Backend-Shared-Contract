@@ -1,12 +1,11 @@
 package payments
 
 import (
-	"encoding/json"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/enums"
 )
 
 // TerminalTransaction is one card-terminal interaction.
@@ -16,10 +15,9 @@ type TerminalTransaction struct {
 	OrderID    string `json:"order_id,omitempty"`
 	PaymentID  string `json:"payment_id,omitempty"`
 
-	ProviderReference  *PaymentReference `json:"provider_reference,omitempty"`
-	ProviderRequestID  string            `json:"provider_request_id,omitempty"`
-	ProviderTerminalID string            `json:"provider_terminal_id,omitempty"`
-	MerchantReference  string            `json:"merchant_reference,omitempty"`
+	ProviderReference *PaymentReference         `json:"provider_reference,omitempty"`
+	ProviderDetails   *TerminalProviderDetails  `json:"provider_details,omitempty"`
+	OperationContext  *ProviderOperationContext `json:"operation_context,omitempty"`
 
 	Type           enums.TerminalTxType `json:"type"`
 	Requested      Amounts              `json:"requested"`
@@ -36,23 +34,11 @@ type TerminalTransaction struct {
 	MerchantReceipt        string          `json:"merchant_receipt,omitempty"`
 	CustomerReceipt        string          `json:"customer_receipt,omitempty"`
 
-	// Raw provider payloads are stored for diagnostics and future
-	// compatibility. They should not be used as the source of truth for
-	// business decisions once the normalized fields above are populated.
-	ProviderRequest      json.RawMessage `json:"provider_request,omitempty"`
-	ProviderResponse     json.RawMessage `json:"provider_response,omitempty"`
-	ProviderNotification json.RawMessage `json:"provider_notification,omitempty"`
-	DisplayNotification  json.RawMessage `json:"display_notification,omitempty"`
+	Payloads *ProviderPayloads `json:"provider_payloads,omitempty"`
 
 	// RecoveryDecision captures the merchant's manual answer when the
 	// provider cannot determine the outcome after status checks.
 	RecoveryDecision enums.RecoveryDecision `json:"recovery_decision,omitempty"`
-
-	// IdempotencyKey lets the POS safely retry a Create call after a
-	// network blip without double-creating the transaction. It is the
-	// caller's responsibility to generate and persist; the contract
-	// only guarantees the field exists.
-	IdempotencyKey string `json:"idempotency_key,omitempty"`
 
 	LastStatusCheckedAt *time.Time `json:"last_status_checked_at,omitempty"`
 	FinalisedAt         *time.Time `json:"finalised_at,omitempty"`
@@ -67,14 +53,12 @@ type TerminalTransaction struct {
 // CreateTerminalTransactionRequest is the input the POS submits to
 // start a new terminal transaction.
 type CreateTerminalTransactionRequest struct {
-	TerminalID        string                       `json:"terminal_id"`
-	OrderID           string                       `json:"order_id,omitempty"`
-	PaymentID         string                       `json:"payment_id,omitempty"`
-	Currency          string                       `json:"currency"`
-	ConnectionMode    enums.TerminalConnectionMode `json:"connection_mode,omitempty"`
-	IdempotencyKey    string                       `json:"idempotency_key,omitempty"`
-	ProviderRequestID string                       `json:"provider_request_id,omitempty"`
-	MerchantReference string                       `json:"merchant_reference,omitempty"`
+	TerminalID       string                       `json:"terminal_id"`
+	OrderID          string                       `json:"order_id,omitempty"`
+	PaymentID        string                       `json:"payment_id,omitempty"`
+	Currency         string                       `json:"currency"`
+	ConnectionMode   enums.TerminalConnectionMode `json:"connection_mode,omitempty"`
+	OperationContext *ProviderOperationContext    `json:"operation_context,omitempty"`
 
 	ReceiptOptions  ReceiptOptions  `json:"receipt_options,omitempty"`
 	ProviderOptions common.Metadata `json:"provider_options,omitempty"`

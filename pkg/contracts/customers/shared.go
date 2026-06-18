@@ -3,29 +3,23 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v5/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/enums"
 )
 
-type CustomerProfile struct {
-	Segment enums.CustomerSegment       `json:"segment"`
-	Status  enums.CustomerProfileStatus `json:"status"`
-}
-
-// LoyaltyStatus groups the loyalty-programme state of a customer: points
-// balance, membership tier, and the spend counters used for tier evaluation.
-// Shared by Customer and CompanyCustomer.
-type LoyaltyStatus struct {
+// RetailCustomerLoyaltyProfile groups the loyalty-programme state of a retail
+// customer.
+type RetailCustomerLoyaltyProfile struct {
 	Points          int           `json:"points"`
-	TierKey         string        `json:"tier_key,omitempty"`       // references loyalty_tiers.tier_key
-	TierSpend       *common.Money `json:"tier_spend,omitempty"`     // spend counted toward the current tier window
-	LifetimeSpend   *common.Money `json:"lifetime_spend,omitempty"` // lifetime spend recognised by the loyalty programme
+	TierKey         string        `json:"tier_key,omitempty"`
+	TierSpend       *common.Money `json:"tier_spend,omitempty"`
+	LifetimeSpend   *common.Money `json:"lifetime_spend,omitempty"`
 	TierEvaluatedAt *time.Time    `json:"tier_evaluated_at,omitempty"`
 }
 
-// OrderStats groups aggregated order statistics for a customer. All values
+// RetailCustomerCommerceProfile groups aggregated commerce statistics. Values
 // are computed by sync jobs and must never be manually edited.
-type OrderStats struct {
+type RetailCustomerCommerceProfile struct {
 	TotalOrders       int          `json:"total_orders"`
 	TotalUnits        int          `json:"total_units,omitempty"`
 	TotalSpend        common.Money `json:"total_spend"`
@@ -37,43 +31,42 @@ type OrderStats struct {
 	SyncedAt          *time.Time   `json:"synced_at,omitempty"`
 }
 
-// MarketingConsent groups per-channel marketing opt-ins together with the
-// provenance of the consent decision.
-type MarketingConsent struct {
-	Email     bool       `json:"email"`
-	SMS       bool       `json:"sms"`
-	Line      bool       `json:"line"`
-	UpdatedAt *time.Time `json:"updated_at,omitempty"`
-	Source    string     `json:"source,omitempty"` // "website" | "pos" | "import" | "manual"
+// RetailCustomerMarketingProfile groups per-channel marketing opt-ins together
+// with the provenance of the consent decision.
+type RetailCustomerMarketingProfile struct {
+	EmailOptIn bool       `json:"email_opt_in"`
+	SMSOptIn   bool       `json:"sms_opt_in"`
+	LineOptIn  bool       `json:"line_opt_in"`
+	UpdatedAt  *time.Time `json:"updated_at,omitempty"`
+	Source     string     `json:"source,omitempty"`
 }
 
-// RFMMetrics groups the recency/frequency/monetary analytics computed by
-// the stats sync job.
-type RFMMetrics struct {
+// RetailCustomerAnalyticsProfile groups the recency/frequency/monetary
+// analytics computed by the stats sync job.
+type RetailCustomerAnalyticsProfile struct {
 	RecencyDays   *int            `json:"recency_days,omitempty"`
 	R             *int            `json:"r,omitempty"`
 	F             *int            `json:"f,omitempty"`
 	M             *int            `json:"m,omitempty"`
-	Score         string          `json:"score,omitempty"`   // e.g. "545"
-	Segment       string          `json:"segment,omitempty"` // e.g. "VIP" / "沉睡"
+	Score         string          `json:"score,omitempty"`
+	Segment       string          `json:"segment,omitempty"`
 	ChurnRisk     enums.ChurnRisk `json:"churn_risk,omitempty"`
 	AvgRepeatDays *float64        `json:"avg_repeat_days,omitempty"`
 }
 
-// Referral groups the referral-programme state of a customer.
-type Referral struct {
+// RetailCustomerReferralProfile groups the referral-programme state of a
+// retail customer.
+type RetailCustomerReferralProfile struct {
 	Code       string `json:"code,omitempty"`
 	ReferrerID string `json:"referrer_id,omitempty"`
 	Credited   bool   `json:"credited,omitempty"`
 }
 
-// ── CRM fields (manually edited, never overwritten by sync) ───────
-type CRM struct {
-	Notes        string   `json:"notes,omitempty"`
-	Tags         []string `json:"tags,omitempty"`
-	SalesRep     string   `json:"sales_rep,omitempty"`
-	CRMTier      string   `json:"crm_tier,omitempty"`      // CRM cooperation level: VIP / A / B / C (distinct from Loyalty.TierKey)
-	PaymentTerms string   `json:"payment_terms,omitempty"` // e.g. "NET30"
-	TaxID        string   `json:"tax_id,omitempty"`        // ABN / tax number
-
+// RetailCustomerManagementProfile groups CRM fields that are manually edited
+// by staff and are never overwritten by sync jobs.
+type RetailCustomerManagementProfile struct {
+	Notes    string   `json:"notes,omitempty"`
+	Tags     []string `json:"tags,omitempty"`
+	SalesRep string   `json:"sales_rep,omitempty"`
+	CRMTier  string   `json:"crm_tier,omitempty"`
 }

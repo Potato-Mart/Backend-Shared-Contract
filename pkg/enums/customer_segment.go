@@ -1,42 +1,53 @@
 package enums
 
-// CustomerSegment distinguishes wholesale B2B clients from retail individuals
-// in the CRM customer_profiles table.
-type CustomerSegment string
+// CustomerStatus is the lifecycle status of a retail or wholesale customer
+// business profile. It is not used to decide portal admission.
+type CustomerStatus string
 
 const (
-	CustomerSegmentWholesale CustomerSegment = "WHOLESALE"
-	CustomerSegmentRetail    CustomerSegment = "RETAIL"
+	CustomerStatusActive   CustomerStatus = "ACTIVE"
+	CustomerStatusInactive CustomerStatus = "INACTIVE"
+	CustomerStatusBlocked  CustomerStatus = "BLOCKED"
+	CustomerStatusClosed   CustomerStatus = "CLOSED"
 )
 
-func (c CustomerSegment) IsValid() bool {
+// IsValid reports whether c is a known CustomerStatus value.
+func (c CustomerStatus) IsValid() bool {
 	switch c {
-	case CustomerSegmentWholesale, CustomerSegmentRetail:
+	case CustomerStatusActive, CustomerStatusInactive, CustomerStatusBlocked,
+		CustomerStatusClosed:
 		return true
 	}
 	return false
 }
 
-func (c CustomerSegment) String() string { return string(c) }
+// String returns the wire value for c.
+func (c CustomerStatus) String() string { return string(c) }
 
-// CustomerProfileStatus is the lifecycle status of a CRM customer profile.
-type CustomerProfileStatus string
+// CustomerAcquisitionSource identifies how a customer profile was acquired.
+type CustomerAcquisitionSource string
 
 const (
-	CustomerProfileStatusActive   CustomerProfileStatus = "ACTIVE"
-	CustomerProfileStatusInactive CustomerProfileStatus = "INACTIVE"
-	CustomerProfileStatusBlocked  CustomerProfileStatus = "BLOCKED"
+	CustomerAcquisitionSourceOnline CustomerAcquisitionSource = "online"
+	CustomerAcquisitionSourcePOS    CustomerAcquisitionSource = "pos"
+	CustomerAcquisitionSourceImport CustomerAcquisitionSource = "import"
+	CustomerAcquisitionSourceManual CustomerAcquisitionSource = "manual"
+	CustomerAcquisitionSourcePhone  CustomerAcquisitionSource = "phone"
 )
 
-func (c CustomerProfileStatus) IsValid() bool {
-	switch c {
-	case CustomerProfileStatusActive, CustomerProfileStatusInactive, CustomerProfileStatusBlocked:
+// IsValid reports whether s is a known CustomerAcquisitionSource value.
+func (s CustomerAcquisitionSource) IsValid() bool {
+	switch s {
+	case CustomerAcquisitionSourceOnline, CustomerAcquisitionSourcePOS,
+		CustomerAcquisitionSourceImport, CustomerAcquisitionSourceManual,
+		CustomerAcquisitionSourcePhone:
 		return true
 	}
 	return false
 }
 
-func (c CustomerProfileStatus) String() string { return string(c) }
+// String returns the wire value for s.
+func (s CustomerAcquisitionSource) String() string { return string(s) }
 
 // ChurnRisk is the computed churn risk level derived from RFM recency analysis.
 type ChurnRisk string
