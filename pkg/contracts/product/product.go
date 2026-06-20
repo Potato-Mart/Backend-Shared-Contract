@@ -13,6 +13,7 @@ type Product struct {
 	Code            string                 `json:"code"`
 	SKU             string                 `json:"sku"`
 	Name            string                 `json:"name"`
+	Description     string                 `json:"description,omitempty"`
 	Price           common.Money           `json:"price"`
 	POSPrice        *common.Money          `json:"pos_price,omitempty"`
 	Barcode         string                 `json:"barcode,omitempty"`
