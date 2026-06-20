@@ -21,6 +21,8 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- | --- | --- | --- |
+| `v6.0.2` | 2026-06-18 | Patch | Version metadata correction (`ModuleVersion = "v6.0.2"`) |
+| `v6.0.1` | 2026-06-18 | Minor | Added product `description` field (additive) |
 | `v6.0.0` | 2026-06-18 | Major | Staged breaking release: V6 module path, identity/access model, retail/wholesale split, grouped support fields |
 | `v5.6.0` | 2026-06-17 | Minor | Contract history, stock movement, loyalty expiry models |
 | `v5.5.2` | 2026-06-16 | Patch | Payment method correction/extension |
@@ -60,6 +62,34 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24 | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21 | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21 | Pre-release | Initial repository seed |
+
+## v6.0.2 - Version Metadata Correction / 版本中繼資料修正
+
+Release date: 2026-06-18
+
+- Corrected the exported module version metadata to `ModuleVersion = "v6.0.2"` and refreshed README version guidance.
+- No contract type, enum, or JSON shape change.
+
+- 修正 exported module version metadata 為 `ModuleVersion = "v6.0.2"`，並更新 README 版本說明。
+- 無 contract type、enum 或 JSON shape 變更。
+
+### Consumer Action / 使用方動作
+
+- No code change required. Optionally pin the dependency to `v6.0.2`.
+- 不需修改程式碼。可選擇將相依版本固定為 `v6.0.2`。
+
+## v6.0.1 - Product Description Field / 商品描述欄位
+
+Release date: 2026-06-18
+
+- Added a proper `description` field to `product.Product`. Additive and backward-compatible — existing consumers are unaffected.
+
+- 為 `product.Product` 新增正式的 `description` 欄位。屬 additive 且向後相容，既有使用方不受影響。
+
+### Consumer Action / 使用方動作
+
+- No breaking change. Consumers may now read/write `product.description`.
+- 無破壞性變更。使用方現在可讀寫 `product.description`。
 
 ## v6.0.0 - V6 Shared Contract Model / V6 共用契約模型
 
