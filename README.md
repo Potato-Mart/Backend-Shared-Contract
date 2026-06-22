@@ -4,15 +4,16 @@
 
 本模組刻意設計為僅包含各後端服務共同使用的型別、列舉、DTO、錯誤碼，以及事件負載（event payload）。  
 模組**不依賴任何資料庫驅動程式或 Web 框架的執行階段相依性**，因此無論是現行單體式架構（monolith）或未來的微服務（microservices），皆可安全地依賴此模組。
+只有合約的結構會被寫入本資料夾中
 
 ## 最新版本
 
-### V6.0.2
+### V7.0.0
 
 ## 模組路徑
 
 ```text
-github.com/Potato-Mart/Backend-Shared-Contract/v6
+github.com/Potato-Mart/Backend-Shared-Contract/v7
 ````
 
 ## 目錄結構
@@ -26,14 +27,14 @@ github.com/Potato-Mart/Backend-Shared-Contract/v6
 在使用方服務的 `go.mod` 中加入：
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v6 v6.0.2
+require github.com/Potato-Mart/Backend-Shared-Contract/v7 v7.0.0
 ```
 
 接著匯入所需套件，例如：
 
 ```go
 import (
-    "github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/enums"
+    "github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
 )
 ```
 

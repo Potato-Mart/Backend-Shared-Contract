@@ -5,9 +5,9 @@ package payments
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
 )
 
 // Terminal is an EFTPOS device registered for POS use.
@@ -31,23 +31,6 @@ type Terminal struct {
 	History  []shared.HistoryEntry `json:"history,omitempty"`
 
 	common.AuditFields `bson:",inline"`
-}
-
-// RegisterTerminalRequest saves a provider terminal association for a
-// tenant/store.
-type RegisterTerminalRequest struct {
-	TenantID        string                       `json:"tenant_id"`
-	StoreID         string                       `json:"store_id,omitempty"`
-	Provider        enums.TerminalProvider       `json:"provider"`
-	ConnectionMode  enums.TerminalConnectionMode `json:"connection_mode,omitempty"`
-	ProviderDetails *TerminalProviderDetails     `json:"provider_details,omitempty"`
-	Metadata        common.Metadata              `json:"metadata,omitempty"`
-}
-
-// RegisterTerminalResponse is returned after a terminal association is
-// stored and can be used by the POS.
-type RegisterTerminalResponse struct {
-	Terminal Terminal `json:"terminal"`
 }
 
 // TerminalConnectionInfo is a lightweight liveness check returned by a

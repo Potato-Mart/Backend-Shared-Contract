@@ -3,8 +3,8 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
 )
 
 // UserProfile is the public projection of a canonical user. Secret fields such

@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/contracts/identity"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/contracts/identity"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
 )
 
 func TestPortalAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T) {
@@ -55,48 +55,34 @@ func TestPortalAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T)
 	}
 }
 
-func TestIdentityRequestsJSONNestContext(t *testing.T) {
-	request := identity.GrantRoleAssignmentRequest{
-		UserID:    "user_1",
-		AccountID: "acct_1",
-		Portal:    enums.PortalControl,
-		RoleKey:   "admin",
-		Context: &identity.IdentityRequestContext{
-			RequestedBy: "super_admin_1",
-			RequestID:   "req_1",
-			Reason:      "least privilege update",
-		},
+func TestIdentityRequestContextJSONShape(t *testing.T) {
+	ctx := identity.IdentityRequestContext{
+		RequestedBy: "super_admin_1",
+		RequestID:   "req_1",
+		Reason:      "least privilege update",
 	}
 
-	payload, err := json.Marshal(request)
+	payload, err := json.Marshal(ctx)
 	if err != nil {
-		t.Fatalf("marshal role assignment request: %v", err)
+		t.Fatalf("marshal identity request context: %v", err)
 	}
 
 	var got map[string]any
 	if err := json.Unmarshal(payload, &got); err != nil {
-		t.Fatalf("unmarshal role assignment request JSON: %v", err)
+		t.Fatalf("unmarshal identity request context JSON: %v", err)
 	}
 
-	for _, key := range []string{"user_id", "account_id", "portal", "role_key"} {
-		if _, ok := got[key]; !ok {
-			t.Fatalf("GrantRoleAssignmentRequest JSON missing top-level %q: %s", key, payload)
-		}
-	}
-	if _, ok := got["context"]; !ok {
-		t.Fatalf("GrantRoleAssignmentRequest JSON missing nested context: %s", payload)
-	}
 	for _, key := range []string{"requested_by", "request_id", "reason"} {
-		if _, ok := got[key]; ok {
-			t.Fatalf("GrantRoleAssignmentRequest JSON should not include flat context key %q: %s", key, payload)
+		if _, ok := got[key]; !ok {
+			t.Fatalf("IdentityRequestContext JSON missing %q: %s", key, payload)
 		}
 	}
 
-	var decoded identity.GrantRoleAssignmentRequest
+	var decoded identity.IdentityRequestContext
 	if err := json.Unmarshal(payload, &decoded); err != nil {
-		t.Fatalf("unmarshal role assignment request: %v", err)
+		t.Fatalf("unmarshal identity request context: %v", err)
 	}
-	if decoded.Context == nil || decoded.Context.RequestID != "req_1" {
-		t.Fatalf("request context did not round-trip: %+v", decoded.Context)
+	if decoded.RequestID != "req_1" {
+		t.Fatalf("request context did not round-trip: %+v", decoded)
 	}
 }

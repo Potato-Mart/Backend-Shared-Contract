@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/contracts/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/contracts/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
 )
 
 func TestStockMovementRoundTripWithPurchaseLinks(t *testing.T) {

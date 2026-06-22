@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/contracts/payments"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/contracts/payments"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
 )
 
 func TestTerminalTransactionJSONRoundTripWithHistory(t *testing.T) {
@@ -159,27 +159,6 @@ func TestTerminalProviderDetailsJSONShapes(t *testing.T) {
 		}
 	}
 
-	register := payments.RegisterTerminalRequest{
-		TenantID:       "tenant_1",
-		Provider:       enums.TerminalProviderMx51,
-		ConnectionMode: enums.TerminalConnectionModeCloudSync,
-		ProviderDetails: &payments.TerminalProviderDetails{
-			MerchantID: "merchant_1",
-			TerminalID: "provider_term_1",
-		},
-	}
-	if payload, err = json.Marshal(register); err != nil {
-		t.Fatalf("marshal register terminal request: %v", err)
-	}
-	if err := json.Unmarshal(payload, &got); err != nil {
-		t.Fatalf("unmarshal register terminal request JSON: %v", err)
-	}
-	for _, key := range []string{"tenant_id", "provider", "connection_mode", "provider_details"} {
-		if _, ok := got[key]; !ok {
-			t.Fatalf("RegisterTerminalRequest JSON missing %q: %s", key, payload)
-		}
-	}
-
 	info := payments.TerminalConnectionInfo{
 		TerminalID:      "term_1",
 		Provider:        enums.TerminalProviderMx51,
@@ -241,39 +220,4 @@ func TestSettlementJSONGroupsProviderSupportFields(t *testing.T) {
 		}
 	}
 
-	createTx := payments.CreateTerminalTransactionRequest{
-		TerminalID:       "term_1",
-		Currency:         "AUD",
-		ConnectionMode:   enums.TerminalConnectionModeCloudSync,
-		OperationContext: &payments.ProviderOperationContext{RequestID: "provider_req_1", IdempotencyKey: "idem_1"},
-	}
-	if payload, err = json.Marshal(createTx); err != nil {
-		t.Fatalf("marshal create terminal transaction request: %v", err)
-	}
-	if err := json.Unmarshal(payload, &got); err != nil {
-		t.Fatalf("unmarshal create terminal transaction request JSON: %v", err)
-	}
-	for _, key := range []string{"terminal_id", "currency", "connection_mode", "operation_context"} {
-		if _, ok := got[key]; !ok {
-			t.Fatalf("CreateTerminalTransactionRequest JSON missing %q: %s", key, payload)
-		}
-	}
-
-	createSettlement := payments.CreateSettlementRequest{
-		TerminalID:       "term_1",
-		Type:             enums.SettlementTypeSettlement,
-		ConnectionMode:   enums.TerminalConnectionModeCloudSync,
-		OperationContext: &payments.ProviderOperationContext{RequestID: "provider_req_1", IdempotencyKey: "idem_1"},
-	}
-	if payload, err = json.Marshal(createSettlement); err != nil {
-		t.Fatalf("marshal create settlement request: %v", err)
-	}
-	if err := json.Unmarshal(payload, &got); err != nil {
-		t.Fatalf("unmarshal create settlement request JSON: %v", err)
-	}
-	for _, key := range []string{"terminal_id", "type", "connection_mode", "operation_context"} {
-		if _, ok := got[key]; !ok {
-			t.Fatalf("CreateSettlementRequest JSON missing %q: %s", key, payload)
-		}
-	}
 }

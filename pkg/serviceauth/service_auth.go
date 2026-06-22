@@ -65,25 +65,8 @@ func JoinScopes(scopes []Scope) string {
 }
 
 // PathToken is the full request path of the service-token endpoint
-// (client-credentials grant) served by Backend-Management. Peer services
-// POST a ServiceTokenRequest here to obtain a short-lived service token.
+// (client-credentials grant) served by Backend-Management.
 const PathToken = "/v1/internal/token"
-
-// ServiceTokenRequest is the client-credentials grant body for
-// POST /v1/internal/token, issued by Backend-Management.
-type ServiceTokenRequest struct {
-	ClientID     string `json:"client_id" binding:"required"`
-	ClientSecret string `json:"client_secret" binding:"required"`
-	Scope        string `json:"scope,omitempty"` // space-delimited requested scopes
-}
-
-// ServiceTokenResponse is the issued service access token.
-type ServiceTokenResponse struct {
-	AccessToken string `json:"access_token"`
-	TokenType   string `json:"token_type"` // always "Bearer"
-	ExpiresIn   int    `json:"expires_in"` // seconds until expiry
-	Scope       string `json:"scope"`      // space-delimited granted scopes
-}
 
 // ServiceClaims is the verified claim set carried by a service token,
 // surfaced to handlers by the verifier middleware after the signature,

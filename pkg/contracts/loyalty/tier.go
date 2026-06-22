@@ -1,7 +1,7 @@
 package loyalty
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/common"
 )
 
 // LoyaltyTier defines the rules for a membership tier in the loyalty programme.

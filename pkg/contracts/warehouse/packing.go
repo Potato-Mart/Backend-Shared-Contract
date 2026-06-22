@@ -1,0 +1,92 @@
+package warehouse
+
+import "time"
+
+// PackingSessionStatus is the workflow state for an order packing session.
+type PackingSessionStatus string
+
+const (
+	PackingSessionStatusPending     PackingSessionStatus = "pending"
+	PackingSessionStatusPacking     PackingSessionStatus = "packing"
+	PackingSessionStatusPacked      PackingSessionStatus = "packed"
+	PackingSessionStatusSyncPending PackingSessionStatus = "sync_pending"
+	PackingSessionStatusResolved    PackingSessionStatus = "resolved"
+)
+
+// IsValid reports whether s is a known packing session state.
+func (s PackingSessionStatus) IsValid() bool {
+	switch s {
+	case PackingSessionStatusPending, PackingSessionStatusPacking, PackingSessionStatusPacked,
+		PackingSessionStatusSyncPending, PackingSessionStatusResolved:
+		return true
+	}
+	return false
+}
+
+func (s PackingSessionStatus) String() string { return string(s) }
+
+// PackingDamageHandling captures what the operator did for a damaged packed unit.
+type PackingDamageHandling string
+
+const (
+	PackingDamageReplaceFromStock PackingDamageHandling = "replace_from_stock"
+	PackingDamageShortShipRefund  PackingDamageHandling = "short_ship_refund"
+)
+
+// IsValid reports whether h is a known customer handling mode.
+func (h PackingDamageHandling) IsValid() bool {
+	switch h {
+	case PackingDamageReplaceFromStock, PackingDamageShortShipRefund:
+		return true
+	}
+	return false
+}
+
+func (h PackingDamageHandling) String() string { return string(h) }
+
+// PackingLine is the order-line projection needed by the packing UI and
+// backend settlement logic.
+type PackingLine struct {
+	ProductID   string `bson:"product_id" json:"product_id"`
+	SKU         string `bson:"sku,omitempty" json:"sku,omitempty"`
+	ProductName string `bson:"product_name,omitempty" json:"product_name,omitempty"`
+	OrderedQty  int    `bson:"ordered_qty" json:"ordered_qty"`
+	ScannedQty  int    `bson:"scanned_qty" json:"scanned_qty"`
+	DamagedQty  int    `bson:"damaged_qty,omitempty" json:"damaged_qty,omitempty"`
+}
+
+// PackingDamage is an auditable damage event discovered while packing.
+type PackingDamage struct {
+	ID              string                `bson:"id" json:"id"`
+	ProductID       string                `bson:"product_id" json:"product_id"`
+	SKU             string                `bson:"sku,omitempty" json:"sku,omitempty"`
+	ProductName     string                `bson:"product_name,omitempty" json:"product_name,omitempty"`
+	DamagedQty      int                   `bson:"damaged_qty" json:"damaged_qty"`
+	Handling        PackingDamageHandling `bson:"handling" json:"handling"`
+	Note            string                `bson:"note,omitempty" json:"note,omitempty"`
+	DamageReportID  string                `bson:"damage_report_id,omitempty" json:"damage_report_id,omitempty"`
+	StockMovementID string                `bson:"stock_movement_id,omitempty" json:"stock_movement_id,omitempty"`
+	CreatedAt       time.Time             `bson:"created_at" json:"created_at"`
+	CreatedBy       string                `bson:"created_by,omitempty" json:"created_by,omitempty"`
+}
+
+// PackingBoxPlan persists box counts and optional contents so label reprints
+// stay consistent across sessions.
+type PackingBoxPlan struct {
+	AmbientBoxes       int                 `bson:"ambient_boxes,omitempty" json:"ambient_boxes,omitempty"`
+	FrozenBoxes        int                 `bson:"frozen_boxes,omitempty" json:"frozen_boxes,omitempty"`
+	ManualAmbientCount bool                `bson:"manual_ambient_count,omitempty" json:"manual_ambient_count,omitempty"`
+	ManualFrozenCount  bool                `bson:"manual_frozen_count,omitempty" json:"manual_frozen_count,omitempty"`
+	Contents           []PackingBoxContent `bson:"contents,omitempty" json:"contents,omitempty"`
+	UpdatedAt          time.Time           `bson:"updated_at,omitempty" json:"updated_at,omitempty"`
+}
+
+// PackingBoxContent describes one product quantity assigned to one box label.
+type PackingBoxContent struct {
+	BoxNo       int    `bson:"box_no" json:"box_no"`
+	Zone        string `bson:"zone,omitempty" json:"zone,omitempty"`
+	ProductID   string `bson:"product_id" json:"product_id"`
+	SKU         string `bson:"sku,omitempty" json:"sku,omitempty"`
+	ProductName string `bson:"product_name,omitempty" json:"product_name,omitempty"`
+	Qty         int    `bson:"qty" json:"qty"`
+}

@@ -12,4 +12,3 @@ type Date string
 // hours) where a full timestamp or timezone-qualified type would change
 // the meaning at service boundaries.
 type TimeOfDay string
-

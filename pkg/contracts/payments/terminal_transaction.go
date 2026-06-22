@@ -3,9 +3,9 @@ package payments
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
 )
 
 // TerminalTransaction is one card-terminal interaction.
@@ -48,73 +48,4 @@ type TerminalTransaction struct {
 
 	common.AuditFields          `bson:",inline"`
 	common.DataProtectionFields `bson:",inline"`
-}
-
-// CreateTerminalTransactionRequest is the input the POS submits to
-// start a new terminal transaction.
-type CreateTerminalTransactionRequest struct {
-	TerminalID       string                       `json:"terminal_id"`
-	OrderID          string                       `json:"order_id,omitempty"`
-	PaymentID        string                       `json:"payment_id,omitempty"`
-	Currency         string                       `json:"currency"`
-	ConnectionMode   enums.TerminalConnectionMode `json:"connection_mode,omitempty"`
-	OperationContext *ProviderOperationContext    `json:"operation_context,omitempty"`
-
-	ReceiptOptions  ReceiptOptions  `json:"receipt_options,omitempty"`
-	ProviderOptions common.Metadata `json:"provider_options,omitempty"`
-
-	Purchase            *PurchaseDetails            `json:"purchase_details,omitempty"`
-	Refund              *RefundDetails              `json:"refund_details,omitempty"`
-	Cashout             *CashoutDetails             `json:"cashout_details,omitempty"`
-	PurchaseWithCashout *PurchaseWithCashoutDetails `json:"purchase_with_cashout_details,omitempty"`
-	MOTO                *MOTODetails                `json:"moto_details,omitempty"`
-}
-
-// PurchaseDetails models a standard purchase.
-type PurchaseDetails struct {
-	PurchaseAmountMinor int64  `json:"purchase_amount_minor"`
-	TipMinor            *int64 `json:"tip_minor,omitempty"`
-	SurchargeMinor      *int64 `json:"surcharge_minor,omitempty"`
-}
-
-// RefundDetails models both referenced and unreferenced refunds.
-type RefundDetails struct {
-	RefundType                enums.TerminalRefundType `json:"refund_type,omitempty"`
-	RefundAmountMinor         int64                    `json:"refund_amount_minor"`
-	OriginalProviderReference *PaymentReference        `json:"original_provider_reference,omitempty"`
-}
-
-// CashoutDetails models a cashout-only transaction.
-type CashoutDetails struct {
-	CashoutAmountMinor int64  `json:"cashout_amount_minor"`
-	SurchargeMinor     *int64 `json:"surcharge_minor,omitempty"`
-}
-
-// PurchaseWithCashoutDetails combines a purchase and a cashout in one
-// transaction.
-type PurchaseWithCashoutDetails struct {
-	PurchaseAmountMinor int64  `json:"purchase_amount_minor"`
-	CashoutAmountMinor  *int64 `json:"cashout_amount_minor,omitempty"`
-	SurchargeMinor      *int64 `json:"surcharge_minor,omitempty"`
-}
-
-// MOTODetails models a Mail Order / Telephone Order card-not-present
-// transaction initiated through the terminal.
-type MOTODetails struct {
-	MOTOAmountMinor int64  `json:"moto_amount_minor"`
-	SurchargeMinor  *int64 `json:"surcharge_minor,omitempty"`
-}
-
-// CheckTerminalTransactionStatusRequest asks the backend to refresh a
-// terminal transaction outcome using the provider's status mechanism.
-type CheckTerminalTransactionStatusRequest struct {
-	TerminalTransactionID string `json:"terminal_transaction_id"`
-}
-
-// ResolveOverrideRequest closes a transaction stuck in OverridePending
-// status with the merchant's manual decision.
-type ResolveOverrideRequest struct {
-	TerminalTransactionID string                 `json:"terminal_transaction_id"`
-	Decision              enums.RecoveryDecision `json:"decision"`
-	Note                  string                 `json:"note,omitempty"`
 }

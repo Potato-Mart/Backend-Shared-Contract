@@ -3,7 +3,7 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/common"
 )
 
 // UserNotificationPreferences captures the account-level notification choices

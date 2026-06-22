@@ -3,9 +3,9 @@ package payments
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v6/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
 )
 
 // Settlement is an end-of-day reconciliation/batch close
@@ -49,22 +49,4 @@ type SettlementTotals struct {
 	RefundsMinor    int64  `json:"refunds_minor,omitempty"`
 	CashoutsMinor   int64  `json:"cashouts_minor,omitempty"`
 	TotalMinor      int64  `json:"total_minor"`
-}
-
-// CreateSettlementRequest triggers a settlement or enquiry on a
-// registered terminal. EnquiryDate is required for an enquiry on a date
-// other than today; omit it for "today's" enquiry or for a real
-// settlement.
-type CreateSettlementRequest struct {
-	TerminalID       string                       `json:"terminal_id"`
-	Type             enums.SettlementType         `json:"type"`
-	EnquiryDate      *common.Date                 `json:"enquiry_date,omitempty"`
-	ConnectionMode   enums.TerminalConnectionMode `json:"connection_mode,omitempty"`
-	OperationContext *ProviderOperationContext    `json:"operation_context,omitempty"`
-}
-
-// CheckSettlementStatusRequest asks the backend to refresh settlement
-// state using the provider's status mechanism.
-type CheckSettlementStatusRequest struct {
-	SettlementID string `json:"settlement_id"`
 }

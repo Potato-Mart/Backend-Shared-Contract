@@ -6,13 +6,15 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 ## Governance / 治理原則
 
-- This module contains shared enums, DTOs, response envelopes, error codes, event payloads, and cross-service request/response contracts only.
+- This module contains reusable domain contracts, value structs, enums, constants, validation helpers, error codes, and durable event/domain payloads only.
+- HTTP/API wire DTOs, response envelopes, command payloads, and backend-specific request/response structs belong in the owning backend service.
 - It must not depend on database drivers, web frameworks, authentication middleware, or runtime service implementations.
 - Semantic versioning is enforced. Any removal, rename, JSON shape change, module path change, or incompatible exported type change requires a major version.
 - Consumers should pin a released module tag and review the "Consumer Action / 使用方動作" section before upgrading.
 - Remote release history was reconciled from GitHub tags in `Potato-Mart/Backend-Shared-Contract` on 2026-06-18.
 
-- 本模組只包含共用列舉、DTO、回應信封、錯誤碼、事件負載，以及跨服務 request/response 契約。
+- 本模組只包含可重用的 domain contract、value struct、列舉、常數、驗證 helper、錯誤碼，以及可持久化的事件/domain payload。
+- HTTP/API wire DTO、回應信封、command payload，以及後端專屬 request/response struct 應由各自擁有的後端服務維護。
 - 本模組不得依賴資料庫驅動、Web 框架、身份驗證 middleware，或任何服務執行期實作。
 - 本模組遵循 semantic versioning。任何移除、改名、JSON shape 改變、module path 改變，或不相容的 exported type 變更，都必須升 major version。
 - 使用方應固定依賴已發布 tag，並在升級前閱讀 "Consumer Action / 使用方動作"。
@@ -21,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- | --- | --- | --- |
+| `v7.0.0` | 2026-06-23 | Major | V7 module path; Product enterprise redesign; contract DTO cleanup removing shared wire/action structs and moving API envelopes, pagination, service-token, pricing, stockops, media, payment terminal/settlement, identity/access, and packing settlement payloads into owning backends |
 | `v6.0.2` | 2026-06-18 | Patch | Version metadata correction (`ModuleVersion = "v6.0.2"`) |
 | `v6.0.1` | 2026-06-18 | Minor | Added product `description` field (additive) |
 | `v6.0.0` | 2026-06-18 | Major | Staged breaking release: V6 module path, identity/access model, retail/wholesale split, grouped support fields |
@@ -62,6 +65,81 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24 | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21 | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21 | Pre-release | Initial repository seed |
+
+## v7.0.0 - Product Enterprise Redesign And Contract DTO Cleanup / 商品企業級重新設計與契約 DTO 清理
+
+Release date: 2026-06-23
+
+### Executive Summary / 摘要
+
+V7 upgrades the module path to `github.com/Potato-Mart/Backend-Shared-Contract/v7` and redesigns `product.Product` for international trading: tidy nested groups (`pricing`, `localization`, `media`, `physical`, `merchandising`, `identifiers`) over a small set of flat, indexable identity/filter/sort fields. It adds localized name/description/brand, a six-field pricing block, a proper enterprise status enum plus a computed display status, and a sales-performance indicator. `product.Snapshot` gains fields additively.
+
+V7 also cleans the shared-contract ownership boundary. Exported HTTP/API wire structs and action DTOs were removed from this module and moved into their owning backend services while preserving the intended public JSON shapes. The shared module now keeps domain/value contracts, enums, constants, validation helpers, error codes, and durable event/domain payloads only.
+
+V7 將 module path 升級為 `github.com/Potato-Mart/Backend-Shared-Contract/v7`，並針對國際貿易重新設計 `product.Product`：在少量保持扁平、可索引的識別/篩選/排序欄位之上，採用整潔的巢狀群組（`pricing`、`localization`、`media`、`physical`、`merchandising`、`identifiers`）。新增本地化名稱/描述/品牌、六欄定價、正式的企業級狀態列舉與計算型顯示狀態，以及銷售表現指標。`product.Snapshot` 以 additive 方式新增欄位。
+
+V7 同時清理 shared-contract 的 ownership boundary。HTTP/API wire struct 與 action DTO 已從本模組移除並移至各自擁有的後端服務，同時維持既有公開 JSON shape 的預期相容性。shared module 現在只保留 domain/value contract、列舉、常數、驗證 helper、錯誤碼，以及可持久化的事件/domain payload。
+
+### Breaking Changes / 破壞性變更
+
+- Changed Go module path to `github.com/Potato-Mart/Backend-Shared-Contract/v7`; updated metadata to `ModuleVersion = "v7.0.0"`, `MajorVersion = "v7"`.
+- Removed exported shared wire/action structs with DTO-style ownership (`Request`, `Response`, `Input`, `Payload`, `DTO`, or `Dto` suffixes); backend services now own runtime API payloads.
+- Removed shared API response envelopes, pagination wire structs, service-auth token request/response structs, payment terminal and settlement command structs, pricing quote/effective-promotion request/response structs, stockops reserve/ref request/response structs, media upload/finalize request/response structs, identity/access command request structs, and the packing stock settlement command line.
+- `product.Product`: renamed `code` → `sku_code` (now the barcode payload / unique key); removed the flat `catalogue` (now `identifiers.catalogue`).
+- `product.Product`: nested `price`/`pos_price` into `pricing` (`pricing.online` ← old `price`, `pricing.offline` ← old `pos_price`) plus new `original`, `tag`, `wholesale`, `cost`.
+- `product.Product`: `brand` (string) → flat `brand_key` + localized `localization.brand_names`; nested `other_names`/`dimensions`/`weight`/`cover_url`/`image_urls`/`vendor`/`placing_area_code` into `localization`/`physical`/`media`/`identifiers`.
+- `product.Product`: replaced `freshness_status` (string) with `sales_performance` (`enums.SalesPerformance`: `hot`/`normal`/`slow`).
+- `enums.ProductStatus` values changed from `publish`/`draft`/`dismiss` to `draft`/`active`/`archived`/`discontinued`.
+
+- Go module path 改為 `github.com/Potato-Mart/Backend-Shared-Contract/v7`；metadata 更新為 `ModuleVersion = "v7.0.0"`、`MajorVersion = "v7"`。
+- 移除帶有 DTO-style ownership 的 exported shared wire/action struct（名稱以 `Request`、`Response`、`Input`、`Payload`、`DTO` 或 `Dto` 結尾）；執行期 API payload 現由各後端服務自行擁有。
+- 移除 shared API response envelope、pagination wire struct、service-auth token request/response struct、payment terminal/settlement command struct、pricing quote/effective-promotion request/response struct、stockops reserve/ref request/response struct、media upload/finalize request/response struct、identity/access command request struct，以及 packing stock settlement command line。
+- `product.Product`：`code` 改名為 `sku_code`（成為條碼內容/唯一鍵）；移除扁平 `catalogue`（改為 `identifiers.catalogue`）。
+- `product.Product`：`price`/`pos_price` 巢狀化為 `pricing`，並新增 `original`、`tag`、`wholesale`、`cost`。
+- `product.Product`：`brand` 改為扁平 `brand_key` + 本地化 `localization.brand_names`；其餘屬性巢狀化。
+- `product.Product`：`freshness_status` 改為 `sales_performance`（`hot`/`normal`/`slow`）。
+- `enums.ProductStatus` 值由 `publish`/`draft`/`dismiss` 改為 `draft`/`active`/`archived`/`discontinued`。
+
+### Additive Changes / 新增（向後相容）
+
+- `product.Snapshot` adds `sku_code` and `display_status` (and keeps the flat `name`). Safe for all embedders (`category.SKU`, `sales.Order`/`Cart`, `purchase.Order`, `subscription.Plan`).
+- New `product.Product.DisplayStatus(now)` helper — read-time merge of status + recency + stock (`new`/`restocked`/`out_of_stock`/`active`), never stored.
+- New `enums.SalesPerformance`.
+- Added a contract-shape guard test that fails if new exported shared-contract types use forbidden DTO-style suffixes (`Request`, `Response`, `Input`, `Payload`, `DTO`, `Dto`).
+
+### Contract Ownership And Backend Migration / 契約歸屬與後端遷移
+
+- **Backend-Operations** now owns local paging, API envelope, media, stockops, packing settlement, effective-promotion, and service-token payloads.
+- **Backend-Commerce** now owns local paging, API envelope, pricing wire, stock wire, terminal command, and service-token payloads.
+- **Backend-Management** now owns local paging, API envelope, media, pricing, identity/access, and service-token payloads.
+- **Frontend-Admin-Web** TypeScript API interfaces remain frontend-local.
+- Public HTTP JSON shapes are intended to remain unchanged; this release changes Go package ownership, not endpoint wire names.
+
+- **Backend-Operations** 現在自行擁有 paging、API envelope、media、stockops、packing settlement、effective-promotion 與 service-token payload。
+- **Backend-Commerce** 現在自行擁有 paging、API envelope、pricing wire、stock wire、terminal command 與 service-token payload。
+- **Backend-Management** 現在自行擁有 paging、API envelope、media、pricing、identity/access 與 service-token payload。
+- **Frontend-Admin-Web** 的 TypeScript API interface 維持 frontend-local。
+- 公開 HTTP JSON shape 預期維持不變；本次 release 調整的是 Go package ownership，而不是 endpoint wire name。
+
+### Validation / 驗證
+
+- `Backend-Shared-Contract`: `go test ./...`
+- `Backend-Operations`: `go test ./...`
+- `Backend-Commerce`: `go test ./...`
+- `Backend-Management`: `go test ./...`
+- `Frontend-Admin-Web`: `npm run test`, `npm run build`
+
+### Consumer Action / 使用方動作
+
+- **Backend-Operations & Frontend-Admin-Web** (this coordinated release): adopt the new field/enum names, the nested pricing, `sku_code`, and the computed `display_status`; migrate the `ops_products` collection (flat→nested, `code`→`sku_code`, status remap) and reconcile indexes.
+- **Backend-Commerce & Backend-Management** (pin `v6.0.2`): unaffected until they upgrade. On upgrade they inherit the `ProductStatus` value change (any code validating `publish`/`dismiss` breaks), the additive Snapshot fields (safe), and the `Pricing` nesting (any read of `product.Price`/`POSPrice` breaks → move to `Pricing.Online`/`Pricing.Offline`).
+- Consumers importing removed shared DTO/request/response types must switch to backend-local equivalents. Domain/value structs, enums, constants, validation helpers, and error code constants remain shared contract responsibilities.
+- Pin the dependency to `v7.0.0` once published.
+
+- **Backend-Operations 與 Frontend-Admin-Web**（本次協同發布）：採用新欄位/列舉名稱、巢狀定價、`sku_code` 與計算型 `display_status`；遷移 `ops_products` 集合並重整索引。
+- **Backend-Commerce 與 Backend-Management**（固定 `v6.0.2`）：升級前不受影響；升級時需處理 `ProductStatus` 值變更、additive Snapshot 欄位與 `Pricing` 巢狀化。
+- 任何仍 import 已移除 shared DTO/request/response type 的使用方，需改用後端本地 equivalent。Domain/value struct、列舉、常數、驗證 helper 與錯誤碼常數仍由 shared contract 負責。
+- 發布後將相依版本固定為 `v7.0.0`。
 
 ## v6.0.2 - Version Metadata Correction / 版本中繼資料修正
 
