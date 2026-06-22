@@ -3,19 +3,19 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
 )
 
 // WholesaleCustomer is the grouped business profile for a wholesaleCustomer
-// account/persona. Organisation approval and membership lifecycle live on
-// WholesaleOrganisation and WholesaleMembership.
+// account/persona. Organisation approval and access lifecycle live on
+// WholesaleOrganisation and OrganisationAccess.
 type WholesaleCustomer struct {
 	ID                     string                             `json:"id"`
 	Identity               common.IdentityLink                `json:"identity"`
 	OrganisationID         string                             `json:"organisation_id"`
-	MembershipID           string                             `json:"membership_id,omitempty"`
+	OrganisationAccessID   string                             `json:"organisation_access_id,omitempty"`
 	BasicInfo              WholesaleCustomerBasicInfo         `json:"basic_info"`
 	Commercial             WholesaleCustomerCommercialProfile `json:"commercial"`
 	AccountProfile         WholesaleCustomerAccountProfile    `json:"account_profile"`
@@ -32,17 +32,17 @@ type WholesaleCustomer struct {
 // WholesaleCustomerSummary is a compact wholesale customer projection for
 // lists, search results, and organisation-member references.
 type WholesaleCustomerSummary struct {
-	ID             string               `json:"id"`
-	AccountID      string               `json:"account_id,omitempty"`
-	UserID         string               `json:"user_id,omitempty"`
-	OrganisationID string               `json:"organisation_id"`
-	MembershipID   string               `json:"membership_id,omitempty"`
-	DisplayName    string               `json:"display_name,omitempty"`
-	Email          string               `json:"email,omitempty"`
-	Phone          string               `json:"phone,omitempty"`
-	RoleKey        string               `json:"role_key,omitempty"`
-	Status         enums.CustomerStatus `json:"status"`
-	TierKey        string               `json:"tier_key,omitempty"`
+	ID                   string               `json:"id"`
+	AccountID            string               `json:"account_id,omitempty"`
+	UserID               string               `json:"user_id,omitempty"`
+	OrganisationID       string               `json:"organisation_id"`
+	OrganisationAccessID string               `json:"organisation_access_id,omitempty"`
+	DisplayName          string               `json:"display_name,omitempty"`
+	Email                string               `json:"email,omitempty"`
+	Phone                string               `json:"phone,omitempty"`
+	RoleKey              string               `json:"role_key,omitempty"`
+	Status               enums.CustomerStatus `json:"status"`
+	TierKey              string               `json:"tier_key,omitempty"`
 }
 
 // WholesaleCustomerBasicInfo groups the person/contact details for a wholesale
@@ -68,7 +68,7 @@ type WholesaleCustomerCommercialProfile struct {
 	Metadata     common.Metadata `json:"metadata,omitempty"`
 }
 
-// WholesaleCustomerAccountProfile groups account/persona and membership
+// WholesaleCustomerAccountProfile groups account/persona and organisation access
 // references for wholesale access.
 type WholesaleCustomerAccountProfile struct {
 	Status        enums.CustomerStatus `json:"status"`

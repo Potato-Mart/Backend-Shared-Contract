@@ -3,18 +3,17 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
 )
 
-// RetailCustomerLoyaltyProfile groups the loyalty-programme state of a retail
-// customer.
-type RetailCustomerLoyaltyProfile struct {
-	Points          int           `json:"points"`
-	TierKey         string        `json:"tier_key,omitempty"`
-	TierSpend       *common.Money `json:"tier_spend,omitempty"`
-	LifetimeSpend   *common.Money `json:"lifetime_spend,omitempty"`
-	TierEvaluatedAt *time.Time    `json:"tier_evaluated_at,omitempty"`
+// RetailCustomerMembershipProfile links a retail customer profile to the
+// global membership programme. Wallet values are projections; membership
+// ledger contracts remain the source of truth.
+type RetailCustomerMembershipProfile struct {
+	MembershipAccountID string                               `json:"membership_account_id,omitempty"`
+	Summary             *membership.MembershipAccountSummary `json:"summary,omitempty"`
 }
 
 // RetailCustomerCommerceProfile groups aggregated commerce statistics. Values

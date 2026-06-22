@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- | --- | --- | --- |
+| `v8.0.0` | 2026-06-23 | Major | Global membership consolidation; loyalty/subscription contracts moved into membership; wholesale membership renamed to organisation access; points reservation and reward redemption contracts |
 | `v7.0.0` | 2026-06-23 | Major | V7 module path; Product enterprise redesign; contract DTO cleanup removing shared wire/action structs and moving API envelopes, pagination, service-token, pricing, stockops, media, payment terminal/settlement, identity/access, and packing settlement payloads into owning backends |
 | `v6.0.2` | 2026-06-18 | Patch | Version metadata correction (`ModuleVersion = "v6.0.2"`) |
 | `v6.0.1` | 2026-06-18 | Minor | Added product `description` field (additive) |
@@ -65,6 +66,52 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24 | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21 | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21 | Pre-release | Initial repository seed |
+
+## v8.0.0 - Global Membership Consolidation / 全域會員整合
+
+Release date: 2026-06-23
+
+### Executive Summary / 摘要
+
+V8 upgrades the module path to `github.com/Potato-Mart/Backend-Shared-Contract/v8` and consolidates membership programme contracts into `pkg/contracts/membership`. The new membership domain owns retail and wholesale-organisation wallets, tiers, point ledgers, point reservations, reward catalog redemptions, point promotions, check-ins, and member subscriptions.
+
+V8 also removes the overloaded wholesale "membership" naming. Wholesale portal access is now `OrganisationAccess`; JSON fields that identify that B2B access grant use `organisation_access_id`. Global membership now means points, tiers, rewards, and recurring member subscriptions.
+
+V8 將 module path 升級為 `github.com/Potato-Mart/Backend-Shared-Contract/v8`，並將會員方案契約整合到 `pkg/contracts/membership`。新的 membership domain 負責零售與 wholesale organisation wallet、tier、點數 ledger、點數 reservation、reward catalog redemption、point promotion、check-in，以及 member subscription。
+
+V8 同時移除 wholesale "membership" 的混淆命名。Wholesale portal access 改名為 `OrganisationAccess`；代表該 B2B access grant 的 JSON 欄位使用 `organisation_access_id`。全域 membership 現在專指點數、tier、reward，以及 recurring member subscription。
+
+### Breaking Changes / 破壞性變更
+
+- Changed Go module path to `github.com/Potato-Mart/Backend-Shared-Contract/v8`; updated metadata to `ModuleVersion = "v8.0.0"`, `MajorVersion = "v8"`.
+- Removed old `pkg/contracts/loyalty` and `pkg/contracts/subscription` exported contracts. Use `pkg/contracts/membership`.
+- Renamed `wholesale.WholesaleMembership` to `wholesale.OrganisationAccess`.
+- Renamed `wholesale.WholesaleMembershipSummary` to `wholesale.OrganisationAccessSummary`.
+- Replaced wholesale access JSON key `membership_id` with `organisation_access_id` across wholesale customer, identity session, claims, permissions, and events.
+- Replaced loyalty/subscription enum names with membership enum names, including `MembershipPointReason`, `MembershipPromotionTarget`, and `MemberSubscriptionStatus`.
+- Replaced `IDENTITY_WHOLESALE_MEMBERSHIP_REQUIRED` with `IDENTITY_ORGANISATION_ACCESS_REQUIRED`.
+
+### Additive Changes / 新增
+
+- Added `membership.MembershipAccount`, `MembershipOwnerRef`, `MembershipWalletSummary`, and `MembershipAccountSummary`.
+- Added `membership.MembershipTier` with qualification metric and benefit fields.
+- Added `membership.PointLedgerEntry`, `PointAllocation`, `PointBucket`, `PointBalanceBreakdown`, and `PointReservation`.
+- Added `membership.Reward` and `RewardRedemption` for catalog rewards.
+- Added `membership.SubscriptionPlan` and `MemberSubscription`.
+- Added internal membership endpoint constants for point quote/reserve/commit/cancel and reward redeem.
+- Added service-auth scopes `membership:read`, `membership:points`, and `membership:redeem`.
+- Added membership API error codes for inactive membership, insufficient points, unavailable rewards, and expired point reservations.
+- Added sales order snapshots for `point_redemption` and `reward_redemptions`.
+
+### Consumer Action / 使用方動作
+
+- Update imports from `/v7` to `/v8`.
+- Migrate `loyalty.LoyaltyLedgerEntry` to `membership.PointLedgerEntry`.
+- Migrate `loyalty.LoyaltyTier` to `membership.MembershipTier`.
+- Migrate `subscription.CustomerSubscription` to `membership.MemberSubscription`.
+- Migrate `wholesale.WholesaleMembership` to `wholesale.OrganisationAccess`.
+- Migrate wholesale access fields from `membership_id` to `organisation_access_id`.
+- Treat membership wallet balances as projections; use point ledger/reservation contracts as the source of truth.
 
 ## v7.0.0 - Product Enterprise Redesign And Contract DTO Cleanup / 商品企業級重新設計與契約 DTO 清理
 

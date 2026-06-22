@@ -17,6 +17,9 @@ func TestScopeIsValid(t *testing.T) {
 	if !ScopeStockReserve.IsValid() {
 		t.Fatal("stock:reserve should be valid")
 	}
+	if !ScopeMembershipRedeem.IsValid() {
+		t.Fatal("membership:redeem should be valid")
+	}
 	if Scope("bogus:scope").IsValid() {
 		t.Fatal("bogus:scope should be invalid")
 	}

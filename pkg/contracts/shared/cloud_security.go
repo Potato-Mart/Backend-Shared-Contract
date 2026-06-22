@@ -3,7 +3,7 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
 )
 
 // CloudServiceSecurityProfile records security posture for a cloud service

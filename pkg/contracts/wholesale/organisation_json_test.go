@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/contracts/wholesale"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
 )
 
 func TestWholesaleOrganisationJSONShape(t *testing.T) {
@@ -34,9 +34,10 @@ func TestWholesaleOrganisationJSONShape(t *testing.T) {
 				},
 			},
 		},
-		Status:   enums.WholesaleOrganisationStatusApproved,
-		TierKey:  "standard",
-		Approval: &common.LifecycleAction{By: "admin_1", At: &approvedAt, Reason: "verified"},
+		MembershipAccountID: "mem_org_123",
+		Status:              enums.WholesaleOrganisationStatusApproved,
+		TierKey:             "standard",
+		Approval:            &common.LifecycleAction{By: "admin_1", At: &approvedAt, Reason: "verified"},
 	}
 
 	payload, err := json.Marshal(organisation)
@@ -55,6 +56,7 @@ func TestWholesaleOrganisationJSONShape(t *testing.T) {
 		"legal_name",
 		"abn",
 		"registered_address",
+		"membership_account_id",
 		"status",
 		"tier_key",
 		"approval",

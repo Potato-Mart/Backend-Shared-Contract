@@ -60,7 +60,7 @@ persona. Session and token-claim contracts can carry:
 - `roles`
 - `permissions`
 - `wholesale_organisation_id`
-- `membership_id`
+- `organisation_access_id`
 - `role_key`
 
 Services that issue or validate sessions must check portal, audience, and
@@ -73,7 +73,7 @@ belong to the `generalCustomer` account/persona model.
 
 Wholesale customer business details live in `wholesale.WholesaleCustomer` and
 belong to the `wholesaleCustomer` account/persona model. Organisation approval
-and membership lifecycle remain separate wholesale contracts.
+and organisation access lifecycle remain separate wholesale contracts.
 
 Wholesale organisation business details use `common.OrganisationDetail`
 embedded by `wholesale.WholesaleOrganisation`, so company/organisation identity,
@@ -86,10 +86,10 @@ Wholesale portal access is organisation and membership aware:
 
 - `WholesaleOrganisation` records approval status and B2B organisation
   references.
-- `WholesaleMembership` links a user account to a wholesale organisation and
+- `OrganisationAccess` links a user account to a wholesale organisation and
   carries the organisation-scoped role key.
 - A wholesale portal session can identify the account, organisation,
-  membership, and role key used for that session.
+  organisation access grant, and role key used for that session.
 
-Wholesale organisation status and membership status are separate from general
-account lifecycle status and portal access status.
+Wholesale organisation status and organisation access status are separate from
+general account lifecycle status and portal access status.

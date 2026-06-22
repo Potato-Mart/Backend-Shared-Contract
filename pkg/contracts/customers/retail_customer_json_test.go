@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/contracts/customers"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/customers"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
 )
 
 func TestRetailCustomerJSONShape(t *testing.T) {
@@ -25,7 +26,17 @@ func TestRetailCustomerJSONShape(t *testing.T) {
 		Lifecycle: customers.RetailCustomerLifecycle{
 			Status: enums.CustomerStatusActive,
 		},
-		Loyalty:   customers.RetailCustomerLoyaltyProfile{Points: 120},
+		Membership: customers.RetailCustomerMembershipProfile{
+			MembershipAccountID: "mem_retail_123",
+			Summary: &membership.MembershipAccountSummary{
+				ID:              "mem_retail_123",
+				Owner:           membership.MembershipOwnerRef{OwnerType: enums.MembershipOwnerTypeRetailCustomer, OwnerID: "retail_123"},
+				TierKey:         "standard",
+				Status:          enums.MembershipAccountStatusActive,
+				AvailablePoints: 120,
+				TotalPoints:     120,
+			},
+		},
 		Marketing: customers.RetailCustomerMarketingProfile{EmailOptIn: true},
 		Commerce:  customers.RetailCustomerCommerceProfile{TotalOrders: 2},
 	}
@@ -45,12 +56,15 @@ func TestRetailCustomerJSONShape(t *testing.T) {
 		"identity",
 		"basic_info",
 		"lifecycle",
-		"loyalty",
+		"membership",
 		"marketing",
 		"commerce",
 	} {
 		if _, ok := got[key]; !ok {
 			t.Fatalf("RetailCustomer JSON missing %q: %s", key, payload)
 		}
+	}
+	if _, ok := got["loyalty"]; ok {
+		t.Fatalf("RetailCustomer JSON should not include legacy loyalty group: %s", payload)
 	}
 }

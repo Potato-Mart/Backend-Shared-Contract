@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
 )
 
 func TestOrderJSONRoundTripWithHistory(t *testing.T) {
@@ -71,6 +71,51 @@ func TestOrderJSONOmitsEmptyHistory(t *testing.T) {
 	}
 	if strings.Contains(string(payload), `"history"`) {
 		t.Fatalf("empty history should be omitted, got %s", payload)
+	}
+}
+
+func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
+	discount := common.Money{AmountMinor: 500, Currency: "AUD"}
+	order := sales.Order{
+		ID:          "ord_points",
+		OrderNumber: "1002",
+		PointRedemption: &sales.PointRedemptionSnapshot{
+			MembershipAccountID: "mem_1",
+			OwnerType:           enums.MembershipOwnerTypeRetailCustomer,
+			OwnerID:             "retail_1",
+			ReservationID:       "res_1",
+			LedgerEntryID:       "ledger_1",
+			Points:              500,
+			DiscountAmount:      discount,
+		},
+		RewardRedemptions: []sales.RewardRedemptionSnapshot{
+			{
+				RewardRedemptionID:  "reward_redemption_1",
+				RewardID:            "reward_1",
+				MembershipAccountID: "mem_1",
+				RewardType:          enums.MembershipRewardTypeOrderDiscount,
+				PointsSpent:         500,
+				DiscountAmount:      &discount,
+			},
+		},
+	}
+
+	payload, err := json.Marshal(order)
+	if err != nil {
+		t.Fatalf("marshal order with membership redemptions: %v", err)
+	}
+
+	var got map[string]any
+	if err := json.Unmarshal(payload, &got); err != nil {
+		t.Fatalf("unmarshal order JSON: %v", err)
+	}
+	for _, key := range []string{"point_redemption", "reward_redemptions"} {
+		if _, ok := got[key]; !ok {
+			t.Fatalf("order JSON missing %q: %s", key, payload)
+		}
+	}
+	if _, ok := got["coupon_code"]; ok {
+		t.Fatalf("membership redemption should not require coupon_code: %s", payload)
 	}
 }
 

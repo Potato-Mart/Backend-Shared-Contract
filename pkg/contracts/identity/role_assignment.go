@@ -3,8 +3,8 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
 )
 
 // RoleAssignment grants a role key to a user in an account, portal, and
@@ -34,7 +34,7 @@ type EffectivePermissionSet struct {
 	ScopeType                  string                   `json:"scope_type,omitempty"`
 	ScopeID                    string                   `json:"scope_id,omitempty"`
 	WholesaleOrganisationID    string                   `json:"wholesale_organisation_id,omitempty"`
-	MembershipID               string                   `json:"membership_id,omitempty"`
+	OrganisationAccessID       string                   `json:"organisation_access_id,omitempty"`
 	Roles                      []string                 `json:"roles,omitempty"`
 	Permissions                []string                 `json:"permissions,omitempty"`
 	RequiresMFA                bool                     `json:"requires_mfa,omitempty"`

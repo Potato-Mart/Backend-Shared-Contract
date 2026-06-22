@@ -44,8 +44,15 @@ const (
 	CodeIdentityMFARequired Code = "IDENTITY_MFA_REQUIRED"
 	// CodeIdentityWholesaleOrganisationNotApproved means the wholesale organisation is not approved.
 	CodeIdentityWholesaleOrganisationNotApproved Code = "IDENTITY_WHOLESALE_ORGANISATION_NOT_APPROVED"
-	// CodeIdentityWholesaleMembershipRequired means a valid wholesale membership is required.
-	CodeIdentityWholesaleMembershipRequired Code = "IDENTITY_WHOLESALE_MEMBERSHIP_REQUIRED"
+	// CodeIdentityOrganisationAccessRequired means valid wholesale organisation access is required.
+	CodeIdentityOrganisationAccessRequired Code = "IDENTITY_ORGANISATION_ACCESS_REQUIRED"
+
+	// Membership
+	CodeMembershipNotFound                Code = "MEMBERSHIP_NOT_FOUND"
+	CodeMembershipInactive                Code = "MEMBERSHIP_INACTIVE"
+	CodeMembershipInsufficientPoints      Code = "MEMBERSHIP_INSUFFICIENT_POINTS"
+	CodeMembershipRewardUnavailable       Code = "MEMBERSHIP_REWARD_UNAVAILABLE"
+	CodeMembershipPointReservationExpired Code = "MEMBERSHIP_POINT_RESERVATION_EXPIRED"
 
 	// User
 	CodeUserEmailTaken Code = "USER_EMAIL_TAKEN"
@@ -103,13 +110,16 @@ func (c Code) HTTPStatus() int {
 		CodeIdentityAccountTypeNotAllowed, CodeIdentityPortalAccessDenied,
 		CodeIdentityPortalAccessRevoked, CodeIdentityAccountSuspended,
 		CodeIdentityWholesaleOrganisationNotApproved,
-		CodeIdentityWholesaleMembershipRequired:
+		CodeIdentityOrganisationAccessRequired,
+		CodeMembershipInactive:
 		return 403
-	case CodeNotFound, CodeDiscountNotFound, CodeTerminalNotRegistered:
+	case CodeNotFound, CodeDiscountNotFound, CodeTerminalNotRegistered,
+		CodeMembershipNotFound, CodeMembershipRewardUnavailable:
 		return 404
 	case CodeConflict, CodeUserEmailTaken, CodeSKUCodeTaken,
 		CodePlacingAreaCodeTaken, CodeProductCodeTaken, CodeDiscountCodeTaken,
-		CodeTerminalBusy:
+		CodeTerminalBusy, CodeMembershipInsufficientPoints,
+		CodeMembershipPointReservationExpired:
 		return 409
 	case CodeRequestTooLarge:
 		return 413

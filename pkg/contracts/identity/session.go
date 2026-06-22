@@ -3,8 +3,8 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
 )
 
 // LoginSession is a non-secret projection of an active login. A session is
@@ -24,7 +24,7 @@ type LoginSession struct {
 	Roles                   []string                 `json:"roles,omitempty"`
 	Permissions             []string                 `json:"permissions,omitempty"`
 	WholesaleOrganisationID string                   `json:"wholesale_organisation_id,omitempty"`
-	MembershipID            string                   `json:"membership_id,omitempty"`
+	OrganisationAccessID    string                   `json:"organisation_access_id,omitempty"`
 	RoleKey                 string                   `json:"role_key,omitempty"`
 	DeviceID                string                   `json:"device_id,omitempty"`
 	DeviceName              string                   `json:"device_name,omitempty"`

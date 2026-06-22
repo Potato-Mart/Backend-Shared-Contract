@@ -31,30 +31,30 @@ func (s WholesaleOrganisationStatus) IsValid() bool {
 // String returns the wire value for s.
 func (s WholesaleOrganisationStatus) String() string { return string(s) }
 
-// WholesaleMembershipStatus describes the lifecycle for a user's membership in
-// a wholesale organisation.
-type WholesaleMembershipStatus string
+// OrganisationAccessStatus describes the lifecycle for a user's access to a
+// wholesale organisation.
+type OrganisationAccessStatus string
 
 const (
-	// WholesaleMembershipStatusPending means the membership is awaiting activation.
-	WholesaleMembershipStatusPending WholesaleMembershipStatus = "pending"
-	// WholesaleMembershipStatusActive means the membership can be used.
-	WholesaleMembershipStatusActive WholesaleMembershipStatus = "active"
-	// WholesaleMembershipStatusSuspended means the membership is temporarily blocked.
-	WholesaleMembershipStatusSuspended WholesaleMembershipStatus = "suspended"
-	// WholesaleMembershipStatusRevoked means the membership has been removed.
-	WholesaleMembershipStatusRevoked WholesaleMembershipStatus = "revoked"
+	// OrganisationAccessStatusPending means the access grant is awaiting activation.
+	OrganisationAccessStatusPending OrganisationAccessStatus = "pending"
+	// OrganisationAccessStatusActive means the access grant can be used.
+	OrganisationAccessStatusActive OrganisationAccessStatus = "active"
+	// OrganisationAccessStatusSuspended means the access grant is temporarily blocked.
+	OrganisationAccessStatusSuspended OrganisationAccessStatus = "suspended"
+	// OrganisationAccessStatusRevoked means the access grant has been removed.
+	OrganisationAccessStatusRevoked OrganisationAccessStatus = "revoked"
 )
 
-// IsValid reports whether s is a known WholesaleMembershipStatus value.
-func (s WholesaleMembershipStatus) IsValid() bool {
+// IsValid reports whether s is a known OrganisationAccessStatus value.
+func (s OrganisationAccessStatus) IsValid() bool {
 	switch s {
-	case WholesaleMembershipStatusPending, WholesaleMembershipStatusActive,
-		WholesaleMembershipStatusSuspended, WholesaleMembershipStatusRevoked:
+	case OrganisationAccessStatusPending, OrganisationAccessStatusActive,
+		OrganisationAccessStatusSuspended, OrganisationAccessStatusRevoked:
 		return true
 	}
 	return false
 }
 
 // String returns the wire value for s.
-func (s WholesaleMembershipStatus) String() string { return string(s) }
+func (s OrganisationAccessStatus) String() string { return string(s) }

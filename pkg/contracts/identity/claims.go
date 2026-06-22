@@ -3,7 +3,7 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
 )
 
 // AccessTokenClaims is a framework-agnostic token-claim shape. This contract
@@ -18,7 +18,7 @@ type AccessTokenClaims struct {
 	Roles                   []string                 `json:"roles,omitempty"`
 	Permissions             []string                 `json:"permissions,omitempty"`
 	WholesaleOrganisationID string                   `json:"wholesale_organisation_id,omitempty"`
-	MembershipID            string                   `json:"membership_id,omitempty"`
+	OrganisationAccessID    string                   `json:"organisation_access_id,omitempty"`
 	RoleKey                 string                   `json:"role_key,omitempty"`
 	AuthAssuranceLevel      enums.AuthAssuranceLevel `json:"auth_assurance_level,omitempty"`
 	MFAVerifiedAt           *time.Time               `json:"mfa_verified_at,omitempty"`

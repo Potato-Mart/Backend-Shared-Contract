@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/contracts/identity"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/identity"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
 )
 
 func TestPortalAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T) {
@@ -84,5 +84,49 @@ func TestIdentityRequestContextJSONShape(t *testing.T) {
 	}
 	if decoded.RequestID != "req_1" {
 		t.Fatalf("request context did not round-trip: %+v", decoded)
+	}
+}
+
+func TestIdentityWholesaleAccessJSONUsesOrganisationAccessID(t *testing.T) {
+	claims := identity.AccessTokenClaims{
+		Subject:                 "user_1",
+		UserID:                  "user_1",
+		AccountID:               "acct_1",
+		Portal:                  enums.PortalPartner,
+		WholesaleOrganisationID: "org_1",
+		OrganisationAccessID:    "access_1",
+		RoleKey:                 "buyer",
+	}
+	session := identity.LoginSession{
+		ID:                      "session_1",
+		UserID:                  "user_1",
+		Portal:                  enums.PortalPartner,
+		WholesaleOrganisationID: "org_1",
+		OrganisationAccessID:    "access_1",
+		RoleKey:                 "buyer",
+		IssuedAt:                time.Date(2026, 6, 23, 0, 0, 0, 0, time.UTC),
+		LastSeenAt:              time.Date(2026, 6, 23, 0, 1, 0, 0, time.UTC),
+		ExpiresAt:               time.Date(2026, 6, 23, 1, 0, 0, 0, time.UTC),
+	}
+
+	payload, err := json.Marshal(struct {
+		Claims  identity.AccessTokenClaims `json:"claims"`
+		Session identity.LoginSession      `json:"session"`
+	}{Claims: claims, Session: session})
+	if err != nil {
+		t.Fatalf("marshal identity wholesale access payload: %v", err)
+	}
+
+	var got map[string]map[string]any
+	if err := json.Unmarshal(payload, &got); err != nil {
+		t.Fatalf("unmarshal identity wholesale access JSON: %v", err)
+	}
+	for group, fields := range got {
+		if _, ok := fields["organisation_access_id"]; !ok {
+			t.Fatalf("%s missing organisation_access_id: %s", group, payload)
+		}
+		if _, ok := fields["membership_id"]; ok {
+			t.Fatalf("%s should not include legacy membership_id: %s", group, payload)
+		}
 	}
 }

@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
 )
 
 var resolverNow = time.Date(2026, 6, 1, 12, 0, 0, 0, time.UTC)

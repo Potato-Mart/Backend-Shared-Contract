@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
 )
 
 // OverrideReasonSpecialCampaign is the canonical reason string written

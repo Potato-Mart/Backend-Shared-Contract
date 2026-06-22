@@ -3,10 +3,10 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v7/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
 )
 
 type Order struct {
@@ -44,13 +44,15 @@ type Order struct {
 	SurchargeAmount common.Money `json:"surcharge_amount,omitempty"`
 	Total           common.Money `json:"total"`
 
-	CouponCode        string             `json:"coupon_code,omitempty"`
-	AppliedPromotions []AppliedPromotion `json:"applied_promotions,omitempty"`
-	TrackingNumber    string             `json:"tracking_number,omitempty"`
-	TrackingURL       string             `json:"tracking_url,omitempty"`
-	CustomerNote      string             `json:"customer_note,omitempty"`
-	InternalNote      string             `json:"internal_note,omitempty"`
-	Tags              []string           `json:"tags,omitempty"`
+	CouponCode        string                     `json:"coupon_code,omitempty"`
+	AppliedPromotions []AppliedPromotion         `json:"applied_promotions,omitempty"`
+	PointRedemption   *PointRedemptionSnapshot   `json:"point_redemption,omitempty"`
+	RewardRedemptions []RewardRedemptionSnapshot `json:"reward_redemptions,omitempty"`
+	TrackingNumber    string                     `json:"tracking_number,omitempty"`
+	TrackingURL       string                     `json:"tracking_url,omitempty"`
+	CustomerNote      string                     `json:"customer_note,omitempty"`
+	InternalNote      string                     `json:"internal_note,omitempty"`
+	Tags              []string                   `json:"tags,omitempty"`
 
 	// ── Lifecycle timestamps ──────────────────────────────────────────
 	ConfirmedAt      *time.Time `json:"confirmed_at,omitempty"`
@@ -85,6 +87,31 @@ type AppliedPromotion struct {
 	DiscountType   enums.DiscountType `json:"discount_type,omitempty"`
 	DiscountValue  string             `json:"discount_value,omitempty"`
 	DiscountAmount *common.Money      `json:"discount_amount,omitempty"`
+}
+
+// PointRedemptionSnapshot records a points discount applied to an order without
+// overloading coupon or promotion fields.
+type PointRedemptionSnapshot struct {
+	MembershipAccountID  string                    `json:"membership_account_id"`
+	OwnerType            enums.MembershipOwnerType `json:"owner_type"`
+	OwnerID              string                    `json:"owner_id"`
+	OrganisationAccessID string                    `json:"organisation_access_id,omitempty"`
+	ReservationID        string                    `json:"reservation_id,omitempty"`
+	LedgerEntryID        string                    `json:"ledger_entry_id,omitempty"`
+	Points               int                       `json:"points"`
+	DiscountAmount       common.Money              `json:"discount_amount"`
+}
+
+// RewardRedemptionSnapshot records a catalog reward applied to an order.
+type RewardRedemptionSnapshot struct {
+	RewardRedemptionID  string                     `json:"reward_redemption_id"`
+	RewardID            string                     `json:"reward_id"`
+	MembershipAccountID string                     `json:"membership_account_id"`
+	RewardType          enums.MembershipRewardType `json:"reward_type"`
+	PointsSpent         int                        `json:"points_spent"`
+	DiscountAmount      *common.Money              `json:"discount_amount,omitempty"`
+	ProductID           string                     `json:"product_id,omitempty"`
+	VoucherCode         string                     `json:"voucher_code,omitempty"`
 }
 
 type SourceDevice struct {
