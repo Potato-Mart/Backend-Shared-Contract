@@ -25,9 +25,9 @@ type Product struct {
 	Description string `json:"description,omitempty"`
 	BrandKey    string `json:"brand_key,omitempty"`
 	Barcode     string `json:"barcode,omitempty"`
+	Taxed       bool   `json:"taxed"`
 
-	// Storage is the physical storage zone (DRY/CHILLED/FROZEN); indexed
-	// for filtering and matched against placing-area refrigeration.
+	// Storage is the physical storage zone (DRY/CHILLED/FROZEN)
 	Storage enums.StorageType `json:"storage,omitempty"`
 	// Status is the admin-controlled lifecycle state (draft/active/
 	// archived/discontinued). Derived runtime states (new/restocked/

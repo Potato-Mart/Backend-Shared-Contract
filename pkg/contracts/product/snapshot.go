@@ -33,4 +33,5 @@ type Snapshot struct {
 	Status        enums.ProductStatus    `json:"status,omitempty"`
 	DisplayStatus string                 `json:"display_status,omitempty"`
 	Barcode       string                 `json:"barcode,omitempty"`
+	Taxed         bool                   `json:"taxed"`
 }
