@@ -3,10 +3,10 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
 )
 
 type Order struct {
@@ -18,8 +18,12 @@ type Order struct {
 	PaymentMethod     enums.PaymentMethod     `json:"payment_method"`
 	FulfillmentStatus enums.FulfillmentStatus `json:"fulfillment_status"`
 	Customer          common.PartyRef         `json:"customer"`
-	Items             []OrderItem             `json:"items"`
-	SourceDevice      SourceDevice            `json:"source_device,omitempty"`
+	// Buyer describes who is buying, independently of Channel. POS is a
+	// channel, not a buyer type — see sales.BuyerContext. Optional pointer
+	// so it is omitted entirely on legacy orders.
+	Buyer        *BuyerContext `json:"buyer,omitempty"`
+	Items        []OrderItem   `json:"items"`
+	SourceDevice SourceDevice  `json:"source_device,omitempty"`
 
 	// ── Shipping & billing ────────────────────────────────────────────
 	Shipping         common.ContactAddress    `json:"shipping"`
@@ -69,16 +73,20 @@ type Order struct {
 }
 
 type OrderItem struct {
-	ID             string           `json:"id,omitempty"`
-	Product        product.Snapshot `json:"product"`
-	VariantTitle   string           `json:"variant_title,omitempty"`
-	UnitPrice      common.Money     `json:"unit_price"`
-	Quantity       int              `json:"quantity"`
-	DiscountAmount common.Money     `json:"discount_amount"`
-	Total          common.Money     `json:"total"`
-	CartonQty      int              `json:"carton_qty,omitempty"`
-	CartonSize     int              `json:"carton_size,omitempty"`
-	Properties     common.Metadata  `json:"properties,omitempty"`
+	ID           string           `json:"id,omitempty"`
+	Product      product.Snapshot `json:"product"`
+	VariantTitle string           `json:"variant_title,omitempty"`
+	UnitPrice    common.Money     `json:"unit_price"`
+	// Pricing is the commercial pricing context under which UnitPrice was
+	// set (retail vs wholesale audience, visibility). Optional pointer so it
+	// is omitted entirely on legacy order items.
+	Pricing        *PricingContext `json:"pricing,omitempty"`
+	Quantity       int             `json:"quantity"`
+	DiscountAmount common.Money    `json:"discount_amount"`
+	Total          common.Money    `json:"total"`
+	CartonQty      int             `json:"carton_qty,omitempty"`
+	CartonSize     int             `json:"carton_size,omitempty"`
+	Properties     common.Metadata `json:"properties,omitempty"`
 }
 
 type AppliedPromotion struct {

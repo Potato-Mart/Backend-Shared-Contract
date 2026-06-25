@@ -1,6 +1,6 @@
 package identity
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
 
 // IdentityRequestContext carries audit and correlation metadata for identity
 // and access-management command DTOs.

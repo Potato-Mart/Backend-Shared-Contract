@@ -6,11 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/payments"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/payments"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
 )
 
 func TestHistoryOmittedWhenEmpty(t *testing.T) {

@@ -23,14 +23,6 @@ type Amounts struct {
 	AuthorizedMinor int64 `json:"authorized_minor,omitempty"`
 }
 
-// TotalMinor returns the sum of all positive components (purchase +
-// tip + surcharge + cashout + moto) minus refund. It is a convenience
-// helper; read individual components and AuthorizedMinor for receipts
-// and reconciliation.
-func (a Amounts) TotalMinor() int64 {
-	return a.PurchaseMinor + a.TipMinor + a.SurchargeMinor + a.CashoutMinor + a.MOTOMinor - a.RefundMinor
-}
-
 // ReceiptOptions are the per-request flags that control whether the
 // terminal or the POS owns receipt printing and signature verification.
 // Provider services map these flags to the relevant Terminal API fields

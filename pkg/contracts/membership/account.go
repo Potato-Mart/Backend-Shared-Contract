@@ -3,8 +3,8 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
 )
 
 // MembershipOwnerRef identifies the business entity that owns the membership
@@ -12,12 +12,6 @@ import (
 type MembershipOwnerRef struct {
 	OwnerType enums.MembershipOwnerType `json:"owner_type"`
 	OwnerID   string                    `json:"owner_id"`
-}
-
-// RequiresOrganisationAccess reports whether spending from this owner should
-// be backed by a valid wholesale organisation access grant.
-func (o MembershipOwnerRef) RequiresOrganisationAccess() bool {
-	return o.OwnerType == enums.MembershipOwnerTypeWholesaleOrganisation
 }
 
 // MembershipWalletSummary is a projected wallet balance. PointLedgerEntry is

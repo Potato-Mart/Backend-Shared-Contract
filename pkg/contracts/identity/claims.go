@@ -3,7 +3,7 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
 )
 
 // AccessTokenClaims is a framework-agnostic token-claim shape. This contract

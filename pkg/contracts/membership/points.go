@@ -3,13 +3,9 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
 )
-
-// PermissionMembershipPointsSpend is the permission a wholesale organisation
-// access grant needs before it may spend organisation-owned points.
-const PermissionMembershipPointsSpend = "membership.points.spend"
 
 // PointLedgerEntry is a single points transaction for a membership account.
 // Positive delta = earned; negative = redeemed or expired. Remaining tracks how
@@ -64,12 +60,6 @@ type PointBalanceBreakdown struct {
 	CalculatedAt        time.Time          `json:"calculated_at"`
 }
 
-// CanReserve reports whether the projected balance can reserve points without
-// going negative.
-func (b PointBalanceBreakdown) CanReserve(points int) bool {
-	return points > 0 && b.AvailablePoints >= points
-}
-
 // PointReservation holds points during checkout or reward redemption. A
 // reservation must be committed before a negative ledger entry is created.
 type PointReservation struct {
@@ -91,22 +81,6 @@ type PointReservation struct {
 	CancelReason              string                         `json:"cancel_reason,omitempty"`
 	CreatedBy                 string                         `json:"created_by,omitempty"`
 	CreatedAt                 time.Time                      `json:"created_at"`
-}
-
-// CanCommit reports whether a reservation is still eligible to become a
-// committed ledger spend at the supplied time.
-func (r PointReservation) CanCommit(now time.Time) bool {
-	return r.Status == enums.PointReservationStatusReserved && !now.After(r.ExpiresAt)
-}
-
-// HasRequiredSpendAccess reports whether this reservation has the required
-// access context for the owner. Retail owners do not need organisation access;
-// wholesale organisation owners need both an access ID and spend permission.
-func (r PointReservation) HasRequiredSpendAccess(hasSpendPermission bool) bool {
-	if !r.Owner.RequiresOrganisationAccess() {
-		return true
-	}
-	return r.OrganisationAccessID != "" && hasSpendPermission
 }
 
 // PointPromotion is a time-limited points multiplier event. The effective earn

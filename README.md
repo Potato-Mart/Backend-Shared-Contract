@@ -8,12 +8,12 @@
 
 ## 最新版本
 
-### V8.0.0
+### V9.0.0
 
 ## 模組路徑
 
 ```text
-github.com/Potato-Mart/Backend-Shared-Contract/v8
+github.com/Potato-Mart/Backend-Shared-Contract/v9
 ```
 
 ## 目錄結構
@@ -27,14 +27,14 @@ github.com/Potato-Mart/Backend-Shared-Contract/v8
 在使用方服務的 `go.mod` 中加入：
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v8 v8.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v9 v9.0.0
 ```
 
 接著匯入所需套件，例如：
 
 ```go
 import (
-    "github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
+    "github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
 )
 ```
 

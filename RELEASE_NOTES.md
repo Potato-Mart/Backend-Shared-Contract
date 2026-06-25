@@ -22,50 +22,117 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 ## Release Index / 發布索引
 
 | Version | Release date | Type | Impact |
-| --- | --- | --- | --- |
-| `v8.0.0` | 2026-06-23 | Major | Global membership consolidation; loyalty/subscription contracts moved into membership; wholesale membership renamed to organisation access; points reservation and reward redemption contracts |
-| `v7.0.0` | 2026-06-23 | Major | V7 module path; Product enterprise redesign; contract DTO cleanup removing shared wire/action structs and moving API envelopes, pagination, service-token, pricing, stockops, media, payment terminal/settlement, identity/access, and packing settlement payloads into owning backends |
-| `v6.0.2` | 2026-06-18 | Patch | Version metadata correction (`ModuleVersion = "v6.0.2"`) |
-| `v6.0.1` | 2026-06-18 | Minor | Added product `description` field (additive) |
-| `v6.0.0` | 2026-06-18 | Major | Staged breaking release: V6 module path, identity/access model, retail/wholesale split, grouped support fields |
-| `v5.6.0` | 2026-06-17 | Minor | Contract history, stock movement, loyalty expiry models |
-| `v5.5.2` | 2026-06-16 | Patch | Payment method correction/extension |
-| `v5.5.1` | 2026-06-15 | Patch | Payment method extension in sales contracts |
-| `v5.5.0` | 2026-06-15 | Minor | Device tracking and customer segment refinement |
-| `v5.4.0` | 2026-06-15 | Minor | Common party reference reuse for company/customer/supplier models |
-| `v5.3.0` | 2026-06-15 | Minor | Company/customer shared detail, device detection, collections, security logs |
-| `v5.2.0` | 2026-06-12 | Minor | Promotions, category tags, product lifecycle, effective promotion resolver |
-| `v5.1.2` | 2026-06-12 | Patch | Product/SKU field refinement |
-| `v5.1.1` | 2026-06-12 | Patch | BSON inline tag corrections and integration audit docs |
-| `v5.1.0` | 2026-06-12 | Minor | Service-authenticated stock/pricing endpoints and API envelope clarification |
-| `v5.0.0` | 2026-06-11 | Major | V5 module path, contract reroute, performance-oriented model cleanup |
-| `v4.2.0` | 2026-06-11 | Patch | Version metadata bump |
-| `v4.1.0` | 2026-06-11 | Minor | Field grouping, common contact/address/date/party references |
-| `v4.0.0` | 2026-06-11 | Major | Generalized payment interfaces and user notification preferences |
-| `v3.10.0` | 2026-06-05 | Minor | Customer `is_active` removal after status migration |
-| `v3.9.0` | 2026-06-05 | Minor | Customer active flag replaced by status |
-| `v3.8.0` | 2026-06-04 | Minor | Customer profile status enum added |
-| `v3.7.0` | 2026-06-04 | Minor | Customer record field expansion |
-| `v3.6.0` | 2026-06-02 | Minor | Warehouse damage report module |
-| `v3.5.1` | 2026-06-01 | Patch | Customer type wording changed from company to wholesaler |
-| `v3.5.0` | 2026-06-01 | Minor | ISO27001-aligned audit, security, media, data protection fields |
-| `v3.3.0` | 2026-05-18 | Minor | Additional identity roles and shared media/security fields |
-| `v3.2.0` | 2026-05-09 | Minor | MX51 payment terminal alignment |
-| `v3.1.0` | 2026-05-09 | Minor | Warehouse 3D geometry and layout contracts |
-| `v3.0.0` | 2026-05-02 | Major | V3 module path and automated release workflow |
-| `v2.1.1` | 2026-04-27 | Patch | Product freshness represented as string |
-| `v2.1.0` | 2026-04-27 | Minor | Product freshness/status field expansion |
-| `v2.0.5` | 2026-04-27 | Patch | Product expiry field |
-| `v2.0.4` | 2026-04-27 | Patch | Product/order JSON naming refinements |
-| `v2.0.3` | 2026-04-27 | Patch | Product code retention follow-up |
-| `v2.0.2` | 2026-04-27 | Patch | Product code retention |
-| `v2.0.1` | 2026-04-26 | Patch | V2 module path correction |
-| `v2.0.0` | 2026-04-26 | Major | V2 module path and package import migration |
-| `v1.3.0` | 2026-04-25 | Minor | Product and placing area contracts |
-| `v1.2.0` | 2026-04-25 | Minor | Purchase, supplier, sales, SKU, payment status model changes |
-| `v1.1.0` | 2026-04-24 | Minor | Initial complete contract/model set |
-| `v1.0.0` | 2026-04-21 | Major | Initial module baseline |
-| `v0.1.0` | 2026-04-21 | Pre-release | Initial repository seed |
+| --- |--------------| --- | --- |
+| `v9.0.0` | 2026-06-25   | Major | Contract hygiene: inline enums relocated to `pkg/enums`; non-struct logic (promotion resolver, product/payments/promotion/membership/campaign helpers) moved to `pkg/logic`; contract files are structs-only. Requires the `/v9` module path migration. Also adds (additive) shared buyer/commercial context — `BuyerType`/`PriceAudience`/`PriceVisibility`/`FulfilmentIntent` enums, `sales.BuyerContext`/`PricingContext`, `Cart.Channel`/`buyer`, item `pricing`, and `product.Selling` — with POS treated as a channel, not a buyer type |
+| `v8.1.0` | 2026-06-24   | Minor | Added product `taxed` field for GST/FRE invoice rendering (additive) |
+| `v8.0.0` | 2026-06-23   | Major | Global membership consolidation; loyalty/subscription contracts moved into membership; wholesale membership renamed to organisation access; points reservation and reward redemption contracts |
+| `v7.0.0` | 2026-06-23   | Major | V7 module path; Product enterprise redesign; contract DTO cleanup removing shared wire/action structs and moving API envelopes, pagination, service-token, pricing, stockops, media, payment terminal/settlement, identity/access, and packing settlement payloads into owning backends |
+| `v6.0.2` | 2026-06-18   | Patch | Version metadata correction (`ModuleVersion = "v6.0.2"`) |
+| `v6.0.1` | 2026-06-18   | Minor | Added product `description` field (additive) |
+| `v6.0.0` | 2026-06-18   | Major | Staged breaking release: V6 module path, identity/access model, retail/wholesale split, grouped support fields |
+| `v5.6.0` | 2026-06-17   | Minor | Contract history, stock movement, loyalty expiry models |
+| `v5.5.2` | 2026-06-16   | Patch | Payment method correction/extension |
+| `v5.5.1` | 2026-06-15   | Patch | Payment method extension in sales contracts |
+| `v5.5.0` | 2026-06-15   | Minor | Device tracking and customer segment refinement |
+| `v5.4.0` | 2026-06-15   | Minor | Common party reference reuse for company/customer/supplier models |
+| `v5.3.0` | 2026-06-15   | Minor | Company/customer shared detail, device detection, collections, security logs |
+| `v5.2.0` | 2026-06-12   | Minor | Promotions, category tags, product lifecycle, effective promotion resolver |
+| `v5.1.2` | 2026-06-12   | Patch | Product/SKU field refinement |
+| `v5.1.1` | 2026-06-12   | Patch | BSON inline tag corrections and integration audit docs |
+| `v5.1.0` | 2026-06-12   | Minor | Service-authenticated stock/pricing endpoints and API envelope clarification |
+| `v5.0.0` | 2026-06-11   | Major | V5 module path, contract reroute, performance-oriented model cleanup |
+| `v4.2.0` | 2026-06-11   | Patch | Version metadata bump |
+| `v4.1.0` | 2026-06-11   | Minor | Field grouping, common contact/address/date/party references |
+| `v4.0.0` | 2026-06-11   | Major | Generalized payment interfaces and user notification preferences |
+| `v3.10.0` | 2026-06-05   | Minor | Customer `is_active` removal after status migration |
+| `v3.9.0` | 2026-06-05   | Minor | Customer active flag replaced by status |
+| `v3.8.0` | 2026-06-04   | Minor | Customer profile status enum added |
+| `v3.7.0` | 2026-06-04   | Minor | Customer record field expansion |
+| `v3.6.0` | 2026-06-02   | Minor | Warehouse damage report module |
+| `v3.5.1` | 2026-06-01   | Patch | Customer type wording changed from company to wholesaler |
+| `v3.5.0` | 2026-06-01   | Minor | ISO27001-aligned audit, security, media, data protection fields |
+| `v3.3.0` | 2026-05-18   | Minor | Additional identity roles and shared media/security fields |
+| `v3.2.0` | 2026-05-09   | Minor | MX51 payment terminal alignment |
+| `v3.1.0` | 2026-05-09   | Minor | Warehouse 3D geometry and layout contracts |
+| `v3.0.0` | 2026-05-02   | Major | V3 module path and automated release workflow |
+| `v2.1.1` | 2026-04-27   | Patch | Product freshness represented as string |
+| `v2.1.0` | 2026-04-27   | Minor | Product freshness/status field expansion |
+| `v2.0.5` | 2026-04-27   | Patch | Product expiry field |
+| `v2.0.4` | 2026-04-27   | Patch | Product/order JSON naming refinements |
+| `v2.0.3` | 2026-04-27   | Patch | Product code retention follow-up |
+| `v2.0.2` | 2026-04-27   | Patch | Product code retention |
+| `v2.0.1` | 2026-04-26   | Patch | V2 module path correction |
+| `v2.0.0` | 2026-04-26   | Major | V2 module path and package import migration |
+| `v1.3.0` | 2026-04-25   | Minor | Product and placing area contracts |
+| `v1.2.0` | 2026-04-25   | Minor | Purchase, supplier, sales, SKU, payment status model changes |
+| `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
+| `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
+| `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v9.0.0 (Unreleased) - Contract Hygiene & Buyer/Commercial Context / 契約整理與買方／商業情境
+
+Release date: Unreleased
+
+### Executive Summary / 摘要
+
+V9 makes the `pkg/contracts/**` files pure data shapes. Every inline enum type that was defined inside a contract file moves to the enum area `pkg/enums`, and every non-struct function/method — the promotion resolver and the derived-property helpers for product, payments, promotion, membership, and campaign — moves to a new `pkg/logic/<domain>` tree. Contract files now contain only structs and their tests. Because exported types change packages, this is a major release; consumers update import qualifiers and call the moved methods as free functions.
+
+V9 讓 `pkg/contracts/**` 內的檔案成為純資料結構。所有原本定義在契約檔內的列舉型別都移至列舉區 `pkg/enums`，所有非 struct 的函式/方法（promotion resolver 以及 product、payments、promotion、membership、campaign 的衍生屬性 helper）都移至新的 `pkg/logic/<domain>`。契約檔現在只包含 struct 與其測試。由於匯出型別更換套件，此為 major 版本；使用方需更新 import 限定詞，並將已遷移的方法改以自由函式呼叫。
+
+V9 also additively introduces a shared buyer/commercial vocabulary so retail, wholesale, and POS sales share one model — without renaming any existing field. POS is treated strictly as an order channel (`enums.OrderType`), never a buyer type: a wholesale organisation buying in the shop is `channel=pos`, `buyer.type=wholesale_organisation`. New `enums.BuyerType`, `enums.PriceAudience`, `enums.PriceVisibility`, and `enums.FulfilmentIntent`, the `sales.BuyerContext`/`sales.PricingContext` structs, an optional `Channel`/`Buyer` on `Cart`, an optional `Buyer` on `Order`, an optional `Pricing` on `CartItem`/`OrderItem`, and a `product.Selling` group describe who is buying and under what commercial pricing context. Every addition is an `omitempty` field (pointer or string), so existing JSON round-trips unchanged.
+
+V9 同時以新增方式導入共用的買方／商業詞彙，讓零售、批發與 POS 銷售共用同一套模型，且不改名任何既有欄位。POS 一律視為訂單通路（`enums.OrderType`），絕非買方類型：批發組織到店購買即為 `channel=pos`、`buyer.type=wholesale_organisation`。新增 `enums.BuyerType`、`enums.PriceAudience`、`enums.PriceVisibility`、`enums.FulfilmentIntent`，以及 `sales.BuyerContext`／`sales.PricingContext`、`Cart` 的選用 `Channel`／`Buyer`、`Order` 的選用 `Buyer`、`CartItem`／`OrderItem` 的選用 `Pricing`，與 `product.Selling` 群組，用以描述買方身分與商業定價情境。所有新增皆為 `omitempty` 欄位（指標或字串），既有 JSON 序列化維持不變。
+
+### Breaking Changes / 破壞性變更
+
+- Relocated inline contract enums to `pkg/enums`: `CampaignPlacement`, `CampaignSeverity`, `CampaignCustomerType`, `CampaignPlatform` (from `campaign`), `PackingSessionStatus`, `PackingDamageHandling` (from `warehouse`), `AlertLevel` (from `analytics`), `AuditOutcome`, `MediaStatus` (from `shared`). The four campaign enums gained a `Campaign` prefix. JSON values are unchanged.
+- Relocated the promotion resolver and derived-property helpers out of `pkg/contracts` into `pkg/logic/<domain>`: `promotionlogic` (`ResolveEffective`, `Matches`, `DiscountedUnitPriceMinor`, `ResolveTarget`, `EffectiveClass`, `IncludesDescendants`, `IsTargeted`, `OverrideReasonSpecialCampaign`), `productlogic` (`IsNew`, `NewExpiresAt`, `IsRestocked`, `RestockedExpiresAt`, `DisplayStatus`, `LifecycleTags`, and the `DisplayStatus*`/`LifecycleTag*` constants), `paymentslogic` (`TotalMinor`), `membershiplogic` (`RequiresOrganisationAccess`, `CanReserve`, `CanCommit`, `HasRequiredSpendAccess`, `PermissionMembershipPointsSpend`), `campaignlogic` (`LiveAt`). Former struct methods became free functions taking the struct as the first argument.
+- Requires the Go major-version migration: module path `…/Backend-Shared-Contract/v8` → `…/v9`; update all consumer imports accordingly when the tag is cut.
+
+### Additive Changes / 新增
+
+- Added the `pkg/logic/{promotion,product,payments,membership,campaign}` packages.
+- Added `IsValid()`/`String()` to the relocated `AlertLevel`, `AuditOutcome`, and `MediaStatus` enums to match the enum-area convention; all relocated enums are covered by `pkg/enums/enums_test.go`.
+- `promotion.EffectivePromotion` remains a contract struct, relocated to `pkg/contracts/promotion/effective_promotion.go`.
+- Added shared buyer/commercial enums in `pkg/enums`: `BuyerType` (`guest_retail`/`retail_customer`/`wholesale_organisation`), `PriceAudience` (`retail`/`wholesale`), `PriceVisibility` (`public`/`login_required`/`wholesale_approved_only`/`hidden`), and `FulfilmentIntent` (`delivery`/`pickup`/`in_store_carry`); all covered by `pkg/enums/enums_test.go`.
+- Added the `sales.BuyerContext` (buyer type, optional retail-customer / wholesale-organisation / organisation-access references, and fulfilment intent) and `sales.PricingContext` (price audience + visibility) structs.
+- Added optional `channel` and `buyer` to `sales.Cart`, optional `buyer` to `sales.Order`, and optional `pricing` to `sales.CartItem` and `sales.OrderItem` — all `omitempty` pointers/strings, so legacy JSON is unchanged. `Order.Channel`, `Cart.CustomerID`, and `Product.Pricing` are untouched.
+- Added the `product.Selling` group (`channels []enums.OrderType`, `buyer_types []enums.BuyerType`, `visibility enums.PriceVisibility`) for per-product channel/buyer sellability rules.
+- POS is modelled as a channel, not a buyer type — e.g. a wholesale organisation buying in store is `channel=pos`, `buyer.type=wholesale_organisation`, item `pricing.audience=wholesale`; a walk-in is `channel=pos`, `buyer.type=guest_retail`.
+
+- 在 `pkg/enums` 新增共用買方／商業列舉：`BuyerType`、`PriceAudience`、`PriceVisibility`、`FulfilmentIntent`，皆納入 `pkg/enums/enums_test.go` 驗證。
+- 新增 `sales.BuyerContext`（買方類型、選用的零售客戶／批發組織／組織存取參照與取貨意圖）與 `sales.PricingContext`（定價對象＋可見性）struct。
+- `sales.Cart` 新增選用 `channel`／`buyer`，`sales.Order` 新增選用 `buyer`，`sales.CartItem`／`sales.OrderItem` 新增選用 `pricing`（皆為 `omitempty`，既有 JSON 不變）。`Order.Channel`、`Cart.CustomerID`、`Product.Pricing` 維持不變。
+- 新增 `product.Selling` 群組，描述每個商品的通路／買方可售規則。
+- POS 視為通路而非買方類型：批發組織到店購買為 `channel=pos`、`buyer.type=wholesale_organisation`、品項 `pricing.audience=wholesale`；一般散客為 `channel=pos`、`buyer.type=guest_retail`。
+
+### Consumer Action / 使用方動作
+
+- Update enum import qualifiers, e.g. `campaign.PlacementTopBanner` → `enums.CampaignPlacementTopBanner`, `warehouse.PackingSessionStatusPending` → `enums.PackingSessionStatusPending`, `analytics.AlertLevelOK` → `enums.AlertLevelOK`, `shared.AuditOutcomeSuccess` → `enums.AuditOutcomeSuccess`, `shared.MediaStatusActive` → `enums.MediaStatusActive`.
+- Replace moved method calls with the logic-package functions, e.g. `p.DisplayStatus(now)` → `productlogic.DisplayStatus(p, now)`, `amounts.TotalMinor()` → `paymentslogic.TotalMinor(amounts)`, `p.EffectiveClass()` → `promotionlogic.EffectiveClass(p)`, `promotion.ResolveEffective(...)` → `promotionlogic.ResolveEffective(...)`.
+- Update the module path from `/v8` to `/v9` when the release is tagged, and re-pin all backend services.
+- The buyer/commercial additions are backward compatible: set `cart.channel`/`buyer`, `order.buyer`, item `pricing`, and `product.selling` where relevant; leaving them unset preserves prior behaviour and JSON shape. Model POS as a channel — never add a "pos" buyer type.
+- 買方／商業新增為向後相容：可在需要時設定 `cart.channel`／`buyer`、`order.buyer`、品項 `pricing` 與 `product.selling`；未設定則維持既有行為與 JSON 形狀。POS 一律以通路表示，切勿新增「pos」買方類型。
+
+## v8.1.0 - Product Tax Flag / 商品稅務旗標
+
+Release date: 2026-06-24
+
+### Executive Summary / 摘要
+
+V8.1.0 adds a `taxed` boolean to the product contracts so consumers can render GST/FRE tax treatment on invoices and receipts. The change is additive and backward-compatible.
+
+V8.1.0 在商品契約新增 `taxed` 布林欄位，讓使用方能在發票與收據上呈現 GST/FRE 稅務處理。此變更為新增且向後相容。
+
+### Additive Changes / 新增
+
+- Added `taxed` to `product.Product` and `product.Snapshot` for GST/FRE invoice rendering.
+- Added product JSON shape coverage for the `taxed` field.
+
+### Consumer Action / 使用方動作
+
+- Run contract serialization/deserialization tests after upgrading.
+- Set `taxed` when creating or syncing products; the default `false` preserves prior behaviour.
 
 ## v8.0.0 - Global Membership Consolidation / 全域會員整合
 

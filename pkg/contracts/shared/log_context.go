@@ -1,6 +1,6 @@
 package shared
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
 
 // ActorRef identifies the authenticated principal that performed an
 // action. It is shared by audit, access, and security records.
@@ -24,7 +24,7 @@ type RequestContext struct {
 
 // RecordOutcome is the result block shared by audit and access records.
 type RecordOutcome struct {
-	Outcome    AuditOutcome `json:"outcome"`
-	StatusCode int          `json:"status_code,omitempty"`
-	Reason     string       `json:"reason,omitempty"` // failure reason / human note
+	Outcome    enums.AuditOutcome `json:"outcome"`
+	StatusCode int                `json:"status_code,omitempty"`
+	Reason     string             `json:"reason,omitempty"` // failure reason / human note
 }

@@ -3,21 +3,8 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
-)
-
-// MediaStatus controls visibility and lifecycle of a media row.
-//
-//	pending  – SAS URL issued but the upload hasn't been finalized yet.
-//	active   – Upload finalized; safe to reference.
-//	deleted  – Soft-deleted; the orphan reaper will purge the blob
-//	           once no documents still reference the row.
-type MediaStatus string
-
-const (
-	MediaStatusPending MediaStatus = "pending"
-	MediaStatusActive  MediaStatus = "active"
-	MediaStatusDeleted MediaStatus = "deleted"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
 )
 
 // Media is the public projection of a stored asset (image, document,
@@ -37,9 +24,9 @@ type Media struct {
 	SizeBytes   int64       `json:"size_bytes"`
 	Width       int         `json:"width,omitempty"`
 	Height      int         `json:"height,omitempty"`
-	Folder      string      `json:"folder,omitempty"`
-	Status      MediaStatus `json:"status,omitempty"`
-	PurgedAt    *time.Time  `json:"purged_at,omitempty"`
+	Folder      string            `json:"folder,omitempty"`
+	Status      enums.MediaStatus `json:"status,omitempty"`
+	PurgedAt    *time.Time        `json:"purged_at,omitempty"`
 
 	common.AuditFields          `bson:",inline"`
 	common.DataProtectionFields `bson:",inline"`

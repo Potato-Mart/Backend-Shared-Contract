@@ -1,8 +1,10 @@
-package product
+package productlogic
 
 import (
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/product"
 )
 
 func ts(t time.Time) *time.Time { return &t }
@@ -13,7 +15,7 @@ func TestIsNew(t *testing.T) {
 	listed := time.Date(2026, 1, 10, 0, 0, 0, 0, time.UTC)
 	created := time.Date(2026, 1, 1, 0, 0, 0, 0, time.UTC)
 
-	p := Product{FirstListedAt: ts(listed)}
+	p := product.Product{FirstListedAt: ts(listed)}
 	p.CreatedAt = created // creation date must not matter
 
 	cases := []struct {
@@ -30,7 +32,7 @@ func TestIsNew(t *testing.T) {
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
-			if got := p.IsNew(tc.now); got != tc.want {
+			if got := IsNew(p, tc.now); got != tc.want {
 				t.Errorf("IsNew(%s) = %v, want %v", tc.now, got, tc.want)
 			}
 		})
@@ -39,17 +41,17 @@ func TestIsNew(t *testing.T) {
 	// Product created on Jan 1, listed Jan 10 → NEW expires Jan 24,
 	// regardless of the Jan 1 creation date.
 	wantExpiry := time.Date(2026, 1, 24, 0, 0, 0, 0, time.UTC)
-	if got := p.NewExpiresAt(); got == nil || !got.Equal(wantExpiry) {
+	if got := NewExpiresAt(p); got == nil || !got.Equal(wantExpiry) {
 		t.Errorf("NewExpiresAt = %v, want %v", got, wantExpiry)
 	}
 
 	// Never listed → never NEW, no expiry.
-	never := Product{}
+	never := product.Product{}
 	never.CreatedAt = created
-	if never.IsNew(created.Add(time.Hour)) {
+	if IsNew(never, created.Add(time.Hour)) {
 		t.Error("unlisted product reported NEW")
 	}
-	if never.NewExpiresAt() != nil {
+	if NewExpiresAt(never) != nil {
 		t.Error("unlisted product has a NEW expiry")
 	}
 }
@@ -58,45 +60,45 @@ func TestIsNew(t *testing.T) {
 // refreshes when the timestamp moves forward.
 func TestIsRestocked(t *testing.T) {
 	restocked := time.Date(2026, 3, 1, 9, 0, 0, 0, time.UTC)
-	p := Product{RestockedAt: ts(restocked)}
+	p := product.Product{RestockedAt: ts(restocked)}
 
-	if p.IsRestocked(restocked.Add(-time.Minute)) {
+	if IsRestocked(p, restocked.Add(-time.Minute)) {
 		t.Error("RESTOCKED before the restock instant")
 	}
-	if !p.IsRestocked(restocked) {
+	if !IsRestocked(p, restocked) {
 		t.Error("not RESTOCKED at the restock instant")
 	}
-	if !p.IsRestocked(restocked.Add(LifecycleTagTTL - time.Second)) {
+	if !IsRestocked(p, restocked.Add(LifecycleTagTTL-time.Second)) {
 		t.Error("not RESTOCKED just before the 14-day expiry")
 	}
-	if p.IsRestocked(restocked.Add(LifecycleTagTTL)) {
+	if IsRestocked(p, restocked.Add(LifecycleTagTTL)) {
 		t.Error("still RESTOCKED at exactly 14 days")
 	}
 
 	// A later 0→>=1 transition refreshes the window (test 17).
 	again := restocked.Add(20 * 24 * time.Hour)
 	p.RestockedAt = ts(again)
-	if !p.IsRestocked(again.Add(13 * 24 * time.Hour)) {
+	if !IsRestocked(p, again.Add(13*24*time.Hour)) {
 		t.Error("refreshed restock window not honoured")
 	}
 
 	// Never restocked → never RESTOCKED.
-	if (Product{}).IsRestocked(restocked) {
+	if IsRestocked(product.Product{}, restocked) {
 		t.Error("product without RestockedAt reported RESTOCKED")
 	}
 }
 
 func TestLifecycleTags(t *testing.T) {
 	now := time.Date(2026, 5, 1, 0, 0, 0, 0, time.UTC)
-	p := Product{
+	p := product.Product{
 		FirstListedAt: ts(now.Add(-24 * time.Hour)),
 		RestockedAt:   ts(now.Add(-time.Hour)),
 	}
-	got := p.LifecycleTags(now)
+	got := LifecycleTags(p, now)
 	if len(got) != 2 || got[0] != LifecycleTagNew || got[1] != LifecycleTagRestocked {
 		t.Errorf("LifecycleTags = %v, want [NEW RESTOCKED]", got)
 	}
-	if tags := (Product{}).LifecycleTags(now); len(tags) != 0 {
+	if tags := LifecycleTags(product.Product{}, now); len(tags) != 0 {
 		t.Errorf("LifecycleTags on bare product = %v, want empty", tags)
 	}
 }

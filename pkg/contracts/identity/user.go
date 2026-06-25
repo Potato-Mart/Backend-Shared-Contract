@@ -3,8 +3,8 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
 )
 
 // UserProfile is the public projection of a canonical user. Secret fields such
@@ -22,7 +22,12 @@ type UserProfile struct {
 	Accounts                []UserAccountSummary         `json:"accounts,omitempty"`
 	PrimaryAccountID        string                       `json:"primary_account_id,omitempty"`
 	PrimaryAccountType      enums.AccountType            `json:"primary_account_type,omitempty"`
-	MFAEnabled              bool                         `json:"mfa_enabled,omitempty"`
+	MFAEnabled bool `json:"mfa_enabled,omitempty"`
+	// EmailVerified is the customer email-verification state. A nil pointer
+	// means "not tracked" (legacy/admin accounts) and is treated as verified;
+	// an explicit false means the account must verify its email before it can
+	// place orders.
+	EmailVerified           *bool                        `json:"email_verified,omitempty"`
 	NotificationPreferences *UserNotificationPreferences `json:"notification_preferences,omitempty"`
 
 	// User Operations

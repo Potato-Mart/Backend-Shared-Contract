@@ -1,9 +1,9 @@
 package promotion
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
 )
 
 // Promotion is the rule-based, auto-applied discount engine entity.
@@ -91,30 +91,6 @@ type Promotion struct {
 	History   []shared.HistoryEntry `json:"history,omitempty"`
 
 	common.AuditFields `bson:",inline"`
-}
-
-// EffectiveClass returns the promotion class, defaulting empty (legacy
-// documents written before v5.2.0) to normal_promotion.
-func (p Promotion) EffectiveClass() enums.PromotionClass {
-	if p.Class == enums.PromotionClassSpecialCampaign {
-		return enums.PromotionClassSpecialCampaign
-	}
-	return enums.PromotionClassNormal
-}
-
-// IncludesDescendants reports whether a category-targeted promotion
-// also covers descendant categories. Defaults to true when unset.
-func (p Promotion) IncludesDescendants() bool {
-	if p.TargetIncludesDescendants == nil {
-		return true
-	}
-	return *p.TargetIncludesDescendants
-}
-
-// IsTargeted reports whether the promotion is narrowed to a product or
-// category rather than the legacy cart-wide behaviour.
-func (p Promotion) IsTargeted() bool {
-	return p.TargetScope == enums.DiscountScopeProduct || p.TargetScope == enums.DiscountScopeCategory
 }
 
 // GiftTier defines a single spend threshold and its associated free gift

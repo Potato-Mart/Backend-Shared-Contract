@@ -3,8 +3,8 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
 )
 
 // AuditLogEntry is one immutable record of an administrative action.
@@ -28,12 +28,3 @@ type AuditLogEntry struct {
 
 	common.DataProtectionFields `bson:",inline"`
 }
-
-// AuditOutcome is a coarse success/failure flag for audit reporting.
-type AuditOutcome string
-
-const (
-	AuditOutcomeSuccess AuditOutcome = "success"
-	AuditOutcomeFailure AuditOutcome = "failure"
-	AuditOutcomeDenied  AuditOutcome = "denied"
-)

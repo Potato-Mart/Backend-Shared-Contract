@@ -3,17 +3,8 @@ package analytics
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
-)
-
-// AlertLevel classifies the urgency of a stock-out forecast.
-type AlertLevel string
-
-const (
-	AlertLevelOK       AlertLevel = "OK"
-	AlertLevelWarning  AlertLevel = "WARNING"
-	AlertLevelCritical AlertLevel = "CRITICAL"
-	AlertLevelExpired  AlertLevel = "EXPIRED"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
 )
 
 // SKUDemandForecast holds the latest AI-generated stock-out prediction for
@@ -30,9 +21,9 @@ type SKUDemandForecast struct {
 	PredictedDaily    []DailyPrediction `json:"predicted_daily"`
 	CurrentStockAtRun float64           `json:"current_stock_at_run"`
 	// DaysUntilStockout is nil when no stock-out is predicted within the horizon.
-	DaysUntilStockout *float64        `json:"days_until_stockout,omitempty"`
-	AlertLevel        AlertLevel      `json:"alert_level"`
-	Algorithm         string          `json:"algorithm"`
+	DaysUntilStockout *float64         `json:"days_until_stockout,omitempty"`
+	AlertLevel        enums.AlertLevel `json:"alert_level"`
+	Algorithm         string           `json:"algorithm"`
 	AlgorithmParams   common.Metadata `json:"algorithm_params,omitempty"`
 }
 

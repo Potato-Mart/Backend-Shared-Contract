@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
 )
 
 func TestMembershipAccountAndTierRoundTrip(t *testing.T) {
@@ -121,54 +121,6 @@ func TestPointLedgerBucketsAndReservationRoundTrip(t *testing.T) {
 	}
 	if len(decoded.Entry.Allocations) != 2 || len(decoded.Breakdown.Buckets) != 2 || decoded.Reservation.Points != 40 {
 		t.Fatalf("point contracts did not round-trip: %+v", decoded)
-	}
-}
-
-func TestPointReservationScenarios(t *testing.T) {
-	now := time.Date(2026, 6, 23, 0, 0, 0, 0, time.UTC)
-	owner := membership.MembershipOwnerRef{OwnerType: enums.MembershipOwnerTypeWholesaleOrganisation, OwnerID: "org_1"}
-	balance := membership.PointBalanceBreakdown{
-		MembershipAccountID: "mem_org_1",
-		Owner:               owner,
-		TotalPoints:         100,
-		ReservedPoints:      30,
-		AvailablePoints:     70,
-		CalculatedAt:        now,
-	}
-	if !balance.CanReserve(70) || balance.CanReserve(71) {
-		t.Fatalf("CanReserve did not respect available points: %+v", balance)
-	}
-
-	active := membership.PointReservation{
-		ID:                   "res_1",
-		MembershipAccountID:  "mem_org_1",
-		Owner:                owner,
-		OrganisationAccessID: "access_1",
-		Points:               70,
-		Status:               enums.PointReservationStatusReserved,
-		RedemptionType:       enums.MembershipRedemptionTypeCheckoutDiscount,
-		ExpiresAt:            now.Add(time.Minute),
-	}
-	expired := active
-	expired.ExpiresAt = now.Add(-time.Minute)
-	cancelled := active
-	cancelled.Status = enums.PointReservationStatusCancelled
-
-	if !active.CanCommit(now) {
-		t.Fatal("active reservation should be committable")
-	}
-	if expired.CanCommit(now) || cancelled.CanCommit(now) {
-		t.Fatal("expired or cancelled reservation should not be committable")
-	}
-	if active.HasRequiredSpendAccess(false) {
-		t.Fatal("wholesale reservation should require spend permission")
-	}
-	if !active.HasRequiredSpendAccess(true) {
-		t.Fatal("wholesale reservation with organisation access and permission should spend")
-	}
-	active.OrganisationAccessID = ""
-	if active.HasRequiredSpendAccess(true) {
-		t.Fatal("wholesale reservation without organisation access should not spend")
 	}
 }
 

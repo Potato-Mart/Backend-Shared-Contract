@@ -3,9 +3,9 @@ package product
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v8/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
 )
 
 // Product is the master record for one sellable unit (v7.0.0).
@@ -63,7 +63,10 @@ type Product struct {
 	ExpiredAt     time.Time  `json:"expired_at,omitempty"`
 
 	// ── Nested groups ─────────────────────────────────────────────────
-	Pricing       Pricing       `json:"pricing"`
+	Pricing Pricing `json:"pricing"`
+	// Selling is an optional pointer (unlike the always-present groups
+	// below) so a product with no channel/buyer sellability rules omits it.
+	Selling       *Selling      `json:"selling,omitempty"`
 	Localization  Localization  `json:"localization,omitempty"`
 	Media         Media         `json:"media,omitempty"`
 	Physical      Physical      `json:"physical,omitempty"`
@@ -89,6 +92,18 @@ type Pricing struct {
 	Tag       *common.Money `json:"tag,omitempty"`       // temporary e-tag price
 	Wholesale *common.Money `json:"wholesale,omitempty"` // wholesale price
 	Cost      *common.Money `json:"cost,omitempty"`      // purchase cost
+}
+
+// Selling groups the channel/buyer sellability rules for a product: which
+// order channels it may be sold through, which buyer types may purchase it,
+// and how its price/listing is exposed. It reuses enums.OrderType for
+// channel and enums.BuyerType for buyer type. Empty Channels/BuyerTypes
+// mean "no restriction"; the contract defines the rules, not the
+// enforcement — that lives in the backend.
+type Selling struct {
+	Channels   []enums.OrderType     `json:"channels,omitempty"`
+	BuyerTypes []enums.BuyerType     `json:"buyer_types,omitempty"`
+	Visibility enums.PriceVisibility `json:"visibility,omitempty"`
 }
 
 // Localization groups the per-language display fields. Each is a slice
