@@ -24,16 +24,17 @@ const TokenType = "Bearer"
 type Scope string
 
 const (
-	ScopeStockReserve     Scope = "stock:reserve"
-	ScopeStockCommit      Scope = "stock:commit"
-	ScopeStockRelease     Scope = "stock:release"
-	ScopePricingQuote     Scope = "pricing:quote"
-	ScopeCatalogRead      Scope = "catalog:read"
-	ScopeCustomersRead    Scope = "customers:read"
-	ScopeSuppliersRead    Scope = "suppliers:read"
-	ScopeMembershipRead   Scope = "membership:read"
-	ScopeMembershipPoints Scope = "membership:points"
-	ScopeMembershipRedeem Scope = "membership:redeem"
+	ScopeStockReserve       Scope = "stock:reserve"
+	ScopeStockCommit        Scope = "stock:commit"
+	ScopeStockRelease       Scope = "stock:release"
+	ScopePricingQuote       Scope = "pricing:quote"
+	ScopeCatalogRead        Scope = "catalog:read"
+	ScopeCustomersRead      Scope = "customers:read"
+	ScopeSuppliersRead      Scope = "suppliers:read"
+	ScopeMembershipRead     Scope = "membership:read"
+	ScopeMembershipPoints   Scope = "membership:points"
+	ScopeMembershipRedeem   Scope = "membership:redeem"
+	ScopeWholesaleTermsRead Scope = "wholesale:terms:read"
 )
 
 func (s Scope) String() string { return string(s) }
@@ -44,6 +45,7 @@ func AllScopes() []Scope {
 		ScopeStockReserve, ScopeStockCommit, ScopeStockRelease,
 		ScopePricingQuote, ScopeCatalogRead, ScopeCustomersRead, ScopeSuppliersRead,
 		ScopeMembershipRead, ScopeMembershipPoints, ScopeMembershipRedeem,
+		ScopeWholesaleTermsRead,
 	}
 }
 

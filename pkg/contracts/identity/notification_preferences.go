@@ -35,11 +35,13 @@ type NotificationSocialAppChannel struct {
 
 // UserNotificationTopics controls which kinds of notifications the user wants.
 type UserNotificationTopics struct {
-	AccountUpdates bool `json:"account_updates"`
-	SecurityAlerts bool `json:"security_alerts"`
-	OrderUpdates   bool `json:"order_updates"`
-	Promotions     bool `json:"promotions"`
-	SystemAlerts   bool `json:"system_alerts"`
+	AccountUpdates  bool `json:"account_updates"`
+	SecurityAlerts  bool `json:"security_alerts"`
+	OrderUpdates    bool `json:"order_updates"`
+	DeliveryUpdates bool `json:"delivery_updates"`
+	InvoiceUpdates  bool `json:"invoice_updates"`
+	Promotions      bool `json:"promotions"`
+	SystemAlerts    bool `json:"system_alerts"`
 }
 
 // NotificationQuietHours lets clients mute non-urgent notifications during a

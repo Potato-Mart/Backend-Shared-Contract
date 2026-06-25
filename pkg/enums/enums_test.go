@@ -70,6 +70,8 @@ func TestExportedEnumsValidateKnownValues(t *testing.T) {
 		{name: "PriceVisibility", valid: []stringEnum{PriceVisibilityPublic, PriceVisibilityLoginRequired, PriceVisibilityWholesaleApprovedOnly, PriceVisibilityHidden}, invalid: PriceVisibility("__invalid__")},
 		{name: "FulfilmentIntent", valid: []stringEnum{FulfilmentIntentDelivery, FulfilmentIntentPickup, FulfilmentIntentInStoreCarry}, invalid: FulfilmentIntent("__invalid__")},
 		{name: "OrganisationAccessStatus", valid: []stringEnum{OrganisationAccessStatusPending, OrganisationAccessStatusActive, OrganisationAccessStatusSuspended, OrganisationAccessStatusRevoked}, invalid: OrganisationAccessStatus("__invalid__")},
+		{name: "WholesaleBuyerRole", valid: []stringEnum{WholesaleBuyerRoleOwner, WholesaleBuyerRoleBuyer, WholesaleBuyerRoleFinance, WholesaleBuyerRoleReadOnly}, invalid: WholesaleBuyerRole("__invalid__")},
+		{name: "WholesalePermission", valid: []stringEnum{WholesalePermissionCatalogueView, WholesalePermissionCartWrite, WholesalePermissionCheckoutSubmit, WholesalePermissionOrdersViewOwn, WholesalePermissionOrdersViewOrg, WholesalePermissionOrdersReorder, WholesalePermissionInvoicesViewOwn, WholesalePermissionInvoicesViewOrg, WholesalePermissionInvoicesPay, WholesalePermissionAccountView, WholesalePermissionTeamView, WholesalePermissionFavouritesWrite, WholesalePermissionOrderListsViewOwn, WholesalePermissionOrderListsWriteOwn, WholesalePermissionOrderListsViewOrg, WholesalePermissionOrderListsWriteOrg}, invalid: WholesalePermission("__invalid__")},
 		{name: "OutboundShipmentStatus", valid: []stringEnum{OutboundShipmentStatusPacked, OutboundShipmentStatusDispatched}, invalid: OutboundShipmentStatus("__invalid__")},
 		{name: "PackingDiscrepancyKind", valid: []stringEnum{PackingDiscrepancyKindShortage, PackingDiscrepancyKindOverweight, PackingDiscrepancyKindDamaged, PackingDiscrepancyKindPending}, invalid: PackingDiscrepancyKind("__invalid__")},
 		{name: "PaymentMethod", valid: []stringEnum{PaymentMethodCard, PaymentMethodCash, PaymentMethodQR, PaymentMethodBankTransfer, PaymentMethodLinePay, PaymentMethodApplePay, PaymentMethodGooglePay, PaymentMethodECPay, PaymentMethodManual, PaymentMethodEFTPOS, PaymentMethodMOTO, PaymentMethodCashout}, invalid: PaymentMethod("__invalid__")},
@@ -216,6 +218,65 @@ func TestPortalAccessStatusCanAccess(t *testing.T) {
 		if status.CanAccess() {
 			t.Fatalf("%s should not allow access", status)
 		}
+	}
+}
+
+func TestWholesaleBuyerRolePermissions(t *testing.T) {
+	ownerPerms := PermissionsForWholesaleBuyerRole(WholesaleBuyerRoleOwner)
+	if len(ownerPerms) == 0 {
+		t.Fatal("owner should receive permissions")
+	}
+	if !HasWholesalePermission(WholesalePermissionStrings(ownerPerms), WholesalePermissionTeamView) {
+		t.Fatal("owner should receive team.view")
+	}
+	if !HasWholesalePermission(WholesalePermissionStrings(ownerPerms), WholesalePermissionOrderListsWriteOrg) {
+		t.Fatal("owner should receive order_lists.write_org")
+	}
+
+	buyerPerms := WholesalePermissionStrings(PermissionsForWholesaleBuyerRole(WholesaleBuyerRoleBuyer))
+	if HasWholesalePermission(buyerPerms, WholesalePermissionInvoicesViewOrg) {
+		t.Fatal("buyer should not receive organisation invoice visibility")
+	}
+	if !HasWholesalePermission(buyerPerms, WholesalePermissionCheckoutSubmit) {
+		t.Fatal("buyer should receive checkout.submit")
+	}
+	if !HasWholesalePermission(buyerPerms, WholesalePermissionFavouritesWrite) ||
+		!HasWholesalePermission(buyerPerms, WholesalePermissionOrderListsWriteOwn) ||
+		!HasWholesalePermission(buyerPerms, WholesalePermissionOrderListsViewOrg) {
+		t.Fatal("buyer should receive own list mutation, org list view, and favourites.write")
+	}
+	if HasWholesalePermission(buyerPerms, WholesalePermissionOrderListsWriteOrg) {
+		t.Fatal("buyer should not receive organisation list mutation")
+	}
+
+	financePerms := WholesalePermissionStrings(PermissionsForWholesaleBuyerRole(WholesaleBuyerRoleFinance))
+	if !HasWholesalePermission(financePerms, WholesalePermissionInvoicesPay) {
+		t.Fatal("finance should receive invoices.pay")
+	}
+	if HasWholesalePermission(financePerms, WholesalePermissionCheckoutSubmit) {
+		t.Fatal("finance should not receive checkout.submit")
+	}
+	if HasWholesalePermission(financePerms, WholesalePermissionFavouritesWrite) ||
+		HasWholesalePermission(financePerms, WholesalePermissionOrderListsViewOwn) ||
+		HasWholesalePermission(financePerms, WholesalePermissionOrderListsViewOrg) {
+		t.Fatal("finance should not receive procurement list permissions")
+	}
+
+	readOnlyPerms := WholesalePermissionStrings(PermissionsForWholesaleBuyerRole(WholesaleBuyerRoleReadOnly))
+	if !HasWholesalePermission(readOnlyPerms, WholesalePermissionOrderListsViewOrg) {
+		t.Fatal("read-only should receive organisation list view")
+	}
+	if HasWholesalePermission(readOnlyPerms, WholesalePermissionFavouritesWrite) ||
+		HasWholesalePermission(readOnlyPerms, WholesalePermissionOrderListsWriteOwn) ||
+		HasWholesalePermission(readOnlyPerms, WholesalePermissionCartWrite) {
+		t.Fatal("read-only should not receive procurement mutation or cart permissions")
+	}
+
+	if got := PermissionsForWholesaleBuyerRole(WholesaleBuyerRole("__invalid__")); got != nil {
+		t.Fatalf("invalid role permissions = %#v, want nil", got)
+	}
+	if HasWholesalePermission([]string{WholesalePermissionTeamView.String()}, WholesalePermission("__invalid__")) {
+		t.Fatal("invalid required permission should never match")
 	}
 }
 
