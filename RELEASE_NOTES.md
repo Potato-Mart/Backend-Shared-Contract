@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v9.3.0` | 2026-06-27   | Minor | Added required SKU `primary_name` as a singular `common.LocalizedName`; SKU `other_names` remains as optional alternate localized names |
 | `v9.0.0` | 2026-06-25   | Major | Contract hygiene: inline enums relocated to `pkg/enums`; non-struct logic (promotion resolver, product/payments/promotion/membership/campaign helpers) moved to `pkg/logic`; contract files are structs-only. Requires the `/v9` module path migration. Also adds (additive) shared buyer/commercial context — `BuyerType`/`PriceAudience`/`PriceVisibility`/`FulfilmentIntent` enums, `sales.BuyerContext`/`PricingContext`, `Cart.Channel`/`buyer`, item `pricing`, and `product.Selling` — with POS treated as a channel, not a buyer type |
 | `v8.1.0` | 2026-06-24   | Minor | Added product `taxed` field for GST/FRE invoice rendering (additive) |
 | `v8.0.0` | 2026-06-23   | Major | Global membership consolidation; loyalty/subscription contracts moved into membership; wholesale membership renamed to organisation access; points reservation and reward redemption contracts |
@@ -68,6 +69,20 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v9.3.0 (2026-06-27) - SKU Primary Localized Name / SKU 主要本地化名稱
+
+Release date: 2026-06-27
+
+### Additive Changes / 新增
+
+- `category.SKU` now includes required `primary_name` as a singular `common.LocalizedName` for the canonical display/listing name.
+- `category.SKU.other_names` remains available for optional alternate localized names.
+
+### Consumer Action / 使用方動作
+
+- SKU-owning backends must require and persist `primary_name` on create/update paths.
+- Frontends should use `primary_name` as the default SKU label and fall back to `other_names` only as alternates.
 
 ## v9.0.0 (Unreleased) - Contract Hygiene & Buyer/Commercial Context / 契約整理與買方／商業情境
 
