@@ -8,7 +8,7 @@
 
 ## 最新版本
 
-### V9.3.0
+### V9.4.0
 
 ## 模組路徑
 
@@ -27,7 +27,7 @@ github.com/Potato-Mart/Backend-Shared-Contract/v9
 在使用方服務的 `go.mod` 中加入：
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v9 v9.3.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v9 v9.4.0
 ```
 
 接著匯入所需套件，例如：

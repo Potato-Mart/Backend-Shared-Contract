@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v9.4.0` | 2026-06-27   | Minor | Canonical code/number reference migration: product refs add `product_sku_code`, order refs add `order_number`, depot/supplier refs add code fields, product display fields use localized description/brand arrays, and product vendor is renamed to supplier with legacy decode/writeback compatibility |
 | `v9.3.0` | 2026-06-27   | Minor | Added required SKU `primary_name` as a singular `common.LocalizedName`; SKU `other_names` remains as optional alternate localized names |
 | `v9.0.0` | 2026-06-25   | Major | Contract hygiene: inline enums relocated to `pkg/enums`; non-struct logic (promotion resolver, product/payments/promotion/membership/campaign helpers) moved to `pkg/logic`; contract files are structs-only. Requires the `/v9` module path migration. Also adds (additive) shared buyer/commercial context — `BuyerType`/`PriceAudience`/`PriceVisibility`/`FulfilmentIntent` enums, `sales.BuyerContext`/`PricingContext`, `Cart.Channel`/`buyer`, item `pricing`, and `product.Selling` — with POS treated as a channel, not a buyer type |
 | `v8.1.0` | 2026-06-24   | Minor | Added product `taxed` field for GST/FRE invoice rendering (additive) |
@@ -69,6 +70,31 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v9.4.0 (2026-06-27) - Canonical Code/Number References / 代碼與單號參照標準化
+
+Release date: 2026-06-27
+
+### Additive Changes / 新增
+
+- Product display contracts now expose localized `description []common.LocalizedDescription` and `brand []common.LocalizedName` arrays.
+- Product snapshots now expose `sku_code`, localized `description`, localized `brand`, and `supplier`.
+- Product, warehouse, purchase, sales, wholesale, payment terminal, promotion, coupon, inbound, and layout contracts gained canonical business reference fields such as `product_sku_code`, `order_number`, `purchase_order_number`, `sales_order_number`, `depot_code`, and `supplier_code`.
+- Promotion targeting and promotion resolver inputs now support product SKU code matching through `target_product_sku_code` and `ResolveTarget.ProductSKUCode`.
+
+### Migration Compatibility / 遷移相容
+
+- Legacy product flat `description` / `brand` JSON values decode into localized arrays.
+- `identifiers.vendor` and snapshot `vendor` still decode and backfill canonical `supplier` during migration.
+- Legacy `product_id`, `order_id`, `depot_id`, and `supplier_id` fields remain present as deprecated `omitempty` aliases where required for dual-read/write migration.
+- Promotion resolver falls back to legacy product ID matching only when `target_product_sku_code` is absent.
+
+### Consumer Action / 使用方動作
+
+- Backends should write canonical fields as the primary lookup/index keys and keep legacy aliases only for transitional dual-write/backfill windows.
+- API consumers should send product references as `product_sku_code`, order references as `order_number`, depot references as `depot_code`, and supplier references as `supplier_code`.
+- Product UIs should render localized `description` and `brand`, and rename product `vendor` copy/fields to `supplier`.
+- Before removing legacy fields/indexes, run duplicate/missing-code preflight checks for `sku_code`, `order_number`, `depot_code`, and `supplier_code`.
 
 ## v9.3.0 (2026-06-27) - SKU Primary Localized Name / SKU 主要本地化名稱
 

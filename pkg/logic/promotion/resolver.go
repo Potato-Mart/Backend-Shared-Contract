@@ -17,10 +17,12 @@ import (
 // normal_promotion.
 const OverrideReasonSpecialCampaign = "special_campaign overrides normal_promotion"
 
-// ResolveTarget describes the product being priced: its id, its canonical
+// ResolveTarget describes the product being priced: its SKU code, canonical
 // category path (root→leaf category keys, leaf last), the undiscounted unit
 // price in minor units, and the pricing instant.
 type ResolveTarget struct {
+	ProductSKUCode string
+	// Deprecated: use ProductSKUCode.
 	ProductID      string
 	CategoryPath   []string
 	UnitPriceMinor int64
@@ -88,6 +90,9 @@ func Matches(p promotion.Promotion, t ResolveTarget) bool {
 	}
 	switch p.TargetScope {
 	case enums.DiscountScopeProduct:
+		if p.TargetProductSKUCode != "" {
+			return p.TargetProductSKUCode == t.ProductSKUCode
+		}
 		return p.TargetProductID != "" && p.TargetProductID == t.ProductID
 	case enums.DiscountScopeCategory:
 		if p.TargetCategoryKey == "" || len(t.CategoryPath) == 0 {

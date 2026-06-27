@@ -118,8 +118,10 @@ type RewardRedemptionSnapshot struct {
 	RewardType          enums.MembershipRewardType `json:"reward_type"`
 	PointsSpent         int                        `json:"points_spent"`
 	DiscountAmount      *common.Money              `json:"discount_amount,omitempty"`
-	ProductID           string                     `json:"product_id,omitempty"`
-	VoucherCode         string                     `json:"voucher_code,omitempty"`
+	ProductSKUCode      string                     `json:"product_sku_code,omitempty"`
+	// Deprecated: use ProductSKUCode.
+	ProductID   string `json:"product_id,omitempty"`
+	VoucherCode string `json:"voucher_code,omitempty"`
 }
 
 type SourceDevice struct {

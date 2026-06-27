@@ -21,15 +21,19 @@ const (
 // for approved B2B buyers. It intentionally exposes one effective wholesale
 // price, not the product.Pricing object, and omits operational stock quantity.
 type ApprovedStorefrontProduct struct {
-	ID                 string                 `json:"id"`
-	SKUCode            string                 `json:"sku_code,omitempty"`
-	SKU                string                 `json:"sku,omitempty"`
-	Name               string                 `json:"name"`
-	Description        string                 `json:"description,omitempty"`
-	Barcode            string                 `json:"barcode,omitempty"`
-	OtherNames         []common.LocalizedName `json:"other_names,omitempty"`
-	BrandKey           string                 `json:"brand_key,omitempty"`
-	BrandNames         []common.LocalizedName `json:"brand_names,omitempty"`
+	ID          string                        `json:"id"`
+	SKUCode     string                        `json:"sku_code,omitempty"`
+	SKU         string                        `json:"sku,omitempty"`
+	Name        string                        `json:"name"`
+	Description []common.LocalizedDescription `json:"description,omitempty"`
+	Barcode     string                        `json:"barcode,omitempty"`
+	OtherNames  []common.LocalizedName        `json:"other_names,omitempty"`
+	Brand       []common.LocalizedName        `json:"brand,omitempty"`
+	Supplier    string                        `json:"supplier,omitempty"`
+	// Deprecated: use Brand.
+	BrandKey   string                 `json:"brand_key,omitempty"`
+	BrandNames []common.LocalizedName `json:"brand_names,omitempty"`
+	// Deprecated: use Supplier.
 	Vendor             string                 `json:"vendor,omitempty"`
 	Catalogue          string                 `json:"catalogue,omitempty"`
 	Storage            enums.StorageType      `json:"storage,omitempty"`
@@ -52,7 +56,9 @@ type ApprovedStorefrontProduct struct {
 // ApprovedStorefrontLine is the minimal cart-safe projection needed to persist
 // a Commerce cart line after the backend has resolved the product server-side.
 type ApprovedStorefrontLine struct {
-	ProductID string                    `json:"product_id"`
+	ProductSKUCode string `json:"product_sku_code"`
+	// Deprecated: use ProductSKUCode.
+	ProductID string                    `json:"product_id,omitempty"`
 	Product   ApprovedStorefrontProduct `json:"product"`
 	Price     common.Money              `json:"price"`
 }

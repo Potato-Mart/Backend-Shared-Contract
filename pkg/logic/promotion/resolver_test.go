@@ -25,7 +25,7 @@ func targetedPromo(id string, class enums.PromotionClass, scope enums.DiscountSc
 	p.IsActive = true
 	switch scope {
 	case enums.DiscountScopeProduct:
-		p.TargetProductID = ref
+		p.TargetProductSKUCode = ref
 	case enums.DiscountScopeCategory:
 		p.TargetCategoryKey = ref
 	}
@@ -34,6 +34,7 @@ func targetedPromo(id string, class enums.PromotionClass, scope enums.DiscountSc
 
 func porkBelly() ResolveTarget {
 	return ResolveTarget{
+		ProductSKUCode: "PORK-BELLY-001",
 		ProductID:      "prd_pork_belly",
 		CategoryPath:   []string{"grocery", "meat", "pork"},
 		UnitPriceMinor: 1000,
@@ -44,7 +45,7 @@ func porkBelly() ResolveTarget {
 
 // 1. NORMAL_PROMOTION applies when no SPECIAL_CAMPAIGN exists.
 func TestResolveNormalAppliesWithoutSpecial(t *testing.T) {
-	active := []promotion.Promotion{targetedPromo("prm_normal", enums.PromotionClassNormal, enums.DiscountScopeProduct, "prd_pork_belly")}
+	active := []promotion.Promotion{targetedPromo("prm_normal", enums.PromotionClassNormal, enums.DiscountScopeProduct, "PORK-BELLY-001")}
 	eff := ResolveEffective(active, porkBelly())
 	if eff == nil || eff.PromotionID != "prm_normal" {
 		t.Fatalf("effective = %+v, want prm_normal", eff)
@@ -63,8 +64,8 @@ func TestResolveNormalAppliesWithoutSpecial(t *testing.T) {
 // 2. SPECIAL_CAMPAIGN overrides NORMAL_PROMOTION for the same product.
 func TestResolveSpecialOverridesNormalSameProduct(t *testing.T) {
 	active := []promotion.Promotion{
-		targetedPromo("prm_normal", enums.PromotionClassNormal, enums.DiscountScopeProduct, "prd_pork_belly"),
-		targetedPromo("prm_special", enums.PromotionClassSpecialCampaign, enums.DiscountScopeProduct, "prd_pork_belly"),
+		targetedPromo("prm_normal", enums.PromotionClassNormal, enums.DiscountScopeProduct, "PORK-BELLY-001"),
+		targetedPromo("prm_special", enums.PromotionClassSpecialCampaign, enums.DiscountScopeProduct, "PORK-BELLY-001"),
 	}
 	eff := ResolveEffective(active, porkBelly())
 	if eff == nil || eff.PromotionID != "prm_special" {
@@ -97,7 +98,7 @@ func TestResolveSpecialOverridesNormalSameCategory(t *testing.T) {
 func TestResolveProductBeatsCategoryWithinClass(t *testing.T) {
 	active := []promotion.Promotion{
 		targetedPromo("prm_cat", enums.PromotionClassNormal, enums.DiscountScopeCategory, "pork"),
-		targetedPromo("prm_prod", enums.PromotionClassNormal, enums.DiscountScopeProduct, "prd_pork_belly"),
+		targetedPromo("prm_prod", enums.PromotionClassNormal, enums.DiscountScopeProduct, "PORK-BELLY-001"),
 	}
 	eff := ResolveEffective(active, porkBelly())
 	if eff == nil || eff.PromotionID != "prm_prod" {
@@ -155,7 +156,7 @@ func TestResolveIgnoresUntargetedPromotions(t *testing.T) {
 
 // Window edges: inactive, not-yet-started, and expired promotions never match.
 func TestResolveRespectsActiveWindow(t *testing.T) {
-	p := targetedPromo("prm_window", enums.PromotionClassSpecialCampaign, enums.DiscountScopeProduct, "prd_pork_belly")
+	p := targetedPromo("prm_window", enums.PromotionClassSpecialCampaign, enums.DiscountScopeProduct, "PORK-BELLY-001")
 	later := resolverNow.Add(time.Hour)
 	p.StartsAt = &later
 	if eff := ResolveEffective([]promotion.Promotion{p}, porkBelly()); eff != nil {
@@ -176,11 +177,20 @@ func TestResolveRespectsActiveWindow(t *testing.T) {
 
 // Tie-break inside one tier: higher priority wins.
 func TestResolvePriorityTieBreak(t *testing.T) {
-	a := targetedPromo("prm_a", enums.PromotionClassNormal, enums.DiscountScopeProduct, "prd_pork_belly")
-	b := targetedPromo("prm_b", enums.PromotionClassNormal, enums.DiscountScopeProduct, "prd_pork_belly")
+	a := targetedPromo("prm_a", enums.PromotionClassNormal, enums.DiscountScopeProduct, "PORK-BELLY-001")
+	b := targetedPromo("prm_b", enums.PromotionClassNormal, enums.DiscountScopeProduct, "PORK-BELLY-001")
 	b.Priority = 5
 	if eff := ResolveEffective([]promotion.Promotion{a, b}, porkBelly()); eff == nil || eff.PromotionID != "prm_b" {
 		t.Fatalf("effective = %+v, want prm_b (priority 5)", eff)
+	}
+}
+
+func TestResolveProductTargetLegacyIDFallback(t *testing.T) {
+	p := targetedPromo("prm_legacy", enums.PromotionClassNormal, enums.DiscountScopeProduct, "")
+	p.TargetProductSKUCode = ""
+	p.TargetProductID = "prd_pork_belly"
+	if eff := ResolveEffective([]promotion.Promotion{p}, porkBelly()); eff == nil || eff.PromotionID != "prm_legacy" {
+		t.Fatalf("effective = %+v, want legacy product id fallback match", eff)
 	}
 }
 

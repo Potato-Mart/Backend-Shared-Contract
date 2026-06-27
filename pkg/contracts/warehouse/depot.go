@@ -23,15 +23,21 @@ type Depot struct {
 }
 
 type PostcodeRule struct {
-	ID       string `json:"id"`
-	DepotID  string `json:"depot_id"`
+	ID        string `json:"id"`
+	DepotCode string `json:"depot_code"`
+	// Deprecated: use DepotCode.
+	DepotID  string `json:"depot_id,omitempty"`
 	Postcode string `json:"postcode"`
 	Priority int    `json:"priority"`
 }
 
 type DepotProduct struct {
-	DepotID      string    `json:"depot_id"`
-	ProductID    string    `json:"product_id"`
+	DepotCode      string `json:"depot_code"`
+	ProductSKUCode string `json:"product_sku_code"`
+	// Deprecated: use DepotCode.
+	DepotID string `json:"depot_id,omitempty"`
+	// Deprecated: use ProductSKUCode.
+	ProductID    string    `json:"product_id,omitempty"`
 	StockQty     int       `json:"stock_qty"`
 	IsAvailable  bool      `json:"is_available"`
 	LocationCode string    `json:"location_code,omitempty"`
@@ -46,8 +52,10 @@ type DepotProduct struct {
 // Transform/Size are a denormalised cache for renderers that fetch
 // locations directly without joining the layout tree.
 type StockLocation struct {
-	ID           string            `json:"id"`
-	DepotID      string            `json:"depot_id"`
+	ID        string `json:"id"`
+	DepotCode string `json:"depot_code"`
+	// Deprecated: use DepotCode.
+	DepotID      string            `json:"depot_id,omitempty"`
 	Code         string            `json:"code"`
 	Name         string            `json:"name,omitempty"`
 	Zone         enums.StorageType `json:"zone,omitempty"`

@@ -21,7 +21,9 @@ type Coupon struct {
 	UsageLimits       `bson:",inline"`
 	ActiveWindow      `bson:",inline"`
 
-	AppliesTo   enums.CouponAppliesTo `json:"applies_to"`
+	AppliesTo       enums.CouponAppliesTo `json:"applies_to"`
+	ProductSKUCodes []string              `json:"product_sku_codes,omitempty"`
+	// Deprecated: use ProductSKUCodes.
 	ProductIDs  []string              `json:"product_ids,omitempty"`
 	CategoryIDs []string              `json:"category_ids,omitempty"`
 	History     []shared.HistoryEntry `json:"history,omitempty"`
@@ -32,13 +34,15 @@ type Coupon struct {
 // CustomerCoupon is an assignment of a coupon to a specific customer,
 // created by the system (RFM comeback, birthday, referral, etc.) or manually.
 type CustomerCoupon struct {
-	ID                string             `json:"id"`
-	CustomerProfileID string             `json:"customer_profile_id"`
-	CouponID          string             `json:"coupon_id"`
-	Source            enums.CouponSource `json:"source"`
-	ExpiresAt         *time.Time         `json:"expires_at,omitempty"`
-	RedeemedAt        *time.Time         `json:"redeemed_at,omitempty"`
-	RedeemedOrderID   string             `json:"redeemed_order_id,omitempty"`
-	Note              string             `json:"note,omitempty"`
-	CreatedAt         time.Time          `json:"created_at"`
+	ID                  string             `json:"id"`
+	CustomerProfileID   string             `json:"customer_profile_id"`
+	CouponID            string             `json:"coupon_id"`
+	Source              enums.CouponSource `json:"source"`
+	ExpiresAt           *time.Time         `json:"expires_at,omitempty"`
+	RedeemedAt          *time.Time         `json:"redeemed_at,omitempty"`
+	RedeemedOrderNumber string             `json:"redeemed_order_number,omitempty"`
+	// Deprecated: use RedeemedOrderNumber.
+	RedeemedOrderID string    `json:"redeemed_order_id,omitempty"`
+	Note            string    `json:"note,omitempty"`
+	CreatedAt       time.Time `json:"created_at"`
 }

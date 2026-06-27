@@ -9,10 +9,16 @@ import (
 )
 
 type Receipt struct {
-	ID          string                    `json:"id"`
-	OrderID     string                    `json:"order_id"`
-	DepotID     string                    `json:"depot_id,omitempty"`
-	Reference   string                    `json:"reference,omitempty"`
+	ID          string `json:"id"`
+	OrderNumber string `json:"order_number"`
+	// Deprecated: use OrderNumber.
+	OrderID   string `json:"order_id,omitempty"`
+	DepotCode string `json:"depot_code,omitempty"`
+	// Deprecated: use DepotCode.
+	DepotID      string `json:"depot_id,omitempty"`
+	Reference    string `json:"reference,omitempty"`
+	SupplierCode string `json:"supplier_code,omitempty"`
+	// Deprecated: use SupplierCode.
 	SupplierID  string                    `json:"supplier_id,omitempty"`
 	Operator    string                    `json:"operator,omitempty"`
 	Status      enums.PurchaseOrderStatus `json:"status"`
@@ -26,7 +32,9 @@ type Receipt struct {
 }
 
 type ReceiptItem struct {
-	ID           string `json:"id,omitempty"`
+	ID             string `json:"id,omitempty"`
+	ProductSKUCode string `json:"product_sku_code,omitempty"`
+	// Deprecated: use ProductSKUCode.
 	ProductID    string `json:"product_id,omitempty"`
 	SKU          string `json:"sku,omitempty"`
 	ProductName  string `json:"product_name,omitempty"`

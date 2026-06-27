@@ -10,10 +10,12 @@ import (
 
 // TerminalTransaction is one card-terminal interaction.
 type TerminalTransaction struct {
-	ID         string `json:"id"`
-	TerminalID string `json:"terminal_id"`
-	OrderID    string `json:"order_id,omitempty"`
-	PaymentID  string `json:"payment_id,omitempty"`
+	ID          string `json:"id"`
+	TerminalID  string `json:"terminal_id"`
+	OrderNumber string `json:"order_number,omitempty"`
+	// Deprecated: use OrderNumber.
+	OrderID   string `json:"order_id,omitempty"`
+	PaymentID string `json:"payment_id,omitempty"`
 
 	ProviderReference *PaymentReference         `json:"provider_reference,omitempty"`
 	ProviderDetails   *TerminalProviderDetails  `json:"provider_details,omitempty"`

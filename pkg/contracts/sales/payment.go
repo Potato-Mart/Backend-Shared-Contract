@@ -11,8 +11,10 @@ import (
 
 // Payment is the order-level record of money received against an order.
 type Payment struct {
-	ID      string       `json:"id"`
-	OrderID string       `json:"order_id"`
+	ID          string `json:"id"`
+	OrderNumber string `json:"order_number"`
+	// Deprecated: use OrderNumber.
+	OrderID string       `json:"order_id,omitempty"`
 	Amount  common.Money `json:"amount"`
 
 	// Currency is retained for backward compatibility with consumers

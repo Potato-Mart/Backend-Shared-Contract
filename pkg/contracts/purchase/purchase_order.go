@@ -21,15 +21,17 @@ type Order struct {
 	ShippingCost *common.Money             `json:"shipping_cost,omitempty"`
 	Total        common.Money              `json:"total"`
 	Reference    string                    `json:"reference,omitempty"`
-	SupplierID   string                    `json:"supplier_id,omitempty"`
-	ExpectedAt   *time.Time                `json:"expected_at,omitempty"`
-	SubmittedAt  *time.Time                `json:"submitted_at,omitempty"`
-	ConfirmedAt  *time.Time                `json:"confirmed_at,omitempty"`
-	CancelledAt  *time.Time                `json:"cancelled_at,omitempty"`
-	CompletedAt  *time.Time                `json:"completed_at,omitempty"`
-	Note         string                    `json:"note,omitempty"`
-	InternalNote string                    `json:"internal_note,omitempty"`
-	History      []shared.HistoryEntry     `json:"history,omitempty"`
+	SupplierCode string                    `json:"supplier_code,omitempty"`
+	// Deprecated: use SupplierCode.
+	SupplierID   string                `json:"supplier_id,omitempty"`
+	ExpectedAt   *time.Time            `json:"expected_at,omitempty"`
+	SubmittedAt  *time.Time            `json:"submitted_at,omitempty"`
+	ConfirmedAt  *time.Time            `json:"confirmed_at,omitempty"`
+	CancelledAt  *time.Time            `json:"cancelled_at,omitempty"`
+	CompletedAt  *time.Time            `json:"completed_at,omitempty"`
+	Note         string                `json:"note,omitempty"`
+	InternalNote string                `json:"internal_note,omitempty"`
+	History      []shared.HistoryEntry `json:"history,omitempty"`
 
 	common.AuditFields `bson:",inline"`
 }

@@ -9,11 +9,14 @@ import (
 )
 
 type OutboundShipment struct {
-	ID             string                       `json:"id"`
-	DepotID        string                       `json:"depot_id,omitempty"`
-	PickingListID  string                       `json:"picking_list_id,omitempty"`
+	ID        string `json:"id"`
+	DepotCode string `json:"depot_code,omitempty"`
+	// Deprecated: use DepotCode.
+	DepotID       string `json:"depot_id,omitempty"`
+	PickingListID string `json:"picking_list_id,omitempty"`
+	OrderNumber   string `json:"order_number,omitempty"`
+	// Deprecated: use OrderNumber.
 	OrderID        string                       `json:"order_id,omitempty"`
-	OrderNumber    string                       `json:"order_number,omitempty"`
 	CustomerName   string                       `json:"customer_name,omitempty"`
 	Address        string                       `json:"address,omitempty"`
 	State          string                       `json:"state,omitempty"`

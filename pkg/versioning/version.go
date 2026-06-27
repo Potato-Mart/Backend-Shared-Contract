@@ -2,6 +2,6 @@
 
 const (
 	ModuleName    = "Backend-Shared-Contract"
-	ModuleVersion = "v9.3.0"
+	ModuleVersion = "v9.4.0"
 	MajorVersion  = "v9"
 )

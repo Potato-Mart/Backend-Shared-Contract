@@ -9,8 +9,10 @@ import (
 )
 
 type DamageReport struct {
-	ID          string                `json:"id"`
-	ProductID   string                `json:"product_id"`
+	ID             string `json:"id"`
+	ProductSKUCode string `json:"product_sku_code"`
+	// Deprecated: use ProductSKUCode.
+	ProductID   string                `json:"product_id,omitempty"`
 	ProductName string                `json:"product_name,omitempty"`
 	DamagedQty  int                   `json:"damaged_qty"`
 	LossValue   *common.Money         `json:"loss_value"`

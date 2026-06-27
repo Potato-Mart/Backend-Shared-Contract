@@ -18,14 +18,16 @@ import (
 // inside a group; only promote a field to the top level when it must be
 // indexed or filtered hot.
 type Product struct {
-	ID          string `json:"id"`
-	SKUCode     string `json:"sku_code"`
-	SKU         string `json:"sku"`
-	Name        string `json:"name"`
-	Description string `json:"description,omitempty"`
-	BrandKey    string `json:"brand_key,omitempty"`
-	Barcode     string `json:"barcode,omitempty"`
-	Taxed       bool   `json:"taxed"`
+	ID          string                        `json:"id"`
+	SKUCode     string                        `json:"sku_code"`
+	SKU         string                        `json:"sku"`
+	Name        string                        `json:"name"`
+	Description []common.LocalizedDescription `json:"description,omitempty"`
+	Brand       []common.LocalizedName        `json:"brand,omitempty"`
+	// Deprecated: use Brand for localized display names.
+	BrandKey string `json:"brand_key,omitempty"`
+	Barcode  string `json:"barcode,omitempty"`
+	Taxed    bool   `json:"taxed"`
 
 	// Storage is the physical storage zone (DRY/CHILLED/FROZEN)
 	Storage enums.StorageType `json:"storage,omitempty"`
@@ -106,10 +108,10 @@ type Selling struct {
 	Visibility enums.PriceVisibility `json:"visibility,omitempty"`
 }
 
-// Localization groups the per-language display fields. Each is a slice
-// of BCP 47–tagged values (the established contract convention); the
-// default-language values live flat on Product (Name, Description,
-// BrandKey).
+// Localization groups secondary per-language display fields. Product
+// Description and Brand are the canonical localized display fields; these
+// slices remain for compatibility with older clients that read localization
+// as a nested group.
 type Localization struct {
 	OtherNames   []common.LocalizedName        `json:"other_names,omitempty"`
 	BrandNames   []common.LocalizedName        `json:"brand_names,omitempty"`
@@ -138,7 +140,9 @@ type Merchandising struct {
 // Identifiers groups secondary identifying / placement attributes that
 // are not hot search keys.
 type Identifiers struct {
-	Catalogue       string `json:"catalogue,omitempty"`
+	Catalogue string `json:"catalogue,omitempty"`
+	Supplier  string `json:"supplier,omitempty"`
+	// Deprecated: use Supplier. Kept only for migration decode/writeback.
 	Vendor          string `json:"vendor,omitempty"`
 	PlacingAreaCode string `json:"placing_area_code,omitempty"`
 }

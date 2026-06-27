@@ -46,10 +46,11 @@ type InvoiceCardPaymentSession struct {
 // InvoiceCardPaymentResult contains invoice/order references plus the
 // payment session needed by a storefront client to confirm card payment.
 type InvoiceCardPaymentResult struct {
-	InvoiceID     string                    `json:"invoice_id"`
-	InvoiceNumber string                    `json:"invoice_number"`
-	OrderID       string                    `json:"order_id"`
-	OrderNumber   string                    `json:"order_number"`
-	Total         common.Money              `json:"total"`
-	Payment       InvoiceCardPaymentSession `json:"payment"`
+	InvoiceID     string `json:"invoice_id"`
+	InvoiceNumber string `json:"invoice_number"`
+	OrderNumber   string `json:"order_number"`
+	// Deprecated: use OrderNumber.
+	OrderID string                    `json:"order_id,omitempty"`
+	Total   common.Money              `json:"total"`
+	Payment InvoiceCardPaymentSession `json:"payment"`
 }

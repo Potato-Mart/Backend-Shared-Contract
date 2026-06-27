@@ -11,11 +11,13 @@ import (
 // at most one published layout per depot (Version is bumped per edit).
 //
 // MongoDB collection: "warehouse_layouts" with a unique index on
-// (depot_id, version) and a partial index on (depot_id) where
+// (depot_code, version) and a partial index on (depot_code) where
 // is_published=true to fetch the live scene cheaply.
 type WarehouseLayout struct {
-	ID              string         `json:"id"`
-	DepotID         string         `json:"depot_id"`
+	ID        string `json:"id"`
+	DepotCode string `json:"depot_code"`
+	// Deprecated: use DepotCode.
+	DepotID         string         `json:"depot_id,omitempty"`
 	Name            string         `json:"name,omitempty"`
 	Version         int            `json:"version"`
 	Origin          common.Vector3 `json:"origin"`
@@ -44,9 +46,11 @@ type WarehouseLayout struct {
 // (layout_id, parent_id), (layout_id, type), and a multikey index on
 // "path" for "give me everything under aisle X" queries.
 type LayoutNode struct {
-	ID         string               `json:"id"`
-	LayoutID   string               `json:"layout_id"`
-	DepotID    string               `json:"depot_id"`
+	ID        string `json:"id"`
+	LayoutID  string `json:"layout_id"`
+	DepotCode string `json:"depot_code"`
+	// Deprecated: use DepotCode.
+	DepotID    string               `json:"depot_id,omitempty"`
 	ParentID   string               `json:"parent_id,omitempty"`
 	Path       []string             `json:"path,omitempty"` // ancestor IDs from root to immediate parent
 	Type       enums.LayoutNodeType `json:"type"`
