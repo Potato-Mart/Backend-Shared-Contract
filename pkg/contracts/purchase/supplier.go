@@ -10,10 +10,3 @@ type Supplier struct {
 	common.OrganisationDetail
 	common.AuditFields
 }
-
-// SupplierSnapshot is the lightweight supplier reference embedded on
-// purchase orders. It shares the same identity/contact base as Supplier.
-type SupplierSnapshot struct {
-	common.PartyRef
-	common.AuditFields
-}

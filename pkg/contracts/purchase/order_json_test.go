@@ -15,20 +15,16 @@ func TestOrderJSONRoundTripWithHistory(t *testing.T) {
 	expectedAt := time.Date(2026, 6, 30, 0, 0, 0, 0, time.UTC)
 	occurredAt := time.Date(2026, 6, 17, 9, 0, 0, 0, time.UTC)
 	order := purchase.Order{
-		ID:          "po_1",
-		OrderNumber: "PO-1001",
-		Supplier: purchase.SupplierSnapshot{
-			PartyRef: common.PartyRef{
-				ID:   "sup_1",
-				Name: "Supplier One",
-			},
-		},
-		Status:     enums.PurchaseOrderStatusSubmitted,
-		Currency:   "AUD",
-		Subtotal:   common.Money{AmountMinor: 10000, Currency: "AUD"},
-		TaxAmount:  common.Money{AmountMinor: 1000, Currency: "AUD"},
-		Total:      common.Money{AmountMinor: 11000, Currency: "AUD"},
-		ExpectedAt: &expectedAt,
+		ID:           "po_1",
+		OrderNumber:  "PO-1001",
+		SupplierCode: "sup_1",
+		SupplierName: "Supplier One",
+		Status:       enums.PurchaseOrderStatusSubmitted,
+		Currency:     "AUD",
+		Subtotal:     common.Money{AmountMinor: 10000, Currency: "AUD"},
+		TaxAmount:    common.Money{AmountMinor: 1000, Currency: "AUD"},
+		Total:        common.Money{AmountMinor: 11000, Currency: "AUD"},
+		ExpectedAt:   &expectedAt,
 		History: []shared.HistoryEntry{
 			{
 				OccurredAt: occurredAt,
@@ -53,8 +49,8 @@ func TestOrderJSONRoundTripWithHistory(t *testing.T) {
 	if decoded.Status != enums.PurchaseOrderStatusSubmitted {
 		t.Fatalf("status = %q, want %q", decoded.Status, enums.PurchaseOrderStatusSubmitted)
 	}
-	if decoded.Supplier.ID != "sup_1" || decoded.Supplier.Name != "Supplier One" {
-		t.Fatalf("supplier did not round-trip: %+v", decoded.Supplier)
+	if decoded.SupplierCode != "sup_1" || decoded.SupplierName != "Supplier One" {
+		t.Fatalf("supplier did not round-trip: code=%q name=%q", decoded.SupplierCode, decoded.SupplierName)
 	}
 	if decoded.ExpectedAt == nil || !decoded.ExpectedAt.Equal(expectedAt) {
 		t.Fatalf("expected_at = %v, want %s", decoded.ExpectedAt, expectedAt)

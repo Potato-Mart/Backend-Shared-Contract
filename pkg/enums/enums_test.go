@@ -28,7 +28,7 @@ func TestExportedEnumsValidateKnownValues(t *testing.T) {
 		{name: "PackingSessionStatus", valid: []stringEnum{PackingSessionStatusPending, PackingSessionStatusPacking, PackingSessionStatusPacked, PackingSessionStatusSyncPending, PackingSessionStatusResolved}, invalid: PackingSessionStatus("__invalid__")},
 		{name: "AccountType", valid: []stringEnum{AccountTypeAdminUser, AccountTypeGeneralCustomer, AccountTypeWholesaleCustomer}, invalid: AccountType("__invalid__")},
 		{name: "AuthAssuranceLevel", valid: []stringEnum{AuthAssuranceLevel1, AuthAssuranceLevel2, AuthAssuranceLevel3}, invalid: AuthAssuranceLevel("__invalid__")},
-		{name: "AuthIdentityProvider", valid: []stringEnum{AuthIdentityProviderPassword, AuthIdentityProviderGoogle, AuthIdentityProviderApple, AuthIdentityProviderAzureAD, AuthIdentityProviderOkta, AuthIdentityProviderPasskey, AuthIdentityProviderServiceToken}, invalid: AuthIdentityProvider("__invalid__")},
+		{name: "AuthIdentityProvider", valid: []stringEnum{AuthIdentityProviderPassword, AuthIdentityProviderGoogle, AuthIdentityProviderApple, AuthIdentityProviderAzureAD, AuthIdentityProviderOkta, AuthIdentityProviderPasskey, AuthIdentityProviderServiceToken, AuthIdentityProviderLine, AuthIdentityProviderDiscord, AuthIdentityProviderMicrosoft, AuthIdentityProviderOIDC}, invalid: AuthIdentityProvider("__invalid__")},
 		{name: "AuthIdentityStatus", valid: []stringEnum{AuthIdentityStatusActive, AuthIdentityStatusDisabled, AuthIdentityStatusRevoked}, invalid: AuthIdentityStatus("__invalid__")},
 		{name: "AuthMethod", valid: []stringEnum{AuthMethodPassword, AuthMethodMFA, AuthMethodPasskey, AuthMethodSSO, AuthMethodRefreshToken, AuthMethodAPIKey}, invalid: AuthMethod("__invalid__")},
 		{name: "CameraProjection", valid: []stringEnum{CameraPerspective, CameraOrthographic}, invalid: CameraProjection("__invalid__")},
@@ -113,6 +113,9 @@ func TestExportedEnumsValidateKnownValues(t *testing.T) {
 		{name: "WholesaleOrganisationStatus", valid: []stringEnum{WholesaleOrganisationStatusPending, WholesaleOrganisationStatusApproved, WholesaleOrganisationStatusSuspended, WholesaleOrganisationStatusRejected, WholesaleOrganisationStatusClosed}, invalid: WholesaleOrganisationStatus("__invalid__")},
 		{name: "WMSDraftStatus", valid: []stringEnum{WMSDraftStatusDraft, WMSDraftStatusSubmitted, WMSDraftStatusCancelled}, invalid: WMSDraftStatus("__invalid__")},
 		{name: "WMSDraftType", valid: []stringEnum{WMSDraftTypeInbound, WMSDraftTypeOutbound}, invalid: WMSDraftType("__invalid__")},
+		{name: "WalletInstrumentType", valid: []stringEnum{WalletInstrumentTypePoints, WalletInstrumentTypeGiftCard, WalletInstrumentTypeVoucher, WalletInstrumentTypeCoupon, WalletInstrumentTypeReward}, invalid: WalletInstrumentType("__invalid__")},
+		{name: "GiftCardStatus", valid: []stringEnum{GiftCardStatusActive, GiftCardStatusPartiallyRedeemed, GiftCardStatusDepleted, GiftCardStatusExpired, GiftCardStatusVoid}, invalid: GiftCardStatus("__invalid__")},
+		{name: "GiftCardTransactionReason", valid: []stringEnum{GiftCardTransactionReasonIssue, GiftCardTransactionReasonRedeem, GiftCardTransactionReasonRefund, GiftCardTransactionReasonTopUp, GiftCardTransactionReasonExpire, GiftCardTransactionReasonAdjust}, invalid: GiftCardTransactionReason("__invalid__")},
 	}
 
 	for _, tt := range tests {

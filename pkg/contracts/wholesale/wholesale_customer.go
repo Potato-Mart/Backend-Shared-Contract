@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/sales"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/shared"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
@@ -12,22 +13,26 @@ import (
 // account/persona. Organisation approval and access lifecycle live on
 // WholesaleOrganisation and OrganisationAccess.
 type WholesaleCustomer struct {
-	ID                     string                             `json:"id"`
-	CustomerNumber         string                             `json:"customer_number,omitempty"`
-	UserID                 string                             `json:"user_id,omitempty"`
-	AccountID              string                             `json:"account_id,omitempty"`
-	PrimaryAuthIdentityID  string                             `json:"primary_auth_identity_id,omitempty"`
-	AuthIdentityIDs        []string                           `json:"auth_identity_ids,omitempty"`
-	OrganisationCode       string                             `json:"organisation_code"`
-	OrganisationAccessID   string                             `json:"organisation_access_id,omitempty"`
-	BasicInfo              WholesaleCustomerBasicInfo         `json:"basic_info"`
-	Commercial             WholesaleCustomerCommercialProfile `json:"commercial"`
-	AccountProfile         WholesaleCustomerAccountProfile    `json:"account_profile"`
-	Terms                  WholesaleTerms                     `json:"terms"`
-	DefaultBillingAddress  *common.ContactAddress             `json:"default_billing_address,omitempty"`
-	DefaultShippingAddress *common.ContactAddress             `json:"default_shipping_address,omitempty"`
-	AdditionalShipTo       []common.ContactAddress            `json:"additional_ship_to,omitempty"`
-	History                []shared.HistoryEntry              `json:"history,omitempty"`
+	ID                    string                             `json:"id"`
+	CustomerNumber        string                             `json:"customer_number,omitempty"`
+	UserID                string                             `json:"user_id,omitempty"`
+	AccountID             string                             `json:"account_id,omitempty"`
+	PrimaryAuthIdentityID string                             `json:"primary_auth_identity_id,omitempty"`
+	AuthIdentityIDs       []string                           `json:"auth_identity_ids,omitempty"`
+	OrganisationCode      string                             `json:"organisation_code"`
+	OrganisationAccessID  string                             `json:"organisation_access_id,omitempty"`
+	BasicInfo             WholesaleCustomerBasicInfo         `json:"basic_info"`
+	Commercial            WholesaleCustomerCommercialProfile `json:"commercial"`
+	AccountProfile        WholesaleCustomerAccountProfile    `json:"account_profile"`
+	Terms                 WholesaleTerms                     `json:"terms"`
+	// RecentOrders is a bounded, sync-populated display strip (hard-capped,
+	// typically 5) of the organisation's latest orders for the account page.
+	// Denormalised projection only; canonical orders live in Commerce.
+	RecentOrders           []sales.OrderSummary    `json:"recent_orders,omitempty"`
+	DefaultBillingAddress  *common.ContactAddress  `json:"default_billing_address,omitempty"`
+	DefaultShippingAddress *common.ContactAddress  `json:"default_shipping_address,omitempty"`
+	AdditionalShipTo       []common.ContactAddress `json:"additional_ship_to,omitempty"`
+	History                []shared.HistoryEntry   `json:"history,omitempty"`
 
 	common.AuditFields
 	common.DataProtectionFields

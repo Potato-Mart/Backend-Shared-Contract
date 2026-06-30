@@ -12,6 +12,17 @@ const (
 	AuthIdentityProviderOkta         AuthIdentityProvider = "okta"
 	AuthIdentityProviderPasskey      AuthIdentityProvider = "passkey"
 	AuthIdentityProviderServiceToken AuthIdentityProvider = "serviceToken"
+
+	// Consumer social / OIDC providers. The model already links many
+	// providers to one user, so adding a value here is all the contract
+	// needs — the backend implements each provider's flow. azureAD remains
+	// the enterprise Entra value; microsoft is the consumer MSA login.
+	AuthIdentityProviderLine      AuthIdentityProvider = "line"
+	AuthIdentityProviderDiscord   AuthIdentityProvider = "discord"
+	AuthIdentityProviderMicrosoft AuthIdentityProvider = "microsoft"
+	// AuthIdentityProviderOIDC is a generic catch-all so a brand-new OIDC
+	// provider needs no contract change.
+	AuthIdentityProviderOIDC AuthIdentityProvider = "oidc"
 )
 
 // IsValid reports whether p is a known AuthIdentityProvider value.
@@ -20,7 +31,9 @@ func (p AuthIdentityProvider) IsValid() bool {
 	case AuthIdentityProviderPassword, AuthIdentityProviderGoogle,
 		AuthIdentityProviderApple, AuthIdentityProviderAzureAD,
 		AuthIdentityProviderOkta, AuthIdentityProviderPasskey,
-		AuthIdentityProviderServiceToken:
+		AuthIdentityProviderServiceToken, AuthIdentityProviderLine,
+		AuthIdentityProviderDiscord, AuthIdentityProviderMicrosoft,
+		AuthIdentityProviderOIDC:
 		return true
 	}
 	return false

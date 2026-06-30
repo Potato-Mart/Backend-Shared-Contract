@@ -109,14 +109,31 @@ legacy decode/backfill/fallback is removed (no backward compatibility; empty dat
   the former nested `identity` object and nested `basic_info.customer_number` are removed.
 - `product.Product` now exposes `catalogue`, `supplier_code`, and `placing_area_code` at the
   top level; the former nested `identifiers` object is removed.
+- Flattened the supplier reference on `purchase.Order`: removed the nested `supplier` object
+  (the `SupplierSnapshot` type is deleted); a purchase order references its supplier by the flat
+  `supplier_code` (required) plus an optional flat `supplier_name`. `purchase.Receipt` was
+  already flat. Supplier remains organisation-only (no login persona).
 
 ### Additive Changes / 新增
 
 - Added `common.PartyRef.Code` (`code`) as the canonical organisation/supplier business key
   (surfaces on `Supplier`, `WholesaleOrganisation`, and their snapshots/summaries).
 - `membership.Reward.Code` is now required (was optional) so `reward_code` is a reliable key.
-
-### Consumer Action / 使用方動作
+- OAuth / social sign-in: added the `line`, `discord`, `microsoft` (consumer MSA, distinct from
+  enterprise `azureAD`), and `oidc` (catch-all) `AuthIdentityProvider` values, plus an
+  `identity.UserConnectedIdentities` projection for the connected-accounts screen. The
+  one-user→many-`AuthIdentity` model already supports account linking; the backend implements
+  each provider's flow.
+- Order snapshot: added `sales.OrderSummary` + `sales.OrderLineSummary` (slim, customer-facing,
+  no audit fields), and embedded a bounded `recent_orders` strip on `customers.RetailCustomer`
+  and `wholesale.WholesaleCustomer` (hard-capped display projection, never the full history).
+- Customer wallet: new `pkg/contracts/wallet` package — `CustomerWallet` (owner-keyed read
+  aggregate linking points / gift cards / vouchers / coupons / rewards by business key),
+  `WalletInstrument`, `CustomerWalletSummary`, a stored-value `GiftCard` + `GiftCardTransaction`
+  balance ledger, and first-class `Voucher`. New enums `WalletInstrumentType`, `GiftCardStatus`,
+  `GiftCardTransactionReason`. Order-side gift-card spend is captured via
+  `sales.GiftCardRedemptionSnapshot` (+ `Order.gift_card_redemptions`). The existing points-only
+  `membership.MembershipWalletSummary` is unchanged (linked, not widened).
 
 - Update the `require` to `/v10` and rewrite imports; there is no `/v9` compatibility.
 - Send/store all cross-entity references as the code/number key; backends must populate

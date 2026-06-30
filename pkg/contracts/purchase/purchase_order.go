@@ -12,7 +12,6 @@ import (
 type Order struct {
 	ID           string                    `json:"id"`
 	OrderNumber  string                    `json:"order_number"`
-	Supplier     SupplierSnapshot          `json:"supplier"`
 	Status       enums.PurchaseOrderStatus `json:"status"`
 	Currency     string                    `json:"currency"`
 	Items        []OrderItem               `json:"items"`
@@ -21,7 +20,8 @@ type Order struct {
 	ShippingCost *common.Money             `json:"shipping_cost,omitempty"`
 	Total        common.Money              `json:"total"`
 	Reference    string                    `json:"reference,omitempty"`
-	SupplierCode string                    `json:"supplier_code,omitempty"`
+	SupplierCode string                    `json:"supplier_code"`
+	SupplierName string                    `json:"supplier_name,omitempty"`
 	ExpectedAt   *time.Time                `json:"expected_at,omitempty"`
 	SubmittedAt  *time.Time                `json:"submitted_at,omitempty"`
 	ConfirmedAt  *time.Time                `json:"confirmed_at,omitempty"`

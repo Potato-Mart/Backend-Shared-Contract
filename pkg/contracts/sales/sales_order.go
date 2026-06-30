@@ -48,15 +48,16 @@ type Order struct {
 	SurchargeAmount common.Money `json:"surcharge_amount,omitempty"`
 	Total           common.Money `json:"total"`
 
-	CouponCode        string                     `json:"coupon_code,omitempty"`
-	AppliedPromotions []AppliedPromotion         `json:"applied_promotions,omitempty"`
-	PointRedemption   *PointRedemptionSnapshot   `json:"point_redemption,omitempty"`
-	RewardRedemptions []RewardRedemptionSnapshot `json:"reward_redemptions,omitempty"`
-	TrackingNumber    string                     `json:"tracking_number,omitempty"`
-	TrackingURL       string                     `json:"tracking_url,omitempty"`
-	CustomerNote      string                     `json:"customer_note,omitempty"`
-	InternalNote      string                     `json:"internal_note,omitempty"`
-	Tags              []string                   `json:"tags,omitempty"`
+	CouponCode          string                       `json:"coupon_code,omitempty"`
+	AppliedPromotions   []AppliedPromotion           `json:"applied_promotions,omitempty"`
+	PointRedemption     *PointRedemptionSnapshot     `json:"point_redemption,omitempty"`
+	RewardRedemptions   []RewardRedemptionSnapshot   `json:"reward_redemptions,omitempty"`
+	GiftCardRedemptions []GiftCardRedemptionSnapshot `json:"gift_card_redemptions,omitempty"`
+	TrackingNumber      string                       `json:"tracking_number,omitempty"`
+	TrackingURL         string                       `json:"tracking_url,omitempty"`
+	CustomerNote        string                       `json:"customer_note,omitempty"`
+	InternalNote        string                       `json:"internal_note,omitempty"`
+	Tags                []string                     `json:"tags,omitempty"`
 
 	// ── Lifecycle timestamps ──────────────────────────────────────────
 	ConfirmedAt      *time.Time `json:"confirmed_at,omitempty"`
@@ -120,6 +121,16 @@ type RewardRedemptionSnapshot struct {
 	DiscountAmount      *common.Money              `json:"discount_amount,omitempty"`
 	ProductSKUCode      string                     `json:"product_sku_code,omitempty"`
 	VoucherCode         string                     `json:"voucher_code,omitempty"`
+}
+
+// GiftCardRedemptionSnapshot records a gift-card amount applied to an order,
+// alongside PointRedemptionSnapshot and RewardRedemptionSnapshot. The gift card
+// is referenced by its code; its re-spendable balance ledger lives in
+// pkg/contracts/wallet.
+type GiftCardRedemptionSnapshot struct {
+	GiftCardCode string       `json:"gift_card_code"`
+	Amount       common.Money `json:"amount"`
+	OrderNumber  string       `json:"order_number,omitempty"`
 }
 
 type SourceDevice struct {

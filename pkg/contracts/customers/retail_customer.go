@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/sales"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/shared"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
@@ -24,11 +25,16 @@ type RetailCustomer struct {
 	Membership            RetailCustomerMembershipProfile `json:"membership"`
 	Marketing             RetailCustomerMarketingProfile  `json:"marketing"`
 	Commerce              RetailCustomerCommerceProfile   `json:"commerce"`
-	Analytics             *RetailCustomerAnalyticsProfile `json:"analytics,omitempty"`
-	Referral              *RetailCustomerReferralProfile  `json:"referral,omitempty"`
-	DefaultShipping       *common.ContactAddress          `json:"default_shipping,omitempty"`
-	ShippingAddresses     []common.ContactAddress         `json:"shipping_addresses,omitempty"`
-	History               []shared.HistoryEntry           `json:"history,omitempty"`
+	// RecentOrders is a bounded, sync-populated display strip of the
+	// customer's latest orders (hard-capped, typically 5) for the account
+	// page. It is a denormalised projection, never the full order history;
+	// canonical orders live in Commerce, fetched by customer_number.
+	RecentOrders      []sales.OrderSummary            `json:"recent_orders,omitempty"`
+	Analytics         *RetailCustomerAnalyticsProfile `json:"analytics,omitempty"`
+	Referral          *RetailCustomerReferralProfile  `json:"referral,omitempty"`
+	DefaultShipping   *common.ContactAddress          `json:"default_shipping,omitempty"`
+	ShippingAddresses []common.ContactAddress         `json:"shipping_addresses,omitempty"`
+	History           []shared.HistoryEntry           `json:"history,omitempty"`
 
 	common.AuditFields
 	common.DataProtectionFields
