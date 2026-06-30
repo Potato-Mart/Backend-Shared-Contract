@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/product"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/wholesale"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
@@ -20,8 +21,8 @@ func TestApprovedStorefrontProductJSONShape(t *testing.T) {
 		Storage:           enums.StorageDry,
 		DisplayStatus:     "active",
 		CoverURL:          "https://example.com/potatoes.jpg",
-		CategoryKey:       "produce",
-		CategoryPath:      []string{"produce", "potatoes"},
+		Collection:        &product.CollectionRef{ID: "col_produce", Name: []common.LocalizedName{{Language: "en", Name: "Produce"}}},
+		CategoryTags:      []product.CategoryTag{{ID: "tag_potatoes", Name: []common.LocalizedName{{Language: "en", Name: "Potatoes"}}, CollectionID: "col_produce", CollectionName: []common.LocalizedName{{Language: "en", Name: "Produce"}}}},
 		Price:             common.Money{AmountMinor: 2500, Currency: "AUD"},
 		StockAvailable:    true,
 		AvailabilityState: "available",
@@ -47,8 +48,8 @@ func TestApprovedStorefrontProductJSONShape(t *testing.T) {
 		"storage",
 		"display_status",
 		"cover_url",
-		"category_key",
-		"category_path",
+		"collection",
+		"category_tags",
 		"price",
 		"stock_available",
 		"availability_state",
@@ -58,7 +59,33 @@ func TestApprovedStorefrontProductJSONShape(t *testing.T) {
 		}
 	}
 
-	for _, forbidden := range []string{"pricing", "online", "original", "cost", "current_stock", "history"} {
+	collection, ok := got["collection"].(map[string]any)
+	if !ok || collection["id"] != "col_produce" {
+		t.Fatalf("collection = %#v, want collection object with id (%s)", got["collection"], raw)
+	}
+	collectionName, ok := collection["name"].([]any)
+	if !ok || len(collectionName) != 1 || collectionName[0].(map[string]any)["name"] != "Produce" {
+		t.Fatalf("collection.name = %#v, want localized Produce (%s)", collection["name"], raw)
+	}
+
+	tags, ok := got["category_tags"].([]any)
+	if !ok || len(tags) != 1 {
+		t.Fatalf("category_tags = %#v, want one tag (%s)", got["category_tags"], raw)
+	}
+	tag, ok := tags[0].(map[string]any)
+	if !ok || tag["id"] != "tag_potatoes" || tag["collection_id"] != "col_produce" {
+		t.Fatalf("category_tags[0] = %#v, want id and collection_id (%s)", tags[0], raw)
+	}
+	tagName, ok := tag["name"].([]any)
+	if !ok || len(tagName) != 1 || tagName[0].(map[string]any)["name"] != "Potatoes" {
+		t.Fatalf("category_tags[0].name = %#v, want localized Potatoes (%s)", tag["name"], raw)
+	}
+	tagCollectionName, ok := tag["collection_name"].([]any)
+	if !ok || len(tagCollectionName) != 1 || tagCollectionName[0].(map[string]any)["name"] != "Produce" {
+		t.Fatalf("category_tags[0].collection_name = %#v, want localized Produce (%s)", tag["collection_name"], raw)
+	}
+
+	for _, forbidden := range []string{"pricing", "online", "original", "cost", "current_stock", "history", "catalogue", "category_key", "category_path", "collection_id", "collection_name"} {
 		if _, ok := got[forbidden]; ok {
 			t.Fatalf("approved wholesale storefront product leaked %q in %s", forbidden, raw)
 		}

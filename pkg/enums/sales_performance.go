@@ -1,7 +1,7 @@
 package enums
 
 // SalesPerformance classifies how well a product is selling relative to
-// the rest of the catalogue. It replaces the former free-form
+// the rest of the product set. It replaces the former free-form
 // "freshness_status" string (which the storefront had repurposed for an
 // expiry indicator). It is a merchandising signal — typically derived
 // from sales velocity (e.g. avg_weekly_sales) by an analytics job — used

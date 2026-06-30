@@ -5,9 +5,10 @@ import (
 )
 
 type CategoryTag struct {
-	ID           string `json:"id"`
-	Name         string `json:"name"`
-	CollectionID string `json:"collection_id"`
+	ID             string                 `json:"id"`
+	Name           []common.LocalizedName `json:"name"`
+	CollectionID   string                 `json:"collection_id"`
+	CollectionName []common.LocalizedName `json:"collection_name"`
 
 	common.AuditFields
 }

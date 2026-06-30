@@ -30,7 +30,7 @@ func (r WholesaleBuyerRole) IsValid() bool {
 type WholesalePermission string
 
 const (
-	WholesalePermissionCatalogueView      WholesalePermission = "catalogue.view"
+	WholesalePermissionProductsView       WholesalePermission = "products.view"
 	WholesalePermissionCartWrite          WholesalePermission = "cart.write"
 	WholesalePermissionCheckoutSubmit     WholesalePermission = "checkout.submit"
 	WholesalePermissionOrdersViewOwn      WholesalePermission = "orders.view_own"
@@ -52,7 +52,7 @@ func (p WholesalePermission) String() string { return string(p) }
 
 func (p WholesalePermission) IsValid() bool {
 	switch p {
-	case WholesalePermissionCatalogueView,
+	case WholesalePermissionProductsView,
 		WholesalePermissionCartWrite,
 		WholesalePermissionCheckoutSubmit,
 		WholesalePermissionOrdersViewOwn,
@@ -80,7 +80,7 @@ func PermissionsForWholesaleBuyerRole(role WholesaleBuyerRole) []WholesalePermis
 	switch role {
 	case WholesaleBuyerRoleOwner:
 		return []WholesalePermission{
-			WholesalePermissionCatalogueView,
+			WholesalePermissionProductsView,
 			WholesalePermissionCartWrite,
 			WholesalePermissionCheckoutSubmit,
 			WholesalePermissionOrdersViewOwn,
@@ -99,7 +99,7 @@ func PermissionsForWholesaleBuyerRole(role WholesaleBuyerRole) []WholesalePermis
 		}
 	case WholesaleBuyerRoleBuyer:
 		return []WholesalePermission{
-			WholesalePermissionCatalogueView,
+			WholesalePermissionProductsView,
 			WholesalePermissionCartWrite,
 			WholesalePermissionCheckoutSubmit,
 			WholesalePermissionOrdersViewOwn,
@@ -113,7 +113,7 @@ func PermissionsForWholesaleBuyerRole(role WholesaleBuyerRole) []WholesalePermis
 		}
 	case WholesaleBuyerRoleFinance:
 		return []WholesalePermission{
-			WholesalePermissionCatalogueView,
+			WholesalePermissionProductsView,
 			WholesalePermissionOrdersViewOwn,
 			WholesalePermissionInvoicesViewOwn,
 			WholesalePermissionInvoicesViewOrg,
@@ -122,7 +122,7 @@ func PermissionsForWholesaleBuyerRole(role WholesaleBuyerRole) []WholesalePermis
 		}
 	case WholesaleBuyerRoleReadOnly:
 		return []WholesalePermission{
-			WholesalePermissionCatalogueView,
+			WholesalePermissionProductsView,
 			WholesalePermissionOrdersViewOwn,
 			WholesalePermissionInvoicesViewOwn,
 			WholesalePermissionAccountView,

@@ -57,7 +57,7 @@ const (
 	// User
 	CodeUserEmailTaken Code = "USER_EMAIL_TAKEN"
 
-	// Catalogue
+	// Products
 	CodeSKUCodeTaken         Code = "SKU_CODE_TAKEN"
 	CodePlacingAreaCodeTaken Code = "PLACING_AREA_CODE_TAKEN"
 	CodeProductCodeTaken     Code = "PRODUCT_CODE_TAKEN"

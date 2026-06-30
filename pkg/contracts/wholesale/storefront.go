@@ -10,14 +10,14 @@ import (
 
 const (
 	// PathApprovedStorefrontProducts is the authenticated wholesale storefront
-	// catalogue endpoint for approved buyers.
+	// product endpoint for approved buyers.
 	PathApprovedStorefrontProducts = "/v1/storefront/wholesale/approved/products"
-	// PathInternalApprovedStorefrontProducts is the service-auth catalogue
+	// PathInternalApprovedStorefrontProducts is the service-auth product
 	// resolver Commerce uses to reprice wholesale cart lines server-side.
-	PathInternalApprovedStorefrontProducts = "/v1/internal/catalog/wholesale/products"
+	PathInternalApprovedStorefrontProducts = "/v1/internal/wholesale/products"
 )
 
-// ApprovedStorefrontProduct is the authenticated wholesale catalogue projection
+// ApprovedStorefrontProduct is the authenticated wholesale product projection
 // for approved B2B buyers. It intentionally exposes one effective wholesale
 // price, not the product.Pricing object, and omits operational stock quantity.
 type ApprovedStorefrontProduct struct {
@@ -31,14 +31,12 @@ type ApprovedStorefrontProduct struct {
 	Brand              []common.LocalizedName        `json:"brand,omitempty"`
 	Supplier           string                        `json:"supplier,omitempty"`
 	BrandNames         []common.LocalizedName        `json:"brand_names,omitempty"`
-	Catalogue          string                        `json:"catalogue,omitempty"`
 	Storage            enums.StorageType             `json:"storage,omitempty"`
 	SalesPerformance   enums.SalesPerformance        `json:"sales_performance,omitempty"`
 	DisplayStatus      string                        `json:"display_status,omitempty"`
 	CoverURL           string                        `json:"cover_url,omitempty"`
 	ImageURLs          []string                      `json:"image_urls,omitempty"`
-	CategoryKey        string                        `json:"category_key,omitempty"`
-	CategoryPath       []string                      `json:"category_path,omitempty"`
+	Collection         *product.CollectionRef        `json:"collection,omitempty"`
 	CategoryTags       []product.CategoryTag         `json:"category_tags,omitempty"`
 	LifecycleTags      []string                      `json:"lifecycle_tags,omitempty"`
 	NewExpiresAt       *time.Time                    `json:"new_expires_at,omitempty"`

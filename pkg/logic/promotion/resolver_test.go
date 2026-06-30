@@ -4,6 +4,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/product"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/promotion"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
@@ -26,16 +28,24 @@ func targetedPromo(id string, class enums.PromotionClass, scope enums.DiscountSc
 	switch scope {
 	case enums.DiscountScopeProduct:
 		p.TargetProductSKUCode = ref
-	case enums.DiscountScopeCategory:
-		p.TargetCategoryKey = ref
+	case enums.DiscountScopeCategoryTag:
+		p.TargetCategoryTagID = ref
+		p.TargetCategoryTagName = localizedName(ref + " name")
 	}
 	return p
+}
+
+func localizedName(name string) []common.LocalizedName {
+	return []common.LocalizedName{{Language: "en", Name: name}}
 }
 
 func porkBelly() ResolveTarget {
 	return ResolveTarget{
 		ProductSKUCode: "PORK-BELLY-001",
-		CategoryPath:   []string{"grocery", "meat", "pork"},
+		CategoryTags: []product.CategoryTag{
+			{ID: "tag_pork", Name: localizedName("Pork"), CollectionID: "col_meat", CollectionName: localizedName("Meat")},
+			{ID: "tag_hotpot", Name: localizedName("Hotpot"), CollectionID: "col_featured", CollectionName: localizedName("Featured")},
+		},
 		UnitPriceMinor: 1000,
 		Currency:       "AUD",
 		Now:            resolverNow,
@@ -78,72 +88,53 @@ func TestResolveSpecialOverridesNormalSameProduct(t *testing.T) {
 	}
 }
 
-// 3. SPECIAL_CAMPAIGN overrides NORMAL_PROMOTION for the same category.
-func TestResolveSpecialOverridesNormalSameCategory(t *testing.T) {
+// 3. SPECIAL_CAMPAIGN overrides NORMAL_PROMOTION for the same category tag.
+func TestResolveSpecialOverridesNormalSameCategoryTag(t *testing.T) {
 	active := []promotion.Promotion{
-		targetedPromo("prm_normal_cat", enums.PromotionClassNormal, enums.DiscountScopeCategory, "pork"),
-		targetedPromo("prm_special_cat", enums.PromotionClassSpecialCampaign, enums.DiscountScopeCategory, "pork"),
+		targetedPromo("prm_normal_tag", enums.PromotionClassNormal, enums.DiscountScopeCategoryTag, "tag_pork"),
+		targetedPromo("prm_special_tag", enums.PromotionClassSpecialCampaign, enums.DiscountScopeCategoryTag, "tag_pork"),
 	}
 	eff := ResolveEffective(active, porkBelly())
-	if eff == nil || eff.PromotionID != "prm_special_cat" {
-		t.Fatalf("effective = %+v, want prm_special_cat", eff)
+	if eff == nil || eff.PromotionID != "prm_special_tag" {
+		t.Fatalf("effective = %+v, want prm_special_tag", eff)
 	}
-	if eff.OverriddenPromotionID != "prm_normal_cat" {
-		t.Errorf("overridden id = %q, want prm_normal_cat", eff.OverriddenPromotionID)
+	if eff.OverriddenPromotionID != "prm_normal_tag" {
+		t.Errorf("overridden id = %q, want prm_normal_tag", eff.OverriddenPromotionID)
 	}
 }
 
-// 4. Product-level promotion beats category-level within the same class.
-func TestResolveProductBeatsCategoryWithinClass(t *testing.T) {
+// 4. Product-level promotion beats category-tag-level within the same class.
+func TestResolveProductBeatsCategoryTagWithinClass(t *testing.T) {
 	active := []promotion.Promotion{
-		targetedPromo("prm_cat", enums.PromotionClassNormal, enums.DiscountScopeCategory, "pork"),
+		targetedPromo("prm_tag", enums.PromotionClassNormal, enums.DiscountScopeCategoryTag, "tag_pork"),
 		targetedPromo("prm_prod", enums.PromotionClassNormal, enums.DiscountScopeProduct, "PORK-BELLY-001"),
 	}
 	eff := ResolveEffective(active, porkBelly())
 	if eff == nil || eff.PromotionID != "prm_prod" {
 		t.Fatalf("effective = %+v, want prm_prod", eff)
 	}
-	// And a category special_campaign still beats a product normal_promotion.
-	active = append(active, targetedPromo("prm_cat_special", enums.PromotionClassSpecialCampaign, enums.DiscountScopeCategory, "pork"))
+	// And a category-tag special_campaign still beats a product normal_promotion.
+	active = append(active, targetedPromo("prm_tag_special", enums.PromotionClassSpecialCampaign, enums.DiscountScopeCategoryTag, "tag_pork"))
 	eff = ResolveEffective(active, porkBelly())
-	if eff == nil || eff.PromotionID != "prm_cat_special" {
-		t.Fatalf("effective = %+v, want prm_cat_special", eff)
+	if eff == nil || eff.PromotionID != "prm_tag_special" {
+		t.Fatalf("effective = %+v, want prm_tag_special", eff)
 	}
 }
 
-// 5. Category promotion applies to products in the target category.
-func TestResolveCategoryPromotionAppliesToMember(t *testing.T) {
-	active := []promotion.Promotion{targetedPromo("prm_cat", enums.PromotionClassNormal, enums.DiscountScopeCategory, "pork")}
-	if eff := ResolveEffective(active, porkBelly()); eff == nil || eff.PromotionID != "prm_cat" {
-		t.Fatalf("effective = %+v, want prm_cat", eff)
+// 5. Category-tag promotion applies to products with the target tag ID.
+func TestResolveCategoryTagPromotionAppliesToMember(t *testing.T) {
+	active := []promotion.Promotion{targetedPromo("prm_tag", enums.PromotionClassNormal, enums.DiscountScopeCategoryTag, "tag_pork")}
+	if eff := ResolveEffective(active, porkBelly()); eff == nil || eff.PromotionID != "prm_tag" {
+		t.Fatalf("effective = %+v, want prm_tag", eff)
 	}
 	other := porkBelly()
-	other.CategoryPath = []string{"grocery", "veg"}
+	other.CategoryTags = []product.CategoryTag{{ID: "tag_veg", Name: localizedName("Vegetables"), CollectionID: "col_produce", CollectionName: localizedName("Produce")}}
 	if eff := ResolveEffective(active, other); eff != nil {
 		t.Fatalf("effective = %+v for non-member, want nil", eff)
 	}
 }
 
-// 6. Category promotion applies to descendant categories by default,
-// and stops doing so when target_includes_descendants=false.
-func TestResolveCategoryPromotionDescendants(t *testing.T) {
-	p := targetedPromo("prm_meat", enums.PromotionClassNormal, enums.DiscountScopeCategory, "meat")
-	if eff := ResolveEffective([]promotion.Promotion{p}, porkBelly()); eff == nil || eff.PromotionID != "prm_meat" {
-		t.Fatalf("effective = %+v, want prm_meat (descendant match)", eff)
-	}
-	off := false
-	p.TargetIncludesDescendants = &off
-	if eff := ResolveEffective([]promotion.Promotion{p}, porkBelly()); eff != nil {
-		t.Fatalf("effective = %+v with descendants disabled, want nil (leaf is pork, not meat)", eff)
-	}
-	// Exact leaf still matches with descendants disabled.
-	p.TargetCategoryKey = "pork"
-	if eff := ResolveEffective([]promotion.Promotion{p}, porkBelly()); eff == nil {
-		t.Fatal("effective = nil for exact leaf with descendants disabled, want match")
-	}
-}
-
-// 7. Untargeted (cart-wide / SKU-less) promotions never match the
+// 6. Untargeted (cart-wide / SKU-less) promotions never match the
 // product price resolver — there is no SKU-level targeting.
 func TestResolveIgnoresUntargetedPromotions(t *testing.T) {
 	p := targetedPromo("prm_cartwide", enums.PromotionClassNormal, "", "")

@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v10.1.0` | 2026-06-30 | Minor | Product category/catalogue cleanup: removes `category_key`, `category_path`, `catalogue`, and nested `merchandising`; adds product/wholesale `collection` object and top-level localized `category_tags`; renames product-list service auth and wholesale permissions from catalog/catalogue to products; replaces category promotion/coupon targeting with category-tag ID/localized-name contracts. Breaking wire-shape change shipped under requested `v10.1.0`. |
 | `v10.0.0` | 2026-06-30  | Major | Breaking `/v9`→`/v10` module path. Completes the canonical reference migration: removes every deprecated id/legacy alias and converts remaining cross-struct references to code/number business keys (product→`sku_code`, order→`order_number`, depot→`depot_code`, supplier→`supplier_code`, coupon→`coupon_code`, reward→`reward_code`, retail customer→`customer_number`, wholesale org→`organisation_code`, device→`device_key`). Removes storage-driver struct tags, flattens customer identity keys and product secondary keys, adds `common.PartyRef.Code`, makes `Reward.Code` required, and removes legacy product/payment/user compatibility fields. Hard cutover — no legacy decode/fallback. |
 | `v9.4.0` | 2026-06-27   | Minor | Canonical code/number reference migration: product refs add `product_sku_code`, order refs add `order_number`, depot/supplier refs add code fields, product display fields use localized description/brand arrays, and product vendor is renamed to supplier with legacy decode/writeback compatibility |
 | `v9.3.0` | 2026-06-27   | Minor | Added required SKU `primary_name` as a singular `common.LocalizedName`; SKU `other_names` remains as optional alternate localized names |
@@ -71,6 +72,47 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v10.1.0 (2026-06-30) - Product Category/Collection Contract Cleanup / 商品分類與集合契約整理
+
+Release date: 2026-06-30
+
+This release replaces the legacy product category/catalogue shape with collection and
+category-tag contracts. The database is empty, so no legacy decode, fallback, or migration
+compatibility fields are retained. Although these are breaking JSON and enum wire changes,
+the release is published as the requested `v10.1.0` metadata version and keeps the `/v10`
+module path.
+
+### Breaking Changes / 破壞性變更
+
+- `product.Product` removes `category_key`, `category_path`, `catalogue`, and the nested
+  `merchandising` group.
+- Product and wholesale product projections now expose category/collection data as a lightweight
+  `collection` object plus top-level `category_tags`.
+- `product.Collection.name`, `product.CollectionRef.name`, `product.CategoryTag.name`, and
+  `product.CategoryTag.collection_name` are `[]common.LocalizedName`.
+- `product.CategoryTag` now carries `id`, localized `name`, `collection_id`, and localized
+  `collection_name`.
+- Product-list auth naming changed from catalog/catalogue to products:
+  `serviceauth.ScopeProductsRead` uses `products:read`, and
+  `enums.WholesalePermissionProductsView` uses `products.view`.
+- The internal wholesale product resolver path changed from `/v1/internal/catalog/wholesale/products`
+  to `/v1/internal/wholesale/products`.
+- Promotion targeting changes from category paths to category tags:
+  `DiscountScopeCategoryTag` uses wire value `category_tag`,
+  `target_category_tag_id` and localized `target_category_tag_name` replace
+  `target_category_key`, and descendant matching is removed.
+- Coupon targeting changes from `specific_categories` / `category_ids` to
+  `specific_category_tags` / `category_tags`.
+
+### Consumer Action / 使用方動作
+
+- Update all services and clients that read product category/catalogue fields to use the
+  product `collection` object and localized category tag names.
+- Update service-token scope checks from `catalog:read` to `products:read`.
+- Update wholesale storefront permission checks from `catalogue.view` to `products.view`.
+- Update promotion and coupon rule management to store category-tag IDs and names, not
+  category keys, category paths, or descendant flags.
 
 ## v10.0.0 (2026-06-30) - ID Reference Removal / 移除 ID 參照（改用代碼與單號）
 

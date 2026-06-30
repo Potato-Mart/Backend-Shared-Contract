@@ -3,7 +3,7 @@ package pricing
 // This file defines the effective-promotion lookup (v5.2.0, ADR 0001
 // family): resolving which single targeted promotion prices one product
 // right now, with the fixed precedence product special_campaign >
-// category special_campaign > product normal_promotion > category
+// category-tag special_campaign > product normal_promotion > category-tag
 // normal_promotion > none.
 //
 // Provider: Backend-Management (owner of promotion rules). Consumers:

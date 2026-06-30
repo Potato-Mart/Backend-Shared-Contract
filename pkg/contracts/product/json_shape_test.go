@@ -20,7 +20,8 @@ func TestProductJSONIncludesTaxed(t *testing.T) {
 		},
 		Brand:           []common.LocalizedName{{Language: "en", Name: "Localized brand"}},
 		Taxed:           true,
-		Catalogue:       "winter",
+		Collection:      &CollectionRef{ID: "col_frozen", Name: []common.LocalizedName{{Language: "en", Name: "Frozen"}}},
+		CategoryTags:    []CategoryTag{{ID: "tag_hotpot", Name: []common.LocalizedName{{Language: "en", Name: "Hotpot"}}, CollectionID: "col_frozen", CollectionName: []common.LocalizedName{{Language: "en", Name: "Frozen"}}}},
 		SupplierCode:    "sup_1",
 		PlacingAreaCode: "A1",
 	})
@@ -33,17 +34,52 @@ func TestProductJSONIncludesTaxed(t *testing.T) {
 	if !strings.Contains(string(body), `"description":[`) || !strings.Contains(string(body), `"brand":[`) {
 		t.Fatalf("Product JSON = %s, want localized description and brand arrays", body)
 	}
-	for _, keyValue := range []string{
-		`"catalogue":"winter"`,
-		`"supplier_code":"sup_1"`,
-		`"placing_area_code":"A1"`,
-	} {
+
+	var got map[string]any
+	if err := json.Unmarshal(body, &got); err != nil {
+		t.Fatalf("unmarshal product JSON: %v", err)
+	}
+	collection, ok := got["collection"].(map[string]any)
+	if !ok || collection["id"] != "col_frozen" {
+		t.Fatalf("Product JSON = %s, want collection object with id", body)
+	}
+	collectionName, ok := collection["name"].([]any)
+	if !ok || len(collectionName) != 1 || collectionName[0].(map[string]any)["name"] != "Frozen" {
+		t.Fatalf("Product JSON = %s, want localized collection.name", body)
+	}
+	tags, ok := got["category_tags"].([]any)
+	if !ok || len(tags) != 1 {
+		t.Fatalf("Product JSON = %s, want one category tag", body)
+	}
+	tag, ok := tags[0].(map[string]any)
+	if !ok || tag["id"] != "tag_hotpot" || tag["collection_id"] != "col_frozen" {
+		t.Fatalf("Product JSON = %s, want category tag id and collection_id", body)
+	}
+	tagName, ok := tag["name"].([]any)
+	if !ok || len(tagName) != 1 || tagName[0].(map[string]any)["name"] != "Hotpot" {
+		t.Fatalf("Product JSON = %s, want localized category tag name", body)
+	}
+	tagCollectionName, ok := tag["collection_name"].([]any)
+	if !ok || len(tagCollectionName) != 1 || tagCollectionName[0].(map[string]any)["name"] != "Frozen" {
+		t.Fatalf("Product JSON = %s, want localized category tag collection_name", body)
+	}
+	for _, keyValue := range []string{`"supplier_code":"sup_1"`, `"placing_area_code":"A1"`} {
 		if !strings.Contains(string(body), keyValue) {
 			t.Fatalf("Product JSON = %s, want flat %s", body, keyValue)
 		}
 	}
+	for _, legacyTopLevelKey := range []string{"collection_id", "collection_name"} {
+		if _, ok := got[legacyTopLevelKey]; ok {
+			t.Fatalf("Product JSON = %s, should not include top-level %s", body, legacyTopLevelKey)
+		}
+	}
 	if strings.Contains(string(body), `"identifiers"`) {
 		t.Fatalf("Product JSON = %s, should not include nested identifiers", body)
+	}
+	for _, legacyKey := range []string{`"catalogue"`, `"category_key"`, `"category_path"`, `"merchandising"`} {
+		if strings.Contains(string(body), legacyKey) {
+			t.Fatalf("Product JSON = %s, should not include legacy %s", body, legacyKey)
+		}
 	}
 }
 

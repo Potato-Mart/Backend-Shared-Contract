@@ -28,7 +28,7 @@ const (
 	ScopeStockCommit        Scope = "stock:commit"
 	ScopeStockRelease       Scope = "stock:release"
 	ScopePricingQuote       Scope = "pricing:quote"
-	ScopeCatalogRead        Scope = "catalog:read"
+	ScopeProductsRead       Scope = "products:read"
 	ScopeCustomersRead      Scope = "customers:read"
 	ScopeSuppliersRead      Scope = "suppliers:read"
 	ScopeMembershipRead     Scope = "membership:read"
@@ -43,7 +43,7 @@ func (s Scope) String() string { return string(s) }
 func AllScopes() []Scope {
 	return []Scope{
 		ScopeStockReserve, ScopeStockCommit, ScopeStockRelease,
-		ScopePricingQuote, ScopeCatalogRead, ScopeCustomersRead, ScopeSuppliersRead,
+		ScopePricingQuote, ScopeProductsRead, ScopeCustomersRead, ScopeSuppliersRead,
 		ScopeMembershipRead, ScopeMembershipPoints, ScopeMembershipRedeem,
 		ScopeWholesaleTermsRead,
 	}

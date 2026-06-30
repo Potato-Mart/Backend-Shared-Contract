@@ -1,17 +1,17 @@
 package enums
 
-// CouponAppliesTo restricts which products or categories a coupon covers.
+// CouponAppliesTo restricts which products or category tags a coupon covers.
 type CouponAppliesTo string
 
 const (
-	CouponAppliesToAll                CouponAppliesTo = "all"
-	CouponAppliesToSpecificProducts   CouponAppliesTo = "specific_products"
-	CouponAppliesToSpecificCategories CouponAppliesTo = "specific_categories"
+	CouponAppliesToAll                  CouponAppliesTo = "all"
+	CouponAppliesToSpecificProducts     CouponAppliesTo = "specific_products"
+	CouponAppliesToSpecificCategoryTags CouponAppliesTo = "specific_category_tags"
 )
 
 func (c CouponAppliesTo) IsValid() bool {
 	switch c {
-	case CouponAppliesToAll, CouponAppliesToSpecificProducts, CouponAppliesToSpecificCategories:
+	case CouponAppliesToAll, CouponAppliesToSpecificProducts, CouponAppliesToSpecificCategoryTags:
 		return true
 	}
 	return false

@@ -7,7 +7,7 @@ package enums
 //	fixed_amount  -> Value is a flat amount in the store's currency.
 //	fixed_price   -> Value is the final sale price (major units) of the
 //	                 targeted product; only meaningful on promotions with
-//	                 target_scope=product or target_scope=category.
+//	                 target_scope=product or target_scope=category_tag.
 type DiscountType string
 
 const (
@@ -31,14 +31,14 @@ func (d DiscountType) String() string { return string(d) }
 type DiscountScope string
 
 const (
-	DiscountScopeAll      DiscountScope = "all"
-	DiscountScopeCategory DiscountScope = "category"
-	DiscountScopeProduct  DiscountScope = "product"
+	DiscountScopeAll         DiscountScope = "all"
+	DiscountScopeCategoryTag DiscountScope = "category_tag"
+	DiscountScopeProduct     DiscountScope = "product"
 )
 
 func (d DiscountScope) IsValid() bool {
 	switch d {
-	case DiscountScopeAll, DiscountScopeCategory, DiscountScopeProduct:
+	case DiscountScopeAll, DiscountScopeCategoryTag, DiscountScopeProduct:
 		return true
 	}
 	return false

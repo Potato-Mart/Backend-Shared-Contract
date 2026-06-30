@@ -14,7 +14,7 @@ import (
 // hot identity, filter, and sort keys that stay directly indexable for
 // fast fetch/sort/search — and a handful of nested GROUP structs that
 // keep the remaining attributes tidy (pricing, localization, media,
-// physical, merchandising). Keep new descriptive attributes
+// physical). Keep new descriptive attributes
 // inside a group; only promote a field to the top level when it must be
 // indexed or filtered hot.
 type Product struct {
@@ -37,17 +37,10 @@ type Product struct {
 	// (hot/normal/slow). Replaces the former freshness_status string.
 	SalesPerformance enums.SalesPerformance `json:"sales_performance,omitempty"`
 
-	// CategoryKey references the canonical node of the ops product-
-	// category tree (ops_product_categories). CategoryPath is the
-	// denormalised root→leaf key chain (leaf last, includes CategoryKey)
-	// maintained by Backend-Operations on every category assignment so
-	// promotion targeting and storefront breadcrumbs never re-walk the
-	// tree.
-	CategoryKey     string   `json:"category_key,omitempty"`
-	CategoryPath    []string `json:"category_path,omitempty"`
-	Catalogue       string   `json:"catalogue,omitempty"`
-	SupplierCode    string   `json:"supplier_code,omitempty"`
-	PlacingAreaCode string   `json:"placing_area_code,omitempty"`
+	Collection      *CollectionRef `json:"collection,omitempty"`
+	CategoryTags    []CategoryTag  `json:"category_tags,omitempty"`
+	SupplierCode    string         `json:"supplier_code,omitempty"`
+	PlacingAreaCode string         `json:"placing_area_code,omitempty"`
 
 	// CurrentStock is a denormalised cache of total sellable stock; the
 	// authoritative quantities live in the warehouse subsystem. It backs
@@ -69,11 +62,10 @@ type Product struct {
 	Pricing Pricing `json:"pricing"`
 	// Selling is an optional pointer (unlike the always-present groups
 	// below) so a product with no channel/buyer sellability rules omits it.
-	Selling       *Selling      `json:"selling,omitempty"`
-	Localization  Localization  `json:"localization,omitempty"`
-	Media         Media         `json:"media,omitempty"`
-	Physical      Physical      `json:"physical,omitempty"`
-	Merchandising Merchandising `json:"merchandising,omitempty"`
+	Selling      *Selling     `json:"selling,omitempty"`
+	Localization Localization `json:"localization,omitempty"`
+	Media        Media        `json:"media,omitempty"`
+	Physical     Physical     `json:"physical,omitempty"`
 
 	// History is for product master-data changes only. Stock changes are
 	// represented as warehouse.StockMovement records.
@@ -128,11 +120,4 @@ type Media struct {
 type Physical struct {
 	Dimensions *common.Dimensions `json:"dimensions,omitempty"`
 	Weight     *common.Weight     `json:"weight,omitempty"`
-}
-
-// Merchandising groups storefront merchandising attributes that are not
-// the canonical category tree. CategoryTags are first-class labels (e.g.
-// Hotpot, Fresh Food) that complement — never replace — CategoryKey.
-type Merchandising struct {
-	CategoryTags []CategoryTag `json:"category_tags,omitempty"`
 }

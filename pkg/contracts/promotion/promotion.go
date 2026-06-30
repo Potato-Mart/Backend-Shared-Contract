@@ -21,21 +21,17 @@ type Promotion struct {
 	// Empty is read as normal_promotion so existing documents keep their
 	// behaviour; see EffectiveClass.
 	Class enums.PromotionClass `json:"class,omitempty"`
-	// TargetScope narrows the promotion to one product or one category
-	// subtree. Empty / "all" applies cart-wide.
+	// TargetScope narrows the promotion to one product or one category tag.
+	// Empty / "all" applies cart-wide.
 	// Product targets are keyed by the product SKU code.
 	TargetScope enums.DiscountScope `json:"target_scope,omitempty"`
 	// TargetProductSKUCode is required when TargetScope is "product".
 	TargetProductSKUCode string `json:"target_product_sku_code,omitempty"`
-	// TargetCategoryKey is required when TargetScope is "category". It
-	// references a node of the ops product-category tree by key; the
-	// promotion applies to every product whose category path contains
-	// the key (see TargetIncludesDescendants).
-	TargetCategoryKey string `json:"target_category_key,omitempty"`
-	// TargetIncludesDescendants controls whether a category target also
-	// covers descendant categories. nil means true (the default rule:
-	// category promotions apply to the whole subtree).
-	TargetIncludesDescendants *bool `json:"target_includes_descendants,omitempty"`
+	// TargetCategoryTagID and TargetCategoryTagName are required when
+	// TargetScope is "category_tag". Matching uses the ID; the name keeps
+	// the target displayable in rule-management UIs and audit history.
+	TargetCategoryTagID   string                 `json:"target_category_tag_id,omitempty"`
+	TargetCategoryTagName []common.LocalizedName `json:"target_category_tag_name,omitempty"`
 
 	// ── Trigger conditions ────────────────────────────────────────────
 	MinCartAmount           *common.Money `json:"min_cart_amount,omitempty"`

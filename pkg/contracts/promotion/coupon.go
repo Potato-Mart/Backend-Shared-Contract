@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/product"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/shared"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
@@ -23,7 +24,7 @@ type Coupon struct {
 
 	AppliesTo       enums.CouponAppliesTo `json:"applies_to"`
 	ProductSKUCodes []string              `json:"product_sku_codes,omitempty"`
-	CategoryIDs     []string              `json:"category_ids,omitempty"`
+	CategoryTags    []product.CategoryTag `json:"category_tags,omitempty"`
 	History         []shared.HistoryEntry `json:"history,omitempty"`
 
 	common.AuditFields

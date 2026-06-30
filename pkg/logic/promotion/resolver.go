@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/product"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/promotion"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
@@ -17,12 +18,11 @@ import (
 // normal_promotion.
 const OverrideReasonSpecialCampaign = "special_campaign overrides normal_promotion"
 
-// ResolveTarget describes the product being priced: its SKU code, canonical
-// category path (root→leaf category keys, leaf last), the undiscounted unit
-// price in minor units, and the pricing instant.
+// ResolveTarget describes the product being priced: its SKU code, category
+// tags, the undiscounted unit price in minor units, and the pricing instant.
 type ResolveTarget struct {
 	ProductSKUCode string
-	CategoryPath   []string
+	CategoryTags   []product.CategoryTag
 	UnitPriceMinor int64
 	Currency       string
 	Now            time.Time
@@ -37,34 +37,25 @@ func EffectiveClass(p promotion.Promotion) enums.PromotionClass {
 	return enums.PromotionClassNormal
 }
 
-// IncludesDescendants reports whether a category-targeted promotion also covers
-// descendant categories. Defaults to true when unset.
-func IncludesDescendants(p promotion.Promotion) bool {
-	if p.TargetIncludesDescendants == nil {
-		return true
-	}
-	return *p.TargetIncludesDescendants
-}
-
-// IsTargeted reports whether the promotion is narrowed to a product or category
-// rather than the cart-wide behaviour.
+// IsTargeted reports whether the promotion is narrowed to a product or
+// category tag rather than the cart-wide behaviour.
 func IsTargeted(p promotion.Promotion) bool {
-	return p.TargetScope == enums.DiscountScopeProduct || p.TargetScope == enums.DiscountScopeCategory
+	return p.TargetScope == enums.DiscountScopeProduct || p.TargetScope == enums.DiscountScopeCategoryTag
 }
 
-// precedence tiers, lower wins. Product beats category within a class;
+// precedence tiers, lower wins. Product beats category tag within a class;
 // special_campaign beats normal_promotion across classes:
 //
 //	0: product-level special_campaign
-//	1: category-level special_campaign
+//	1: category-tag-level special_campaign
 //	2: product-level normal_promotion
-//	3: category-level normal_promotion
+//	3: category-tag-level normal_promotion
 func tierOf(p promotion.Promotion) int {
 	t := 0
 	if EffectiveClass(p) != enums.PromotionClassSpecialCampaign {
 		t += 2
 	}
-	if p.TargetScope == enums.DiscountScopeCategory {
+	if p.TargetScope == enums.DiscountScopeCategoryTag {
 		t++
 	}
 	return t
@@ -89,19 +80,16 @@ func Matches(p promotion.Promotion, t ResolveTarget) bool {
 	switch p.TargetScope {
 	case enums.DiscountScopeProduct:
 		return p.TargetProductSKUCode == t.ProductSKUCode
-	case enums.DiscountScopeCategory:
-		if p.TargetCategoryKey == "" || len(t.CategoryPath) == 0 {
+	case enums.DiscountScopeCategoryTag:
+		if p.TargetCategoryTagID == "" || len(t.CategoryTags) == 0 {
 			return false
 		}
-		if IncludesDescendants(p) {
-			for _, key := range t.CategoryPath {
-				if key == p.TargetCategoryKey {
-					return true
-				}
+		for _, tag := range t.CategoryTags {
+			if tag.ID == p.TargetCategoryTagID {
+				return true
 			}
-			return false
 		}
-		return t.CategoryPath[len(t.CategoryPath)-1] == p.TargetCategoryKey
+		return false
 	}
 	return false
 }
@@ -149,8 +137,8 @@ func clampPrice(price, original int64) int64 {
 }
 
 // ResolveEffective picks the single promotion that prices the product, applying
-// the fixed precedence: product special_campaign > category special_campaign >
-// product normal_promotion > category normal_promotion > none. Ties inside a
+// the fixed precedence: product special_campaign > category-tag special_campaign >
+// product normal_promotion > category-tag normal_promotion > none. Ties inside a
 // tier break on Priority desc, then CreatedAt desc, then ID asc — the same
 // ordering the promotion repository already uses.
 //

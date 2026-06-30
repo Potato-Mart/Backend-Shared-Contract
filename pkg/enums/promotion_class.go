@@ -13,7 +13,7 @@ package enums
 //	normal_promotion -> 常態特價: recurring/standing promotion
 //	special_campaign -> 特殊活動: event promotion for a specific period;
 //	                    always overrides a normal_promotion that targets
-//	                    the same product or category in the same window
+//	                    the same product or category tag in the same window
 type PromotionClass string
 
 const (

@@ -50,7 +50,7 @@ type Campaign struct {
 
 	Audience *Audience `json:"audience,omitempty"`
 
-	// TargetScope scopes a product_notice to a product/category key.
+	// TargetScope scopes a product_notice to a product or category tag.
 	TargetScope string `json:"target_scope,omitempty"`
 
 	common.AuditFields
