@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // OverrideReasonSpecialCampaign is the canonical reason string written onto an
@@ -22,16 +22,14 @@ const OverrideReasonSpecialCampaign = "special_campaign overrides normal_promoti
 // price in minor units, and the pricing instant.
 type ResolveTarget struct {
 	ProductSKUCode string
-	// Deprecated: use ProductSKUCode.
-	ProductID      string
 	CategoryPath   []string
 	UnitPriceMinor int64
 	Currency       string
 	Now            time.Time
 }
 
-// EffectiveClass returns the promotion class, defaulting empty (legacy
-// documents written before v5.2.0) to normal_promotion.
+// EffectiveClass returns the promotion class, defaulting an empty class to
+// normal_promotion.
 func EffectiveClass(p promotion.Promotion) enums.PromotionClass {
 	if p.Class == enums.PromotionClassSpecialCampaign {
 		return enums.PromotionClassSpecialCampaign
@@ -49,7 +47,7 @@ func IncludesDescendants(p promotion.Promotion) bool {
 }
 
 // IsTargeted reports whether the promotion is narrowed to a product or category
-// rather than the legacy cart-wide behaviour.
+// rather than the cart-wide behaviour.
 func IsTargeted(p promotion.Promotion) bool {
 	return p.TargetScope == enums.DiscountScopeProduct || p.TargetScope == enums.DiscountScopeCategory
 }
@@ -90,10 +88,7 @@ func Matches(p promotion.Promotion, t ResolveTarget) bool {
 	}
 	switch p.TargetScope {
 	case enums.DiscountScopeProduct:
-		if p.TargetProductSKUCode != "" {
-			return p.TargetProductSKUCode == t.ProductSKUCode
-		}
-		return p.TargetProductID != "" && p.TargetProductID == t.ProductID
+		return p.TargetProductSKUCode == t.ProductSKUCode
 	case enums.DiscountScopeCategory:
 		if p.TargetCategoryKey == "" || len(t.CategoryPath) == 0 {
 			return false

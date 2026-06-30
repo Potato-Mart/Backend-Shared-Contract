@@ -3,10 +3,10 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 type Order struct {
@@ -20,7 +20,7 @@ type Order struct {
 	Customer          common.PartyRef         `json:"customer"`
 	// Buyer describes who is buying, independently of Channel. POS is a
 	// channel, not a buyer type — see sales.BuyerContext. Optional pointer
-	// so it is omitted entirely on legacy orders.
+	// so it is omitted entirely when unset.
 	Buyer        *BuyerContext `json:"buyer,omitempty"`
 	Items        []OrderItem   `json:"items"`
 	SourceDevice SourceDevice  `json:"source_device,omitempty"`
@@ -69,7 +69,7 @@ type Order struct {
 
 	History []shared.HistoryEntry `json:"history,omitempty"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 type OrderItem struct {
@@ -79,7 +79,7 @@ type OrderItem struct {
 	UnitPrice    common.Money     `json:"unit_price"`
 	// Pricing is the commercial pricing context under which UnitPrice was
 	// set (retail vs wholesale audience, visibility). Optional pointer so it
-	// is omitted entirely on legacy order items.
+	// is omitted entirely when unset.
 	Pricing        *PricingContext `json:"pricing,omitempty"`
 	Quantity       int             `json:"quantity"`
 	DiscountAmount common.Money    `json:"discount_amount"`
@@ -113,22 +113,19 @@ type PointRedemptionSnapshot struct {
 // RewardRedemptionSnapshot records a catalog reward applied to an order.
 type RewardRedemptionSnapshot struct {
 	RewardRedemptionID  string                     `json:"reward_redemption_id"`
-	RewardID            string                     `json:"reward_id"`
+	RewardCode          string                     `json:"reward_code"`
 	MembershipAccountID string                     `json:"membership_account_id"`
 	RewardType          enums.MembershipRewardType `json:"reward_type"`
 	PointsSpent         int                        `json:"points_spent"`
 	DiscountAmount      *common.Money              `json:"discount_amount,omitempty"`
 	ProductSKUCode      string                     `json:"product_sku_code,omitempty"`
-	// Deprecated: use ProductSKUCode.
-	ProductID   string `json:"product_id,omitempty"`
-	VoucherCode string `json:"voucher_code,omitempty"`
+	VoucherCode         string                     `json:"voucher_code,omitempty"`
 }
 
 type SourceDevice struct {
-	Type     enums.OrderSourceDeviceType `json:"type,omitempty"`
-	LocalID  string                      `json:"local_id,omitempty"`
-	DeviceID string                      `json:"device_id,omitempty"`
-	Name     string                      `json:"name,omitempty"`
+	Type    enums.OrderSourceDeviceType `json:"type,omitempty"`
+	LocalID string                      `json:"local_id,omitempty"`
+	Name    string                      `json:"name,omitempty"`
 
 	// Metadata stores source-specific details that should not become first-class
 	// contract fields yet, for example app_version, terminal_id, store_id,
@@ -137,5 +134,5 @@ type SourceDevice struct {
 
 	// DeviceRecord carries shared fingerprint/request attributes such as
 	// device_key, ip_address, user_agent, os, and browser.
-	shared.DeviceRecord `bson:",inline"`
+	shared.DeviceRecord
 }

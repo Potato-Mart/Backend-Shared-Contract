@@ -1,7 +1,7 @@
 package wholesale
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
 )
 
 // WholesaleTierPreset defines the freight rules for a wholesale shipping tier.
@@ -27,5 +27,5 @@ type WholesaleTierPreset struct {
 	SortOrder int  `json:"sort_order"`
 	IsSystem  bool `json:"is_system"` // system presets cannot be deleted
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }

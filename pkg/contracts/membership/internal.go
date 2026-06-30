@@ -3,8 +3,8 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // Internal membership service endpoints. Provider: Backend-Management.
@@ -27,7 +27,7 @@ type PointQuoteCommand struct {
 	Currency             string                         `json:"currency" binding:"required"`
 	MerchandiseAmount    *common.Money                  `json:"merchandise_amount,omitempty"`
 	RelatedOrderID       string                         `json:"related_order_id,omitempty"`
-	RewardID             string                         `json:"reward_id,omitempty"`
+	RewardCode           string                         `json:"reward_code,omitempty"`
 }
 
 // PointQuoteResult returns the projected discount and available balance.
@@ -49,7 +49,7 @@ type PointReserveCommand struct {
 	Reason                    enums.MembershipPointReason    `json:"reason"`
 	RedemptionType            enums.MembershipRedemptionType `json:"redemption_type"`
 	RelatedOrderID            string                         `json:"related_order_id,omitempty"`
-	RelatedRewardID           string                         `json:"related_reward_id,omitempty"`
+	RelatedRewardCode         string                         `json:"related_reward_code,omitempty"`
 	RelatedRewardRedemptionID string                         `json:"related_reward_redemption_id,omitempty"`
 	ExpiresAt                 time.Time                      `json:"expires_at"`
 	CreatedBy                 string                         `json:"created_by,omitempty"`
@@ -62,7 +62,6 @@ type PointReserveResult struct {
 
 type PointCommitCommand struct {
 	ReservationID             string `json:"reservation_id" binding:"required"`
-	RelatedOrderID            string `json:"related_order_id,omitempty"`
 	RelatedOrderNumber        string `json:"related_order_number,omitempty"`
 	RelatedRewardRedemptionID string `json:"related_reward_redemption_id,omitempty"`
 	CreatedBy                 string `json:"created_by,omitempty"`
@@ -90,7 +89,7 @@ type RewardRedeemCommand struct {
 	MembershipAccountID  string             `json:"membership_account_id"`
 	Owner                MembershipOwnerRef `json:"owner"`
 	OrganisationAccessID string             `json:"organisation_access_id,omitempty"`
-	RewardID             string             `json:"reward_id" binding:"required"`
+	RewardCode           string             `json:"reward_code" binding:"required"`
 	RelatedOrderID       string             `json:"related_order_id,omitempty"`
 	CreatedBy            string             `json:"created_by,omitempty"`
 }

@@ -1,14 +1,14 @@
 package wholesale
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // WholesaleOrganisation represents an approved or prospective B2B organisation
 // that wholesaleCustomer accounts can access through OrganisationAccess grants.
 type WholesaleOrganisation struct {
-	common.OrganisationDetail `bson:",inline"`
+	common.OrganisationDetail
 
 	PrimaryWholesaleCustomerID string                            `json:"primary_wholesale_customer_id,omitempty"`
 	MembershipAccountID        string                            `json:"membership_account_id,omitempty"`
@@ -20,13 +20,13 @@ type WholesaleOrganisation struct {
 	Rejection                  *common.LifecycleAction           `json:"rejection,omitempty"`
 	Closure                    *common.LifecycleAction           `json:"closure,omitempty"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 // WholesaleOrganisationSummary is the compact organisation projection carried
 // by access/session and membership responses.
 type WholesaleOrganisationSummary struct {
-	common.PartyRef `bson:",inline"`
+	common.PartyRef
 
 	PrimaryWholesaleCustomerID string                            `json:"primary_wholesale_customer_id,omitempty"`
 	MembershipAccountID        string                            `json:"membership_account_id,omitempty"`

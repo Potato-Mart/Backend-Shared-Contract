@@ -3,10 +3,10 @@ package purchase
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 type Order struct {
@@ -22,18 +22,16 @@ type Order struct {
 	Total        common.Money              `json:"total"`
 	Reference    string                    `json:"reference,omitempty"`
 	SupplierCode string                    `json:"supplier_code,omitempty"`
-	// Deprecated: use SupplierCode.
-	SupplierID   string                `json:"supplier_id,omitempty"`
-	ExpectedAt   *time.Time            `json:"expected_at,omitempty"`
-	SubmittedAt  *time.Time            `json:"submitted_at,omitempty"`
-	ConfirmedAt  *time.Time            `json:"confirmed_at,omitempty"`
-	CancelledAt  *time.Time            `json:"cancelled_at,omitempty"`
-	CompletedAt  *time.Time            `json:"completed_at,omitempty"`
-	Note         string                `json:"note,omitempty"`
-	InternalNote string                `json:"internal_note,omitempty"`
-	History      []shared.HistoryEntry `json:"history,omitempty"`
+	ExpectedAt   *time.Time                `json:"expected_at,omitempty"`
+	SubmittedAt  *time.Time                `json:"submitted_at,omitempty"`
+	ConfirmedAt  *time.Time                `json:"confirmed_at,omitempty"`
+	CancelledAt  *time.Time                `json:"cancelled_at,omitempty"`
+	CompletedAt  *time.Time                `json:"completed_at,omitempty"`
+	Note         string                    `json:"note,omitempty"`
+	InternalNote string                    `json:"internal_note,omitempty"`
+	History      []shared.HistoryEntry     `json:"history,omitempty"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 type OrderItem struct {

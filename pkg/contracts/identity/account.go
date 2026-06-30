@@ -3,8 +3,8 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // UserAccount is an account/persona record attached to one canonical user.
@@ -23,7 +23,7 @@ type UserAccount struct {
 	SuspendedReason string              `json:"suspended_reason,omitempty"`
 	ClosedAt        *time.Time          `json:"closed_at,omitempty"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 // UserAccountSummary is the compact account/persona projection returned with

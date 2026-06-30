@@ -3,20 +3,16 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 type OutboundShipment struct {
-	ID        string `json:"id"`
-	DepotCode string `json:"depot_code,omitempty"`
-	// Deprecated: use DepotCode.
-	DepotID       string `json:"depot_id,omitempty"`
-	PickingListID string `json:"picking_list_id,omitempty"`
-	OrderNumber   string `json:"order_number,omitempty"`
-	// Deprecated: use OrderNumber.
-	OrderID        string                       `json:"order_id,omitempty"`
+	ID             string                       `json:"id"`
+	DepotCode      string                       `json:"depot_code,omitempty"`
+	PickingListID  string                       `json:"picking_list_id,omitempty"`
+	OrderNumber    string                       `json:"order_number,omitempty"`
 	CustomerName   string                       `json:"customer_name,omitempty"`
 	Address        string                       `json:"address,omitempty"`
 	State          string                       `json:"state,omitempty"`
@@ -34,7 +30,7 @@ type PackingDiscrepancy struct {
 	OrderNumber     string                       `json:"order_number"`
 	OrderDate       time.Time                    `json:"order_date"`
 	CustomerName    string                       `json:"customer_name,omitempty"`
-	SKU             string                       `json:"sku"`
+	ProductSKUCode  string                       `json:"product_sku_code"`
 	ProductName     string                       `json:"product_name,omitempty"`
 	Kind            enums.PackingDiscrepancyKind `json:"kind"`
 	OrderedQty      int                          `json:"ordered_qty"`

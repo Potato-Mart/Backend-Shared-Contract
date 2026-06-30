@@ -1,6 +1,6 @@
 package shared
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 
 // ActorRef identifies the authenticated principal that performed an
 // action. It is shared by audit, access, and security records.
@@ -13,7 +13,7 @@ type ActorRef struct {
 // RequestContext carries the transport-level correlation fields captured
 // alongside audit, access, and security records.
 type RequestContext struct {
-	DeviceID      string `json:"device_id,omitempty"`
+	DeviceKey     string `json:"device_key,omitempty"`
 	SessionID     string `json:"session_id,omitempty"`
 	IPAddress     string `json:"ip_address,omitempty"`
 	UserAgent     string `json:"user_agent,omitempty"`

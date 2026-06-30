@@ -4,24 +4,23 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/customers"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/customers"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 func TestRetailCustomerJSONShape(t *testing.T) {
 	customer := customers.RetailCustomer{
-		ID: "retail_123",
-		Identity: common.IdentityLink{
-			UserID:                "user_123",
-			AccountID:             "acct_123",
-			PrimaryAuthIdentityID: "auth_123",
-		},
+		ID:                    "retail_123",
+		CustomerNumber:        "RC-123",
+		UserID:                "user_123",
+		AccountID:             "acct_123",
+		PrimaryAuthIdentityID: "auth_123",
+		AuthIdentityIDs:       []string{"auth_123"},
 		BasicInfo: customers.RetailCustomerBasicInfo{
-			CustomerNumber: "RC-123",
-			Name:           common.PersonName{DisplayName: "Retail Customer"},
-			Contacts:       common.ContactChannels{Email: "retail@example.com"},
+			Name:     common.PersonName{DisplayName: "Retail Customer"},
+			Contacts: common.ContactChannels{Email: "retail@example.com"},
 		},
 		Lifecycle: customers.RetailCustomerLifecycle{
 			Status: enums.CustomerStatusActive,
@@ -53,7 +52,11 @@ func TestRetailCustomerJSONShape(t *testing.T) {
 
 	for _, key := range []string{
 		"id",
-		"identity",
+		"customer_number",
+		"user_id",
+		"account_id",
+		"primary_auth_identity_id",
+		"auth_identity_ids",
 		"basic_info",
 		"lifecycle",
 		"membership",
@@ -64,7 +67,14 @@ func TestRetailCustomerJSONShape(t *testing.T) {
 			t.Fatalf("RetailCustomer JSON missing %q: %s", key, payload)
 		}
 	}
-	if _, ok := got["loyalty"]; ok {
-		t.Fatalf("RetailCustomer JSON should not include legacy loyalty group: %s", payload)
+	if _, ok := got["identity"]; ok {
+		t.Fatalf("RetailCustomer JSON should not include nested identity: %s", payload)
+	}
+	basicInfo, ok := got["basic_info"].(map[string]any)
+	if !ok {
+		t.Fatalf("RetailCustomer JSON basic_info should be an object: %s", payload)
+	}
+	if _, ok := basicInfo["customer_number"]; ok {
+		t.Fatalf("RetailCustomer JSON should not include nested customer_number: %s", payload)
 	}
 }

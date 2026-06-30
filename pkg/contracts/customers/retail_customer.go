@@ -3,31 +3,35 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // RetailCustomer is the grouped business profile for a generalCustomer
 // account/persona. Portal admission is controlled by identity.AccountType and
 // identity.PortalAccess, not by this profile.
 type RetailCustomer struct {
-	ID                string                          `json:"id"`
-	Identity          common.IdentityLink             `json:"identity"`
-	BasicInfo         RetailCustomerBasicInfo         `json:"basic_info"`
-	Lifecycle         RetailCustomerLifecycle         `json:"lifecycle"`
-	Management        RetailCustomerManagementProfile `json:"management"`
-	Membership        RetailCustomerMembershipProfile `json:"membership"`
-	Marketing         RetailCustomerMarketingProfile  `json:"marketing"`
-	Commerce          RetailCustomerCommerceProfile   `json:"commerce"`
-	Analytics         *RetailCustomerAnalyticsProfile `json:"analytics,omitempty"`
-	Referral          *RetailCustomerReferralProfile  `json:"referral,omitempty"`
-	DefaultShipping   *common.ContactAddress          `json:"default_shipping,omitempty"`
-	ShippingAddresses []common.ContactAddress         `json:"shipping_addresses,omitempty"`
-	History           []shared.HistoryEntry           `json:"history,omitempty"`
+	ID                    string                          `json:"id"`
+	CustomerNumber        string                          `json:"customer_number,omitempty"`
+	UserID                string                          `json:"user_id,omitempty"`
+	AccountID             string                          `json:"account_id,omitempty"`
+	PrimaryAuthIdentityID string                          `json:"primary_auth_identity_id,omitempty"`
+	AuthIdentityIDs       []string                        `json:"auth_identity_ids,omitempty"`
+	BasicInfo             RetailCustomerBasicInfo         `json:"basic_info"`
+	Lifecycle             RetailCustomerLifecycle         `json:"lifecycle"`
+	Management            RetailCustomerManagementProfile `json:"management"`
+	Membership            RetailCustomerMembershipProfile `json:"membership"`
+	Marketing             RetailCustomerMarketingProfile  `json:"marketing"`
+	Commerce              RetailCustomerCommerceProfile   `json:"commerce"`
+	Analytics             *RetailCustomerAnalyticsProfile `json:"analytics,omitempty"`
+	Referral              *RetailCustomerReferralProfile  `json:"referral,omitempty"`
+	DefaultShipping       *common.ContactAddress          `json:"default_shipping,omitempty"`
+	ShippingAddresses     []common.ContactAddress         `json:"shipping_addresses,omitempty"`
+	History               []shared.HistoryEntry           `json:"history,omitempty"`
 
-	common.AuditFields          `bson:",inline"`
-	common.DataProtectionFields `bson:",inline"`
+	common.AuditFields
+	common.DataProtectionFields
 }
 
 // RetailCustomerSummary is a compact retail customer projection for lists,
@@ -47,10 +51,9 @@ type RetailCustomerSummary struct {
 	Metadata            common.Metadata      `json:"metadata,omitempty"`
 }
 
-// RetailCustomerBasicInfo groups stable identity, name, contact, and
-// acquisition fields for a retail customer profile.
+// RetailCustomerBasicInfo groups stable name, contact, and acquisition fields
+// for a retail customer profile.
 type RetailCustomerBasicInfo struct {
-	CustomerNumber    string                          `json:"customer_number,omitempty"`
 	Name              common.PersonName               `json:"name"`
 	Contacts          common.ContactChannels          `json:"contacts"`
 	DateOfBirth       *time.Time                      `json:"date_of_birth,omitempty"`

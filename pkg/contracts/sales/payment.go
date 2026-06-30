@@ -3,26 +3,17 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	paymentcontracts "github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/payments"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	paymentcontracts "github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/payments"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // Payment is the order-level record of money received against an order.
 type Payment struct {
-	ID          string `json:"id"`
-	OrderNumber string `json:"order_number"`
-	// Deprecated: use OrderNumber.
-	OrderID string       `json:"order_id,omitempty"`
-	Amount  common.Money `json:"amount"`
-
-	// Currency is retained for backward compatibility with consumers
-	// that read it as a sibling of Amount. New code should read
-	// Amount.Currency instead.
-	//
-	// Deprecated: use Amount.Currency.
-	Currency string `json:"currency,omitempty"`
+	ID          string       `json:"id"`
+	OrderNumber string       `json:"order_number"`
+	Amount      common.Money `json:"amount"`
 
 	Method            enums.PaymentMethod                `json:"method"`
 	Status            enums.PaymentRecordStatus          `json:"status"`
@@ -57,5 +48,5 @@ type Payment struct {
 	History      []shared.HistoryEntry `json:"history,omitempty"`
 	CreatedAt    time.Time             `json:"created_at"`
 
-	common.DataProtectionFields `bson:",inline"`
+	common.DataProtectionFields
 }

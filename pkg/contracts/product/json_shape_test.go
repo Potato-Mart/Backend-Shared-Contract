@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 func TestProductJSONIncludesTaxed(t *testing.T) {
@@ -18,8 +18,11 @@ func TestProductJSONIncludesTaxed(t *testing.T) {
 		Description: []common.LocalizedDescription{
 			{Language: "en", Description: "Localized description"},
 		},
-		Brand: []common.LocalizedName{{Language: "en", Name: "Localized brand"}},
-		Taxed: true,
+		Brand:           []common.LocalizedName{{Language: "en", Name: "Localized brand"}},
+		Taxed:           true,
+		Catalogue:       "winter",
+		SupplierCode:    "sup_1",
+		PlacingAreaCode: "A1",
 	})
 	if err != nil {
 		t.Fatalf("marshal product: %v", err)
@@ -29,6 +32,18 @@ func TestProductJSONIncludesTaxed(t *testing.T) {
 	}
 	if !strings.Contains(string(body), `"description":[`) || !strings.Contains(string(body), `"brand":[`) {
 		t.Fatalf("Product JSON = %s, want localized description and brand arrays", body)
+	}
+	for _, keyValue := range []string{
+		`"catalogue":"winter"`,
+		`"supplier_code":"sup_1"`,
+		`"placing_area_code":"A1"`,
+	} {
+		if !strings.Contains(string(body), keyValue) {
+			t.Fatalf("Product JSON = %s, want flat %s", body, keyValue)
+		}
+	}
+	if strings.Contains(string(body), `"identifiers"`) {
+		t.Fatalf("Product JSON = %s, should not include nested identifiers", body)
 	}
 }
 
@@ -40,9 +55,9 @@ func TestSnapshotJSONIncludesTaxed(t *testing.T) {
 		Description: []common.LocalizedDescription{
 			{Language: "en", Description: "Snapshot description"},
 		},
-		Brand:    []common.LocalizedName{{Language: "en", Name: "Snapshot brand"}},
-		Supplier: "sup_1",
-		Taxed:    true,
+		Brand:        []common.LocalizedName{{Language: "en", Name: "Snapshot brand"}},
+		SupplierCode: "sup_1",
+		Taxed:        true,
 	})
 	if err != nil {
 		t.Fatalf("marshal snapshot: %v", err)
@@ -50,8 +65,8 @@ func TestSnapshotJSONIncludesTaxed(t *testing.T) {
 	if !strings.Contains(string(body), `"taxed":true`) {
 		t.Fatalf("Snapshot JSON = %s, want taxed true field", body)
 	}
-	if strings.Contains(string(body), `"vendor"`) || !strings.Contains(string(body), `"supplier":"sup_1"`) {
-		t.Fatalf("Snapshot JSON = %s, want supplier and no legacy vendor", body)
+	if strings.Contains(string(body), `"vendor"`) || !strings.Contains(string(body), `"supplier_code":"sup_1"`) {
+		t.Fatalf("Snapshot JSON = %s, want supplier_code and no legacy vendor", body)
 	}
 }
 
@@ -99,42 +114,5 @@ func TestProductOmitsEmptySelling(t *testing.T) {
 	}
 	if strings.Contains(string(body), `"selling"`) {
 		t.Fatalf("empty selling should be omitted, got %s", body)
-	}
-}
-
-func TestProductDecodesLegacyDisplayFields(t *testing.T) {
-	var got Product
-	if err := json.Unmarshal([]byte(`{
-		"id":"prd_1",
-		"sku_code":"A0001",
-		"sku":"A",
-		"name":"Legacy",
-		"description":"Flat legacy description",
-		"brand":"Flat legacy brand",
-		"identifiers":{"vendor":"SUP-1"}
-	}`), &got); err != nil {
-		t.Fatalf("unmarshal legacy product: %v", err)
-	}
-	if len(got.Description) != 1 || got.Description[0].Description != "Flat legacy description" {
-		t.Fatalf("description = %+v, want localized legacy description", got.Description)
-	}
-	if len(got.Brand) != 1 || got.Brand[0].Name != "Flat legacy brand" {
-		t.Fatalf("brand = %+v, want localized legacy brand", got.Brand)
-	}
-	if got.Identifiers.Supplier != "SUP-1" {
-		t.Fatalf("supplier = %q, want vendor backfill", got.Identifiers.Supplier)
-	}
-}
-
-func TestSnapshotDecodesLegacyBrandAndVendor(t *testing.T) {
-	var got Snapshot
-	if err := json.Unmarshal([]byte(`{"id":"prd_1","sku_code":"A0001","brand":"Legacy brand","vendor":"SUP-1"}`), &got); err != nil {
-		t.Fatalf("unmarshal legacy snapshot: %v", err)
-	}
-	if len(got.Brand) != 1 || got.Brand[0].Name != "Legacy brand" {
-		t.Fatalf("brand = %+v, want localized legacy brand", got.Brand)
-	}
-	if got.Supplier != "SUP-1" {
-		t.Fatalf("supplier = %q, want vendor backfill", got.Supplier)
 	}
 }

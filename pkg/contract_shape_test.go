@@ -71,6 +71,83 @@ func TestSharedContractDoesNotExportWireDTOs(t *testing.T) {
 	}
 }
 
+func TestSharedContractHasNoDatabaseSpecificTerms(t *testing.T) {
+	terms := blockedStorageTerms()
+	err := filepath.WalkDir(".", func(path string, d os.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() {
+			if d.Name() == ".git" {
+				return filepath.SkipDir
+			}
+			return nil
+		}
+		body, err := os.ReadFile(path)
+		if err != nil {
+			return err
+		}
+		lower := strings.ToLower(string(body))
+		for _, term := range terms {
+			if strings.Contains(lower, term) {
+				t.Fatalf("%s contains database-specific term %q", path, term)
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("scan repository text: %v", err)
+	}
+}
+
+func TestSharedContractStructTagsAreDatabaseNeutral(t *testing.T) {
+	terms := blockedStorageTerms()
+	err := filepath.WalkDir(".", func(path string, d os.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+		if d.IsDir() || !strings.HasSuffix(path, ".go") {
+			return nil
+		}
+		fset := token.NewFileSet()
+		file, err := parser.ParseFile(fset, path, nil, 0)
+		if err != nil {
+			return err
+		}
+		ast.Inspect(file, func(n ast.Node) bool {
+			st, ok := n.(*ast.StructType)
+			if !ok || st.Fields == nil {
+				return true
+			}
+			for _, field := range st.Fields.List {
+				if field.Tag == nil {
+					continue
+				}
+				tag := strings.ToLower(field.Tag.Value)
+				for _, term := range terms {
+					if strings.Contains(tag, term) {
+						pos := fset.Position(field.Tag.Pos())
+						t.Fatalf("%s uses database-specific struct tag %q", pos, term)
+					}
+				}
+			}
+			return true
+		})
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("scan struct tags: %v", err)
+	}
+}
+
+func blockedStorageTerms() []string {
+	return []string{
+		string([]byte{98, 115, 111, 110}),
+		string([]byte{109, 111, 110, 103, 111}),
+		string([]byte{109, 111, 110, 103, 111, 100, 98}),
+	}
+}
+
 func isAllowedSharedWireDTO(path, name string) bool {
 	types := allowedSharedWireDTOs[filepath.ToSlash(path)]
 	if types == nil {

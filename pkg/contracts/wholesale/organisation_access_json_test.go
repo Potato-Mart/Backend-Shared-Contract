@@ -5,23 +5,23 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/wholesale"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 func TestOrganisationAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T) {
 	invitedAt := time.Date(2026, 6, 18, 5, 15, 0, 0, time.UTC)
 	joinedAt := time.Date(2026, 6, 18, 5, 30, 0, 0, time.UTC)
 	access := wholesale.OrganisationAccess{
-		ID:                      "access_1",
-		WholesaleOrganisationID: "org_1",
-		UserID:                  "user_1",
-		AccountID:               "acct_1",
-		RoleKey:                 "buyer",
-		Status:                  enums.OrganisationAccessStatusActive,
-		Invitation:              &common.LifecycleAction{By: "admin_1", At: &invitedAt},
-		JoinedAt:                &joinedAt,
+		ID:                        "access_1",
+		WholesaleOrganisationCode: "org_1",
+		UserID:                    "user_1",
+		AccountID:                 "acct_1",
+		RoleKey:                   "buyer",
+		Status:                    enums.OrganisationAccessStatusActive,
+		Invitation:                &common.LifecycleAction{By: "admin_1", At: &invitedAt},
+		JoinedAt:                  &joinedAt,
 	}
 
 	payload, err := json.Marshal(access)
@@ -34,7 +34,7 @@ func TestOrganisationAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *test
 		t.Fatalf("unmarshal organisation access JSON: %v", err)
 	}
 
-	for _, key := range []string{"id", "wholesale_organisation_id", "user_id", "account_id", "role_key", "status", "joined_at"} {
+	for _, key := range []string{"id", "wholesale_organisation_code", "user_id", "account_id", "role_key", "status", "joined_at"} {
 		if _, ok := got[key]; !ok {
 			t.Fatalf("OrganisationAccess JSON missing top-level %q: %s", key, payload)
 		}

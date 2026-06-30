@@ -3,8 +3,8 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // MembershipOwnerRef identifies the business entity that owns the membership
@@ -38,7 +38,7 @@ type MembershipAccount struct {
 	ClosedAt    *time.Time                    `json:"closed_at,omitempty"`
 	Metadata    common.Metadata               `json:"metadata,omitempty"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 // MembershipAccountSummary is safe to embed in customer, organisation, and

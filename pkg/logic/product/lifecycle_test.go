@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/product"
 )
 
 func ts(t time.Time) *time.Time { return &t }

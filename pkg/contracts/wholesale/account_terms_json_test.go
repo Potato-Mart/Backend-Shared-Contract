@@ -4,13 +4,13 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/wholesale"
 )
 
 func TestWholesaleAccountTermsJSONShape(t *testing.T) {
 	resp := wholesale.WholesaleAccountTerms{
-		OrganisationID:       "org_123",
+		OrganisationCode:     "org_123",
 		OrganisationAccessID: "access_123",
 		CustomerID:           "wc_123",
 		UserID:               "user_123",
@@ -39,7 +39,7 @@ func TestWholesaleAccountTermsJSONShape(t *testing.T) {
 	}
 
 	for _, key := range []string{
-		"organisation_id",
+		"organisation_code",
 		"organisation_access_id",
 		"customer_id",
 		"user_id",
@@ -85,7 +85,6 @@ func TestInvoiceCardPaymentJSONShape(t *testing.T) {
 	resp := wholesale.InvoiceCardPaymentResult{
 		InvoiceID:     "inv_123",
 		InvoiceNumber: "INV-123",
-		OrderID:       "ord_123",
 		OrderNumber:   "ORD-123",
 		Total:         common.Money{AmountMinor: 12500, Currency: "AUD"},
 		Payment: wholesale.InvoiceCardPaymentSession{
@@ -109,7 +108,6 @@ func TestInvoiceCardPaymentJSONShape(t *testing.T) {
 	for _, key := range []string{
 		"invoice_id",
 		"invoice_number",
-		"order_id",
 		"order_number",
 		"total",
 		"payment",

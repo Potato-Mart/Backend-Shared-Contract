@@ -1,7 +1,7 @@
 package product
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
 )
 
 type CategoryTag struct {
@@ -9,5 +9,5 @@ type CategoryTag struct {
 	Name         string `json:"name"`
 	CollectionID string `json:"collection_id"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }

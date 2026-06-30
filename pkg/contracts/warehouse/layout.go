@@ -3,21 +3,19 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // WarehouseLayout is the root 3D scene description for a depot. There is
 // at most one published layout per depot (Version is bumped per edit).
 //
-// MongoDB collection: "warehouse_layouts" with a unique index on
+// Persistence collection: "warehouse_layouts" with a unique index on
 // (depot_code, version) and a partial index on (depot_code) where
 // is_published=true to fetch the live scene cheaply.
 type WarehouseLayout struct {
-	ID        string `json:"id"`
-	DepotCode string `json:"depot_code"`
-	// Deprecated: use DepotCode.
-	DepotID         string         `json:"depot_id,omitempty"`
+	ID              string         `json:"id"`
+	DepotCode       string         `json:"depot_code"`
 	Name            string         `json:"name,omitempty"`
 	Version         int            `json:"version"`
 	Origin          common.Vector3 `json:"origin"`
@@ -34,7 +32,7 @@ type WarehouseLayout struct {
 	IsPublished     bool           `json:"is_published"`
 	PublishedAt     *time.Time     `json:"published_at,omitempty"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 // LayoutNode is a single element in the warehouse 3D hierarchy:
@@ -42,15 +40,13 @@ type WarehouseLayout struct {
 // and its parent, with a materialised Path so a subtree can be fetched
 // in one query.
 //
-// MongoDB collection: "warehouse_layout_nodes" with indexes on
+// Persistence collection: "warehouse_layout_nodes" with indexes on
 // (layout_id, parent_id), (layout_id, type), and a multikey index on
 // "path" for "give me everything under aisle X" queries.
 type LayoutNode struct {
-	ID        string `json:"id"`
-	LayoutID  string `json:"layout_id"`
-	DepotCode string `json:"depot_code"`
-	// Deprecated: use DepotCode.
-	DepotID    string               `json:"depot_id,omitempty"`
+	ID         string               `json:"id"`
+	LayoutID   string               `json:"layout_id"`
+	DepotCode  string               `json:"depot_code"`
 	ParentID   string               `json:"parent_id,omitempty"`
 	Path       []string             `json:"path,omitempty"` // ancestor IDs from root to immediate parent
 	Type       enums.LayoutNodeType `json:"type"`
@@ -66,12 +62,12 @@ type LayoutNode struct {
 	SortOrder  int                  `json:"sort_order,omitempty"`
 	IsActive   bool                 `json:"is_active"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 // ModelAsset references a 3D model file stored elsewhere (object storage,
 // CDN). Never embed mesh data here — keep documents small to stay well
-// under the 16MB MongoDB document limit and keep reads fast.
+// under large-document storage limits and keep reads fast.
 type ModelAsset struct {
 	ID        string              `json:"id,omitempty"`
 	URL       string              `json:"url"`

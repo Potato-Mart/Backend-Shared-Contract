@@ -9,7 +9,7 @@ package common
 // (id / name / phone / email) and adds richer registration, tax, address,
 // branding, and operating metadata.
 type OrganisationDetail struct {
-	PartyRef `bson:",inline"` // organisation id / name / phone / email
+	PartyRef // organisation id / name / phone / email
 
 	TradingName string `json:"trading_name,omitempty"`
 	LegalName   string `json:"legal_name,omitempty"`

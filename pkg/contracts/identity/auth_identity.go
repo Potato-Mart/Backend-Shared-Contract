@@ -3,8 +3,8 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // AuthIdentity is a non-secret projection of a login identity/provider attached
@@ -23,7 +23,7 @@ type AuthIdentity struct {
 	DisabledAt      *time.Time                 `json:"disabled_at,omitempty"`
 	DisabledReason  string                     `json:"disabled_reason,omitempty"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 // AuthIdentitySummary is the compact admin-safe projection of an auth identity.

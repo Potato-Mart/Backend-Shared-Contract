@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 func TestMembershipAccountAndTierRoundTrip(t *testing.T) {
@@ -130,6 +130,7 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 	owner := membership.MembershipOwnerRef{OwnerType: enums.MembershipOwnerTypeRetailCustomer, OwnerID: "retail_1"}
 	reward := membership.Reward{
 		ID:             "reward_1",
+		Code:           "reward_1",
 		Name:           "Five dollar discount",
 		Type:           enums.MembershipRewardTypeOrderDiscount,
 		PointsCost:     500,
@@ -140,7 +141,7 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 		ID:                  "redemption_1",
 		MembershipAccountID: "mem_1",
 		Owner:               owner,
-		RewardID:            "reward_1",
+		RewardCode:          "reward_1",
 		ReservationID:       "res_1",
 		PointsSpent:         500,
 		Status:              enums.MembershipRewardRedemptionStatusRedeemed,

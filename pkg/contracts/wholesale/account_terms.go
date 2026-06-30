@@ -1,6 +1,6 @@
 package wholesale
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
 
 const (
 	PathWholesaleAccountTermsMe       = "/v1/wholesale-account/me"
@@ -10,7 +10,7 @@ const (
 // WholesaleAccountTerms is the buyer-facing terms projection used by
 // approved wholesale storefront checkout flows.
 type WholesaleAccountTerms struct {
-	OrganisationID         string                 `json:"organisation_id"`
+	OrganisationCode       string                 `json:"organisation_code"`
 	OrganisationAccessID   string                 `json:"organisation_access_id"`
 	CustomerID             string                 `json:"customer_id"`
 	UserID                 string                 `json:"user_id,omitempty"`
@@ -46,11 +46,9 @@ type InvoiceCardPaymentSession struct {
 // InvoiceCardPaymentResult contains invoice/order references plus the
 // payment session needed by a storefront client to confirm card payment.
 type InvoiceCardPaymentResult struct {
-	InvoiceID     string `json:"invoice_id"`
-	InvoiceNumber string `json:"invoice_number"`
-	OrderNumber   string `json:"order_number"`
-	// Deprecated: use OrderNumber.
-	OrderID string                    `json:"order_id,omitempty"`
-	Total   common.Money              `json:"total"`
-	Payment InvoiceCardPaymentSession `json:"payment"`
+	InvoiceID     string                    `json:"invoice_id"`
+	InvoiceNumber string                    `json:"invoice_number"`
+	OrderNumber   string                    `json:"order_number"`
+	Total         common.Money              `json:"total"`
+	Payment       InvoiceCardPaymentSession `json:"payment"`
 }

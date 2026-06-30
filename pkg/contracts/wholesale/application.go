@@ -3,8 +3,8 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // WholesaleApplicationState is the storefront-facing lifecycle for a trade
@@ -51,10 +51,10 @@ type WholesaleApplicationRequest struct {
 type WholesaleApplicationResponse struct {
 	State WholesaleApplicationState `json:"state"`
 
-	UserID                  string `json:"user_id,omitempty"`
-	WholesaleOrganisationID string `json:"wholesale_organisation_id,omitempty"`
-	OrganisationAccessID    string `json:"organisation_access_id,omitempty"`
-	WholesaleCustomerID     string `json:"wholesale_customer_id,omitempty"`
+	UserID                    string `json:"user_id,omitempty"`
+	WholesaleOrganisationCode string `json:"wholesale_organisation_code,omitempty"`
+	OrganisationAccessID      string `json:"organisation_access_id,omitempty"`
+	WholesaleCustomerNumber   string `json:"wholesale_customer_number,omitempty"`
 
 	OrganisationStatus enums.WholesaleOrganisationStatus `json:"organisation_status,omitempty"`
 	AccessStatus       enums.OrganisationAccessStatus    `json:"access_status,omitempty"`

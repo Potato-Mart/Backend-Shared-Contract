@@ -3,9 +3,9 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // RetailCustomerMembershipProfile links a retail customer profile to the
@@ -56,9 +56,9 @@ type RetailCustomerAnalyticsProfile struct {
 // RetailCustomerReferralProfile groups the referral-programme state of a
 // retail customer.
 type RetailCustomerReferralProfile struct {
-	Code       string `json:"code,omitempty"`
-	ReferrerID string `json:"referrer_id,omitempty"`
-	Credited   bool   `json:"credited,omitempty"`
+	Code                   string `json:"code,omitempty"`
+	ReferrerCustomerNumber string `json:"referrer_customer_number,omitempty"`
+	Credited               bool   `json:"credited,omitempty"`
 }
 
 // RetailCustomerManagementProfile groups CRM fields that are manually edited

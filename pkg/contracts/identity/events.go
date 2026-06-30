@@ -3,7 +3,7 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // UserAccountCreatedEvent is emitted when an account/persona is created for a
@@ -104,15 +104,15 @@ type RoleAssignmentRevokedEvent struct {
 // OrganisationAccessChangedEvent is emitted when wholesale organisation access
 // changes status or role.
 type OrganisationAccessChangedEvent struct {
-	OrganisationAccessID    string                         `json:"organisation_access_id"`
-	WholesaleOrganisationID string                         `json:"wholesale_organisation_id"`
-	UserID                  string                         `json:"user_id"`
-	AccountID               string                         `json:"account_id,omitempty"`
-	RoleKey                 string                         `json:"role_key,omitempty"`
-	PreviousStatus          enums.OrganisationAccessStatus `json:"previous_status,omitempty"`
-	Status                  enums.OrganisationAccessStatus `json:"status"`
-	ChangedBy               string                         `json:"changed_by,omitempty"`
-	ChangedAt               time.Time                      `json:"changed_at"`
-	Reason                  string                         `json:"reason,omitempty"`
-	RequestID               string                         `json:"request_id,omitempty"`
+	OrganisationAccessID      string                         `json:"organisation_access_id"`
+	WholesaleOrganisationCode string                         `json:"wholesale_organisation_code"`
+	UserID                    string                         `json:"user_id"`
+	AccountID                 string                         `json:"account_id,omitempty"`
+	RoleKey                   string                         `json:"role_key,omitempty"`
+	PreviousStatus            enums.OrganisationAccessStatus `json:"previous_status,omitempty"`
+	Status                    enums.OrganisationAccessStatus `json:"status"`
+	ChangedBy                 string                         `json:"changed_by,omitempty"`
+	ChangedAt                 time.Time                      `json:"changed_at"`
+	Reason                    string                         `json:"reason,omitempty"`
+	RequestID                 string                         `json:"request_id,omitempty"`
 }

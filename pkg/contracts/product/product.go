@@ -3,9 +3,9 @@ package product
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // Product is the master record for one sellable unit (v7.0.0).
@@ -14,7 +14,7 @@ import (
 // hot identity, filter, and sort keys that stay directly indexable for
 // fast fetch/sort/search — and a handful of nested GROUP structs that
 // keep the remaining attributes tidy (pricing, localization, media,
-// physical, merchandising, identifiers). Keep new descriptive attributes
+// physical, merchandising). Keep new descriptive attributes
 // inside a group; only promote a field to the top level when it must be
 // indexed or filtered hot.
 type Product struct {
@@ -24,10 +24,8 @@ type Product struct {
 	Name        string                        `json:"name"`
 	Description []common.LocalizedDescription `json:"description,omitempty"`
 	Brand       []common.LocalizedName        `json:"brand,omitempty"`
-	// Deprecated: use Brand for localized display names.
-	BrandKey string `json:"brand_key,omitempty"`
-	Barcode  string `json:"barcode,omitempty"`
-	Taxed    bool   `json:"taxed"`
+	Barcode     string                        `json:"barcode,omitempty"`
+	Taxed       bool                          `json:"taxed"`
 
 	// Storage is the physical storage zone (DRY/CHILLED/FROZEN)
 	Storage enums.StorageType `json:"storage,omitempty"`
@@ -45,8 +43,11 @@ type Product struct {
 	// maintained by Backend-Operations on every category assignment so
 	// promotion targeting and storefront breadcrumbs never re-walk the
 	// tree.
-	CategoryKey  string   `json:"category_key,omitempty"`
-	CategoryPath []string `json:"category_path,omitempty"`
+	CategoryKey     string   `json:"category_key,omitempty"`
+	CategoryPath    []string `json:"category_path,omitempty"`
+	Catalogue       string   `json:"catalogue,omitempty"`
+	SupplierCode    string   `json:"supplier_code,omitempty"`
+	PlacingAreaCode string   `json:"placing_area_code,omitempty"`
 
 	// CurrentStock is a denormalised cache of total sellable stock; the
 	// authoritative quantities live in the warehouse subsystem. It backs
@@ -73,13 +74,12 @@ type Product struct {
 	Media         Media         `json:"media,omitempty"`
 	Physical      Physical      `json:"physical,omitempty"`
 	Merchandising Merchandising `json:"merchandising,omitempty"`
-	Identifiers   Identifiers   `json:"identifiers,omitempty"`
 
 	// History is for product master-data changes only. Stock changes are
 	// represented as warehouse.StockMovement records.
 	History []shared.HistoryEntry `json:"history,omitempty"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 // Pricing groups the prices a product can carry. Every field is an
@@ -135,14 +135,4 @@ type Physical struct {
 // Hotpot, Fresh Food) that complement — never replace — CategoryKey.
 type Merchandising struct {
 	CategoryTags []CategoryTag `json:"category_tags,omitempty"`
-}
-
-// Identifiers groups secondary identifying / placement attributes that
-// are not hot search keys.
-type Identifiers struct {
-	Catalogue string `json:"catalogue,omitempty"`
-	Supplier  string `json:"supplier,omitempty"`
-	// Deprecated: use Supplier. Kept only for migration decode/writeback.
-	Vendor          string `json:"vendor,omitempty"`
-	PlacingAreaCode string `json:"placing_area_code,omitempty"`
 }

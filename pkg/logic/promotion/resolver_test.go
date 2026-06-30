@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 var resolverNow = time.Date(2026, 6, 1, 12, 0, 0, 0, time.UTC)
@@ -35,7 +35,6 @@ func targetedPromo(id string, class enums.PromotionClass, scope enums.DiscountSc
 func porkBelly() ResolveTarget {
 	return ResolveTarget{
 		ProductSKUCode: "PORK-BELLY-001",
-		ProductID:      "prd_pork_belly",
 		CategoryPath:   []string{"grocery", "meat", "pork"},
 		UnitPriceMinor: 1000,
 		Currency:       "AUD",
@@ -182,15 +181,6 @@ func TestResolvePriorityTieBreak(t *testing.T) {
 	b.Priority = 5
 	if eff := ResolveEffective([]promotion.Promotion{a, b}, porkBelly()); eff == nil || eff.PromotionID != "prm_b" {
 		t.Fatalf("effective = %+v, want prm_b (priority 5)", eff)
-	}
-}
-
-func TestResolveProductTargetLegacyIDFallback(t *testing.T) {
-	p := targetedPromo("prm_legacy", enums.PromotionClassNormal, enums.DiscountScopeProduct, "")
-	p.TargetProductSKUCode = ""
-	p.TargetProductID = "prd_pork_belly"
-	if eff := ResolveEffective([]promotion.Promotion{p}, porkBelly()); eff == nil || eff.PromotionID != "prm_legacy" {
-		t.Fatalf("effective = %+v, want legacy product id fallback match", eff)
 	}
 }
 

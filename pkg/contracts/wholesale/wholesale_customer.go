@@ -3,9 +3,9 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // WholesaleCustomer is the grouped business profile for a wholesaleCustomer
@@ -13,8 +13,12 @@ import (
 // WholesaleOrganisation and OrganisationAccess.
 type WholesaleCustomer struct {
 	ID                     string                             `json:"id"`
-	Identity               common.IdentityLink                `json:"identity"`
-	OrganisationID         string                             `json:"organisation_id"`
+	CustomerNumber         string                             `json:"customer_number,omitempty"`
+	UserID                 string                             `json:"user_id,omitempty"`
+	AccountID              string                             `json:"account_id,omitempty"`
+	PrimaryAuthIdentityID  string                             `json:"primary_auth_identity_id,omitempty"`
+	AuthIdentityIDs        []string                           `json:"auth_identity_ids,omitempty"`
+	OrganisationCode       string                             `json:"organisation_code"`
 	OrganisationAccessID   string                             `json:"organisation_access_id,omitempty"`
 	BasicInfo              WholesaleCustomerBasicInfo         `json:"basic_info"`
 	Commercial             WholesaleCustomerCommercialProfile `json:"commercial"`
@@ -25,8 +29,8 @@ type WholesaleCustomer struct {
 	AdditionalShipTo       []common.ContactAddress            `json:"additional_ship_to,omitempty"`
 	History                []shared.HistoryEntry              `json:"history,omitempty"`
 
-	common.AuditFields          `bson:",inline"`
-	common.DataProtectionFields `bson:",inline"`
+	common.AuditFields
+	common.DataProtectionFields
 }
 
 // WholesaleCustomerSummary is a compact wholesale customer projection for
@@ -35,7 +39,7 @@ type WholesaleCustomerSummary struct {
 	ID                   string               `json:"id"`
 	AccountID            string               `json:"account_id,omitempty"`
 	UserID               string               `json:"user_id,omitempty"`
-	OrganisationID       string               `json:"organisation_id"`
+	OrganisationCode     string               `json:"organisation_code"`
 	OrganisationAccessID string               `json:"organisation_access_id,omitempty"`
 	DisplayName          string               `json:"display_name,omitempty"`
 	Email                string               `json:"email,omitempty"`
@@ -48,7 +52,6 @@ type WholesaleCustomerSummary struct {
 // WholesaleCustomerBasicInfo groups the person/contact details for a wholesale
 // customer contact.
 type WholesaleCustomerBasicInfo struct {
-	CustomerNumber    string                          `json:"customer_number,omitempty"`
 	Name              common.PersonName               `json:"name"`
 	Contacts          common.ContactChannels          `json:"contacts"`
 	JobTitle          string                          `json:"job_title,omitempty"`

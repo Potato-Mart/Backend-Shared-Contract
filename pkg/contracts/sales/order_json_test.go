@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 func TestOrderJSONRoundTripWithHistory(t *testing.T) {
@@ -91,7 +91,7 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 		RewardRedemptions: []sales.RewardRedemptionSnapshot{
 			{
 				RewardRedemptionID:  "reward_redemption_1",
-				RewardID:            "reward_1",
+				RewardCode:          "reward_1",
 				MembershipAccountID: "mem_1",
 				RewardType:          enums.MembershipRewardTypeOrderDiscount,
 				PointsSpent:         500,
@@ -116,15 +116,5 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 	}
 	if _, ok := got["coupon_code"]; ok {
 		t.Fatalf("membership redemption should not require coupon_code: %s", payload)
-	}
-}
-
-func TestOrderJSONLegacyPayloadWithoutHistory(t *testing.T) {
-	var order sales.Order
-	if err := json.Unmarshal([]byte(`{"id":"ord_1","order_number":"1001","status":"paid"}`), &order); err != nil {
-		t.Fatalf("unmarshal legacy order: %v", err)
-	}
-	if order.History != nil {
-		t.Fatalf("legacy payload history = %+v, want nil", order.History)
 	}
 }

@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/wholesale"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 func TestApprovedStorefrontProductJSONShape(t *testing.T) {
@@ -17,7 +17,6 @@ func TestApprovedStorefrontProductJSONShape(t *testing.T) {
 		Description:       []common.LocalizedDescription{{Language: "en", Description: "Foodservice carton"}},
 		Brand:             []common.LocalizedName{{Language: "en", Name: "Potato Mart"}},
 		Supplier:          "SUP-1",
-		BrandKey:          "potato-mart",
 		Storage:           enums.StorageDry,
 		DisplayStatus:     "active",
 		CoverURL:          "https://example.com/potatoes.jpg",
@@ -45,7 +44,6 @@ func TestApprovedStorefrontProductJSONShape(t *testing.T) {
 		"description",
 		"brand",
 		"supplier",
-		"brand_key",
 		"storage",
 		"display_status",
 		"cover_url",

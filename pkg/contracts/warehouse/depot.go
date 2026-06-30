@@ -3,8 +3,8 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 type Depot struct {
@@ -19,29 +19,23 @@ type Depot struct {
 	// 3D viewer. Empty when no layout has been built yet.
 	LayoutID string `json:"layout_id,omitempty"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 type PostcodeRule struct {
 	ID        string `json:"id"`
 	DepotCode string `json:"depot_code"`
-	// Deprecated: use DepotCode.
-	DepotID  string `json:"depot_id,omitempty"`
-	Postcode string `json:"postcode"`
-	Priority int    `json:"priority"`
+	Postcode  string `json:"postcode"`
+	Priority  int    `json:"priority"`
 }
 
 type DepotProduct struct {
-	DepotCode      string `json:"depot_code"`
-	ProductSKUCode string `json:"product_sku_code"`
-	// Deprecated: use DepotCode.
-	DepotID string `json:"depot_id,omitempty"`
-	// Deprecated: use ProductSKUCode.
-	ProductID    string    `json:"product_id,omitempty"`
-	StockQty     int       `json:"stock_qty"`
-	IsAvailable  bool      `json:"is_available"`
-	LocationCode string    `json:"location_code,omitempty"`
-	UpdatedAt    time.Time `json:"updated_at"`
+	DepotCode      string    `json:"depot_code"`
+	ProductSKUCode string    `json:"product_sku_code"`
+	StockQty       int       `json:"stock_qty"`
+	IsAvailable    bool      `json:"is_available"`
+	LocationCode   string    `json:"location_code,omitempty"`
+	UpdatedAt      time.Time `json:"updated_at"`
 }
 
 // StockLocation is the inventory bin a product physically lives in.
@@ -52,10 +46,8 @@ type DepotProduct struct {
 // Transform/Size are a denormalised cache for renderers that fetch
 // locations directly without joining the layout tree.
 type StockLocation struct {
-	ID        string `json:"id"`
-	DepotCode string `json:"depot_code"`
-	// Deprecated: use DepotCode.
-	DepotID      string            `json:"depot_id,omitempty"`
+	ID           string            `json:"id"`
+	DepotCode    string            `json:"depot_code"`
 	Code         string            `json:"code"`
 	Name         string            `json:"name,omitempty"`
 	Zone         enums.StorageType `json:"zone,omitempty"`

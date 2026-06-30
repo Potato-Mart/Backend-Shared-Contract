@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/identity"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/identity"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 func TestPortalAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T) {
@@ -89,24 +89,24 @@ func TestIdentityRequestContextJSONShape(t *testing.T) {
 
 func TestIdentityWholesaleAccessJSONUsesOrganisationAccessID(t *testing.T) {
 	claims := identity.AccessTokenClaims{
-		Subject:                 "user_1",
-		UserID:                  "user_1",
-		AccountID:               "acct_1",
-		Portal:                  enums.PortalPartner,
-		WholesaleOrganisationID: "org_1",
-		OrganisationAccessID:    "access_1",
-		RoleKey:                 "buyer",
+		Subject:                   "user_1",
+		UserID:                    "user_1",
+		AccountID:                 "acct_1",
+		Portal:                    enums.PortalPartner,
+		WholesaleOrganisationCode: "org_1",
+		OrganisationAccessID:      "access_1",
+		RoleKey:                   "buyer",
 	}
 	session := identity.LoginSession{
-		ID:                      "session_1",
-		UserID:                  "user_1",
-		Portal:                  enums.PortalPartner,
-		WholesaleOrganisationID: "org_1",
-		OrganisationAccessID:    "access_1",
-		RoleKey:                 "buyer",
-		IssuedAt:                time.Date(2026, 6, 23, 0, 0, 0, 0, time.UTC),
-		LastSeenAt:              time.Date(2026, 6, 23, 0, 1, 0, 0, time.UTC),
-		ExpiresAt:               time.Date(2026, 6, 23, 1, 0, 0, 0, time.UTC),
+		ID:                        "session_1",
+		UserID:                    "user_1",
+		Portal:                    enums.PortalPartner,
+		WholesaleOrganisationCode: "org_1",
+		OrganisationAccessID:      "access_1",
+		RoleKey:                   "buyer",
+		IssuedAt:                  time.Date(2026, 6, 23, 0, 0, 0, 0, time.UTC),
+		LastSeenAt:                time.Date(2026, 6, 23, 0, 1, 0, 0, time.UTC),
+		ExpiresAt:                 time.Date(2026, 6, 23, 1, 0, 0, 0, time.UTC),
 	}
 
 	payload, err := json.Marshal(struct {

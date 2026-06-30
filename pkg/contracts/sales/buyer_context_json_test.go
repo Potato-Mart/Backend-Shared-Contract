@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // TestOrderBuyerAndItemPricingRoundTrip checks the additive buyer/commercial
@@ -18,10 +18,10 @@ func TestOrderBuyerAndItemPricingRoundTrip(t *testing.T) {
 		OrderNumber: "B2B-1001",
 		Channel:     enums.OrderTypeB2B,
 		Buyer: &sales.BuyerContext{
-			Type:                    enums.BuyerTypeWholesaleOrganisation,
-			WholesaleOrganisationID: "org_1",
-			OrganisationAccessID:    "oacc_1",
-			FulfilmentIntent:        enums.FulfilmentIntentDelivery,
+			Type:                      enums.BuyerTypeWholesaleOrganisation,
+			WholesaleOrganisationCode: "org_1",
+			OrganisationAccessID:      "oacc_1",
+			FulfilmentIntent:          enums.FulfilmentIntentDelivery,
 		},
 		Items: []sales.OrderItem{
 			{
@@ -54,7 +54,7 @@ func TestOrderBuyerAndItemPricingRoundTrip(t *testing.T) {
 	if decoded.Buyer.Type != enums.BuyerTypeWholesaleOrganisation {
 		t.Fatalf("buyer.type = %q, want wholesale_organisation", decoded.Buyer.Type)
 	}
-	if decoded.Buyer.WholesaleOrganisationID != "org_1" || decoded.Buyer.OrganisationAccessID != "oacc_1" {
+	if decoded.Buyer.WholesaleOrganisationCode != "org_1" || decoded.Buyer.OrganisationAccessID != "oacc_1" {
 		t.Fatalf("buyer org references did not round-trip: %+v", decoded.Buyer)
 	}
 	if decoded.Buyer.FulfilmentIntent != enums.FulfilmentIntentDelivery {
@@ -100,8 +100,8 @@ func TestCartChannelAndBuyerRoundTrip(t *testing.T) {
 	}
 }
 
-// TestOrderOmitsEmptyBuyer verifies the additive fields stay out of legacy
-// JSON when unset (backward compatibility).
+// TestOrderOmitsEmptyBuyer verifies the additive fields stay out of the
+// JSON when unset.
 func TestOrderOmitsEmptyBuyer(t *testing.T) {
 	payload, err := json.Marshal(sales.Order{ID: "ord_1"})
 	if err != nil {
@@ -109,24 +109,6 @@ func TestOrderOmitsEmptyBuyer(t *testing.T) {
 	}
 	if strings.Contains(string(payload), `"buyer"`) {
 		t.Fatalf("empty buyer should be omitted, got %s", payload)
-	}
-}
-
-// TestCartLegacyPayloadWithoutChannelOrBuyer verifies a pre-existing cart
-// document (no channel/buyer) still unmarshals cleanly.
-func TestCartLegacyPayloadWithoutChannelOrBuyer(t *testing.T) {
-	var cart sales.Cart
-	if err := json.Unmarshal([]byte(`{"id":"cart_1","session_id":"sess_1","customer_id":"cust_1"}`), &cart); err != nil {
-		t.Fatalf("unmarshal legacy cart: %v", err)
-	}
-	if cart.Channel != "" {
-		t.Fatalf("legacy cart channel = %q, want empty", cart.Channel)
-	}
-	if cart.Buyer != nil {
-		t.Fatalf("legacy cart buyer = %+v, want nil", cart.Buyer)
-	}
-	if cart.CustomerID != "cust_1" {
-		t.Fatalf("legacy cart customer_id = %q, want cust_1", cart.CustomerID)
 	}
 }
 

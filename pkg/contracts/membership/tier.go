@@ -1,8 +1,8 @@
 package membership
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // MembershipTier defines the qualification and benefit rules for the global
@@ -21,5 +21,5 @@ type MembershipTier struct {
 	IsActive              bool                       `json:"is_active"`
 	IsSystem              bool                       `json:"is_system"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }

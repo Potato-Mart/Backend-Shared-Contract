@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/purchase"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/purchase"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 func TestOrderJSONRoundTripWithHistory(t *testing.T) {
@@ -61,15 +61,5 @@ func TestOrderJSONRoundTripWithHistory(t *testing.T) {
 	}
 	if len(decoded.History) != 1 || decoded.History[0].Changes[0].ToValue != "SUBMITTED" {
 		t.Fatalf("history did not round-trip: %+v", decoded.History)
-	}
-}
-
-func TestOrderJSONLegacyPayloadWithoutHistory(t *testing.T) {
-	var order purchase.Order
-	if err := json.Unmarshal([]byte(`{"id":"po_1","order_number":"PO-1001","status":"SUBMITTED"}`), &order); err != nil {
-		t.Fatalf("unmarshal legacy purchase order: %v", err)
-	}
-	if order.History != nil {
-		t.Fatalf("legacy payload history = %+v, want nil", order.History)
 	}
 }

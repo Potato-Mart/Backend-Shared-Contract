@@ -3,8 +3,8 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // HistoryChange is one field-level before/after fragment in a timeline entry.
@@ -35,6 +35,6 @@ type HistoryEntry struct {
 	RelatedResource   string                  `json:"related_resource,omitempty"`
 	RelatedResourceID string                  `json:"related_resource_id,omitempty"`
 	Metadata          common.Metadata         `json:"metadata,omitempty"`
-	ActorRef          `bson:",inline"`
-	RequestContext    `bson:",inline"`
+	ActorRef
+	RequestContext
 }

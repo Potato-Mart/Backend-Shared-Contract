@@ -3,38 +3,38 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // RetailCustomerActivity is a single entry in the retail customer interaction timeline.
 // It records orders, calls, complaints, tier changes, refunds, and any
 // other touchpoints for a customer profile.
 type RetailCustomerActivity struct {
-	ID               string                     `json:"id"`
-	RetailCustomerID string                     `json:"retail_customer_id"`
-	ActivityType     enums.CustomerActivityType `json:"activity_type"`
-	Title            string                     `json:"title"`
-	Body             string                     `json:"body,omitempty"`
-	Amount           *float64                   `json:"amount,omitempty"`
-	Metadata         common.Metadata            `json:"metadata,omitempty"`
-	OccurredAt       time.Time                  `json:"occurred_at"`
-	CreatedBy        string                     `json:"created_by,omitempty"`
-	CreatedAt        time.Time                  `json:"created_at"`
+	ID                   string                     `json:"id"`
+	RetailCustomerNumber string                     `json:"retail_customer_number"`
+	ActivityType         enums.CustomerActivityType `json:"activity_type"`
+	Title                string                     `json:"title"`
+	Body                 string                     `json:"body,omitempty"`
+	Amount               *common.Money              `json:"amount,omitempty"`
+	Metadata             common.Metadata            `json:"metadata,omitempty"`
+	OccurredAt           time.Time                  `json:"occurred_at"`
+	CreatedBy            string                     `json:"created_by,omitempty"`
+	CreatedAt            time.Time                  `json:"created_at"`
 }
 
 // RetailCustomerExternalIdentity is a single cross-channel identifier
 // belonging to a retail customer profile.
 type RetailCustomerExternalIdentity struct {
-	ID               string                     `json:"id"`
-	RetailCustomerID string                     `json:"retail_customer_id"`
-	AccountID        string                     `json:"account_id,omitempty"`
-	AuthIdentityID   string                     `json:"auth_identity_id,omitempty"`
-	Kind             enums.CustomerIdentityKind `json:"kind"`
-	Value            string                     `json:"value"`
-	Label            string                     `json:"label,omitempty"`
-	Verified         bool                       `json:"verified"`
-	CreatedAt        time.Time                  `json:"created_at"`
+	ID                   string                     `json:"id"`
+	RetailCustomerNumber string                     `json:"retail_customer_number"`
+	AccountID            string                     `json:"account_id,omitempty"`
+	AuthIdentityID       string                     `json:"auth_identity_id,omitempty"`
+	Kind                 enums.CustomerIdentityKind `json:"kind"`
+	Value                string                     `json:"value"`
+	Label                string                     `json:"label,omitempty"`
+	Verified             bool                       `json:"verified"`
+	CreatedAt            time.Time                  `json:"created_at"`
 
-	common.DataProtectionFields `bson:",inline"`
+	common.DataProtectionFields
 }

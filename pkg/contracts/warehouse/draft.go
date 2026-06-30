@@ -3,9 +3,9 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // WMSDraft is an uncommitted batch of inbound or outbound stock movements
@@ -15,7 +15,7 @@ type WMSDraft struct {
 	ID          string                `json:"id"`
 	Type        enums.WMSDraftType    `json:"type"`
 	Operator    string                `json:"operator"`
-	DepotID     string                `json:"depot_id,omitempty"`
+	DepotCode   string                `json:"depot_code,omitempty"`
 	Reference   string                `json:"reference,omitempty"` // supplier PO / order number
 	Items       []WMSDraftItem        `json:"items"`
 	ItemCount   int                   `json:"item_count"`
@@ -25,17 +25,17 @@ type WMSDraft struct {
 	SubmittedAt *time.Time            `json:"submitted_at,omitempty"`
 	History     []shared.HistoryEntry `json:"history,omitempty"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 // WMSDraftItem is the schema for each element of WMSDraft.Items.
 type WMSDraftItem struct {
-	SKU          string `json:"sku"`
-	ProductName  string `json:"product_name,omitempty"`
-	Barcode      string `json:"barcode,omitempty"`
-	LocationCode string `json:"location_code,omitempty"`
-	Qty          int    `json:"qty"`
-	ExpiryYM     string `json:"expiry_ym,omitempty"` // "YYYY-MM"
+	ProductSKUCode string `json:"product_sku_code"`
+	ProductName    string `json:"product_name,omitempty"`
+	Barcode        string `json:"barcode,omitempty"`
+	LocationCode   string `json:"location_code,omitempty"`
+	Qty            int    `json:"qty"`
+	ExpiryYM       string `json:"expiry_ym,omitempty"` // "YYYY-MM"
 }
 
 // OrderPackingProgress persists per-SKU scan progress for the packing
@@ -46,7 +46,7 @@ type OrderPackingProgress struct {
 	ID                 string    `json:"id"`
 	OrderNumber        string    `json:"order_number"`
 	OrderDate          time.Time `json:"order_date"`
-	SKU                string    `json:"sku"`
+	ProductSKUCode     string    `json:"product_sku_code"`
 	ProductName        string    `json:"product_name,omitempty"`
 	OrderedQty         int       `json:"ordered_qty"`
 	ScannedQty         int       `json:"scanned_qty"`

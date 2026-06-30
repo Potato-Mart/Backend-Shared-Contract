@@ -28,7 +28,7 @@ Scope: Backend-Shared-Contract (source of truth) → Backend-Management / Backen
 - `internal/modules/purchasing/module.go:443-452` transition timestamp switch has no case for PARTIALLY_RECEIVED/REFUNDED (transition itself is allowed via contract `CanTransitionTo`; only the optional `*_at` stamp is skipped). Cosmetic — flagged.
 
 **Backend-Commerce — 1 change:**
-- `internal/mongox/indexes.go` — added guard comment tying the partial-index literals `"draft"/"issued"` to `invoices.InvoiceDraft/InvoiceIssued` (import would cycle; values verified identical).
+- Backend-Commerce invoice index registration — added guard comment tying the partial-index literals `"draft"/"issued"` to `invoices.InvoiceDraft/InvoiceIssued` (import would cycle; values verified identical).
 - Local InvoiceStatus/CartStatus/refund Kind and checkout session extra states (`awaiting_payment`, `expired`) are intentional module-local vocabulary — verified the frontend mirrors them exactly.
 
 ## D. Frontend changes (Frontend-Admin-Web)
@@ -103,7 +103,7 @@ No class-1 defects (dead frontend calls) found; the repo's own wiring contract t
 ## Diff summary
 
 ```
-Backend-Commerce/internal/mongox/indexes.go                    | +3 (comment)
+Backend-Commerce invoice index registration                    | +3 (comment)
 Frontend-Admin-Web/src/lib/api/orders.ts                       | enum unions/arrays rewritten to contract v5
 Frontend-Admin-Web/src/lib/api/payments.ts                     | enum unions/arrays rewritten to contract v5
 Frontend-Admin-Web/src/lib/api/purchasing.ts                   | PO statuses → UPPERCASE, +2 values

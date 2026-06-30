@@ -3,16 +3,16 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // Reward is a catalog item that can be redeemed with membership points.
 type Reward struct {
 	ID                 string                      `json:"id"`
-	Code               string                      `json:"code,omitempty"`
+	Code               string                      `json:"code"`
 	Name               string                      `json:"name"`
 	Description        string                      `json:"description,omitempty"`
 	Type               enums.MembershipRewardType  `json:"type"`
@@ -32,7 +32,7 @@ type Reward struct {
 	Metadata           common.Metadata             `json:"metadata,omitempty"`
 	History            []shared.HistoryEntry       `json:"history,omitempty"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 // RewardRedemption records a member's use of a catalog reward.
@@ -41,12 +41,11 @@ type RewardRedemption struct {
 	MembershipAccountID  string                                 `json:"membership_account_id"`
 	Owner                MembershipOwnerRef                     `json:"owner"`
 	OrganisationAccessID string                                 `json:"organisation_access_id,omitempty"`
-	RewardID             string                                 `json:"reward_id"`
+	RewardCode           string                                 `json:"reward_code"`
 	ReservationID        string                                 `json:"reservation_id,omitempty"`
 	PointsSpent          int                                    `json:"points_spent"`
 	Status               enums.MembershipRewardRedemptionStatus `json:"status"`
 	DiscountAmount       *common.Money                          `json:"discount_amount,omitempty"`
-	RelatedOrderID       string                                 `json:"related_order_id,omitempty"`
 	RelatedOrderNumber   string                                 `json:"related_order_number,omitempty"`
 	VoucherCode          string                                 `json:"voucher_code,omitempty"`
 	FulfilledAt          *time.Time                             `json:"fulfilled_at,omitempty"`

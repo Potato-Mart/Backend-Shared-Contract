@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/wholesale"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 func TestWholesaleApplicationRequestJSONShape(t *testing.T) {
@@ -76,9 +76,9 @@ func TestWholesaleApplicationStatusJSONShape(t *testing.T) {
 		WholesaleApplicationResponse: wholesale.WholesaleApplicationResponse{
 			State:                     wholesale.WholesaleApplicationStatePending,
 			UserID:                    "usr_1",
-			WholesaleOrganisationID:   "org_1",
+			WholesaleOrganisationCode: "org_1",
 			OrganisationAccessID:      "acc_1",
-			WholesaleCustomerID:       "cus_1",
+			WholesaleCustomerNumber:   "cus_1",
 			OrganisationStatus:        enums.WholesaleOrganisationStatusPending,
 			AccessStatus:              enums.OrganisationAccessStatusPending,
 			CustomerStatus:            enums.CustomerStatusInactive,
@@ -103,9 +103,9 @@ func TestWholesaleApplicationStatusJSONShape(t *testing.T) {
 	for _, key := range []string{
 		"state",
 		"user_id",
-		"wholesale_organisation_id",
+		"wholesale_organisation_code",
 		"organisation_access_id",
-		"wholesale_customer_id",
+		"wholesale_customer_number",
 		"organisation_status",
 		"access_status",
 		"customer_status",
@@ -128,9 +128,9 @@ func TestWholesaleApplicationReviewJSONShape(t *testing.T) {
 				WholesaleApplicationResponse: wholesale.WholesaleApplicationResponse{
 					State:                     wholesale.WholesaleApplicationStatePending,
 					UserID:                    "usr_1",
-					WholesaleOrganisationID:   "org_1",
+					WholesaleOrganisationCode: "org_1",
 					OrganisationAccessID:      "acc_1",
-					WholesaleCustomerID:       "cus_1",
+					WholesaleCustomerNumber:   "cus_1",
 					OrganisationStatus:        enums.WholesaleOrganisationStatusPending,
 					AccessStatus:              enums.OrganisationAccessStatusPending,
 					CustomerStatus:            enums.CustomerStatusInactive,
@@ -168,7 +168,7 @@ func TestWholesaleApplicationReviewJSONShape(t *testing.T) {
 
 	for _, key := range []string{
 		"state",
-		"wholesale_organisation_id",
+		"wholesale_organisation_code",
 		"organisation_access_id",
 		"business_name",
 		"business_type",

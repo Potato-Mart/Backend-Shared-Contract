@@ -5,19 +5,19 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 func TestStockMovementRoundTripWithPurchaseLinks(t *testing.T) {
 	occurredAt := time.Date(2026, 6, 17, 9, 30, 0, 0, time.UTC)
 	movement := warehouse.StockMovement{
 		ID:                  "mov_1",
-		ProductID:           "prod_1",
+		ProductSKUCode:      "SKU-001",
 		SKU:                 "SKU-001",
 		ProductName:         "Potato Chips",
-		DepotID:             "depot_1",
+		DepotCode:           "DEPOT-1",
 		LocationCode:        "A-01",
 		Type:                enums.StockMovementTypePurchaseReceipt,
 		QtyDelta:            30,
@@ -26,9 +26,9 @@ func TestStockMovementRoundTripWithPurchaseLinks(t *testing.T) {
 		CreatedBy:           "ops@example.com",
 		ReasonCode:          "supplier_delivery",
 		Note:                "Received from supplier PO.",
-		PurchaseOrderID:     "po_1",
 		PurchaseOrderNumber: "PO-1001",
 		PurchaseReceiptID:   "pr_1",
+		SalesOrderNumber:    "SO-1001",
 		ReferenceType:       "purchase_receipt",
 		ReferenceID:         "pr_1",
 		Metadata: common.Metadata{
@@ -46,8 +46,14 @@ func TestStockMovementRoundTripWithPurchaseLinks(t *testing.T) {
 		t.Fatalf("unmarshal stock movement: %v", err)
 	}
 
-	if decoded.PurchaseOrderID != "po_1" || decoded.PurchaseReceiptID != "pr_1" {
+	if decoded.PurchaseOrderNumber != "PO-1001" || decoded.PurchaseReceiptID != "pr_1" {
 		t.Fatalf("purchase links did not round-trip: %+v", decoded)
+	}
+	if decoded.SalesOrderNumber != "SO-1001" {
+		t.Fatalf("sales order number did not round-trip: %+v", decoded)
+	}
+	if decoded.ProductSKUCode != "SKU-001" || decoded.DepotCode != "DEPOT-1" {
+		t.Fatalf("canonical codes did not round-trip: %+v", decoded)
 	}
 	if decoded.Type != enums.StockMovementTypePurchaseReceipt {
 		t.Fatalf("type = %q, want %q", decoded.Type, enums.StockMovementTypePurchaseReceipt)

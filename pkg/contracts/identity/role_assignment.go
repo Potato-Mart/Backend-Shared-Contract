@@ -3,8 +3,8 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // RoleAssignment grants a role key to a user in an account, portal, and
@@ -21,7 +21,7 @@ type RoleAssignment struct {
 	Grant      *common.LifecycleAction `json:"grant,omitempty"`
 	Revocation *common.LifecycleAction `json:"revocation,omitempty"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 // EffectivePermissionSet is the resolved RBAC projection for an admitted
@@ -33,7 +33,7 @@ type EffectivePermissionSet struct {
 	Portal                     enums.Portal             `json:"portal"`
 	ScopeType                  string                   `json:"scope_type,omitempty"`
 	ScopeID                    string                   `json:"scope_id,omitempty"`
-	WholesaleOrganisationID    string                   `json:"wholesale_organisation_id,omitempty"`
+	WholesaleOrganisationCode  string                   `json:"wholesale_organisation_code,omitempty"`
 	OrganisationAccessID       string                   `json:"organisation_access_id,omitempty"`
 	Roles                      []string                 `json:"roles,omitempty"`
 	Permissions                []string                 `json:"permissions,omitempty"`

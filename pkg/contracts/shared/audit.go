@@ -3,8 +3,8 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // AuditLogEntry is one immutable record of an administrative action.
@@ -14,17 +14,17 @@ import (
 // (login, role change, refund issued, etc.). Reads are never audited
 // here – use access logs for that.
 type AuditLogEntry struct {
-	ID             string    `json:"id"`
-	OccurredAt     time.Time `json:"occurred_at"`
-	ActorRef       `bson:",inline"`
-	Action         string `json:"action"`             // dotted key e.g. "customer.update"
-	Resource       string `json:"resource,omitempty"` // dotted key e.g. "customer:cust_123"
-	ResourceID     string `json:"resource_id,omitempty"`
-	RequestContext `bson:",inline"`
-	RecordOutcome  `bson:",inline"`
-	RiskLevel      enums.SecurityRiskLevel `json:"risk_level,omitempty"`
-	IntegrityHash  string                  `json:"integrity_hash,omitempty"`
-	Diff           common.Metadata         `json:"diff,omitempty"` // arbitrary before/after fragments
+	ID         string    `json:"id"`
+	OccurredAt time.Time `json:"occurred_at"`
+	ActorRef
+	Action     string `json:"action"`             // dotted key e.g. "customer.update"
+	Resource   string `json:"resource,omitempty"` // dotted key e.g. "customer:cust_123"
+	ResourceID string `json:"resource_id,omitempty"`
+	RequestContext
+	RecordOutcome
+	RiskLevel     enums.SecurityRiskLevel `json:"risk_level,omitempty"`
+	IntegrityHash string                  `json:"integrity_hash,omitempty"`
+	Diff          common.Metadata         `json:"diff,omitempty"` // arbitrary before/after fragments
 
-	common.DataProtectionFields `bson:",inline"`
+	common.DataProtectionFields
 }

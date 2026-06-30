@@ -3,26 +3,26 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // SecurityEvent is a normalized event used for alerts, suspicious activity,
 // access-control failures, data leakage indicators, and monitoring findings.
 type SecurityEvent struct {
-	ID                 string                      `json:"id"`
-	DetectedAt         time.Time                   `json:"detected_at"`
-	ReportedAt         *time.Time                  `json:"reported_at,omitempty"`
-	Source             string                      `json:"source,omitempty"`
-	Category           string                      `json:"category"` // e.g. "auth", "access", "data", "cloud", "payment"
-	Title              string                      `json:"title"`
-	Description        string                      `json:"description,omitempty"`
-	Severity           enums.SecurityEventSeverity `json:"severity"`
-	Status             enums.SecurityEventStatus   `json:"status"`
-	RiskLevel          enums.SecurityRiskLevel     `json:"risk_level,omitempty"`
-	ActorRef           `bson:",inline"`
-	SubjectUserID      string `json:"subject_user_id,omitempty"`
-	RequestContext     `bson:",inline"`
+	ID          string                      `json:"id"`
+	DetectedAt  time.Time                   `json:"detected_at"`
+	ReportedAt  *time.Time                  `json:"reported_at,omitempty"`
+	Source      string                      `json:"source,omitempty"`
+	Category    string                      `json:"category"` // e.g. "auth", "access", "data", "cloud", "payment"
+	Title       string                      `json:"title"`
+	Description string                      `json:"description,omitempty"`
+	Severity    enums.SecurityEventSeverity `json:"severity"`
+	Status      enums.SecurityEventStatus   `json:"status"`
+	RiskLevel   enums.SecurityRiskLevel     `json:"risk_level,omitempty"`
+	ActorRef
+	SubjectUserID string `json:"subject_user_id,omitempty"`
+	RequestContext
 	Resource           string          `json:"resource,omitempty"`
 	ResourceID         string          `json:"resource_id,omitempty"`
 	RelatedAuditLogID  string          `json:"related_audit_log_id,omitempty"`
@@ -34,7 +34,7 @@ type SecurityEvent struct {
 	Metadata           common.Metadata `json:"metadata,omitempty"`
 	History            []HistoryEntry  `json:"history,omitempty"`
 
-	common.DataProtectionFields `bson:",inline"`
+	common.DataProtectionFields
 }
 
 // SecurityIncident groups one or more security events into an incident
@@ -63,7 +63,7 @@ type SecurityIncident struct {
 	Metadata           common.Metadata             `json:"metadata,omitempty"`
 	History            []HistoryEntry              `json:"history,omitempty"`
 
-	common.DataProtectionFields `bson:",inline"`
+	common.DataProtectionFields
 }
 
 // EvidenceRecord tracks security evidence and chain-of-custody metadata.
@@ -80,7 +80,7 @@ type EvidenceRecord struct {
 	ChainOfCustody []CustodyEvent  `json:"chain_of_custody,omitempty"`
 	Metadata       common.Metadata `json:"metadata,omitempty"`
 
-	common.DataProtectionFields `bson:",inline"`
+	common.DataProtectionFields
 }
 
 type CustodyEvent struct {

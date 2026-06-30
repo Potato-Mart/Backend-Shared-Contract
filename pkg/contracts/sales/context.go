@@ -1,7 +1,7 @@
 package sales
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // BuyerContext is the shared, channel-independent description of who is
@@ -12,14 +12,14 @@ import (
 // walk-in customer on the same channel is Type=BuyerTypeGuestRetail.
 //
 // The optional reference IDs resolve the buyer to a concrete identity when
-// one exists. WholesaleOrganisationID / OrganisationAccessID carry the B2B
-// linkage that the existing Cart.CustomerID / Order.Customer fields cannot.
+// one exists. WholesaleOrganisationCode / OrganisationAccessID carry the B2B
+// linkage that the existing Cart.CustomerNumber / Order.Customer fields cannot.
 type BuyerContext struct {
-	Type                    enums.BuyerType        `json:"type,omitempty"`
-	RetailCustomerID        string                 `json:"retail_customer_id,omitempty"`
-	WholesaleOrganisationID string                 `json:"wholesale_organisation_id,omitempty"`
-	OrganisationAccessID    string                 `json:"organisation_access_id,omitempty"`
-	FulfilmentIntent        enums.FulfilmentIntent `json:"fulfilment_intent,omitempty"`
+	Type                      enums.BuyerType        `json:"type,omitempty"`
+	RetailCustomerNumber      string                 `json:"retail_customer_number,omitempty"`
+	WholesaleOrganisationCode string                 `json:"wholesale_organisation_code,omitempty"`
+	OrganisationAccessID      string                 `json:"organisation_access_id,omitempty"`
+	FulfilmentIntent          enums.FulfilmentIntent `json:"fulfilment_intent,omitempty"`
 }
 
 // PricingContext is the shared commercial pricing context under which a line

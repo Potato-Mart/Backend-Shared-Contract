@@ -3,9 +3,9 @@ package payments
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // TerminalTransaction is one card-terminal interaction.
@@ -13,9 +13,7 @@ type TerminalTransaction struct {
 	ID          string `json:"id"`
 	TerminalID  string `json:"terminal_id"`
 	OrderNumber string `json:"order_number,omitempty"`
-	// Deprecated: use OrderNumber.
-	OrderID   string `json:"order_id,omitempty"`
-	PaymentID string `json:"payment_id,omitempty"`
+	PaymentID   string `json:"payment_id,omitempty"`
 
 	ProviderReference *PaymentReference         `json:"provider_reference,omitempty"`
 	ProviderDetails   *TerminalProviderDetails  `json:"provider_details,omitempty"`
@@ -48,6 +46,6 @@ type TerminalTransaction struct {
 	Metadata common.Metadata       `json:"metadata,omitempty"`
 	History  []shared.HistoryEntry `json:"history,omitempty"`
 
-	common.AuditFields          `bson:",inline"`
-	common.DataProtectionFields `bson:",inline"`
+	common.AuditFields
+	common.DataProtectionFields
 }

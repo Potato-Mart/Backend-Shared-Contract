@@ -5,16 +5,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/marketing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/marketing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 func TestMarketingCampaignRecipientJSONGroupsContactChannels(t *testing.T) {
 	recipient := marketing.MarketingCampaignRecipient{
-		ID:                "recipient_1",
-		CampaignID:        "campaign_1",
-		CustomerProfileID: "customer_1",
+		ID:             "recipient_1",
+		CampaignID:     "campaign_1",
+		CustomerNumber: "customer_1",
 		Contacts: common.ContactChannels{
 			Email:  "buyer@example.com",
 			Phone:  "+61000000000",
@@ -35,7 +35,7 @@ func TestMarketingCampaignRecipientJSONGroupsContactChannels(t *testing.T) {
 		t.Fatalf("unmarshal marketing recipient JSON: %v", err)
 	}
 
-	for _, key := range []string{"id", "campaign_id", "customer_profile_id", "customer_name", "status", "created_at"} {
+	for _, key := range []string{"id", "campaign_id", "customer_number", "customer_name", "status", "created_at"} {
 		if _, ok := got[key]; !ok {
 			t.Fatalf("MarketingCampaignRecipient JSON missing top-level %q: %s", key, payload)
 		}

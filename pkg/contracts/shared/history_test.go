@@ -6,11 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/payments"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/payments"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 func TestHistoryOmittedWhenEmpty(t *testing.T) {
@@ -94,16 +94,6 @@ func TestHistoryEntryRoundTrip(t *testing.T) {
 	}
 	if len(got.Changes) != 1 || got.Changes[0].Field != "status" || got.Changes[0].ToValue != "override_pending" {
 		t.Fatalf("changes did not round-trip: %+v", got.Changes)
-	}
-}
-
-func TestHistoryBackwardCompatibility(t *testing.T) {
-	var order sales.Order
-	if err := json.Unmarshal([]byte(`{"id":"ord_1","order_number":"1001"}`), &order); err != nil {
-		t.Fatalf("unmarshal legacy order: %v", err)
-	}
-	if order.History != nil {
-		t.Fatalf("legacy payload history = %+v, want nil", order.History)
 	}
 }
 

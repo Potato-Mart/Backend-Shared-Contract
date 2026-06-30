@@ -1,8 +1,8 @@
 package sales
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // VolumeDiscountTier defines a carton-quantity threshold for bulk purchase
@@ -16,5 +16,5 @@ type VolumeDiscountTier struct {
 	IsActive        bool                          `json:"is_active"`
 	SortOrder       int                           `json:"sort_order"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }

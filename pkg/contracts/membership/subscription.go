@@ -3,10 +3,10 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // SubscriptionPlan defines a recurring purchase option available through the
@@ -22,7 +22,7 @@ type SubscriptionPlan struct {
 	IsActive        bool             `json:"is_active"`
 	SortOrder       int              `json:"sort_order"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 // MemberSubscription is an active recurring purchase attached to a membership
@@ -43,5 +43,5 @@ type MemberSubscription struct {
 	Note                string                         `json:"note,omitempty"`
 	History             []shared.HistoryEntry          `json:"history,omitempty"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }

@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/payments"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/payments"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 func TestTerminalTransactionJSONRoundTripWithHistory(t *testing.T) {
@@ -16,7 +16,6 @@ func TestTerminalTransactionJSONRoundTripWithHistory(t *testing.T) {
 	tx := payments.TerminalTransaction{
 		ID:         "ttx_1",
 		TerminalID: "term_1",
-		OrderID:    "ord_1",
 		PaymentID:  "pay_1",
 		ProviderReference: &payments.PaymentReference{
 			Mx51: &payments.Mx51PaymentReference{
@@ -107,16 +106,6 @@ func TestTerminalTransactionJSONRoundTripWithHistory(t *testing.T) {
 	}
 	if len(decoded.History) != 1 || decoded.History[0].Changes[0].ToValue != "finalised" {
 		t.Fatalf("history did not round-trip: %+v", decoded.History)
-	}
-}
-
-func TestTerminalTransactionJSONLegacyPayloadWithoutHistory(t *testing.T) {
-	var tx payments.TerminalTransaction
-	if err := json.Unmarshal([]byte(`{"id":"ttx_1","terminal_id":"term_1","type":"purchase","status":"pending"}`), &tx); err != nil {
-		t.Fatalf("unmarshal legacy terminal transaction: %v", err)
-	}
-	if tx.History != nil {
-		t.Fatalf("legacy payload history = %+v, want nil", tx.History)
 	}
 }
 

@@ -1,9 +1,9 @@
 package category
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // SKU corresponds to one of the top-level SKU codes that
@@ -18,5 +18,5 @@ type SKU struct {
 	Products    []product.Snapshot     `json:"products,omitempty"`
 	SortOrder   int                    `json:"sort_order"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }

@@ -3,7 +3,7 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
 )
 
 // CloudServiceSecurityProfile records security posture for a cloud service
@@ -31,5 +31,5 @@ type CloudServiceSecurityProfile struct {
 	ConfigurationBaseline string          `json:"configuration_baseline,omitempty"`
 	Metadata              common.Metadata `json:"metadata,omitempty"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }

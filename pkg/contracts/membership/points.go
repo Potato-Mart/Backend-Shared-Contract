@@ -3,8 +3,8 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // PointLedgerEntry is a single points transaction for a membership account.
@@ -16,7 +16,6 @@ type PointLedgerEntry struct {
 	Owner                     MembershipOwnerRef          `json:"owner"`
 	Delta                     int                         `json:"delta"`
 	Reason                    enums.MembershipPointReason `json:"reason"`
-	RelatedOrderID            string                      `json:"related_order_id,omitempty"`
 	RelatedOrderNumber        string                      `json:"related_order_number,omitempty"`
 	RelatedReservationID      string                      `json:"related_reservation_id,omitempty"`
 	RelatedRewardRedemptionID string                      `json:"related_reward_redemption_id,omitempty"`
@@ -44,7 +43,6 @@ type PointBucket struct {
 	ExpiresAt           *time.Time                  `json:"expires_at,omitempty"`
 	SourceLedgerEntryID string                      `json:"source_ledger_entry_id"`
 	Reason              enums.MembershipPointReason `json:"reason"`
-	RelatedOrderID      string                      `json:"related_order_id,omitempty"`
 	RelatedOrderNumber  string                      `json:"related_order_number,omitempty"`
 }
 
@@ -72,7 +70,7 @@ type PointReservation struct {
 	Reason                    enums.MembershipPointReason    `json:"reason"`
 	RedemptionType            enums.MembershipRedemptionType `json:"redemption_type"`
 	RelatedOrderID            string                         `json:"related_order_id,omitempty"`
-	RelatedRewardID           string                         `json:"related_reward_id,omitempty"`
+	RelatedRewardCode         string                         `json:"related_reward_code,omitempty"`
 	RelatedRewardRedemptionID string                         `json:"related_reward_redemption_id,omitempty"`
 	Allocations               []PointAllocation              `json:"allocations,omitempty"`
 	ExpiresAt                 time.Time                      `json:"expires_at"`
@@ -97,7 +95,7 @@ type PointPromotion struct {
 	MinOrderAmount *common.Money                   `json:"min_order_amount,omitempty"`
 	IsActive       bool                            `json:"is_active"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 // MemberCheckIn records a daily check-in for streak-based point awards.

@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v10.0.0` | 2026-06-30  | Major | Breaking `/v9`→`/v10` module path. Completes the canonical reference migration: removes every deprecated id/legacy alias and converts remaining cross-struct references to code/number business keys (product→`sku_code`, order→`order_number`, depot→`depot_code`, supplier→`supplier_code`, coupon→`coupon_code`, reward→`reward_code`, retail customer→`customer_number`, wholesale org→`organisation_code`, device→`device_key`). Removes storage-driver struct tags, flattens customer identity keys and product secondary keys, adds `common.PartyRef.Code`, makes `Reward.Code` required, and removes legacy product/payment/user compatibility fields. Hard cutover — no legacy decode/fallback. |
 | `v9.4.0` | 2026-06-27   | Minor | Canonical code/number reference migration: product refs add `product_sku_code`, order refs add `order_number`, depot/supplier refs add code fields, product display fields use localized description/brand arrays, and product vendor is renamed to supplier with legacy decode/writeback compatibility |
 | `v9.3.0` | 2026-06-27   | Minor | Added required SKU `primary_name` as a singular `common.LocalizedName`; SKU `other_names` remains as optional alternate localized names |
 | `v9.0.0` | 2026-06-25   | Major | Contract hygiene: inline enums relocated to `pkg/enums`; non-struct logic (promotion resolver, product/payments/promotion/membership/campaign helpers) moved to `pkg/logic`; contract files are structs-only. Requires the `/v9` module path migration. Also adds (additive) shared buyer/commercial context — `BuyerType`/`PriceAudience`/`PriceVisibility`/`FulfilmentIntent` enums, `sales.BuyerContext`/`PricingContext`, `Cart.Channel`/`buyer`, item `pricing`, and `product.Selling` — with POS treated as a channel, not a buyer type |
@@ -40,7 +41,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v5.3.0` | 2026-06-15   | Minor | Company/customer shared detail, device detection, collections, security logs |
 | `v5.2.0` | 2026-06-12   | Minor | Promotions, category tags, product lifecycle, effective promotion resolver |
 | `v5.1.2` | 2026-06-12   | Patch | Product/SKU field refinement |
-| `v5.1.1` | 2026-06-12   | Patch | BSON inline tag corrections and integration audit docs |
+| `v5.1.1` | 2026-06-12   | Patch | Embedded struct tag corrections and integration audit docs |
 | `v5.1.0` | 2026-06-12   | Minor | Service-authenticated stock/pricing endpoints and API envelope clarification |
 | `v5.0.0` | 2026-06-11   | Major | V5 module path, contract reroute, performance-oriented model cleanup |
 | `v4.2.0` | 2026-06-11   | Patch | Version metadata bump |
@@ -70,6 +71,63 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v10.0.0 (2026-06-30) - ID Reference Removal / 移除 ID 參照（改用代碼與單號）
+
+Release date: 2026-06-30
+
+Breaking `/v9` → `/v10` module path migration. This release completes the v9.4.0 canonical
+code/number migration by removing every deprecated id/legacy alias and converting the
+remaining cross-struct references to their code/number business key. Each struct keeps its
+own `id`; only references whose target has no code/number stay id-based. HARD CUTOVER — all
+legacy decode/backfill/fallback is removed (no backward compatibility; empty datastore).
+
+### Breaking Changes / 破壞性變更
+
+- Module path `github.com/Potato-Mart/Backend-Shared-Contract/v9` → `/v10`.
+- Removed all deprecated `omitempty` id aliases (canonical siblings already existed): product
+  `product_id`/`product_ids`, depot `depot_id`, order `order_id`/`purchase_order_id`/`sales_order_id`,
+  supplier `supplier_id`, coupon `redeemed_order_id`, membership `related_order_id` (where a
+  `related_order_number` sibling existed), and the inbound legacy `supplier`.
+- Renamed remaining id references to code/number: `customer_profile_id` / `retail_customer_id` /
+  cart `customer_id` / `referrer_id` → `*customer_number`; `coupon_id` → `coupon_code`;
+  `reward_id` / `related_reward_id` → `reward_code` / `related_reward_code`;
+  `wholesale_organisation_id` / `organisation_id` → `*organisation_code`; `wholesale_customer_id`
+  → `wholesale_customer_number`; `device_id` (identity session, request context, order source) →
+  `device_key`; analytics forecast `sku` and WMS draft/discrepancy `sku` → `sku_code` /
+  `product_sku_code`; product/snapshot `supplier` → `supplier_code`.
+- Removed deprecated non-id fields: product `vendor` and `brand_key`, snapshot `vendor`,
+  storefront `vendor`/`brand_key`, `Payment.currency` (use `amount.currency`),
+  `UserProfile.user_role`, and enum `UserRoleClient` plus `UserRole.IsStaff()`/`IsAdmin()`.
+- Removed the product legacy-decode compat (`product/json_compat.go`) and the promotion
+  resolver legacy `ProductID` fallback.
+- `customers.RetailCustomerActivity.amount` changed from a bare number to `common.Money`.
+- Removed storage-driver struct tags from shared contracts so persistence adapters own all
+  storage-specific field mapping.
+- `customers.RetailCustomer` and `wholesale.WholesaleCustomer` now expose `customer_number`,
+  `user_id`, `account_id`, `primary_auth_identity_id`, and `auth_identity_ids` at the top level;
+  the former nested `identity` object and nested `basic_info.customer_number` are removed.
+- `product.Product` now exposes `catalogue`, `supplier_code`, and `placing_area_code` at the
+  top level; the former nested `identifiers` object is removed.
+
+### Additive Changes / 新增
+
+- Added `common.PartyRef.Code` (`code`) as the canonical organisation/supplier business key
+  (surfaces on `Supplier`, `WholesaleOrganisation`, and their snapshots/summaries).
+- `membership.Reward.Code` is now required (was optional) so `reward_code` is a reliable key.
+
+### Consumer Action / 使用方動作
+
+- Update the `require` to `/v10` and rewrite imports; there is no `/v9` compatibility.
+- Send/store all cross-entity references as the code/number key; backends must populate
+  `PartyRef.Code` (supplier/organisation code) and `customer_number` on write so the new
+  references resolve.
+- Persistence adapters must map storage primary keys and any provider-specific storage field
+  names locally; shared contracts expose only database-neutral JSON/domain fields.
+- The 3 backends and frontends must be re-synced (separate task): fix imports, adapt
+  repositories/handlers/DTOs to the renamed/removed fields, and move persistence lookup/index keys
+  off the removed `*_id` to the canonical code/number (notably analytics `sku`→`sku_code` and
+  request-context `device_id`→`device_key`).
 
 ## v9.4.0 (2026-06-27) - Canonical Code/Number References / 代碼與單號參照標準化
 
@@ -638,15 +696,15 @@ Release date: 2026-06-12
 - category contract 新增更合適的 product/SKU 欄位。
 - 更新 README 與 version metadata。
 
-## v5.1.1 - BSON Inline Tag Fixes / BSON Inline 標籤修正
+## v5.1.1 - Embedded Struct Tag Fixes / Embedded Struct 標籤修正
 
 Release date: 2026-06-12
 
-- Corrected BSON inline tags for embedded structs across category, customer, identity, loyalty, marketing, payment, product, promotion, purchase, sales, shared, shipping, subscription, warehouse, and wholesale-related contracts.
+- Corrected embedded struct tags across category, customer, identity, loyalty, marketing, payment, product, promotion, purchase, sales, shared, shipping, subscription, warehouse, and wholesale-related contracts.
 - Added integration audit documentation dated 2026-06-12.
 - Improved persistence compatibility for consumers using document databases.
 
-- 修正多個 category、customer、identity、loyalty、marketing、payment、product、promotion、purchase、sales、shared、shipping、subscription、warehouse、wholesale-related contract 的 embedded struct BSON inline tags。
+- 修正多個 category、customer、identity、loyalty、marketing、payment、product、promotion、purchase、sales、shared、shipping、subscription、warehouse、wholesale-related contract 的 embedded struct tags。
 - 新增 2026-06-12 integration audit 文件。
 - 改善使用 document database 的消費方持久化相容性。
 

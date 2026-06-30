@@ -3,8 +3,8 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // PortalAccess records whether an account/persona may enter one front-door
@@ -20,7 +20,7 @@ type PortalAccess struct {
 	Revocation  *common.LifecycleAction  `json:"revocation,omitempty"`
 	ExpiresAt   *time.Time               `json:"expires_at,omitempty"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 // PortalAccessDecision is the contract-only result shape for login or portal

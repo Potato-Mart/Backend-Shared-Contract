@@ -1,8 +1,8 @@
 package product
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v9/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
 )
 
 // Snapshot is the denormalised product summary embedded in carts, order
@@ -21,20 +21,18 @@ import (
 // freezing a transient state like "new" or "out_of_stock" into a
 // historical row would be wrong.
 type Snapshot struct {
-	ID          string                        `json:"id,omitempty"`
-	SKUCode     string                        `json:"sku_code,omitempty"`
-	SKU         string                        `json:"sku,omitempty"`
-	Name        string                        `json:"name,omitempty"`
-	OtherNames  []common.LocalizedName        `json:"other_names,omitempty"`
-	Description []common.LocalizedDescription `json:"description,omitempty"`
-	Brand       []common.LocalizedName        `json:"brand,omitempty"`
-	Supplier    string                        `json:"supplier,omitempty"`
-	// Deprecated: use Supplier. Kept only for migration decode/writeback.
-	Vendor        string              `json:"vendor,omitempty"`
-	ImageURL      string              `json:"image_url,omitempty"`
-	Storage       enums.StorageType   `json:"storage,omitempty"`
-	Status        enums.ProductStatus `json:"status,omitempty"`
-	DisplayStatus string              `json:"display_status,omitempty"`
-	Barcode       string              `json:"barcode,omitempty"`
-	Taxed         bool                `json:"taxed"`
+	ID            string                        `json:"id,omitempty"`
+	SKUCode       string                        `json:"sku_code,omitempty"`
+	SKU           string                        `json:"sku,omitempty"`
+	Name          string                        `json:"name,omitempty"`
+	OtherNames    []common.LocalizedName        `json:"other_names,omitempty"`
+	Description   []common.LocalizedDescription `json:"description,omitempty"`
+	Brand         []common.LocalizedName        `json:"brand,omitempty"`
+	SupplierCode  string                        `json:"supplier_code,omitempty"`
+	ImageURL      string                        `json:"image_url,omitempty"`
+	Storage       enums.StorageType             `json:"storage,omitempty"`
+	Status        enums.ProductStatus           `json:"status,omitempty"`
+	DisplayStatus string                        `json:"display_status,omitempty"`
+	Barcode       string                        `json:"barcode,omitempty"`
+	Taxed         bool                          `json:"taxed"`
 }
