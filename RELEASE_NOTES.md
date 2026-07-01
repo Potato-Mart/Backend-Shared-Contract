@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v10.1.1` | 2026-07-02 | Patch | Identity claim alignment: adds optional `retail_customer_number` to `identity.AccessTokenClaims` so services can carry the retail customer business number in access-token claims. Additive only; no module path change, migration, or breaking JSON change. |
 | `v10.1.0` | 2026-06-30 | Minor | Product category/catalogue cleanup: removes `category_key`, `category_path`, `catalogue`, and nested `merchandising`; adds product/wholesale `collection` object and top-level localized `category_tags`; renames product-list service auth and wholesale permissions from catalog/catalogue to products; replaces category promotion/coupon targeting with category-tag ID/localized-name contracts. Breaking wire-shape change shipped under requested `v10.1.0`. |
 | `v10.0.0` | 2026-06-30  | Major | Breaking `/v9`→`/v10` module path. Completes the canonical reference migration: removes every deprecated id/legacy alias and converts remaining cross-struct references to code/number business keys (product→`sku_code`, order→`order_number`, depot→`depot_code`, supplier→`supplier_code`, coupon→`coupon_code`, reward→`reward_code`, retail customer→`customer_number`, wholesale org→`organisation_code`, device→`device_key`). Removes storage-driver struct tags, flattens customer identity keys and product secondary keys, adds `common.PartyRef.Code`, makes `Reward.Code` required, and removes legacy product/payment/user compatibility fields. Hard cutover — no legacy decode/fallback. |
 | `v9.4.0` | 2026-06-27   | Minor | Canonical code/number reference migration: product refs add `product_sku_code`, order refs add `order_number`, depot/supplier refs add code fields, product display fields use localized description/brand arrays, and product vendor is renamed to supplier with legacy decode/writeback compatibility |
@@ -72,6 +73,30 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v10.1.1 (2026-07-02) - Retail Customer Number Identity Claim / 零售顧客編號身份聲明
+
+Release date: 2026-07-02
+
+This patch release adds an optional retail customer business number claim to the shared
+access-token contract. It keeps the `/v10` module path and does not require a data migration
+or compatibility fallback.
+
+本 patch release 在共用 access-token 契約中加入可選的零售顧客業務編號聲明。此版本維持
+`/v10` module path，不需要資料遷移，也不需要相容性 fallback。
+
+### Additive Changes / 新增相容變更
+
+- `identity.AccessTokenClaims` now includes optional `retail_customer_number`.
+- Services can use this claim to mirror the retail customer number that Management issues
+  for accounts linked to a retail-customer profile.
+
+### Consumer Action / 使用方動作
+
+- Upgrade backend services and other consumers to
+  `github.com/Potato-Mart/Backend-Shared-Contract/v10 v10.1.1`.
+- Ensure any service-local JWT/access-token claim mirrors accept `retail_customer_number`.
+- No module path change, schema migration, or breaking JSON handling change is required.
 
 ## v10.1.0 (2026-06-30) - Product Category/Collection Contract Cleanup / 商品分類與集合契約整理
 

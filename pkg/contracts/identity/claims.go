@@ -19,6 +19,7 @@ type AccessTokenClaims struct {
 	Permissions               []string                 `json:"permissions,omitempty"`
 	WholesaleOrganisationCode string                   `json:"wholesale_organisation_code,omitempty"`
 	OrganisationAccessID      string                   `json:"organisation_access_id,omitempty"`
+	RetailCustomerNumber      string                   `json:"retail_customer_number,omitempty"`
 	RoleKey                   string                   `json:"role_key,omitempty"`
 	AuthAssuranceLevel        enums.AuthAssuranceLevel `json:"auth_assurance_level,omitempty"`
 	MFAVerifiedAt             *time.Time               `json:"mfa_verified_at,omitempty"`
