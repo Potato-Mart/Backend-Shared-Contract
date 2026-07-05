@@ -1,8 +1,8 @@
 package wholesale
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
 )
 
 // WholesaleOrganisation represents an approved or prospective B2B organisation

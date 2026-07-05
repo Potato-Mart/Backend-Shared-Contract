@@ -3,8 +3,8 @@ package wallet
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/membership"
 )
 
 // Voucher is a customer-held, single-redemption instrument (often issued by a

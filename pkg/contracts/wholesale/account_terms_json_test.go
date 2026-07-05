@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/wholesale"
 )
 
 func TestWholesaleAccountTermsJSONShape(t *testing.T) {

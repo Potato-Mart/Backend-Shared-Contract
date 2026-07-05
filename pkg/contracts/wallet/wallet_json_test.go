@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/contracts/wallet"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
 )
 
 func TestCustomerWalletRoundTrip(t *testing.T) {
@@ -98,5 +98,76 @@ func TestGiftCardTransactionRoundTrip(t *testing.T) {
 	if decoded.Reason != enums.GiftCardTransactionReasonRedeem ||
 		decoded.BalanceAfter.AmountMinor != 5000 || decoded.RelatedOrderNumber != "ORD-1" {
 		t.Fatalf("gift card tx did not round-trip: %+v", decoded)
+	}
+}
+
+func TestWalletExportRoundTrip(t *testing.T) {
+	now := time.Date(2026, 7, 5, 0, 0, 0, 0, time.UTC)
+	owner := membership.MembershipOwnerRef{OwnerType: enums.MembershipOwnerTypeRetailCustomer, OwnerID: "RC-1"}
+	export := wallet.WalletExport{
+		SchemaVersion: wallet.WalletExportSchemaVersion,
+		Owner:         owner,
+		Membership: wallet.WalletExportMembership{
+			Account: &membership.MembershipAccount{
+				ID:     "mem_1",
+				Owner:  owner,
+				Status: enums.MembershipAccountStatusActive,
+				Wallet: membership.MembershipWalletSummary{
+					AvailablePoints: 150,
+					CalculatedAt:    now,
+				},
+				EnrolledAt: now,
+			},
+			PointLedger: []membership.PointLedgerEntry{{
+				ID:                  "pledger_1",
+				MembershipAccountID: "mem_1",
+				Owner:               owner,
+				Delta:               150,
+				BalanceAfter:        150,
+				Remaining:           150,
+				CreatedAt:           now,
+			}},
+		},
+		History: []wallet.WalletExportHistoryEvent{{
+			At:          now,
+			Type:        enums.WalletInstrumentTypePoints,
+			Code:        "mem_1",
+			DeltaPoints: 150,
+			Status:      "earned",
+		}},
+		Summary:     wallet.WalletExportSummary{AvailablePoints: 150},
+		GeneratedAt: now,
+		Filters: wallet.WalletExportFilters{
+			IncludeHistory:  true,
+			IncludeExpired:  true,
+			IncludeRedeemed: true,
+			IncludeVoided:   true,
+		},
+		RecordCounts: wallet.WalletExportRecordCounts{
+			MembershipPointLedgerEntries: 1,
+			HistoryEvents:                1,
+		},
+	}
+
+	payload, err := json.Marshal(export)
+	if err != nil {
+		t.Fatalf("marshal wallet export: %v", err)
+	}
+	if !strings.Contains(string(payload), `"schema_version":"wallet_export_v1"`) {
+		t.Fatalf("wallet export payload missing schema version: %s", payload)
+	}
+	if !strings.Contains(string(payload), `"point_ledger"`) {
+		t.Fatalf("wallet export payload missing point ledger: %s", payload)
+	}
+
+	var decoded wallet.WalletExport
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal wallet export: %v", err)
+	}
+	if decoded.SchemaVersion != wallet.WalletExportSchemaVersion ||
+		decoded.Owner.OwnerID != "RC-1" ||
+		len(decoded.Membership.PointLedger) != 1 ||
+		decoded.RecordCounts.HistoryEvents != 1 {
+		t.Fatalf("wallet export did not round-trip: %+v", decoded)
 	}
 }

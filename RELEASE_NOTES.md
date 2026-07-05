@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v11.0.0` | 2026-07-05 | Major | Unified coupon and wallet export contracts: removes public `CustomerCoupon`; adds Coupon-owned assignment/detail/issue/recipient-preview contracts; adds wallet export request/status/result models with `schema_version: "wallet_export_v1"` covering membership points, coupons, vouchers, gift cards, rewards, normalized history, filters, row counts, checksum, and status. Requires `/v10` → `/v11` module-path migration. |
 | `v10.1.1` | 2026-07-02 | Patch | Identity claim alignment: adds optional `retail_customer_number` to `identity.AccessTokenClaims` so services can carry the retail customer business number in access-token claims. Additive only; no module path change, migration, or breaking JSON change. |
 | `v10.1.0` | 2026-06-30 | Minor | Product category/catalogue cleanup: removes `category_key`, `category_path`, `catalogue`, and nested `merchandising`; adds product/wholesale `collection` object and top-level localized `category_tags`; renames product-list service auth and wholesale permissions from catalog/catalogue to products; replaces category promotion/coupon targeting with category-tag ID/localized-name contracts. Breaking wire-shape change shipped under requested `v10.1.0`. |
 | `v10.0.0` | 2026-06-30  | Major | Breaking `/v9`→`/v10` module path. Completes the canonical reference migration: removes every deprecated id/legacy alias and converts remaining cross-struct references to code/number business keys (product→`sku_code`, order→`order_number`, depot→`depot_code`, supplier→`supplier_code`, coupon→`coupon_code`, reward→`reward_code`, retail customer→`customer_number`, wholesale org→`organisation_code`, device→`device_key`). Removes storage-driver struct tags, flattens customer identity keys and product secondary keys, adds `common.PartyRef.Code`, makes `Reward.Code` required, and removes legacy product/payment/user compatibility fields. Hard cutover — no legacy decode/fallback. |
@@ -73,6 +74,46 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v11.0.0 (2026-07-05) - Unified Coupons and Wallet Export Contracts / 統一優惠券與錢包匯出契約
+
+Release date: 2026-07-05
+
+This major release moves coupon ownership to the Coupon aggregate and adds the shared
+wallet export contracts used by Management-owned wallet export APIs. It upgrades the Go
+module path from `/v10` to `/v11`. The database is empty for this migration window, so no
+old customer-coupon data migration or backward-compatible read path is required.
+
+本 major release 將優惠券發放歸屬移至 Coupon aggregate，並新增 Management 錢包匯出 API
+使用的共用錢包匯出契約。Go module path 從 `/v10` 升級為 `/v11`。本次遷移期間資料庫為空，
+因此不需要舊 customer-coupon 資料遷移，也不保留向後相容讀取路徑。
+
+### Breaking Changes / 破壞性變更
+
+- Removed public `promotion.CustomerCoupon`. Consumers must use Coupon-owned assignment
+  and history contracts instead.
+- Module path changes from `github.com/Potato-Mart/Backend-Shared-Contract/v10` to
+  `github.com/Potato-Mart/Backend-Shared-Contract/v11`.
+
+### Added / 新增
+
+- `promotion.CouponAssignment`, `promotion.CouponAssignmentSummary`,
+  `promotion.CouponDetail`, `promotion.CouponIssueSpec`, and
+  `promotion.CouponRecipientPreview`.
+- Wallet export contracts with `schema_version: "wallet_export_v1"` for async export
+  request/status/result flows.
+- Wallet export item/history models for membership points, coupon assignments/usage,
+  vouchers, gift cards, rewards, normalized history, filters, record counts, checksum,
+  status, requester, and generated/export metadata.
+
+### Consumer Action / 使用方動作
+
+- Update imports and `go.mod` from `/v10` to `/v11` and require
+  `github.com/Potato-Mart/Backend-Shared-Contract/v11 v11.0.0`.
+- Remove local `/v10` replace directives and run `go mod tidy`.
+- Run contract JSON round-trip tests and backend integration tests for coupon assignment,
+  coupon redemption, wallet export, checkout, and any consumer package importing shared
+  promotion or wallet contracts.
 
 ## v10.1.1 (2026-07-02) - Retail Customer Number Identity Claim / 零售顧客編號身份聲明
 

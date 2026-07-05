@@ -3,7 +3,7 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
 )
 
 // UserAccountCreatedEvent is emitted when an account/persona is created for a

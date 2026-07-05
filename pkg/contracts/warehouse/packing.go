@@ -3,7 +3,7 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v10/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
 )
 
 // PackingLine is the order-line projection needed by the packing UI and
