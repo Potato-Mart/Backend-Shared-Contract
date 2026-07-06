@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/wholesale"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/product"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/wholesale"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/product"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/warehouse"
 )
 
 func TestApprovedStorefrontProductJSONShape(t *testing.T) {

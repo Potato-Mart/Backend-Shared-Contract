@@ -1,10 +1,10 @@
 package promotion
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/shared"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/promotion"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/shared"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/promotion"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/sales"
 )
 
 // Promotion is the rule-based, auto-applied discount engine entity.

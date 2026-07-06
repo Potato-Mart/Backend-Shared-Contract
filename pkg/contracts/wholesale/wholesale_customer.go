@@ -3,10 +3,10 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/shared"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/customer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/shared"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/customer"
 )
 
 // WholesaleCustomer is the grouped business profile for a wholesaleCustomer

@@ -3,7 +3,7 @@ package promotion
 import (
 	"time"
 
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/promotion"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/promotion"
 )
 
 // DiscountSpec is the discount type/value pair shared by promotions and

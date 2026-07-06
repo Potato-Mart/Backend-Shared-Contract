@@ -3,9 +3,9 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/customer"
-	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/customer"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/wholesale"
 )
 
 // WholesaleApplicationRequest is the public trade-account application payload.

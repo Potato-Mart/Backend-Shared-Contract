@@ -6,8 +6,8 @@ package productlogic
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/product"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/product"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/product"
 )
 
 // Display states are the read-time, computed presentation states layered on top

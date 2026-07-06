@@ -8,12 +8,12 @@
 
 ## 最新版本
 
-### V12.0.0
+### V13.0.0
 
 ## 模組路徑
 
 ```text
-github.com/Potato-Mart/Backend-Shared-Contract/v12
+github.com/Potato-Mart/Backend-Shared-Contract/v13
 ```
 
 ## 目錄結構
@@ -27,15 +27,35 @@ github.com/Potato-Mart/Backend-Shared-Contract/v12
 在使用方服務的 `go.mod` 中加入：
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v12 v12.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v13 v13.0.0
 ```
 
 接著匯入所需套件，例如：
 
 ```go
 import (
-    walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/wallet"
+    walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/wallet"
 )
+```
+
+## 測試
+
+本模組通常位於 Potato Mart workspace 旁邊，為了避免上層 `go.work` 影響測試，請使用：
+
+```powershell
+./scripts/Test-Contract.ps1
+```
+
+或：
+
+```bash
+bash scripts/test-contract.sh
+```
+
+等效指令為：
+
+```bash
+GOWORK=off go test ./...
 ```
 
 ## 版本管理

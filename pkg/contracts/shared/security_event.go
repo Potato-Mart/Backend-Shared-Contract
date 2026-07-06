@@ -3,8 +3,8 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/security"
 )
 
 // SecurityEvent is a normalized event used for alerts, suspicious activity,

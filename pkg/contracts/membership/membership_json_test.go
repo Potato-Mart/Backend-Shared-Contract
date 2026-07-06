@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/product"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/product"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/membership"
 )
 
 func TestMembershipAccountAndTierRoundTrip(t *testing.T) {

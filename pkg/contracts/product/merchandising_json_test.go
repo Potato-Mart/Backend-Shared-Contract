@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/product"
 )
 
 func TestProductStorefrontMerchandisingJSONShape(t *testing.T) {

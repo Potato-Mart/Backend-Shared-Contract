@@ -3,10 +3,10 @@ package wallet
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/shared"
-	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/shared"
+	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/wallet"
 )
 
 // GiftCard is a stored-value instrument with a re-spendable balance. The

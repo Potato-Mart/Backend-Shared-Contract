@@ -9,7 +9,7 @@
 // backend services (separate modules) from importing these types.
 package serviceauth
 
-import serviceauthenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/serviceauth"
+import serviceauthenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/serviceauth"
 
 // AudienceInternal is the JWT `aud` value that marks a service (machine)
 // token. It isolates service tokens from user tokens, which carry a

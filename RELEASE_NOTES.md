@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v13.0.0` | 2026-07-06 | Major | V13 module path for reward tier-trigger fields and release engineering cleanup: adds membership reward tier-achievement issue fields, splits enum tests into small domain files, adds standalone `GOWORK=off` test scripts/CI, and requires `/v12` → `/v13` module-path migration. |
 | `v12.0.0` | 2026-07-06 | Major | Breaking enum package cleanup: splits the flat enum package into domain enum subpackages, hard-moves remaining contract/API/service-auth typed enums, removes legacy wallet enum aliases, and removes provider-specific terminal adapter constants from the contract repo. Requires `/v11` → `/v12` module-path migration. |
 | `v11.2.0` | 2026-07-06 | Minor | Sales delivery scheduling and payment processor fees: adds order `expected_delivery_date`/`expected_delivery_time`, `delivery_method` (new `DeliveryMethod` enum) with `outsourced_carrier`, derived `delivery_region` (new `DeliveryRegion` enum), shipping zone `is_local`, payment `processor_fee`/`net_amount`, Stripe `balance_transaction_id`, and the canonical MAMA order-number rule in `pkg/logic/sales`. Additive only; no module path change. |
 | `v11.1.0` | 2026-07-06 | Minor | Retail preorder and expiry merchandising contracts: adds preorder interest/status contracts, product preorder policy fields, admin-configurable soon-expiry merchandising policy, storefront-safe preorder/expiry display fields, and wholesale storefront projection support. Additive only; no module path change. |
@@ -78,9 +79,54 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
 
-## v12.0.0 (Unreleased) - Domain Enum Subpackages / 領域列舉子套件
+## v13.0.0 (2026-07-06) - Reward Tier Triggers And Test Infrastructure / 獎勵等級觸發與測試基礎設施
 
-Release date: Unreleased
+Release date: 2026-07-06
+
+This major release moves the Go module path to `/v13`, adds tier-achievement
+trigger fields to membership rewards, and hardens the contract test setup. The
+enum test suite is split into small domain-owned files so enum cases and helper
+behaviour can be maintained without growing a single large test file.
+
+本 major release 將 Go module path 升至 `/v13`，為會員獎勵新增等級達成觸發欄位，
+並強化 shared contract 的測試設定。enum 測試已拆成小型領域檔案，方便後續新增、
+修改或刪除 enum case 與 helper 行為，而不再擴大單一大型測試檔。
+
+### Breaking Changes / 破壞性變更
+
+- `go.mod` module path changes to `github.com/Potato-Mart/Backend-Shared-Contract/v13`.
+- All in-repository imports now use `/v13`; consumers must update imports from
+  `/v12` to `/v13` before upgrading.
+- No enum JSON wire values are changed by this release.
+
+### Additive Contract Changes / 新增相容合約變更
+
+- `membership.Reward` gains `trigger_tier_key` for rewards issued when a member
+  reaches a specific tier.
+- `membership.Reward` gains `issue_on_tier_achievement` to mark rewards that
+  should be issued automatically on tier achievement.
+- Both new reward fields are `omitempty`, so existing serialized reward records
+  remain readable.
+
+### Release Engineering / 發布工程
+
+- The previous large `pkg/enums/enums_test.go` file is split into small
+  domain-focused enum test files under `pkg/enums`.
+- Shared enum assertions now live in `pkg/enums/enum_assertions_test.go`.
+- Contract tests can be run with `scripts/Test-Contract.ps1` or
+  `scripts/test-contract.sh`, both using `GOWORK=off go test ./...` so the
+  parent Potato Mart workspace does not hide this standalone module.
+- GitHub test and release workflows run with `GOWORK=off`.
+
+### Consumer Action / 使用方動作
+
+- Update dependencies from `/v12` to `/v13`, then run `go mod tidy`.
+- Treat the new reward tier-trigger fields as optional for existing data.
+- Run contract serialization/deserialization tests after upgrading.
+
+## v12.0.0 (2026-07-06) - Domain Enum Subpackages / 領域列舉子套件
+
+Release date: 2026-07-06
 
 This major release replaces the flat enum package with domain enum subpackages
 under `pkg/enums/*`. It also hard-moves the remaining typed enum definitions
