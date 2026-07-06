@@ -12,17 +12,21 @@ import (
 
 func TestApprovedStorefrontProductJSONShape(t *testing.T) {
 	p := wholesale.ApprovedStorefrontProduct{
-		ID:                "prd_1",
-		SKUCode:           "SKU-1",
-		Name:              "Bulk Potatoes",
-		Description:       []common.LocalizedDescription{{Language: "en", Description: "Foodservice carton"}},
-		Brand:             []common.LocalizedName{{Language: "en", Name: "Potato Mart"}},
-		Supplier:          "SUP-1",
-		Storage:           enums.StorageDry,
-		DisplayStatus:     "active",
-		CoverURL:          "https://example.com/potatoes.jpg",
-		Collection:        &product.CollectionRef{ID: "col_produce", Name: []common.LocalizedName{{Language: "en", Name: "Produce"}}},
-		CategoryTags:      []product.CategoryTag{{ID: "tag_potatoes", Name: []common.LocalizedName{{Language: "en", Name: "Potatoes"}}, CollectionID: "col_produce", CollectionName: []common.LocalizedName{{Language: "en", Name: "Produce"}}}},
+		ID:            "prd_1",
+		SKUCode:       "SKU-1",
+		Name:          "Bulk Potatoes",
+		Description:   []common.LocalizedDescription{{Language: "en", Description: "Foodservice carton"}},
+		Brand:         []common.LocalizedName{{Language: "en", Name: "Potato Mart"}},
+		Supplier:      "SUP-1",
+		Storage:       enums.StorageDry,
+		DisplayStatus: "active",
+		CoverURL:      "https://example.com/potatoes.jpg",
+		Collection:    &product.CollectionRef{ID: "col_produce", Name: []common.LocalizedName{{Language: "en", Name: "Produce"}}},
+		CategoryTags:  []product.CategoryTag{{ID: "tag_potatoes", Name: []common.LocalizedName{{Language: "en", Name: "Potatoes"}}, CollectionID: "col_produce", CollectionName: []common.LocalizedName{{Language: "en", Name: "Produce"}}}},
+		StorefrontDisplay: &product.StorefrontDisplay{
+			Preorder: &product.StorefrontPreorderDisplay{Available: true, Status: product.StorefrontPreorderStatusOpen},
+			Expiry:   &product.StorefrontExpiryDisplay{SoonExpiry: true, Status: product.StorefrontExpiryStatusSoonExpiry},
+		},
 		Price:             common.Money{AmountMinor: 2500, Currency: "AUD"},
 		StockAvailable:    true,
 		AvailabilityState: "available",
@@ -50,6 +54,7 @@ func TestApprovedStorefrontProductJSONShape(t *testing.T) {
 		"cover_url",
 		"collection",
 		"category_tags",
+		"storefront_display",
 		"price",
 		"stock_available",
 		"availability_state",
@@ -83,6 +88,18 @@ func TestApprovedStorefrontProductJSONShape(t *testing.T) {
 	tagCollectionName, ok := tag["collection_name"].([]any)
 	if !ok || len(tagCollectionName) != 1 || tagCollectionName[0].(map[string]any)["name"] != "Produce" {
 		t.Fatalf("category_tags[0].collection_name = %#v, want localized Produce (%s)", tag["collection_name"], raw)
+	}
+	display, ok := got["storefront_display"].(map[string]any)
+	if !ok {
+		t.Fatalf("storefront_display = %#v, want object (%s)", got["storefront_display"], raw)
+	}
+	preorder, ok := display["preorder"].(map[string]any)
+	if !ok || preorder["status"] != "open" {
+		t.Fatalf("storefront_display.preorder = %#v, want open status (%s)", display["preorder"], raw)
+	}
+	expiry, ok := display["expiry"].(map[string]any)
+	if !ok || expiry["status"] != "soon_expiry" {
+		t.Fatalf("storefront_display.expiry = %#v, want soon_expiry status (%s)", display["expiry"], raw)
 	}
 
 	for _, forbidden := range []string{"pricing", "online", "original", "cost", "current_stock", "history", "catalogue", "category_key", "category_path", "collection_id", "collection_name"} {

@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v11.1.0` | 2026-07-06 | Minor | Retail preorder and expiry merchandising contracts: adds preorder interest/status contracts, product preorder policy fields, admin-configurable soon-expiry merchandising policy, storefront-safe preorder/expiry display fields, and wholesale storefront projection support. Additive only; no module path change. |
 | `v11.0.0` | 2026-07-05 | Major | Unified coupon and wallet export contracts: removes public `CustomerCoupon`; adds Coupon-owned assignment/detail/issue/recipient-preview contracts; adds wallet export request/status/result models with `schema_version: "wallet_export_v1"` covering membership points, coupons, vouchers, gift cards, rewards, normalized history, filters, row counts, checksum, and status. Requires `/v10` → `/v11` module-path migration. |
 | `v10.1.1` | 2026-07-02 | Patch | Identity claim alignment: adds optional `retail_customer_number` to `identity.AccessTokenClaims` so services can carry the retail customer business number in access-token claims. Additive only; no module path change, migration, or breaking JSON change. |
 | `v10.1.0` | 2026-06-30 | Minor | Product category/catalogue cleanup: removes `category_key`, `category_path`, `catalogue`, and nested `merchandising`; adds product/wholesale `collection` object and top-level localized `category_tags`; renames product-list service auth and wholesale permissions from catalog/catalogue to products; replaces category promotion/coupon targeting with category-tag ID/localized-name contracts. Breaking wire-shape change shipped under requested `v10.1.0`. |
@@ -74,6 +75,61 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v11.1.0 (2026-07-06) - Retail Preorder And Expiry Merchandising Contracts / 零售預購與效期銷售契約
+
+Release date: 2026-07-06
+
+This minor release adds additive retail merchandising contracts for preorder
+interest and soon-expiry product display. It keeps the `/v11` Go module path and
+does not remove, rename, or narrow any exported type or JSON field.
+
+本 minor release 新增零售預購與即期商品銷售展示所需的相容契約。此版本維持 `/v11`
+Go module path，沒有移除、重新命名或縮窄任何 exported type 或 JSON 欄位。
+
+### Additive Changes / 新增相容變更
+
+- `sales.PreorderStatus`, `sales.Preorder`, and `sales.PreorderSummary` define
+  durable preorder interest/status contracts for customer preorder history,
+  customer preorder checks, and downstream order conversion visibility.
+- `product.StorefrontMerchandising` adds optional product-level preorder policy
+  fields through `product.PreorderPolicy`, including active windows, expected
+  availability, quantity limits, and localized customer labels/descriptions.
+- `product.SoonExpiryMerchandisingPolicy` adds an admin-configurable soon-expiry
+  merchandising policy with active windows, display window days, exact-date
+  visibility control, and localized customer labels/descriptions.
+- `product.StorefrontDisplay`, `product.StorefrontPreorderDisplay`, and
+  `product.StorefrontExpiryDisplay` provide backend-computed, storefront-safe
+  display fields for product cards and detail pages without exposing stock lots,
+  internal service names, or operational implementation details.
+- `wholesale.ApprovedStorefrontProduct` now includes optional
+  `storefront_display` so wholesale storefront responses can reuse the same
+  customer-safe preorder and expiry display state.
+- `pkg/versioning.ModuleVersion` and README usage examples now point to
+  `v11.1.0`.
+
+### Consumer Action / 使用方動作
+
+- Management: upgrade to
+  `github.com/Potato-Mart/Backend-Shared-Contract/v11 v11.1.0`, then map any
+  admin-configurable preorder and soon-expiry settings into the new product
+  policy structs. Keep endpoint-specific command/request DTOs in Management if
+  Management owns those APIs.
+- Operations: upgrade to `v11.1.0`, then map catalog expiry/stock-lot decisions
+  into `product.StorefrontExpiryDisplay` only after filtering out lot IDs,
+  backend module names, and other operational details that storefronts should
+  not see.
+- Commerce: upgrade to `v11.1.0`, use `sales.Preorder` /
+  `sales.PreorderSummary` for preorder persistence or read projections, and
+  continue owning checkout/order-conversion command payloads locally.
+- Retail and wholesale storefronts: consume backend-provided
+  `storefront_display.preorder` and `storefront_display.expiry` fields for
+  cards, detail pages, comparison views, profile preorder checks, and home
+  listing merchandising. Do not infer preorder eligibility or expiry truth from
+  frontend-only state.
+- All consumers: run `go mod tidy`, contract JSON round-trip tests, and the
+  affected API/frontend integration tests after upgrading. No `/v12` module-path
+  migration is required.
 
 ## v11.0.0 (2026-07-05) - Unified Coupons and Wallet Export Contracts / 統一優惠券與錢包匯出契約
 

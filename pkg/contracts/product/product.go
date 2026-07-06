@@ -66,6 +66,9 @@ type Product struct {
 	Localization Localization `json:"localization,omitempty"`
 	Media        Media        `json:"media,omitempty"`
 	Physical     Physical     `json:"physical,omitempty"`
+	// StorefrontMerchandising carries admin-managed retail display policy.
+	// Backend read models convert it into customer-safe display fields.
+	StorefrontMerchandising *StorefrontMerchandising `json:"storefront_merchandising,omitempty"`
 
 	// History is for product master-data changes only. Stock changes are
 	// represented as warehouse.StockMovement records.

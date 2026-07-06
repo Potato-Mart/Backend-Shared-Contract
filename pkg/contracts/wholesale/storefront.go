@@ -41,6 +41,7 @@ type ApprovedStorefrontProduct struct {
 	LifecycleTags      []string                      `json:"lifecycle_tags,omitempty"`
 	NewExpiresAt       *time.Time                    `json:"new_expires_at,omitempty"`
 	RestockedExpiresAt *time.Time                    `json:"restocked_expires_at,omitempty"`
+	StorefrontDisplay  *product.StorefrontDisplay    `json:"storefront_display,omitempty"`
 
 	Price             common.Money `json:"price"`
 	StockAvailable    bool         `json:"stock_available"`
