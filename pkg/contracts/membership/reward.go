@@ -11,26 +11,28 @@ import (
 
 // Reward is a catalog item that can be redeemed with membership points.
 type Reward struct {
-	ID                 string                               `json:"id"`
-	Code               string                               `json:"code"`
-	Name               string                               `json:"name"`
-	Description        string                               `json:"description,omitempty"`
-	Type               membershipenum.MembershipRewardType  `json:"type"`
-	PointsCost         int                                  `json:"points_cost"`
-	DiscountAmount     *common.Money                        `json:"discount_amount,omitempty"`
-	DiscountPercent    float64                              `json:"discount_percent,omitempty"`
-	Product            *product.Snapshot                    `json:"product,omitempty"`
-	VoucherCodePrefix  string                               `json:"voucher_code_prefix,omitempty"`
-	StartsAt           *time.Time                           `json:"starts_at,omitempty"`
-	ExpiresAt          *time.Time                           `json:"expires_at,omitempty"`
-	IsActive           bool                                 `json:"is_active"`
-	UsageLimit         int                                  `json:"usage_limit,omitempty"`
-	UsedCount          int                                  `json:"used_count"`
-	PerMemberLimit     int                                  `json:"per_member_limit,omitempty"`
-	MinimumTierKey     string                               `json:"minimum_tier_key,omitempty"`
-	EligibleOwnerTypes []membershipenum.MembershipOwnerType `json:"eligible_owner_types,omitempty"`
-	Metadata           common.Metadata                      `json:"metadata,omitempty"`
-	History            []shared.HistoryEntry                `json:"history,omitempty"`
+	ID                     string                               `json:"id"`
+	Code                   string                               `json:"code"`
+	Name                   string                               `json:"name"`
+	Description            string                               `json:"description,omitempty"`
+	Type                   membershipenum.MembershipRewardType  `json:"type"`
+	PointsCost             int                                  `json:"points_cost"`
+	DiscountAmount         *common.Money                        `json:"discount_amount,omitempty"`
+	DiscountPercent        float64                              `json:"discount_percent,omitempty"`
+	Product                *product.Snapshot                    `json:"product,omitempty"`
+	VoucherCodePrefix      string                               `json:"voucher_code_prefix,omitempty"`
+	StartsAt               *time.Time                           `json:"starts_at,omitempty"`
+	ExpiresAt              *time.Time                           `json:"expires_at,omitempty"`
+	IsActive               bool                                 `json:"is_active"`
+	UsageLimit             int                                  `json:"usage_limit,omitempty"`
+	UsedCount              int                                  `json:"used_count"`
+	PerMemberLimit         int                                  `json:"per_member_limit,omitempty"`
+	MinimumTierKey         string                               `json:"minimum_tier_key,omitempty"`
+	TriggerTierKey         string                               `json:"trigger_tier_key,omitempty"`
+	IssueOnTierAchievement bool                                 `json:"issue_on_tier_achievement,omitempty"`
+	EligibleOwnerTypes     []membershipenum.MembershipOwnerType `json:"eligible_owner_types,omitempty"`
+	Metadata               common.Metadata                      `json:"metadata,omitempty"`
+	History                []shared.HistoryEntry                `json:"history,omitempty"`
 
 	common.AuditFields
 }
