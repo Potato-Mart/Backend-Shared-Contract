@@ -21,7 +21,7 @@ func TestCouponAssignmentRoundTrip(t *testing.T) {
 		Status:              "redeemed",
 		ExpiresAt:           &now,
 		RedeemedAt:          &now,
-		RedeemedOrderNumber: "ORD-1",
+		RedeemedOrderNumber: "MAMA260703ABC123",
 		Note:                "campaign issue",
 		CreatedAt:           now,
 	}
@@ -39,7 +39,7 @@ func TestCouponAssignmentRoundTrip(t *testing.T) {
 		t.Fatalf("unmarshal coupon assignment: %v", err)
 	}
 	if decoded.CouponID != "coupon_1" || decoded.CouponCode != "SAVE10" ||
-		decoded.RedeemedOrderNumber != "ORD-1" {
+		decoded.RedeemedOrderNumber != "MAMA260703ABC123" {
 		t.Fatalf("coupon assignment did not round-trip: %+v", decoded)
 	}
 }

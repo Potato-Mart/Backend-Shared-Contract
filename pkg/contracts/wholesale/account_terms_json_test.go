@@ -85,7 +85,7 @@ func TestInvoiceCardPaymentJSONShape(t *testing.T) {
 	resp := wholesale.InvoiceCardPaymentResult{
 		InvoiceID:     "inv_123",
 		InvoiceNumber: "INV-123",
-		OrderNumber:   "ORD-123",
+		OrderNumber:   "MAMA260703ABC123",
 		Total:         common.Money{AmountMinor: 12500, Currency: "AUD"},
 		Payment: wholesale.InvoiceCardPaymentSession{
 			Provider:          "stripe",

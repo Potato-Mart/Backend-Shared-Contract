@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v11.2.0` | 2026-07-06 | Minor | Sales delivery scheduling and payment processor fees: adds order `expected_delivery_date`/`expected_delivery_time`, `delivery_method` (new `DeliveryMethod` enum) with `outsourced_carrier`, derived `delivery_region` (new `DeliveryRegion` enum), shipping zone `is_local`, payment `processor_fee`/`net_amount`, Stripe `balance_transaction_id`, and the canonical MAMA order-number rule in `pkg/logic/sales`. Additive only; no module path change. |
 | `v11.1.0` | 2026-07-06 | Minor | Retail preorder and expiry merchandising contracts: adds preorder interest/status contracts, product preorder policy fields, admin-configurable soon-expiry merchandising policy, storefront-safe preorder/expiry display fields, and wholesale storefront projection support. Additive only; no module path change. |
 | `v11.0.0` | 2026-07-05 | Major | Unified coupon and wallet export contracts: removes public `CustomerCoupon`; adds Coupon-owned assignment/detail/issue/recipient-preview contracts; adds wallet export request/status/result models with `schema_version: "wallet_export_v1"` covering membership points, coupons, vouchers, gift cards, rewards, normalized history, filters, row counts, checksum, and status. Requires `/v10` → `/v11` module-path migration. |
 | `v10.1.1` | 2026-07-02 | Patch | Identity claim alignment: adds optional `retail_customer_number` to `identity.AccessTokenClaims` so services can carry the retail customer business number in access-token claims. Additive only; no module path change, migration, or breaking JSON change. |
@@ -75,6 +76,56 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v11.2.0 (2026-07-06) - Sales Delivery Scheduling And Payment Processor Fees / 銷售配送排程與支付手續費
+
+Release date: 2026-07-06
+
+This minor release adds additive delivery-scheduling fields to sales orders,
+payment processor fee fields, and the canonical MAMA order-number rule. It
+keeps the `/v11` Go module path and does not remove, rename, or narrow any
+exported type or JSON field.
+
+本 minor release 為銷售訂單新增相容的配送排程欄位、支付手續費欄位，以及標準
+MAMA 訂單編號規則。此版本維持 `/v11` Go module path，沒有移除、重新命名或縮窄
+任何 exported type 或 JSON 欄位。
+
+### Additive Changes / 新增相容變更
+
+- `sales.Order` gains `expected_delivery_date` (`common.Date`) and
+  `expected_delivery_time` (`common.TimeOfDay`) for the promised delivery
+  slot, distinct from the after-the-fact `delivered_at` lifecycle timestamp.
+- `enums.DeliveryMethod` (`delivery`, `pickup`, `outsourced`) and
+  `sales.Order.delivery_method` record the authoritative fulfilment method;
+  `sales.Order.outsourced_carrier` names the third-party company when the
+  method is `outsourced`.
+- `enums.DeliveryRegion` (`local_melbourne`, `regional_vic`, `interstate`)
+  and `sales.Order.delivery_region` classify the shipping destination for
+  packing and dispatch planning; `shipping.Zone.is_local` marks the metro
+  zone used to derive it.
+- `sales.Payment` gains `processor_fee` and `net_amount` (`common.Money`,
+  minor units) and `payments.StripePaymentReference` gains
+  `balance_transaction_id` so processor-reported transaction fees can be
+  stored and aggregated.
+- `pkg/logic/sales` adds `OrderNumberPrefix`, `OrderNumberPattern`
+  (`^MAMA\d{6}[A-Z0-9]{6}$`), and `IsValidOrderNumber` as the canonical
+  order-number rule shared by services.
+- `pkg/versioning.ModuleVersion` now reports `v11.2.0`.
+
+### Consumer Action / 使用方動作
+
+- Commerce: upgrade to
+  `github.com/Potato-Mart/Backend-Shared-Contract/v11 v11.2.0`, mint order
+  numbers in the MAMA shape, validate supplied numbers with
+  `saleslogic.IsValidOrderNumber`, populate the new delivery fields, and
+  store Stripe balance-transaction fees on payments.
+- Management / Operations: upgrade the pin to `v11.2.0` and `go mod tidy`;
+  no behavioural change required.
+- Frontends: treat the new order/payment fields as optional (absent on
+  pre-existing records) and mirror the order-number pattern literal only
+  with a comment pointing at `pkg/logic/sales/order_number.go`.
+- All consumers: run `go mod tidy` and contract JSON round-trip tests after
+  upgrading. No `/v12` module-path migration is required.
 
 ## v11.1.0 (2026-07-06) - Retail Preorder And Expiry Merchandising Contracts / 零售預購與效期銷售契約
 

@@ -43,6 +43,8 @@ func TestExportedEnumsValidateKnownValues(t *testing.T) {
 		{name: "DamageStage", valid: []stringEnum{DamageStageInbound, DamageStagePicking, DamageStagePacking, DamageStageStorage}, invalid: DamageStage("__invalid__")},
 		{name: "DataClassification", valid: []stringEnum{DataClassificationPublic, DataClassificationInternal, DataClassificationConfidential, DataClassificationRestricted}, invalid: DataClassification("__invalid__")},
 		{name: "DataProtectionBasis", valid: []stringEnum{DataProtectionBasisNotApplicable, DataProtectionBasisConsent, DataProtectionBasisContract, DataProtectionBasisLegalObligation, DataProtectionBasisLegitimateInterest}, invalid: DataProtectionBasis("__invalid__")},
+		{name: "DeliveryMethod", valid: []stringEnum{DeliveryMethodDelivery, DeliveryMethodPickup, DeliveryMethodOutsourced}, invalid: DeliveryMethod("__invalid__")},
+		{name: "DeliveryRegion", valid: []stringEnum{DeliveryRegionLocalMelbourne, DeliveryRegionRegionalVIC, DeliveryRegionInterstate}, invalid: DeliveryRegion("__invalid__")},
 		{name: "DeviceType", valid: []stringEnum{DeviceTypeDesktop, DeviceTypeMobile, DeviceTypeTablet, DeviceTypeAPI}, invalid: DeviceType("__invalid__")},
 		{name: "DiscountScope", valid: []stringEnum{DiscountScopeAll, DiscountScopeCategoryTag, DiscountScopeProduct}, invalid: DiscountScope("__invalid__")},
 		{name: "DiscountType", valid: []stringEnum{DiscountTypePercentage, DiscountTypeFixedAmount, DiscountTypeFreeShipping, DiscountTypeFixedPrice}, invalid: DiscountType("__invalid__")},

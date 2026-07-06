@@ -83,7 +83,7 @@ func TestGiftCardTransactionRoundTrip(t *testing.T) {
 		Delta:              common.Money{AmountMinor: -5000, Currency: "AUD"},
 		BalanceAfter:       common.Money{AmountMinor: 5000, Currency: "AUD"},
 		Reason:             enums.GiftCardTransactionReasonRedeem,
-		RelatedOrderNumber: "ORD-1",
+		RelatedOrderNumber: "MAMA260703ABC123",
 		CreatedAt:          now,
 	}
 
@@ -96,7 +96,7 @@ func TestGiftCardTransactionRoundTrip(t *testing.T) {
 		t.Fatalf("unmarshal gift card tx: %v", err)
 	}
 	if decoded.Reason != enums.GiftCardTransactionReasonRedeem ||
-		decoded.BalanceAfter.AmountMinor != 5000 || decoded.RelatedOrderNumber != "ORD-1" {
+		decoded.BalanceAfter.AmountMinor != 5000 || decoded.RelatedOrderNumber != "MAMA260703ABC123" {
 		t.Fatalf("gift card tx did not round-trip: %+v", decoded)
 	}
 }

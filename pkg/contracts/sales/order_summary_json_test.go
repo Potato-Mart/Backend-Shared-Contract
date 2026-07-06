@@ -13,7 +13,7 @@ import (
 func TestOrderSummaryJSONShape(t *testing.T) {
 	now := time.Date(2026, 6, 30, 0, 0, 0, 0, time.UTC)
 	summary := sales.OrderSummary{
-		OrderNumber:       "ORD-2026-0001",
+		OrderNumber:       "MAMA260703ABC123",
 		Status:            enums.SalesOrderStatusConfirmed,
 		PaymentStatus:     enums.PaymentStatusPaid,
 		FulfillmentStatus: enums.FulfillmentStatusUnfulfilled,

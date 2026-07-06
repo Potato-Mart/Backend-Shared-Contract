@@ -33,6 +33,18 @@ type Order struct {
 	ShippingRateID   string                   `json:"shipping_rate_id,omitempty"`
 	ShippingPackages []common.PhysicalPackage `json:"shipping_packages,omitempty"`
 
+	// ── Delivery scheduling ───────────────────────────────────────────
+	// ExpectedDeliveryDate/Time are the promised delivery slot, set by
+	// staff or checkout — distinct from the DeliveredAt lifecycle
+	// timestamp recorded after the fact.
+	ExpectedDeliveryDate common.Date          `json:"expected_delivery_date,omitempty"`
+	ExpectedDeliveryTime common.TimeOfDay     `json:"expected_delivery_time,omitempty"`
+	DeliveryMethod       enums.DeliveryMethod `json:"delivery_method,omitempty"`
+	// OutsourcedCarrier names the third-party delivery company; set only
+	// when DeliveryMethod is outsourced.
+	OutsourcedCarrier string               `json:"outsourced_carrier,omitempty"`
+	DeliveryRegion    enums.DeliveryRegion `json:"delivery_region,omitempty"`
+
 	// ── Money ─────────────────────────────────────────────────────────
 	Subtotal       common.Money `json:"subtotal"`
 	DiscountAmount common.Money `json:"discount_amount"`

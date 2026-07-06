@@ -11,6 +11,9 @@ type StripePaymentReference struct {
 	CheckoutSessionID string `json:"checkout_session_id,omitempty"`
 	CustomerID        string `json:"customer_id,omitempty"`
 	RefundID          string `json:"refund_id,omitempty"`
+	// BalanceTransactionID is the Stripe balance transaction that carries
+	// the processor fee and net amount for the charge.
+	BalanceTransactionID string `json:"balance_transaction_id,omitempty"`
 }
 
 type Mx51PaymentReference struct {

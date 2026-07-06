@@ -20,6 +20,12 @@ type Payment struct {
 	Provider          string                             `json:"provider,omitempty"`
 	ProviderReference *paymentcontracts.PaymentReference `json:"provider_reference,omitempty"`
 
+	// ProcessorFee and NetAmount are the payment processor's transaction
+	// fee and the settled amount net of that fee (e.g. from the Stripe
+	// balance transaction). Present only when the processor reports them.
+	ProcessorFee *common.Money `json:"processor_fee,omitempty"`
+	NetAmount    *common.Money `json:"net_amount,omitempty"`
+
 	// Terminal linkage, populated for eftpos / moto / cashout methods.
 	TerminalID            string `json:"terminal_id,omitempty"`
 	TerminalTransactionID string `json:"terminal_transaction_id,omitempty"`
