@@ -1,30 +1,31 @@
 package promotion
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/shared"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/promotion"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/sales"
 )
 
 // Promotion is the rule-based, auto-applied discount engine entity.
 // It covers all promotion types: auto_discount, spend_gift, addon_purchase,
 // bogo, bundle, and tiered_pricing.
 type Promotion struct {
-	ID          string              `json:"id"`
-	Name        string              `json:"name"`
-	Description string              `json:"description,omitempty"`
-	Type        enums.PromotionType `json:"type"`
+	ID          string                      `json:"id"`
+	Name        string                      `json:"name"`
+	Description string                      `json:"description,omitempty"`
+	Type        promotionenum.PromotionType `json:"type"`
 
 	// ── Classification & targeting (additive, v5.2.0) ─────────────────
 	// Class separates standing promotions (常態特價, normal_promotion)
 	// from time-boxed special campaigns (特殊活動, special_campaign).
 	// Empty is read as normal_promotion so existing documents keep their
 	// behaviour; see EffectiveClass.
-	Class enums.PromotionClass `json:"class,omitempty"`
+	Class promotionenum.PromotionClass `json:"class,omitempty"`
 	// TargetScope narrows the promotion to one product or one category tag.
 	// Empty / "all" applies cart-wide.
 	// Product targets are keyed by the product SKU code.
-	TargetScope enums.DiscountScope `json:"target_scope,omitempty"`
+	TargetScope promotionenum.DiscountScope `json:"target_scope,omitempty"`
 	// TargetProductSKUCode is required when TargetScope is "product".
 	TargetProductSKUCode string `json:"target_product_sku_code,omitempty"`
 	// TargetCategoryTagID and TargetCategoryTagName are required when
@@ -41,7 +42,7 @@ type Promotion struct {
 
 	// RequiredQtyMode controls whether RequiredQtyEach applies per product
 	// or as a combined total across all required products.
-	RequiredQtyMode enums.PromotionQtyMode `json:"required_qty_mode,omitempty"`
+	RequiredQtyMode promotionenum.PromotionQtyMode `json:"required_qty_mode,omitempty"`
 	// RequiredQtyPerProduct overrides per-SKU qty when mode is PER_PRODUCT
 	// and quantities differ across products. Map key is SKU, value is qty.
 	RequiredQtyPerProduct common.Metadata `json:"required_qty_per_product,omitempty"`
@@ -50,8 +51,8 @@ type Promotion struct {
 
 	// ── auto_discount ─────────────────────────────────────────────────
 	DiscountSpec
-	MaxDiscount    *common.Money                 `json:"max_discount,omitempty"`
-	DiscountTarget enums.PromotionDiscountTarget `json:"discount_target,omitempty"`
+	MaxDiscount    *common.Money                         `json:"max_discount,omitempty"`
+	DiscountTarget promotionenum.PromotionDiscountTarget `json:"discount_target,omitempty"`
 
 	// ── spend_gift / bogo ─────────────────────────────────────────────
 	GiftProductSKUCode string `json:"gift_product_sku_code,omitempty"`
@@ -62,10 +63,10 @@ type Promotion struct {
 	GiftTiers []GiftTier `json:"gift_tiers,omitempty"`
 
 	// ── addon_purchase ────────────────────────────────────────────────
-	AddonProductSKUCode string                      `json:"addon_product_sku_code,omitempty"`
-	AddonPrice          *common.Money               `json:"addon_price,omitempty"`
-	AddonMaxQty         int                         `json:"addon_max_qty,omitempty"`
-	AddonTriggerMode    enums.PromotionAddonTrigger `json:"addon_trigger_mode,omitempty"`
+	AddonProductSKUCode string                              `json:"addon_product_sku_code,omitempty"`
+	AddonPrice          *common.Money                       `json:"addon_price,omitempty"`
+	AddonMaxQty         int                                 `json:"addon_max_qty,omitempty"`
+	AddonTriggerMode    promotionenum.PromotionAddonTrigger `json:"addon_trigger_mode,omitempty"`
 
 	// ── bundle ────────────────────────────────────────────────────────
 	BundlePrice *common.Money `json:"bundle_price,omitempty"`
@@ -79,7 +80,7 @@ type Promotion struct {
 	IsStackable bool `json:"is_stackable"`
 	UsageLimits
 	ActiveWindow
-	Channels []enums.OrderType `json:"channels,omitempty"` // e.g. ["online","pos"]
+	Channels []salesenum.OrderType `json:"channels,omitempty"` // e.g. ["online","pos"]
 
 	// Source tracking for promotions synced from external systems.
 	Source    string                `json:"source,omitempty"`

@@ -4,16 +4,16 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/promotion"
 )
 
 func TestPromotionCategoryTagTargetNameIsLocalized(t *testing.T) {
 	body, err := json.Marshal(Promotion{
 		ID:                    "prm_1",
 		Name:                  "Hotpot tag discount",
-		Type:                  enums.PromotionTypeAutoDiscount,
-		TargetScope:           enums.DiscountScopeCategoryTag,
+		Type:                  promotionenum.PromotionTypeAutoDiscount,
+		TargetScope:           promotionenum.DiscountScopeCategoryTag,
 		TargetCategoryTagID:   "tag_hotpot",
 		TargetCategoryTagName: []common.LocalizedName{{Language: "en", Name: "Hotpot"}},
 	})

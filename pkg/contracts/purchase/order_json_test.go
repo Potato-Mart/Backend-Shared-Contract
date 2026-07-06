@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/purchase"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/purchase"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/shared"
+	purchaseenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/purchase"
 )
 
 func TestOrderJSONRoundTripWithHistory(t *testing.T) {
@@ -19,7 +19,7 @@ func TestOrderJSONRoundTripWithHistory(t *testing.T) {
 		OrderNumber:  "PO-1001",
 		SupplierCode: "sup_1",
 		SupplierName: "Supplier One",
-		Status:       enums.PurchaseOrderStatusSubmitted,
+		Status:       purchaseenum.PurchaseOrderStatusSubmitted,
 		Currency:     "AUD",
 		Subtotal:     common.Money{AmountMinor: 10000, Currency: "AUD"},
 		TaxAmount:    common.Money{AmountMinor: 1000, Currency: "AUD"},
@@ -46,8 +46,8 @@ func TestOrderJSONRoundTripWithHistory(t *testing.T) {
 		t.Fatalf("unmarshal purchase order: %v", err)
 	}
 
-	if decoded.Status != enums.PurchaseOrderStatusSubmitted {
-		t.Fatalf("status = %q, want %q", decoded.Status, enums.PurchaseOrderStatusSubmitted)
+	if decoded.Status != purchaseenum.PurchaseOrderStatusSubmitted {
+		t.Fatalf("status = %q, want %q", decoded.Status, purchaseenum.PurchaseOrderStatusSubmitted)
 	}
 	if decoded.SupplierCode != "sup_1" || decoded.SupplierName != "Supplier One" {
 		t.Fatalf("supplier did not round-trip: code=%q name=%q", decoded.SupplierCode, decoded.SupplierName)

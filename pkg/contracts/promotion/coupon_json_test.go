@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/promotion"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/promotion"
 )
 
 func TestCouponAssignmentRoundTrip(t *testing.T) {
@@ -17,7 +17,7 @@ func TestCouponAssignmentRoundTrip(t *testing.T) {
 		CouponID:            "coupon_1",
 		CouponCode:          "SAVE10",
 		CustomerNumber:      "RC-1",
-		Source:              enums.CouponSourceCampaign,
+		Source:              promotionenum.CouponSourceCampaign,
 		Status:              "redeemed",
 		ExpiresAt:           &now,
 		RedeemedAt:          &now,

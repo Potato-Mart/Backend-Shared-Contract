@@ -3,24 +3,24 @@ package payments
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/shared"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/payment"
 )
 
 // Settlement is an end-of-day reconciliation/batch close
 // (Type = SettlementTypeSettlement) or a read-only summary
 // (Type = SettlementTypeEnquiry).
 type Settlement struct {
-	ID                   string                          `json:"id"`
-	TerminalID           string                          `json:"terminal_id"`
-	ProviderSettlementID string                          `json:"provider_settlement_id,omitempty"`
-	ProviderDetails      *TerminalProviderDetails        `json:"provider_details,omitempty"`
-	OperationContext     *ProviderOperationContext       `json:"operation_context,omitempty"`
-	Type                 enums.SettlementType            `json:"type"`
-	EnquiryDate          *common.Date                    `json:"enquiry_date,omitempty"`
-	Status               enums.TerminalTxStatus          `json:"status"`
-	FinancialStatus      enums.TerminalTxFinancialStatus `json:"financial_status,omitempty"`
+	ID                   string                                `json:"id"`
+	TerminalID           string                                `json:"terminal_id"`
+	ProviderSettlementID string                                `json:"provider_settlement_id,omitempty"`
+	ProviderDetails      *TerminalProviderDetails              `json:"provider_details,omitempty"`
+	OperationContext     *ProviderOperationContext             `json:"operation_context,omitempty"`
+	Type                 paymentenum.SettlementType            `json:"type"`
+	EnquiryDate          *common.Date                          `json:"enquiry_date,omitempty"`
+	Status               paymentenum.TerminalTxStatus          `json:"status"`
+	FinancialStatus      paymentenum.TerminalTxFinancialStatus `json:"financial_status,omitempty"`
 
 	Totals          SettlementTotals `json:"totals"`
 	Message         string           `json:"message,omitempty"`

@@ -3,9 +3,9 @@ package wallet
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/membership"
+	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/wallet"
 )
 
 // CustomerWallet is a read-model aggregate of every value instrument a customer
@@ -27,11 +27,11 @@ type CustomerWallet struct {
 // membership_account_id for points). Balance is set only for stored-value
 // instruments (gift cards); it is nil for count/state instruments.
 type WalletInstrument struct {
-	Type      enums.WalletInstrumentType `json:"type"`
-	Code      string                     `json:"code"`
-	Status    string                     `json:"status,omitempty"`
-	Balance   *common.Money              `json:"balance,omitempty"`
-	ExpiresAt *time.Time                 `json:"expires_at,omitempty"`
+	Type      walletenum.WalletInstrumentType `json:"type"`
+	Code      string                          `json:"code"`
+	Status    string                          `json:"status,omitempty"`
+	Balance   *common.Money                   `json:"balance,omitempty"`
+	ExpiresAt *time.Time                      `json:"expires_at,omitempty"`
 }
 
 // CustomerWalletSummary is a thin headline projection. The points figure mirrors

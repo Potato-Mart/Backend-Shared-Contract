@@ -3,9 +3,9 @@ package payments
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/shared"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/payment"
 )
 
 // TerminalTransaction is one card-terminal interaction.
@@ -19,13 +19,13 @@ type TerminalTransaction struct {
 	ProviderDetails   *TerminalProviderDetails  `json:"provider_details,omitempty"`
 	OperationContext  *ProviderOperationContext `json:"operation_context,omitempty"`
 
-	Type           enums.TerminalTxType `json:"type"`
-	Requested      Amounts              `json:"requested"`
-	ReceiptOptions ReceiptOptions       `json:"receipt_options,omitempty"`
+	Type           paymentenum.TerminalTxType `json:"type"`
+	Requested      Amounts                    `json:"requested"`
+	ReceiptOptions ReceiptOptions             `json:"receipt_options,omitempty"`
 
-	Status          enums.TerminalTxStatus          `json:"status"`
-	FinancialStatus enums.TerminalTxFinancialStatus `json:"financial_status,omitempty"`
-	Result          Amounts                         `json:"result"`
+	Status          paymentenum.TerminalTxStatus          `json:"status"`
+	FinancialStatus paymentenum.TerminalTxFinancialStatus `json:"financial_status,omitempty"`
+	Result          Amounts                               `json:"result"`
 
 	Message                string          `json:"message,omitempty"`
 	ProviderResult         string          `json:"provider_result,omitempty"`
@@ -38,7 +38,7 @@ type TerminalTransaction struct {
 
 	// RecoveryDecision captures the merchant's manual answer when the
 	// provider cannot determine the outcome after status checks.
-	RecoveryDecision enums.RecoveryDecision `json:"recovery_decision,omitempty"`
+	RecoveryDecision paymentenum.RecoveryDecision `json:"recovery_decision,omitempty"`
 
 	LastStatusCheckedAt *time.Time `json:"last_status_checked_at,omitempty"`
 	FinalisedAt         *time.Time `json:"finalised_at,omitempty"`

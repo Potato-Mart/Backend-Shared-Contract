@@ -1,19 +1,23 @@
-package enums
+package enums_test
 
-import "testing"
+import (
+	"testing"
+
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/warehouse"
+)
 
 func TestStockMovementTypeIsValid(t *testing.T) {
-	validTypes := []StockMovementType{
-		StockMovementTypePurchaseReceipt,
-		StockMovementTypeSaleReserve,
-		StockMovementTypeSaleCommit,
-		StockMovementTypeSaleRelease,
-		StockMovementTypeAdjustment,
-		StockMovementTypeDamage,
-		StockMovementTypeReturn,
-		StockMovementTypeTransferIn,
-		StockMovementTypeTransferOut,
-		StockMovementTypeStocktake,
+	validTypes := []warehouseenum.StockMovementType{
+		warehouseenum.StockMovementTypePurchaseReceipt,
+		warehouseenum.StockMovementTypeSaleReserve,
+		warehouseenum.StockMovementTypeSaleCommit,
+		warehouseenum.StockMovementTypeSaleRelease,
+		warehouseenum.StockMovementTypeAdjustment,
+		warehouseenum.StockMovementTypeDamage,
+		warehouseenum.StockMovementTypeReturn,
+		warehouseenum.StockMovementTypeTransferIn,
+		warehouseenum.StockMovementTypeTransferOut,
+		warehouseenum.StockMovementTypeStocktake,
 	}
 
 	for _, movementType := range validTypes {
@@ -25,7 +29,7 @@ func TestStockMovementTypeIsValid(t *testing.T) {
 		}
 	}
 
-	if StockMovementType("UNKNOWN").IsValid() {
+	if warehouseenum.StockMovementType("UNKNOWN").IsValid() {
 		t.Fatal("UNKNOWN should be invalid")
 	}
 }

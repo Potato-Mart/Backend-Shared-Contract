@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/wholesale"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/wholesale"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/wholesale"
 )
 
 func TestWholesaleOrganisationJSONShape(t *testing.T) {
@@ -35,7 +35,7 @@ func TestWholesaleOrganisationJSONShape(t *testing.T) {
 			},
 		},
 		MembershipAccountID: "mem_org_123",
-		Status:              enums.WholesaleOrganisationStatusApproved,
+		Status:              wholesaleenum.WholesaleOrganisationStatusApproved,
 		TierKey:             "standard",
 		Approval:            &common.LifecycleAction{By: "admin_1", At: &approvedAt, Reason: "verified"},
 	}

@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/payments"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/payments"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/shared"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/payment"
 )
 
 func TestTerminalTransactionJSONRoundTripWithHistory(t *testing.T) {
@@ -30,10 +30,10 @@ func TestTerminalTransactionJSONRoundTripWithHistory(t *testing.T) {
 			MerchantReference: "merchant_ref_1",
 			IdempotencyKey:    "idem_1",
 		},
-		Type:            enums.TerminalTxTypePurchase,
+		Type:            paymentenum.TerminalTxTypePurchase,
 		Requested:       payments.Amounts{Currency: "AUD", PurchaseMinor: 10000},
-		Status:          enums.TerminalTxStatusFinalised,
-		FinancialStatus: enums.TerminalTxFinancialStatusApproved,
+		Status:          paymentenum.TerminalTxStatusFinalised,
+		FinancialStatus: paymentenum.TerminalTxFinancialStatusApproved,
 		Result:          payments.Amounts{Currency: "AUD", PurchaseMinor: 10000, AuthorizedMinor: 10000},
 		ProviderResult:  "approved",
 		ProviderData: common.Metadata{
@@ -98,7 +98,7 @@ func TestTerminalTransactionJSONRoundTripWithHistory(t *testing.T) {
 	if decoded.Payloads == nil || len(decoded.Payloads.Request) == 0 || len(decoded.Payloads.DisplayNotification) == 0 {
 		t.Fatalf("provider payloads did not round-trip: %+v", decoded.Payloads)
 	}
-	if decoded.Result.AuthorizedMinor != 10000 || decoded.FinancialStatus != enums.TerminalTxFinancialStatusApproved {
+	if decoded.Result.AuthorizedMinor != 10000 || decoded.FinancialStatus != paymentenum.TerminalTxFinancialStatusApproved {
 		t.Fatalf("result/financial status did not round-trip: %+v", decoded)
 	}
 	if decoded.ProviderData["terminal_batch"] != "batch_1" {
@@ -113,8 +113,8 @@ func TestTerminalProviderDetailsJSONShapes(t *testing.T) {
 	terminal := payments.Terminal{
 		ID:       "term_1",
 		TenantID: "tenant_1",
-		Provider: enums.TerminalProviderMx51,
-		Status:   enums.TerminalStatusActive,
+		Provider: paymentenum.TerminalProviderMx51,
+		Status:   paymentenum.TerminalStatusActive,
 		ProviderDetails: &payments.TerminalProviderDetails{
 			MerchantID: "merchant_1",
 			StoreID:    "store_1",
@@ -150,9 +150,9 @@ func TestTerminalProviderDetailsJSONShapes(t *testing.T) {
 
 	info := payments.TerminalConnectionInfo{
 		TerminalID:      "term_1",
-		Provider:        enums.TerminalProviderMx51,
+		Provider:        paymentenum.TerminalProviderMx51,
 		ProviderDetails: &payments.TerminalProviderDetails{TerminalID: "provider_term_1"},
-		Status:          enums.TerminalStatusActive,
+		Status:          paymentenum.TerminalStatusActive,
 		Connected:       true,
 		ProviderStatus:  "online",
 		CheckedAt:       time.Date(2026, 6, 18, 6, 0, 0, 0, time.UTC),
@@ -177,9 +177,9 @@ func TestSettlementJSONGroupsProviderSupportFields(t *testing.T) {
 		ProviderSettlementID: "provider_settlement_1",
 		ProviderDetails:      &payments.TerminalProviderDetails{MerchantID: "merchant_1", TerminalID: "provider_term_1"},
 		OperationContext:     &payments.ProviderOperationContext{RequestID: "provider_req_1", IdempotencyKey: "idem_1"},
-		Type:                 enums.SettlementTypeSettlement,
-		Status:               enums.TerminalTxStatusFinalised,
-		FinancialStatus:      enums.TerminalTxFinancialStatusApproved,
+		Type:                 paymentenum.SettlementTypeSettlement,
+		Status:               paymentenum.TerminalTxStatusFinalised,
+		FinancialStatus:      paymentenum.TerminalTxFinancialStatusApproved,
 		Totals:               payments.SettlementTotals{Currency: "AUD", TotalMinor: 10000},
 		Payloads:             &payments.ProviderPayloads{Request: json.RawMessage(`{"settle":"request"}`)},
 	}

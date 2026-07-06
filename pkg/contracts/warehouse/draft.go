@@ -3,27 +3,27 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/shared"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/warehouse"
 )
 
 // WMSDraft is an uncommitted batch of inbound or outbound stock movements
 // created by a warehouse operator on a PDA or desktop. On submission the draft
 // is converted into inbound or outbound warehouse records by the owning service.
 type WMSDraft struct {
-	ID          string                `json:"id"`
-	Type        enums.WMSDraftType    `json:"type"`
-	Operator    string                `json:"operator"`
-	DepotCode   string                `json:"depot_code,omitempty"`
-	Reference   string                `json:"reference,omitempty"` // supplier PO / order number
-	Items       []WMSDraftItem        `json:"items"`
-	ItemCount   int                   `json:"item_count"`
-	TotalQty    int                   `json:"total_qty"`
-	Status      enums.WMSDraftStatus  `json:"status"`
-	Note        string                `json:"note,omitempty"`
-	SubmittedAt *time.Time            `json:"submitted_at,omitempty"`
-	History     []shared.HistoryEntry `json:"history,omitempty"`
+	ID          string                       `json:"id"`
+	Type        warehouseenum.WMSDraftType   `json:"type"`
+	Operator    string                       `json:"operator"`
+	DepotCode   string                       `json:"depot_code,omitempty"`
+	Reference   string                       `json:"reference,omitempty"` // supplier PO / order number
+	Items       []WMSDraftItem               `json:"items"`
+	ItemCount   int                          `json:"item_count"`
+	TotalQty    int                          `json:"total_qty"`
+	Status      warehouseenum.WMSDraftStatus `json:"status"`
+	Note        string                       `json:"note,omitempty"`
+	SubmittedAt *time.Time                   `json:"submitted_at,omitempty"`
+	History     []shared.HistoryEntry        `json:"history,omitempty"`
 
 	common.AuditFields
 }

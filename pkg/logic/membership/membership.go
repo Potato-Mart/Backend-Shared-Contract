@@ -6,8 +6,8 @@ package membershiplogic
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/membership"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/membership"
 )
 
 // PermissionMembershipPointsSpend is the permission a wholesale organisation
@@ -17,7 +17,7 @@ const PermissionMembershipPointsSpend = "membership.points.spend"
 // RequiresOrganisationAccess reports whether spending from this owner should be
 // backed by a valid wholesale organisation access grant.
 func RequiresOrganisationAccess(o membership.MembershipOwnerRef) bool {
-	return o.OwnerType == enums.MembershipOwnerTypeWholesaleOrganisation
+	return o.OwnerType == membershipenum.MembershipOwnerTypeWholesaleOrganisation
 }
 
 // CanReserve reports whether the projected balance can reserve points without
@@ -29,7 +29,7 @@ func CanReserve(b membership.PointBalanceBreakdown, points int) bool {
 // CanCommit reports whether a reservation is still eligible to become a
 // committed ledger spend at the supplied time.
 func CanCommit(r membership.PointReservation, now time.Time) bool {
-	return r.Status == enums.PointReservationStatusReserved && !now.After(r.ExpiresAt)
+	return r.Status == membershipenum.PointReservationStatusReserved && !now.After(r.ExpiresAt)
 }
 
 // HasRequiredSpendAccess reports whether this reservation has the required

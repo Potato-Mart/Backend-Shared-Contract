@@ -3,8 +3,8 @@ package analytics
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/security"
 )
 
 // SKUDemandForecast holds the latest AI-generated stock-out prediction for
@@ -21,10 +21,10 @@ type SKUDemandForecast struct {
 	PredictedDaily    []DailyPrediction `json:"predicted_daily"`
 	CurrentStockAtRun float64           `json:"current_stock_at_run"`
 	// DaysUntilStockout is nil when no stock-out is predicted within the horizon.
-	DaysUntilStockout *float64         `json:"days_until_stockout,omitempty"`
-	AlertLevel        enums.AlertLevel `json:"alert_level"`
-	Algorithm         string           `json:"algorithm"`
-	AlgorithmParams   common.Metadata  `json:"algorithm_params,omitempty"`
+	DaysUntilStockout *float64                `json:"days_until_stockout,omitempty"`
+	AlertLevel        securityenum.AlertLevel `json:"alert_level"`
+	Algorithm         string                  `json:"algorithm"`
+	AlgorithmParams   common.Metadata         `json:"algorithm_params,omitempty"`
 }
 
 // DailyPrediction is one element in SKUDemandForecast.PredictedDaily.

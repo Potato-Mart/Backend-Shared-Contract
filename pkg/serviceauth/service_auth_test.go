@@ -1,45 +1,49 @@
 package serviceauth
 
-import "testing"
+import (
+	"testing"
+
+	serviceauthenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/serviceauth"
+)
 
 func TestScopeJoinParseRoundTrip(t *testing.T) {
-	joined := JoinScopes([]Scope{ScopeStockReserve, ScopeStockCommit})
+	joined := serviceauthenum.JoinScopes([]serviceauthenum.Scope{serviceauthenum.ScopeStockReserve, serviceauthenum.ScopeStockCommit})
 	if joined != "stock:reserve stock:commit" {
 		t.Fatalf("JoinScopes = %q", joined)
 	}
-	got := ParseScopes(joined)
+	got := serviceauthenum.ParseScopes(joined)
 	if len(got) != 2 || got[0] != "stock:reserve" || got[1] != "stock:commit" {
 		t.Fatalf("ParseScopes = %v", got)
 	}
 }
 
 func TestScopeIsValid(t *testing.T) {
-	if !ScopeStockReserve.IsValid() {
+	if !serviceauthenum.ScopeStockReserve.IsValid() {
 		t.Fatal("stock:reserve should be valid")
 	}
-	if !ScopeMembershipRedeem.IsValid() {
+	if !serviceauthenum.ScopeMembershipRedeem.IsValid() {
 		t.Fatal("membership:redeem should be valid")
 	}
-	if !ScopeProductsRead.IsValid() {
+	if !serviceauthenum.ScopeProductsRead.IsValid() {
 		t.Fatal("products:read should be valid")
 	}
-	if !ScopeWholesaleTermsRead.IsValid() {
+	if !serviceauthenum.ScopeWholesaleTermsRead.IsValid() {
 		t.Fatal("wholesale:terms:read should be valid")
 	}
-	if Scope("bogus:scope").IsValid() {
+	if serviceauthenum.Scope("bogus:scope").IsValid() {
 		t.Fatal("bogus:scope should be invalid")
 	}
-	if len(AllScopes()) == 0 {
+	if len(serviceauthenum.AllScopes()) == 0 {
 		t.Fatal("AllScopes must not be empty")
 	}
 }
 
 func TestServiceClaimsHasScope(t *testing.T) {
-	c := ServiceClaims{Subject: "svc-commerce", Scopes: ParseScopes("stock:reserve pricing:quote")}
-	if !c.HasScope(ScopeStockReserve) {
+	c := ServiceClaims{Subject: "svc-commerce", Scopes: serviceauthenum.ParseScopes("stock:reserve pricing:quote")}
+	if !c.HasScope(serviceauthenum.ScopeStockReserve) {
 		t.Fatal("expected stock:reserve present")
 	}
-	if c.HasScope(ScopeStockCommit) {
+	if c.HasScope(serviceauthenum.ScopeStockCommit) {
 		t.Fatal("did not expect stock:commit")
 	}
 }

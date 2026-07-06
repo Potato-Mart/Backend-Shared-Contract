@@ -3,15 +3,15 @@ package promotion
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/promotion"
 )
 
 // DiscountSpec is the discount type/value pair shared by promotions and
 // coupons. DiscountValue is a string so percentage ("10") and fixed
 // amounts ("5.00") share one wire shape; DiscountType disambiguates.
 type DiscountSpec struct {
-	DiscountType  enums.DiscountType `json:"discount_type,omitempty"`
-	DiscountValue string             `json:"discount_value,omitempty"`
+	DiscountType  promotionenum.DiscountType `json:"discount_type,omitempty"`
+	DiscountValue string                     `json:"discount_value,omitempty"`
 }
 
 // ActiveWindow groups the activation flag with the optional start/expiry

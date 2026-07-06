@@ -16,7 +16,7 @@ Scope: Backend-Shared-Contract (source of truth) → Backend-Management / Backen
 
 - Module `github.com/Potato-Mart/Backend-Shared-Contract/v5`, working tree at **v5.1.0**; all three backends pin exactly `v5.1.0`, no `replace`, no vendoring → backends and contract working tree are the same version. No generation tooling exists (plain Go types; no ABI/TypeChain — N/A for this stack).
 - S2S paths are contract constants: `serviceauth.PathToken=/v1/internal/token`, `pricing.PathQuote=/v1/internal/pricing/quote`, `stockops.PathReserve|Commit|Release`. Management and Operations register routes **derived from these constants**, Commerce calls them via the same constants → consistent by construction.
-- Key wire-value facts that drove fixes: `SalesOrderStatus` includes `paid`, `packed`, `completed` (no plain `packing`); `FulfillmentStatus` = unfulfilled, picking_printed, packing, packed, partial, fulfilled; `PaymentStatus` adds unknown/pending/partially_refunded; `PaymentRecordStatus` adds processing/cancelled/awaiting_action/unknown; `PaymentMethod` = card, cash, qr, bank_transfer, line_pay, ecpay, manual, eftpos, moto, cashout (no `adyen`); `PurchaseOrderStatus` is **UPPERCASE** (DRAFT…REFUNDED, incl. PARTIALLY_RECEIVED); `OrderType` = online, pos, b2b, relay, manual, import (no `phone`).
+- Key wire-value facts that drove fixes: `SalesOrderStatus` includes `paid`, `packed`, `completed` (no plain `packing`); `FulfillmentStatus` = unfulfilled, picking_printed, packing, packed, partial, fulfilled; `PaymentStatus` adds unknown/pending/partially_refunded; `PaymentRecordStatus` adds processing/cancelled/awaiting_action/unknown; `PaymentMethod` = card, cash, qr, bank_transfer, line_pay, ecpay, manual, eftpos, moto, cashout; `PurchaseOrderStatus` is **UPPERCASE** (DRAFT…REFUNDED, incl. PARTIALLY_RECEIVED); `OrderType` = online, pos, b2b, relay, manual, import (no `phone`).
 
 ## C. Backend changes
 
@@ -36,13 +36,13 @@ Scope: Backend-Shared-Contract (source of truth) → Backend-Management / Backen
 | File | Fix |
 |---|---|
 | `src/lib/api/orders.ts` | `OrderStatus`: +paid, +packed, +completed, −packing (invalid). `OrderPaymentStatus`: +unknown, +pending, +partially_refunded. `FulfillmentStatus`: −partially_fulfilled (invalid) → contract's picking_printed/packing/packed/partial. `OrderChannel`: −phone (invalid) → +b2b, +relay, +manual |
-| `src/lib/api/payments.ts` | `PaymentMethod`: −adyen (invalid) → full contract set incl. qr/line_pay/ecpay/eftpos/moto/cashout. `PaymentRecordStatus`: +processing, +cancelled, +awaiting_action, +unknown |
+| `src/lib/api/payments.ts` | `PaymentMethod`: full contract set incl. qr/line_pay/ecpay/eftpos/moto/cashout. `PaymentRecordStatus`: +processing, +cancelled, +awaiting_action, +unknown |
 | `src/lib/api/purchasing.ts` | PO statuses lowercase → **UPPERCASE** wire values; +PARTIALLY_RECEIVED, +REFUNDED in PO_STATUSES and PO_TRANSITION_TARGETS |
 | `src/pages/import/PurchaseOrdersPage.tsx` | statusTone cases, default transition target, and row-disable checks → UPPERCASE; disable now also covers REFUNDED |
 | `src/pages/import/ReceiptsPage.tsx` | RECEIPT_STATUSES → contract values actually used (DRAFT, CONFIRMED); isDraft/labels/tones → UPPERCASE |
 | `src/contexts/LanguageContext.tsx` | Added zh-TW + zh-CN labels for every new enum value (b2b, relay, qr, line_pay, ecpay, eftpos, moto, cashout, failed, partially_refunded, unknown, awaiting_action, picking_printed, SUBMITTED, CONFIRMED, PARTIALLY_RECEIVED, RECEIVED, REFUNDED) |
 
-Impact before fix: PO status filter/transition sent lowercase → backend `IsValid()` rejection or empty lists; order filters `packing`/`phone`/`partially_fulfilled` matched nothing or were rejected; manual-payment method `adyen` rejected; orders in paid/packed/completed states rendered with no label and couldn't be targeted by the transition dialog.
+Impact before fix: PO status filter/transition sent lowercase → backend `IsValid()` rejection or empty lists; order filters `packing`/`phone`/`partially_fulfilled` matched nothing or were rejected; unsupported manual-payment methods were rejected; orders in paid/packed/completed states rendered with no label and couldn't be targeted by the transition dialog.
 
 State/loading/error handling: verified the transition/cancel/confirm/dispatch buttons disable on `saving`, reload list on success, and surface the contract error envelope — no changes needed. Tests: the existing `_wiring.contract.test.ts` snapshot was re-verified by hand against all three live route tables — accurate, no update required.
 
@@ -86,7 +86,7 @@ No class-1 defects (dead frontend calls) found; the repo's own wiring contract t
 | Order filters | OrdersListPage selects | GET /v1/orders | orders.List | 4 enums | **fixed** | all filter values now valid |
 | Cancel order | cancel button | POST /v1/orders/:id/cancel | orders.Transition→cancelled (+stock release via stockops) | ✓ | OK | — |
 | Bulk order import | OrderUploadPage | POST /v1/orders/import | import validate (IsValid) | OrderType | OK | CSV passthrough; backend validates |
-| Record manual payment | PaymentsListPage form | POST /v1/payments | payments.RecordManual | PaymentMethod | **fixed** | −adyen, full contract set |
+| Record manual payment | PaymentsListPage form | POST /v1/payments | payments.RecordManual | PaymentMethod | **fixed** | full contract set |
 | PO transition | PurchaseOrdersPage dialog | POST /v1/purchase-orders/:id/transition | purchasing.Transition | PurchaseOrderStatus | **fixed** | UPPERCASE + new targets |
 | Receipt confirm | ReceiptsPage confirm | POST /v1/receipts/:id/confirm | receipts.Confirm (DRAFT→CONFIRMED) | PurchaseOrderStatus | **fixed** | UPPERCASE checks |
 | Picking assign/start/complete/cancel, Packing mark-packed/discrepancy, Shipment dispatch, Stock receive/adjust/transfer/reserve/commit/release/import, Expiry run, Invoice issue/void, Refund create, Checkout, Cart ops, Media upload, Auth/Users/Customers/Roles/Settings/Loyalty/Marketing/Coupons/Promotions CRUD | respective pages | verified routes | verified handlers | contract enums | OK | — |

@@ -1,6 +1,6 @@
 package wholesale
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
 
 const (
 	PathWholesaleAccountTermsMe       = "/v1/wholesale-account/me"

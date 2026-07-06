@@ -3,10 +3,10 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/shared"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/customer"
 )
 
 // WholesaleCustomer is the grouped business profile for a wholesaleCustomer
@@ -41,27 +41,27 @@ type WholesaleCustomer struct {
 // WholesaleCustomerSummary is a compact wholesale customer projection for
 // lists, search results, and organisation-member references.
 type WholesaleCustomerSummary struct {
-	ID                   string               `json:"id"`
-	AccountID            string               `json:"account_id,omitempty"`
-	UserID               string               `json:"user_id,omitempty"`
-	OrganisationCode     string               `json:"organisation_code"`
-	OrganisationAccessID string               `json:"organisation_access_id,omitempty"`
-	DisplayName          string               `json:"display_name,omitempty"`
-	Email                string               `json:"email,omitempty"`
-	Phone                string               `json:"phone,omitempty"`
-	RoleKey              string               `json:"role_key,omitempty"`
-	Status               enums.CustomerStatus `json:"status"`
-	TierKey              string               `json:"tier_key,omitempty"`
+	ID                   string                      `json:"id"`
+	AccountID            string                      `json:"account_id,omitempty"`
+	UserID               string                      `json:"user_id,omitempty"`
+	OrganisationCode     string                      `json:"organisation_code"`
+	OrganisationAccessID string                      `json:"organisation_access_id,omitempty"`
+	DisplayName          string                      `json:"display_name,omitempty"`
+	Email                string                      `json:"email,omitempty"`
+	Phone                string                      `json:"phone,omitempty"`
+	RoleKey              string                      `json:"role_key,omitempty"`
+	Status               customerenum.CustomerStatus `json:"status"`
+	TierKey              string                      `json:"tier_key,omitempty"`
 }
 
 // WholesaleCustomerBasicInfo groups the person/contact details for a wholesale
 // customer contact.
 type WholesaleCustomerBasicInfo struct {
-	Name              common.PersonName               `json:"name"`
-	Contacts          common.ContactChannels          `json:"contacts"`
-	JobTitle          string                          `json:"job_title,omitempty"`
-	Department        string                          `json:"department,omitempty"`
-	AcquisitionSource enums.CustomerAcquisitionSource `json:"acquisition_source,omitempty"`
+	Name              common.PersonName                      `json:"name"`
+	Contacts          common.ContactChannels                 `json:"contacts"`
+	JobTitle          string                                 `json:"job_title,omitempty"`
+	Department        string                                 `json:"department,omitempty"`
+	AcquisitionSource customerenum.CustomerAcquisitionSource `json:"acquisition_source,omitempty"`
 }
 
 // WholesaleCustomerCommercialProfile groups staff-managed commercial details
@@ -79,11 +79,11 @@ type WholesaleCustomerCommercialProfile struct {
 // WholesaleCustomerAccountProfile groups account/persona and organisation access
 // references for wholesale access.
 type WholesaleCustomerAccountProfile struct {
-	Status        enums.CustomerStatus `json:"status"`
-	RoleKey       string               `json:"role_key,omitempty"`
-	IsPrimary     bool                 `json:"is_primary,omitempty"`
-	JoinedAt      *time.Time           `json:"joined_at,omitempty"`
-	LastOrderedAt *time.Time           `json:"last_ordered_at,omitempty"`
+	Status        customerenum.CustomerStatus `json:"status"`
+	RoleKey       string                      `json:"role_key,omitempty"`
+	IsPrimary     bool                        `json:"is_primary,omitempty"`
+	JoinedAt      *time.Time                  `json:"joined_at,omitempty"`
+	LastOrderedAt *time.Time                  `json:"last_ordered_at,omitempty"`
 }
 
 // WholesaleTerms groups B2B price-tier configuration and freight terms for a

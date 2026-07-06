@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/wholesale"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/wholesale"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/customer"
 )
 
 func TestWholesaleCustomerJSONShape(t *testing.T) {
@@ -24,7 +24,7 @@ func TestWholesaleCustomerJSONShape(t *testing.T) {
 			Contacts: common.ContactChannels{Email: "buyer@example.com"},
 		},
 		Commercial:     wholesale.WholesaleCustomerCommercialProfile{SalesRep: "sales_123"},
-		AccountProfile: wholesale.WholesaleCustomerAccountProfile{Status: enums.CustomerStatusActive, RoleKey: "buyer"},
+		AccountProfile: wholesale.WholesaleCustomerAccountProfile{Status: customerenum.CustomerStatusActive, RoleKey: "buyer"},
 		Terms:          wholesale.WholesaleTerms{TierKey: "standard", PriceTier: 1},
 	}
 

@@ -6,22 +6,23 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/wallet"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/wallet"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/membership"
+	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/wallet"
 )
 
 func TestCustomerWalletRoundTrip(t *testing.T) {
 	now := time.Date(2026, 6, 30, 0, 0, 0, 0, time.UTC)
-	owner := membership.MembershipOwnerRef{OwnerType: enums.MembershipOwnerTypeRetailCustomer, OwnerID: "retail_1"}
+	owner := membership.MembershipOwnerRef{OwnerType: membershipenum.MembershipOwnerTypeRetailCustomer, OwnerID: "retail_1"}
 	bal := common.Money{AmountMinor: 2500, Currency: "AUD"}
 	w := wallet.CustomerWallet{
 		Owner:               owner,
 		MembershipAccountID: "mem_1",
 		Instruments: []wallet.WalletInstrument{
-			{Type: enums.WalletInstrumentTypeGiftCard, Code: "GC-1", Status: "active", Balance: &bal},
-			{Type: enums.WalletInstrumentTypePoints, Code: "mem_1"},
+			{Type: walletenum.WalletInstrumentTypeGiftCard, Code: "GC-1", Status: "active", Balance: &bal},
+			{Type: walletenum.WalletInstrumentTypePoints, Code: "mem_1"},
 		},
 		Summary:      wallet.CustomerWalletSummary{AvailablePoints: 1000, GiftCardBalanceTotal: bal, ActiveGiftCards: 1},
 		CalculatedAt: now,
@@ -50,14 +51,14 @@ func TestCustomerWalletRoundTrip(t *testing.T) {
 
 func TestGiftCardRoundTrip(t *testing.T) {
 	now := time.Date(2026, 6, 30, 0, 0, 0, 0, time.UTC)
-	owner := membership.MembershipOwnerRef{OwnerType: enums.MembershipOwnerTypeWholesaleOrganisation, OwnerID: "org_1"}
+	owner := membership.MembershipOwnerRef{OwnerType: membershipenum.MembershipOwnerTypeWholesaleOrganisation, OwnerID: "org_1"}
 	gc := wallet.GiftCard{
 		ID:           "gc_1",
 		Code:         "GC-1",
 		Owner:        owner,
 		Balance:      common.Money{AmountMinor: 5000, Currency: "AUD"},
 		InitialValue: common.Money{AmountMinor: 10000, Currency: "AUD"},
-		Status:       enums.GiftCardStatusPartiallyRedeemed,
+		Status:       walletenum.GiftCardStatusPartiallyRedeemed,
 		IssuedAt:     now,
 	}
 
@@ -70,7 +71,7 @@ func TestGiftCardRoundTrip(t *testing.T) {
 		t.Fatalf("unmarshal gift card: %v", err)
 	}
 	if decoded.Code != "GC-1" || decoded.Balance.AmountMinor != 5000 ||
-		decoded.Status != enums.GiftCardStatusPartiallyRedeemed {
+		decoded.Status != walletenum.GiftCardStatusPartiallyRedeemed {
 		t.Fatalf("gift card did not round-trip: %+v", decoded)
 	}
 }
@@ -82,7 +83,7 @@ func TestGiftCardTransactionRoundTrip(t *testing.T) {
 		GiftCardCode:       "GC-1",
 		Delta:              common.Money{AmountMinor: -5000, Currency: "AUD"},
 		BalanceAfter:       common.Money{AmountMinor: 5000, Currency: "AUD"},
-		Reason:             enums.GiftCardTransactionReasonRedeem,
+		Reason:             walletenum.GiftCardTransactionReasonRedeem,
 		RelatedOrderNumber: "MAMA260703ABC123",
 		CreatedAt:          now,
 	}
@@ -95,7 +96,7 @@ func TestGiftCardTransactionRoundTrip(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal gift card tx: %v", err)
 	}
-	if decoded.Reason != enums.GiftCardTransactionReasonRedeem ||
+	if decoded.Reason != walletenum.GiftCardTransactionReasonRedeem ||
 		decoded.BalanceAfter.AmountMinor != 5000 || decoded.RelatedOrderNumber != "MAMA260703ABC123" {
 		t.Fatalf("gift card tx did not round-trip: %+v", decoded)
 	}
@@ -103,7 +104,7 @@ func TestGiftCardTransactionRoundTrip(t *testing.T) {
 
 func TestWalletExportRoundTrip(t *testing.T) {
 	now := time.Date(2026, 7, 5, 0, 0, 0, 0, time.UTC)
-	owner := membership.MembershipOwnerRef{OwnerType: enums.MembershipOwnerTypeRetailCustomer, OwnerID: "RC-1"}
+	owner := membership.MembershipOwnerRef{OwnerType: membershipenum.MembershipOwnerTypeRetailCustomer, OwnerID: "RC-1"}
 	export := wallet.WalletExport{
 		SchemaVersion: wallet.WalletExportSchemaVersion,
 		Owner:         owner,
@@ -111,7 +112,7 @@ func TestWalletExportRoundTrip(t *testing.T) {
 			Account: &membership.MembershipAccount{
 				ID:     "mem_1",
 				Owner:  owner,
-				Status: enums.MembershipAccountStatusActive,
+				Status: membershipenum.MembershipAccountStatusActive,
 				Wallet: membership.MembershipWalletSummary{
 					AvailablePoints: 150,
 					CalculatedAt:    now,
@@ -130,7 +131,7 @@ func TestWalletExportRoundTrip(t *testing.T) {
 		},
 		History: []wallet.WalletExportHistoryEvent{{
 			At:          now,
-			Type:        enums.WalletInstrumentTypePoints,
+			Type:        walletenum.WalletInstrumentTypePoints,
 			Code:        "mem_1",
 			DeltaPoints: 150,
 			Status:      "earned",

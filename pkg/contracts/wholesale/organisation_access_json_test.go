@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/wholesale"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/wholesale"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/wholesale"
 )
 
 func TestOrganisationAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T) {
@@ -19,7 +19,7 @@ func TestOrganisationAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *test
 		UserID:                    "user_1",
 		AccountID:                 "acct_1",
 		RoleKey:                   "buyer",
-		Status:                    enums.OrganisationAccessStatusActive,
+		Status:                    wholesaleenum.OrganisationAccessStatusActive,
 		Invitation:                &common.LifecycleAction{By: "admin_1", At: &invitedAt},
 		JoinedAt:                  &joinedAt,
 	}

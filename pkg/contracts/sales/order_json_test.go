@@ -6,10 +6,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/shared"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/membership"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/payment"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/sales"
 )
 
 func TestOrderJSONRoundTripWithHistory(t *testing.T) {
@@ -17,11 +19,11 @@ func TestOrderJSONRoundTripWithHistory(t *testing.T) {
 	order := sales.Order{
 		ID:                "ord_1",
 		OrderNumber:       "1001",
-		Channel:           enums.OrderTypeOnline,
-		Status:            enums.SalesOrderStatusPaid,
-		PaymentStatus:     enums.PaymentStatusPaid,
-		PaymentMethod:     enums.PaymentMethodCard,
-		FulfillmentStatus: enums.FulfillmentStatusUnfulfilled,
+		Channel:           salesenum.OrderTypeOnline,
+		Status:            salesenum.SalesOrderStatusPaid,
+		PaymentStatus:     paymentenum.PaymentStatusPaid,
+		PaymentMethod:     paymentenum.PaymentMethodCard,
+		FulfillmentStatus: salesenum.FulfillmentStatusUnfulfilled,
 		Customer: common.PartyRef{
 			ID:    "cust_1",
 			Name:  "Customer One",
@@ -53,7 +55,7 @@ func TestOrderJSONRoundTripWithHistory(t *testing.T) {
 		t.Fatalf("unmarshal order: %v", err)
 	}
 
-	if decoded.Status != enums.SalesOrderStatusPaid || decoded.PaymentStatus != enums.PaymentStatusPaid {
+	if decoded.Status != salesenum.SalesOrderStatusPaid || decoded.PaymentStatus != paymentenum.PaymentStatusPaid {
 		t.Fatalf("status fields did not round-trip: %+v", decoded)
 	}
 	if decoded.Total.AmountMinor != 9500 || decoded.Total.Currency != "AUD" {
@@ -81,7 +83,7 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 		OrderNumber: "1002",
 		PointRedemption: &sales.PointRedemptionSnapshot{
 			MembershipAccountID: "mem_1",
-			OwnerType:           enums.MembershipOwnerTypeRetailCustomer,
+			OwnerType:           membershipenum.MembershipOwnerTypeRetailCustomer,
 			OwnerID:             "retail_1",
 			ReservationID:       "res_1",
 			LedgerEntryID:       "ledger_1",
@@ -93,7 +95,7 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 				RewardRedemptionID:  "reward_redemption_1",
 				RewardCode:          "reward_1",
 				MembershipAccountID: "mem_1",
-				RewardType:          enums.MembershipRewardTypeOrderDiscount,
+				RewardType:          membershipenum.MembershipRewardTypeOrderDiscount,
 				PointsSpent:         500,
 				DiscountAmount:      &discount,
 			},

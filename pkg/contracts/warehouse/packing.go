@@ -3,7 +3,7 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/warehouse"
 )
 
 // PackingLine is the order-line projection needed by the packing UI and
@@ -19,17 +19,17 @@ type PackingLine struct {
 
 // PackingDamage is an auditable damage event discovered while packing.
 type PackingDamage struct {
-	ID              string                      `json:"id"`
-	ProductSKUCode  string                      `json:"product_sku_code"`
-	SKU             string                      `json:"sku,omitempty"`
-	ProductName     string                      `json:"product_name,omitempty"`
-	DamagedQty      int                         `json:"damaged_qty"`
-	Handling        enums.PackingDamageHandling `json:"handling"`
-	Note            string                      `json:"note,omitempty"`
-	DamageReportID  string                      `json:"damage_report_id,omitempty"`
-	StockMovementID string                      `json:"stock_movement_id,omitempty"`
-	CreatedAt       time.Time                   `json:"created_at"`
-	CreatedBy       string                      `json:"created_by,omitempty"`
+	ID              string                              `json:"id"`
+	ProductSKUCode  string                              `json:"product_sku_code"`
+	SKU             string                              `json:"sku,omitempty"`
+	ProductName     string                              `json:"product_name,omitempty"`
+	DamagedQty      int                                 `json:"damaged_qty"`
+	Handling        warehouseenum.PackingDamageHandling `json:"handling"`
+	Note            string                              `json:"note,omitempty"`
+	DamageReportID  string                              `json:"damage_report_id,omitempty"`
+	StockMovementID string                              `json:"stock_movement_id,omitempty"`
+	CreatedAt       time.Time                           `json:"created_at"`
+	CreatedBy       string                              `json:"created_by,omitempty"`
 }
 
 // PackingBoxPlan persists box counts and optional contents so label reprints

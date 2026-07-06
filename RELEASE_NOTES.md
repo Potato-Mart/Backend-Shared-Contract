@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v12.0.0` | 2026-07-06 | Major | Breaking enum package cleanup: splits the flat enum package into domain enum subpackages, hard-moves remaining contract/API/service-auth typed enums, removes legacy wallet enum aliases, and removes provider-specific terminal adapter constants from the contract repo. Requires `/v11` → `/v12` module-path migration. |
 | `v11.2.0` | 2026-07-06 | Minor | Sales delivery scheduling and payment processor fees: adds order `expected_delivery_date`/`expected_delivery_time`, `delivery_method` (new `DeliveryMethod` enum) with `outsourced_carrier`, derived `delivery_region` (new `DeliveryRegion` enum), shipping zone `is_local`, payment `processor_fee`/`net_amount`, Stripe `balance_transaction_id`, and the canonical MAMA order-number rule in `pkg/logic/sales`. Additive only; no module path change. |
 | `v11.1.0` | 2026-07-06 | Minor | Retail preorder and expiry merchandising contracts: adds preorder interest/status contracts, product preorder policy fields, admin-configurable soon-expiry merchandising policy, storefront-safe preorder/expiry display fields, and wholesale storefront projection support. Additive only; no module path change. |
 | `v11.0.0` | 2026-07-05 | Major | Unified coupon and wallet export contracts: removes public `CustomerCoupon`; adds Coupon-owned assignment/detail/issue/recipient-preview contracts; adds wallet export request/status/result models with `schema_version: "wallet_export_v1"` covering membership points, coupons, vouchers, gift cards, rewards, normalized history, filters, row counts, checksum, and status. Requires `/v10` → `/v11` module-path migration. |
@@ -76,6 +77,68 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v12.0.0 (Unreleased) - Domain Enum Subpackages / 領域列舉子套件
+
+Release date: Unreleased
+
+This major release replaces the flat enum package with domain enum subpackages
+under `pkg/enums/*`. It also hard-moves the remaining typed enum definitions
+that still lived in contract, API response, and service-auth packages. No
+compatibility aliases are kept, so consumers must update imports and enum
+qualifiers while JSON wire values remain unchanged.
+
+本 major release 將原本扁平的列舉套件拆分為 `pkg/enums/*` 下的領域列舉子套件，
+並將仍留在 contract、API response、service-auth 套件中的 typed enum 全部硬搬遷。
+本版本不保留相容別名，因此使用方必須更新 import 與列舉限定詞；JSON wire 值不變。
+
+### Breaking Changes / 破壞性變更
+
+- `go.mod` module path changes to `github.com/Potato-Mart/Backend-Shared-Contract/v12`.
+- The former flat enum package is split into domain packages such as
+  `pkg/enums/sales`, `pkg/enums/payment`, `pkg/enums/product`, and
+  `pkg/enums/wallet`.
+- `apiresponse.Code` moves to `pkg/enums/apiresponse`; `apiresponse.Error`
+  remains in `pkg/apiresponse` and now uses the moved code type.
+- `serviceauth.Scope` and scope helpers move to `pkg/enums/serviceauth`;
+  service-auth endpoint constants and `ServiceClaims` remain in `pkg/serviceauth`.
+- Preorder status, storefront preorder/expiry status, wholesale application
+  state, and wallet export status are now enum-subpackage types instead of
+  contract-package types.
+- Provider-specific terminal adapter constants were removed from shared
+  contracts; provider adapter code belongs in the owning backend.
+
+### 破壞性變更
+
+- `go.mod` module path 改為 `github.com/Potato-Mart/Backend-Shared-Contract/v12`。
+- 原本扁平的 enum package 拆分為 `pkg/enums/sales`、`pkg/enums/payment`、
+  `pkg/enums/product`、`pkg/enums/wallet` 等領域套件。
+- `apiresponse.Code` 移至 `pkg/enums/apiresponse`；`apiresponse.Error` 留在
+  `pkg/apiresponse`，並改用搬遷後的 code type。
+- `serviceauth.Scope` 與 scope helpers 移至 `pkg/enums/serviceauth`；
+  service-auth endpoint constants 與 `ServiceClaims` 留在 `pkg/serviceauth`。
+- Preorder status、storefront preorder/expiry status、wholesale application
+  state、wallet export status 改由 enum 子套件定義，不再由 contract 套件定義。
+- shared contract 移除 provider-specific terminal adapter constants；provider
+  adapter code 應留在擁有該整合的 backend。
+
+### Consumer Action / 使用方動作
+
+- Update dependencies from `/v11` to `/v12`, then replace flat enum imports with
+  the matching domain enum package. Example: `salesenum.OrderTypeOnline`,
+  `paymentenum.PaymentStatusPaid`, `walletenum.WalletExportFormatJSON`, and
+  `serviceauthenum.ScopePricingQuote`.
+- Replace old contract-local enum qualifiers such as `wallet.WalletExportFormat`,
+  `sales.PreorderStatusRequested`, `product.StorefrontPreorderStatusOpen`, and
+  `wholesale.WholesaleApplicationStatePending` with their new enum-subpackage
+  qualifiers.
+
+- 將依賴從 `/v11` 更新到 `/v12`，並把原本扁平的 enum import 改為對應領域的 enum
+  子套件。例如：`salesenum.OrderTypeOnline`、`paymentenum.PaymentStatusPaid`、
+  `walletenum.WalletExportFormatJSON`、`serviceauthenum.ScopePricingQuote`。
+- 將舊的 contract-local enum 限定詞（例如 `wallet.WalletExportFormat`、
+  `sales.PreorderStatusRequested`、`product.StorefrontPreorderStatusOpen`、
+  `wholesale.WholesaleApplicationStatePending`）改為新的 enum 子套件限定詞。
 
 ## v11.2.0 (2026-07-06) - Sales Delivery Scheduling And Payment Processor Fees / 銷售配送排程與支付手續費
 
@@ -1084,14 +1147,14 @@ Release date: 2026-06-01
 - Added identity device/session/user security fields.
 - Added shared audit, access log, cloud security, security event, security policy, media, and media upload contracts.
 - Expanded payment terminal constants and payment amount/settlement/transaction contracts.
-- Added Adyen terminal readiness documentation and retained MX51 readiness documentation.
+- Added payment terminal readiness documentation.
 - Updated README and version metadata.
 
 - 新增或擴充 audit 與 data protection contracts。
 - identity device/session/user 新增 security fields。
 - 新增 shared audit、access log、cloud security、security event、security policy、media、media upload contracts。
 - 擴充 payment terminal constants 與 payment amount/settlement/transaction contracts。
-- 新增 Adyen terminal readiness 文件並保留 MX51 readiness 文件。
+- 新增 payment terminal readiness 文件。
 - 更新 README 與 version metadata。
 
 ## v3.3.0 - Identity Role And Shared Media Updates / Identity Role 與 Shared Media 更新

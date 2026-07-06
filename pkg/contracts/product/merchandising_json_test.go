@@ -5,7 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/product"
 )
 
 func TestProductStorefrontMerchandisingJSONShape(t *testing.T) {
@@ -66,14 +67,14 @@ func TestStorefrontDisplayJSONShape(t *testing.T) {
 	display := StorefrontDisplay{
 		Preorder: &StorefrontPreorderDisplay{
 			Available:             true,
-			Status:                StorefrontPreorderStatusOpen,
+			Status:                productenum.StorefrontPreorderStatusOpen,
 			ExpectedAvailableAt:   &expiresAt,
 			MaxQuantityPerRequest: 2,
 			Labels:                []common.LocalizedName{{Language: "en", Name: "Preorder now"}},
 		},
 		Expiry: &StorefrontExpiryDisplay{
 			SoonExpiry:          true,
-			Status:              StorefrontExpiryStatusSoonExpiry,
+			Status:              productenum.StorefrontExpiryStatusSoonExpiry,
 			ExpiresAt:           &expiresAt,
 			DaysToExpiry:        &days,
 			WindowDays:          14,

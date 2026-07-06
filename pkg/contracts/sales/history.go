@@ -3,7 +3,7 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/sales"
 )
 
 type StatusHistory struct {
@@ -15,10 +15,10 @@ type StatusHistory struct {
 }
 
 type Fulfillment struct {
-	OrderNumber      string                  `json:"order_number"`
-	OrderDate        time.Time               `json:"order_date"`
-	Status           enums.FulfillmentStatus `json:"status"`
-	PickingPrintedAt *time.Time              `json:"picking_printed_at,omitempty"`
-	PackedAt         *time.Time              `json:"packed_at,omitempty"`
-	UpdatedAt        time.Time               `json:"updated_at"`
+	OrderNumber      string                      `json:"order_number"`
+	OrderDate        time.Time                   `json:"order_date"`
+	Status           salesenum.FulfillmentStatus `json:"status"`
+	PickingPrintedAt *time.Time                  `json:"picking_printed_at,omitempty"`
+	PackedAt         *time.Time                  `json:"packed_at,omitempty"`
+	UpdatedAt        time.Time                   `json:"updated_at"`
 }

@@ -3,8 +3,8 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/warehouse"
 )
 
 type Depot struct {
@@ -46,15 +46,15 @@ type DepotProduct struct {
 // Transform/Size are a denormalised cache for renderers that fetch
 // locations directly without joining the layout tree.
 type StockLocation struct {
-	ID           string            `json:"id"`
-	DepotCode    string            `json:"depot_code"`
-	Code         string            `json:"code"`
-	Name         string            `json:"name,omitempty"`
-	Zone         enums.StorageType `json:"zone,omitempty"`
-	IsActive     bool              `json:"is_active"`
-	LayoutNodeID string            `json:"layout_node_id,omitempty"`
-	Transform    *common.Transform `json:"transform,omitempty"`
-	Size         *common.Size3D    `json:"size,omitempty"`
-	Shape        enums.ShapeType   `json:"shape,omitempty"`
-	Color        string            `json:"color,omitempty"`
+	ID           string                    `json:"id"`
+	DepotCode    string                    `json:"depot_code"`
+	Code         string                    `json:"code"`
+	Name         string                    `json:"name,omitempty"`
+	Zone         warehouseenum.StorageType `json:"zone,omitempty"`
+	IsActive     bool                      `json:"is_active"`
+	LayoutNodeID string                    `json:"layout_node_id,omitempty"`
+	Transform    *common.Transform         `json:"transform,omitempty"`
+	Size         *common.Size3D            `json:"size,omitempty"`
+	Shape        warehouseenum.ShapeType   `json:"shape,omitempty"`
+	Color        string                    `json:"color,omitempty"`
 }

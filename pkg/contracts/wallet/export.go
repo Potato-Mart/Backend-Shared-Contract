@@ -3,51 +3,24 @@ package wallet
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/promotion"
+	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/wallet"
 )
 
 const WalletExportSchemaVersion = "wallet_export_v1"
 
-// WalletExportFormat controls the downloadable representation.
-type WalletExportFormat string
-
-const (
-	WalletExportFormatJSON   WalletExportFormat = "json"
-	WalletExportFormatCSVZip WalletExportFormat = "csv_zip"
-)
-
-func (f WalletExportFormat) IsValid() bool {
-	switch f {
-	case WalletExportFormatJSON, WalletExportFormatCSVZip:
-		return true
-	}
-	return false
-}
-
-// WalletExportStatus is the lifecycle state of an async export request.
-type WalletExportStatus string
-
-const (
-	WalletExportStatusPending   WalletExportStatus = "pending"
-	WalletExportStatusRunning   WalletExportStatus = "running"
-	WalletExportStatusCompleted WalletExportStatus = "completed"
-	WalletExportStatusFailed    WalletExportStatus = "failed"
-	WalletExportStatusExpired   WalletExportStatus = "expired"
-)
-
 // WalletExportSpec describes how Management should build a durable export.
 type WalletExportSpec struct {
-	Format          WalletExportFormat `json:"format,omitempty"`
-	IncludeHistory  *bool              `json:"include_history,omitempty"`
-	From            *time.Time         `json:"from,omitempty"`
-	To              *time.Time         `json:"to,omitempty"`
-	IncludeExpired  *bool              `json:"include_expired,omitempty"`
-	IncludeRedeemed *bool              `json:"include_redeemed,omitempty"`
-	IncludeVoided   *bool              `json:"include_voided,omitempty"`
-	Locale          string             `json:"locale,omitempty"`
+	Format          walletenum.WalletExportFormat `json:"format,omitempty"`
+	IncludeHistory  *bool                         `json:"include_history,omitempty"`
+	From            *time.Time                    `json:"from,omitempty"`
+	To              *time.Time                    `json:"to,omitempty"`
+	IncludeExpired  *bool                         `json:"include_expired,omitempty"`
+	IncludeRedeemed *bool                         `json:"include_redeemed,omitempty"`
+	IncludeVoided   *bool                         `json:"include_voided,omitempty"`
+	Locale          string                        `json:"locale,omitempty"`
 }
 
 // WalletExportRecord is returned by export status endpoints.
@@ -56,8 +29,8 @@ type WalletExportRecord struct {
 	SchemaVersion string                        `json:"schema_version"`
 	Owner         membership.MembershipOwnerRef `json:"owner"`
 	RequestedBy   string                        `json:"requested_by,omitempty"`
-	Format        WalletExportFormat            `json:"format"`
-	Status        WalletExportStatus            `json:"status"`
+	Format        walletenum.WalletExportFormat `json:"format"`
+	Status        walletenum.WalletExportStatus `json:"status"`
 	Filters       WalletExportFilters           `json:"filters"`
 	RecordCounts  WalletExportRecordCounts      `json:"record_counts,omitempty"`
 	Checksum      string                        `json:"checksum,omitempty"`
@@ -135,16 +108,16 @@ type WalletExportGiftCard struct {
 }
 
 type WalletExportHistoryEvent struct {
-	At                 time.Time                  `json:"at"`
-	Type               enums.WalletInstrumentType `json:"type"`
-	Code               string                     `json:"code,omitempty"`
-	Status             string                     `json:"status,omitempty"`
-	DeltaPoints        int                        `json:"delta_points,omitempty"`
-	DeltaMoney         *common.Money              `json:"delta_money,omitempty"`
-	BalanceAfter       *common.Money              `json:"balance_after,omitempty"`
-	RelatedOrderNumber string                     `json:"related_order_number,omitempty"`
-	Source             string                     `json:"source,omitempty"`
-	Note               string                     `json:"note,omitempty"`
+	At                 time.Time                       `json:"at"`
+	Type               walletenum.WalletInstrumentType `json:"type"`
+	Code               string                          `json:"code,omitempty"`
+	Status             string                          `json:"status,omitempty"`
+	DeltaPoints        int                             `json:"delta_points,omitempty"`
+	DeltaMoney         *common.Money                   `json:"delta_money,omitempty"`
+	BalanceAfter       *common.Money                   `json:"balance_after,omitempty"`
+	RelatedOrderNumber string                          `json:"related_order_number,omitempty"`
+	Source             string                          `json:"source,omitempty"`
+	Note               string                          `json:"note,omitempty"`
 }
 
 type WalletExportSummary struct {

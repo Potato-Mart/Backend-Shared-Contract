@@ -6,8 +6,8 @@ package productlogic
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/product"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/product"
 )
 
 // Display states are the read-time, computed presentation states layered on top
@@ -90,7 +90,7 @@ func RestockedExpiresAt(p product.Product) *time.Time {
 // out_of_stock clears once stock returns, an active product reverts to "active"
 // automatically — no background job.
 func DisplayStatus(p product.Product, now time.Time) string {
-	if p.Status != enums.ProductStatusActive {
+	if p.Status != productenum.ProductStatusActive {
 		return string(p.Status)
 	}
 	switch {

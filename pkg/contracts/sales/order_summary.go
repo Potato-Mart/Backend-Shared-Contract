@@ -3,8 +3,9 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/payment"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/sales"
 )
 
 // OrderSummary is a slim, customer-facing projection of an Order for "my orders"
@@ -12,11 +13,11 @@ import (
 // projection — deliberately carries no audit/actor fields — and is built from
 // Order in pkg/logic. Reads and links use OrderNumber, the human business key.
 type OrderSummary struct {
-	OrderNumber       string                  `json:"order_number"`
-	Status            enums.SalesOrderStatus  `json:"status"`
-	PaymentStatus     enums.PaymentStatus     `json:"payment_status"`
-	FulfillmentStatus enums.FulfillmentStatus `json:"fulfillment_status"`
-	Channel           enums.OrderType         `json:"channel,omitempty"`
+	OrderNumber       string                      `json:"order_number"`
+	Status            salesenum.SalesOrderStatus  `json:"status"`
+	PaymentStatus     paymentenum.PaymentStatus   `json:"payment_status"`
+	FulfillmentStatus salesenum.FulfillmentStatus `json:"fulfillment_status"`
+	Channel           salesenum.OrderType         `json:"channel,omitempty"`
 	// PlacedAt is the customer-meaningful order time (Order.ConfirmedAt,
 	// falling back to Order.CreatedAt — Order has no separate order_date).
 	PlacedAt       time.Time              `json:"placed_at"`

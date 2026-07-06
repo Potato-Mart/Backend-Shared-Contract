@@ -8,17 +8,17 @@ package campaign
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/campaign"
 )
 
 // Audience narrows who a campaign is shown to. An empty field means "any";
 // clients pass their own context (customer_type/platform/region) when querying
 // and the server filters server-side.
 type Audience struct {
-	CustomerType enums.CampaignCustomerType `json:"customer_type,omitempty"`
-	Platform     enums.CampaignPlatform     `json:"platform,omitempty"`
-	Region       string                     `json:"region,omitempty"`
+	CustomerType campaignenum.CampaignCustomerType `json:"customer_type,omitempty"`
+	Platform     campaignenum.CampaignPlatform     `json:"platform,omitempty"`
+	Region       string                            `json:"region,omitempty"`
 }
 
 // Campaign is one piece of scheduled, targeted storefront content.
@@ -34,8 +34,8 @@ type Campaign struct {
 	MediaURL        string `json:"media_url,omitempty"`
 	BackgroundToken string `json:"background_token,omitempty"`
 
-	Placement enums.CampaignPlacement `json:"placement"`
-	Severity  enums.CampaignSeverity  `json:"severity"`
+	Placement campaignenum.CampaignPlacement `json:"placement"`
+	Severity  campaignenum.CampaignSeverity  `json:"severity"`
 
 	// Priority orders competing campaigns for the same placement (higher first).
 	Priority int `json:"priority"`

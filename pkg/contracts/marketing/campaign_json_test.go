@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/marketing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/marketing"
+	marketingenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/marketing"
 )
 
 func TestMarketingCampaignRecipientJSONGroupsContactChannels(t *testing.T) {
@@ -21,7 +21,7 @@ func TestMarketingCampaignRecipientJSONGroupsContactChannels(t *testing.T) {
 			LineID: "line_1",
 		},
 		CustomerName: "Retail Customer",
-		Status:       enums.MarketingRecipientStatusPending,
+		Status:       marketingenum.MarketingRecipientStatusPending,
 		CreatedAt:    time.Date(2026, 6, 18, 6, 30, 0, 0, time.UTC),
 	}
 

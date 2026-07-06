@@ -3,9 +3,9 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/product"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/sales"
 )
 
 type Cart struct {
@@ -14,7 +14,7 @@ type Cart struct {
 	CustomerNumber string `json:"customer_number,omitempty"`
 	// Channel is the order channel this cart is being built for
 	// (online/pos/b2b/...). Optional and additive.
-	Channel enums.OrderType `json:"channel,omitempty"`
+	Channel salesenum.OrderType `json:"channel,omitempty"`
 	// Buyer describes who is buying, independently of Channel. POS is a
 	// channel, not a buyer type — see sales.BuyerContext. Optional pointer
 	// so it is omitted entirely when unset.

@@ -3,8 +3,8 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/membership"
 )
 
 // Internal membership service endpoints. Provider: Backend-Management.
@@ -19,15 +19,15 @@ const (
 // PointQuoteCommand asks for the value and eligibility of a points spend before
 // checkout or reward reservation.
 type PointQuoteCommand struct {
-	MembershipAccountID  string                         `json:"membership_account_id,omitempty"`
-	Owner                *MembershipOwnerRef            `json:"owner,omitempty"`
-	OrganisationAccessID string                         `json:"organisation_access_id,omitempty"`
-	RedemptionType       enums.MembershipRedemptionType `json:"redemption_type"`
-	Points               int                            `json:"points" binding:"required,gt=0"`
-	Currency             string                         `json:"currency" binding:"required"`
-	MerchandiseAmount    *common.Money                  `json:"merchandise_amount,omitempty"`
-	RelatedOrderID       string                         `json:"related_order_id,omitempty"`
-	RewardCode           string                         `json:"reward_code,omitempty"`
+	MembershipAccountID  string                                  `json:"membership_account_id,omitempty"`
+	Owner                *MembershipOwnerRef                     `json:"owner,omitempty"`
+	OrganisationAccessID string                                  `json:"organisation_access_id,omitempty"`
+	RedemptionType       membershipenum.MembershipRedemptionType `json:"redemption_type"`
+	Points               int                                     `json:"points" binding:"required,gt=0"`
+	Currency             string                                  `json:"currency" binding:"required"`
+	MerchandiseAmount    *common.Money                           `json:"merchandise_amount,omitempty"`
+	RelatedOrderID       string                                  `json:"related_order_id,omitempty"`
+	RewardCode           string                                  `json:"reward_code,omitempty"`
 }
 
 // PointQuoteResult returns the projected discount and available balance.
@@ -42,17 +42,17 @@ type PointQuoteResult struct {
 
 // PointReserveCommand reserves points against checkout or a reward redemption.
 type PointReserveCommand struct {
-	MembershipAccountID       string                         `json:"membership_account_id"`
-	Owner                     MembershipOwnerRef             `json:"owner"`
-	OrganisationAccessID      string                         `json:"organisation_access_id,omitempty"`
-	Points                    int                            `json:"points" binding:"required,gt=0"`
-	Reason                    enums.MembershipPointReason    `json:"reason"`
-	RedemptionType            enums.MembershipRedemptionType `json:"redemption_type"`
-	RelatedOrderID            string                         `json:"related_order_id,omitempty"`
-	RelatedRewardCode         string                         `json:"related_reward_code,omitempty"`
-	RelatedRewardRedemptionID string                         `json:"related_reward_redemption_id,omitempty"`
-	ExpiresAt                 time.Time                      `json:"expires_at"`
-	CreatedBy                 string                         `json:"created_by,omitempty"`
+	MembershipAccountID       string                                  `json:"membership_account_id"`
+	Owner                     MembershipOwnerRef                      `json:"owner"`
+	OrganisationAccessID      string                                  `json:"organisation_access_id,omitempty"`
+	Points                    int                                     `json:"points" binding:"required,gt=0"`
+	Reason                    membershipenum.MembershipPointReason    `json:"reason"`
+	RedemptionType            membershipenum.MembershipRedemptionType `json:"redemption_type"`
+	RelatedOrderID            string                                  `json:"related_order_id,omitempty"`
+	RelatedRewardCode         string                                  `json:"related_reward_code,omitempty"`
+	RelatedRewardRedemptionID string                                  `json:"related_reward_redemption_id,omitempty"`
+	ExpiresAt                 time.Time                               `json:"expires_at"`
+	CreatedBy                 string                                  `json:"created_by,omitempty"`
 }
 
 type PointReserveResult struct {

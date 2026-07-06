@@ -5,8 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/customer"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/product"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/sales"
 )
 
 func TestProductJSONIncludesTaxed(t *testing.T) {
@@ -113,9 +115,9 @@ func TestProductSellingJSONGroup(t *testing.T) {
 		SKU:     "A",
 		Name:    "Wholesale-only product",
 		Selling: &Selling{
-			Channels:   []enums.OrderType{enums.OrderTypeB2B, enums.OrderTypePOS},
-			BuyerTypes: []enums.BuyerType{enums.BuyerTypeWholesaleOrganisation},
-			Visibility: enums.PriceVisibilityWholesaleApprovedOnly,
+			Channels:   []salesenum.OrderType{salesenum.OrderTypeB2B, salesenum.OrderTypePOS},
+			BuyerTypes: []customerenum.BuyerType{customerenum.BuyerTypeWholesaleOrganisation},
+			Visibility: productenum.PriceVisibilityWholesaleApprovedOnly,
 		},
 	})
 	if err != nil {
@@ -138,7 +140,7 @@ func TestProductSellingJSONGroup(t *testing.T) {
 	if err := json.Unmarshal(body, &decoded); err != nil {
 		t.Fatalf("unmarshal product: %v", err)
 	}
-	if decoded.Selling == nil || len(decoded.Selling.Channels) != 2 || decoded.Selling.BuyerTypes[0] != enums.BuyerTypeWholesaleOrganisation {
+	if decoded.Selling == nil || len(decoded.Selling.Channels) != 2 || decoded.Selling.BuyerTypes[0] != customerenum.BuyerTypeWholesaleOrganisation {
 		t.Fatalf("selling rules did not round-trip: %+v", decoded.Selling)
 	}
 }

@@ -4,13 +4,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/membership"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/membership"
 )
 
 func TestPointReservationScenarios(t *testing.T) {
 	now := time.Date(2026, 6, 23, 0, 0, 0, 0, time.UTC)
-	owner := membership.MembershipOwnerRef{OwnerType: enums.MembershipOwnerTypeWholesaleOrganisation, OwnerID: "org_1"}
+	owner := membership.MembershipOwnerRef{OwnerType: membershipenum.MembershipOwnerTypeWholesaleOrganisation, OwnerID: "org_1"}
 	balance := membership.PointBalanceBreakdown{
 		MembershipAccountID: "mem_org_1",
 		Owner:               owner,
@@ -29,14 +29,14 @@ func TestPointReservationScenarios(t *testing.T) {
 		Owner:                owner,
 		OrganisationAccessID: "access_1",
 		Points:               70,
-		Status:               enums.PointReservationStatusReserved,
-		RedemptionType:       enums.MembershipRedemptionTypeCheckoutDiscount,
+		Status:               membershipenum.PointReservationStatusReserved,
+		RedemptionType:       membershipenum.MembershipRedemptionTypeCheckoutDiscount,
 		ExpiresAt:            now.Add(time.Minute),
 	}
 	expired := active
 	expired.ExpiresAt = now.Add(-time.Minute)
 	cancelled := active
-	cancelled.Status = enums.PointReservationStatusCancelled
+	cancelled.Status = membershipenum.PointReservationStatusCancelled
 
 	if !CanCommit(active, now) {
 		t.Fatal("active reservation should be committable")

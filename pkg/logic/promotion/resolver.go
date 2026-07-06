@@ -8,9 +8,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/promotion"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/promotion"
 )
 
 // OverrideReasonSpecialCampaign is the canonical reason string written onto an
@@ -30,17 +30,17 @@ type ResolveTarget struct {
 
 // EffectiveClass returns the promotion class, defaulting an empty class to
 // normal_promotion.
-func EffectiveClass(p promotion.Promotion) enums.PromotionClass {
-	if p.Class == enums.PromotionClassSpecialCampaign {
-		return enums.PromotionClassSpecialCampaign
+func EffectiveClass(p promotion.Promotion) promotionenum.PromotionClass {
+	if p.Class == promotionenum.PromotionClassSpecialCampaign {
+		return promotionenum.PromotionClassSpecialCampaign
 	}
-	return enums.PromotionClassNormal
+	return promotionenum.PromotionClassNormal
 }
 
 // IsTargeted reports whether the promotion is narrowed to a product or
 // category tag rather than the cart-wide behaviour.
 func IsTargeted(p promotion.Promotion) bool {
-	return p.TargetScope == enums.DiscountScopeProduct || p.TargetScope == enums.DiscountScopeCategoryTag
+	return p.TargetScope == promotionenum.DiscountScopeProduct || p.TargetScope == promotionenum.DiscountScopeCategoryTag
 }
 
 // precedence tiers, lower wins. Product beats category tag within a class;
@@ -52,10 +52,10 @@ func IsTargeted(p promotion.Promotion) bool {
 //	3: category-tag-level normal_promotion
 func tierOf(p promotion.Promotion) int {
 	t := 0
-	if EffectiveClass(p) != enums.PromotionClassSpecialCampaign {
+	if EffectiveClass(p) != promotionenum.PromotionClassSpecialCampaign {
 		t += 2
 	}
-	if p.TargetScope == enums.DiscountScopeCategoryTag {
+	if p.TargetScope == promotionenum.DiscountScopeCategoryTag {
 		t++
 	}
 	return t
@@ -78,9 +78,9 @@ func Matches(p promotion.Promotion, t ResolveTarget) bool {
 		return false
 	}
 	switch p.TargetScope {
-	case enums.DiscountScopeProduct:
+	case promotionenum.DiscountScopeProduct:
 		return p.TargetProductSKUCode == t.ProductSKUCode
-	case enums.DiscountScopeCategoryTag:
+	case promotionenum.DiscountScopeCategoryTag:
 		if p.TargetCategoryTagID == "" || len(t.CategoryTags) == 0 {
 			return false
 		}
@@ -100,7 +100,7 @@ func Matches(p promotion.Promotion, t ResolveTarget) bool {
 // resolver.
 func DiscountedUnitPriceMinor(p promotion.Promotion, unitPriceMinor int64) (int64, bool) {
 	switch p.DiscountType {
-	case enums.DiscountTypePercentage:
+	case promotionenum.DiscountTypePercentage:
 		pct, err := strconv.ParseFloat(p.DiscountValue, 64)
 		if err != nil || pct < 0 || pct > 100 {
 			return 0, false
@@ -110,13 +110,13 @@ func DiscountedUnitPriceMinor(p promotion.Promotion, unitPriceMinor int64) (int6
 			d = p.MaxDiscount.AmountMinor
 		}
 		return clampPrice(unitPriceMinor-d, unitPriceMinor), true
-	case enums.DiscountTypeFixedAmount:
+	case promotionenum.DiscountTypeFixedAmount:
 		major, err := strconv.ParseFloat(p.DiscountValue, 64)
 		if err != nil || major < 0 {
 			return 0, false
 		}
 		return clampPrice(unitPriceMinor-int64(math.Round(major*100)), unitPriceMinor), true
-	case enums.DiscountTypeFixedPrice:
+	case promotionenum.DiscountTypeFixedPrice:
 		major, err := strconv.ParseFloat(p.DiscountValue, 64)
 		if err != nil || major < 0 {
 			return 0, false
@@ -158,7 +158,7 @@ func ResolveEffective(active []promotion.Promotion, t ResolveTarget) *promotion.
 		if !ok {
 			continue
 		}
-		if EffectiveClass(p) == enums.PromotionClassNormal {
+		if EffectiveClass(p) == promotionenum.PromotionClassNormal {
 			if bestNormal == nil || beats(p, *bestNormal) {
 				cp := p
 				bestNormal, bestNormalPrice = &cp, price
@@ -184,7 +184,7 @@ func ResolveEffective(active []promotion.Promotion, t ResolveTarget) *promotion.
 		StartsAt:             winner.StartsAt,
 		ExpiresAt:            winner.ExpiresAt,
 	}
-	if EffectiveClass(*winner) == enums.PromotionClassSpecialCampaign && bestNormal != nil {
+	if EffectiveClass(*winner) == promotionenum.PromotionClassSpecialCampaign && bestNormal != nil {
 		eff.OverrideReason = OverrideReasonSpecialCampaign
 		eff.OverriddenPromotionID = bestNormal.ID
 		_ = bestNormalPrice // displaced price intentionally not exposed

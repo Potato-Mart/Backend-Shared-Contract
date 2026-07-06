@@ -5,19 +5,20 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/sales"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/payment"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/sales"
 )
 
 func TestOrderSummaryJSONShape(t *testing.T) {
 	now := time.Date(2026, 6, 30, 0, 0, 0, 0, time.UTC)
 	summary := sales.OrderSummary{
 		OrderNumber:       "MAMA260703ABC123",
-		Status:            enums.SalesOrderStatusConfirmed,
-		PaymentStatus:     enums.PaymentStatusPaid,
-		FulfillmentStatus: enums.FulfillmentStatusUnfulfilled,
-		Channel:           enums.OrderTypeOnline,
+		Status:            salesenum.SalesOrderStatusConfirmed,
+		PaymentStatus:     paymentenum.PaymentStatusPaid,
+		FulfillmentStatus: salesenum.FulfillmentStatusUnfulfilled,
+		Channel:           salesenum.OrderTypeOnline,
 		PlacedAt:          now,
 		UpdatedAt:         now,
 		Total:             common.Money{AmountMinor: 4200, Currency: "AUD"},

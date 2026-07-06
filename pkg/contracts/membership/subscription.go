@@ -3,10 +3,10 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/shared"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/membership"
 )
 
 // SubscriptionPlan defines a recurring purchase option available through the
@@ -28,20 +28,20 @@ type SubscriptionPlan struct {
 // MemberSubscription is an active recurring purchase attached to a membership
 // account.
 type MemberSubscription struct {
-	ID                  string                         `json:"id"`
-	MembershipAccountID string                         `json:"membership_account_id"`
-	Owner               MembershipOwnerRef             `json:"owner"`
-	PlanID              string                         `json:"plan_id"`
-	Qty                 int                            `json:"qty"`
-	Status              enums.MemberSubscriptionStatus `json:"status"`
-	StartedAt           time.Time                      `json:"started_at"`
-	NextOrderAt         time.Time                      `json:"next_order_at"`
-	LastOrderAt         *time.Time                     `json:"last_order_at,omitempty"`
-	PausedAt            *time.Time                     `json:"paused_at,omitempty"`
-	CancelledAt         *time.Time                     `json:"cancelled_at,omitempty"`
-	CyclesCompleted     int                            `json:"cycles_completed"`
-	Note                string                         `json:"note,omitempty"`
-	History             []shared.HistoryEntry          `json:"history,omitempty"`
+	ID                  string                                  `json:"id"`
+	MembershipAccountID string                                  `json:"membership_account_id"`
+	Owner               MembershipOwnerRef                      `json:"owner"`
+	PlanID              string                                  `json:"plan_id"`
+	Qty                 int                                     `json:"qty"`
+	Status              membershipenum.MemberSubscriptionStatus `json:"status"`
+	StartedAt           time.Time                               `json:"started_at"`
+	NextOrderAt         time.Time                               `json:"next_order_at"`
+	LastOrderAt         *time.Time                              `json:"last_order_at,omitempty"`
+	PausedAt            *time.Time                              `json:"paused_at,omitempty"`
+	CancelledAt         *time.Time                              `json:"cancelled_at,omitempty"`
+	CyclesCompleted     int                                     `json:"cycles_completed"`
+	Note                string                                  `json:"note,omitempty"`
+	History             []shared.HistoryEntry                   `json:"history,omitempty"`
 
 	common.AuditFields
 }

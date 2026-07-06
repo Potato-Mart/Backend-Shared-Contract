@@ -3,10 +3,10 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	paymentcontracts "github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/payments"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	paymentcontracts "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/payments"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/shared"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/payment"
 )
 
 // Payment is the order-level record of money received against an order.
@@ -15,8 +15,8 @@ type Payment struct {
 	OrderNumber string       `json:"order_number"`
 	Amount      common.Money `json:"amount"`
 
-	Method            enums.PaymentMethod                `json:"method"`
-	Status            enums.PaymentRecordStatus          `json:"status"`
+	Method            paymentenum.PaymentMethod          `json:"method"`
+	Status            paymentenum.PaymentRecordStatus    `json:"status"`
 	Provider          string                             `json:"provider,omitempty"`
 	ProviderReference *paymentcontracts.PaymentReference `json:"provider_reference,omitempty"`
 
@@ -44,7 +44,7 @@ type Payment struct {
 
 	// RecoveryDecision is the merchant's manual answer when the terminal
 	// outcome stayed unknown after provider status checks.
-	RecoveryDecision enums.RecoveryDecision `json:"recovery_decision,omitempty"`
+	RecoveryDecision paymentenum.RecoveryDecision `json:"recovery_decision,omitempty"`
 
 	PaidAt       *time.Time            `json:"paid_at,omitempty"`
 	RefundedAt   *time.Time            `json:"refunded_at,omitempty"`

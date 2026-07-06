@@ -6,11 +6,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/payments"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/payments"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/shared"
+	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/identity"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/payment"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/security"
 )
 
 func TestHistoryOmittedWhenEmpty(t *testing.T) {
@@ -39,7 +41,7 @@ func TestHistoryEntryRoundTrip(t *testing.T) {
 		ActorRef: shared.ActorRef{
 			ActorID:    "usr_1",
 			ActorEmail: "ops@example.com",
-			ActorRole:  enums.UserRoleAdmin,
+			ActorRole:  identityenum.UserRoleAdmin,
 		},
 		RequestContext: shared.RequestContext{
 			RequestID:     "req_1",
@@ -48,7 +50,7 @@ func TestHistoryEntryRoundTrip(t *testing.T) {
 		},
 		ReasonCode:        "terminal_timeout",
 		Note:              "Provider status check could not confirm the outcome.",
-		RiskLevel:         enums.SecurityRiskLevelHigh,
+		RiskLevel:         securityenum.SecurityRiskLevelHigh,
 		RiskFlags:         []string{"payment_unknown", "manual_recovery_required"},
 		RelatedResource:   "terminal_transaction",
 		RelatedResourceID: "ttx_123",
@@ -59,7 +61,7 @@ func TestHistoryEntryRoundTrip(t *testing.T) {
 
 	tx := payments.TerminalTransaction{
 		ID:      "ttx_123",
-		Status:  enums.TerminalTxStatusOverridePending,
+		Status:  paymentenum.TerminalTxStatusOverridePending,
 		History: []shared.HistoryEntry{entry},
 	}
 
@@ -86,8 +88,8 @@ func TestHistoryEntryRoundTrip(t *testing.T) {
 	if got.ActorEmail != "ops@example.com" || got.RequestID != "req_1" {
 		t.Fatalf("actor/request context did not round-trip: %+v", got)
 	}
-	if got.RiskLevel != enums.SecurityRiskLevelHigh {
-		t.Fatalf("risk_level = %q, want %q", got.RiskLevel, enums.SecurityRiskLevelHigh)
+	if got.RiskLevel != securityenum.SecurityRiskLevelHigh {
+		t.Fatalf("risk_level = %q, want %q", got.RiskLevel, securityenum.SecurityRiskLevelHigh)
 	}
 	if got.Metadata["provider_result"] != "timeout" {
 		t.Fatalf("metadata provider_result = %v, want timeout", got.Metadata["provider_result"])

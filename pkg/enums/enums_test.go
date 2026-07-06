@@ -1,8 +1,25 @@
-package enums
+package enums_test
 
 import (
 	"reflect"
 	"testing"
+
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/account"
+	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/campaign"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/customer"
+	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/identity"
+	marketingenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/marketing"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/membership"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/payment"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/product"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/promotion"
+	purchaseenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/purchase"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/sales"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/security"
+	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/shipping"
+	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/wallet"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/warehouse"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/wholesale"
 )
 
 type stringEnum interface {
@@ -16,108 +33,114 @@ func TestExportedEnumsValidateKnownValues(t *testing.T) {
 		valid   []stringEnum
 		invalid stringEnum
 	}{
-		{name: "AccountStatus", valid: []stringEnum{AccountStatusPending, AccountStatusActive, AccountStatusSuspended, AccountStatusClosed, AccountStatusDeleted}, invalid: AccountStatus("__invalid__")},
-		{name: "AlertLevel", valid: []stringEnum{AlertLevelOK, AlertLevelWarning, AlertLevelCritical, AlertLevelExpired}, invalid: AlertLevel("__invalid__")},
-		{name: "AuditOutcome", valid: []stringEnum{AuditOutcomeSuccess, AuditOutcomeFailure, AuditOutcomeDenied}, invalid: AuditOutcome("__invalid__")},
-		{name: "CampaignCustomerType", valid: []stringEnum{CampaignCustomerTypeGuest, CampaignCustomerTypeRetail, CampaignCustomerTypeWholesale}, invalid: CampaignCustomerType("__invalid__")},
-		{name: "CampaignPlacement", valid: []stringEnum{CampaignPlacementTopBanner, CampaignPlacementHomeHero, CampaignPlacementModal, CampaignPlacementCheckoutNotice, CampaignPlacementProductNotice}, invalid: CampaignPlacement("__invalid__")},
-		{name: "CampaignPlatform", valid: []stringEnum{CampaignPlatformWeb, CampaignPlatformMobile}, invalid: CampaignPlatform("__invalid__")},
-		{name: "CampaignSeverity", valid: []stringEnum{CampaignSeverityInfo, CampaignSeveritySuccess, CampaignSeverityWarning, CampaignSeverityCritical}, invalid: CampaignSeverity("__invalid__")},
-		{name: "MediaStatus", valid: []stringEnum{MediaStatusPending, MediaStatusActive, MediaStatusDeleted}, invalid: MediaStatus("__invalid__")},
-		{name: "PackingDamageHandling", valid: []stringEnum{PackingDamageReplaceFromStock, PackingDamageShortShipRefund}, invalid: PackingDamageHandling("__invalid__")},
-		{name: "PackingSessionStatus", valid: []stringEnum{PackingSessionStatusPending, PackingSessionStatusPacking, PackingSessionStatusPacked, PackingSessionStatusSyncPending, PackingSessionStatusResolved}, invalid: PackingSessionStatus("__invalid__")},
-		{name: "AccountType", valid: []stringEnum{AccountTypeAdminUser, AccountTypeGeneralCustomer, AccountTypeWholesaleCustomer}, invalid: AccountType("__invalid__")},
-		{name: "AuthAssuranceLevel", valid: []stringEnum{AuthAssuranceLevel1, AuthAssuranceLevel2, AuthAssuranceLevel3}, invalid: AuthAssuranceLevel("__invalid__")},
-		{name: "AuthIdentityProvider", valid: []stringEnum{AuthIdentityProviderPassword, AuthIdentityProviderGoogle, AuthIdentityProviderApple, AuthIdentityProviderAzureAD, AuthIdentityProviderOkta, AuthIdentityProviderPasskey, AuthIdentityProviderServiceToken, AuthIdentityProviderLine, AuthIdentityProviderDiscord, AuthIdentityProviderMicrosoft, AuthIdentityProviderOIDC}, invalid: AuthIdentityProvider("__invalid__")},
-		{name: "AuthIdentityStatus", valid: []stringEnum{AuthIdentityStatusActive, AuthIdentityStatusDisabled, AuthIdentityStatusRevoked}, invalid: AuthIdentityStatus("__invalid__")},
-		{name: "AuthMethod", valid: []stringEnum{AuthMethodPassword, AuthMethodMFA, AuthMethodPasskey, AuthMethodSSO, AuthMethodRefreshToken, AuthMethodAPIKey}, invalid: AuthMethod("__invalid__")},
-		{name: "CameraProjection", valid: []stringEnum{CameraPerspective, CameraOrthographic}, invalid: CameraProjection("__invalid__")},
-		{name: "ChurnRisk", valid: []stringEnum{ChurnRiskLow, ChurnRiskMedium, ChurnRiskHigh}, invalid: ChurnRisk("__invalid__")},
-		{name: "CouponAppliesTo", valid: []stringEnum{CouponAppliesToAll, CouponAppliesToSpecificProducts, CouponAppliesToSpecificCategoryTags}, invalid: CouponAppliesTo("__invalid__")},
-		{name: "CouponSource", valid: []stringEnum{CouponSourceManual, CouponSourceRFMComeback, CouponSourceBirthday, CouponSourceReferral, CouponSourceSignupBonus, CouponSourceCampaign}, invalid: CouponSource("__invalid__")},
-		{name: "CustomerActivityType", valid: []stringEnum{CustomerActivityTypeNote, CustomerActivityTypeCall, CustomerActivityTypeEmail, CustomerActivityTypeSMS, CustomerActivityTypeLine, CustomerActivityTypeOrder, CustomerActivityTypeComplaint, CustomerActivityTypeReturn, CustomerActivityTypeRefund, CustomerActivityTypePointsAdjust, CustomerActivityTypeTierChange, CustomerActivityTypeStatusChange, CustomerActivityTypeReferral, CustomerActivityTypeCampaign}, invalid: CustomerActivityType("__invalid__")},
-		{name: "CustomerAcquisitionSource", valid: []stringEnum{CustomerAcquisitionSourceOnline, CustomerAcquisitionSourcePOS, CustomerAcquisitionSourceImport, CustomerAcquisitionSourceManual, CustomerAcquisitionSourcePhone}, invalid: CustomerAcquisitionSource("__invalid__")},
-		{name: "CustomerIdentityKind", valid: []stringEnum{CustomerIdentityKindPhone, CustomerIdentityKindEmail, CustomerIdentityKindLine, CustomerIdentityKindMemberCard, CustomerIdentityKindPOSID, CustomerIdentityKindExternal}, invalid: CustomerIdentityKind("__invalid__")},
-		{name: "CustomerStatus", valid: []stringEnum{CustomerStatusActive, CustomerStatusInactive, CustomerStatusBlocked, CustomerStatusClosed}, invalid: CustomerStatus("__invalid__")},
-		{name: "CustomerTier", valid: []stringEnum{CustomerTierStandard, CustomerTierSilver, CustomerTierGold, CustomerTierPlatinum}, invalid: CustomerTier("__invalid__")},
-		{name: "DamageStage", valid: []stringEnum{DamageStageInbound, DamageStagePicking, DamageStagePacking, DamageStageStorage}, invalid: DamageStage("__invalid__")},
-		{name: "DataClassification", valid: []stringEnum{DataClassificationPublic, DataClassificationInternal, DataClassificationConfidential, DataClassificationRestricted}, invalid: DataClassification("__invalid__")},
-		{name: "DataProtectionBasis", valid: []stringEnum{DataProtectionBasisNotApplicable, DataProtectionBasisConsent, DataProtectionBasisContract, DataProtectionBasisLegalObligation, DataProtectionBasisLegitimateInterest}, invalid: DataProtectionBasis("__invalid__")},
-		{name: "DeliveryMethod", valid: []stringEnum{DeliveryMethodDelivery, DeliveryMethodPickup, DeliveryMethodOutsourced}, invalid: DeliveryMethod("__invalid__")},
-		{name: "DeliveryRegion", valid: []stringEnum{DeliveryRegionLocalMelbourne, DeliveryRegionRegionalVIC, DeliveryRegionInterstate}, invalid: DeliveryRegion("__invalid__")},
-		{name: "DeviceType", valid: []stringEnum{DeviceTypeDesktop, DeviceTypeMobile, DeviceTypeTablet, DeviceTypeAPI}, invalid: DeviceType("__invalid__")},
-		{name: "DiscountScope", valid: []stringEnum{DiscountScopeAll, DiscountScopeCategoryTag, DiscountScopeProduct}, invalid: DiscountScope("__invalid__")},
-		{name: "DiscountType", valid: []stringEnum{DiscountTypePercentage, DiscountTypeFixedAmount, DiscountTypeFreeShipping, DiscountTypeFixedPrice}, invalid: DiscountType("__invalid__")},
-		{name: "FulfillmentStatus", valid: []stringEnum{FulfillmentStatusUnfulfilled, FulfillmentStatusPickingPrinted, FulfillmentStatusPacking, FulfillmentStatusPacked, FulfillmentStatusPartial, FulfillmentStatusFulfilled}, invalid: FulfillmentStatus("__invalid__")},
-		{name: "InboundReceiptStatus", valid: []stringEnum{InboundReceiptStatusDraft, InboundReceiptStatusConfirmed}, invalid: InboundReceiptStatus("__invalid__")},
-		{name: "IdentityDomain", valid: []stringEnum{IdentityDomainCustomer, IdentityDomainWorkforce, IdentityDomainPartner, IdentityDomainService}, invalid: IdentityDomain("__invalid__")},
-		{name: "LayoutNodeType", valid: []stringEnum{LayoutNodeZone, LayoutNodeAisle, LayoutNodeRack, LayoutNodeShelf, LayoutNodeBin}, invalid: LayoutNodeType("__invalid__")},
-		{name: "MarketingCampaignStatus", valid: []stringEnum{MarketingCampaignStatusDraft, MarketingCampaignStatusSending, MarketingCampaignStatusSent, MarketingCampaignStatusPartial, MarketingCampaignStatusFailed, MarketingCampaignStatusCancelled, MarketingCampaignStatusExported}, invalid: MarketingCampaignStatus("__invalid__")},
-		{name: "MarketingChannel", valid: []stringEnum{MarketingChannelEmail, MarketingChannelSMS, MarketingChannelLine, MarketingChannelExport}, invalid: MarketingChannel("__invalid__")},
-		{name: "MarketingRecipientStatus", valid: []stringEnum{MarketingRecipientStatusPending, MarketingRecipientStatusSent, MarketingRecipientStatusDelivered, MarketingRecipientStatusBounced, MarketingRecipientStatusOpened, MarketingRecipientStatusClicked, MarketingRecipientStatusFailed, MarketingRecipientStatusUnsubscribed}, invalid: MarketingRecipientStatus("__invalid__")},
-		{name: "MembershipAccountStatus", valid: []stringEnum{MembershipAccountStatusActive, MembershipAccountStatusSuspended, MembershipAccountStatusClosed}, invalid: MembershipAccountStatus("__invalid__")},
-		{name: "MembershipOwnerType", valid: []stringEnum{MembershipOwnerTypeRetailCustomer, MembershipOwnerTypeWholesaleOrganisation}, invalid: MembershipOwnerType("__invalid__")},
-		{name: "MembershipPointReason", valid: []stringEnum{MembershipPointReasonOrder, MembershipPointReasonBirthday, MembershipPointReasonRedeem, MembershipPointReasonRewardRedeem, MembershipPointReasonAdminAdjust, MembershipPointReasonExpired, MembershipPointReasonReferral, MembershipPointReasonSignupBonus, MembershipPointReasonTierUpgrade, MembershipPointReasonManual}, invalid: MembershipPointReason("__invalid__")},
-		{name: "MembershipPromotionTarget", valid: []stringEnum{MembershipPromotionTargetAll, MembershipPromotionTargetWholesale, MembershipPromotionTargetRetail, MembershipPromotionTargetTierSpecific}, invalid: MembershipPromotionTarget("__invalid__")},
-		{name: "MembershipRedemptionType", valid: []stringEnum{MembershipRedemptionTypeCheckoutDiscount, MembershipRedemptionTypeRewardCatalog}, invalid: MembershipRedemptionType("__invalid__")},
-		{name: "MembershipRewardRedemptionStatus", valid: []stringEnum{MembershipRewardRedemptionStatusReserved, MembershipRewardRedemptionStatusRedeemed, MembershipRewardRedemptionStatusCancelled, MembershipRewardRedemptionStatusExpired}, invalid: MembershipRewardRedemptionStatus("__invalid__")},
-		{name: "MembershipRewardType", valid: []stringEnum{MembershipRewardTypeOrderDiscount, MembershipRewardTypeProduct, MembershipRewardTypeFreeShipping, MembershipRewardTypeVoucher}, invalid: MembershipRewardType("__invalid__")},
-		{name: "MembershipTierMetric", valid: []stringEnum{MembershipTierMetricAnnualSpend, MembershipTierMetricLifetimeSpend, MembershipTierMetricManual}, invalid: MembershipTierMetric("__invalid__")},
-		{name: "MemberSubscriptionStatus", valid: []stringEnum{MemberSubscriptionStatusActive, MemberSubscriptionStatusPaused, MemberSubscriptionStatusCancelled}, invalid: MemberSubscriptionStatus("__invalid__")},
-		{name: "ModelFormat", valid: []stringEnum{ModelFormatGLB, ModelFormatGLTF, ModelFormatOBJ, ModelFormatFBX, ModelFormatUSDZ}, invalid: ModelFormat("__invalid__")},
-		{name: "OrderSourceDeviceType", valid: []stringEnum{OrderSourceDeviceTypeIOS, OrderSourceDeviceTypeAndroid, OrderSourceDeviceTypePC, OrderSourceDeviceTypeMobileWeb, OrderSourceDeviceTypeTablet, OrderSourceDeviceTypePos, OrderSourceDeviceTypeManual, OrderSourceDeviceTypePhone, OrderSourceDeviceTypeVR}, invalid: OrderSourceDeviceType("__invalid__")},
-		{name: "OrderType", valid: []stringEnum{OrderTypeOnline, OrderTypePOS, OrderTypeB2B, OrderTypeRelay, OrderTypeManual, OrderTypeImport}, invalid: OrderType("__invalid__")},
-		{name: "BuyerType", valid: []stringEnum{BuyerTypeGuestRetail, BuyerTypeRetailCustomer, BuyerTypeWholesaleOrganisation}, invalid: BuyerType("__invalid__")},
-		{name: "PriceAudience", valid: []stringEnum{PriceAudienceRetail, PriceAudienceWholesale}, invalid: PriceAudience("__invalid__")},
-		{name: "PriceVisibility", valid: []stringEnum{PriceVisibilityPublic, PriceVisibilityLoginRequired, PriceVisibilityWholesaleApprovedOnly, PriceVisibilityHidden}, invalid: PriceVisibility("__invalid__")},
-		{name: "FulfilmentIntent", valid: []stringEnum{FulfilmentIntentDelivery, FulfilmentIntentPickup, FulfilmentIntentInStoreCarry}, invalid: FulfilmentIntent("__invalid__")},
-		{name: "OrganisationAccessStatus", valid: []stringEnum{OrganisationAccessStatusPending, OrganisationAccessStatusActive, OrganisationAccessStatusSuspended, OrganisationAccessStatusRevoked}, invalid: OrganisationAccessStatus("__invalid__")},
-		{name: "WholesaleBuyerRole", valid: []stringEnum{WholesaleBuyerRoleOwner, WholesaleBuyerRoleBuyer, WholesaleBuyerRoleFinance, WholesaleBuyerRoleReadOnly}, invalid: WholesaleBuyerRole("__invalid__")},
-		{name: "WholesalePermission", valid: []stringEnum{WholesalePermissionProductsView, WholesalePermissionCartWrite, WholesalePermissionCheckoutSubmit, WholesalePermissionOrdersViewOwn, WholesalePermissionOrdersViewOrg, WholesalePermissionOrdersReorder, WholesalePermissionInvoicesViewOwn, WholesalePermissionInvoicesViewOrg, WholesalePermissionInvoicesPay, WholesalePermissionAccountView, WholesalePermissionTeamView, WholesalePermissionFavouritesWrite, WholesalePermissionOrderListsViewOwn, WholesalePermissionOrderListsWriteOwn, WholesalePermissionOrderListsViewOrg, WholesalePermissionOrderListsWriteOrg}, invalid: WholesalePermission("__invalid__")},
-		{name: "OutboundShipmentStatus", valid: []stringEnum{OutboundShipmentStatusPacked, OutboundShipmentStatusDispatched}, invalid: OutboundShipmentStatus("__invalid__")},
-		{name: "PackingDiscrepancyKind", valid: []stringEnum{PackingDiscrepancyKindShortage, PackingDiscrepancyKindOverweight, PackingDiscrepancyKindDamaged, PackingDiscrepancyKindPending}, invalid: PackingDiscrepancyKind("__invalid__")},
-		{name: "PaymentMethod", valid: []stringEnum{PaymentMethodCard, PaymentMethodCash, PaymentMethodQR, PaymentMethodBankTransfer, PaymentMethodLinePay, PaymentMethodApplePay, PaymentMethodGooglePay, PaymentMethodECPay, PaymentMethodManual, PaymentMethodEFTPOS, PaymentMethodMOTO, PaymentMethodCashout}, invalid: PaymentMethod("__invalid__")},
-		{name: "PaymentRecordStatus", valid: []stringEnum{PaymentRecordStatusPending, PaymentRecordStatusProcessing, PaymentRecordStatusCompleted, PaymentRecordStatusFailed, PaymentRecordStatusCancelled, PaymentRecordStatusRefunded, PaymentRecordStatusAwaitingAction, PaymentRecordStatusUnknown}, invalid: PaymentRecordStatus("__invalid__")},
-		{name: "PaymentStatus", valid: []stringEnum{PaymentStatusUnknown, PaymentStatusUnpaid, PaymentStatusPending, PaymentStatusPaid, PaymentStatusPartiallyPaid, PaymentStatusRefunded, PaymentStatusPartialRefunded}, invalid: PaymentStatus("__invalid__")},
-		{name: "PickingItemStatus", valid: []stringEnum{PickingItemStatusPending, PickingItemStatusPartial, PickingItemStatusComplete, PickingItemStatusSkipped}, invalid: PickingItemStatus("__invalid__")},
-		{name: "PickingListStatus", valid: []stringEnum{PickingListStatusPending, PickingListStatusInProgress, PickingListStatusComplete, PickingListStatusCancelled}, invalid: PickingListStatus("__invalid__")},
-		{name: "PointReservationStatus", valid: []stringEnum{PointReservationStatusReserved, PointReservationStatusCommitted, PointReservationStatusCancelled, PointReservationStatusExpired}, invalid: PointReservationStatus("__invalid__")},
-		{name: "Portal", valid: []stringEnum{PortalControl, PortalStore, PortalPartner}, invalid: Portal("__invalid__")},
-		{name: "PortalAccessStatus", valid: []stringEnum{PortalAccessStatusPending, PortalAccessStatusActive, PortalAccessStatusSuspended, PortalAccessStatusRevoked}, invalid: PortalAccessStatus("__invalid__")},
-		{name: "PromotionAddonTrigger", valid: []stringEnum{PromotionAddonTriggerAmount, PromotionAddonTriggerRequiredProducts}, invalid: PromotionAddonTrigger("__invalid__")},
-		{name: "PromotionClass", valid: []stringEnum{PromotionClassNormal, PromotionClassSpecialCampaign}, invalid: PromotionClass("__invalid__")},
-		{name: "PromotionDiscountTarget", valid: []stringEnum{PromotionDiscountTargetCart, PromotionDiscountTargetRequiredItems}, invalid: PromotionDiscountTarget("__invalid__")},
-		{name: "PromotionQtyMode", valid: []stringEnum{PromotionQtyModePerProduct, PromotionQtyModeCombined}, invalid: PromotionQtyMode("__invalid__")},
-		{name: "PromotionType", valid: []stringEnum{PromotionTypeAutoDiscount, PromotionTypeSpendGift, PromotionTypeAddonPurchase, PromotionTypeBOGO, PromotionTypeBundle, PromotionTypeTieredPricing}, invalid: PromotionType("__invalid__")},
-		{name: "ProductStatus", valid: []stringEnum{ProductStatusDraft, ProductStatusActive, ProductStatusArchived, ProductStatusDiscontinued}, invalid: ProductStatus("__invalid__")},
-		{name: "PurchaseOrderStatus", valid: []stringEnum{PurchaseOrderStatusDraft, PurchaseOrderStatusSubmitted, PurchaseOrderStatusConfirmed, PurchaseOrderStatusPartiallyReceived, PurchaseOrderStatusReceived, PurchaseOrderStatusCancelled, PurchaseOrderStatusRefunded}, invalid: PurchaseOrderStatus("__invalid__")},
-		{name: "RecoveryDecision", valid: []stringEnum{RecoveryDecisionPending, RecoveryDecisionApproved, RecoveryDecisionDeclined}, invalid: RecoveryDecision("__invalid__")},
-		{name: "SalesPerformance", valid: []stringEnum{SalesPerformanceHot, SalesPerformanceNormal, SalesPerformanceSlow}, invalid: SalesPerformance("__invalid__")},
-		{name: "SalesOrderStatus", valid: []stringEnum{SalesOrderStatusPending, SalesOrderStatusConfirmed, SalesOrderStatusPaid, SalesOrderStatusProcessing, SalesOrderStatusPicking, SalesOrderStatusPacked, SalesOrderStatusShipped, SalesOrderStatusDelivered, SalesOrderStatusCompleted, SalesOrderStatusCancelled, SalesOrderStatusRefunded}, invalid: SalesOrderStatus("__invalid__")},
-		{name: "SecurityEventSeverity", valid: []stringEnum{SecurityEventSeverityInfo, SecurityEventSeverityLow, SecurityEventSeverityMedium, SecurityEventSeverityHigh, SecurityEventSeverityCritical}, invalid: SecurityEventSeverity("__invalid__")},
-		{name: "SecurityEventStatus", valid: []stringEnum{SecurityEventStatusDetected, SecurityEventStatusTriaged, SecurityEventStatusInvestigating, SecurityEventStatusContained, SecurityEventStatusResolved, SecurityEventStatusFalsePositive}, invalid: SecurityEventStatus("__invalid__")},
-		{name: "SecurityRiskLevel", valid: []stringEnum{SecurityRiskLevelLow, SecurityRiskLevelMedium, SecurityRiskLevelHigh, SecurityRiskLevelCritical}, invalid: SecurityRiskLevel("__invalid__")},
-		{name: "SettlementType", valid: []stringEnum{SettlementTypeSettlement, SettlementTypeEnquiry}, invalid: SettlementType("__invalid__")},
-		{name: "ShapeType", valid: []stringEnum{ShapeBox, ShapeCylinder, ShapeSphere, ShapePlane, ShapeCustom}, invalid: ShapeType("__invalid__")},
-		{name: "ShippingRateName", valid: []stringEnum{ShippingRateNameStandard, ShippingRateNameExpress, ShippingRateNamePickup}, invalid: ShippingRateName("__invalid__")},
-		{name: "StockMovementType", valid: []stringEnum{StockMovementTypePurchaseReceipt, StockMovementTypeSaleReserve, StockMovementTypeSaleCommit, StockMovementTypeSaleRelease, StockMovementTypeAdjustment, StockMovementTypeDamage, StockMovementTypeReturn, StockMovementTypeTransferIn, StockMovementTypeTransferOut, StockMovementTypeStocktake}, invalid: StockMovementType("__invalid__")},
-		{name: "StorageType", valid: []stringEnum{StorageDry, StorageChilled, StorageFrozen}, invalid: StorageType("__invalid__")},
-		{name: "TerminalConnectionMode", valid: []stringEnum{TerminalConnectionModeCloudSync, TerminalConnectionModeCloudAsync, TerminalConnectionModeLocal}, invalid: TerminalConnectionMode("__invalid__")},
-		{name: "TerminalProvider", valid: []stringEnum{TerminalProviderMx51}, invalid: TerminalProvider("__invalid__")},
-		{name: "TerminalRefundType", valid: []stringEnum{TerminalRefundTypeReferenced, TerminalRefundTypeUnreferenced}, invalid: TerminalRefundType("__invalid__")},
-		{name: "TerminalStatus", valid: []stringEnum{TerminalStatusRegistered, TerminalStatusActive, TerminalStatusDeregistered, TerminalStatusExpired, TerminalStatusError}, invalid: TerminalStatus("__invalid__")},
-		{name: "TerminalTxFinancialStatus", valid: []stringEnum{TerminalTxFinancialStatusApproved, TerminalTxFinancialStatusDeclined, TerminalTxFinancialStatusCancelled, TerminalTxFinancialStatusUnknown}, invalid: TerminalTxFinancialStatus("__invalid__")},
-		{name: "TerminalTxStatus", valid: []stringEnum{TerminalTxStatusUnknown, TerminalTxStatusPending, TerminalTxStatusAwaitingAction, TerminalTxStatusFinalised, TerminalTxStatusOverridePending, TerminalTxStatusOverrideResolved}, invalid: TerminalTxStatus("__invalid__")},
-		{name: "TerminalTxType", valid: []stringEnum{TerminalTxTypePurchase, TerminalTxTypeRefund, TerminalTxTypeReversal, TerminalTxTypeCashout, TerminalTxTypePurchaseWithCashout, TerminalTxTypeMOTO, TerminalTxTypeSettlement, TerminalTxTypeSettlementEnquiry}, invalid: TerminalTxType("__invalid__")},
-		{name: "UserPreferredLanguage", valid: []stringEnum{PreferredLanguageEnglish, PreferredLanguageTraditionalChinese, PreferredLanguageSimplifiedChinese}, invalid: UserPreferredLanguage("__invalid__")},
-		{name: "UserRole", valid: []stringEnum{UserRoleSuperAdmin, UserRoleAdmin, UserRoleSales, UserRoleWarehouse, UserRoleWarehouseOperator, UserRoleMarketing, UserRoleCustomer}, invalid: UserRole("__invalid__")},
-		{name: "VolumeDiscountAppliesTo", valid: []stringEnum{VolumeDiscountAppliesToAll, VolumeDiscountAppliesToWholesale, VolumeDiscountAppliesToRetail}, invalid: VolumeDiscountAppliesTo("__invalid__")},
-		{name: "WholesaleOrganisationStatus", valid: []stringEnum{WholesaleOrganisationStatusPending, WholesaleOrganisationStatusApproved, WholesaleOrganisationStatusSuspended, WholesaleOrganisationStatusRejected, WholesaleOrganisationStatusClosed}, invalid: WholesaleOrganisationStatus("__invalid__")},
-		{name: "WMSDraftStatus", valid: []stringEnum{WMSDraftStatusDraft, WMSDraftStatusSubmitted, WMSDraftStatusCancelled}, invalid: WMSDraftStatus("__invalid__")},
-		{name: "WMSDraftType", valid: []stringEnum{WMSDraftTypeInbound, WMSDraftTypeOutbound}, invalid: WMSDraftType("__invalid__")},
-		{name: "WalletInstrumentType", valid: []stringEnum{WalletInstrumentTypePoints, WalletInstrumentTypeGiftCard, WalletInstrumentTypeVoucher, WalletInstrumentTypeCoupon, WalletInstrumentTypeReward}, invalid: WalletInstrumentType("__invalid__")},
-		{name: "GiftCardStatus", valid: []stringEnum{GiftCardStatusActive, GiftCardStatusPartiallyRedeemed, GiftCardStatusDepleted, GiftCardStatusExpired, GiftCardStatusVoid}, invalid: GiftCardStatus("__invalid__")},
-		{name: "GiftCardTransactionReason", valid: []stringEnum{GiftCardTransactionReasonIssue, GiftCardTransactionReasonRedeem, GiftCardTransactionReasonRefund, GiftCardTransactionReasonTopUp, GiftCardTransactionReasonExpire, GiftCardTransactionReasonAdjust}, invalid: GiftCardTransactionReason("__invalid__")},
+		{name: "accountenum.AccountStatus", valid: []stringEnum{accountenum.AccountStatusPending, accountenum.AccountStatusActive, accountenum.AccountStatusSuspended, accountenum.AccountStatusClosed, accountenum.AccountStatusDeleted}, invalid: accountenum.AccountStatus("__invalid__")},
+		{name: "securityenum.AlertLevel", valid: []stringEnum{securityenum.AlertLevelOK, securityenum.AlertLevelWarning, securityenum.AlertLevelCritical, securityenum.AlertLevelExpired}, invalid: securityenum.AlertLevel("__invalid__")},
+		{name: "securityenum.AuditOutcome", valid: []stringEnum{securityenum.AuditOutcomeSuccess, securityenum.AuditOutcomeFailure, securityenum.AuditOutcomeDenied}, invalid: securityenum.AuditOutcome("__invalid__")},
+		{name: "campaignenum.CampaignCustomerType", valid: []stringEnum{campaignenum.CampaignCustomerTypeGuest, campaignenum.CampaignCustomerTypeRetail, campaignenum.CampaignCustomerTypeWholesale}, invalid: campaignenum.CampaignCustomerType("__invalid__")},
+		{name: "campaignenum.CampaignPlacement", valid: []stringEnum{campaignenum.CampaignPlacementTopBanner, campaignenum.CampaignPlacementHomeHero, campaignenum.CampaignPlacementModal, campaignenum.CampaignPlacementCheckoutNotice, campaignenum.CampaignPlacementProductNotice}, invalid: campaignenum.CampaignPlacement("__invalid__")},
+		{name: "campaignenum.CampaignPlatform", valid: []stringEnum{campaignenum.CampaignPlatformWeb, campaignenum.CampaignPlatformMobile}, invalid: campaignenum.CampaignPlatform("__invalid__")},
+		{name: "campaignenum.CampaignSeverity", valid: []stringEnum{campaignenum.CampaignSeverityInfo, campaignenum.CampaignSeveritySuccess, campaignenum.CampaignSeverityWarning, campaignenum.CampaignSeverityCritical}, invalid: campaignenum.CampaignSeverity("__invalid__")},
+		{name: "productenum.MediaStatus", valid: []stringEnum{productenum.MediaStatusPending, productenum.MediaStatusActive, productenum.MediaStatusDeleted}, invalid: productenum.MediaStatus("__invalid__")},
+		{name: "warehouseenum.PackingDamageHandling", valid: []stringEnum{warehouseenum.PackingDamageReplaceFromStock, warehouseenum.PackingDamageShortShipRefund}, invalid: warehouseenum.PackingDamageHandling("__invalid__")},
+		{name: "warehouseenum.PackingSessionStatus", valid: []stringEnum{warehouseenum.PackingSessionStatusPending, warehouseenum.PackingSessionStatusPacking, warehouseenum.PackingSessionStatusPacked, warehouseenum.PackingSessionStatusSyncPending, warehouseenum.PackingSessionStatusResolved}, invalid: warehouseenum.PackingSessionStatus("__invalid__")},
+		{name: "accountenum.AccountType", valid: []stringEnum{accountenum.AccountTypeAdminUser, accountenum.AccountTypeGeneralCustomer, accountenum.AccountTypeWholesaleCustomer}, invalid: accountenum.AccountType("__invalid__")},
+		{name: "securityenum.AuthAssuranceLevel", valid: []stringEnum{securityenum.AuthAssuranceLevel1, securityenum.AuthAssuranceLevel2, securityenum.AuthAssuranceLevel3}, invalid: securityenum.AuthAssuranceLevel("__invalid__")},
+		{name: "identityenum.AuthIdentityProvider", valid: []stringEnum{identityenum.AuthIdentityProviderPassword, identityenum.AuthIdentityProviderGoogle, identityenum.AuthIdentityProviderApple, identityenum.AuthIdentityProviderAzureAD, identityenum.AuthIdentityProviderOkta, identityenum.AuthIdentityProviderPasskey, identityenum.AuthIdentityProviderServiceToken, identityenum.AuthIdentityProviderLine, identityenum.AuthIdentityProviderDiscord, identityenum.AuthIdentityProviderMicrosoft, identityenum.AuthIdentityProviderOIDC}, invalid: identityenum.AuthIdentityProvider("__invalid__")},
+		{name: "identityenum.AuthIdentityStatus", valid: []stringEnum{identityenum.AuthIdentityStatusActive, identityenum.AuthIdentityStatusDisabled, identityenum.AuthIdentityStatusRevoked}, invalid: identityenum.AuthIdentityStatus("__invalid__")},
+		{name: "securityenum.AuthMethod", valid: []stringEnum{securityenum.AuthMethodPassword, securityenum.AuthMethodMFA, securityenum.AuthMethodPasskey, securityenum.AuthMethodSSO, securityenum.AuthMethodRefreshToken, securityenum.AuthMethodAPIKey}, invalid: securityenum.AuthMethod("__invalid__")},
+		{name: "warehouseenum.CameraProjection", valid: []stringEnum{warehouseenum.CameraPerspective, warehouseenum.CameraOrthographic}, invalid: warehouseenum.CameraProjection("__invalid__")},
+		{name: "customerenum.ChurnRisk", valid: []stringEnum{customerenum.ChurnRiskLow, customerenum.ChurnRiskMedium, customerenum.ChurnRiskHigh}, invalid: customerenum.ChurnRisk("__invalid__")},
+		{name: "promotionenum.CouponAppliesTo", valid: []stringEnum{promotionenum.CouponAppliesToAll, promotionenum.CouponAppliesToSpecificProducts, promotionenum.CouponAppliesToSpecificCategoryTags}, invalid: promotionenum.CouponAppliesTo("__invalid__")},
+		{name: "promotionenum.CouponSource", valid: []stringEnum{promotionenum.CouponSourceManual, promotionenum.CouponSourceRFMComeback, promotionenum.CouponSourceBirthday, promotionenum.CouponSourceReferral, promotionenum.CouponSourceSignupBonus, promotionenum.CouponSourceCampaign}, invalid: promotionenum.CouponSource("__invalid__")},
+		{name: "customerenum.CustomerActivityType", valid: []stringEnum{customerenum.CustomerActivityTypeNote, customerenum.CustomerActivityTypeCall, customerenum.CustomerActivityTypeEmail, customerenum.CustomerActivityTypeSMS, customerenum.CustomerActivityTypeLine, customerenum.CustomerActivityTypeOrder, customerenum.CustomerActivityTypeComplaint, customerenum.CustomerActivityTypeReturn, customerenum.CustomerActivityTypeRefund, customerenum.CustomerActivityTypePointsAdjust, customerenum.CustomerActivityTypeTierChange, customerenum.CustomerActivityTypeStatusChange, customerenum.CustomerActivityTypeReferral, customerenum.CustomerActivityTypeCampaign}, invalid: customerenum.CustomerActivityType("__invalid__")},
+		{name: "customerenum.CustomerAcquisitionSource", valid: []stringEnum{customerenum.CustomerAcquisitionSourceOnline, customerenum.CustomerAcquisitionSourcePOS, customerenum.CustomerAcquisitionSourceImport, customerenum.CustomerAcquisitionSourceManual, customerenum.CustomerAcquisitionSourcePhone}, invalid: customerenum.CustomerAcquisitionSource("__invalid__")},
+		{name: "customerenum.CustomerIdentityKind", valid: []stringEnum{customerenum.CustomerIdentityKindPhone, customerenum.CustomerIdentityKindEmail, customerenum.CustomerIdentityKindLine, customerenum.CustomerIdentityKindMemberCard, customerenum.CustomerIdentityKindPOSID, customerenum.CustomerIdentityKindExternal}, invalid: customerenum.CustomerIdentityKind("__invalid__")},
+		{name: "customerenum.CustomerStatus", valid: []stringEnum{customerenum.CustomerStatusActive, customerenum.CustomerStatusInactive, customerenum.CustomerStatusBlocked, customerenum.CustomerStatusClosed}, invalid: customerenum.CustomerStatus("__invalid__")},
+		{name: "customerenum.CustomerTier", valid: []stringEnum{customerenum.CustomerTierStandard, customerenum.CustomerTierSilver, customerenum.CustomerTierGold, customerenum.CustomerTierPlatinum}, invalid: customerenum.CustomerTier("__invalid__")},
+		{name: "warehouseenum.DamageStage", valid: []stringEnum{warehouseenum.DamageStageInbound, warehouseenum.DamageStagePicking, warehouseenum.DamageStagePacking, warehouseenum.DamageStageStorage}, invalid: warehouseenum.DamageStage("__invalid__")},
+		{name: "securityenum.DataClassification", valid: []stringEnum{securityenum.DataClassificationPublic, securityenum.DataClassificationInternal, securityenum.DataClassificationConfidential, securityenum.DataClassificationRestricted}, invalid: securityenum.DataClassification("__invalid__")},
+		{name: "securityenum.DataProtectionBasis", valid: []stringEnum{securityenum.DataProtectionBasisNotApplicable, securityenum.DataProtectionBasisConsent, securityenum.DataProtectionBasisContract, securityenum.DataProtectionBasisLegalObligation, securityenum.DataProtectionBasisLegitimateInterest}, invalid: securityenum.DataProtectionBasis("__invalid__")},
+		{name: "shippingenum.DeliveryMethod", valid: []stringEnum{shippingenum.DeliveryMethodDelivery, shippingenum.DeliveryMethodPickup, shippingenum.DeliveryMethodOutsourced}, invalid: shippingenum.DeliveryMethod("__invalid__")},
+		{name: "shippingenum.DeliveryRegion", valid: []stringEnum{shippingenum.DeliveryRegionLocalMelbourne, shippingenum.DeliveryRegionRegionalVIC, shippingenum.DeliveryRegionInterstate}, invalid: shippingenum.DeliveryRegion("__invalid__")},
+		{name: "identityenum.DeviceType", valid: []stringEnum{identityenum.DeviceTypeDesktop, identityenum.DeviceTypeMobile, identityenum.DeviceTypeTablet, identityenum.DeviceTypeAPI}, invalid: identityenum.DeviceType("__invalid__")},
+		{name: "promotionenum.DiscountScope", valid: []stringEnum{promotionenum.DiscountScopeAll, promotionenum.DiscountScopeCategoryTag, promotionenum.DiscountScopeProduct}, invalid: promotionenum.DiscountScope("__invalid__")},
+		{name: "promotionenum.DiscountType", valid: []stringEnum{promotionenum.DiscountTypePercentage, promotionenum.DiscountTypeFixedAmount, promotionenum.DiscountTypeFreeShipping, promotionenum.DiscountTypeFixedPrice}, invalid: promotionenum.DiscountType("__invalid__")},
+		{name: "salesenum.FulfillmentStatus", valid: []stringEnum{salesenum.FulfillmentStatusUnfulfilled, salesenum.FulfillmentStatusPickingPrinted, salesenum.FulfillmentStatusPacking, salesenum.FulfillmentStatusPacked, salesenum.FulfillmentStatusPartial, salesenum.FulfillmentStatusFulfilled}, invalid: salesenum.FulfillmentStatus("__invalid__")},
+		{name: "warehouseenum.InboundReceiptStatus", valid: []stringEnum{warehouseenum.InboundReceiptStatusDraft, warehouseenum.InboundReceiptStatusConfirmed}, invalid: warehouseenum.InboundReceiptStatus("__invalid__")},
+		{name: "identityenum.IdentityDomain", valid: []stringEnum{identityenum.IdentityDomainCustomer, identityenum.IdentityDomainWorkforce, identityenum.IdentityDomainPartner, identityenum.IdentityDomainService}, invalid: identityenum.IdentityDomain("__invalid__")},
+		{name: "warehouseenum.LayoutNodeType", valid: []stringEnum{warehouseenum.LayoutNodeZone, warehouseenum.LayoutNodeAisle, warehouseenum.LayoutNodeRack, warehouseenum.LayoutNodeShelf, warehouseenum.LayoutNodeBin}, invalid: warehouseenum.LayoutNodeType("__invalid__")},
+		{name: "marketingenum.MarketingCampaignStatus", valid: []stringEnum{marketingenum.MarketingCampaignStatusDraft, marketingenum.MarketingCampaignStatusSending, marketingenum.MarketingCampaignStatusSent, marketingenum.MarketingCampaignStatusPartial, marketingenum.MarketingCampaignStatusFailed, marketingenum.MarketingCampaignStatusCancelled, marketingenum.MarketingCampaignStatusExported}, invalid: marketingenum.MarketingCampaignStatus("__invalid__")},
+		{name: "marketingenum.MarketingChannel", valid: []stringEnum{marketingenum.MarketingChannelEmail, marketingenum.MarketingChannelSMS, marketingenum.MarketingChannelLine, marketingenum.MarketingChannelExport}, invalid: marketingenum.MarketingChannel("__invalid__")},
+		{name: "marketingenum.MarketingRecipientStatus", valid: []stringEnum{marketingenum.MarketingRecipientStatusPending, marketingenum.MarketingRecipientStatusSent, marketingenum.MarketingRecipientStatusDelivered, marketingenum.MarketingRecipientStatusBounced, marketingenum.MarketingRecipientStatusOpened, marketingenum.MarketingRecipientStatusClicked, marketingenum.MarketingRecipientStatusFailed, marketingenum.MarketingRecipientStatusUnsubscribed}, invalid: marketingenum.MarketingRecipientStatus("__invalid__")},
+		{name: "membershipenum.MembershipAccountStatus", valid: []stringEnum{membershipenum.MembershipAccountStatusActive, membershipenum.MembershipAccountStatusSuspended, membershipenum.MembershipAccountStatusClosed}, invalid: membershipenum.MembershipAccountStatus("__invalid__")},
+		{name: "membershipenum.MembershipOwnerType", valid: []stringEnum{membershipenum.MembershipOwnerTypeRetailCustomer, membershipenum.MembershipOwnerTypeWholesaleOrganisation}, invalid: membershipenum.MembershipOwnerType("__invalid__")},
+		{name: "membershipenum.MembershipPointReason", valid: []stringEnum{membershipenum.MembershipPointReasonOrder, membershipenum.MembershipPointReasonBirthday, membershipenum.MembershipPointReasonRedeem, membershipenum.MembershipPointReasonRewardRedeem, membershipenum.MembershipPointReasonAdminAdjust, membershipenum.MembershipPointReasonExpired, membershipenum.MembershipPointReasonReferral, membershipenum.MembershipPointReasonSignupBonus, membershipenum.MembershipPointReasonTierUpgrade, membershipenum.MembershipPointReasonManual}, invalid: membershipenum.MembershipPointReason("__invalid__")},
+		{name: "membershipenum.MembershipPromotionTarget", valid: []stringEnum{membershipenum.MembershipPromotionTargetAll, membershipenum.MembershipPromotionTargetWholesale, membershipenum.MembershipPromotionTargetRetail, membershipenum.MembershipPromotionTargetTierSpecific}, invalid: membershipenum.MembershipPromotionTarget("__invalid__")},
+		{name: "membershipenum.MembershipRedemptionType", valid: []stringEnum{membershipenum.MembershipRedemptionTypeCheckoutDiscount, membershipenum.MembershipRedemptionTypeRewardCatalog}, invalid: membershipenum.MembershipRedemptionType("__invalid__")},
+		{name: "membershipenum.MembershipRewardRedemptionStatus", valid: []stringEnum{membershipenum.MembershipRewardRedemptionStatusReserved, membershipenum.MembershipRewardRedemptionStatusRedeemed, membershipenum.MembershipRewardRedemptionStatusCancelled, membershipenum.MembershipRewardRedemptionStatusExpired}, invalid: membershipenum.MembershipRewardRedemptionStatus("__invalid__")},
+		{name: "membershipenum.MembershipRewardType", valid: []stringEnum{membershipenum.MembershipRewardTypeOrderDiscount, membershipenum.MembershipRewardTypeProduct, membershipenum.MembershipRewardTypeFreeShipping, membershipenum.MembershipRewardTypeVoucher}, invalid: membershipenum.MembershipRewardType("__invalid__")},
+		{name: "membershipenum.MembershipTierMetric", valid: []stringEnum{membershipenum.MembershipTierMetricAnnualSpend, membershipenum.MembershipTierMetricLifetimeSpend, membershipenum.MembershipTierMetricManual}, invalid: membershipenum.MembershipTierMetric("__invalid__")},
+		{name: "membershipenum.MemberSubscriptionStatus", valid: []stringEnum{membershipenum.MemberSubscriptionStatusActive, membershipenum.MemberSubscriptionStatusPaused, membershipenum.MemberSubscriptionStatusCancelled}, invalid: membershipenum.MemberSubscriptionStatus("__invalid__")},
+		{name: "warehouseenum.ModelFormat", valid: []stringEnum{warehouseenum.ModelFormatGLB, warehouseenum.ModelFormatGLTF, warehouseenum.ModelFormatOBJ, warehouseenum.ModelFormatFBX, warehouseenum.ModelFormatUSDZ}, invalid: warehouseenum.ModelFormat("__invalid__")},
+		{name: "salesenum.OrderSourceDeviceType", valid: []stringEnum{salesenum.OrderSourceDeviceTypeIOS, salesenum.OrderSourceDeviceTypeAndroid, salesenum.OrderSourceDeviceTypePC, salesenum.OrderSourceDeviceTypeMobileWeb, salesenum.OrderSourceDeviceTypeTablet, salesenum.OrderSourceDeviceTypePos, salesenum.OrderSourceDeviceTypeManual, salesenum.OrderSourceDeviceTypePhone, salesenum.OrderSourceDeviceTypeVR}, invalid: salesenum.OrderSourceDeviceType("__invalid__")},
+		{name: "salesenum.OrderType", valid: []stringEnum{salesenum.OrderTypeOnline, salesenum.OrderTypePOS, salesenum.OrderTypeB2B, salesenum.OrderTypeRelay, salesenum.OrderTypeManual, salesenum.OrderTypeImport}, invalid: salesenum.OrderType("__invalid__")},
+		{name: "customerenum.BuyerType", valid: []stringEnum{customerenum.BuyerTypeGuestRetail, customerenum.BuyerTypeRetailCustomer, customerenum.BuyerTypeWholesaleOrganisation}, invalid: customerenum.BuyerType("__invalid__")},
+		{name: "productenum.PriceAudience", valid: []stringEnum{productenum.PriceAudienceRetail, productenum.PriceAudienceWholesale}, invalid: productenum.PriceAudience("__invalid__")},
+		{name: "productenum.PriceVisibility", valid: []stringEnum{productenum.PriceVisibilityPublic, productenum.PriceVisibilityLoginRequired, productenum.PriceVisibilityWholesaleApprovedOnly, productenum.PriceVisibilityHidden}, invalid: productenum.PriceVisibility("__invalid__")},
+		{name: "shippingenum.FulfilmentIntent", valid: []stringEnum{shippingenum.FulfilmentIntentDelivery, shippingenum.FulfilmentIntentPickup, shippingenum.FulfilmentIntentInStoreCarry}, invalid: shippingenum.FulfilmentIntent("__invalid__")},
+		{name: "wholesaleenum.OrganisationAccessStatus", valid: []stringEnum{wholesaleenum.OrganisationAccessStatusPending, wholesaleenum.OrganisationAccessStatusActive, wholesaleenum.OrganisationAccessStatusSuspended, wholesaleenum.OrganisationAccessStatusRevoked}, invalid: wholesaleenum.OrganisationAccessStatus("__invalid__")},
+		{name: "wholesaleenum.WholesaleBuyerRole", valid: []stringEnum{wholesaleenum.WholesaleBuyerRoleOwner, wholesaleenum.WholesaleBuyerRoleBuyer, wholesaleenum.WholesaleBuyerRoleFinance, wholesaleenum.WholesaleBuyerRoleReadOnly}, invalid: wholesaleenum.WholesaleBuyerRole("__invalid__")},
+		{name: "wholesaleenum.WholesalePermission", valid: []stringEnum{wholesaleenum.WholesalePermissionProductsView, wholesaleenum.WholesalePermissionCartWrite, wholesaleenum.WholesalePermissionCheckoutSubmit, wholesaleenum.WholesalePermissionOrdersViewOwn, wholesaleenum.WholesalePermissionOrdersViewOrg, wholesaleenum.WholesalePermissionOrdersReorder, wholesaleenum.WholesalePermissionInvoicesViewOwn, wholesaleenum.WholesalePermissionInvoicesViewOrg, wholesaleenum.WholesalePermissionInvoicesPay, wholesaleenum.WholesalePermissionAccountView, wholesaleenum.WholesalePermissionTeamView, wholesaleenum.WholesalePermissionFavouritesWrite, wholesaleenum.WholesalePermissionOrderListsViewOwn, wholesaleenum.WholesalePermissionOrderListsWriteOwn, wholesaleenum.WholesalePermissionOrderListsViewOrg, wholesaleenum.WholesalePermissionOrderListsWriteOrg}, invalid: wholesaleenum.WholesalePermission("__invalid__")},
+		{name: "warehouseenum.OutboundShipmentStatus", valid: []stringEnum{warehouseenum.OutboundShipmentStatusPacked, warehouseenum.OutboundShipmentStatusDispatched}, invalid: warehouseenum.OutboundShipmentStatus("__invalid__")},
+		{name: "warehouseenum.PackingDiscrepancyKind", valid: []stringEnum{warehouseenum.PackingDiscrepancyKindShortage, warehouseenum.PackingDiscrepancyKindOverweight, warehouseenum.PackingDiscrepancyKindDamaged, warehouseenum.PackingDiscrepancyKindPending}, invalid: warehouseenum.PackingDiscrepancyKind("__invalid__")},
+		{name: "paymentenum.PaymentMethod", valid: []stringEnum{paymentenum.PaymentMethodCard, paymentenum.PaymentMethodCash, paymentenum.PaymentMethodQR, paymentenum.PaymentMethodBankTransfer, paymentenum.PaymentMethodLinePay, paymentenum.PaymentMethodApplePay, paymentenum.PaymentMethodGooglePay, paymentenum.PaymentMethodECPay, paymentenum.PaymentMethodManual, paymentenum.PaymentMethodEFTPOS, paymentenum.PaymentMethodMOTO, paymentenum.PaymentMethodCashout}, invalid: paymentenum.PaymentMethod("__invalid__")},
+		{name: "paymentenum.PaymentRecordStatus", valid: []stringEnum{paymentenum.PaymentRecordStatusPending, paymentenum.PaymentRecordStatusProcessing, paymentenum.PaymentRecordStatusCompleted, paymentenum.PaymentRecordStatusFailed, paymentenum.PaymentRecordStatusCancelled, paymentenum.PaymentRecordStatusRefunded, paymentenum.PaymentRecordStatusAwaitingAction, paymentenum.PaymentRecordStatusUnknown}, invalid: paymentenum.PaymentRecordStatus("__invalid__")},
+		{name: "paymentenum.PaymentStatus", valid: []stringEnum{paymentenum.PaymentStatusUnknown, paymentenum.PaymentStatusUnpaid, paymentenum.PaymentStatusPending, paymentenum.PaymentStatusPaid, paymentenum.PaymentStatusPartiallyPaid, paymentenum.PaymentStatusRefunded, paymentenum.PaymentStatusPartialRefunded}, invalid: paymentenum.PaymentStatus("__invalid__")},
+		{name: "warehouseenum.PickingItemStatus", valid: []stringEnum{warehouseenum.PickingItemStatusPending, warehouseenum.PickingItemStatusPartial, warehouseenum.PickingItemStatusComplete, warehouseenum.PickingItemStatusSkipped}, invalid: warehouseenum.PickingItemStatus("__invalid__")},
+		{name: "warehouseenum.PickingListStatus", valid: []stringEnum{warehouseenum.PickingListStatusPending, warehouseenum.PickingListStatusInProgress, warehouseenum.PickingListStatusComplete, warehouseenum.PickingListStatusCancelled}, invalid: warehouseenum.PickingListStatus("__invalid__")},
+		{name: "membershipenum.PointReservationStatus", valid: []stringEnum{membershipenum.PointReservationStatusReserved, membershipenum.PointReservationStatusCommitted, membershipenum.PointReservationStatusCancelled, membershipenum.PointReservationStatusExpired}, invalid: membershipenum.PointReservationStatus("__invalid__")},
+		{name: "accountenum.Portal", valid: []stringEnum{accountenum.PortalControl, accountenum.PortalStore, accountenum.PortalPartner}, invalid: accountenum.Portal("__invalid__")},
+		{name: "accountenum.PortalAccessStatus", valid: []stringEnum{accountenum.PortalAccessStatusPending, accountenum.PortalAccessStatusActive, accountenum.PortalAccessStatusSuspended, accountenum.PortalAccessStatusRevoked}, invalid: accountenum.PortalAccessStatus("__invalid__")},
+		{name: "salesenum.PreorderStatus", valid: []stringEnum{salesenum.PreorderStatusRequested, salesenum.PreorderStatusAccepted, salesenum.PreorderStatusRejected, salesenum.PreorderStatusCancelled, salesenum.PreorderStatusConverted, salesenum.PreorderStatusFulfilled, salesenum.PreorderStatusExpired}, invalid: salesenum.PreorderStatus("__invalid__")},
+		{name: "productenum.StorefrontPreorderStatus", valid: []stringEnum{productenum.StorefrontPreorderStatusUnavailable, productenum.StorefrontPreorderStatusUpcoming, productenum.StorefrontPreorderStatusOpen, productenum.StorefrontPreorderStatusClosed, productenum.StorefrontPreorderStatusSoldOut}, invalid: productenum.StorefrontPreorderStatus("__invalid__")},
+		{name: "productenum.StorefrontExpiryStatus", valid: []stringEnum{productenum.StorefrontExpiryStatusNotApplicable, productenum.StorefrontExpiryStatusSoonExpiry, productenum.StorefrontExpiryStatusExpired}, invalid: productenum.StorefrontExpiryStatus("__invalid__")},
+		{name: "promotionenum.PromotionAddonTrigger", valid: []stringEnum{promotionenum.PromotionAddonTriggerAmount, promotionenum.PromotionAddonTriggerRequiredProducts}, invalid: promotionenum.PromotionAddonTrigger("__invalid__")},
+		{name: "promotionenum.PromotionClass", valid: []stringEnum{promotionenum.PromotionClassNormal, promotionenum.PromotionClassSpecialCampaign}, invalid: promotionenum.PromotionClass("__invalid__")},
+		{name: "promotionenum.PromotionDiscountTarget", valid: []stringEnum{promotionenum.PromotionDiscountTargetCart, promotionenum.PromotionDiscountTargetRequiredItems}, invalid: promotionenum.PromotionDiscountTarget("__invalid__")},
+		{name: "promotionenum.PromotionQtyMode", valid: []stringEnum{promotionenum.PromotionQtyModePerProduct, promotionenum.PromotionQtyModeCombined}, invalid: promotionenum.PromotionQtyMode("__invalid__")},
+		{name: "promotionenum.PromotionType", valid: []stringEnum{promotionenum.PromotionTypeAutoDiscount, promotionenum.PromotionTypeSpendGift, promotionenum.PromotionTypeAddonPurchase, promotionenum.PromotionTypeBOGO, promotionenum.PromotionTypeBundle, promotionenum.PromotionTypeTieredPricing}, invalid: promotionenum.PromotionType("__invalid__")},
+		{name: "productenum.ProductStatus", valid: []stringEnum{productenum.ProductStatusDraft, productenum.ProductStatusActive, productenum.ProductStatusArchived, productenum.ProductStatusDiscontinued}, invalid: productenum.ProductStatus("__invalid__")},
+		{name: "purchaseenum.PurchaseOrderStatus", valid: []stringEnum{purchaseenum.PurchaseOrderStatusDraft, purchaseenum.PurchaseOrderStatusSubmitted, purchaseenum.PurchaseOrderStatusConfirmed, purchaseenum.PurchaseOrderStatusPartiallyReceived, purchaseenum.PurchaseOrderStatusReceived, purchaseenum.PurchaseOrderStatusCancelled, purchaseenum.PurchaseOrderStatusRefunded}, invalid: purchaseenum.PurchaseOrderStatus("__invalid__")},
+		{name: "paymentenum.RecoveryDecision", valid: []stringEnum{paymentenum.RecoveryDecisionPending, paymentenum.RecoveryDecisionApproved, paymentenum.RecoveryDecisionDeclined}, invalid: paymentenum.RecoveryDecision("__invalid__")},
+		{name: "productenum.SalesPerformance", valid: []stringEnum{productenum.SalesPerformanceHot, productenum.SalesPerformanceNormal, productenum.SalesPerformanceSlow}, invalid: productenum.SalesPerformance("__invalid__")},
+		{name: "salesenum.SalesOrderStatus", valid: []stringEnum{salesenum.SalesOrderStatusPending, salesenum.SalesOrderStatusConfirmed, salesenum.SalesOrderStatusPaid, salesenum.SalesOrderStatusProcessing, salesenum.SalesOrderStatusPicking, salesenum.SalesOrderStatusPacked, salesenum.SalesOrderStatusShipped, salesenum.SalesOrderStatusDelivered, salesenum.SalesOrderStatusCompleted, salesenum.SalesOrderStatusCancelled, salesenum.SalesOrderStatusRefunded}, invalid: salesenum.SalesOrderStatus("__invalid__")},
+		{name: "securityenum.SecurityEventSeverity", valid: []stringEnum{securityenum.SecurityEventSeverityInfo, securityenum.SecurityEventSeverityLow, securityenum.SecurityEventSeverityMedium, securityenum.SecurityEventSeverityHigh, securityenum.SecurityEventSeverityCritical}, invalid: securityenum.SecurityEventSeverity("__invalid__")},
+		{name: "securityenum.SecurityEventStatus", valid: []stringEnum{securityenum.SecurityEventStatusDetected, securityenum.SecurityEventStatusTriaged, securityenum.SecurityEventStatusInvestigating, securityenum.SecurityEventStatusContained, securityenum.SecurityEventStatusResolved, securityenum.SecurityEventStatusFalsePositive}, invalid: securityenum.SecurityEventStatus("__invalid__")},
+		{name: "securityenum.SecurityRiskLevel", valid: []stringEnum{securityenum.SecurityRiskLevelLow, securityenum.SecurityRiskLevelMedium, securityenum.SecurityRiskLevelHigh, securityenum.SecurityRiskLevelCritical}, invalid: securityenum.SecurityRiskLevel("__invalid__")},
+		{name: "paymentenum.SettlementType", valid: []stringEnum{paymentenum.SettlementTypeSettlement, paymentenum.SettlementTypeEnquiry}, invalid: paymentenum.SettlementType("__invalid__")},
+		{name: "warehouseenum.ShapeType", valid: []stringEnum{warehouseenum.ShapeBox, warehouseenum.ShapeCylinder, warehouseenum.ShapeSphere, warehouseenum.ShapePlane, warehouseenum.ShapeCustom}, invalid: warehouseenum.ShapeType("__invalid__")},
+		{name: "shippingenum.ShippingRateName", valid: []stringEnum{shippingenum.ShippingRateNameStandard, shippingenum.ShippingRateNameExpress, shippingenum.ShippingRateNamePickup}, invalid: shippingenum.ShippingRateName("__invalid__")},
+		{name: "warehouseenum.StockMovementType", valid: []stringEnum{warehouseenum.StockMovementTypePurchaseReceipt, warehouseenum.StockMovementTypeSaleReserve, warehouseenum.StockMovementTypeSaleCommit, warehouseenum.StockMovementTypeSaleRelease, warehouseenum.StockMovementTypeAdjustment, warehouseenum.StockMovementTypeDamage, warehouseenum.StockMovementTypeReturn, warehouseenum.StockMovementTypeTransferIn, warehouseenum.StockMovementTypeTransferOut, warehouseenum.StockMovementTypeStocktake}, invalid: warehouseenum.StockMovementType("__invalid__")},
+		{name: "warehouseenum.StorageType", valid: []stringEnum{warehouseenum.StorageDry, warehouseenum.StorageChilled, warehouseenum.StorageFrozen}, invalid: warehouseenum.StorageType("__invalid__")},
+		{name: "paymentenum.TerminalConnectionMode", valid: []stringEnum{paymentenum.TerminalConnectionModeCloudSync, paymentenum.TerminalConnectionModeCloudAsync, paymentenum.TerminalConnectionModeLocal}, invalid: paymentenum.TerminalConnectionMode("__invalid__")},
+		{name: "paymentenum.TerminalProvider", valid: []stringEnum{paymentenum.TerminalProviderMx51}, invalid: paymentenum.TerminalProvider("__invalid__")},
+		{name: "paymentenum.TerminalRefundType", valid: []stringEnum{paymentenum.TerminalRefundTypeReferenced, paymentenum.TerminalRefundTypeUnreferenced}, invalid: paymentenum.TerminalRefundType("__invalid__")},
+		{name: "paymentenum.TerminalStatus", valid: []stringEnum{paymentenum.TerminalStatusRegistered, paymentenum.TerminalStatusActive, paymentenum.TerminalStatusDeregistered, paymentenum.TerminalStatusExpired, paymentenum.TerminalStatusError}, invalid: paymentenum.TerminalStatus("__invalid__")},
+		{name: "paymentenum.TerminalTxFinancialStatus", valid: []stringEnum{paymentenum.TerminalTxFinancialStatusApproved, paymentenum.TerminalTxFinancialStatusDeclined, paymentenum.TerminalTxFinancialStatusCancelled, paymentenum.TerminalTxFinancialStatusUnknown}, invalid: paymentenum.TerminalTxFinancialStatus("__invalid__")},
+		{name: "paymentenum.TerminalTxStatus", valid: []stringEnum{paymentenum.TerminalTxStatusUnknown, paymentenum.TerminalTxStatusPending, paymentenum.TerminalTxStatusAwaitingAction, paymentenum.TerminalTxStatusFinalised, paymentenum.TerminalTxStatusOverridePending, paymentenum.TerminalTxStatusOverrideResolved}, invalid: paymentenum.TerminalTxStatus("__invalid__")},
+		{name: "paymentenum.TerminalTxType", valid: []stringEnum{paymentenum.TerminalTxTypePurchase, paymentenum.TerminalTxTypeRefund, paymentenum.TerminalTxTypeReversal, paymentenum.TerminalTxTypeCashout, paymentenum.TerminalTxTypePurchaseWithCashout, paymentenum.TerminalTxTypeMOTO, paymentenum.TerminalTxTypeSettlement, paymentenum.TerminalTxTypeSettlementEnquiry}, invalid: paymentenum.TerminalTxType("__invalid__")},
+		{name: "identityenum.UserPreferredLanguage", valid: []stringEnum{identityenum.PreferredLanguageEnglish, identityenum.PreferredLanguageTraditionalChinese, identityenum.PreferredLanguageSimplifiedChinese}, invalid: identityenum.UserPreferredLanguage("__invalid__")},
+		{name: "identityenum.UserRole", valid: []stringEnum{identityenum.UserRoleSuperAdmin, identityenum.UserRoleAdmin, identityenum.UserRoleSales, identityenum.UserRoleWarehouse, identityenum.UserRoleWarehouseOperator, identityenum.UserRoleMarketing, identityenum.UserRoleCustomer}, invalid: identityenum.UserRole("__invalid__")},
+		{name: "promotionenum.VolumeDiscountAppliesTo", valid: []stringEnum{promotionenum.VolumeDiscountAppliesToAll, promotionenum.VolumeDiscountAppliesToWholesale, promotionenum.VolumeDiscountAppliesToRetail}, invalid: promotionenum.VolumeDiscountAppliesTo("__invalid__")},
+		{name: "wholesaleenum.WholesaleApplicationState", valid: []stringEnum{wholesaleenum.WholesaleApplicationStateMissing, wholesaleenum.WholesaleApplicationStatePending, wholesaleenum.WholesaleApplicationStateApproved, wholesaleenum.WholesaleApplicationStateRejected, wholesaleenum.WholesaleApplicationStateSuspended}, invalid: wholesaleenum.WholesaleApplicationState("__invalid__")},
+		{name: "wholesaleenum.WholesaleOrganisationStatus", valid: []stringEnum{wholesaleenum.WholesaleOrganisationStatusPending, wholesaleenum.WholesaleOrganisationStatusApproved, wholesaleenum.WholesaleOrganisationStatusSuspended, wholesaleenum.WholesaleOrganisationStatusRejected, wholesaleenum.WholesaleOrganisationStatusClosed}, invalid: wholesaleenum.WholesaleOrganisationStatus("__invalid__")},
+		{name: "warehouseenum.WMSDraftStatus", valid: []stringEnum{warehouseenum.WMSDraftStatusDraft, warehouseenum.WMSDraftStatusSubmitted, warehouseenum.WMSDraftStatusCancelled}, invalid: warehouseenum.WMSDraftStatus("__invalid__")},
+		{name: "warehouseenum.WMSDraftType", valid: []stringEnum{warehouseenum.WMSDraftTypeInbound, warehouseenum.WMSDraftTypeOutbound}, invalid: warehouseenum.WMSDraftType("__invalid__")},
+		{name: "walletenum.WalletInstrumentType", valid: []stringEnum{walletenum.WalletInstrumentTypePoints, walletenum.WalletInstrumentTypeGiftCard, walletenum.WalletInstrumentTypeVoucher, walletenum.WalletInstrumentTypeCoupon, walletenum.WalletInstrumentTypeReward}, invalid: walletenum.WalletInstrumentType("__invalid__")},
+		{name: "walletenum.WalletExportFormat", valid: []stringEnum{walletenum.WalletExportFormatJSON, walletenum.WalletExportFormatCSVZip}, invalid: walletenum.WalletExportFormat("__invalid__")},
+		{name: "walletenum.WalletExportStatus", valid: []stringEnum{walletenum.WalletExportStatusPending, walletenum.WalletExportStatusRunning, walletenum.WalletExportStatusCompleted, walletenum.WalletExportStatusFailed, walletenum.WalletExportStatusExpired}, invalid: walletenum.WalletExportStatus("__invalid__")},
+		{name: "walletenum.GiftCardStatus", valid: []stringEnum{walletenum.GiftCardStatusActive, walletenum.GiftCardStatusPartiallyRedeemed, walletenum.GiftCardStatusDepleted, walletenum.GiftCardStatusExpired, walletenum.GiftCardStatusVoid}, invalid: walletenum.GiftCardStatus("__invalid__")},
+		{name: "walletenum.GiftCardTransactionReason", valid: []stringEnum{walletenum.GiftCardTransactionReasonIssue, walletenum.GiftCardTransactionReasonRedeem, walletenum.GiftCardTransactionReasonRefund, walletenum.GiftCardTransactionReasonTopUp, walletenum.GiftCardTransactionReasonExpire, walletenum.GiftCardTransactionReasonAdjust}, invalid: walletenum.GiftCardTransactionReason("__invalid__")},
 	}
 
 	for _, tt := range tests {
@@ -139,10 +162,10 @@ func TestExportedEnumsValidateKnownValues(t *testing.T) {
 }
 
 func TestAccountTypePortalAdmission(t *testing.T) {
-	allowed := map[AccountType]Portal{
-		AccountTypeAdminUser:         PortalControl,
-		AccountTypeGeneralCustomer:   PortalStore,
-		AccountTypeWholesaleCustomer: PortalPartner,
+	allowed := map[accountenum.AccountType]accountenum.Portal{
+		accountenum.AccountTypeAdminUser:         accountenum.PortalControl,
+		accountenum.AccountTypeGeneralCustomer:   accountenum.PortalStore,
+		accountenum.AccountTypeWholesaleCustomer: accountenum.PortalPartner,
 	}
 
 	for accountType, portal := range allowed {
@@ -152,15 +175,15 @@ func TestAccountTypePortalAdmission(t *testing.T) {
 	}
 
 	rejected := []struct {
-		accountType AccountType
-		portal      Portal
+		accountType accountenum.AccountType
+		portal      accountenum.Portal
 	}{
-		{AccountTypeAdminUser, PortalStore},
-		{AccountTypeAdminUser, PortalPartner},
-		{AccountTypeGeneralCustomer, PortalControl},
-		{AccountTypeGeneralCustomer, PortalPartner},
-		{AccountTypeWholesaleCustomer, PortalControl},
-		{AccountTypeWholesaleCustomer, PortalStore},
+		{accountenum.AccountTypeAdminUser, accountenum.PortalStore},
+		{accountenum.AccountTypeAdminUser, accountenum.PortalPartner},
+		{accountenum.AccountTypeGeneralCustomer, accountenum.PortalControl},
+		{accountenum.AccountTypeGeneralCustomer, accountenum.PortalPartner},
+		{accountenum.AccountTypeWholesaleCustomer, accountenum.PortalControl},
+		{accountenum.AccountTypeWholesaleCustomer, accountenum.PortalStore},
 	}
 
 	for _, tt := range rejected {
@@ -172,12 +195,12 @@ func TestAccountTypePortalAdmission(t *testing.T) {
 
 func TestPortalAccountTypeHelpers(t *testing.T) {
 	tests := []struct {
-		portal      Portal
-		accountType AccountType
+		portal      accountenum.Portal
+		accountType accountenum.AccountType
 	}{
-		{PortalControl, AccountTypeAdminUser},
-		{PortalStore, AccountTypeGeneralCustomer},
-		{PortalPartner, AccountTypeWholesaleCustomer},
+		{accountenum.PortalControl, accountenum.AccountTypeAdminUser},
+		{accountenum.PortalStore, accountenum.AccountTypeGeneralCustomer},
+		{accountenum.PortalPartner, accountenum.AccountTypeWholesaleCustomer},
 	}
 
 	for _, tt := range tests {
@@ -193,32 +216,32 @@ func TestPortalAccountTypeHelpers(t *testing.T) {
 			t.Fatalf("%s required account type = %s, want %s", tt.portal, required, tt.accountType)
 		}
 
-		want := []AccountType{tt.accountType}
+		want := []accountenum.AccountType{tt.accountType}
 		if got := tt.portal.AllowedAccountTypes(); !reflect.DeepEqual(got, want) {
 			t.Fatalf("%s allowed account types = %#v, want %#v", tt.portal, got, want)
 		}
-		if got := AccountTypesForPortal(tt.portal); !reflect.DeepEqual(got, want) {
-			t.Fatalf("AccountTypesForPortal(%s) = %#v, want %#v", tt.portal, got, want)
+		if got := accountenum.AccountTypesForPortal(tt.portal); !reflect.DeepEqual(got, want) {
+			t.Fatalf("accountenum.AccountTypesForPortal(%s) = %#v, want %#v", tt.portal, got, want)
 		}
 	}
 
-	if _, ok := Portal("__invalid__").RequiredAccountType(); ok {
+	if _, ok := accountenum.Portal("__invalid__").RequiredAccountType(); ok {
 		t.Fatal("invalid portal should not have a required account type")
 	}
-	if got := Portal("__invalid__").AllowedAccountTypes(); got != nil {
+	if got := accountenum.Portal("__invalid__").AllowedAccountTypes(); got != nil {
 		t.Fatalf("invalid portal allowed account types = %#v, want nil", got)
 	}
 }
 
 func TestPortalAccessStatusCanAccess(t *testing.T) {
-	if !PortalAccessStatusActive.CanAccess() {
+	if !accountenum.PortalAccessStatusActive.CanAccess() {
 		t.Fatal("active portal access should allow access")
 	}
 
-	for _, status := range []PortalAccessStatus{
-		PortalAccessStatusPending,
-		PortalAccessStatusSuspended,
-		PortalAccessStatusRevoked,
+	for _, status := range []accountenum.PortalAccessStatus{
+		accountenum.PortalAccessStatusPending,
+		accountenum.PortalAccessStatusSuspended,
+		accountenum.PortalAccessStatusRevoked,
 	} {
 		if status.CanAccess() {
 			t.Fatalf("%s should not allow access", status)
@@ -227,75 +250,75 @@ func TestPortalAccessStatusCanAccess(t *testing.T) {
 }
 
 func TestWholesaleBuyerRolePermissions(t *testing.T) {
-	ownerPerms := PermissionsForWholesaleBuyerRole(WholesaleBuyerRoleOwner)
+	ownerPerms := wholesaleenum.PermissionsForWholesaleBuyerRole(wholesaleenum.WholesaleBuyerRoleOwner)
 	if len(ownerPerms) == 0 {
 		t.Fatal("owner should receive permissions")
 	}
-	if !HasWholesalePermission(WholesalePermissionStrings(ownerPerms), WholesalePermissionTeamView) {
+	if !wholesaleenum.HasWholesalePermission(wholesaleenum.WholesalePermissionStrings(ownerPerms), wholesaleenum.WholesalePermissionTeamView) {
 		t.Fatal("owner should receive team.view")
 	}
-	if !HasWholesalePermission(WholesalePermissionStrings(ownerPerms), WholesalePermissionOrderListsWriteOrg) {
+	if !wholesaleenum.HasWholesalePermission(wholesaleenum.WholesalePermissionStrings(ownerPerms), wholesaleenum.WholesalePermissionOrderListsWriteOrg) {
 		t.Fatal("owner should receive order_lists.write_org")
 	}
 
-	buyerPerms := WholesalePermissionStrings(PermissionsForWholesaleBuyerRole(WholesaleBuyerRoleBuyer))
-	if HasWholesalePermission(buyerPerms, WholesalePermissionInvoicesViewOrg) {
+	buyerPerms := wholesaleenum.WholesalePermissionStrings(wholesaleenum.PermissionsForWholesaleBuyerRole(wholesaleenum.WholesaleBuyerRoleBuyer))
+	if wholesaleenum.HasWholesalePermission(buyerPerms, wholesaleenum.WholesalePermissionInvoicesViewOrg) {
 		t.Fatal("buyer should not receive organisation invoice visibility")
 	}
-	if !HasWholesalePermission(buyerPerms, WholesalePermissionCheckoutSubmit) {
+	if !wholesaleenum.HasWholesalePermission(buyerPerms, wholesaleenum.WholesalePermissionCheckoutSubmit) {
 		t.Fatal("buyer should receive checkout.submit")
 	}
-	if !HasWholesalePermission(buyerPerms, WholesalePermissionFavouritesWrite) ||
-		!HasWholesalePermission(buyerPerms, WholesalePermissionOrderListsWriteOwn) ||
-		!HasWholesalePermission(buyerPerms, WholesalePermissionOrderListsViewOrg) {
+	if !wholesaleenum.HasWholesalePermission(buyerPerms, wholesaleenum.WholesalePermissionFavouritesWrite) ||
+		!wholesaleenum.HasWholesalePermission(buyerPerms, wholesaleenum.WholesalePermissionOrderListsWriteOwn) ||
+		!wholesaleenum.HasWholesalePermission(buyerPerms, wholesaleenum.WholesalePermissionOrderListsViewOrg) {
 		t.Fatal("buyer should receive own list mutation, org list view, and favourites.write")
 	}
-	if HasWholesalePermission(buyerPerms, WholesalePermissionOrderListsWriteOrg) {
+	if wholesaleenum.HasWholesalePermission(buyerPerms, wholesaleenum.WholesalePermissionOrderListsWriteOrg) {
 		t.Fatal("buyer should not receive organisation list mutation")
 	}
 
-	financePerms := WholesalePermissionStrings(PermissionsForWholesaleBuyerRole(WholesaleBuyerRoleFinance))
-	if !HasWholesalePermission(financePerms, WholesalePermissionInvoicesPay) {
+	financePerms := wholesaleenum.WholesalePermissionStrings(wholesaleenum.PermissionsForWholesaleBuyerRole(wholesaleenum.WholesaleBuyerRoleFinance))
+	if !wholesaleenum.HasWholesalePermission(financePerms, wholesaleenum.WholesalePermissionInvoicesPay) {
 		t.Fatal("finance should receive invoices.pay")
 	}
-	if HasWholesalePermission(financePerms, WholesalePermissionCheckoutSubmit) {
+	if wholesaleenum.HasWholesalePermission(financePerms, wholesaleenum.WholesalePermissionCheckoutSubmit) {
 		t.Fatal("finance should not receive checkout.submit")
 	}
-	if HasWholesalePermission(financePerms, WholesalePermissionFavouritesWrite) ||
-		HasWholesalePermission(financePerms, WholesalePermissionOrderListsViewOwn) ||
-		HasWholesalePermission(financePerms, WholesalePermissionOrderListsViewOrg) {
+	if wholesaleenum.HasWholesalePermission(financePerms, wholesaleenum.WholesalePermissionFavouritesWrite) ||
+		wholesaleenum.HasWholesalePermission(financePerms, wholesaleenum.WholesalePermissionOrderListsViewOwn) ||
+		wholesaleenum.HasWholesalePermission(financePerms, wholesaleenum.WholesalePermissionOrderListsViewOrg) {
 		t.Fatal("finance should not receive procurement list permissions")
 	}
 
-	readOnlyPerms := WholesalePermissionStrings(PermissionsForWholesaleBuyerRole(WholesaleBuyerRoleReadOnly))
-	if !HasWholesalePermission(readOnlyPerms, WholesalePermissionOrderListsViewOrg) {
+	readOnlyPerms := wholesaleenum.WholesalePermissionStrings(wholesaleenum.PermissionsForWholesaleBuyerRole(wholesaleenum.WholesaleBuyerRoleReadOnly))
+	if !wholesaleenum.HasWholesalePermission(readOnlyPerms, wholesaleenum.WholesalePermissionOrderListsViewOrg) {
 		t.Fatal("read-only should receive organisation list view")
 	}
-	if HasWholesalePermission(readOnlyPerms, WholesalePermissionFavouritesWrite) ||
-		HasWholesalePermission(readOnlyPerms, WholesalePermissionOrderListsWriteOwn) ||
-		HasWholesalePermission(readOnlyPerms, WholesalePermissionCartWrite) {
+	if wholesaleenum.HasWholesalePermission(readOnlyPerms, wholesaleenum.WholesalePermissionFavouritesWrite) ||
+		wholesaleenum.HasWholesalePermission(readOnlyPerms, wholesaleenum.WholesalePermissionOrderListsWriteOwn) ||
+		wholesaleenum.HasWholesalePermission(readOnlyPerms, wholesaleenum.WholesalePermissionCartWrite) {
 		t.Fatal("read-only should not receive procurement mutation or cart permissions")
 	}
 
-	if got := PermissionsForWholesaleBuyerRole(WholesaleBuyerRole("__invalid__")); got != nil {
+	if got := wholesaleenum.PermissionsForWholesaleBuyerRole(wholesaleenum.WholesaleBuyerRole("__invalid__")); got != nil {
 		t.Fatalf("invalid role permissions = %#v, want nil", got)
 	}
-	if HasWholesalePermission([]string{WholesalePermissionTeamView.String()}, WholesalePermission("__invalid__")) {
+	if wholesaleenum.HasWholesalePermission([]string{wholesaleenum.WholesalePermissionTeamView.String()}, wholesaleenum.WholesalePermission("__invalid__")) {
 		t.Fatal("invalid required permission should never match")
 	}
 }
 
 func TestAccountStatusTerminalState(t *testing.T) {
-	for _, status := range []AccountStatus{AccountStatusClosed, AccountStatusDeleted} {
+	for _, status := range []accountenum.AccountStatus{accountenum.AccountStatusClosed, accountenum.AccountStatusDeleted} {
 		if !status.IsTerminal() {
 			t.Fatalf("%s should be terminal", status)
 		}
 	}
 
-	for _, status := range []AccountStatus{
-		AccountStatusPending,
-		AccountStatusActive,
-		AccountStatusSuspended,
+	for _, status := range []accountenum.AccountStatus{
+		accountenum.AccountStatusPending,
+		accountenum.AccountStatusActive,
+		accountenum.AccountStatusSuspended,
 	} {
 		if status.IsTerminal() {
 			t.Fatalf("%s should not be terminal", status)
@@ -305,18 +328,18 @@ func TestAccountStatusTerminalState(t *testing.T) {
 
 func TestSalesOrderStatusTransitions(t *testing.T) {
 	allowed := []struct {
-		from SalesOrderStatus
-		to   SalesOrderStatus
+		from salesenum.SalesOrderStatus
+		to   salesenum.SalesOrderStatus
 	}{
-		{SalesOrderStatusPending, SalesOrderStatusConfirmed},
-		{SalesOrderStatusConfirmed, SalesOrderStatusPaid},
-		{SalesOrderStatusPaid, SalesOrderStatusProcessing},
-		{SalesOrderStatusProcessing, SalesOrderStatusPicking},
-		{SalesOrderStatusPicking, SalesOrderStatusPacked},
-		{SalesOrderStatusPacked, SalesOrderStatusShipped},
-		{SalesOrderStatusShipped, SalesOrderStatusDelivered},
-		{SalesOrderStatusDelivered, SalesOrderStatusCompleted},
-		{SalesOrderStatusCompleted, SalesOrderStatusRefunded},
+		{salesenum.SalesOrderStatusPending, salesenum.SalesOrderStatusConfirmed},
+		{salesenum.SalesOrderStatusConfirmed, salesenum.SalesOrderStatusPaid},
+		{salesenum.SalesOrderStatusPaid, salesenum.SalesOrderStatusProcessing},
+		{salesenum.SalesOrderStatusProcessing, salesenum.SalesOrderStatusPicking},
+		{salesenum.SalesOrderStatusPicking, salesenum.SalesOrderStatusPacked},
+		{salesenum.SalesOrderStatusPacked, salesenum.SalesOrderStatusShipped},
+		{salesenum.SalesOrderStatusShipped, salesenum.SalesOrderStatusDelivered},
+		{salesenum.SalesOrderStatusDelivered, salesenum.SalesOrderStatusCompleted},
+		{salesenum.SalesOrderStatusCompleted, salesenum.SalesOrderStatusRefunded},
 	}
 
 	for _, transition := range allowed {
@@ -326,13 +349,13 @@ func TestSalesOrderStatusTransitions(t *testing.T) {
 	}
 
 	rejected := []struct {
-		from SalesOrderStatus
-		to   SalesOrderStatus
+		from salesenum.SalesOrderStatus
+		to   salesenum.SalesOrderStatus
 	}{
-		{SalesOrderStatusPending, SalesOrderStatusPacked},
-		{SalesOrderStatusProcessing, SalesOrderStatusCancelled},
-		{SalesOrderStatusCancelled, SalesOrderStatusPending},
-		{SalesOrderStatusRefunded, SalesOrderStatusPaid},
+		{salesenum.SalesOrderStatusPending, salesenum.SalesOrderStatusPacked},
+		{salesenum.SalesOrderStatusProcessing, salesenum.SalesOrderStatusCancelled},
+		{salesenum.SalesOrderStatusCancelled, salesenum.SalesOrderStatusPending},
+		{salesenum.SalesOrderStatusRefunded, salesenum.SalesOrderStatusPaid},
 	}
 
 	for _, transition := range rejected {
@@ -341,25 +364,25 @@ func TestSalesOrderStatusTransitions(t *testing.T) {
 		}
 	}
 
-	if !SalesOrderStatusCancelled.IsTerminal() || !SalesOrderStatusRefunded.IsTerminal() {
+	if !salesenum.SalesOrderStatusCancelled.IsTerminal() || !salesenum.SalesOrderStatusRefunded.IsTerminal() {
 		t.Fatal("cancelled and refunded sales orders should be terminal")
 	}
-	if SalesOrderStatusCompleted.IsTerminal() {
+	if salesenum.SalesOrderStatusCompleted.IsTerminal() {
 		t.Fatal("completed sales order should remain refundable, not terminal")
 	}
 }
 
 func TestPurchaseOrderStatusTransitions(t *testing.T) {
 	allowed := []struct {
-		from PurchaseOrderStatus
-		to   PurchaseOrderStatus
+		from purchaseenum.PurchaseOrderStatus
+		to   purchaseenum.PurchaseOrderStatus
 	}{
-		{PurchaseOrderStatusDraft, PurchaseOrderStatusSubmitted},
-		{PurchaseOrderStatusSubmitted, PurchaseOrderStatusConfirmed},
-		{PurchaseOrderStatusConfirmed, PurchaseOrderStatusPartiallyReceived},
-		{PurchaseOrderStatusConfirmed, PurchaseOrderStatusReceived},
-		{PurchaseOrderStatusPartiallyReceived, PurchaseOrderStatusReceived},
-		{PurchaseOrderStatusReceived, PurchaseOrderStatusRefunded},
+		{purchaseenum.PurchaseOrderStatusDraft, purchaseenum.PurchaseOrderStatusSubmitted},
+		{purchaseenum.PurchaseOrderStatusSubmitted, purchaseenum.PurchaseOrderStatusConfirmed},
+		{purchaseenum.PurchaseOrderStatusConfirmed, purchaseenum.PurchaseOrderStatusPartiallyReceived},
+		{purchaseenum.PurchaseOrderStatusConfirmed, purchaseenum.PurchaseOrderStatusReceived},
+		{purchaseenum.PurchaseOrderStatusPartiallyReceived, purchaseenum.PurchaseOrderStatusReceived},
+		{purchaseenum.PurchaseOrderStatusReceived, purchaseenum.PurchaseOrderStatusRefunded},
 	}
 
 	for _, transition := range allowed {
@@ -369,13 +392,13 @@ func TestPurchaseOrderStatusTransitions(t *testing.T) {
 	}
 
 	rejected := []struct {
-		from PurchaseOrderStatus
-		to   PurchaseOrderStatus
+		from purchaseenum.PurchaseOrderStatus
+		to   purchaseenum.PurchaseOrderStatus
 	}{
-		{PurchaseOrderStatusDraft, PurchaseOrderStatusReceived},
-		{PurchaseOrderStatusSubmitted, PurchaseOrderStatusRefunded},
-		{PurchaseOrderStatusCancelled, PurchaseOrderStatusSubmitted},
-		{PurchaseOrderStatusRefunded, PurchaseOrderStatusConfirmed},
+		{purchaseenum.PurchaseOrderStatusDraft, purchaseenum.PurchaseOrderStatusReceived},
+		{purchaseenum.PurchaseOrderStatusSubmitted, purchaseenum.PurchaseOrderStatusRefunded},
+		{purchaseenum.PurchaseOrderStatusCancelled, purchaseenum.PurchaseOrderStatusSubmitted},
+		{purchaseenum.PurchaseOrderStatusRefunded, purchaseenum.PurchaseOrderStatusConfirmed},
 	}
 
 	for _, transition := range rejected {
@@ -384,26 +407,26 @@ func TestPurchaseOrderStatusTransitions(t *testing.T) {
 		}
 	}
 
-	if !PurchaseOrderStatusCancelled.IsTerminal() || !PurchaseOrderStatusRefunded.IsTerminal() {
+	if !purchaseenum.PurchaseOrderStatusCancelled.IsTerminal() || !purchaseenum.PurchaseOrderStatusRefunded.IsTerminal() {
 		t.Fatal("cancelled and refunded purchase orders should be terminal")
 	}
-	if PurchaseOrderStatusReceived.IsTerminal() {
+	if purchaseenum.PurchaseOrderStatusReceived.IsTerminal() {
 		t.Fatal("received purchase order should remain refundable, not terminal")
 	}
 }
 
 func TestTerminalStatusesTerminalState(t *testing.T) {
-	if !TerminalStatusDeregistered.IsTerminal() || !TerminalStatusExpired.IsTerminal() {
+	if !paymentenum.TerminalStatusDeregistered.IsTerminal() || !paymentenum.TerminalStatusExpired.IsTerminal() {
 		t.Fatal("deregistered and expired terminals should be terminal")
 	}
-	if TerminalStatusError.IsTerminal() {
+	if paymentenum.TerminalStatusError.IsTerminal() {
 		t.Fatal("error terminal status should be recoverable")
 	}
 
-	if !TerminalTxStatusFinalised.IsTerminal() || !TerminalTxStatusOverrideResolved.IsTerminal() {
+	if !paymentenum.TerminalTxStatusFinalised.IsTerminal() || !paymentenum.TerminalTxStatusOverrideResolved.IsTerminal() {
 		t.Fatal("finalised and override_resolved terminal transactions should be terminal")
 	}
-	if TerminalTxStatusOverridePending.IsTerminal() {
+	if paymentenum.TerminalTxStatusOverridePending.IsTerminal() {
 		t.Fatal("override_pending terminal transaction should require resolution")
 	}
 }

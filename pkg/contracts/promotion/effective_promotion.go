@@ -3,17 +3,17 @@ package promotion
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/promotion"
 )
 
 // EffectivePromotion is the result of resolving the single promotion that
 // prices one product at one instant. Targeted promotions never stack: exactly
 // one wins (or none). It is produced by promotionlogic.ResolveEffective.
 type EffectivePromotion struct {
-	PromotionID   string               `json:"promotion_id"`
-	PromotionName string               `json:"promotion_name,omitempty"`
-	Class         enums.PromotionClass `json:"class"`
-	TargetScope   enums.DiscountScope  `json:"target_scope"`
+	PromotionID   string                       `json:"promotion_id"`
+	PromotionName string                       `json:"promotion_name,omitempty"`
+	Class         promotionenum.PromotionClass `json:"class"`
+	TargetScope   promotionenum.DiscountScope  `json:"target_scope"`
 
 	OriginalPriceMinor   int64  `json:"original_price_minor"`
 	DiscountedPriceMinor int64  `json:"discounted_price_minor"`

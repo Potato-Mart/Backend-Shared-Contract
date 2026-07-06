@@ -3,8 +3,8 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/security"
 )
 
 // HistoryChange is one field-level before/after fragment in a timeline entry.
@@ -21,20 +21,20 @@ type HistoryChange struct {
 // whether the change introduces operational, financial, customer, or security
 // risk.
 type HistoryEntry struct {
-	ID                string                  `json:"id,omitempty"`
-	Sequence          int64                   `json:"sequence,omitempty"`
-	OccurredAt        time.Time               `json:"occurred_at"`
-	Type              string                  `json:"type"`
-	Summary           string                  `json:"summary,omitempty"`
-	Changes           []HistoryChange         `json:"changes,omitempty"`
-	Source            string                  `json:"source,omitempty"`
-	ReasonCode        string                  `json:"reason_code,omitempty"`
-	Note              string                  `json:"note,omitempty"`
-	RiskLevel         enums.SecurityRiskLevel `json:"risk_level,omitempty"`
-	RiskFlags         []string                `json:"risk_flags,omitempty"`
-	RelatedResource   string                  `json:"related_resource,omitempty"`
-	RelatedResourceID string                  `json:"related_resource_id,omitempty"`
-	Metadata          common.Metadata         `json:"metadata,omitempty"`
+	ID                string                         `json:"id,omitempty"`
+	Sequence          int64                          `json:"sequence,omitempty"`
+	OccurredAt        time.Time                      `json:"occurred_at"`
+	Type              string                         `json:"type"`
+	Summary           string                         `json:"summary,omitempty"`
+	Changes           []HistoryChange                `json:"changes,omitempty"`
+	Source            string                         `json:"source,omitempty"`
+	ReasonCode        string                         `json:"reason_code,omitempty"`
+	Note              string                         `json:"note,omitempty"`
+	RiskLevel         securityenum.SecurityRiskLevel `json:"risk_level,omitempty"`
+	RiskFlags         []string                       `json:"risk_flags,omitempty"`
+	RelatedResource   string                         `json:"related_resource,omitempty"`
+	RelatedResourceID string                         `json:"related_resource_id,omitempty"`
+	Metadata          common.Metadata                `json:"metadata,omitempty"`
 	ActorRef
 	RequestContext
 }

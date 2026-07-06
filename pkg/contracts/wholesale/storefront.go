@@ -3,9 +3,10 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/product"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/product"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/warehouse"
 )
 
 const (
@@ -31,8 +32,8 @@ type ApprovedStorefrontProduct struct {
 	Brand              []common.LocalizedName        `json:"brand,omitempty"`
 	Supplier           string                        `json:"supplier,omitempty"`
 	BrandNames         []common.LocalizedName        `json:"brand_names,omitempty"`
-	Storage            enums.StorageType             `json:"storage,omitempty"`
-	SalesPerformance   enums.SalesPerformance        `json:"sales_performance,omitempty"`
+	Storage            warehouseenum.StorageType     `json:"storage,omitempty"`
+	SalesPerformance   productenum.SalesPerformance  `json:"sales_performance,omitempty"`
 	DisplayStatus      string                        `json:"display_status,omitempty"`
 	CoverURL           string                        `json:"cover_url,omitempty"`
 	ImageURLs          []string                      `json:"image_urls,omitempty"`

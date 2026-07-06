@@ -3,14 +3,14 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
 )
 
 // CloudServiceSecurityProfile records security posture for a cloud service
 // or managed platform used by a backend.
 type CloudServiceSecurityProfile struct {
 	ID                    string          `json:"id"`
-	Provider              string          `json:"provider"` // e.g. "azure", "aws", "gcp", "adyen"
+	Provider              string          `json:"provider"` // e.g. "azure", "aws", "gcp"
 	ServiceName           string          `json:"service_name"`
 	Environment           string          `json:"environment,omitempty"` // "dev", "staging", "prod"
 	OwnerID               string          `json:"owner_id,omitempty"`

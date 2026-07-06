@@ -3,9 +3,9 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/membership"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/customer"
 )
 
 // RetailCustomerMembershipProfile links a retail customer profile to the
@@ -43,14 +43,14 @@ type RetailCustomerMarketingProfile struct {
 // RetailCustomerAnalyticsProfile groups the recency/frequency/monetary
 // analytics computed by the stats sync job.
 type RetailCustomerAnalyticsProfile struct {
-	RecencyDays   *int            `json:"recency_days,omitempty"`
-	R             *int            `json:"r,omitempty"`
-	F             *int            `json:"f,omitempty"`
-	M             *int            `json:"m,omitempty"`
-	Score         string          `json:"score,omitempty"`
-	Segment       string          `json:"segment,omitempty"`
-	ChurnRisk     enums.ChurnRisk `json:"churn_risk,omitempty"`
-	AvgRepeatDays *float64        `json:"avg_repeat_days,omitempty"`
+	RecencyDays   *int                   `json:"recency_days,omitempty"`
+	R             *int                   `json:"r,omitempty"`
+	F             *int                   `json:"f,omitempty"`
+	M             *int                   `json:"m,omitempty"`
+	Score         string                 `json:"score,omitempty"`
+	Segment       string                 `json:"segment,omitempty"`
+	ChurnRisk     customerenum.ChurnRisk `json:"churn_risk,omitempty"`
+	AvgRepeatDays *float64               `json:"avg_repeat_days,omitempty"`
 }
 
 // RetailCustomerReferralProfile groups the referral-programme state of a

@@ -3,10 +3,10 @@ package wallet
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/shared"
+	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/wallet"
 )
 
 // GiftCard is a stored-value instrument with a re-spendable balance. The
@@ -19,7 +19,7 @@ type GiftCard struct {
 	Owner        membership.MembershipOwnerRef `json:"owner"`
 	Balance      common.Money                  `json:"balance"`
 	InitialValue common.Money                  `json:"initial_value"`
-	Status       enums.GiftCardStatus          `json:"status"`
+	Status       walletenum.GiftCardStatus     `json:"status"`
 	IssuedAt     time.Time                     `json:"issued_at"`
 	ActivatedAt  *time.Time                    `json:"activated_at,omitempty"`
 	ExpiresAt    *time.Time                    `json:"expires_at,omitempty"`
@@ -33,13 +33,13 @@ type GiftCard struct {
 // Delta tops up (issue / top_up / refund); a negative Delta redeems.
 // BalanceAfter is the running balance after this entry.
 type GiftCardTransaction struct {
-	ID                 string                          `json:"id"`
-	GiftCardCode       string                          `json:"gift_card_code"`
-	Delta              common.Money                    `json:"delta"`
-	BalanceAfter       common.Money                    `json:"balance_after"`
-	Reason             enums.GiftCardTransactionReason `json:"reason"`
-	RelatedOrderNumber string                          `json:"related_order_number,omitempty"`
-	Note               string                          `json:"note,omitempty"`
-	CreatedBy          string                          `json:"created_by,omitempty"`
-	CreatedAt          time.Time                       `json:"created_at"`
+	ID                 string                               `json:"id"`
+	GiftCardCode       string                               `json:"gift_card_code"`
+	Delta              common.Money                         `json:"delta"`
+	BalanceAfter       common.Money                         `json:"balance_after"`
+	Reason             walletenum.GiftCardTransactionReason `json:"reason"`
+	RelatedOrderNumber string                               `json:"related_order_number,omitempty"`
+	Note               string                               `json:"note,omitempty"`
+	CreatedBy          string                               `json:"created_by,omitempty"`
+	CreatedAt          time.Time                            `json:"created_at"`
 }

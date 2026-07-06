@@ -3,21 +3,9 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
-)
-
-// WholesaleApplicationState is the storefront-facing lifecycle for a trade
-// account application. It condenses the organisation, access, and customer
-// records into the state a buyer needs to understand.
-type WholesaleApplicationState string
-
-const (
-	WholesaleApplicationStateMissing   WholesaleApplicationState = "missing"
-	WholesaleApplicationStatePending   WholesaleApplicationState = "pending"
-	WholesaleApplicationStateApproved  WholesaleApplicationState = "approved"
-	WholesaleApplicationStateRejected  WholesaleApplicationState = "rejected"
-	WholesaleApplicationStateSuspended WholesaleApplicationState = "suspended"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/customer"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/wholesale"
 )
 
 // WholesaleApplicationRequest is the public trade-account application payload.
@@ -49,16 +37,16 @@ type WholesaleApplicationRequest struct {
 
 // WholesaleApplicationResponse is returned after a public application submit.
 type WholesaleApplicationResponse struct {
-	State WholesaleApplicationState `json:"state"`
+	State wholesaleenum.WholesaleApplicationState `json:"state"`
 
 	UserID                    string `json:"user_id,omitempty"`
 	WholesaleOrganisationCode string `json:"wholesale_organisation_code,omitempty"`
 	OrganisationAccessID      string `json:"organisation_access_id,omitempty"`
 	WholesaleCustomerNumber   string `json:"wholesale_customer_number,omitempty"`
 
-	OrganisationStatus enums.WholesaleOrganisationStatus `json:"organisation_status,omitempty"`
-	AccessStatus       enums.OrganisationAccessStatus    `json:"access_status,omitempty"`
-	CustomerStatus     enums.CustomerStatus              `json:"customer_status,omitempty"`
+	OrganisationStatus wholesaleenum.WholesaleOrganisationStatus `json:"organisation_status,omitempty"`
+	AccessStatus       wholesaleenum.OrganisationAccessStatus    `json:"access_status,omitempty"`
+	CustomerStatus     customerenum.CustomerStatus               `json:"customer_status,omitempty"`
 
 	EmailVerificationRequired bool   `json:"email_verification_required"`
 	Message                   string `json:"message,omitempty"`

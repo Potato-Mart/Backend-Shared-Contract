@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/warehouse"
 )
 
 func TestSKUJSONIncludesPrimaryName(t *testing.T) {
 	body, err := json.Marshal(SKU{
 		ID:      "sku_f2",
 		Code:    "F2",
-		Storage: enums.StorageFrozen,
+		Storage: warehouseenum.StorageFrozen,
 		PrimaryName: common.LocalizedName{
 			Language: "zh-Hant",
 			Name:     "冷凍 - 肉品",

@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/warehouse"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/warehouse"
 )
 
 func TestStockMovementRoundTripWithPurchaseLinks(t *testing.T) {
@@ -19,7 +19,7 @@ func TestStockMovementRoundTripWithPurchaseLinks(t *testing.T) {
 		ProductName:         "Potato Chips",
 		DepotCode:           "DEPOT-1",
 		LocationCode:        "A-01",
-		Type:                enums.StockMovementTypePurchaseReceipt,
+		Type:                warehouseenum.StockMovementTypePurchaseReceipt,
 		QtyDelta:            30,
 		BalanceAfter:        130,
 		OccurredAt:          occurredAt,
@@ -55,8 +55,8 @@ func TestStockMovementRoundTripWithPurchaseLinks(t *testing.T) {
 	if decoded.ProductSKUCode != "SKU-001" || decoded.DepotCode != "DEPOT-1" {
 		t.Fatalf("canonical codes did not round-trip: %+v", decoded)
 	}
-	if decoded.Type != enums.StockMovementTypePurchaseReceipt {
-		t.Fatalf("type = %q, want %q", decoded.Type, enums.StockMovementTypePurchaseReceipt)
+	if decoded.Type != warehouseenum.StockMovementTypePurchaseReceipt {
+		t.Fatalf("type = %q, want %q", decoded.Type, warehouseenum.StockMovementTypePurchaseReceipt)
 	}
 	if decoded.QtyDelta != 30 || decoded.BalanceAfter != 130 {
 		t.Fatalf("stock quantities did not round-trip: %+v", decoded)

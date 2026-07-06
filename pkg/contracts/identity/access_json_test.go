@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/identity"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/identity"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/account"
 )
 
 func TestPortalAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T) {
@@ -16,9 +16,9 @@ func TestPortalAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T)
 		ID:          "portal_access_1",
 		UserID:      "user_1",
 		AccountID:   "acct_1",
-		AccountType: enums.AccountTypeGeneralCustomer,
-		Portal:      enums.PortalStore,
-		Status:      enums.PortalAccessStatusActive,
+		AccountType: accountenum.AccountTypeGeneralCustomer,
+		Portal:      accountenum.PortalStore,
+		Status:      accountenum.PortalAccessStatusActive,
 		Grant:       &common.LifecycleAction{By: "admin_1", At: &grantedAt, Reason: "approved"},
 	}
 
@@ -92,7 +92,7 @@ func TestIdentityWholesaleAccessJSONUsesOrganisationAccessID(t *testing.T) {
 		Subject:                   "user_1",
 		UserID:                    "user_1",
 		AccountID:                 "acct_1",
-		Portal:                    enums.PortalPartner,
+		Portal:                    accountenum.PortalPartner,
 		WholesaleOrganisationCode: "org_1",
 		OrganisationAccessID:      "access_1",
 		RoleKey:                   "buyer",
@@ -100,7 +100,7 @@ func TestIdentityWholesaleAccessJSONUsesOrganisationAccessID(t *testing.T) {
 	session := identity.LoginSession{
 		ID:                        "session_1",
 		UserID:                    "user_1",
-		Portal:                    enums.PortalPartner,
+		Portal:                    accountenum.PortalPartner,
 		WholesaleOrganisationCode: "org_1",
 		OrganisationAccessID:      "access_1",
 		RoleKey:                   "buyer",

@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/wholesale"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/wholesale"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/product"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/warehouse"
 )
 
 func TestApprovedStorefrontProductJSONShape(t *testing.T) {
@@ -18,14 +19,14 @@ func TestApprovedStorefrontProductJSONShape(t *testing.T) {
 		Description:   []common.LocalizedDescription{{Language: "en", Description: "Foodservice carton"}},
 		Brand:         []common.LocalizedName{{Language: "en", Name: "Potato Mart"}},
 		Supplier:      "SUP-1",
-		Storage:       enums.StorageDry,
+		Storage:       warehouseenum.StorageDry,
 		DisplayStatus: "active",
 		CoverURL:      "https://example.com/potatoes.jpg",
 		Collection:    &product.CollectionRef{ID: "col_produce", Name: []common.LocalizedName{{Language: "en", Name: "Produce"}}},
 		CategoryTags:  []product.CategoryTag{{ID: "tag_potatoes", Name: []common.LocalizedName{{Language: "en", Name: "Potatoes"}}, CollectionID: "col_produce", CollectionName: []common.LocalizedName{{Language: "en", Name: "Produce"}}}},
 		StorefrontDisplay: &product.StorefrontDisplay{
-			Preorder: &product.StorefrontPreorderDisplay{Available: true, Status: product.StorefrontPreorderStatusOpen},
-			Expiry:   &product.StorefrontExpiryDisplay{SoonExpiry: true, Status: product.StorefrontExpiryStatusSoonExpiry},
+			Preorder: &product.StorefrontPreorderDisplay{Available: true, Status: productenum.StorefrontPreorderStatusOpen},
+			Expiry:   &product.StorefrontExpiryDisplay{SoonExpiry: true, Status: productenum.StorefrontExpiryStatusSoonExpiry},
 		},
 		Price:             common.Money{AmountMinor: 2500, Currency: "AUD"},
 		StockAvailable:    true,

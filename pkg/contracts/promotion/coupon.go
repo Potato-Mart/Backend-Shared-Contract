@@ -3,10 +3,10 @@ package promotion
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/shared"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/promotion"
 )
 
 // Coupon is a code-based discount that customers enter at checkout.
@@ -22,10 +22,10 @@ type Coupon struct {
 	UsageLimits
 	ActiveWindow
 
-	AppliesTo       enums.CouponAppliesTo `json:"applies_to"`
-	ProductSKUCodes []string              `json:"product_sku_codes,omitempty"`
-	CategoryTags    []product.CategoryTag `json:"category_tags,omitempty"`
-	History         []shared.HistoryEntry `json:"history,omitempty"`
+	AppliesTo       promotionenum.CouponAppliesTo `json:"applies_to"`
+	ProductSKUCodes []string                      `json:"product_sku_codes,omitempty"`
+	CategoryTags    []product.CategoryTag         `json:"category_tags,omitempty"`
+	History         []shared.HistoryEntry         `json:"history,omitempty"`
 
 	common.AuditFields
 }
@@ -34,19 +34,19 @@ type Coupon struct {
 // the Coupon aggregate; the coupon definition remains the source of discount
 // math and eligibility.
 type CouponAssignment struct {
-	ID                  string                `json:"id"`
-	CouponID            string                `json:"coupon_id"`
-	CouponCode          string                `json:"coupon_code"`
-	CustomerNumber      string                `json:"customer_number"`
-	Source              enums.CouponSource    `json:"source"`
-	Status              string                `json:"status"`
-	ExpiresAt           *time.Time            `json:"expires_at,omitempty"`
-	RedeemedAt          *time.Time            `json:"redeemed_at,omitempty"`
-	RedeemedOrderNumber string                `json:"redeemed_order_number,omitempty"`
-	VoidedAt            *time.Time            `json:"voided_at,omitempty"`
-	Note                string                `json:"note,omitempty"`
-	History             []shared.HistoryEntry `json:"history,omitempty"`
-	CreatedAt           time.Time             `json:"created_at"`
+	ID                  string                     `json:"id"`
+	CouponID            string                     `json:"coupon_id"`
+	CouponCode          string                     `json:"coupon_code"`
+	CustomerNumber      string                     `json:"customer_number"`
+	Source              promotionenum.CouponSource `json:"source"`
+	Status              string                     `json:"status"`
+	ExpiresAt           *time.Time                 `json:"expires_at,omitempty"`
+	RedeemedAt          *time.Time                 `json:"redeemed_at,omitempty"`
+	RedeemedOrderNumber string                     `json:"redeemed_order_number,omitempty"`
+	VoidedAt            *time.Time                 `json:"voided_at,omitempty"`
+	Note                string                     `json:"note,omitempty"`
+	History             []shared.HistoryEntry      `json:"history,omitempty"`
+	CreatedAt           time.Time                  `json:"created_at"`
 }
 
 // CouponAssignmentSummary is embedded in coupon detail responses so clients can
@@ -67,10 +67,10 @@ type CouponDetail struct {
 
 // CouponIssueSpec describes assignment issuance under a Coupon.
 type CouponIssueSpec struct {
-	CustomerNumbers []string           `json:"customer_numbers,omitempty"`
-	Source          enums.CouponSource `json:"source,omitempty"`
-	ExpiresAt       *time.Time         `json:"expires_at,omitempty"`
-	Note            string             `json:"note,omitempty"`
+	CustomerNumbers []string                   `json:"customer_numbers,omitempty"`
+	Source          promotionenum.CouponSource `json:"source,omitempty"`
+	ExpiresAt       *time.Time                 `json:"expires_at,omitempty"`
+	Note            string                     `json:"note,omitempty"`
 }
 
 // CouponRecipientPreview reports the backend-resolved recipients for an issue

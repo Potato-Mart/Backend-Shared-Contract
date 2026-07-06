@@ -1,8 +1,9 @@
 package product
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/product"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/warehouse"
 )
 
 // Snapshot is the denormalised product summary embedded in carts, order
@@ -30,8 +31,8 @@ type Snapshot struct {
 	Brand         []common.LocalizedName        `json:"brand,omitempty"`
 	SupplierCode  string                        `json:"supplier_code,omitempty"`
 	ImageURL      string                        `json:"image_url,omitempty"`
-	Storage       enums.StorageType             `json:"storage,omitempty"`
-	Status        enums.ProductStatus           `json:"status,omitempty"`
+	Storage       warehouseenum.StorageType     `json:"storage,omitempty"`
+	Status        productenum.ProductStatus     `json:"status,omitempty"`
 	DisplayStatus string                        `json:"display_status,omitempty"`
 	Barcode       string                        `json:"barcode,omitempty"`
 	Taxed         bool                          `json:"taxed"`

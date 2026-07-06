@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/wholesale"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/wholesale"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/customer"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/wholesale"
 )
 
 func TestWholesaleApplicationRequestJSONShape(t *testing.T) {
@@ -74,14 +75,14 @@ func TestWholesaleApplicationRequestJSONShape(t *testing.T) {
 func TestWholesaleApplicationStatusJSONShape(t *testing.T) {
 	status := wholesale.WholesaleApplicationStatusResponse{
 		WholesaleApplicationResponse: wholesale.WholesaleApplicationResponse{
-			State:                     wholesale.WholesaleApplicationStatePending,
+			State:                     wholesaleenum.WholesaleApplicationStatePending,
 			UserID:                    "usr_1",
 			WholesaleOrganisationCode: "org_1",
 			OrganisationAccessID:      "acc_1",
 			WholesaleCustomerNumber:   "cus_1",
-			OrganisationStatus:        enums.WholesaleOrganisationStatusPending,
-			AccessStatus:              enums.OrganisationAccessStatusPending,
-			CustomerStatus:            enums.CustomerStatusInactive,
+			OrganisationStatus:        wholesaleenum.WholesaleOrganisationStatusPending,
+			AccessStatus:              wholesaleenum.OrganisationAccessStatusPending,
+			CustomerStatus:            customerenum.CustomerStatusInactive,
 			EmailVerificationRequired: true,
 		},
 		BusinessName: "Example Foods",
@@ -126,14 +127,14 @@ func TestWholesaleApplicationReviewJSONShape(t *testing.T) {
 		WholesaleApplicationReviewListItem: wholesale.WholesaleApplicationReviewListItem{
 			WholesaleApplicationStatusResponse: wholesale.WholesaleApplicationStatusResponse{
 				WholesaleApplicationResponse: wholesale.WholesaleApplicationResponse{
-					State:                     wholesale.WholesaleApplicationStatePending,
+					State:                     wholesaleenum.WholesaleApplicationStatePending,
 					UserID:                    "usr_1",
 					WholesaleOrganisationCode: "org_1",
 					OrganisationAccessID:      "acc_1",
 					WholesaleCustomerNumber:   "cus_1",
-					OrganisationStatus:        enums.WholesaleOrganisationStatusPending,
-					AccessStatus:              enums.OrganisationAccessStatusPending,
-					CustomerStatus:            enums.CustomerStatusInactive,
+					OrganisationStatus:        wholesaleenum.WholesaleOrganisationStatusPending,
+					AccessStatus:              wholesaleenum.OrganisationAccessStatusPending,
+					CustomerStatus:            customerenum.CustomerStatusInactive,
 					EmailVerificationRequired: true,
 				},
 				BusinessName: "Example Foods",

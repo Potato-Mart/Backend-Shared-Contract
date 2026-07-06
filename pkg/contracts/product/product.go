@@ -3,9 +3,12 @@ package product
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/shared"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/customer"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/product"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/sales"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/warehouse"
 )
 
 // Product is the master record for one sellable unit (v7.0.0).
@@ -28,14 +31,14 @@ type Product struct {
 	Taxed       bool                          `json:"taxed"`
 
 	// Storage is the physical storage zone (DRY/CHILLED/FROZEN)
-	Storage enums.StorageType `json:"storage,omitempty"`
+	Storage warehouseenum.StorageType `json:"storage,omitempty"`
 	// Status is the admin-controlled lifecycle state (draft/active/
 	// archived/discontinued). Derived runtime states (new/restocked/
 	// out_of_stock) are computed by DisplayStatus, never stored here.
-	Status enums.ProductStatus `json:"status,omitempty"`
+	Status productenum.ProductStatus `json:"status,omitempty"`
 	// SalesPerformance is the best-seller / sales-velocity signal
 	// (hot/normal/slow). Replaces the former freshness_status string.
-	SalesPerformance enums.SalesPerformance `json:"sales_performance,omitempty"`
+	SalesPerformance productenum.SalesPerformance `json:"sales_performance,omitempty"`
 
 	Collection      *CollectionRef `json:"collection,omitempty"`
 	CategoryTags    []CategoryTag  `json:"category_tags,omitempty"`
@@ -93,14 +96,14 @@ type Pricing struct {
 
 // Selling groups the channel/buyer sellability rules for a product: which
 // order channels it may be sold through, which buyer types may purchase it,
-// and how its price/listing is exposed. It reuses enums.OrderType for
-// channel and enums.BuyerType for buyer type. Empty Channels/BuyerTypes
+// and how its price/listing is exposed. It reuses salesenum.OrderType for
+// channel and customerenum.BuyerType for buyer type. Empty Channels/BuyerTypes
 // mean "no restriction"; the contract defines the rules, not the
 // enforcement — that lives in the backend.
 type Selling struct {
-	Channels   []enums.OrderType     `json:"channels,omitempty"`
-	BuyerTypes []enums.BuyerType     `json:"buyer_types,omitempty"`
-	Visibility enums.PriceVisibility `json:"visibility,omitempty"`
+	Channels   []salesenum.OrderType       `json:"channels,omitempty"`
+	BuyerTypes []customerenum.BuyerType    `json:"buyer_types,omitempty"`
+	Visibility productenum.PriceVisibility `json:"visibility,omitempty"`
 }
 
 // Localization groups secondary per-language display fields. Product

@@ -3,8 +3,8 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/warehouse"
 )
 
 // WarehouseLayout is the root 3D scene description for a depot. There is
@@ -44,23 +44,23 @@ type WarehouseLayout struct {
 // (layout_id, parent_id), (layout_id, type), and a multikey index on
 // "path" for "give me everything under aisle X" queries.
 type LayoutNode struct {
-	ID         string               `json:"id"`
-	LayoutID   string               `json:"layout_id"`
-	DepotCode  string               `json:"depot_code"`
-	ParentID   string               `json:"parent_id,omitempty"`
-	Path       []string             `json:"path,omitempty"` // ancestor IDs from root to immediate parent
-	Type       enums.LayoutNodeType `json:"type"`
-	Code       string               `json:"code"` // human code, e.g. "A-12-3-2"
-	Name       string               `json:"name,omitempty"`
-	Storage    enums.StorageType    `json:"storage,omitempty"`
-	Shape      enums.ShapeType      `json:"shape,omitempty"`
-	Transform  common.Transform     `json:"transform"`
-	Size       common.Size3D        `json:"size"`
-	Color      string               `json:"color,omitempty"`       // hex like "#3b82f6"
-	Model      *ModelAsset          `json:"model,omitempty"`       // optional model override for this node
-	LocationID string               `json:"location_id,omitempty"` // links a BIN node to a StockLocation
-	SortOrder  int                  `json:"sort_order,omitempty"`
-	IsActive   bool                 `json:"is_active"`
+	ID         string                       `json:"id"`
+	LayoutID   string                       `json:"layout_id"`
+	DepotCode  string                       `json:"depot_code"`
+	ParentID   string                       `json:"parent_id,omitempty"`
+	Path       []string                     `json:"path,omitempty"` // ancestor IDs from root to immediate parent
+	Type       warehouseenum.LayoutNodeType `json:"type"`
+	Code       string                       `json:"code"` // human code, e.g. "A-12-3-2"
+	Name       string                       `json:"name,omitempty"`
+	Storage    warehouseenum.StorageType    `json:"storage,omitempty"`
+	Shape      warehouseenum.ShapeType      `json:"shape,omitempty"`
+	Transform  common.Transform             `json:"transform"`
+	Size       common.Size3D                `json:"size"`
+	Color      string                       `json:"color,omitempty"`       // hex like "#3b82f6"
+	Model      *ModelAsset                  `json:"model,omitempty"`       // optional model override for this node
+	LocationID string                       `json:"location_id,omitempty"` // links a BIN node to a StockLocation
+	SortOrder  int                          `json:"sort_order,omitempty"`
+	IsActive   bool                         `json:"is_active"`
 
 	common.AuditFields
 }
@@ -69,26 +69,26 @@ type LayoutNode struct {
 // CDN). Never embed mesh data here — keep documents small to stay well
 // under large-document storage limits and keep reads fast.
 type ModelAsset struct {
-	ID        string              `json:"id,omitempty"`
-	URL       string              `json:"url"`
-	Format    enums.ModelFormat   `json:"format,omitempty"`
-	SizeBytes int64               `json:"size_bytes,omitempty"`
-	SHA256    string              `json:"sha256,omitempty"`
-	Anchor    *common.Vector3     `json:"anchor,omitempty"` // offset to apply when placing the model
-	Bounds    *common.BoundingBox `json:"bounds,omitempty"`
-	Metadata  common.Metadata     `json:"metadata,omitempty"`
+	ID        string                    `json:"id,omitempty"`
+	URL       string                    `json:"url"`
+	Format    warehouseenum.ModelFormat `json:"format,omitempty"`
+	SizeBytes int64                     `json:"size_bytes,omitempty"`
+	SHA256    string                    `json:"sha256,omitempty"`
+	Anchor    *common.Vector3           `json:"anchor,omitempty"` // offset to apply when placing the model
+	Bounds    *common.BoundingBox       `json:"bounds,omitempty"`
+	Metadata  common.Metadata           `json:"metadata,omitempty"`
 }
 
 // CameraPreset is a saved viewpoint a user can jump to in the 3D viewer.
 type CameraPreset struct {
-	ID         string                 `json:"id"`
-	Name       string                 `json:"name"`
-	Position   common.Vector3         `json:"position"`
-	Target     common.Vector3         `json:"target"`
-	FOV        float64                `json:"fov,omitempty"`
-	OrthoZoom  float64                `json:"ortho_zoom,omitempty"`
-	Projection enums.CameraProjection `json:"projection,omitempty"`
-	IsDefault  bool                   `json:"is_default,omitempty"`
+	ID         string                         `json:"id"`
+	Name       string                         `json:"name"`
+	Position   common.Vector3                 `json:"position"`
+	Target     common.Vector3                 `json:"target"`
+	FOV        float64                        `json:"fov,omitempty"`
+	OrthoZoom  float64                        `json:"ortho_zoom,omitempty"`
+	Projection warehouseenum.CameraProjection `json:"projection,omitempty"`
+	IsDefault  bool                           `json:"is_default,omitempty"`
 }
 
 // LayoutWall is a vertical wall segment used when a depot does not have

@@ -3,7 +3,8 @@ package product
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/product"
 )
 
 // StorefrontMerchandising groups admin-configurable product merchandising policy
@@ -47,51 +48,29 @@ type StorefrontDisplay struct {
 	Expiry   *StorefrontExpiryDisplay   `json:"expiry,omitempty"`
 }
 
-// StorefrontPreorderStatus is the public preorder display state for storefronts.
-type StorefrontPreorderStatus string
-
-const (
-	StorefrontPreorderStatusUnavailable StorefrontPreorderStatus = "unavailable"
-	StorefrontPreorderStatusUpcoming    StorefrontPreorderStatus = "upcoming"
-	StorefrontPreorderStatusOpen        StorefrontPreorderStatus = "open"
-	StorefrontPreorderStatusClosed      StorefrontPreorderStatus = "closed"
-	StorefrontPreorderStatusSoldOut     StorefrontPreorderStatus = "sold_out"
-)
-
 // StorefrontPreorderDisplay contains only fields safe for customer-facing
 // product cards and detail pages.
 type StorefrontPreorderDisplay struct {
-	Available              bool                          `json:"available"`
-	Status                 StorefrontPreorderStatus      `json:"status,omitempty"`
-	StartsAt               *time.Time                    `json:"starts_at,omitempty"`
-	EndsAt                 *time.Time                    `json:"ends_at,omitempty"`
-	ExpectedAvailableAt    *time.Time                    `json:"expected_available_at,omitempty"`
-	MaxQuantityPerRequest  int                           `json:"max_quantity_per_request,omitempty"`
-	MaxQuantityPerCustomer int                           `json:"max_quantity_per_customer,omitempty"`
-	Labels                 []common.LocalizedName        `json:"labels,omitempty"`
-	Descriptions           []common.LocalizedDescription `json:"descriptions,omitempty"`
+	Available              bool                                 `json:"available"`
+	Status                 productenum.StorefrontPreorderStatus `json:"status,omitempty"`
+	StartsAt               *time.Time                           `json:"starts_at,omitempty"`
+	EndsAt                 *time.Time                           `json:"ends_at,omitempty"`
+	ExpectedAvailableAt    *time.Time                           `json:"expected_available_at,omitempty"`
+	MaxQuantityPerRequest  int                                  `json:"max_quantity_per_request,omitempty"`
+	MaxQuantityPerCustomer int                                  `json:"max_quantity_per_customer,omitempty"`
+	Labels                 []common.LocalizedName               `json:"labels,omitempty"`
+	Descriptions           []common.LocalizedDescription        `json:"descriptions,omitempty"`
 }
-
-// StorefrontExpiryStatus is the public expiry merchandising state for
-// storefronts. It avoids exposing warehouse lot or service implementation
-// details.
-type StorefrontExpiryStatus string
-
-const (
-	StorefrontExpiryStatusNotApplicable StorefrontExpiryStatus = "not_applicable"
-	StorefrontExpiryStatusSoonExpiry    StorefrontExpiryStatus = "soon_expiry"
-	StorefrontExpiryStatusExpired       StorefrontExpiryStatus = "expired"
-)
 
 // StorefrontExpiryDisplay contains backend-computed expiry merchandising fields
 // for customer-facing product cards and detail pages.
 type StorefrontExpiryDisplay struct {
-	SoonExpiry          bool                          `json:"soon_expiry"`
-	Status              StorefrontExpiryStatus        `json:"status,omitempty"`
-	ExpiresAt           *time.Time                    `json:"expires_at,omitempty"`
-	DaysToExpiry        *int                          `json:"days_to_expiry,omitempty"`
-	WindowDays          int                           `json:"window_days,omitempty"`
-	ShowExactExpiryDate bool                          `json:"show_exact_expiry_date,omitempty"`
-	Labels              []common.LocalizedName        `json:"labels,omitempty"`
-	Descriptions        []common.LocalizedDescription `json:"descriptions,omitempty"`
+	SoonExpiry          bool                               `json:"soon_expiry"`
+	Status              productenum.StorefrontExpiryStatus `json:"status,omitempty"`
+	ExpiresAt           *time.Time                         `json:"expires_at,omitempty"`
+	DaysToExpiry        *int                               `json:"days_to_expiry,omitempty"`
+	WindowDays          int                                `json:"window_days,omitempty"`
+	ShowExactExpiryDate bool                               `json:"show_exact_expiry_date,omitempty"`
+	Labels              []common.LocalizedName             `json:"labels,omitempty"`
+	Descriptions        []common.LocalizedDescription      `json:"descriptions,omitempty"`
 }

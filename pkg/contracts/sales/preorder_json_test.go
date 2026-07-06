@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v11/pkg/enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/contracts/sales"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v12/pkg/enums/sales"
 )
 
 func TestPreorderJSONRoundTrip(t *testing.T) {
@@ -17,8 +17,8 @@ func TestPreorderJSONRoundTrip(t *testing.T) {
 	preorder := sales.Preorder{
 		ID:             "pre_1",
 		PreorderNumber: "PO-1001",
-		Channel:        enums.OrderTypeOnline,
-		Status:         sales.PreorderStatusRequested,
+		Channel:        salesenum.OrderTypeOnline,
+		Status:         salesenum.PreorderStatusRequested,
 		Customer: common.PartyRef{
 			ID:    "retail_1",
 			Code:  "RC-1001",
@@ -42,7 +42,7 @@ func TestPreorderJSONRoundTrip(t *testing.T) {
 	if err := json.Unmarshal(body, &decoded); err != nil {
 		t.Fatalf("unmarshal preorder: %v", err)
 	}
-	if decoded.Status != sales.PreorderStatusRequested || decoded.ProductSKUCode != "A00084" || decoded.Quantity != 2 {
+	if decoded.Status != salesenum.PreorderStatusRequested || decoded.ProductSKUCode != "A00084" || decoded.Quantity != 2 {
 		t.Fatalf("preorder did not round-trip: %+v", decoded)
 	}
 	if decoded.ExpectedAvailableAt == nil || !decoded.ExpectedAvailableAt.Equal(expectedAt) {
@@ -65,8 +65,8 @@ func TestPreorderSummaryJSONShape(t *testing.T) {
 	updatedAt := requestedAt.Add(2 * time.Hour)
 	summary := sales.PreorderSummary{
 		PreorderNumber:       "PO-1001",
-		Status:               sales.PreorderStatusConverted,
-		Channel:              enums.OrderTypeOnline,
+		Status:               salesenum.PreorderStatusConverted,
+		Channel:              salesenum.OrderTypeOnline,
 		ProductSKUCode:       "A00084",
 		Product:              product.Snapshot{SKUCode: "A00084", Name: "Frozen fries", Taxed: true},
 		Quantity:             1,
