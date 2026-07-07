@@ -18,6 +18,7 @@ const (
 	ScopeMembershipPoints   Scope = "membership:points"
 	ScopeMembershipRedeem   Scope = "membership:redeem"
 	ScopeWholesaleTermsRead Scope = "wholesale:terms:read"
+	ScopePromotionGrant     Scope = "promotion:grant"
 )
 
 func (s Scope) String() string { return string(s) }
@@ -28,7 +29,7 @@ func AllScopes() []Scope {
 		ScopeStockReserve, ScopeStockCommit, ScopeStockRelease,
 		ScopePricingQuote, ScopeProductsRead, ScopeCustomersRead, ScopeSuppliersRead,
 		ScopeMembershipRead, ScopeMembershipPoints, ScopeMembershipRedeem,
-		ScopeWholesaleTermsRead,
+		ScopeWholesaleTermsRead, ScopePromotionGrant,
 	}
 }
 

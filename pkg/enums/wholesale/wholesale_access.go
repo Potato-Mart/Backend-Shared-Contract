@@ -46,6 +46,14 @@ const (
 	WholesalePermissionOrderListsWriteOwn WholesalePermission = "order_lists.write_own"
 	WholesalePermissionOrderListsViewOrg  WholesalePermission = "order_lists.view_org"
 	WholesalePermissionOrderListsWriteOrg WholesalePermission = "order_lists.write_org"
+
+	// Group-order manager permissions (added v13.1.0). The wholesale
+	// group-order manager creates/manages the group order, invites retail
+	// participants by email, submits it, and applies for a per-group discount.
+	WholesalePermissionGroupOrdersManage       WholesalePermission = "group_orders.manage_org"
+	WholesalePermissionGroupOrdersInvite       WholesalePermission = "group_orders.invite"
+	WholesalePermissionGroupOrdersSubmit       WholesalePermission = "group_orders.submit"
+	WholesalePermissionGroupOrderDiscountApply WholesalePermission = "group_order_discount.apply"
 )
 
 func (p WholesalePermission) String() string { return string(p) }
@@ -67,7 +75,11 @@ func (p WholesalePermission) IsValid() bool {
 		WholesalePermissionOrderListsViewOwn,
 		WholesalePermissionOrderListsWriteOwn,
 		WholesalePermissionOrderListsViewOrg,
-		WholesalePermissionOrderListsWriteOrg:
+		WholesalePermissionOrderListsWriteOrg,
+		WholesalePermissionGroupOrdersManage,
+		WholesalePermissionGroupOrdersInvite,
+		WholesalePermissionGroupOrdersSubmit,
+		WholesalePermissionGroupOrderDiscountApply:
 		return true
 	default:
 		return false
@@ -96,6 +108,10 @@ func PermissionsForWholesaleBuyerRole(role WholesaleBuyerRole) []WholesalePermis
 			WholesalePermissionOrderListsWriteOwn,
 			WholesalePermissionOrderListsViewOrg,
 			WholesalePermissionOrderListsWriteOrg,
+			WholesalePermissionGroupOrdersManage,
+			WholesalePermissionGroupOrdersInvite,
+			WholesalePermissionGroupOrdersSubmit,
+			WholesalePermissionGroupOrderDiscountApply,
 		}
 	case WholesaleBuyerRoleBuyer:
 		return []WholesalePermission{

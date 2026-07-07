@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v13.1.0` | 2026-07-07 | Minor | Group-order buyer discount and manager permissions: adds the shared per-group-order discount application/approval domain model (`promotion.GroupOrderDiscountApplication`/`GroupOrderDiscountProposal`), its lifecycle enum (`promotionenum.GroupOrderDiscountState`), the internal discount-read endpoint constant `promotion.PathGroupOrderDiscountInternal`, the `promotion:grant` service-auth scope, and four wholesale group-order manager permissions. Additive only; keeps the `/v13` module path. |
 | `v13.0.0` | 2026-07-06 | Major | V13 module path for reward tier-trigger fields and release engineering cleanup: adds membership reward tier-achievement issue fields, splits enum tests into small domain files, adds standalone `GOWORK=off` test scripts/CI, and requires `/v12` → `/v13` module-path migration. |
 | `v12.0.0` | 2026-07-06 | Major | Breaking enum package cleanup: splits the flat enum package into domain enum subpackages, hard-moves remaining contract/API/service-auth typed enums, removes legacy wallet enum aliases, and removes provider-specific terminal adapter constants from the contract repo. Requires `/v11` → `/v12` module-path migration. |
 | `v11.2.0` | 2026-07-06 | Minor | Sales delivery scheduling and payment processor fees: adds order `expected_delivery_date`/`expected_delivery_time`, `delivery_method` (new `DeliveryMethod` enum) with `outsourced_carrier`, derived `delivery_region` (new `DeliveryRegion` enum), shipping zone `is_local`, payment `processor_fee`/`net_amount`, Stripe `balance_transaction_id`, and the canonical MAMA order-number rule in `pkg/logic/sales`. Additive only; no module path change. |
@@ -78,6 +79,114 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v13.1.0 (2026-07-07) - Group-Order Buyer Discount And Manager Permissions / 團購買方折扣與團購管理權限
+
+Release date: 2026-07-07
+
+This minor release adds the shared contract surface for the buyer-facing group
+order feature: a per-group-order discount application/approval domain model, its
+lifecycle enum, an internal endpoint constant plus a service-auth scope for the
+discount grant read, and the wholesale-buyer permission keys a group-order
+manager needs. It keeps the `/v13` Go module path and does not remove, rename, or
+narrow any exported type or JSON field. Group-order discount money is carried as
+`common.Money` minor units (fixed amount) or an integer basis-point value
+(percentage), never as a stringified major-unit value.
+
+本 minor release 新增團購（group order）買方功能所需的共用契約：每個團購的折扣
+申請／核准 domain 模型、其生命週期列舉、折扣讀取用的 internal endpoint 常數與
+service-auth scope，以及團購管理者所需的批發買方權限。此版本維持 `/v13` Go module
+path，未移除、改名或縮窄任何 exported type 或 JSON 欄位。團購折扣金額一律以
+`common.Money`（最小貨幣單位，定額）或整數 basis points（百分比）表示，不使用
+字串型主單位數值。
+
+### Additive Changes / 新增相容變更
+
+- `promotionenum.GroupOrderDiscountState` (`pending` / `approved` / `rejected`)
+  captures the lifecycle of a per-group-order discount application submitted by a
+  wholesale group-order manager and decided by a staff approver.
+- `promotion.GroupOrderDiscountApplication` is the shared application record
+  produced by Backend-Management and read by Backend-Commerce and the admin
+  console: group order code, organisation/access, state, the selected or approved
+  promotion id, the requested proposal, and requester/decider audit fields.
+- `promotion.GroupOrderDiscountProposal` describes a newly requested benefit with
+  a `common.Money` `amount` (fixed amount, minor units), an optional `max_discount`
+  cap (minor units), and integer `percent_basis_points` (percentage, 1000 =
+  10.00%). It deliberately avoids `DiscountSpec`'s stringified major-unit
+  `discount_value`, so no float or major-unit money crosses the wire.
+- `promotion.PathGroupOrderDiscountInternal`
+  (`/v1/internal/promotions/group-order-discount`) is the internal endpoint
+  Backend-Commerce uses to resolve an application's approved promotion for a group
+  order.
+- `serviceauthenum.ScopePromotionGrant` (`promotion:grant`) authorises that
+  internal group-order-discount read.
+- `wholesaleenum` gains four group-order manager permissions —
+  `group_orders.manage_org`, `group_orders.invite`, `group_orders.submit`, and
+  `group_order_discount.apply` — all granted to the `owner` buyer role by
+  `PermissionsForWholesaleBuyerRole` and validated by `IsValid`.
+- `pkg/versioning.ModuleVersion` now reports `v13.1.0`.
+- Consistent with the contract's DTO-ownership guard, the manager-apply and
+  admin approve/reject wire request envelopes are NOT added to the shared
+  contract; they remain owned by Backend-Management. The shared module keeps only
+  the domain record, the proposal, the enum, the endpoint constant, the scope, and
+  the permission keys.
+
+### 新增相容變更
+
+- `promotionenum.GroupOrderDiscountState`（`pending`／`approved`／`rejected`）
+  表示由批發團購管理者提交、由後台核准人員裁決的每團購折扣申請生命週期。
+- `promotion.GroupOrderDiscountApplication` 是由 Backend-Management 產生、供
+  Backend-Commerce 與後台管理台讀取的共用申請紀錄：團購代碼、組織／存取、狀態、
+  選定或核准的 promotion id、申請提案，以及申請者／裁決者稽核欄位。
+- `promotion.GroupOrderDiscountProposal` 描述新申請的折扣：`common.Money` 的
+  `amount`（定額，最小單位）、選用的 `max_discount` 上限（最小單位），以及整數
+  `percent_basis_points`（百分比，1000 = 10.00%）。刻意不重用 `DiscountSpec` 的
+  字串型主單位 `discount_value`，避免任何浮點或主單位金額進入 wire。
+- `promotion.PathGroupOrderDiscountInternal`
+  （`/v1/internal/promotions/group-order-discount`）為 Backend-Commerce 解析某團購
+  已核准 promotion 所使用的 internal endpoint。
+- `serviceauthenum.ScopePromotionGrant`（`promotion:grant`）授權該 internal
+  團購折扣讀取。
+- `wholesaleenum` 新增四個團購管理權限——`group_orders.manage_org`、
+  `group_orders.invite`、`group_orders.submit`、`group_order_discount.apply`——
+  由 `PermissionsForWholesaleBuyerRole` 全數授予 `owner` 買方角色並納入 `IsValid`。
+- `pkg/versioning.ModuleVersion` 現在回報 `v13.1.0`。
+- 依照契約的 DTO 歸屬守則，管理者申請與後台核准／退回的 wire request 信封不加入
+  共用契約，仍由 Backend-Management 擁有；共用模組只保留 domain record、proposal、
+  列舉、endpoint 常數、scope 與權限鍵。
+
+### Consumer Action / 使用方動作
+
+- Management / Operations / Commerce: upgrade the pin to
+  `github.com/Potato-Mart/Backend-Shared-Contract/v13 v13.1.0` and run
+  `go mod tidy`. No `/v14` module-path migration is required; all changes are
+  additive.
+- Backend-Management: own the manager-apply and admin approve/reject request DTOs
+  locally, persist the `GroupOrderDiscountApplication` record, grant the new
+  wholesale permissions to group-order managers, and gate the internal
+  group-order-discount read with the `promotion:grant` scope.
+- Backend-Commerce: resolve the approved promotion for a group order through
+  `PathGroupOrderDiscountInternal` (or by storing the approved promotion id on the
+  group order) and apply it at pricing/submit; carry all discount money as
+  `common.Money` minor units.
+- Frontends: treat the group-order discount fields as optional; render the
+  proposal amount from the `common.Money` field, never from the percentage
+  integer as money.
+- All consumers: run `go mod tidy` and contract JSON round-trip tests after
+  upgrading.
+
+- Management／Operations／Commerce：將相依固定升級為
+  `github.com/Potato-Mart/Backend-Shared-Contract/v13 v13.1.0` 並執行
+  `go mod tidy`。全部為 additive，不需要 `/v14` module-path 遷移。
+- Backend-Management：於後端自行擁有管理者申請與後台核准／退回的 request DTO、
+  持久化 `GroupOrderDiscountApplication` 紀錄、將新批發權限授予團購管理者，並以
+  `promotion:grant` scope 保護 internal 團購折扣讀取。
+- Backend-Commerce：透過 `PathGroupOrderDiscountInternal`（或將已核准 promotion id
+  存於團購上）解析某團購的已核准 promotion，並於定價／送出時套用；所有折扣金額以
+  `common.Money` 最小單位表示。
+- 前端：將團購折扣欄位視為選用；折扣金額一律取自 `common.Money` 欄位，切勿將
+  百分比整數當作金額顯示。
+- 所有使用方：升級後執行 `go mod tidy` 與契約 JSON round-trip 測試。
 
 ## v13.0.0 (2026-07-06) - Reward Tier Triggers And Test Infrastructure / 獎勵等級觸發與測試基礎設施
 
