@@ -77,8 +77,9 @@ func TestCartChannelAndBuyerRoundTrip(t *testing.T) {
 		Buyer:     &sales.BuyerContext{Type: customerenum.BuyerTypeGuestRetail},
 		Items: []sales.CartItem{
 			{
-				Price:   common.Money{AmountMinor: 500, Currency: "AUD"},
-				Pricing: &sales.PricingContext{Audience: productenum.PriceAudienceRetail},
+				Price:      common.Money{AmountMinor: 500, Currency: "AUD"},
+				Pricing:    &sales.PricingContext{Audience: productenum.PriceAudienceRetail},
+				Properties: common.Metadata{"fulfilment_mode": "preorder"},
 			},
 		},
 	}
@@ -100,6 +101,9 @@ func TestCartChannelAndBuyerRoundTrip(t *testing.T) {
 	}
 	if len(decoded.Items) != 1 || decoded.Items[0].Pricing == nil || decoded.Items[0].Pricing.Audience != productenum.PriceAudienceRetail {
 		t.Fatalf("cart item pricing.audience did not round-trip: %+v", decoded.Items)
+	}
+	if decoded.Items[0].Properties["fulfilment_mode"] != "preorder" {
+		t.Fatalf("cart item properties did not round-trip: %+v", decoded.Items[0].Properties)
 	}
 }
 

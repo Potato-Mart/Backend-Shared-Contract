@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v13.2.0` | 2026-07-08 | Minor | Paid preorder checkout support: adds optional `sales.CartItem.properties` metadata so Commerce can carry server-validated preorder fulfilment markers from cart lines into order lines and skip immediate stock reservation for preorder-open products. Additive only; keeps the `/v13` module path. |
 | `v13.1.0` | 2026-07-07 | Minor | Group-order buyer discount and manager permissions: adds the shared per-group-order discount application/approval domain model (`promotion.GroupOrderDiscountApplication`/`GroupOrderDiscountProposal`), its lifecycle enum (`promotionenum.GroupOrderDiscountState`), the internal discount-read endpoint constant `promotion.PathGroupOrderDiscountInternal`, the `promotion:grant` service-auth scope, and four wholesale group-order manager permissions. Additive only; keeps the `/v13` module path. |
 | `v13.0.0` | 2026-07-06 | Major | V13 module path for reward tier-trigger fields and release engineering cleanup: adds membership reward tier-achievement issue fields, splits enum tests into small domain files, adds standalone `GOWORK=off` test scripts/CI, and requires `/v12` → `/v13` module-path migration. |
 | `v12.0.0` | 2026-07-06 | Major | Breaking enum package cleanup: splits the flat enum package into domain enum subpackages, hard-moves remaining contract/API/service-auth typed enums, removes legacy wallet enum aliases, and removes provider-specific terminal adapter constants from the contract repo. Requires `/v11` → `/v12` module-path migration. |
@@ -79,6 +80,37 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v13.2.0 (2026-07-08) - Paid Preorder Checkout Metadata / 付費預購結帳中繼資料
+
+Release date: 2026-07-08
+
+This minor release adds optional cart-line metadata for prepaid preorder
+checkout. Commerce can now stamp a cart line with a server-validated fulfilment
+mode such as `{"fulfilment_mode":"preorder"}`, carry it into the resulting order
+line, and decide whether immediate stock reservation is required. The field is
+additive, optional, and omitted for ordinary cart lines, so existing consumers
+that ignore unknown JSON fields remain compatible.
+
+本 minor release 新增可選的購物車明細中繼資料，用於付費預購結帳。Commerce 可在通過
+伺服器端驗證後，將明細標記為例如 `{"fulfilment_mode":"preorder"}`，並把該標記帶入
+後續訂單明細，以決定是否需要立即預留庫存。此欄位為相容新增、可省略；一般購物車明細
+不會輸出，忽略未知 JSON 欄位的既有使用方可保持相容。
+
+### Additive Changes / 新增相容變更
+
+- `sales.CartItem.Properties` (`json:"properties,omitempty"`) carries optional
+  metadata for cart lines before checkout turns them into `sales.OrderItem`
+  records.
+- `pkg/versioning.ModuleVersion` now reports `v13.2.0`.
+
+### Consumer Action / 使用方動作
+
+- Backend services that need prepaid preorder checkout should upgrade to
+  `github.com/Potato-Mart/Backend-Shared-Contract/v13 v13.2.0` after this
+  contract tag is pushed.
+- Consumers that only read ordinary carts do not need code changes unless they
+  want to display or preserve cart-line properties.
 
 ## v13.1.0 (2026-07-07) - Group-Order Buyer Discount And Manager Permissions / 團購買方折扣與團購管理權限
 

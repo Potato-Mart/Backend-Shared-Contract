@@ -33,6 +33,7 @@ type CartItem struct {
 	// Pricing is the commercial pricing context under which Price was set
 	// (retail vs wholesale audience, visibility). Optional pointer so it is
 	// omitted entirely when unset.
-	Pricing  *PricingContext `json:"pricing,omitempty"`
-	Quantity int             `json:"quantity"`
+	Pricing    *PricingContext `json:"pricing,omitempty"`
+	Quantity   int             `json:"quantity"`
+	Properties common.Metadata `json:"properties,omitempty"`
 }
