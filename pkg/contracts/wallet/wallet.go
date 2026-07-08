@@ -3,9 +3,9 @@ package wallet
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/membership"
-	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/membership"
+	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/wallet"
 )
 
 // CustomerWallet is a read-model aggregate of every value instrument a customer

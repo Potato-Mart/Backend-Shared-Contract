@@ -3,8 +3,8 @@ package analytics
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/security"
 )
 
 // SKUDemandForecast holds the latest AI-generated stock-out prediction for

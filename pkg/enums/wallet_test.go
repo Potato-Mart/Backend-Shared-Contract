@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/wallet"
+	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/wallet"
 )
 
 func TestWalletEnumsValidateKnownValues(t *testing.T) {

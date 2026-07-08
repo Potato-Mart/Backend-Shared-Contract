@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/wholesale"
-	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/wholesale"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/wholesale"
 )
 
 func TestOrganisationAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T) {
@@ -20,6 +20,10 @@ func TestOrganisationAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *test
 		AccountID:                 "acct_1",
 		RoleKey:                   "buyer",
 		Status:                    wholesaleenum.OrganisationAccessStatusActive,
+		Name:                      common.PersonName{DisplayName: "A Buyer"},
+		Contacts:                  common.ContactChannels{Email: "buyer@example.com"},
+		Department:                "Procurement",
+		JobTitle:                  "Buyer",
 		Invitation:                &common.LifecycleAction{By: "admin_1", At: &invitedAt},
 		JoinedAt:                  &joinedAt,
 	}
@@ -34,7 +38,7 @@ func TestOrganisationAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *test
 		t.Fatalf("unmarshal organisation access JSON: %v", err)
 	}
 
-	for _, key := range []string{"id", "wholesale_organisation_code", "user_id", "account_id", "role_key", "status", "joined_at"} {
+	for _, key := range []string{"id", "wholesale_organisation_code", "user_id", "account_id", "role_key", "status", "name", "contacts", "department", "job_title", "joined_at"} {
 		if _, ok := got[key]; !ok {
 			t.Fatalf("OrganisationAccess JSON missing top-level %q: %s", key, payload)
 		}

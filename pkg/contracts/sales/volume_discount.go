@@ -1,8 +1,8 @@
 package sales
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/promotion"
 )
 
 // VolumeDiscountTier defines a carton-quantity threshold for bulk purchase

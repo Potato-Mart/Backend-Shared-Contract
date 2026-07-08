@@ -8,9 +8,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/promotion"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/promotion"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/promotion"
 )
 
 // OverrideReasonSpecialCampaign is the canonical reason string written onto an

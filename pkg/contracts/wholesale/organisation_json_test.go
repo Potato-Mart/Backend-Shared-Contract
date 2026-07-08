@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/wholesale"
-	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/wholesale"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/wholesale"
 )
 
 func TestWholesaleOrganisationJSONShape(t *testing.T) {
@@ -34,10 +34,15 @@ func TestWholesaleOrganisationJSONShape(t *testing.T) {
 				},
 			},
 		},
-		MembershipAccountID: "mem_org_123",
-		Status:              wholesaleenum.WholesaleOrganisationStatusApproved,
-		TierKey:             "standard",
-		Approval:            &common.LifecycleAction{By: "admin_1", At: &approvedAt, Reason: "verified"},
+		PrincipalUserID:             "org_user_123",
+		PrincipalAccountID:          "org_acct_123",
+		PrimaryAuthIdentityID:       "auth_123",
+		AuthIdentityIDs:             []string{"auth_123"},
+		PrimaryOrganisationAccessID: "access_123",
+		MembershipAccountID:         "mem_org_123",
+		Status:                      wholesaleenum.WholesaleOrganisationStatusApproved,
+		TierKey:                     "standard",
+		Approval:                    &common.LifecycleAction{By: "admin_1", At: &approvedAt, Reason: "verified"},
 	}
 
 	payload, err := json.Marshal(organisation)
@@ -56,6 +61,11 @@ func TestWholesaleOrganisationJSONShape(t *testing.T) {
 		"legal_name",
 		"abn",
 		"registered_address",
+		"principal_user_id",
+		"principal_account_id",
+		"primary_auth_identity_id",
+		"auth_identity_ids",
+		"primary_organisation_access_id",
 		"membership_account_id",
 		"status",
 		"tier_key",
@@ -72,6 +82,9 @@ func TestWholesaleOrganisationJSONShape(t *testing.T) {
 		}
 		if key == "approved_by" || key == "approved_at" {
 			t.Fatalf("WholesaleOrganisation JSON should not include flat approval key %q: %s", key, payload)
+		}
+		if key == "primary_wholesale_customer_id" {
+			t.Fatalf("WholesaleOrganisation JSON should not include legacy primary customer key %q: %s", key, payload)
 		}
 	}
 }

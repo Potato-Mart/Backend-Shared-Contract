@@ -71,9 +71,12 @@ account type consistently. This repository only defines the shared shape.
 Retail/general customer business details live in `customers.RetailCustomer` and
 belong to the `generalCustomer` account/persona model.
 
-Wholesale customer business details live in `wholesale.WholesaleCustomer` and
-belong to the `wholesaleCustomer` account/persona model. Organisation approval
-and organisation access lifecycle remain separate wholesale contracts.
+Wholesale customer business details are organisation-owned. In v14,
+`wholesale.WholesaleCustomer` is a compatibility name for
+`wholesale.WholesaleOrganisation`, and the `wholesaleCustomer` account/persona
+represents the organisation principal used for partner portal sign-in.
+Organisation approval and organisation access lifecycle remain separate
+wholesale contracts.
 
 Wholesale organisation business details use `common.OrganisationDetail`
 embedded by `wholesale.WholesaleOrganisation`, so company/organisation identity,
@@ -84,10 +87,14 @@ shape across suppliers and wholesale organisations.
 
 Wholesale portal access is organisation and membership aware:
 
-- `WholesaleOrganisation` records approval status and B2B organisation
-  references.
+- `WholesaleOrganisation` records approval status, B2B organisation references,
+  and the stable organisation-principal identity link.
 - `OrganisationAccess` links a user account to a wholesale organisation and
-  carries the organisation-scoped role key.
+  carries the organisation-scoped role key plus the person's team profile.
+- Exactly one active organisation access should be primary for an organisation;
+  `primary_organisation_access_id` identifies the main person-in-charge.
+- Changing the main person-in-charge updates organisation/contact/access
+  metadata and does not mutate the organisation principal's `AuthIdentity`.
 - A wholesale portal session can identify the account, organisation,
   organisation access grant, and role key used for that session.
 

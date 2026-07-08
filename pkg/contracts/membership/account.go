@@ -3,8 +3,8 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/membership"
 )
 
 // MembershipOwnerRef identifies the business entity that owns the membership

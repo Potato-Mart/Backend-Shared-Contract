@@ -5,7 +5,7 @@ package campaignlogic
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/campaign"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/campaign"
 )
 
 // LiveAt reports whether the campaign should be shown at instant t: active and

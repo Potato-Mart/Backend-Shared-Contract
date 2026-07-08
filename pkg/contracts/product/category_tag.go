@@ -1,7 +1,7 @@
 package product
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
 )
 
 type CategoryTag struct {

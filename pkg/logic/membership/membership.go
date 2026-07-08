@@ -6,8 +6,8 @@ package membershiplogic
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/membership"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/membership"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/membership"
 )
 
 // PermissionMembershipPointsSpend is the permission a wholesale organisation

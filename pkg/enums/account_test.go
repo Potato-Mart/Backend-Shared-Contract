@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/account"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/account"
 )
 
 func TestAccountEnumsValidateKnownValues(t *testing.T) {

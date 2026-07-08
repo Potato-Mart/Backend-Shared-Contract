@@ -3,10 +3,10 @@ package wallet
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/promotion"
-	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/promotion"
+	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/wallet"
 )
 
 const WalletExportSchemaVersion = "wallet_export_v1"

@@ -3,8 +3,8 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
-	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/identity"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
+	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/identity"
 )
 
 // AuthIdentity is a non-secret projection of a login identity/provider attached

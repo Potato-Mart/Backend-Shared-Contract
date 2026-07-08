@@ -3,14 +3,14 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/shared"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/membership"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/payment"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/promotion"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/sales"
-	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/shared"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/membership"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/payment"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/promotion"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/sales"
+	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/shipping"
 )
 
 type Order struct {

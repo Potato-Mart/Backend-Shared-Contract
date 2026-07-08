@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/customer"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/customer"
 )
 
 func TestCustomerEnumsValidateKnownValues(t *testing.T) {

@@ -3,8 +3,8 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/security"
 )
 
 // AuditLogEntry is one immutable record of an administrative action.

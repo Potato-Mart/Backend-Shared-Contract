@@ -5,10 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/customer"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/product"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/customer"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/product"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/sales"
 )
 
 func TestProductJSONIncludesTaxed(t *testing.T) {

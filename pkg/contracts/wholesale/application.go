@@ -3,9 +3,8 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/customer"
-	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/wholesale"
 )
 
 // WholesaleApplicationRequest is the public trade-account application payload.
@@ -42,11 +41,9 @@ type WholesaleApplicationResponse struct {
 	UserID                    string `json:"user_id,omitempty"`
 	WholesaleOrganisationCode string `json:"wholesale_organisation_code,omitempty"`
 	OrganisationAccessID      string `json:"organisation_access_id,omitempty"`
-	WholesaleCustomerNumber   string `json:"wholesale_customer_number,omitempty"`
 
 	OrganisationStatus wholesaleenum.WholesaleOrganisationStatus `json:"organisation_status,omitempty"`
 	AccessStatus       wholesaleenum.OrganisationAccessStatus    `json:"access_status,omitempty"`
-	CustomerStatus     customerenum.CustomerStatus               `json:"customer_status,omitempty"`
 
 	EmailVerificationRequired bool   `json:"email_verification_required"`
 	Message                   string `json:"message,omitempty"`

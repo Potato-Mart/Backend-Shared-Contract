@@ -3,10 +3,10 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/shared"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/shared"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/sales"
 )
 
 // Preorder records customer preorder interest for one product SKU. It is shared

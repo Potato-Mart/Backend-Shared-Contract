@@ -3,12 +3,13 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
-	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/wholesale"
 )
 
 // OrganisationAccess links a user account/persona to a wholesale organisation
-// and carries the organisation-scoped role key.
+// and carries the organisation-scoped role key plus the person's team profile.
+// At most one active access per organisation should be marked primary.
 type OrganisationAccess struct {
 	ID                        string                                 `json:"id"`
 	WholesaleOrganisationCode string                                 `json:"wholesale_organisation_code"`
@@ -16,7 +17,10 @@ type OrganisationAccess struct {
 	AccountID                 string                                 `json:"account_id"`
 	RoleKey                   string                                 `json:"role_key"`
 	Status                    wholesaleenum.OrganisationAccessStatus `json:"status"`
+	Name                      common.PersonName                      `json:"name,omitempty"`
+	Contacts                  common.ContactChannels                 `json:"contacts,omitempty"`
 	JobTitle                  string                                 `json:"job_title,omitempty"`
+	Department                string                                 `json:"department,omitempty"`
 	IsPrimary                 bool                                   `json:"is_primary,omitempty"`
 	Invitation                *common.LifecycleAction                `json:"invitation,omitempty"`
 	JoinedAt                  *time.Time                             `json:"joined_at,omitempty"`
@@ -37,6 +41,9 @@ type OrganisationAccessSummary struct {
 	AccountID                 string                                 `json:"account_id,omitempty"`
 	RoleKey                   string                                 `json:"role_key"`
 	Status                    wholesaleenum.OrganisationAccessStatus `json:"status"`
+	Name                      common.PersonName                      `json:"name,omitempty"`
+	Contacts                  common.ContactChannels                 `json:"contacts,omitempty"`
 	JobTitle                  string                                 `json:"job_title,omitempty"`
+	Department                string                                 `json:"department,omitempty"`
 	IsPrimary                 bool                                   `json:"is_primary,omitempty"`
 }

@@ -9,7 +9,7 @@ const (
 	AccountTypeAdminUser AccountType = "adminUser"
 	// AccountTypeGeneralCustomer is the storefront customer account persona.
 	AccountTypeGeneralCustomer AccountType = "generalCustomer"
-	// AccountTypeWholesaleCustomer is the wholesale/partner account persona.
+	// AccountTypeWholesaleCustomer is the wholesale/partner organisation-principal account persona.
 	AccountTypeWholesaleCustomer AccountType = "wholesaleCustomer"
 )
 

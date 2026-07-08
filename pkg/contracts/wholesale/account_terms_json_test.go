@@ -4,15 +4,14 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/wholesale"
 )
 
 func TestWholesaleAccountTermsJSONShape(t *testing.T) {
 	resp := wholesale.WholesaleAccountTerms{
 		OrganisationCode:     "org_123",
 		OrganisationAccessID: "access_123",
-		CustomerID:           "wc_123",
 		UserID:               "user_123",
 		BusinessName:         "Potato Mart Cafe",
 		TradingName:          "Cafe PM",
@@ -41,7 +40,6 @@ func TestWholesaleAccountTermsJSONShape(t *testing.T) {
 	for _, key := range []string{
 		"organisation_code",
 		"organisation_access_id",
-		"customer_id",
 		"user_id",
 		"business_name",
 		"trading_name",
@@ -53,6 +51,9 @@ func TestWholesaleAccountTermsJSONShape(t *testing.T) {
 		if _, ok := got[key]; !ok {
 			t.Fatalf("missing json key %q in %s", key, raw)
 		}
+	}
+	if _, ok := got["customer_id"]; ok {
+		t.Fatalf("WholesaleAccountTerms JSON should not include separate customer_id: %s", raw)
 	}
 
 	terms, ok := got["terms"].(map[string]any)

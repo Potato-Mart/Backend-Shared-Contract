@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v14.0.0` | 2026-07-08 | Major | Wholesale customer consolidation: makes wholesale customer a compatibility name for the wholesale organisation/business account, moves stable sign-in identity references onto the organisation principal, makes organisation access the people/team record, removes separate wholesale customer number/customer id response fields, and requires `/v13` → `/v14` module-path migration. |
 | `v13.3.0` | 2026-07-08 | Minor | Back-in-stock notifications: adds account-only SKU subscription contracts, email/SMS channel and lifecycle enums, consent snapshot and delivery-error metadata, a restock event payload, and the `restock:notify` service-auth scope for Operations to trigger Management-owned notification processing. Additive only; keeps the `/v13` module path. |
 | `v13.2.0` | 2026-07-08 | Minor | Paid preorder checkout support: adds optional `sales.CartItem.properties` metadata so Commerce can carry server-validated preorder fulfilment markers from cart lines into order lines and skip immediate stock reservation for preorder-open products. Additive only; keeps the `/v13` module path. |
 | `v13.1.0` | 2026-07-07 | Minor | Group-order buyer discount and manager permissions: adds the shared per-group-order discount application/approval domain model (`promotion.GroupOrderDiscountApplication`/`GroupOrderDiscountProposal`), its lifecycle enum (`promotionenum.GroupOrderDiscountState`), the internal discount-read endpoint constant `promotion.PathGroupOrderDiscountInternal`, the `promotion:grant` service-auth scope, and four wholesale group-order manager permissions. Additive only; keeps the `/v13` module path. |
@@ -81,6 +82,53 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v14.0.0 (2026-07-08) - Wholesale Customer Organisation Consolidation / 批發客戶組織化整併
+
+Release date: 2026-07-08
+
+This major release makes the wholesale organisation the canonical wholesale
+customer/business account. `wholesale.WholesaleCustomer` and
+`WholesaleCustomerSummary` remain exported as compatibility names for the
+organisation contracts, while people inside the business are represented by
+`OrganisationAccess` records. The stable sign-in identity now belongs to the
+organisation principal, so changing the main person-in-charge changes
+organisation/contact/access metadata without changing the principal
+`AuthIdentity`.
+
+### Breaking Contract Changes / 破壞性契約變更
+
+- `go.mod` module path changes to `github.com/Potato-Mart/Backend-Shared-Contract/v14`.
+- All in-repository imports now use `/v14`; consumers must update imports from
+  `/v13` to `/v14` before upgrading.
+- `wholesale.WholesaleCustomer` is now an alias of
+  `wholesale.WholesaleOrganisation`; the old person-profile fields
+  `customer_number`, `basic_info`, `commercial`, `account_profile`,
+  `organisation_access_id`, and `primary_wholesale_customer_id` are removed
+  from the wholesale customer shape.
+- `WholesaleOrganisation` adds organisation-principal identity references:
+  `principal_user_id`, `principal_account_id`, `primary_auth_identity_id`,
+  `auth_identity_ids`, and `primary_organisation_access_id`.
+- `OrganisationAccess` is the canonical organisation-person/team-member
+  contract and adds optional `name`, `contacts`, and `department`.
+- Wholesale application responses no longer expose
+  `wholesale_customer_number` or `customer_status`.
+- `WholesaleAccountTerms` no longer exposes a separate `customer_id`; the
+  customer/business key is `organisation_code`.
+- `pkg/versioning.ModuleVersion` now reports `v14.0.0`.
+
+### Consumer Action / 使用方動作
+
+- Upgrade imports and dependencies from `/v13` to `/v14`, then run
+  `go mod tidy`.
+- Treat `organisation_code` / `wholesale_organisation_code` as the wholesale
+  customer/business account key.
+- Store people, roles, status, and the main person-in-charge through
+  `OrganisationAccess`; enforce one active primary access per organisation in
+  the owning backend.
+- Stop reading or writing separate wholesale customer numbers for B2B accounts;
+  migrate any per-person wholesale customer profile data into organisation
+  records or organisation access records.
 
 ## v13.3.0 (2026-07-08) - Back-In-Stock Notification Contracts / 到貨通知契約
 

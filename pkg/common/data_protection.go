@@ -3,7 +3,7 @@ package common
 import (
 	"time"
 
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/security"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/security"
 )
 
 // DataProtectionFields are optional labels that let each service apply

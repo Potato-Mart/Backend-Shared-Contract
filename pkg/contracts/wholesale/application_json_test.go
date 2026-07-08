@@ -4,10 +4,9 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/contracts/wholesale"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/customer"
-	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v13/pkg/enums/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/wholesale"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/wholesale"
 )
 
 func TestWholesaleApplicationRequestJSONShape(t *testing.T) {
@@ -79,10 +78,8 @@ func TestWholesaleApplicationStatusJSONShape(t *testing.T) {
 			UserID:                    "usr_1",
 			WholesaleOrganisationCode: "org_1",
 			OrganisationAccessID:      "acc_1",
-			WholesaleCustomerNumber:   "cus_1",
 			OrganisationStatus:        wholesaleenum.WholesaleOrganisationStatusPending,
 			AccessStatus:              wholesaleenum.OrganisationAccessStatusPending,
-			CustomerStatus:            customerenum.CustomerStatusInactive,
 			EmailVerificationRequired: true,
 		},
 		BusinessName: "Example Foods",
@@ -106,10 +103,8 @@ func TestWholesaleApplicationStatusJSONShape(t *testing.T) {
 		"user_id",
 		"wholesale_organisation_code",
 		"organisation_access_id",
-		"wholesale_customer_number",
 		"organisation_status",
 		"access_status",
-		"customer_status",
 		"email_verification_required",
 		"business_name",
 		"trading_name",
@@ -118,6 +113,11 @@ func TestWholesaleApplicationStatusJSONShape(t *testing.T) {
 	} {
 		if _, ok := got[key]; !ok {
 			t.Fatalf("missing json key %q in %s", key, raw)
+		}
+	}
+	for _, key := range []string{"wholesale_customer_number", "customer_status"} {
+		if _, ok := got[key]; ok {
+			t.Fatalf("application status JSON should not include %q: %s", key, raw)
 		}
 	}
 }
@@ -131,10 +131,8 @@ func TestWholesaleApplicationReviewJSONShape(t *testing.T) {
 					UserID:                    "usr_1",
 					WholesaleOrganisationCode: "org_1",
 					OrganisationAccessID:      "acc_1",
-					WholesaleCustomerNumber:   "cus_1",
 					OrganisationStatus:        wholesaleenum.WholesaleOrganisationStatusPending,
 					AccessStatus:              wholesaleenum.OrganisationAccessStatusPending,
-					CustomerStatus:            customerenum.CustomerStatusInactive,
 					EmailVerificationRequired: true,
 				},
 				BusinessName: "Example Foods",
@@ -185,6 +183,11 @@ func TestWholesaleApplicationReviewJSONShape(t *testing.T) {
 	} {
 		if _, ok := got[key]; !ok {
 			t.Fatalf("missing json key %q in %s", key, raw)
+		}
+	}
+	for _, key := range []string{"wholesale_customer_number", "customer_status"} {
+		if _, ok := got[key]; ok {
+			t.Fatalf("application review JSON should not include %q: %s", key, raw)
 		}
 	}
 }
