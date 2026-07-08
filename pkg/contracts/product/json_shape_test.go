@@ -22,8 +22,8 @@ func TestProductJSONIncludesTaxed(t *testing.T) {
 		},
 		Brand:           []common.LocalizedName{{Language: "en", Name: "Localized brand"}},
 		Taxed:           true,
-		Collection:      &CollectionRef{ID: "col_frozen", Name: []common.LocalizedName{{Language: "en", Name: "Frozen"}}},
-		CategoryTags:    []CategoryTag{{ID: "tag_hotpot", Name: []common.LocalizedName{{Language: "en", Name: "Hotpot"}}, CollectionID: "col_frozen", CollectionName: []common.LocalizedName{{Language: "en", Name: "Frozen"}}}},
+		Collection:      &CollectionRef{ID: "col_frozen", Slug: "frozen", Name: []common.LocalizedName{{Language: "en", Name: "Frozen"}}},
+		CategoryTags:    []CategoryTag{{ID: "tag_hotpot", Slug: "hotpot", Name: []common.LocalizedName{{Language: "en", Name: "Hotpot"}}, CollectionID: "col_frozen", CollectionName: []common.LocalizedName{{Language: "en", Name: "Frozen"}}}},
 		SupplierCode:    "sup_1",
 		PlacingAreaCode: "A1",
 	})
@@ -45,6 +45,9 @@ func TestProductJSONIncludesTaxed(t *testing.T) {
 	if !ok || collection["id"] != "col_frozen" {
 		t.Fatalf("Product JSON = %s, want collection object with id", body)
 	}
+	if collection["slug"] != "frozen" {
+		t.Fatalf("Product JSON = %s, want collection.slug=frozen", body)
+	}
 	collectionName, ok := collection["name"].([]any)
 	if !ok || len(collectionName) != 1 || collectionName[0].(map[string]any)["name"] != "Frozen" {
 		t.Fatalf("Product JSON = %s, want localized collection.name", body)
@@ -56,6 +59,9 @@ func TestProductJSONIncludesTaxed(t *testing.T) {
 	tag, ok := tags[0].(map[string]any)
 	if !ok || tag["id"] != "tag_hotpot" || tag["collection_id"] != "col_frozen" {
 		t.Fatalf("Product JSON = %s, want category tag id and collection_id", body)
+	}
+	if tag["slug"] != "hotpot" {
+		t.Fatalf("Product JSON = %s, want category tag slug=hotpot", body)
 	}
 	tagName, ok := tag["name"].([]any)
 	if !ok || len(tagName) != 1 || tagName[0].(map[string]any)["name"] != "Hotpot" {
@@ -82,6 +88,45 @@ func TestProductJSONIncludesTaxed(t *testing.T) {
 		if strings.Contains(string(body), legacyKey) {
 			t.Fatalf("Product JSON = %s, should not include legacy %s", body, legacyKey)
 		}
+	}
+}
+
+func TestProductCollectionAndCategorySlugsAreOptional(t *testing.T) {
+	body, err := json.Marshal(Collection{
+		ID:   "col_frozen",
+		Slug: "frozen",
+		Name: []common.LocalizedName{{Language: "en", Name: "Frozen"}},
+	})
+	if err != nil {
+		t.Fatalf("marshal collection with slug: %v", err)
+	}
+	if !strings.Contains(string(body), `"slug":"frozen"`) {
+		t.Fatalf("Collection JSON = %s, want slug when present", body)
+	}
+
+	body, err = json.Marshal(Collection{
+		ID:   "col_frozen",
+		Name: []common.LocalizedName{{Language: "en", Name: "Frozen"}},
+		CategoryTags: []CategoryTag{
+			{ID: "tag_hotpot", Name: []common.LocalizedName{{Language: "en", Name: "Hotpot"}}, CollectionID: "col_frozen"},
+		},
+	})
+	if err != nil {
+		t.Fatalf("marshal collection: %v", err)
+	}
+	if strings.Contains(string(body), `"slug"`) {
+		t.Fatalf("empty collection/category slugs should be omitted, got %s", body)
+	}
+
+	body, err = json.Marshal(CollectionRef{
+		ID:   "col_frozen",
+		Name: []common.LocalizedName{{Language: "en", Name: "Frozen"}},
+	})
+	if err != nil {
+		t.Fatalf("marshal collection ref: %v", err)
+	}
+	if strings.Contains(string(body), `"slug"`) {
+		t.Fatalf("empty collection ref slug should be omitted, got %s", body)
 	}
 }
 

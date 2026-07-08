@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v14.1.0` | 2026-07-09 | Minor | Storefront profile and catalogue slugs: adds optional product collection/category slug fields for public storefront URLs and optional avatar fields on `identity.UserProfile`. Additive only; keeps the `/v14` module path. |
 | `v14.0.0` | 2026-07-08 | Major | Wholesale customer consolidation: makes wholesale customer a compatibility name for the wholesale organisation/business account, moves stable sign-in identity references onto the organisation principal, makes organisation access the people/team record, removes separate wholesale customer number/customer id response fields, and requires `/v13` → `/v14` module-path migration. |
 | `v13.3.0` | 2026-07-08 | Minor | Back-in-stock notifications: adds account-only SKU subscription contracts, email/SMS channel and lifecycle enums, consent snapshot and delivery-error metadata, a restock event payload, and the `restock:notify` service-auth scope for Operations to trigger Management-owned notification processing. Additive only; keeps the `/v13` module path. |
 | `v13.2.0` | 2026-07-08 | Minor | Paid preorder checkout support: adds optional `sales.CartItem.properties` metadata so Commerce can carry server-validated preorder fulfilment markers from cart lines into order lines and skip immediate stock reservation for preorder-open products. Additive only; keeps the `/v13` module path. |
@@ -82,6 +83,47 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v14.1.0 (2026-07-09) - Storefront Slugs And Account Avatars / 零售網址 Slug 與帳號頭像
+
+Release date: 2026-07-09
+
+This minor release adds the shared contract fields needed by the retail
+storefront profile and product navigation work. Product collection and category
+records can now expose stable public slugs while preserving their canonical ids,
+and the shared user profile can project the caller's avatar media reference and
+public avatar URL.
+
+本 minor release 新增零售網站個人資料與商品導覽所需的共用欄位。商品集合與分類可在保留
+canonical id 的同時提供穩定公開 slug；共用使用者資料也可投影登入者的頭像媒體參照與公開頭像網址。
+
+### Added / 新增
+
+- `product.CollectionRef.slug` and `product.Collection.slug` are optional JSON
+  fields for public product collection URLs.
+- `product.CategoryTag.slug` is an optional JSON field for public category tag
+  URLs.
+- `identity.UserProfile.avatar_media_id` and `identity.UserProfile.avatar_url`
+  are optional JSON fields for account avatar projection.
+- JSON-shape tests cover slug inclusion/omission and avatar field
+  inclusion/omission.
+
+### Compatibility / 相容性
+
+- No module path change: consumers remain on
+  `github.com/Potato-Mart/Backend-Shared-Contract/v14`.
+- All new fields use `omitempty`; existing JSON consumers that ignore unknown
+  fields remain compatible.
+- Canonical ids remain unchanged. Slugs are public routing/display helpers, not
+  primary persistence keys.
+
+### Consumer Action / 使用方動作
+
+- Upgrade `github.com/Potato-Mart/Backend-Shared-Contract/v14` to `v14.1.0` and
+  run `go mod tidy`.
+- Backends that project storefront product collections/categories should emit
+  slug fields when available or derive/backfill them from English names.
+- Backends that expose `/users/me` should project avatar fields where supported.
 
 ## v14.0.0 (2026-07-08) - Wholesale Customer Organisation Consolidation / 批發客戶組織化整併
 
