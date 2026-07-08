@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v13.3.0` | 2026-07-08 | Minor | Back-in-stock notifications: adds account-only SKU subscription contracts, email/SMS channel and lifecycle enums, consent snapshot and delivery-error metadata, a restock event payload, and the `restock:notify` service-auth scope for Operations to trigger Management-owned notification processing. Additive only; keeps the `/v13` module path. |
 | `v13.2.0` | 2026-07-08 | Minor | Paid preorder checkout support: adds optional `sales.CartItem.properties` metadata so Commerce can carry server-validated preorder fulfilment markers from cart lines into order lines and skip immediate stock reservation for preorder-open products. Additive only; keeps the `/v13` module path. |
 | `v13.1.0` | 2026-07-07 | Minor | Group-order buyer discount and manager permissions: adds the shared per-group-order discount application/approval domain model (`promotion.GroupOrderDiscountApplication`/`GroupOrderDiscountProposal`), its lifecycle enum (`promotionenum.GroupOrderDiscountState`), the internal discount-read endpoint constant `promotion.PathGroupOrderDiscountInternal`, the `promotion:grant` service-auth scope, and four wholesale group-order manager permissions. Additive only; keeps the `/v13` module path. |
 | `v13.0.0` | 2026-07-06 | Major | V13 module path for reward tier-trigger fields and release engineering cleanup: adds membership reward tier-achievement issue fields, splits enum tests into small domain files, adds standalone `GOWORK=off` test scripts/CI, and requires `/v12` → `/v13` module-path migration. |
@@ -80,6 +81,58 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v13.3.0 (2026-07-08) - Back-In-Stock Notification Contracts / 到貨通知契約
+
+Release date: 2026-07-08
+
+This minor release adds the shared contract surface for account-only
+back-in-stock notifications. Management remains the owning API and persistence
+service, while Operations can emit a service-authenticated restock event when a
+storefront-visible, sellable SKU moves from unavailable to available. The
+subscription model is one-shot: each pending channel subscription can be marked
+`notified` once, and a customer can subscribe again after notification.
+
+本 minor release 新增登入帳號專用的到貨通知共用契約。Management 仍是 API 與持久化資料
+的擁有服務；Operations 可在 storefront 可見、可銷售的 SKU 從不可購買變成可購買時，
+送出 service-authenticated restock event。訂閱模型為一次性通知：每個 pending channel
+subscription 只能被標記為 `notified` 一次，通知後客戶可再次訂閱。
+
+### Additive Changes / 新增相容變更
+
+- `notification.BackInStockSubscription` captures account-owned SKU
+  subscriptions with `product_sku_code`, `user_id`, customer type, selected
+  channel, locale, lifecycle status, consent snapshot, requested/notified/
+  cancelled timestamps, and delivery-error metadata.
+- `notification.BackInStockConsentSnapshot` records the email/SMS consent and
+  contact availability observed at subscription time.
+- `notification.BackInStockDeliveryError` stores the last provider/channel
+  delivery failure code and message without making provider adapters part of the
+  shared contract.
+- `notification.BackInStockRestockEvent` is the durable payload Operations sends
+  when a restock should be evaluated by Management.
+- `notificationenum.BackInStockChannel` adds `email` and `sms`.
+- `notificationenum.BackInStockStatus` adds `pending`, `notified`, and
+  `cancelled`.
+- `serviceauth.ScopeRestockNotify` adds the `restock:notify` internal
+  service-auth scope.
+- `pkg/versioning.ModuleVersion` now reports `v13.3.0`.
+
+### Consumer Action / 使用方動作
+
+- Backend services that implement back-in-stock notifications should upgrade to
+  `github.com/Potato-Mart/Backend-Shared-Contract/v13 v13.3.0` after this
+  contract tag is pushed.
+- Backend-Management should expose the account-owned subscription endpoints,
+  dedupe `user_id + product_sku_code + channel + pending`, enforce account
+  contact/consent checks for SMS, and mark subscriptions `notified` after a
+  successful one-shot trigger.
+- Backend-Operations should request/use the `restock:notify` scope and send
+  `BackInStockRestockEvent` only for storefront-visible, sellable SKU restocks
+  that transition from unavailable to available.
+- Frontends should treat these as account-only subscriptions, redirect signed-out
+  users to sign-in, and call the owning Management-backed APIs rather than
+  persisting local notification promises.
 
 ## v13.2.0 (2026-07-08) - Paid Preorder Checkout Metadata / 付費預購結帳中繼資料
 
