@@ -3,9 +3,9 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/membership"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/customer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/membership"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/customer"
 )
 
 // RetailCustomerMembershipProfile links a retail customer profile to the
@@ -53,12 +53,24 @@ type RetailCustomerAnalyticsProfile struct {
 	AvgRepeatDays *float64               `json:"avg_repeat_days,omitempty"`
 }
 
+// RetailCustomerProfileCompletion is a computed read projection describing how
+// complete a retail customer's profile is.
+type RetailCustomerProfileCompletion struct {
+	Percent         int      `json:"percent"`
+	CompletedFields []string `json:"completed_fields,omitempty"`
+	MissingFields   []string `json:"missing_fields,omitempty"`
+}
+
 // RetailCustomerReferralProfile groups the referral-programme state of a
 // retail customer.
 type RetailCustomerReferralProfile struct {
-	Code                   string `json:"code,omitempty"`
-	ReferrerCustomerNumber string `json:"referrer_customer_number,omitempty"`
-	Credited               bool   `json:"credited,omitempty"`
+	Code                      string     `json:"code,omitempty"`
+	ReferrerCustomerNumber    string     `json:"referrer_customer_number,omitempty"`
+	UsedReferralCodeConfirmed bool       `json:"used_referral_code_confirmed,omitempty"`
+	UsedByCount               int        `json:"used_by_count,omitempty"`
+	RewardVouchersIssued      int        `json:"reward_vouchers_issued,omitempty"`
+	RewardVoucherCodes        []string   `json:"reward_voucher_codes,omitempty"`
+	LastRewardIssuedAt        *time.Time `json:"last_reward_issued_at,omitempty"`
 }
 
 // RetailCustomerManagementProfile groups CRM fields that are manually edited

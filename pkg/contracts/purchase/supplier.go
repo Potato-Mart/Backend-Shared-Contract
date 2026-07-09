@@ -1,6 +1,6 @@
 package purchase
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
 
 // Supplier is the full supplier record. A supplier is an organisation, so it
 // carries the complete organisation profile via common.OrganisationDetail

@@ -1,13 +1,13 @@
 package category
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/product"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/product"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/warehouse"
 )
 
 // SKU corresponds to one of the top-level SKU codes that
-// identify a product family (e.g. A0 = 特色台灣商品/吊飾, F2 = 冷凍-肉品).
+// identify a product family (e.g. A0 = ç‰¹è‰²å°ç£å•†å“/åŠé£¾, F2 = å†·å‡-è‚‰å“).
 // Products reference a category by its SKU Code.
 type SKU struct {
 	ID          string                    `json:"id"`

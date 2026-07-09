@@ -3,15 +3,15 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/shared"
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/account"
-	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/identity"
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/shared"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/account"
+	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/identity"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/security"
 )
 
 // LoginSession is a non-secret projection of an active login. A session is
 // scoped to one portal and, for user sessions, one account/persona. The hashed
-// refresh token never leaves the identity service – this type is only used for
+// refresh token never leaves the identity service â€“ this type is only used for
 // admin "active sessions" views and for "log out everywhere" features.
 //
 // APIs must validate portal, audience, and account_type consistently; this

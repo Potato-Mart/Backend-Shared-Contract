@@ -3,10 +3,10 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
-	paymentcontracts "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/payments"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/shared"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	paymentcontracts "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/payments"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/shared"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/payment"
 )
 
 // Payment is the order-level record of money received against an order.

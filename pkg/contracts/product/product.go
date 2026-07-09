@@ -3,19 +3,19 @@ package product
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/shared"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/customer"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/product"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/sales"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/shared"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/customer"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/product"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/sales"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/warehouse"
 )
 
 // Product is the master record for one sellable unit (v7.0.0).
 //
-// The struct is split into a small set of FLAT top-level fields — the
+// The struct is split into a small set of FLAT top-level fields â€” the
 // hot identity, filter, and sort keys that stay directly indexable for
-// fast fetch/sort/search — and a handful of nested GROUP structs that
+// fast fetch/sort/search â€” and a handful of nested GROUP structs that
 // keep the remaining attributes tidy (pricing, localization, media,
 // physical). Keep new descriptive attributes
 // inside a group; only promote a field to the top level when it must be
@@ -54,14 +54,14 @@ type Product struct {
 	AvgWeeklySales float64 `json:"avg_weekly_sales,omitempty"`
 
 	// FirstListedAt is set exactly once, when the product first becomes
-	// active. It anchors the NEW (新品) 14-day window and is never reset
-	// on delist/relist. RestockedAt is the most recent 0→>=1 sellable-
-	// stock transition; it refreshes the RESTOCKED (補貨) window.
+	// active. It anchors the NEW (æ–°å“) 14-day window and is never reset
+	// on delist/relist. RestockedAt is the most recent 0â†’>=1 sellable-
+	// stock transition; it refreshes the RESTOCKED (è£œè²¨) window.
 	FirstListedAt *time.Time `json:"first_listed_at,omitempty"`
 	RestockedAt   *time.Time `json:"restocked_at,omitempty"`
 	ExpiredAt     time.Time  `json:"expired_at,omitempty"`
 
-	// ── Nested groups ─────────────────────────────────────────────────
+	// â”€â”€ Nested groups â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	Pricing Pricing `json:"pricing"`
 	// Selling is an optional pointer (unlike the always-present groups
 	// below) so a product with no channel/buyer sellability rules omits it.
@@ -99,7 +99,7 @@ type Pricing struct {
 // and how its price/listing is exposed. It reuses salesenum.OrderType for
 // channel and customerenum.BuyerType for buyer type. Empty Channels/BuyerTypes
 // mean "no restriction"; the contract defines the rules, not the
-// enforcement — that lives in the backend.
+// enforcement â€” that lives in the backend.
 type Selling struct {
 	Channels   []salesenum.OrderType       `json:"channels,omitempty"`
 	BuyerTypes []customerenum.BuyerType    `json:"buyer_types,omitempty"`

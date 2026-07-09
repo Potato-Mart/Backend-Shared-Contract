@@ -3,9 +3,9 @@ package shipping
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
-	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/shipping"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/shipping"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/warehouse"
 )
 
 type Rate struct {

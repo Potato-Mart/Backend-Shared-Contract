@@ -23,7 +23,5 @@ type PersonName struct {
 type ContactChannels struct {
 	Email           string            `json:"email,omitempty"`
 	Phone           string            `json:"phone,omitempty"`
-	Mobile          string            `json:"mobile,omitempty"`
-	LineID          string            `json:"line_id,omitempty"`
 	ExternalHandles map[string]string `json:"external_handles,omitempty"`
 }

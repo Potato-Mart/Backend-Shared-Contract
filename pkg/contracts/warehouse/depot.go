@@ -3,8 +3,8 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/warehouse"
 )
 
 type Depot struct {

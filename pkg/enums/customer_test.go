@@ -3,14 +3,14 @@ package enums_test
 import (
 	"testing"
 
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/customer"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/customer"
 )
 
 func TestCustomerEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
 		{name: "customerenum.ChurnRisk", valid: []stringEnum{customerenum.ChurnRiskLow, customerenum.ChurnRiskMedium, customerenum.ChurnRiskHigh}, invalid: customerenum.ChurnRisk("__invalid__")},
-		{name: "customerenum.CustomerActivityType", valid: []stringEnum{customerenum.CustomerActivityTypeNote, customerenum.CustomerActivityTypeCall, customerenum.CustomerActivityTypeEmail, customerenum.CustomerActivityTypeSMS, customerenum.CustomerActivityTypeLine, customerenum.CustomerActivityTypeOrder, customerenum.CustomerActivityTypeComplaint, customerenum.CustomerActivityTypeReturn, customerenum.CustomerActivityTypeRefund, customerenum.CustomerActivityTypePointsAdjust, customerenum.CustomerActivityTypeTierChange, customerenum.CustomerActivityTypeStatusChange, customerenum.CustomerActivityTypeReferral, customerenum.CustomerActivityTypeCampaign}, invalid: customerenum.CustomerActivityType("__invalid__")},
 		{name: "customerenum.CustomerAcquisitionSource", valid: []stringEnum{customerenum.CustomerAcquisitionSourceOnline, customerenum.CustomerAcquisitionSourcePOS, customerenum.CustomerAcquisitionSourceImport, customerenum.CustomerAcquisitionSourceManual, customerenum.CustomerAcquisitionSourcePhone}, invalid: customerenum.CustomerAcquisitionSource("__invalid__")},
+		{name: "customerenum.CustomerGender", valid: []stringEnum{customerenum.CustomerGenderFemale, customerenum.CustomerGenderMale, customerenum.CustomerGenderNonBinary}, invalid: customerenum.CustomerGender("__invalid__")},
 		{name: "customerenum.CustomerIdentityKind", valid: []stringEnum{customerenum.CustomerIdentityKindPhone, customerenum.CustomerIdentityKindEmail, customerenum.CustomerIdentityKindLine, customerenum.CustomerIdentityKindMemberCard, customerenum.CustomerIdentityKindPOSID, customerenum.CustomerIdentityKindExternal}, invalid: customerenum.CustomerIdentityKind("__invalid__")},
 		{name: "customerenum.CustomerStatus", valid: []stringEnum{customerenum.CustomerStatusActive, customerenum.CustomerStatusInactive, customerenum.CustomerStatusBlocked, customerenum.CustomerStatusClosed}, invalid: customerenum.CustomerStatus("__invalid__")},
 		{name: "customerenum.CustomerTier", valid: []stringEnum{customerenum.CustomerTierStandard, customerenum.CustomerTierSilver, customerenum.CustomerTierGold, customerenum.CustomerTierPlatinum}, invalid: customerenum.CustomerTier("__invalid__")},

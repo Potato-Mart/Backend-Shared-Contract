@@ -3,7 +3,7 @@ package serviceauth
 import (
 	"testing"
 
-	serviceauthenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/serviceauth"
+	serviceauthenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/serviceauth"
 )
 
 func TestScopeJoinParseRoundTrip(t *testing.T) {

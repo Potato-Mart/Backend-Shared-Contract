@@ -6,12 +6,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/shared"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/membership"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/payment"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/warehouse"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/membership"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/payment"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/sales"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/warehouse"
 )
 
 func TestOrderJSONRoundTripWithHistory(t *testing.T) {
@@ -73,6 +75,75 @@ func TestOrderJSONOmitsEmptyHistory(t *testing.T) {
 	}
 	if strings.Contains(string(payload), `"history"`) {
 		t.Fatalf("empty history should be omitted, got %s", payload)
+	}
+}
+
+func TestOrderJSONRoundTripsPackingProgress(t *testing.T) {
+	startedAt := time.Date(2026, 7, 9, 9, 30, 0, 0, time.UTC)
+	updatedAt := startedAt.Add(15 * time.Minute)
+	order := sales.Order{
+		ID:                "ord_pack",
+		OrderNumber:       "MAMA260709ABC123",
+		FulfillmentStatus: salesenum.FulfillmentStatusPacking,
+		Packing: &sales.OrderPackingProgress{
+			Status:    salesenum.FulfillmentStatusPacking,
+			Operator:  "packer@example.test",
+			StartedAt: &startedAt,
+			UpdatedAt: &updatedAt,
+			Lines: []warehouse.PackingLine{
+				{
+					ProductSKUCode: "SKU-001",
+					SKU:            "POT-001",
+					ProductName:    "Washed potatoes",
+					OrderedQty:     4,
+					ScannedQty:     3,
+					DamagedQty:     1,
+				},
+			},
+			BoxPlan: &warehouse.PackingBoxPlan{AmbientBoxes: 1, UpdatedAt: updatedAt},
+			Damages: []warehouse.PackingDamage{
+				{
+					ID:             "damage_1",
+					ProductSKUCode: "SKU-001",
+					DamagedQty:     1,
+					Handling:       warehouseenum.PackingDamageShortShipRefund,
+					CreatedAt:      updatedAt,
+				},
+			},
+			Discrepancies: []warehouse.PackingDiscrepancy{
+				{
+					ID:             "disc_1",
+					OrderNumber:    "MAMA260709ABC123",
+					ProductSKUCode: "SKU-001",
+					Kind:           warehouseenum.PackingDiscrepancyKindShortage,
+					OrderedQty:     4,
+					ScannedQty:     3,
+					DiffQty:        1,
+					RecordedAt:     updatedAt,
+				},
+			},
+		},
+	}
+
+	payload, err := json.Marshal(order)
+	if err != nil {
+		t.Fatalf("marshal order with packing progress: %v", err)
+	}
+	for _, key := range []string{`"packing"`, `"scanned_qty"`, `"box_plan"`, `"discrepancies"`, `"started_at"`} {
+		if !strings.Contains(string(payload), key) {
+			t.Fatalf("order packing JSON missing %s: %s", key, payload)
+		}
+	}
+
+	var decoded sales.Order
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal order with packing progress: %v", err)
+	}
+	if decoded.Packing == nil || len(decoded.Packing.Lines) != 1 || decoded.Packing.Lines[0].ScannedQty != 3 {
+		t.Fatalf("packing progress did not round-trip: %+v", decoded.Packing)
+	}
+	if decoded.Packing.BoxPlan == nil || decoded.Packing.BoxPlan.AmbientBoxes != 1 {
+		t.Fatalf("packing box plan did not round-trip: %+v", decoded.Packing.BoxPlan)
 	}
 }
 

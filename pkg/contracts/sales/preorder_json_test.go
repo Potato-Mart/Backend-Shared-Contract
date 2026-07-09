@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/sales"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/sales"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/sales"
 )
 
 func TestPreorderJSONRoundTrip(t *testing.T) {

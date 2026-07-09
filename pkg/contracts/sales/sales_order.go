@@ -3,14 +3,15 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/shared"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/membership"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/payment"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/promotion"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/sales"
-	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/warehouse"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/membership"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/payment"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/promotion"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/sales"
+	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/shipping"
 )
 
 type Order struct {
@@ -23,13 +24,13 @@ type Order struct {
 	FulfillmentStatus salesenum.FulfillmentStatus `json:"fulfillment_status"`
 	Customer          common.PartyRef             `json:"customer"`
 	// Buyer describes who is buying, independently of Channel. POS is a
-	// channel, not a buyer type — see sales.BuyerContext. Optional pointer
+	// channel, not a buyer type â€” see sales.BuyerContext. Optional pointer
 	// so it is omitted entirely when unset.
 	Buyer        *BuyerContext `json:"buyer,omitempty"`
 	Items        []OrderItem   `json:"items"`
 	SourceDevice SourceDevice  `json:"source_device,omitempty"`
 
-	// ── Shipping & billing ────────────────────────────────────────────
+	// â”€â”€ Shipping & billing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	Shipping         common.ContactAddress         `json:"shipping"`
 	Billing          *common.ContactAddress        `json:"billing,omitempty"`
 	ShippingMethod   shippingenum.ShippingRateName `json:"shipping_method,omitempty"`
@@ -37,9 +38,9 @@ type Order struct {
 	ShippingRateID   string                        `json:"shipping_rate_id,omitempty"`
 	ShippingPackages []common.PhysicalPackage      `json:"shipping_packages,omitempty"`
 
-	// ── Delivery scheduling ───────────────────────────────────────────
+	// â”€â”€ Delivery scheduling â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	// ExpectedDeliveryDate/Time are the promised delivery slot, set by
-	// staff or checkout — distinct from the DeliveredAt lifecycle
+	// staff or checkout â€” distinct from the DeliveredAt lifecycle
 	// timestamp recorded after the fact.
 	ExpectedDeliveryDate common.Date                 `json:"expected_delivery_date,omitempty"`
 	ExpectedDeliveryTime common.TimeOfDay            `json:"expected_delivery_time,omitempty"`
@@ -49,7 +50,7 @@ type Order struct {
 	OutsourcedCarrier string                      `json:"outsourced_carrier,omitempty"`
 	DeliveryRegion    shippingenum.DeliveryRegion `json:"delivery_region,omitempty"`
 
-	// ── Money ─────────────────────────────────────────────────────────
+	// â”€â”€ Money â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	Subtotal       common.Money `json:"subtotal"`
 	DiscountAmount common.Money `json:"discount_amount"`
 	ShippingAmount common.Money `json:"shipping_amount"`
@@ -71,11 +72,12 @@ type Order struct {
 	GiftCardRedemptions []GiftCardRedemptionSnapshot `json:"gift_card_redemptions,omitempty"`
 	TrackingNumber      string                       `json:"tracking_number,omitempty"`
 	TrackingURL         string                       `json:"tracking_url,omitempty"`
+	Packing             *OrderPackingProgress        `json:"packing,omitempty"`
 	CustomerNote        string                       `json:"customer_note,omitempty"`
 	InternalNote        string                       `json:"internal_note,omitempty"`
 	Tags                []string                     `json:"tags,omitempty"`
 
-	// ── Lifecycle timestamps ──────────────────────────────────────────
+	// â”€â”€ Lifecycle timestamps â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	ConfirmedAt      *time.Time `json:"confirmed_at,omitempty"`
 	CancelledAt      *time.Time `json:"cancelled_at,omitempty"`
 	CompletedAt      *time.Time `json:"completed_at,omitempty"`
@@ -87,6 +89,22 @@ type Order struct {
 	History []shared.HistoryEntry `json:"history,omitempty"`
 
 	common.AuditFields
+}
+
+// OrderPackingProgress is the order-owned packing state shown to both staff
+// and customer order views. It replaces admin-facing dependence on a separate
+// packing-session aggregate for current packing progress.
+type OrderPackingProgress struct {
+	Status        salesenum.FulfillmentStatus    `json:"status,omitempty"`
+	Operator      string                         `json:"operator,omitempty"`
+	Lines         []warehouse.PackingLine        `json:"lines,omitempty"`
+	BoxPlan       *warehouse.PackingBoxPlan      `json:"box_plan,omitempty"`
+	Damages       []warehouse.PackingDamage      `json:"damages,omitempty"`
+	Discrepancies []warehouse.PackingDiscrepancy `json:"discrepancies,omitempty"`
+	StartedAt     *time.Time                     `json:"started_at,omitempty"`
+	UpdatedAt     *time.Time                     `json:"updated_at,omitempty"`
+	PackedAt      *time.Time                     `json:"packed_at,omitempty"`
+	FulfilledAt   *time.Time                     `json:"fulfilled_at,omitempty"`
 }
 
 type OrderItem struct {

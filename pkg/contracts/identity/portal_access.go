@@ -3,9 +3,9 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/account"
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/account"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/security"
 )
 
 // PortalAccess records whether an account/persona may enter one front-door

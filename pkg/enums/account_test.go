@@ -4,14 +4,14 @@ import (
 	"reflect"
 	"testing"
 
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/account"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/account"
 )
 
 func TestAccountEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
 		{name: "accountenum.AccountStatus", valid: []stringEnum{accountenum.AccountStatusPending, accountenum.AccountStatusActive, accountenum.AccountStatusSuspended, accountenum.AccountStatusClosed, accountenum.AccountStatusDeleted}, invalid: accountenum.AccountStatus("__invalid__")},
-		{name: "accountenum.AccountType", valid: []stringEnum{accountenum.AccountTypeAdminUser, accountenum.AccountTypeGeneralCustomer, accountenum.AccountTypeWholesaleCustomer}, invalid: accountenum.AccountType("__invalid__")},
-		{name: "accountenum.Portal", valid: []stringEnum{accountenum.PortalControl, accountenum.PortalStore, accountenum.PortalPartner}, invalid: accountenum.Portal("__invalid__")},
+		{name: "accountenum.AccountType", valid: []stringEnum{accountenum.AccountTypeAdminUser, accountenum.AccountTypeRetailCustomer, accountenum.AccountTypeWholesaleCustomer}, invalid: accountenum.AccountType("__invalid__")},
+		{name: "accountenum.Portal", valid: []stringEnum{accountenum.PortalControl, accountenum.PortalRetail, accountenum.PortalWholesale}, invalid: accountenum.Portal("__invalid__")},
 		{name: "accountenum.PortalAccessStatus", valid: []stringEnum{accountenum.PortalAccessStatusPending, accountenum.PortalAccessStatusActive, accountenum.PortalAccessStatusSuspended, accountenum.PortalAccessStatusRevoked}, invalid: accountenum.PortalAccessStatus("__invalid__")},
 	})
 }
@@ -19,8 +19,8 @@ func TestAccountEnumsValidateKnownValues(t *testing.T) {
 func TestAccountTypePortalAdmission(t *testing.T) {
 	allowed := map[accountenum.AccountType]accountenum.Portal{
 		accountenum.AccountTypeAdminUser:         accountenum.PortalControl,
-		accountenum.AccountTypeGeneralCustomer:   accountenum.PortalStore,
-		accountenum.AccountTypeWholesaleCustomer: accountenum.PortalPartner,
+		accountenum.AccountTypeRetailCustomer:    accountenum.PortalRetail,
+		accountenum.AccountTypeWholesaleCustomer: accountenum.PortalWholesale,
 	}
 
 	for accountType, portal := range allowed {
@@ -33,12 +33,12 @@ func TestAccountTypePortalAdmission(t *testing.T) {
 		accountType accountenum.AccountType
 		portal      accountenum.Portal
 	}{
-		{accountenum.AccountTypeAdminUser, accountenum.PortalStore},
-		{accountenum.AccountTypeAdminUser, accountenum.PortalPartner},
-		{accountenum.AccountTypeGeneralCustomer, accountenum.PortalControl},
-		{accountenum.AccountTypeGeneralCustomer, accountenum.PortalPartner},
+		{accountenum.AccountTypeAdminUser, accountenum.PortalRetail},
+		{accountenum.AccountTypeAdminUser, accountenum.PortalWholesale},
+		{accountenum.AccountTypeRetailCustomer, accountenum.PortalControl},
+		{accountenum.AccountTypeRetailCustomer, accountenum.PortalWholesale},
 		{accountenum.AccountTypeWholesaleCustomer, accountenum.PortalControl},
-		{accountenum.AccountTypeWholesaleCustomer, accountenum.PortalStore},
+		{accountenum.AccountTypeWholesaleCustomer, accountenum.PortalRetail},
 	}
 
 	for _, tt := range rejected {
@@ -54,8 +54,8 @@ func TestPortalAccountTypeHelpers(t *testing.T) {
 		accountType accountenum.AccountType
 	}{
 		{accountenum.PortalControl, accountenum.AccountTypeAdminUser},
-		{accountenum.PortalStore, accountenum.AccountTypeGeneralCustomer},
-		{accountenum.PortalPartner, accountenum.AccountTypeWholesaleCustomer},
+		{accountenum.PortalRetail, accountenum.AccountTypeRetailCustomer},
+		{accountenum.PortalWholesale, accountenum.AccountTypeWholesaleCustomer},
 	}
 
 	for _, tt := range tests {

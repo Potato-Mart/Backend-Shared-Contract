@@ -4,12 +4,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/product"
 )
 
 func ts(t time.Time) *time.Time { return &t }
 
-// Tests 8–12: NEW is driven solely by FirstListedAt, never by creation
+// Tests 8â€“12: NEW is driven solely by FirstListedAt, never by creation
 // date, and lapses exactly 14 days later.
 func TestIsNew(t *testing.T) {
 	listed := time.Date(2026, 1, 10, 0, 0, 0, 0, time.UTC)
@@ -27,7 +27,7 @@ func TestIsNew(t *testing.T) {
 		{"at first listing", listed, true},
 		{"day 13", listed.Add(13 * 24 * time.Hour), true},
 		{"one second before expiry", listed.Add(LifecycleTagTTL - time.Second), true},
-		{"exactly 14 days — expired", listed.Add(LifecycleTagTTL), false},
+		{"exactly 14 days â€” expired", listed.Add(LifecycleTagTTL), false},
 		{"well after expiry", listed.Add(30 * 24 * time.Hour), false},
 	}
 	for _, tc := range cases {
@@ -38,14 +38,14 @@ func TestIsNew(t *testing.T) {
 		})
 	}
 
-	// Product created on Jan 1, listed Jan 10 → NEW expires Jan 24,
+	// Product created on Jan 1, listed Jan 10 â†’ NEW expires Jan 24,
 	// regardless of the Jan 1 creation date.
 	wantExpiry := time.Date(2026, 1, 24, 0, 0, 0, 0, time.UTC)
 	if got := NewExpiresAt(p); got == nil || !got.Equal(wantExpiry) {
 		t.Errorf("NewExpiresAt = %v, want %v", got, wantExpiry)
 	}
 
-	// Never listed → never NEW, no expiry.
+	// Never listed â†’ never NEW, no expiry.
 	never := product.Product{}
 	never.CreatedAt = created
 	if IsNew(never, created.Add(time.Hour)) {
@@ -56,7 +56,7 @@ func TestIsNew(t *testing.T) {
 	}
 }
 
-// Tests 13–18 (tag side): RESTOCKED is driven solely by RestockedAt and
+// Tests 13â€“18 (tag side): RESTOCKED is driven solely by RestockedAt and
 // refreshes when the timestamp moves forward.
 func TestIsRestocked(t *testing.T) {
 	restocked := time.Date(2026, 3, 1, 9, 0, 0, 0, time.UTC)
@@ -75,14 +75,14 @@ func TestIsRestocked(t *testing.T) {
 		t.Error("still RESTOCKED at exactly 14 days")
 	}
 
-	// A later 0→>=1 transition refreshes the window (test 17).
+	// A later 0â†’>=1 transition refreshes the window (test 17).
 	again := restocked.Add(20 * 24 * time.Hour)
 	p.RestockedAt = ts(again)
 	if !IsRestocked(p, again.Add(13*24*time.Hour)) {
 		t.Error("refreshed restock window not honoured")
 	}
 
-	// Never restocked → never RESTOCKED.
+	// Never restocked â†’ never RESTOCKED.
 	if IsRestocked(product.Product{}, restocked) {
 		t.Error("product without RestockedAt reported RESTOCKED")
 	}

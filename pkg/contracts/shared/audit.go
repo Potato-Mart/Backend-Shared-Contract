@@ -3,8 +3,8 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/security"
 )
 
 // AuditLogEntry is one immutable record of an administrative action.
@@ -12,7 +12,7 @@ import (
 // Entries are written by middleware on every successful write request
 // (HTTP method POST/PUT/PATCH/DELETE) plus explicit business events
 // (login, role change, refund issued, etc.). Reads are never audited
-// here – use access logs for that.
+// here â€“ use access logs for that.
 type AuditLogEntry struct {
 	ID         string    `json:"id"`
 	OccurredAt time.Time `json:"occurred_at"`

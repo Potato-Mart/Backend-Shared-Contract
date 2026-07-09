@@ -3,8 +3,8 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/account"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/account"
 )
 
 // UserAccount is an account/persona record attached to one canonical user.

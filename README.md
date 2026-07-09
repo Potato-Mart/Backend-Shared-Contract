@@ -8,12 +8,12 @@
 
 ## 最新版本
 
-### V14.1.0
+### V15.0.0
 
 ## 模組路徑
 
 ```text
-github.com/Potato-Mart/Backend-Shared-Contract/v14
+github.com/Potato-Mart/Backend-Shared-Contract/v15
 ```
 
 ## 目錄結構
@@ -27,14 +27,14 @@ github.com/Potato-Mart/Backend-Shared-Contract/v14
 在使用方服務的 `go.mod` 中加入：
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v14 v14.1.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v15 v15.0.0
 ```
 
 接著匯入所需套件，例如：
 
 ```go
 import (
-    walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/wallet"
+    walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/wallet"
 )
 ```
 

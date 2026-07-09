@@ -4,10 +4,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/promotion"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/promotion"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/promotion"
 )
 
 var resolverNow = time.Date(2026, 6, 1, 12, 0, 0, 0, time.UTC)
@@ -135,7 +135,7 @@ func TestResolveCategoryTagPromotionAppliesToMember(t *testing.T) {
 }
 
 // 6. Untargeted (cart-wide / SKU-less) promotions never match the
-// product price resolver — there is no SKU-level targeting.
+// product price resolver â€” there is no SKU-level targeting.
 func TestResolveIgnoresUntargetedPromotions(t *testing.T) {
 	p := targetedPromo("prm_cartwide", promotionenum.PromotionClassNormal, "", "")
 	p.TargetScope = promotionenum.DiscountScopeAll

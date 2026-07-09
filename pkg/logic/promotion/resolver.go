@@ -8,9 +8,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/promotion"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/promotion"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/promotion"
 )
 
 // OverrideReasonSpecialCampaign is the canonical reason string written onto an
@@ -62,7 +62,7 @@ func tierOf(p promotion.Promotion) int {
 }
 
 // Matches reports whether a targeted promotion applies to the given product at
-// the given instant. Untargeted (cart-wide) promotions never match here — they
+// the given instant. Untargeted (cart-wide) promotions never match here â€” they
 // stay on the cart-quote path.
 func Matches(p promotion.Promotion, t ResolveTarget) bool {
 	if !IsTargeted(p) {
@@ -96,7 +96,7 @@ func Matches(p promotion.Promotion, t ResolveTarget) bool {
 
 // DiscountedUnitPriceMinor applies the promotion's DiscountSpec to a unit
 // price. The bool result is false when the spec cannot price a single unit
-// (free_shipping, malformed value) — such promotions are skipped by the
+// (free_shipping, malformed value) â€” such promotions are skipped by the
 // resolver.
 func DiscountedUnitPriceMinor(p promotion.Promotion, unitPriceMinor int64) (int64, bool) {
 	switch p.DiscountType {
@@ -139,7 +139,7 @@ func clampPrice(price, original int64) int64 {
 // ResolveEffective picks the single promotion that prices the product, applying
 // the fixed precedence: product special_campaign > category-tag special_campaign >
 // product normal_promotion > category-tag normal_promotion > none. Ties inside a
-// tier break on Priority desc, then CreatedAt desc, then ID asc — the same
+// tier break on Priority desc, then CreatedAt desc, then ID asc â€” the same
 // ordering the promotion repository already uses.
 //
 // Targeted promotions never stack with each other; whether the winner

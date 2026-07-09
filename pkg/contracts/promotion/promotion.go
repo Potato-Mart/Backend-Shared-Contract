@@ -1,10 +1,10 @@
 package promotion
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/shared"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/promotion"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/shared"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/promotion"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/sales"
 )
 
 // Promotion is the rule-based, auto-applied discount engine entity.
@@ -16,9 +16,9 @@ type Promotion struct {
 	Description string                      `json:"description,omitempty"`
 	Type        promotionenum.PromotionType `json:"type"`
 
-	// ── Classification & targeting (additive, v5.2.0) ─────────────────
-	// Class separates standing promotions (常態特價, normal_promotion)
-	// from time-boxed special campaigns (特殊活動, special_campaign).
+	// â”€â”€ Classification & targeting (additive, v5.2.0) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+	// Class separates standing promotions (å¸¸æ…‹ç‰¹åƒ¹, normal_promotion)
+	// from time-boxed special campaigns (ç‰¹æ®Šæ´»å‹•, special_campaign).
 	// Empty is read as normal_promotion so existing documents keep their
 	// behaviour; see EffectiveClass.
 	Class promotionenum.PromotionClass `json:"class,omitempty"`
@@ -34,7 +34,7 @@ type Promotion struct {
 	TargetCategoryTagID   string                 `json:"target_category_tag_id,omitempty"`
 	TargetCategoryTagName []common.LocalizedName `json:"target_category_tag_name,omitempty"`
 
-	// ── Trigger conditions ────────────────────────────────────────────
+	// â”€â”€ Trigger conditions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	MinCartAmount           *common.Money `json:"min_cart_amount,omitempty"`
 	MinCartQty              int           `json:"min_cart_qty,omitempty"`
 	RequiredProductSKUCodes []string      `json:"required_product_sku_codes,omitempty"`
@@ -49,12 +49,12 @@ type Promotion struct {
 	// RequiredQtyCombined is the total quantity threshold for COMBINED mode.
 	RequiredQtyCombined int `json:"required_qty_combined,omitempty"`
 
-	// ── auto_discount ─────────────────────────────────────────────────
+	// â”€â”€ auto_discount â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	DiscountSpec
 	MaxDiscount    *common.Money                         `json:"max_discount,omitempty"`
 	DiscountTarget promotionenum.PromotionDiscountTarget `json:"discount_target,omitempty"`
 
-	// ── spend_gift / bogo ─────────────────────────────────────────────
+	// â”€â”€ spend_gift / bogo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	GiftProductSKUCode string `json:"gift_product_sku_code,omitempty"`
 	GiftQty            int    `json:"gift_qty,omitempty"`
 	// GiftOptional allows the customer to decline the free gift at cart.
@@ -62,20 +62,20 @@ type Promotion struct {
 	// GiftTiers enables multiple spend thresholds for spend_gift promotions.
 	GiftTiers []GiftTier `json:"gift_tiers,omitempty"`
 
-	// ── addon_purchase ────────────────────────────────────────────────
+	// â”€â”€ addon_purchase â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	AddonProductSKUCode string                              `json:"addon_product_sku_code,omitempty"`
 	AddonPrice          *common.Money                       `json:"addon_price,omitempty"`
 	AddonMaxQty         int                                 `json:"addon_max_qty,omitempty"`
 	AddonTriggerMode    promotionenum.PromotionAddonTrigger `json:"addon_trigger_mode,omitempty"`
 
-	// ── bundle ────────────────────────────────────────────────────────
+	// â”€â”€ bundle â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	BundlePrice *common.Money `json:"bundle_price,omitempty"`
 
-	// ── tiered_pricing ────────────────────────────────────────────────
+	// â”€â”€ tiered_pricing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	PricingTiers      []PricingTier `json:"pricing_tiers,omitempty"`
 	PricingMixAllowed bool          `json:"pricing_mix_allowed,omitempty"`
 
-	// ── Control ───────────────────────────────────────────────────────
+	// â”€â”€ Control â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	Priority    int  `json:"priority"`
 	IsStackable bool `json:"is_stackable"`
 	UsageLimits

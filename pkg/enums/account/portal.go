@@ -5,15 +5,15 @@ package accountenum
 type Portal string
 
 const (
-	PortalControl Portal = "control"
-	PortalStore   Portal = "store"
-	PortalPartner Portal = "partner"
+	PortalControl   Portal = "control"
+	PortalRetail    Portal = "retail"
+	PortalWholesale Portal = "wholesale"
 )
 
 // IsValid reports whether p is a known Portal.
 func (p Portal) IsValid() bool {
 	switch p {
-	case PortalControl, PortalStore, PortalPartner:
+	case PortalControl, PortalRetail, PortalWholesale:
 		return true
 	}
 	return false
@@ -40,9 +40,9 @@ func (p Portal) RequiredAccountType() (AccountType, bool) {
 	switch p {
 	case PortalControl:
 		return AccountTypeAdminUser, true
-	case PortalStore:
-		return AccountTypeGeneralCustomer, true
-	case PortalPartner:
+	case PortalRetail:
+		return AccountTypeRetailCustomer, true
+	case PortalWholesale:
 		return AccountTypeWholesaleCustomer, true
 	}
 	return "", false

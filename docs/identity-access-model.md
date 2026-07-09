@@ -43,10 +43,10 @@ Each current portal accepts exactly one account type:
 | Portal | Wire value | Required account type |
 | --- | --- | --- |
 | `PortalControl` | `control` | `adminUser` |
-| `PortalStore` | `store` | `generalCustomer` |
-| `PortalPartner` | `partner` | `wholesaleCustomer` |
+| `PortalRetail` | `retail` | `retailCustomer` |
+| `PortalWholesale` | `wholesale` | `wholesaleCustomer` |
 
-`PortalPartner` is the wholesale/partner portal for the current v6 contract.
+Only these three portal names are valid.
 
 ## Sessions And Claims
 
@@ -68,13 +68,13 @@ account type consistently. This repository only defines the shared shape.
 
 ## Customer Profile Contracts
 
-Retail/general customer business details live in `customers.RetailCustomer` and
-belong to the `generalCustomer` account/persona model.
+Retail customer business details live in `customers.RetailCustomer` and belong
+to the `retailCustomer` account/persona model.
 
-Wholesale customer business details are organisation-owned. In v14,
+Wholesale customer business details are organisation-owned. Since v14,
 `wholesale.WholesaleCustomer` is a compatibility name for
 `wholesale.WholesaleOrganisation`, and the `wholesaleCustomer` account/persona
-represents the organisation principal used for partner portal sign-in.
+represents the organisation principal used for wholesale portal sign-in.
 Organisation approval and organisation access lifecycle remain separate
 wholesale contracts.
 
@@ -99,4 +99,4 @@ Wholesale portal access is organisation and membership aware:
   organisation access grant, and role key used for that session.
 
 Wholesale organisation status and organisation access status are separate from
-general account lifecycle status and portal access status.
+retail account lifecycle status and portal access status.

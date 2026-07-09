@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/marketing"
-	marketingenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/marketing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/marketing"
+	marketingenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/marketing"
 )
 
 func TestMarketingCampaignRecipientJSONGroupsContactChannels(t *testing.T) {
@@ -16,9 +16,9 @@ func TestMarketingCampaignRecipientJSONGroupsContactChannels(t *testing.T) {
 		CampaignID:     "campaign_1",
 		CustomerNumber: "customer_1",
 		Contacts: common.ContactChannels{
-			Email:  "buyer@example.com",
-			Phone:  "+61000000000",
-			LineID: "line_1",
+			Email:           "buyer@example.com",
+			Phone:           "+61000000000",
+			ExternalHandles: map[string]string{"line_id": "line_1"},
 		},
 		CustomerName: "Retail Customer",
 		Status:       marketingenum.MarketingRecipientStatusPending,
@@ -53,7 +53,7 @@ func TestMarketingCampaignRecipientJSONGroupsContactChannels(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal marketing recipient: %v", err)
 	}
-	if decoded.Contacts.Email != "buyer@example.com" || decoded.Contacts.LineID != "line_1" {
+	if decoded.Contacts.Email != "buyer@example.com" || decoded.Contacts.ExternalHandles["line_id"] != "line_1" {
 		t.Fatalf("contacts did not round-trip: %+v", decoded.Contacts)
 	}
 }

@@ -5,7 +5,7 @@
 // message strings.
 package apiresponse
 
-import apiresponseenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/apiresponse"
+import apiresponseenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/apiresponse"
 
 type Error struct {
 	Code    apiresponseenum.Code `json:"code"`

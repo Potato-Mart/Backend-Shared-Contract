@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v15.0.0` | 2026-07-09 | Major | Retail account and portal cleanup: changes the module path to `/v15`, renames the general customer account persona to `retailCustomer`, renames storefront/partner portal wire values to `retail`/`wholesale`, removes legacy contact and activity timeline fields, adds retail profile completion/gender/billing/referral fields, and embeds order packing progress on sales orders. |
 | `v14.1.0` | 2026-07-09 | Minor | Storefront profile and catalogue slugs: adds optional product collection/category slug fields for public storefront URLs and optional avatar fields on `identity.UserProfile`. Additive only; keeps the `/v14` module path. |
 | `v14.0.0` | 2026-07-08 | Major | Wholesale customer consolidation: makes wholesale customer a compatibility name for the wholesale organisation/business account, moves stable sign-in identity references onto the organisation principal, makes organisation access the people/team record, removes separate wholesale customer number/customer id response fields, and requires `/v13` → `/v14` module-path migration. |
 | `v13.3.0` | 2026-07-08 | Minor | Back-in-stock notifications: adds account-only SKU subscription contracts, email/SMS channel and lifecycle enums, consent snapshot and delivery-error metadata, a restock event payload, and the `restock:notify` service-auth scope for Operations to trigger Management-owned notification processing. Additive only; keeps the `/v13` module path. |
@@ -84,6 +85,70 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
 
+## v15.0.0 (2026-07-09) - Retail Account And Portal Cleanup
+
+Release date: 2026-07-09
+
+This major release aligns the shared identity and retail customer contracts with
+the retail/wholesale portal model, removes legacy contact and customer activity
+shapes, and adds the shared fields needed by retail profile completion,
+referral rewards, billing, gender, and order packing progress.
+
+### Breaking Contract Changes
+
+- `go.mod` module path changes to `github.com/Potato-Mart/Backend-Shared-Contract/v15`.
+- All in-repository imports now use `/v15`; consumers must update imports from
+  `/v14` to `/v15` before upgrading.
+- `accountenum.AccountTypeGeneralCustomer` is replaced by
+  `accountenum.AccountTypeRetailCustomer`, with the wire value changing from
+  `generalCustomer` to `retailCustomer`.
+- `accountenum.PortalStore` and `accountenum.PortalPartner` are replaced by
+  `accountenum.PortalRetail` and `accountenum.PortalWholesale`, with wire values
+  changing from `store`/`partner` to `retail`/`wholesale`.
+- `common.ContactChannels.mobile` and `common.ContactChannels.line_id` are
+  removed. Use `phone` for the primary phone number and `external_handles` for
+  channel-specific handles such as LINE.
+- `customers.RetailCustomer.recent_orders` is removed from the shared customer
+  profile; consumers should fetch order history/projections from Commerce.
+- `customers.RetailCustomerActivity` and `customerenum.CustomerActivityType` are
+  removed from the shared contract.
+- `customers.RetailCustomerReferralProfile.credited` is removed and replaced by
+  explicit referral confirmation, usage, reward count, voucher code, and reward
+  timestamp fields.
+- `pkg/versioning.ModuleVersion` now reports `v15.0.0`.
+
+### Added
+
+- `customerenum.CustomerGender` and `customers.RetailCustomerBasicInfo.gender`.
+- `customers.RetailCustomerProfileCompletion` and
+  `customers.RetailCustomer.profile_completion`.
+- `customers.RetailCustomer.default_billing`.
+- Expanded `customers.RetailCustomerReferralProfile` reward tracking fields.
+- `sales.Order.packing` with `sales.OrderPackingProgress`, reusing warehouse
+  packing lines, box plan, damage, and discrepancy contracts.
+- JSON-shape tests for the retail customer profile and sales order packing
+  progress changes.
+
+### Documentation And Release Notes
+
+- README usage examples now point to `v15.0.0` and the `/v15` module path.
+- Identity access documentation now uses the retail/wholesale portal names.
+- The generated lowercase `release-notes.md` content has been consolidated into
+  this canonical `RELEASE_NOTES.md` history.
+
+### Consumer Action
+
+- Upgrade imports and dependencies from `/v14` to `/v15`, then run
+  `go mod tidy`.
+- Update any persisted or serialized account/portal values from
+  `generalCustomer`/`store`/`partner` to `retailCustomer`/`retail`/`wholesale`.
+- Move LINE and other channel-specific contact handles into
+  `contacts.external_handles`.
+- Stop reading `recent_orders` from retail customer payloads; fetch order
+  summaries from Commerce-owned order projections.
+- Replace shared customer activity timeline usage with the owning service's
+  history or CRM activity model.
+
 ## v14.1.0 (2026-07-09) - Storefront Slugs And Account Avatars / 零售網址 Slug 與帳號頭像
 
 Release date: 2026-07-09
@@ -107,6 +172,15 @@ canonical id 的同時提供穩定公開 slug；共用使用者資料也可投�
   are optional JSON fields for account avatar projection.
 - JSON-shape tests cover slug inclusion/omission and avatar field
   inclusion/omission.
+
+### Contract Files Changed
+
+- `pkg/contracts/identity/user.go`
+- `pkg/contracts/identity/user_json_test.go`
+- `pkg/contracts/product/category_tag.go`
+- `pkg/contracts/product/collection.go`
+- `pkg/contracts/product/json_shape_test.go`
+- `pkg/versioning/version.go`
 
 ### Compatibility / 相容性
 

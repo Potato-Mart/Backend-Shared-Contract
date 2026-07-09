@@ -3,12 +3,12 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/account"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/account"
 )
 
 // UserProfile is the public projection of a canonical user. Secret fields such
-// as password hashes and refresh token material never appear here —
+// as password hashes and refresh token material never appear here â€”
 // they live only inside the service that manages identity.
 type UserProfile struct {
 	ID                 string                  `json:"id"`

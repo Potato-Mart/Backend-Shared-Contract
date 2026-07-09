@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/membership"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/membership"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/membership"
 )
 
 func TestPointReservationScenarios(t *testing.T) {

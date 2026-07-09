@@ -1,7 +1,7 @@
 package wholesale
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
 )
 
 // WholesaleTierPreset defines the freight rules for a wholesale shipping tier.

@@ -7,16 +7,16 @@ type AccountType string
 const (
 	// AccountTypeAdminUser is the internal/admin-platform account persona.
 	AccountTypeAdminUser AccountType = "adminUser"
-	// AccountTypeGeneralCustomer is the storefront customer account persona.
-	AccountTypeGeneralCustomer AccountType = "generalCustomer"
-	// AccountTypeWholesaleCustomer is the wholesale/partner organisation-principal account persona.
+	// AccountTypeRetailCustomer is the retail storefront customer account persona.
+	AccountTypeRetailCustomer AccountType = "retailCustomer"
+	// AccountTypeWholesaleCustomer is the wholesale organisation-principal account persona.
 	AccountTypeWholesaleCustomer AccountType = "wholesaleCustomer"
 )
 
 // IsValid reports whether t is a known AccountType value.
 func (t AccountType) IsValid() bool {
 	switch t {
-	case AccountTypeAdminUser, AccountTypeGeneralCustomer, AccountTypeWholesaleCustomer:
+	case AccountTypeAdminUser, AccountTypeRetailCustomer, AccountTypeWholesaleCustomer:
 		return true
 	}
 	return false
@@ -35,7 +35,7 @@ func (t AccountType) IsAllowedInPortal(portal Portal) bool {
 func AllAccountTypes() []AccountType {
 	return []AccountType{
 		AccountTypeAdminUser,
-		AccountTypeGeneralCustomer,
+		AccountTypeRetailCustomer,
 		AccountTypeWholesaleCustomer,
 	}
 }

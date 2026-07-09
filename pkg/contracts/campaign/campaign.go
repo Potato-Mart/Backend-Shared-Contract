@@ -2,14 +2,14 @@
 // banners, announcements, modals and notices surfaced across every storefront
 // surface (3 web + 2 mobile clients). A campaign is pure presentational
 // content with scheduling and audience targeting; it carries no pricing logic
-// (that is promotion's job — a campaign may LINK to a promotion via CTAHref).
+// (that is promotion's job â€” a campaign may LINK to a promotion via CTAHref).
 package campaign
 
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
-	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/campaign"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/campaign"
 )
 
 // Audience narrows who a campaign is shown to. An empty field means "any";

@@ -3,38 +3,34 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/contracts/shared"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v14/pkg/enums/customer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/shared"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/customer"
 )
 
-// RetailCustomer is the grouped business profile for a generalCustomer
+// RetailCustomer is the grouped business profile for a retailCustomer
 // account/persona. Portal admission is controlled by identity.AccountType and
 // identity.PortalAccess, not by this profile.
 type RetailCustomer struct {
-	ID                    string                          `json:"id"`
-	CustomerNumber        string                          `json:"customer_number,omitempty"`
-	UserID                string                          `json:"user_id,omitempty"`
-	AccountID             string                          `json:"account_id,omitempty"`
-	PrimaryAuthIdentityID string                          `json:"primary_auth_identity_id,omitempty"`
-	AuthIdentityIDs       []string                        `json:"auth_identity_ids,omitempty"`
-	BasicInfo             RetailCustomerBasicInfo         `json:"basic_info"`
-	Lifecycle             RetailCustomerLifecycle         `json:"lifecycle"`
-	Management            RetailCustomerManagementProfile `json:"management"`
-	Membership            RetailCustomerMembershipProfile `json:"membership"`
-	Marketing             RetailCustomerMarketingProfile  `json:"marketing"`
-	Commerce              RetailCustomerCommerceProfile   `json:"commerce"`
-	// RecentOrders is a bounded, sync-populated display strip of the
-	// customer's latest orders (hard-capped, typically 5) for the account
-	// page. It is a denormalised projection, never the full order history;
-	// canonical orders live in Commerce, fetched by customer_number.
-	RecentOrders      []sales.OrderSummary            `json:"recent_orders,omitempty"`
-	Analytics         *RetailCustomerAnalyticsProfile `json:"analytics,omitempty"`
-	Referral          *RetailCustomerReferralProfile  `json:"referral,omitempty"`
-	DefaultShipping   *common.ContactAddress          `json:"default_shipping,omitempty"`
-	ShippingAddresses []common.ContactAddress         `json:"shipping_addresses,omitempty"`
-	History           []shared.HistoryEntry           `json:"history,omitempty"`
+	ID                    string                           `json:"id"`
+	CustomerNumber        string                           `json:"customer_number,omitempty"`
+	UserID                string                           `json:"user_id,omitempty"`
+	AccountID             string                           `json:"account_id,omitempty"`
+	PrimaryAuthIdentityID string                           `json:"primary_auth_identity_id,omitempty"`
+	AuthIdentityIDs       []string                         `json:"auth_identity_ids,omitempty"`
+	BasicInfo             RetailCustomerBasicInfo          `json:"basic_info"`
+	Lifecycle             RetailCustomerLifecycle          `json:"lifecycle"`
+	Management            RetailCustomerManagementProfile  `json:"management"`
+	Membership            RetailCustomerMembershipProfile  `json:"membership"`
+	Marketing             RetailCustomerMarketingProfile   `json:"marketing"`
+	Commerce              RetailCustomerCommerceProfile    `json:"commerce"`
+	Analytics             *RetailCustomerAnalyticsProfile  `json:"analytics,omitempty"`
+	Referral              *RetailCustomerReferralProfile   `json:"referral,omitempty"`
+	ProfileCompletion     *RetailCustomerProfileCompletion `json:"profile_completion,omitempty"`
+	DefaultShipping       *common.ContactAddress           `json:"default_shipping,omitempty"`
+	DefaultBilling        *common.ContactAddress           `json:"default_billing,omitempty"`
+	ShippingAddresses     []common.ContactAddress          `json:"shipping_addresses,omitempty"`
+	History               []shared.HistoryEntry            `json:"history,omitempty"`
 
 	common.AuditFields
 	common.DataProtectionFields
@@ -63,6 +59,7 @@ type RetailCustomerBasicInfo struct {
 	Name              common.PersonName                      `json:"name"`
 	Contacts          common.ContactChannels                 `json:"contacts"`
 	DateOfBirth       *time.Time                             `json:"date_of_birth,omitempty"`
+	Gender            customerenum.CustomerGender            `json:"gender,omitempty"`
 	AcquisitionSource customerenum.CustomerAcquisitionSource `json:"acquisition_source,omitempty"`
 }
 
