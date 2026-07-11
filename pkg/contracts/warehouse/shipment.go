@@ -21,6 +21,7 @@ type OutboundShipment struct {
 	TrackingNumber string                               `json:"tracking_number,omitempty"`
 	Note           string                               `json:"note,omitempty"`
 	DispatchedAt   *time.Time                           `json:"dispatched_at,omitempty"`
+	DeliveredAt    *time.Time                           `json:"delivered_at,omitempty"`
 	History        []shared.HistoryEntry                `json:"history,omitempty"`
 	CreatedAt      time.Time                            `json:"created_at"`
 }

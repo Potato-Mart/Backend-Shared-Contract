@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v15.1.0` | 2026-07-11 | Minor | Outbound delivery completion: adds the `delivered` outbound-shipment status and optional `delivered_at` timestamp. Additive only; keeps the `/v15` module path. |
 | `v15.0.0` | 2026-07-09 | Major | Retail account and portal cleanup: changes the module path to `/v15`, renames the general customer account persona to `retailCustomer`, renames storefront/partner portal wire values to `retail`/`wholesale`, removes legacy contact and activity timeline fields, adds retail profile completion/gender/billing/referral fields, and embeds order packing progress on sales orders. |
 | `v14.1.0` | 2026-07-09 | Minor | Storefront profile and catalogue slugs: adds optional product collection/category slug fields for public storefront URLs and optional avatar fields on `identity.UserProfile`. Additive only; keeps the `/v14` module path. |
 | `v14.0.0` | 2026-07-08 | Major | Wholesale customer consolidation: makes wholesale customer a compatibility name for the wholesale organisation/business account, moves stable sign-in identity references onto the organisation principal, makes organisation access the people/team record, removes separate wholesale customer number/customer id response fields, and requires `/v13` → `/v14` module-path migration. |
@@ -84,6 +85,34 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v15.1.0 (2026-07-11) - Outbound Delivery Completion
+
+Release date: 2026-07-11
+
+This additive minor release lets warehouse and delivery consumers represent the
+final delivery milestone on an outbound shipment without changing the `/v15`
+module path or any existing JSON field.
+
+### Added
+
+- `warehouseenum.OutboundShipmentStatusDelivered` with wire value `delivered`.
+- Optional `warehouse.OutboundShipment.delivered_at` timestamp.
+- JSON and enum validation coverage for the delivered state and timestamp.
+
+### Compatibility
+
+- Existing `packed` and `dispatched` statuses remain unchanged.
+- `delivered_at` uses `omitempty`; existing payloads and consumers remain valid.
+- No package or module path changes are required.
+
+### Consumer Action
+
+- Upgrade `github.com/Potato-Mart/Backend-Shared-Contract/v15` to `v15.1.0`
+  and run `go mod tidy`.
+- Consumers that complete deliveries should persist the `delivered` status and
+  stamp `delivered_at`; read-only consumers may continue ignoring the new
+  optional field.
 
 ## v15.0.0 (2026-07-09) - Retail Account And Portal Cleanup
 
