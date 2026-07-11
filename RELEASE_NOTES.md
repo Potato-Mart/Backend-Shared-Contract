@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v15.2.0` | 2026-07-12 | Minor | Durable customer notifications and idempotent stock operations: adds customer notification topics/channels/delivery states, preorder availability and delivery receipt contracts, customer/internal notification paths, the `notification:send` scope, and atomic reservation/packing-settlement commands and results. Additive only; keeps the `/v15` module path. |
 | `v15.1.0` | 2026-07-11 | Minor | Outbound delivery completion: adds the `delivered` outbound-shipment status and optional `delivered_at` timestamp. Additive only; keeps the `/v15` module path. |
 | `v15.0.0` | 2026-07-09 | Major | Retail account and portal cleanup: changes the module path to `/v15`, renames the general customer account persona to `retailCustomer`, renames storefront/partner portal wire values to `retail`/`wholesale`, removes legacy contact and activity timeline fields, adds retail profile completion/gender/billing/referral fields, and embeds order packing progress on sales orders. |
 | `v14.1.0` | 2026-07-09 | Minor | Storefront profile and catalogue slugs: adds optional product collection/category slug fields for public storefront URLs and optional avatar fields on `identity.UserProfile`. Additive only; keeps the `/v14` module path. |
@@ -85,6 +86,42 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v15.2.0 (2026-07-12) - Durable Notifications And Idempotent Stock Operations
+
+Release date: 2026-07-12
+
+This additive minor release provides shared domain/wire contracts for durable
+customer notifications, paid-preorder availability, atomic stock reservation,
+and packing-time stock settlement without changing the `/v15` module path.
+
+### Added
+
+- Customer notification topic, channel, and delivery-status enums.
+- Customer-safe portal notification and delivery receipt contracts.
+- A preorder availability command that carries stable business identifiers and
+  intentionally excludes recipient addresses, subjects, and message bodies.
+- Customer list/mark-read and internal preorder-availability path constants.
+- The least-privilege `notification:send` service-auth scope.
+- Idempotent atomic reservation and packing-settlement commands/results plus the
+  internal packing-settlement path.
+- An optional paid-preorder readiness projection carrying reservation ids and
+  the durable customer-notification delivery receipt.
+
+### Compatibility
+
+- All additions are optional/new exported symbols; existing `/v15` payloads and
+  paths are unchanged.
+- Existing reserve, commit, and release path constants remain available.
+
+### Consumer Action
+
+- Upgrade `github.com/Potato-Mart/Backend-Shared-Contract/v15` to `v15.2.0`
+  after the tag is published and run `go mod tidy`.
+- Management should own message copy, verified-recipient resolution, portal
+  persistence, and email delivery state.
+- Operations and Commerce should use stable idempotency keys and reject reuse
+  with a different request fingerprint.
 
 ## v15.1.0 (2026-07-11) - Outbound Delivery Completion
 

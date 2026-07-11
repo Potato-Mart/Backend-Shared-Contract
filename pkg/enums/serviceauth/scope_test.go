@@ -25,4 +25,7 @@ func TestScopeHelpers(t *testing.T) {
 	if Scope("__invalid__").IsValid() {
 		t.Fatal("invalid scope should not be valid")
 	}
+	if !ScopeNotificationSend.IsValid() || ScopeNotificationSend.String() != "notification:send" {
+		t.Fatalf("notification scope = %q", ScopeNotificationSend)
+	}
 }

@@ -33,5 +33,30 @@ func TestNotificationEnums(t *testing.T) {
 			},
 			invalid: notificationenum.BackInStockCustomerType("__invalid__"),
 		},
+		{
+			name: "notification.CustomerNotificationTopic",
+			valid: []stringEnum{
+				notificationenum.CustomerNotificationTopicPreorderAvailable,
+				notificationenum.CustomerNotificationTopicBackInStock,
+			},
+			invalid: notificationenum.CustomerNotificationTopic("__invalid__"),
+		},
+		{
+			name: "notification.CustomerNotificationChannel",
+			valid: []stringEnum{
+				notificationenum.CustomerNotificationChannelPortal,
+				notificationenum.CustomerNotificationChannelEmail,
+			},
+			invalid: notificationenum.CustomerNotificationChannel("__invalid__"),
+		},
+		{
+			name: "notification.CustomerNotificationDeliveryStatus",
+			valid: []stringEnum{
+				notificationenum.CustomerNotificationDeliveryStatusPending,
+				notificationenum.CustomerNotificationDeliveryStatusDelivered,
+				notificationenum.CustomerNotificationDeliveryStatusFailed,
+			},
+			invalid: notificationenum.CustomerNotificationDeliveryStatus("__invalid__"),
+		},
 	})
 }
