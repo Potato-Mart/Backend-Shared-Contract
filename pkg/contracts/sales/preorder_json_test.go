@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/notification"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/product"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/sales"
 	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/sales"
@@ -31,6 +32,15 @@ func TestPreorderJSONRoundTrip(t *testing.T) {
 		RequestedAt:         requestedAt,
 		ExpectedAvailableAt: &expectedAt,
 		CustomerNote:        "Please notify me",
+		Availability: &sales.PreorderAvailability{
+			StockReserved:       true,
+			ReservationIDs:      []string{"res_1"},
+			ReservedAt:          &requestedAt,
+			NotificationEventID: "preorder:PO-1001:A00084:available",
+			Notification: &notification.NotificationDeliveryReceipt{
+				EventID: "preorder:PO-1001:A00084:available",
+			},
+		},
 	}
 
 	body, err := json.Marshal(preorder)
@@ -47,6 +57,10 @@ func TestPreorderJSONRoundTrip(t *testing.T) {
 	}
 	if decoded.ExpectedAvailableAt == nil || !decoded.ExpectedAvailableAt.Equal(expectedAt) {
 		t.Fatalf("expected_available_at did not round-trip: %+v", decoded.ExpectedAvailableAt)
+	}
+	if decoded.Availability == nil || !decoded.Availability.StockReserved ||
+		len(decoded.Availability.ReservationIDs) != 1 || decoded.Availability.Notification == nil {
+		t.Fatalf("availability did not round-trip: %+v", decoded.Availability)
 	}
 
 	var got map[string]any
