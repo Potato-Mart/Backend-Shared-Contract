@@ -1,9 +1,9 @@
 package category
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/product"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/product"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/warehouse"
 )
 
 // SKU corresponds to one of the top-level SKU codes that

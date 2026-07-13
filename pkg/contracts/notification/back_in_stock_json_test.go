@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/identity"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/notification"
-	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/notification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/identity"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/notification"
+	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/notification"
 )
 
 func TestBackInStockSubscriptionJSONRoundTrip(t *testing.T) {

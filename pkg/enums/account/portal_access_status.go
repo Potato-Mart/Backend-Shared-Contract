@@ -26,8 +26,3 @@ func (s PortalAccessStatus) IsValid() bool {
 
 // String returns the wire value for s.
 func (s PortalAccessStatus) String() string { return string(s) }
-
-// CanAccess reports whether s permits portal entry.
-func (s PortalAccessStatus) CanAccess() bool {
-	return s == PortalAccessStatusActive
-}

@@ -3,9 +3,9 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/membership"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/customer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/membership"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/customer"
 )
 
 // RetailCustomerMembershipProfile links a retail customer profile to the

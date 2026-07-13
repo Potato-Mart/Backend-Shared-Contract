@@ -3,8 +3,9 @@ package identity
 import (
 	"time"
 
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/account"
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/security"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/account"
+	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/identity"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/security"
 )
 
 // AccessTokenClaims is a framework-agnostic token-claim shape. This contract
@@ -12,6 +13,8 @@ import (
 type AccessTokenClaims struct {
 	Subject                   string                          `json:"sub"`
 	UserID                    string                          `json:"user_id"`
+	AuthIdentityID            string                          `json:"auth_identity_id"`
+	IdentityDomain            identityenum.IdentityDomain     `json:"identity_domain"`
 	AccountID                 string                          `json:"account_id,omitempty"`
 	AccountType               accountenum.AccountType         `json:"account_type,omitempty"`
 	Portal                    accountenum.Portal              `json:"portal,omitempty"`

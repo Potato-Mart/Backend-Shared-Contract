@@ -3,9 +3,9 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/payment"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/payment"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/sales"
 )
 
 // OrderSummary is a slim, customer-facing projection of an Order for "my orders"

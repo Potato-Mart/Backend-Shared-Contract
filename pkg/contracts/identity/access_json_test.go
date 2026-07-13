@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/identity"
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/account"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/identity"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/account"
 )
 
 func TestPortalAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T) {
@@ -52,38 +52,6 @@ func TestPortalAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T)
 	}
 	if decoded.Grant == nil || decoded.Grant.By != "admin_1" || decoded.Grant.At == nil || !decoded.Grant.At.Equal(grantedAt) {
 		t.Fatalf("grant lifecycle did not round-trip: %+v", decoded.Grant)
-	}
-}
-
-func TestIdentityRequestContextJSONShape(t *testing.T) {
-	ctx := identity.IdentityRequestContext{
-		RequestedBy: "super_admin_1",
-		RequestID:   "req_1",
-		Reason:      "least privilege update",
-	}
-
-	payload, err := json.Marshal(ctx)
-	if err != nil {
-		t.Fatalf("marshal identity request context: %v", err)
-	}
-
-	var got map[string]any
-	if err := json.Unmarshal(payload, &got); err != nil {
-		t.Fatalf("unmarshal identity request context JSON: %v", err)
-	}
-
-	for _, key := range []string{"requested_by", "request_id", "reason"} {
-		if _, ok := got[key]; !ok {
-			t.Fatalf("IdentityRequestContext JSON missing %q: %s", key, payload)
-		}
-	}
-
-	var decoded identity.IdentityRequestContext
-	if err := json.Unmarshal(payload, &decoded); err != nil {
-		t.Fatalf("unmarshal identity request context: %v", err)
-	}
-	if decoded.RequestID != "req_1" {
-		t.Fatalf("request context did not round-trip: %+v", decoded)
 	}
 }
 

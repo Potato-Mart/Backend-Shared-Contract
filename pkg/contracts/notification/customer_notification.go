@@ -3,19 +3,7 @@ package notification
 import (
 	"time"
 
-	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/notification"
-)
-
-const (
-	// PathCustomerNotifications lists notifications for the authenticated
-	// customer. Management derives ownership from the access token.
-	PathCustomerNotifications = "/v1/notifications"
-	// PathCustomerNotificationRead marks one owned notification read. Consumers
-	// replace :id with the notification id.
-	PathCustomerNotificationRead = "/v1/notifications/:id/read"
-	// PathInternalPreorderAvailability is the service-authenticated command
-	// Commerce uses after it has reserved a paid preorder line.
-	PathInternalPreorderAvailability = "/v1/internal/notifications/preorder-availability"
+	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/notification"
 )
 
 // CustomerNotificationDelivery records one channel's durable delivery state.
@@ -44,31 +32,4 @@ type CustomerNotification struct {
 	Deliveries     []CustomerNotificationDelivery             `json:"deliveries,omitempty"`
 	CreatedAt      time.Time                                  `json:"created_at"`
 	ReadAt         *time.Time                                 `json:"read_at,omitempty"`
-}
-
-// PreorderAvailabilityCommand carries stable business identifiers only.
-// Management resolves the verified email recipient and renders server-owned
-// copy; the caller cannot choose an address, subject, or body.
-type PreorderAvailabilityCommand struct {
-	EventID              string     `json:"event_id"`
-	RetailCustomerNumber string     `json:"retail_customer_number"`
-	OrderNumber          string     `json:"order_number"`
-	PreorderNumber       string     `json:"preorder_number,omitempty"`
-	ProductSKUCode       string     `json:"product_sku_code"`
-	ProductName          string     `json:"product_name,omitempty"`
-	Quantity             int        `json:"quantity"`
-	AvailableAt          time.Time  `json:"available_at"`
-	ExpectedAvailableAt  *time.Time `json:"expected_available_at,omitempty"`
-	Locale               string     `json:"locale,omitempty"`
-}
-
-// NotificationDeliveryReceipt is returned for both first delivery and
-// idempotent retries of the same stable event.
-type NotificationDeliveryReceipt struct {
-	EventID        string                                     `json:"event_id"`
-	NotificationID string                                     `json:"notification_id"`
-	Topic          notificationenum.CustomerNotificationTopic `json:"topic"`
-	Deliveries     []CustomerNotificationDelivery             `json:"deliveries"`
-	Replayed       bool                                       `json:"replayed,omitempty"`
-	CreatedAt      time.Time                                  `json:"created_at"`
 }

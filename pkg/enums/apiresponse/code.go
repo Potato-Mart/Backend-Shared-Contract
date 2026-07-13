@@ -4,15 +4,16 @@ type Code string
 
 const (
 	// Generic
-	CodeInternal        Code = "INTERNAL_ERROR"
-	CodeBadRequest      Code = "BAD_REQUEST"
-	CodeValidation      Code = "VALIDATION_ERROR"
-	CodeNotFound        Code = "NOT_FOUND"
-	CodeConflict        Code = "CONFLICT"
-	CodeUnauthorized    Code = "UNAUTHORIZED"
-	CodeForbidden       Code = "FORBIDDEN"
-	CodeTooManyRequests Code = "TOO_MANY_REQUESTS"
-	CodeRequestTooLarge Code = "REQUEST_BODY_TOO_LARGE"
+	CodeInternal           Code = "INTERNAL_ERROR"
+	CodeBadRequest         Code = "BAD_REQUEST"
+	CodeValidation         Code = "VALIDATION_ERROR"
+	CodeNotFound           Code = "NOT_FOUND"
+	CodeConflict           Code = "CONFLICT"
+	CodeUnauthorized       Code = "UNAUTHORIZED"
+	CodeForbidden          Code = "FORBIDDEN"
+	CodeTooManyRequests    Code = "TOO_MANY_REQUESTS"
+	CodeRequestTooLarge    Code = "REQUEST_BODY_TOO_LARGE"
+	CodeServiceUnavailable Code = "SERVICE_UNAVAILABLE"
 
 	// Auth
 	CodeAuthInvalidCredentials  Code = "AUTH_INVALID_CREDENTIALS"
@@ -83,7 +84,7 @@ func (c Code) IsValid() bool {
 	switch c {
 	case CodeInternal, CodeBadRequest, CodeValidation, CodeNotFound,
 		CodeConflict, CodeUnauthorized, CodeForbidden, CodeTooManyRequests,
-		CodeRequestTooLarge, CodeAuthInvalidCredentials, CodeAuthInvalidToken,
+		CodeRequestTooLarge, CodeServiceUnavailable, CodeAuthInvalidCredentials, CodeAuthInvalidToken,
 		CodeAuthExpiredToken, CodeAuthWrongPortal, CodeAuthAccountDisabled,
 		CodeAuthMFARequired, CodeAuthReauthRequired, CodeSecurityPolicyViolation,
 		CodeIdentityAccountTypeNotAllowed, CodeIdentityPortalAccessDenied,
@@ -108,45 +109,3 @@ func (c Code) IsValid() bool {
 }
 
 func (c Code) String() string { return string(c) }
-
-// HTTPStatus returns the preferred HTTP status code for an error Code.
-func (c Code) HTTPStatus() int {
-	switch c {
-	case CodeBadRequest, CodeValidation, CodeOrderEmpty, CodeOrderInvalidTransition,
-		CodeOrderTerminal, CodeInsufficientStock, CodeStorageMismatch,
-		CodeDiscountInactive, CodeDiscountNotStarted, CodeDiscountExpired,
-		CodeDiscountExhausted, CodeDiscountMinNotMet, CodeDiscountInapplicable,
-		CodeTerminalSignatureFail, CodeTerminalRequestRejected:
-		return 400
-	case CodeUnauthorized, CodeAuthInvalidCredentials, CodeAuthInvalidToken,
-		CodeAuthExpiredToken, CodeAuthWrongPortal, CodeAuthAccountDisabled,
-		CodeAuthMFARequired, CodeAuthReauthRequired,
-		CodeIdentityAuthIdentityDisabled, CodeIdentityMFARequired:
-		return 401
-	case CodeForbidden, CodeSecurityPolicyViolation,
-		CodeIdentityAccountTypeNotAllowed, CodeIdentityPortalAccessDenied,
-		CodeIdentityPortalAccessRevoked, CodeIdentityAccountSuspended,
-		CodeIdentityWholesaleOrganisationNotApproved,
-		CodeIdentityOrganisationAccessRequired,
-		CodeMembershipInactive:
-		return 403
-	case CodeNotFound, CodeDiscountNotFound, CodeTerminalNotRegistered,
-		CodeMembershipNotFound, CodeMembershipRewardUnavailable:
-		return 404
-	case CodeConflict, CodeUserEmailTaken, CodeSKUCodeTaken,
-		CodePlacingAreaCodeTaken, CodeProductCodeTaken, CodeDiscountCodeTaken,
-		CodeTerminalBusy, CodeMembershipInsufficientPoints,
-		CodeMembershipPointReservationExpired:
-		return 409
-	case CodeRequestTooLarge:
-		return 413
-	case CodeTooManyRequests:
-		return 429
-	case CodeTerminalNotConnected:
-		return 424
-	case CodeTerminalOutcomeUnknown, CodeTerminalTimeout:
-		return 504
-	default:
-		return 500
-	}
-}

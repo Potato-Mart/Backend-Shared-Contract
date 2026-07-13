@@ -3,9 +3,8 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/identity"
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/identity"
 )
 
 // Role is the projection of a role definition stored in mgmt_roles.
@@ -14,9 +13,9 @@ import (
 // claims and middleware checks; Permissions is the list of permission
 // strings granted to anyone holding this role.
 //
-// IsSystem marks the seven built-in roles that the platform ships with
-// (superAdmin, admin, sales, warehouse, warehouseOperator, marketing,
-// customer). System roles cannot be deleted but their permissions can
+// IsSystem marks the six built-in workforce roles that the platform ships
+// with (superAdmin, admin, sales, warehouse, warehouseOperator, marketing).
+// System roles cannot be deleted but their permissions can
 // be tweaked by a superAdmin.
 type Role struct {
 	Key                         identityenum.UserRole `json:"key"`
@@ -27,22 +26,6 @@ type Role struct {
 	OwnerID                     string                `json:"owner_id,omitempty"`
 	LeastPrivilegeJustification string                `json:"least_privilege_justification,omitempty"`
 	AccessReviewedAt            *time.Time            `json:"access_reviewed_at,omitempty"`
-
-	common.AuditFields
-}
-
-// Permission is the projection of a permission definition stored in
-// mgmt_permissions. Permissions are addressed by a stable dotted key
-// (e.g. "customer.write", "promotion.publish") and grouped by module
-// for the admin UI.
-type Permission struct {
-	Key         string                         `json:"key"`
-	Label       string                         `json:"label"`
-	Description string                         `json:"description,omitempty"`
-	Module      string                         `json:"module"`
-	IsSystem    bool                           `json:"is_system"`
-	RiskLevel   securityenum.SecurityRiskLevel `json:"risk_level,omitempty"`
-	RequiresMFA bool                           `json:"requires_mfa,omitempty"`
 
 	common.AuditFields
 }

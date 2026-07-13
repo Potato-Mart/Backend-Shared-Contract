@@ -3,9 +3,9 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/shared"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/shared"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/warehouse"
 )
 
 type InboundReceipt struct {
@@ -16,6 +16,7 @@ type InboundReceipt struct {
 	ETA          *time.Time                         `json:"eta,omitempty"`
 	Operator     string                             `json:"operator,omitempty"`
 	Status       warehouseenum.InboundReceiptStatus `json:"status"`
+	Items        []InboundItem                      `json:"items"`
 	Note         string                             `json:"note,omitempty"`
 	ConfirmedAt  *time.Time                         `json:"confirmed_at,omitempty"`
 	History      []shared.HistoryEntry              `json:"history,omitempty"`
@@ -24,14 +25,12 @@ type InboundReceipt struct {
 }
 
 type InboundItem struct {
-	ID               string                    `json:"id"`
-	InboundReceiptID string                    `json:"inbound_receipt_id"`
-	ProductSKUCode   string                    `json:"product_sku_code"`
-	Barcode          string                    `json:"barcode,omitempty"`
-	ProductName      string                    `json:"product_name,omitempty"`
-	Storage          warehouseenum.StorageType `json:"storage,omitempty"`
-	ExpectedQty      int                       `json:"expected_qty"`
-	ReceivedQty      int                       `json:"received_qty"`
-	LocationCode     string                    `json:"location_code,omitempty"`
-	CreatedAt        time.Time                 `json:"created_at"`
+	ProductSKUCode string                    `json:"product_sku_code"`
+	Barcode        string                    `json:"barcode,omitempty"`
+	ProductName    string                    `json:"product_name,omitempty"`
+	Storage        warehouseenum.StorageType `json:"storage,omitempty"`
+	ExpectedQty    int                       `json:"expected_qty"`
+	ReceivedQty    int                       `json:"received_qty"`
+	LocationCode   string                    `json:"location_code,omitempty"`
+	CreatedAt      time.Time                 `json:"created_at"`
 }

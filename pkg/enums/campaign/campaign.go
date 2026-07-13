@@ -88,3 +88,65 @@ func (p CampaignPlatform) IsValid() bool {
 }
 
 func (p CampaignPlatform) String() string { return string(p) }
+
+type CampaignStatus string
+
+const (
+	CampaignStatusDraft     CampaignStatus = "draft"
+	CampaignStatusScheduled CampaignStatus = "scheduled"
+	CampaignStatusActive    CampaignStatus = "active"
+	CampaignStatusCompleted CampaignStatus = "completed"
+	CampaignStatusArchived  CampaignStatus = "archived"
+)
+
+func (s CampaignStatus) IsValid() bool {
+	switch s {
+	case CampaignStatusDraft, CampaignStatusScheduled, CampaignStatusActive,
+		CampaignStatusCompleted, CampaignStatusArchived:
+		return true
+	default:
+		return false
+	}
+}
+
+func (s CampaignStatus) String() string { return string(s) }
+
+type CampaignPredictionStatus string
+
+const (
+	CampaignPredictionStatusNotApplicable CampaignPredictionStatus = "not_applicable"
+	CampaignPredictionStatusReady         CampaignPredictionStatus = "ready"
+	CampaignPredictionStatusWarning       CampaignPredictionStatus = "warning"
+)
+
+func (s CampaignPredictionStatus) IsValid() bool {
+	switch s {
+	case CampaignPredictionStatusNotApplicable, CampaignPredictionStatusReady,
+		CampaignPredictionStatusWarning:
+		return true
+	default:
+		return false
+	}
+}
+
+func (s CampaignPredictionStatus) String() string { return string(s) }
+
+type CampaignPredictionSource string
+
+const (
+	CampaignPredictionSourceSameSeries        CampaignPredictionSource = "same_series"
+	CampaignPredictionSourceSimilarEvent      CampaignPredictionSource = "similar_event"
+	CampaignPredictionSourceLast14DaysDoubled CampaignPredictionSource = "last_14_days_doubled"
+)
+
+func (s CampaignPredictionSource) IsValid() bool {
+	switch s {
+	case CampaignPredictionSourceSameSeries, CampaignPredictionSourceSimilarEvent,
+		CampaignPredictionSourceLast14DaysDoubled:
+		return true
+	default:
+		return false
+	}
+}
+
+func (s CampaignPredictionSource) String() string { return string(s) }

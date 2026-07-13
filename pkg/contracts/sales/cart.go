@@ -3,9 +3,9 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/product"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/product"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/sales"
 )
 
 type Cart struct {
@@ -33,7 +33,7 @@ type CartItem struct {
 	// Pricing is the commercial pricing context under which Price was set
 	// (retail vs wholesale audience, visibility). Optional pointer so it is
 	// omitted entirely when unset.
-	Pricing    *PricingContext `json:"pricing,omitempty"`
-	Quantity   int             `json:"quantity"`
-	Properties common.Metadata `json:"properties,omitempty"`
+	Pricing  *PricingContext       `json:"pricing,omitempty"`
+	Quantity int                   `json:"quantity"`
+	Preorder *PreorderItemSnapshot `json:"preorder,omitempty"`
 }

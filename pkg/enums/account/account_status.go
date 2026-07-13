@@ -28,12 +28,3 @@ func (s AccountStatus) IsValid() bool {
 
 // String returns the wire value for s.
 func (s AccountStatus) String() string { return string(s) }
-
-// IsTerminal reports whether s represents a final account lifecycle state.
-func (s AccountStatus) IsTerminal() bool {
-	switch s {
-	case AccountStatusClosed, AccountStatusDeleted:
-		return true
-	}
-	return false
-}

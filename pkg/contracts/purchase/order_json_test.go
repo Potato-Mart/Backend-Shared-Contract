@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/purchase"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/shared"
-	purchaseenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/purchase"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/purchase"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/shared"
+	purchaseenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/purchase"
 )
 
 func TestOrderJSONRoundTripWithHistory(t *testing.T) {

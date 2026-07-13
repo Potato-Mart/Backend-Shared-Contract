@@ -6,10 +6,6 @@ package promotionenum
 // bogo, …): a special campaign can still be an auto_discount under the
 // hood.
 //
-// An empty Class on a stored promotion is read as normal_promotion so
-// every pre-existing document keeps its current behaviour without a
-// migration.
-//
 //	normal_promotion -> 常態特價: recurring/standing promotion
 //	special_campaign -> 特殊活動: event promotion for a specific period;
 //	                    always overrides a normal_promotion that targets

@@ -24,23 +24,3 @@ func (t AccountType) IsValid() bool {
 
 // String returns the wire value for t.
 func (t AccountType) String() string { return string(t) }
-
-// IsAllowedInPortal reports whether t is accepted by the given front-door
-// portal.
-func (t AccountType) IsAllowedInPortal(portal Portal) bool {
-	return portal.RequiresAccountType(t)
-}
-
-// AllAccountTypes returns every account type known to this contract.
-func AllAccountTypes() []AccountType {
-	return []AccountType{
-		AccountTypeAdminUser,
-		AccountTypeRetailCustomer,
-		AccountTypeWholesaleCustomer,
-	}
-}
-
-// AccountTypesForPortal returns the account types accepted by portal.
-func AccountTypesForPortal(portal Portal) []AccountType {
-	return portal.AllowedAccountTypes()
-}

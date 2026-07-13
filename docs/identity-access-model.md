@@ -1,102 +1,58 @@
-# Identity Access Model
+# Identity Data Model
 
-This module is contract-layer only. It defines shared enums, DTOs, error
-codes, and event payloads. It does not implement authentication, token signing,
-password hashing, HTTP middleware, database access, or portal admission logic.
+This module defines shared identity data only. Authentication flows, password
+handling, token issuance, portal admission, permission resolution, HTTP
+transport, persistence, and authorization policy belong to Backend-Management
+and to each backend's local enforcement layer.
 
-## Core Model
+## Core records
 
-`User` is the canonical human or principal. A user can have multiple login
-identities and multiple account/persona records.
+`User` is the canonical principal profile. It contains no credential or global
+role policy.
 
-`AuthIdentity` is a non-secret login identity attached to a user. It records the
-provider, domain, provider subject, email projection, verification state, and
-status. It never carries password hashes, refresh token hashes, OAuth tokens,
-passkey private material, or private IdP material.
+`AuthIdentity` records a provider identity in an explicit identity domain. It
+stores provider and verification metadata, but never password hashes, refresh
+token hashes, OAuth tokens, passkey private material, or private IdP material.
+The same normalized email can therefore be represented independently by
+different identity-domain records without implying a link between them.
 
-`UserAccount` is the account/persona record attached to a user. It carries an
-`AccountType`, lifecycle status, public display fields, and account-level audit
-metadata. A user can have more than one account persona.
+`UserAccount` is a portal-facing account/persona owned by a user. One user can
+have multiple account records, including both customer account types.
 
-`PortalAccess` controls front-door platform admission. It answers whether a
-specific account/persona may enter a specific portal.
+`PortalAccess` is the persisted grant or revocation record between an account
+and a portal. It is data consumed by Management's portal policy; this module
+does not map portals to domains or account types.
 
-`RoleAssignment` controls capabilities after portal admission. It assigns a
-role key inside an account, portal, and optional business scope such as a
-wholesale organisation.
+`RoleAssignment` is a persisted scoped role grant. Role-to-permission policy
+and access evaluation are backend-owned business rules.
 
-## Account Type Is Not User Role
+## Sessions and claims
 
-`AccountType` answers: is this account/persona allowed into this portal?
+Identity claims, login sessions, refresh records, portal decisions, and
+security/audit events carry the stable identifiers needed to preserve domain,
+account, and portal isolation, including:
 
-`UserRole`, `Role`, `Permission`, and `RoleAssignment` answer: what can this
-account do after it is inside the portal?
-
-`UserRole` remains exported for backward compatibility, but new services must
-not use it as the sole platform gate. Use `AccountType` and `PortalAccess` for
-portal admission.
-
-## Portal Mapping
-
-Each current portal accepts exactly one account type:
-
-| Portal | Wire value | Required account type |
-| --- | --- | --- |
-| `PortalControl` | `control` | `adminUser` |
-| `PortalRetail` | `retail` | `retailCustomer` |
-| `PortalWholesale` | `wholesale` | `wholesaleCustomer` |
-
-Only these three portal names are valid.
-
-## Sessions And Claims
-
-`LoginSession` is scoped to one portal and, for user sessions, one account
-persona. Session and token-claim contracts can carry:
-
+- `auth_identity_id`
+- `identity_domain`
+- `user_id`
 - `account_id`
 - `account_type`
 - `portal`
 - `audience`
-- `roles`
-- `permissions`
-- `wholesale_organisation_id`
-- `organisation_access_id`
-- `role_key`
+- scoped role and organisation identifiers when applicable
 
-Services that issue or validate sessions must check portal, audience, and
-account type consistently. This repository only defines the shared shape.
+The shared models record those values. Issuers and consumers independently
+enforce their required claim tuples and audience policy.
 
-## Customer Profile Contracts
+## Customer and organisation records
 
-Retail customer business details live in `customers.RetailCustomer` and belong
-to the `retailCustomer` account/persona model.
+Retail customer business details use `customers.RetailCustomer`.
 
-Wholesale customer business details are organisation-owned. Since v14,
-`wholesale.WholesaleCustomer` is a compatibility name for
-`wholesale.WholesaleOrganisation`, and the `wholesaleCustomer` account/persona
-represents the organisation principal used for wholesale portal sign-in.
-Organisation approval and organisation access lifecycle remain separate
-wholesale contracts.
+Wholesale organisation business details use
+`wholesale.WholesaleOrganisation`, with people linked through
+`wholesale.OrganisationAccess`. Organisation approval, portal grants, account
+state, and organisation access remain distinct persisted records.
 
-Wholesale organisation business details use `common.OrganisationDetail`
-embedded by `wholesale.WholesaleOrganisation`, so company/organisation identity,
-registration, contact, address, branding, and metadata fields have one shared
-shape across suppliers and wholesale organisations.
-
-## Wholesale Access
-
-Wholesale portal access is organisation and membership aware:
-
-- `WholesaleOrganisation` records approval status, B2B organisation references,
-  and the stable organisation-principal identity link.
-- `OrganisationAccess` links a user account to a wholesale organisation and
-  carries the organisation-scoped role key plus the person's team profile.
-- Exactly one active organisation access should be primary for an organisation;
-  `primary_organisation_access_id` identifies the main person-in-charge.
-- Changing the main person-in-charge updates organisation/contact/access
-  metadata and does not mutate the organisation principal's `AuthIdentity`.
-- A wholesale portal session can identify the account, organisation,
-  organisation access grant, and role key used for that session.
-
-Wholesale organisation status and organisation access status are separate from
-retail account lifecycle status and portal access status.
+`common.OrganisationDetail` provides the shared organisation value shape used
+by suppliers and wholesale organisations. It is a data model, not an onboarding
+or authorization workflow.

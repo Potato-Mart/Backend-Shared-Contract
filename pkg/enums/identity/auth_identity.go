@@ -48,15 +48,13 @@ type IdentityDomain string
 const (
 	IdentityDomainCustomer  IdentityDomain = "customer"
 	IdentityDomainWorkforce IdentityDomain = "workforce"
-	IdentityDomainPartner   IdentityDomain = "partner"
 	IdentityDomainService   IdentityDomain = "service"
 )
 
 // IsValid reports whether d is a known IdentityDomain value.
 func (d IdentityDomain) IsValid() bool {
 	switch d {
-	case IdentityDomainCustomer, IdentityDomainWorkforce, IdentityDomainPartner,
-		IdentityDomainService:
+	case IdentityDomainCustomer, IdentityDomainWorkforce, IdentityDomainService:
 		return true
 	}
 	return false

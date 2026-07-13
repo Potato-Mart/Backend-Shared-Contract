@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/notification"
+	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/notification"
 )
 
 func TestNotificationEnums(t *testing.T) {

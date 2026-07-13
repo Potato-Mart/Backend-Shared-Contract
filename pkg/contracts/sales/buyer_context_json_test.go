@@ -5,12 +5,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/sales"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/customer"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/product"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/sales"
-	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/sales"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/customer"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/product"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/sales"
+	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/shipping"
 )
 
 // TestOrderBuyerAndItemPricingRoundTrip checks the additive buyer/commercial
@@ -77,9 +77,8 @@ func TestCartChannelAndBuyerRoundTrip(t *testing.T) {
 		Buyer:     &sales.BuyerContext{Type: customerenum.BuyerTypeGuestRetail},
 		Items: []sales.CartItem{
 			{
-				Price:      common.Money{AmountMinor: 500, Currency: "AUD"},
-				Pricing:    &sales.PricingContext{Audience: productenum.PriceAudienceRetail},
-				Properties: common.Metadata{"fulfilment_mode": "preorder"},
+				Price:   common.Money{AmountMinor: 500, Currency: "AUD"},
+				Pricing: &sales.PricingContext{Audience: productenum.PriceAudienceRetail},
 			},
 		},
 	}
@@ -102,8 +101,8 @@ func TestCartChannelAndBuyerRoundTrip(t *testing.T) {
 	if len(decoded.Items) != 1 || decoded.Items[0].Pricing == nil || decoded.Items[0].Pricing.Audience != productenum.PriceAudienceRetail {
 		t.Fatalf("cart item pricing.audience did not round-trip: %+v", decoded.Items)
 	}
-	if decoded.Items[0].Properties["fulfilment_mode"] != "preorder" {
-		t.Fatalf("cart item properties did not round-trip: %+v", decoded.Items[0].Properties)
+	if strings.Contains(string(payload), `"properties"`) || strings.Contains(string(payload), `"fulfilment_mode"`) {
+		t.Fatalf("removed cart item properties leaked into JSON: %s", payload)
 	}
 }
 

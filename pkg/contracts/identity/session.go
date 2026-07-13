@@ -3,10 +3,10 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/shared"
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/account"
-	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/identity"
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/shared"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/account"
+	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/identity"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/security"
 )
 
 // LoginSession is a non-secret projection of an active login. A session is
@@ -19,6 +19,8 @@ import (
 type LoginSession struct {
 	ID                        string                          `json:"id"`
 	UserID                    string                          `json:"user_id"`
+	AuthIdentityID            string                          `json:"auth_identity_id"`
+	IdentityDomain            identityenum.IdentityDomain     `json:"identity_domain"`
 	Portal                    accountenum.Portal              `json:"portal"`
 	AccountID                 string                          `json:"account_id,omitempty"`
 	AccountType               accountenum.AccountType         `json:"account_type,omitempty"`
@@ -46,11 +48,20 @@ type LoginSession struct {
 	History                   []shared.HistoryEntry           `json:"history,omitempty"`
 }
 
-// AuthTokenPair is returned on successful login or refresh.
-type AuthTokenPair struct {
-	AccessToken  string    `json:"access_token"`
-	TokenType    string    `json:"token_type"` // always "Bearer"
-	ExpiresIn    int       `json:"expires_in"` // seconds until access_token expiry
-	ExpiresAt    time.Time `json:"expires_at"`
-	RefreshToken string    `json:"refresh_token"`
+// RefreshTokenRecord is the non-secret persistence/audit projection for a
+// rotating refresh token. Implementations persist only a token hash.
+type RefreshTokenRecord struct {
+	ID             string                      `json:"id"`
+	TokenHash      string                      `json:"-"`
+	UserID         string                      `json:"user_id"`
+	AuthIdentityID string                      `json:"auth_identity_id"`
+	IdentityDomain identityenum.IdentityDomain `json:"identity_domain"`
+	AccountID      string                      `json:"account_id"`
+	Portal         accountenum.Portal          `json:"portal"`
+	Audience       string                      `json:"audience"`
+	IssuedAt       time.Time                   `json:"issued_at"`
+	ExpiresAt      time.Time                   `json:"expires_at"`
+	RotatedAt      *time.Time                  `json:"rotated_at,omitempty"`
+	RevokedAt      *time.Time                  `json:"revoked_at,omitempty"`
+	RevokedReason  string                      `json:"revoked_reason,omitempty"`
 }

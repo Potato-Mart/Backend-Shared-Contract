@@ -6,14 +6,14 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 ## Governance / 治理原則
 
-- This module contains reusable domain contracts, value structs, enums, constants, validation helpers, error codes, and durable event/domain payloads only.
+- This module contains reusable domain entities, records, snapshots, events, value objects, typed enums, field-name/error-code constants, serialization methods, and single-value `IsValid` methods only.
 - HTTP/API wire DTOs, response envelopes, command payloads, and backend-specific request/response structs belong in the owning backend service.
 - It must not depend on database drivers, web frameworks, authentication middleware, or runtime service implementations.
 - Semantic versioning is enforced. Any removal, rename, JSON shape change, module path change, or incompatible exported type change requires a major version.
 - Consumers should pin a released module tag and review the "Consumer Action / 使用方動作" section before upgrading.
 - Remote release history was reconciled from GitHub tags in `Potato-Mart/Backend-Shared-Contract` on 2026-06-18.
 
-- 本模組只包含可重用的 domain contract、value struct、列舉、常數、驗證 helper、錯誤碼，以及可持久化的事件/domain payload。
+- 本模組只包含可重用的 domain entity、record、snapshot、event、value object、typed enum、欄位名稱/錯誤碼常數、序列化方法，以及單一值 `IsValid` 方法。
 - HTTP/API wire DTO、回應信封、command payload，以及後端專屬 request/response struct 應由各自擁有的後端服務維護。
 - 本模組不得依賴資料庫驅動、Web 框架、身份驗證 middleware，或任何服務執行期實作。
 - 本模組遵循 semantic versioning。任何移除、改名、JSON shape 改變、module path 改變，或不相容的 exported type 變更，都必須升 major version。
@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v16.0.0` | 2026-07-13 | Major | Model-only hard cut: changes the module path to `/v16`; removes endpoint DTOs, paths, service scopes, HTTP envelopes, business functions/mappings/transitions, forbidden packages, standalone preorder models, and compatibility aliases; adds v16 identity, order-owned preorder, campaign prediction, packing/stock-arrival, and persisted discount decision models plus an AST/manifest boundary gate. |
 | `v15.2.0` | 2026-07-12 | Minor | Durable customer notifications and idempotent stock operations: adds customer notification topics/channels/delivery states, preorder availability and delivery receipt contracts, customer/internal notification paths, the `notification:send` scope, and atomic reservation/packing-settlement commands and results. Additive only; keeps the `/v15` module path. |
 | `v15.1.0` | 2026-07-11 | Minor | Outbound delivery completion: adds the `delivered` outbound-shipment status and optional `delivered_at` timestamp. Additive only; keeps the `/v15` module path. |
 | `v15.0.0` | 2026-07-09 | Major | Retail account and portal cleanup: changes the module path to `/v15`, renames the general customer account persona to `retailCustomer`, renames storefront/partner portal wire values to `retail`/`wholesale`, removes legacy contact and activity timeline fields, adds retail profile completion/gender/billing/referral fields, and embeds order packing progress on sales orders. |
@@ -86,6 +87,49 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v16.0.0 (2026-07-13) - Model-Only Contract Hard Cut
+
+### Breaking boundary changes
+
+- Changes the module path to
+  `github.com/Potato-Mart/Backend-Shared-Contract/v16` and reports exactly
+  `v16.0.0` from `versioning.ModuleVersion`.
+- Removes every endpoint request/response/query/command/acknowledgement and
+  pagination DTO, route/path inventory, service scope catalogue, token endpoint
+  type, and HTTP response envelope/helper.
+- Removes portal/account mappings, permission resolution, state transitions,
+  calculations, normalizers, and every `pkg/logic` package. Backend services
+  own these policies and publish their transports through provider OpenAPI.
+- Removes standalone preorder records/statuses and wholesale compatibility
+  aliases. Preorder state is stored on cart/order models.
+- Keeps error codes as typed data enums while each backend owns HTTP status and
+  envelope mapping.
+
+### Shared model additions and changes
+
+- Adds identity-domain/account/portal isolation fields to claims, sessions,
+  refresh/security records, plus group-order-manager application records.
+- Adds order-owned preorder snapshots/allocation state and fulfillment
+  readiness.
+- Adds storefront campaign planning targets, immutable prediction revisions and
+  evidence, packing projections, stock-arrival events, and persisted
+  group-order discount decisions.
+- Renames the preorder limit field to `max_quantity_per_order`.
+
+### Boundary governance
+
+- Adds an exported-model classification manifest and digest.
+- Adds AST tests that reject endpoint DTO naming, transport tags, paths, scopes,
+  free functions, non-intrinsic methods, exported aliases, and forbidden
+  packages.
+
+### Consumer action
+
+- Pin `github.com/Potato-Mart/Backend-Shared-Contract/v16 v16.0.0`.
+- Remove v15 imports and all local compatibility decoding.
+- Own endpoint DTOs, paths, scopes, validation, authorization, and workflows in
+  the provider backend; generate consumer clients from provider OpenAPI.
 
 ## v15.2.0 (2026-07-12) - Durable Notifications And Idempotent Stock Operations
 

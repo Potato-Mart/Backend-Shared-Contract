@@ -6,7 +6,7 @@ func TestCodeIsValidAndString(t *testing.T) {
 	valid := []Code{
 		CodeInternal, CodeBadRequest, CodeValidation, CodeNotFound,
 		CodeConflict, CodeUnauthorized, CodeForbidden, CodeTooManyRequests,
-		CodeRequestTooLarge, CodeAuthInvalidCredentials, CodeAuthInvalidToken,
+		CodeRequestTooLarge, CodeServiceUnavailable, CodeAuthInvalidCredentials, CodeAuthInvalidToken,
 		CodeAuthExpiredToken, CodeAuthWrongPortal, CodeAuthAccountDisabled,
 		CodeAuthMFARequired, CodeAuthReauthRequired, CodeSecurityPolicyViolation,
 		CodeIdentityAccountTypeNotAllowed, CodeIdentityPortalAccessDenied,
@@ -38,30 +38,5 @@ func TestCodeIsValidAndString(t *testing.T) {
 
 	if Code("__invalid__").IsValid() {
 		t.Fatal("invalid code should not be valid")
-	}
-}
-
-func TestCodeHTTPStatus(t *testing.T) {
-	tests := []struct {
-		code Code
-		want int
-	}{
-		{CodeValidation, 400},
-		{CodeAuthInvalidToken, 401},
-		{CodeForbidden, 403},
-		{CodeNotFound, 404},
-		{CodeConflict, 409},
-		{CodeRequestTooLarge, 413},
-		{CodeTooManyRequests, 429},
-		{CodeTerminalNotConnected, 424},
-		{CodeTerminalTimeout, 504},
-		{CodeInternal, 500},
-		{Code("__unknown__"), 500},
-	}
-
-	for _, tt := range tests {
-		if got := tt.code.HTTPStatus(); got != tt.want {
-			t.Fatalf("%s.HTTPStatus() = %d, want %d", tt.code, got, tt.want)
-		}
 	}
 }

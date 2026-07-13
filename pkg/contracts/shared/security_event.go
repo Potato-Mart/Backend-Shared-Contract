@@ -3,8 +3,9 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/identity"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/security"
 )
 
 // SecurityEvent is a normalized event used for alerts, suspicious activity,
@@ -21,7 +22,10 @@ type SecurityEvent struct {
 	Status      securityenum.SecurityEventStatus   `json:"status"`
 	RiskLevel   securityenum.SecurityRiskLevel     `json:"risk_level,omitempty"`
 	ActorRef
-	SubjectUserID string `json:"subject_user_id,omitempty"`
+	SubjectUserID    string                      `json:"subject_user_id,omitempty"`
+	SubjectAccountID string                      `json:"subject_account_id,omitempty"`
+	AuthIdentityID   string                      `json:"auth_identity_id,omitempty"`
+	IdentityDomain   identityenum.IdentityDomain `json:"identity_domain,omitempty"`
 	RequestContext
 	Resource           string          `json:"resource,omitempty"`
 	ResourceID         string          `json:"resource_id,omitempty"`

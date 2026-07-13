@@ -4,162 +4,71 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
-	"os"
+	"io/fs"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
-	"unicode"
 )
 
-var forbiddenExportedTypeSuffixes = []string{
-	"Request",
-	"Response",
-	"Input",
-	"Payload",
-	"DTO",
-	"Dto",
+var forbiddenTransportImports = map[string]struct{}{
+	"net/http":                 {},
+	"github.com/gin-gonic/gin": {},
+	"github.com/go-chi/chi":    {},
+	"github.com/labstack/echo": {},
+	"github.com/gofiber/fiber": {},
 }
 
-var allowedSharedWireDTOs = map[string]map[string]struct{}{
-	"contracts/wholesale/application.go": {
-		"WholesaleApplicationRequest":          {},
-		"WholesaleApplicationResponse":         {},
-		"WholesaleApplicationStatusResponse":   {},
-		"WholesaleApplicationDecisionRequest":  {},
-		"WholesaleApplicationDecisionResponse": {},
-	},
-}
-
-func TestSharedContractDoesNotExportWireDTOs(t *testing.T) {
-	err := filepath.WalkDir(".", func(path string, d os.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		if d.IsDir() || !strings.HasSuffix(path, ".go") || strings.HasSuffix(path, "_test.go") {
-			return nil
-		}
-		fset := token.NewFileSet()
-		file, err := parser.ParseFile(fset, path, nil, 0)
-		if err != nil {
-			return err
-		}
-		for _, decl := range file.Decls {
-			gen, ok := decl.(*ast.GenDecl)
-			if !ok || gen.Tok != token.TYPE {
-				continue
+func TestSharedContractHasNoTransportFrameworkImports(t *testing.T) {
+	walkGoFiles(t, func(path string, fset *token.FileSet, file *ast.File) {
+		for _, spec := range file.Imports {
+			importPath, err := strconv.Unquote(spec.Path.Value)
+			if err != nil {
+				t.Fatalf("%s: invalid import: %v", fset.Position(spec.Pos()), err)
 			}
-			for _, spec := range gen.Specs {
-				ts, ok := spec.(*ast.TypeSpec)
-				if !ok || !isExported(ts.Name.Name) {
-					continue
-				}
-				for _, suffix := range forbiddenExportedTypeSuffixes {
-					if strings.HasSuffix(ts.Name.Name, suffix) {
-						if isAllowedSharedWireDTO(path, ts.Name.Name) {
-							continue
-						}
-						pos := fset.Position(ts.Pos())
-						t.Fatalf("%s exports %s; request/response/input/payload DTOs belong in the owning backend", pos, ts.Name.Name)
-					}
-				}
+			if _, forbidden := forbiddenTransportImports[importPath]; forbidden {
+				t.Errorf("%s imports transport framework %q", fset.Position(spec.Pos()), importPath)
 			}
 		}
-		return nil
 	})
-	if err != nil {
-		t.Fatalf("scan contract package types: %v", err)
-	}
 }
 
-func TestSharedContractHasNoDatabaseSpecificTerms(t *testing.T) {
-	terms := blockedStorageTerms()
-	err := filepath.WalkDir(".", func(path string, d os.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		if d.IsDir() {
-			if d.Name() == ".git" {
-				return filepath.SkipDir
-			}
-			return nil
-		}
-		body, err := os.ReadFile(path)
-		if err != nil {
-			return err
-		}
-		lower := strings.ToLower(string(body))
-		for _, term := range terms {
-			if strings.Contains(lower, term) {
-				t.Fatalf("%s contains database-specific term %q", path, term)
-			}
-		}
-		return nil
-	})
-	if err != nil {
-		t.Fatalf("scan repository text: %v", err)
-	}
-}
-
-func TestSharedContractStructTagsAreDatabaseNeutral(t *testing.T) {
-	terms := blockedStorageTerms()
-	err := filepath.WalkDir(".", func(path string, d os.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		if d.IsDir() || !strings.HasSuffix(path, ".go") {
-			return nil
-		}
-		fset := token.NewFileSet()
-		file, err := parser.ParseFile(fset, path, nil, 0)
-		if err != nil {
-			return err
-		}
-		ast.Inspect(file, func(n ast.Node) bool {
-			st, ok := n.(*ast.StructType)
-			if !ok || st.Fields == nil {
+func TestSharedContractHasNoTransportTags(t *testing.T) {
+	walkGoFiles(t, func(path string, fset *token.FileSet, file *ast.File) {
+		ast.Inspect(file, func(node ast.Node) bool {
+			field, ok := node.(*ast.Field)
+			if !ok || field.Tag == nil {
 				return true
 			}
-			for _, field := range st.Fields.List {
-				if field.Tag == nil {
-					continue
-				}
-				tag := strings.ToLower(field.Tag.Value)
-				for _, term := range terms {
-					if strings.Contains(tag, term) {
-						pos := fset.Position(field.Tag.Pos())
-						t.Fatalf("%s uses database-specific struct tag %q", pos, term)
-					}
+			tag := strings.ToLower(field.Tag.Value)
+			for _, term := range []string{"binding:", "form:", "query:", "header:", "uri:"} {
+				if strings.Contains(tag, term) {
+					t.Errorf("%s uses transport-specific struct tag %q", fset.Position(field.Tag.Pos()), term)
 				}
 			}
 			return true
 		})
+	})
+}
+
+func walkGoFiles(t *testing.T, inspect func(string, *token.FileSet, *ast.File)) {
+	t.Helper()
+	err := filepath.WalkDir(".", func(path string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if entry.IsDir() || !strings.HasSuffix(path, ".go") {
+			return nil
+		}
+		fset := token.NewFileSet()
+		file, err := parser.ParseFile(fset, path, nil, 0)
+		if err != nil {
+			return err
+		}
+		inspect(path, fset, file)
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan struct tags: %v", err)
+		t.Fatalf("scan shared contract: %v", err)
 	}
-}
-
-func blockedStorageTerms() []string {
-	return []string{
-		string([]byte{98, 115, 111, 110}),
-		string([]byte{109, 111, 110, 103, 111}),
-		string([]byte{109, 111, 110, 103, 111, 100, 98}),
-	}
-}
-
-func isAllowedSharedWireDTO(path, name string) bool {
-	types := allowedSharedWireDTOs[filepath.ToSlash(path)]
-	if types == nil {
-		return false
-	}
-	_, ok := types[name]
-	return ok
-}
-
-func isExported(name string) bool {
-	for _, r := range name {
-		return unicode.IsUpper(r)
-	}
-	return false
 }

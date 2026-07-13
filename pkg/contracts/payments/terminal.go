@@ -5,9 +5,9 @@ package payments
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/shared"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/shared"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/payment"
 )
 
 // Terminal is an EFTPOS device registered for POS use.
@@ -31,17 +31,4 @@ type Terminal struct {
 	History  []shared.HistoryEntry `json:"history,omitempty"`
 
 	common.AuditFields
-}
-
-// TerminalConnectionInfo is a lightweight liveness check returned by a
-// provider status call.
-type TerminalConnectionInfo struct {
-	TerminalID      string                       `json:"terminal_id"`
-	Provider        paymentenum.TerminalProvider `json:"provider"`
-	ProviderDetails *TerminalProviderDetails     `json:"provider_details,omitempty"`
-	Status          paymentenum.TerminalStatus   `json:"status"`
-	Connected       bool                         `json:"connected"`
-	ProviderStatus  string                       `json:"provider_status,omitempty"`
-	CheckedAt       time.Time                    `json:"checked_at"`
-	Metadata        common.Metadata              `json:"metadata,omitempty"`
 }

@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/payment"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/payment"
 )
 
 func TestPaymentEnumsValidateKnownValues(t *testing.T) {
@@ -21,20 +21,4 @@ func TestPaymentEnumsValidateKnownValues(t *testing.T) {
 		{name: "paymentenum.TerminalTxStatus", valid: []stringEnum{paymentenum.TerminalTxStatusUnknown, paymentenum.TerminalTxStatusPending, paymentenum.TerminalTxStatusAwaitingAction, paymentenum.TerminalTxStatusFinalised, paymentenum.TerminalTxStatusOverridePending, paymentenum.TerminalTxStatusOverrideResolved}, invalid: paymentenum.TerminalTxStatus("__invalid__")},
 		{name: "paymentenum.TerminalTxType", valid: []stringEnum{paymentenum.TerminalTxTypePurchase, paymentenum.TerminalTxTypeRefund, paymentenum.TerminalTxTypeReversal, paymentenum.TerminalTxTypeCashout, paymentenum.TerminalTxTypePurchaseWithCashout, paymentenum.TerminalTxTypeMOTO, paymentenum.TerminalTxTypeSettlement, paymentenum.TerminalTxTypeSettlementEnquiry}, invalid: paymentenum.TerminalTxType("__invalid__")},
 	})
-}
-
-func TestTerminalStatusesTerminalState(t *testing.T) {
-	if !paymentenum.TerminalStatusDeregistered.IsTerminal() || !paymentenum.TerminalStatusExpired.IsTerminal() {
-		t.Fatal("deregistered and expired terminals should be terminal")
-	}
-	if paymentenum.TerminalStatusError.IsTerminal() {
-		t.Fatal("error terminal status should be recoverable")
-	}
-
-	if !paymentenum.TerminalTxStatusFinalised.IsTerminal() || !paymentenum.TerminalTxStatusOverrideResolved.IsTerminal() {
-		t.Fatal("finalised and override_resolved terminal transactions should be terminal")
-	}
-	if paymentenum.TerminalTxStatusOverridePending.IsTerminal() {
-		t.Fatal("override_pending terminal transaction should require resolution")
-	}
 }

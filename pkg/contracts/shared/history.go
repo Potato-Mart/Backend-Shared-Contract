@@ -3,8 +3,8 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/security"
 )
 
 // HistoryChange is one field-level before/after fragment in a timeline entry.

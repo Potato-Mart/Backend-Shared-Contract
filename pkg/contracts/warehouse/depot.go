@@ -3,18 +3,19 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/warehouse"
 )
 
 type Depot struct {
-	ID        string `json:"id"`
-	Code      string `json:"code"`
-	Name      string `json:"name"`
-	Address   string `json:"address,omitempty"`
-	Phone     string `json:"phone,omitempty"`
-	IsActive  bool   `json:"is_active"`
-	SortOrder int    `json:"sort_order"`
+	ID            string         `json:"id"`
+	Code          string         `json:"code"`
+	Name          string         `json:"name"`
+	Address       string         `json:"address,omitempty"`
+	Phone         string         `json:"phone,omitempty"`
+	IsActive      bool           `json:"is_active"`
+	SortOrder     int            `json:"sort_order"`
+	PostcodeRules []PostcodeRule `json:"postcode_rules,omitempty"`
 	// LayoutID points at the published WarehouseLayout for this depot's
 	// 3D viewer. Empty when no layout has been built yet.
 	LayoutID string `json:"layout_id,omitempty"`
@@ -23,10 +24,8 @@ type Depot struct {
 }
 
 type PostcodeRule struct {
-	ID        string `json:"id"`
-	DepotCode string `json:"depot_code"`
-	Postcode  string `json:"postcode"`
-	Priority  int    `json:"priority"`
+	Postcode string `json:"postcode"`
+	Priority int    `json:"priority"`
 }
 
 type DepotProduct struct {

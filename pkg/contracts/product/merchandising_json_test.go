@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/product"
 )
 
 func TestProductStorefrontMerchandisingJSONShape(t *testing.T) {
@@ -22,7 +22,7 @@ func TestProductStorefrontMerchandisingJSONShape(t *testing.T) {
 				Enabled:                true,
 				StartsAt:               &start,
 				ExpectedAvailableAt:    &expected,
-				MaxQuantityPerRequest:  3,
+				MaxQuantityPerOrder:    3,
 				MaxQuantityPerCustomer: 6,
 				Labels:                 []common.LocalizedName{{Language: "en", Name: "Preorder"}},
 			},
@@ -49,7 +49,7 @@ func TestProductStorefrontMerchandisingJSONShape(t *testing.T) {
 		t.Fatalf("Product JSON missing storefront_merchandising: %s", body)
 	}
 	preorder, ok := merchandising["preorder"].(map[string]any)
-	if !ok || preorder["enabled"] != true || preorder["max_quantity_per_request"] != float64(3) {
+	if !ok || preorder["enabled"] != true || preorder["max_quantity_per_order"] != float64(3) {
 		t.Fatalf("Product preorder policy JSON mismatch: %s", body)
 	}
 	if preorder["expected_available_at"] != "2026-07-21T00:00:00Z" {
@@ -66,11 +66,11 @@ func TestStorefrontDisplayJSONShape(t *testing.T) {
 	days := 6
 	display := StorefrontDisplay{
 		Preorder: &StorefrontPreorderDisplay{
-			Available:             true,
-			Status:                productenum.StorefrontPreorderStatusOpen,
-			ExpectedAvailableAt:   &expiresAt,
-			MaxQuantityPerRequest: 2,
-			Labels:                []common.LocalizedName{{Language: "en", Name: "Preorder now"}},
+			Available:           true,
+			Status:              productenum.StorefrontPreorderStatusOpen,
+			ExpectedAvailableAt: &expiresAt,
+			MaxQuantityPerOrder: 2,
+			Labels:              []common.LocalizedName{{Language: "en", Name: "Preorder now"}},
 		},
 		Expiry: &StorefrontExpiryDisplay{
 			SoonExpiry:          true,

@@ -3,16 +3,11 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/warehouse"
 )
 
-// WarehouseLayout is the root 3D scene description for a depot. There is
-// at most one published layout per depot (Version is bumped per edit).
-//
-// Persistence collection: "warehouse_layouts" with a unique index on
-// (depot_code, version) and a partial index on (depot_code) where
-// is_published=true to fetch the live scene cheaply.
+// WarehouseLayout is the root 3D scene description for a depot.
 type WarehouseLayout struct {
 	ID              string         `json:"id"`
 	DepotCode       string         `json:"depot_code"`
@@ -36,31 +31,25 @@ type WarehouseLayout struct {
 }
 
 // LayoutNode is a single element in the warehouse 3D hierarchy:
-// Zone > Aisle > Rack > Shelf > Bin. Each node references its layout
-// and its parent, with a materialised Path so a subtree can be fetched
-// in one query.
-//
-// Persistence collection: "warehouse_layout_nodes" with indexes on
-// (layout_id, parent_id), (layout_id, type), and a multikey index on
-// "path" for "give me everything under aisle X" queries.
+// Zone > Aisle > Rack > Shelf > Bin.
 type LayoutNode struct {
-	ID         string                       `json:"id"`
-	LayoutID   string                       `json:"layout_id"`
-	DepotCode  string                       `json:"depot_code"`
-	ParentID   string                       `json:"parent_id,omitempty"`
-	Path       []string                     `json:"path,omitempty"` // ancestor IDs from root to immediate parent
-	Type       warehouseenum.LayoutNodeType `json:"type"`
-	Code       string                       `json:"code"` // human code, e.g. "A-12-3-2"
-	Name       string                       `json:"name,omitempty"`
-	Storage    warehouseenum.StorageType    `json:"storage,omitempty"`
-	Shape      warehouseenum.ShapeType      `json:"shape,omitempty"`
-	Transform  common.Transform             `json:"transform"`
-	Size       common.Size3D                `json:"size"`
-	Color      string                       `json:"color,omitempty"`       // hex like "#3b82f6"
-	Model      *ModelAsset                  `json:"model,omitempty"`       // optional model override for this node
-	LocationID string                       `json:"location_id,omitempty"` // links a BIN node to a StockLocation
-	SortOrder  int                          `json:"sort_order,omitempty"`
-	IsActive   bool                         `json:"is_active"`
+	ID            string                       `json:"id"`
+	DepotCode     string                       `json:"depot_code"`
+	LayoutVersion int                          `json:"layout_version"`
+	ParentCode    string                       `json:"parent_code,omitempty"`
+	PathCodes     []string                     `json:"path_codes,omitempty"` // ancestor codes from root to immediate parent
+	Type          warehouseenum.LayoutNodeType `json:"type"`
+	Code          string                       `json:"code"` // human code, e.g. "A-12-3-2"
+	Name          string                       `json:"name,omitempty"`
+	Storage       warehouseenum.StorageType    `json:"storage,omitempty"`
+	Shape         warehouseenum.ShapeType      `json:"shape,omitempty"`
+	Transform     common.Transform             `json:"transform"`
+	Size          common.Size3D                `json:"size"`
+	Color         string                       `json:"color,omitempty"`         // hex like "#3b82f6"
+	Model         *ModelAsset                  `json:"model,omitempty"`         // optional model override for this node
+	LocationCode  string                       `json:"location_code,omitempty"` // links a BIN node to a StockLocation
+	SortOrder     int                          `json:"sort_order,omitempty"`
+	IsActive      bool                         `json:"is_active"`
 
 	common.AuditFields
 }

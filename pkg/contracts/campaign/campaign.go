@@ -8,8 +8,8 @@ package campaign
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/campaign"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/campaign"
 )
 
 // Audience narrows who a campaign is shown to. An empty field means "any";
@@ -23,11 +23,13 @@ type Audience struct {
 
 // Campaign is one piece of scheduled, targeted storefront content.
 type Campaign struct {
-	ID      string `json:"id"`
-	Title   string `json:"title"`
-	Message string `json:"message,omitempty"`
-	CTAText string `json:"cta_text,omitempty"`
-	CTAHref string `json:"cta_href,omitempty"`
+	ID          string `json:"id,omitempty"`
+	CampaignKey string `json:"campaign_key"`
+	SeriesKey   string `json:"series_key,omitempty"`
+	Title       string `json:"title"`
+	Message     string `json:"message,omitempty"`
+	CTAText     string `json:"cta_text,omitempty"`
+	CTAHref     string `json:"cta_href,omitempty"`
 
 	// MediaURL is the slide/hero image (used by home_hero, modal). BackgroundToken
 	// is an optional theme token name for the banner background.
@@ -48,10 +50,30 @@ type Campaign struct {
 	StartsAt *time.Time `json:"starts_at,omitempty"`
 	EndsAt   *time.Time `json:"ends_at,omitempty"`
 
-	Audience *Audience `json:"audience,omitempty"`
-
-	// TargetScope scopes a product_notice to a product or category tag.
-	TargetScope string `json:"target_scope,omitempty"`
+	Audience    *Audience                   `json:"audience,omitempty"`
+	Targets     CampaignTarget              `json:"targets,omitempty"`
+	Planning    *CampaignPlanning           `json:"planning,omitempty"`
+	Status      campaignenum.CampaignStatus `json:"status"`
+	ActivatedAt *time.Time                  `json:"activated_at,omitempty"`
+	ArchivedAt  *time.Time                  `json:"archived_at,omitempty"`
 
 	common.AuditFields
+}
+
+type CampaignCategoryTarget struct {
+	CollectionSlug string `json:"collection_slug"`
+	CategorySlug   string `json:"category_slug"`
+}
+
+type CampaignTarget struct {
+	ProductSKUCodes []string                 `json:"product_sku_codes,omitempty"`
+	Categories      []CampaignCategoryTarget `json:"categories,omitempty"`
+}
+
+type CampaignPlanning struct {
+	ResolvedProductSKUCodes []string   `json:"resolved_product_sku_codes,omitempty"`
+	PredictionKey           string     `json:"prediction_key,omitempty"`
+	PredictionRevision      int        `json:"prediction_revision,omitempty"`
+	AlgorithmVersion        string     `json:"algorithm_version,omitempty"`
+	PredictedAt             *time.Time `json:"predicted_at,omitempty"`
 }

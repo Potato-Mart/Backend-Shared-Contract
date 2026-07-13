@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/payments"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/shared"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/payments"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/shared"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/payment"
 )
 
 func TestTerminalTransactionJSONRoundTripWithHistory(t *testing.T) {
@@ -148,26 +148,6 @@ func TestTerminalProviderDetailsJSONShapes(t *testing.T) {
 		}
 	}
 
-	info := payments.TerminalConnectionInfo{
-		TerminalID:      "term_1",
-		Provider:        paymentenum.TerminalProviderMx51,
-		ProviderDetails: &payments.TerminalProviderDetails{TerminalID: "provider_term_1"},
-		Status:          paymentenum.TerminalStatusActive,
-		Connected:       true,
-		ProviderStatus:  "online",
-		CheckedAt:       time.Date(2026, 6, 18, 6, 0, 0, 0, time.UTC),
-	}
-	if payload, err = json.Marshal(info); err != nil {
-		t.Fatalf("marshal terminal connection info: %v", err)
-	}
-	if err := json.Unmarshal(payload, &got); err != nil {
-		t.Fatalf("unmarshal terminal connection info JSON: %v", err)
-	}
-	for _, key := range []string{"terminal_id", "provider", "provider_details", "status", "connected", "checked_at"} {
-		if _, ok := got[key]; !ok {
-			t.Fatalf("TerminalConnectionInfo JSON missing %q: %s", key, payload)
-		}
-	}
 }
 
 func TestSettlementJSONGroupsProviderSupportFields(t *testing.T) {

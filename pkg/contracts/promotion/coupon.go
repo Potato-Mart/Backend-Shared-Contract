@@ -3,10 +3,10 @@ package promotion
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/shared"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/shared"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/promotion"
 )
 
 // Coupon is a code-based discount that customers enter at checkout.
@@ -49,34 +49,13 @@ type CouponAssignment struct {
 	CreatedAt           time.Time                  `json:"created_at"`
 }
 
-// CouponAssignmentSummary is embedded in coupon detail responses so clients can
-// show assignment state without fetching the full assignment list.
-type CouponAssignmentSummary struct {
-	TotalAssignments    int `json:"total_assignments"`
-	ActiveAssignments   int `json:"active_assignments"`
-	RedeemedAssignments int `json:"redeemed_assignments"`
-	VoidedAssignments   int `json:"voided_assignments"`
-	ExpiredAssignments  int `json:"expired_assignments"`
-}
-
-// CouponDetail expands a Coupon with assignment and usage summaries.
-type CouponDetail struct {
-	Coupon
-	AssignmentSummary CouponAssignmentSummary `json:"assignment_summary"`
-}
-
-// CouponIssueSpec describes assignment issuance under a Coupon.
-type CouponIssueSpec struct {
-	CustomerNumbers []string                   `json:"customer_numbers,omitempty"`
-	Source          promotionenum.CouponSource `json:"source,omitempty"`
-	ExpiresAt       *time.Time                 `json:"expires_at,omitempty"`
-	Note            string                     `json:"note,omitempty"`
-}
-
-// CouponRecipientPreview reports the backend-resolved recipients for an issue
-// request. Future criteria-based issuance can extend Criteria without changing
-// assignment records.
-type CouponRecipientPreview struct {
-	CustomerNumbers []string `json:"customer_numbers"`
-	Count           int      `json:"count"`
+// CouponUsageRecord is Management's durable idempotent redemption result.
+type CouponUsageRecord struct {
+	ID                  string       `json:"id"`
+	CouponCode          string       `json:"coupon_code"`
+	CustomerNumber      string       `json:"customer_number,omitempty"`
+	RedeemedOrderNumber string       `json:"redeemed_order_number"`
+	DiscountAmount      common.Money `json:"discount_amount"`
+	RedeemedAt          time.Time    `json:"redeemed_at"`
+	CreatedAt           time.Time    `json:"created_at"`
 }

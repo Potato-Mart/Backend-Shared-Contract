@@ -6,7 +6,7 @@ This module follows semantic versioning for shared backend contracts.
 
 - Patch, for example `v2.1.2`: comments, docs, non-breaking helper fixes, or corrections that do not change JSON shape, enum values, field names, or behavior expected by consumers.
 - Minor, for example `v2.2.0`: additive contract changes such as new optional fields, new contracts, new enum values, or new helper types.
-- Major, for example `v3.0.0`: breaking changes such as removed fields, renamed JSON keys, changed enum wire values, changed primitive shapes, changed package paths, or response shape changes.
+- Major, for example `v3.0.0`: breaking changes such as removed fields, renamed JSON keys, changed enum wire values, changed primitive shapes, changed package paths, or serialized model shape changes.
 
 ## Release Flow
 

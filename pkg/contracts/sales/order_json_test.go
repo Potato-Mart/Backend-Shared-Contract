@@ -6,14 +6,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/warehouse"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/membership"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/payment"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/sales"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/warehouse"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/membership"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/payment"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/sales"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/warehouse"
 )
 
 func TestOrderJSONRoundTripWithHistory(t *testing.T) {
@@ -75,6 +75,27 @@ func TestOrderJSONOmitsEmptyHistory(t *testing.T) {
 	}
 	if strings.Contains(string(payload), `"history"`) {
 		t.Fatalf("empty history should be omitted, got %s", payload)
+	}
+}
+
+func TestV16LineItemsRemovePropertiesAndRequireOrderItemID(t *testing.T) {
+	cartPayload, err := json.Marshal(sales.CartItem{Quantity: 1})
+	if err != nil {
+		t.Fatalf("marshal cart item: %v", err)
+	}
+	if strings.Contains(string(cartPayload), `"properties"`) {
+		t.Fatalf("removed cart item properties remain: %s", cartPayload)
+	}
+
+	orderPayload, err := json.Marshal(sales.OrderItem{Quantity: 1})
+	if err != nil {
+		t.Fatalf("marshal order item: %v", err)
+	}
+	if !strings.Contains(string(orderPayload), `"id":""`) {
+		t.Fatalf("order item id must remain a required JSON key: %s", orderPayload)
+	}
+	if strings.Contains(string(orderPayload), `"properties"`) {
+		t.Fatalf("removed order item properties remain: %s", orderPayload)
 	}
 }
 

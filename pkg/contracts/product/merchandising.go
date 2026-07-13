@@ -3,8 +3,8 @@ package product
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/product"
 )
 
 // StorefrontMerchandising groups admin-configurable product merchandising policy
@@ -23,7 +23,7 @@ type PreorderPolicy struct {
 	StartsAt               *time.Time                    `json:"starts_at,omitempty"`
 	EndsAt                 *time.Time                    `json:"ends_at,omitempty"`
 	ExpectedAvailableAt    *time.Time                    `json:"expected_available_at,omitempty"`
-	MaxQuantityPerRequest  int                           `json:"max_quantity_per_request,omitempty"`
+	MaxQuantityPerOrder    int                           `json:"max_quantity_per_order,omitempty"`
 	MaxQuantityPerCustomer int                           `json:"max_quantity_per_customer,omitempty"`
 	Labels                 []common.LocalizedName        `json:"labels,omitempty"`
 	Descriptions           []common.LocalizedDescription `json:"descriptions,omitempty"`
@@ -56,7 +56,7 @@ type StorefrontPreorderDisplay struct {
 	StartsAt               *time.Time                           `json:"starts_at,omitempty"`
 	EndsAt                 *time.Time                           `json:"ends_at,omitempty"`
 	ExpectedAvailableAt    *time.Time                           `json:"expected_available_at,omitempty"`
-	MaxQuantityPerRequest  int                                  `json:"max_quantity_per_request,omitempty"`
+	MaxQuantityPerOrder    int                                  `json:"max_quantity_per_order,omitempty"`
 	MaxQuantityPerCustomer int                                  `json:"max_quantity_per_customer,omitempty"`
 	Labels                 []common.LocalizedName               `json:"labels,omitempty"`
 	Descriptions           []common.LocalizedDescription        `json:"descriptions,omitempty"`

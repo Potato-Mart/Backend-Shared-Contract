@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/security"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/security"
 )
 
 func TestSecurityEnumsValidateKnownValues(t *testing.T) {

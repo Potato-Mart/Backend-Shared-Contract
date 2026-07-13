@@ -3,27 +3,15 @@ package wallet
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/promotion"
-	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/promotion"
+	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/wallet"
 )
 
 const WalletExportSchemaVersion = "wallet_export_v1"
 
-// WalletExportSpec describes how Management should build a durable export.
-type WalletExportSpec struct {
-	Format          walletenum.WalletExportFormat `json:"format,omitempty"`
-	IncludeHistory  *bool                         `json:"include_history,omitempty"`
-	From            *time.Time                    `json:"from,omitempty"`
-	To              *time.Time                    `json:"to,omitempty"`
-	IncludeExpired  *bool                         `json:"include_expired,omitempty"`
-	IncludeRedeemed *bool                         `json:"include_redeemed,omitempty"`
-	IncludeVoided   *bool                         `json:"include_voided,omitempty"`
-	Locale          string                        `json:"locale,omitempty"`
-}
-
-// WalletExportRecord is returned by export status endpoints.
+// WalletExportRecord is the durable state of a wallet export.
 type WalletExportRecord struct {
 	ID            string                        `json:"id"`
 	SchemaVersion string                        `json:"schema_version"`

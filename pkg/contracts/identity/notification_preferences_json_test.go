@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/identity"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/identity"
 )
 
 func TestUserNotificationTopicsJSONShape(t *testing.T) {

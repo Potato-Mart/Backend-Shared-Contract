@@ -3,15 +3,15 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/contracts/warehouse"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/membership"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/payment"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/promotion"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/sales"
-	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v15/pkg/enums/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/warehouse"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/membership"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/payment"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/promotion"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/sales"
+	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/shipping"
 )
 
 type Order struct {
@@ -65,20 +65,23 @@ type Order struct {
 	SurchargeAmount common.Money `json:"surcharge_amount,omitempty"`
 	Total           common.Money `json:"total"`
 
-	CouponCode          string                       `json:"coupon_code,omitempty"`
-	AppliedPromotions   []AppliedPromotion           `json:"applied_promotions,omitempty"`
-	PointRedemption     *PointRedemptionSnapshot     `json:"point_redemption,omitempty"`
-	RewardRedemptions   []RewardRedemptionSnapshot   `json:"reward_redemptions,omitempty"`
-	GiftCardRedemptions []GiftCardRedemptionSnapshot `json:"gift_card_redemptions,omitempty"`
-	TrackingNumber      string                       `json:"tracking_number,omitempty"`
-	TrackingURL         string                       `json:"tracking_url,omitempty"`
-	Packing             *OrderPackingProgress        `json:"packing,omitempty"`
-	CustomerNote        string                       `json:"customer_note,omitempty"`
-	InternalNote        string                       `json:"internal_note,omitempty"`
-	Tags                []string                     `json:"tags,omitempty"`
+	CouponCode           string                         `json:"coupon_code,omitempty"`
+	AppliedPromotions    []AppliedPromotion             `json:"applied_promotions,omitempty"`
+	PointRedemption      *PointRedemptionSnapshot       `json:"point_redemption,omitempty"`
+	RewardRedemptions    []RewardRedemptionSnapshot     `json:"reward_redemptions,omitempty"`
+	GiftCardRedemptions  []GiftCardRedemptionSnapshot   `json:"gift_card_redemptions,omitempty"`
+	TrackingNumber       string                         `json:"tracking_number,omitempty"`
+	TrackingURL          string                         `json:"tracking_url,omitempty"`
+	Packing              *OrderPackingProgress          `json:"packing,omitempty"`
+	PackingRevision      int64                          `json:"packing_revision,omitempty"`
+	FulfillmentReadiness salesenum.FulfillmentReadiness `json:"fulfillment_readiness"`
+	CustomerNote         string                         `json:"customer_note,omitempty"`
+	InternalNote         string                         `json:"internal_note,omitempty"`
+	Tags                 []string                       `json:"tags,omitempty"`
 
 	// â”€â”€ Lifecycle timestamps â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	ConfirmedAt      *time.Time `json:"confirmed_at,omitempty"`
+	PaidAt           *time.Time `json:"paid_at,omitempty"`
 	CancelledAt      *time.Time `json:"cancelled_at,omitempty"`
 	CompletedAt      *time.Time `json:"completed_at,omitempty"`
 	ShippedAt        *time.Time `json:"shipped_at,omitempty"`
@@ -108,20 +111,20 @@ type OrderPackingProgress struct {
 }
 
 type OrderItem struct {
-	ID           string           `json:"id,omitempty"`
+	ID           string           `json:"id"`
 	Product      product.Snapshot `json:"product"`
 	VariantTitle string           `json:"variant_title,omitempty"`
 	UnitPrice    common.Money     `json:"unit_price"`
 	// Pricing is the commercial pricing context under which UnitPrice was
 	// set (retail vs wholesale audience, visibility). Optional pointer so it
 	// is omitted entirely when unset.
-	Pricing        *PricingContext `json:"pricing,omitempty"`
-	Quantity       int             `json:"quantity"`
-	DiscountAmount common.Money    `json:"discount_amount"`
-	Total          common.Money    `json:"total"`
-	CartonQty      int             `json:"carton_qty,omitempty"`
-	CartonSize     int             `json:"carton_size,omitempty"`
-	Properties     common.Metadata `json:"properties,omitempty"`
+	Pricing        *PricingContext    `json:"pricing,omitempty"`
+	Quantity       int                `json:"quantity"`
+	DiscountAmount common.Money       `json:"discount_amount"`
+	Total          common.Money       `json:"total"`
+	CartonQty      int                `json:"carton_qty,omitempty"`
+	CartonSize     int                `json:"carton_size,omitempty"`
+	Preorder       *PreorderItemState `json:"preorder,omitempty"`
 }
 
 type AppliedPromotion struct {

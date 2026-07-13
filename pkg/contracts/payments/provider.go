@@ -3,7 +3,7 @@ package payments
 import "encoding/json"
 
 // TerminalProviderDetails groups provider-side terminal identifiers and
-// connection hints without hiding the platform TerminalID from parent DTOs.
+// connection hints without hiding the platform TerminalID from parent records.
 type TerminalProviderDetails struct {
 	MerchantID string `json:"merchant_id,omitempty"`
 	StoreID    string `json:"store_id,omitempty"`
