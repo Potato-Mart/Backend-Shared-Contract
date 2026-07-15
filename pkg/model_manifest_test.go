@@ -58,8 +58,9 @@ var v17ModelPackageManifest = map[string]string{
 }
 
 // Reviewed v17 additions cover checkout-benefit reservations, explicit gift
-// card payment references, and the removal of wallet-export models.
-const v17ExportedTypeManifestDigest = "182a028378d07ab1a684f87e805888e2bcb2bc45f56c044b8884728e5dea7416"
+// card payment references, wallet-export removal, and the buyer-safe
+// promotion.ReceiptOffer projection.
+const v17ExportedTypeManifestDigest = "826f96a32623fd02b1f17681c5c9d87ea83ec4598f096e0935eaf63448430d61"
 
 func TestV17ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)
