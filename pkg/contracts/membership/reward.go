@@ -3,10 +3,10 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/shared"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/shared"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/membership"
 )
 
 // Reward is a catalog item that can be redeemed with membership points.

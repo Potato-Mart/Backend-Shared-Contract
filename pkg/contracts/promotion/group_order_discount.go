@@ -3,8 +3,8 @@ package promotion
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/promotion"
 )
 
 // A wholesale group-order manager applies for (or selects) a per-group discount

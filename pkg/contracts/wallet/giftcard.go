@@ -3,28 +3,34 @@ package wallet
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/shared"
-	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/shared"
+	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/wallet"
 )
 
 // GiftCard is a stored-value instrument with a re-spendable balance. The
-// GiftCardTransaction ledger is the source of truth for Balance; this record is
-// the current projected state. It is referenced everywhere by Code (the
-// business key), never by ID.
+// GiftCardTransaction ledger is the source of truth for CommittedBalance. Live
+// checkout reservations are summarized by ReservedBalance and subtracted to
+// produce AvailableBalance. It is referenced everywhere by Code (the business
+// key), never by ID.
 type GiftCard struct {
-	ID           string                        `json:"id"`
-	Code         string                        `json:"code"`
-	Owner        membership.MembershipOwnerRef `json:"owner"`
-	Balance      common.Money                  `json:"balance"`
-	InitialValue common.Money                  `json:"initial_value"`
-	Status       walletenum.GiftCardStatus     `json:"status"`
-	IssuedAt     time.Time                     `json:"issued_at"`
-	ActivatedAt  *time.Time                    `json:"activated_at,omitempty"`
-	ExpiresAt    *time.Time                    `json:"expires_at,omitempty"`
-	Note         string                        `json:"note,omitempty"`
-	History      []shared.HistoryEntry         `json:"history,omitempty"`
+	ID               string                        `json:"id"`
+	Code             string                        `json:"code"`
+	Owner            membership.MembershipOwnerRef `json:"owner"`
+	CommittedBalance common.Money                  `json:"committed_balance"`
+	ReservedBalance  common.Money                  `json:"reserved_balance"`
+	AvailableBalance common.Money                  `json:"available_balance"`
+	InitialValue     common.Money                  `json:"initial_value"`
+	// ReplacesGiftCardCode links a refund-issued replacement to an original
+	// source card that could not be reactivated because it expired or was voided.
+	ReplacesGiftCardCode string                    `json:"replaces_gift_card_code,omitempty"`
+	Status               walletenum.GiftCardStatus `json:"status"`
+	IssuedAt             time.Time                 `json:"issued_at"`
+	ActivatedAt          *time.Time                `json:"activated_at,omitempty"`
+	ExpiresAt            *time.Time                `json:"expires_at,omitempty"`
+	Note                 string                    `json:"note,omitempty"`
+	History              []shared.HistoryEntry     `json:"history,omitempty"`
 
 	common.AuditFields
 }
@@ -38,6 +44,7 @@ type GiftCardTransaction struct {
 	Delta              common.Money                         `json:"delta"`
 	BalanceAfter       common.Money                         `json:"balance_after"`
 	Reason             walletenum.GiftCardTransactionReason `json:"reason"`
+	ReservationID      string                               `json:"reservation_id,omitempty"`
 	RelatedOrderNumber string                               `json:"related_order_number,omitempty"`
 	Note               string                               `json:"note,omitempty"`
 	CreatedBy          string                               `json:"created_by,omitempty"`

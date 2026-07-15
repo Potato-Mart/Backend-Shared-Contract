@@ -3,9 +3,9 @@ package marketing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/shared"
-	marketingenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/marketing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/shared"
+	marketingenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/marketing"
 )
 
 // MarketingCampaign records a single EDM / SMS / LINE push broadcast.

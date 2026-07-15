@@ -6,17 +6,23 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/promotion"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/promotion"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/membership"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/promotion"
 )
 
 func TestCouponAssignmentRoundTrip(t *testing.T) {
 	now := time.Date(2026, 7, 5, 0, 0, 0, 0, time.UTC)
 	rec := promotion.CouponAssignment{
-		ID:                  "ca_1",
-		CouponID:            "coupon_1",
-		CouponCode:          "SAVE10",
-		CustomerNumber:      "RC-1",
+		ID:         "ca_1",
+		CouponID:   "coupon_1",
+		CouponCode: "SAVE10",
+		Owner: membership.MembershipOwnerRef{
+			OwnerType: membershipenum.MembershipOwnerTypeRetailCustomer,
+			OwnerID:   "RC-1",
+		},
 		Source:              promotionenum.CouponSourceCampaign,
 		Status:              "redeemed",
 		ExpiresAt:           &now,
@@ -33,13 +39,49 @@ func TestCouponAssignmentRoundTrip(t *testing.T) {
 	if strings.Contains(string(payload), "customer_coupon") {
 		t.Fatalf("assignment payload should not expose customer_coupon naming: %s", payload)
 	}
+	if strings.Contains(string(payload), "customer_number") || !strings.Contains(string(payload), `"owner_type":"retail_customer"`) {
+		t.Fatalf("assignment payload must use the generalized owner reference: %s", payload)
+	}
 
 	var decoded promotion.CouponAssignment
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal coupon assignment: %v", err)
 	}
 	if decoded.CouponID != "coupon_1" || decoded.CouponCode != "SAVE10" ||
-		decoded.RedeemedOrderNumber != "MAMA260703ABC123" {
+		decoded.Owner.OwnerID != "RC-1" || decoded.RedeemedOrderNumber != "MAMA260703ABC123" {
 		t.Fatalf("coupon assignment did not round-trip: %+v", decoded)
+	}
+}
+
+func TestCouponUsageRoundTripsWholesaleOwner(t *testing.T) {
+	now := time.Date(2026, 7, 15, 0, 0, 0, 0, time.UTC)
+	owner := membership.MembershipOwnerRef{
+		OwnerType: membershipenum.MembershipOwnerTypeWholesaleOrganisation,
+		OwnerID:   "ORG-1",
+	}
+	record := promotion.CouponUsageRecord{
+		ID:                  "usage_1",
+		CouponCode:          "WHOLESALE10",
+		Owner:               &owner,
+		RedeemedOrderNumber: "MAMA260715ABC123",
+		DiscountAmount:      common.Money{AmountMinor: 1000, Currency: "AUD"},
+		RedeemedAt:          now,
+		CreatedAt:           now,
+	}
+
+	payload, err := json.Marshal(record)
+	if err != nil {
+		t.Fatalf("marshal wholesale coupon usage: %v", err)
+	}
+	if strings.Contains(string(payload), "customer_number") || !strings.Contains(string(payload), `"owner_type":"wholesale_organisation"`) {
+		t.Fatalf("coupon usage must use the wholesale owner reference: %s", payload)
+	}
+
+	var decoded promotion.CouponUsageRecord
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal wholesale coupon usage: %v", err)
+	}
+	if decoded.Owner == nil || decoded.Owner.OwnerID != "ORG-1" {
+		t.Fatalf("wholesale coupon owner did not round-trip: %+v", decoded)
 	}
 }

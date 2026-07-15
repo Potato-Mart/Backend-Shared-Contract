@@ -3,12 +3,12 @@ package enums_test
 import (
 	"testing"
 
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/payment"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/payment"
 )
 
 func TestPaymentEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
-		{name: "paymentenum.PaymentMethod", valid: []stringEnum{paymentenum.PaymentMethodCard, paymentenum.PaymentMethodCash, paymentenum.PaymentMethodQR, paymentenum.PaymentMethodBankTransfer, paymentenum.PaymentMethodLinePay, paymentenum.PaymentMethodApplePay, paymentenum.PaymentMethodGooglePay, paymentenum.PaymentMethodECPay, paymentenum.PaymentMethodManual, paymentenum.PaymentMethodEFTPOS, paymentenum.PaymentMethodMOTO, paymentenum.PaymentMethodCashout}, invalid: paymentenum.PaymentMethod("__invalid__")},
+		{name: "paymentenum.PaymentMethod", valid: []stringEnum{paymentenum.PaymentMethodCard, paymentenum.PaymentMethodCash, paymentenum.PaymentMethodQR, paymentenum.PaymentMethodBankTransfer, paymentenum.PaymentMethodLinePay, paymentenum.PaymentMethodApplePay, paymentenum.PaymentMethodGooglePay, paymentenum.PaymentMethodECPay, paymentenum.PaymentMethodManual, paymentenum.PaymentMethodGiftCard, paymentenum.PaymentMethodEFTPOS, paymentenum.PaymentMethodMOTO, paymentenum.PaymentMethodCashout}, invalid: paymentenum.PaymentMethod("__invalid__")},
 		{name: "paymentenum.PaymentRecordStatus", valid: []stringEnum{paymentenum.PaymentRecordStatusPending, paymentenum.PaymentRecordStatusProcessing, paymentenum.PaymentRecordStatusCompleted, paymentenum.PaymentRecordStatusFailed, paymentenum.PaymentRecordStatusCancelled, paymentenum.PaymentRecordStatusRefunded, paymentenum.PaymentRecordStatusAwaitingAction, paymentenum.PaymentRecordStatusUnknown}, invalid: paymentenum.PaymentRecordStatus("__invalid__")},
 		{name: "paymentenum.PaymentStatus", valid: []stringEnum{paymentenum.PaymentStatusUnknown, paymentenum.PaymentStatusUnpaid, paymentenum.PaymentStatusPending, paymentenum.PaymentStatusPaid, paymentenum.PaymentStatusPartiallyPaid, paymentenum.PaymentStatusRefunded, paymentenum.PaymentStatusPartialRefunded}, invalid: paymentenum.PaymentStatus("__invalid__")},
 		{name: "paymentenum.RecoveryDecision", valid: []stringEnum{paymentenum.RecoveryDecisionPending, paymentenum.RecoveryDecisionApproved, paymentenum.RecoveryDecisionDeclined}, invalid: paymentenum.RecoveryDecision("__invalid__")},

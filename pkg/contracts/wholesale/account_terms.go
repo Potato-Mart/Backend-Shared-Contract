@@ -1,6 +1,6 @@
 package wholesale
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
 
 // WholesaleTerms groups B2B price-tier configuration, checkout policy, credit,
 // and freight terms for a wholesale organisation/business account.

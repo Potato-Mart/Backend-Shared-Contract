@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/promotion"
 )
 
 func TestPromotionCategoryTagTargetNameIsLocalized(t *testing.T) {

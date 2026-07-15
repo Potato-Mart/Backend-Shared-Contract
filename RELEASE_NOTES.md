@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v17.0.0` | 2026-07-15 | Major | Retail wallet and checkout-benefit hard cut: changes the module path to `/v17`; removes all wallet-export contracts and enums; generalizes coupon ownership; adds reservation-aware vouchers and gift cards, explicit gift-card balances, order redemption snapshots, and the `gift_card` payment method/provider reference. |
 | `v16.0.0` | 2026-07-13 | Major | Model-only hard cut: changes the module path to `/v16`; removes endpoint DTOs, paths, service scopes, HTTP envelopes, business functions/mappings/transitions, forbidden packages, standalone preorder models, and compatibility aliases; adds v16 identity, order-owned preorder, campaign prediction, packing/stock-arrival, and persisted discount decision models plus an AST/manifest boundary gate. |
 | `v15.2.0` | 2026-07-12 | Minor | Durable customer notifications and idempotent stock operations: adds customer notification topics/channels/delivery states, preorder availability and delivery receipt contracts, customer/internal notification paths, the `notification:send` scope, and atomic reservation/packing-settlement commands and results. Additive only; keeps the `/v15` module path. |
 | `v15.1.0` | 2026-07-11 | Minor | Outbound delivery completion: adds the `delivered` outbound-shipment status and optional `delivered_at` timestamp. Additive only; keeps the `/v15` module path. |
@@ -87,6 +88,55 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v17.0.0 (2026-07-15) - Retail Wallet And Checkout Benefits
+
+### Breaking removals and ownership changes
+
+- Changes the module path to
+  `github.com/Potato-Mart/Backend-Shared-Contract/v17` and reports exactly
+  `v17.0.0` from `versioning.ModuleVersion`.
+- Removes `wallet.WalletExport*`, `walletenum.WalletExportFormat`, and
+  `walletenum.WalletExportStatus` with no compatibility aliases. Runtime
+  wallet-export routes, storage, and generated API documentation are removed by
+  their owning services.
+- Replaces coupon assignment `customer_number` with the required generalized
+  `owner` reference. Coupon usage uses the same owner reference when the
+  redemption has an authenticated retail customer or wholesale organisation.
+
+### Wallet, reservation, and order models
+
+- Replaces ambiguous gift-card `balance` fields with committed, reserved, and
+  available balances. Wallet instruments expose the same three balances;
+  wallet summaries aggregate all three and use available value for storefront
+  display.
+- Adds typed voucher lifecycle state including `reserved`, reservation linkage
+  and expiry timestamps, exact source reward-redemption linkage for idempotent
+  backfill, and a voucher face-value projection on wallet instruments.
+- Adds the idempotency-keyed `CheckoutBenefitReservation` record with distinct
+  coupon, voucher, and ordered gift-card allocation state, including refunded
+  gift-card amounts for deterministic partial-refund replay.
+- Adds voucher redemption snapshots and reshapes the existing gift-card order
+  snapshot around applied amount, reservation id, and committed wallet
+  transaction id.
+- Adds the `gift_card` payment method and a wallet provider reference containing
+  the gift-card code and authoritative wallet transaction id.
+- Adds `replaces_gift_card_code` so refund-issued replacements remain linked to
+  expired or voided source cards.
+- Adds membership point-ledger reason `REFUND` so original-source point
+  restoration is distinguishable from manual adjustments and new earnings.
+
+### Consumer action
+
+- Pin `github.com/Potato-Mart/Backend-Shared-Contract/v17 v17.0.0` and replace
+  all `/v16` imports.
+- Remove wallet-export APIs and persisted export payloads rather than decoding
+  them into v17.
+- Migrate coupon ownership before serving v17 traffic and initialize every gift
+  card's reserved balance to zero, with available balance equal to committed
+  balance.
+- Treat checkout quote/start/commit transports as provider-owned API DTOs; the
+  shared module remains model-only.
 
 ## v16.0.0 (2026-07-13) - Model-Only Contract Hard Cut
 

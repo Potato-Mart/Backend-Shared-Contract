@@ -3,6 +3,14 @@ package payments
 type PaymentReference struct {
 	Stripe *StripePaymentReference `json:"stripe,omitempty"`
 	Mx51   *Mx51PaymentReference   `json:"mx51,omitempty"`
+	Wallet *WalletPaymentReference `json:"wallet,omitempty"`
+}
+
+// WalletPaymentReference links a completed gift-card order payment to the
+// authoritative wallet ledger transaction returned by Management.
+type WalletPaymentReference struct {
+	GiftCardCode        string `json:"gift_card_code"`
+	WalletTransactionID string `json:"wallet_transaction_id"`
 }
 
 type StripePaymentReference struct {

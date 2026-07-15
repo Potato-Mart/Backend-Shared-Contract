@@ -65,6 +65,7 @@ const (
 	MembershipPointReasonOrder        MembershipPointReason = "ORDER"
 	MembershipPointReasonBirthday     MembershipPointReason = "BIRTHDAY"
 	MembershipPointReasonRedeem       MembershipPointReason = "REDEEM"
+	MembershipPointReasonRefund       MembershipPointReason = "REFUND"
 	MembershipPointReasonRewardRedeem MembershipPointReason = "REWARD_REDEEM"
 	MembershipPointReasonAdminAdjust  MembershipPointReason = "ADMIN_ADJUST"
 	MembershipPointReasonExpired      MembershipPointReason = "EXPIRED"
@@ -77,7 +78,7 @@ const (
 func (m MembershipPointReason) IsValid() bool {
 	switch m {
 	case MembershipPointReasonOrder, MembershipPointReasonBirthday, MembershipPointReasonRedeem,
-		MembershipPointReasonRewardRedeem, MembershipPointReasonAdminAdjust, MembershipPointReasonExpired,
+		MembershipPointReasonRefund, MembershipPointReasonRewardRedeem, MembershipPointReasonAdminAdjust, MembershipPointReasonExpired,
 		MembershipPointReasonReferral, MembershipPointReasonSignupBonus, MembershipPointReasonTierUpgrade,
 		MembershipPointReasonManual:
 		return true
