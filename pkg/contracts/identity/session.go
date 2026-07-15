@@ -3,10 +3,10 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/shared"
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/account"
-	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/identity"
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/shared"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/account"
+	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/identity"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/security"
 )
 
 // LoginSession is a non-secret projection of an active login. A session is

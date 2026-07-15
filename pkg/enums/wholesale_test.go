@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/wholesale"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/wholesale"
 )
 
 func TestWholesaleEnumsValidateKnownValues(t *testing.T) {

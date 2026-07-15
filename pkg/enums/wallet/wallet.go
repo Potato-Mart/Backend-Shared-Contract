@@ -26,27 +26,6 @@ func (t WalletInstrumentType) IsValid() bool {
 // String returns the wire value for t.
 func (t WalletInstrumentType) String() string { return string(t) }
 
-// WalletExportFormat controls the downloadable representation of a wallet
-// export.
-type WalletExportFormat string
-
-const (
-	WalletExportFormatJSON   WalletExportFormat = "json"
-	WalletExportFormatCSVZip WalletExportFormat = "csv_zip"
-)
-
-// IsValid reports whether f is a known WalletExportFormat value.
-func (f WalletExportFormat) IsValid() bool {
-	switch f {
-	case WalletExportFormatJSON, WalletExportFormatCSVZip:
-		return true
-	}
-	return false
-}
-
-// String returns the wire value for f.
-func (f WalletExportFormat) String() string { return string(f) }
-
 // GiftCardStatus is the lifecycle state of a stored-value gift card.
 type GiftCardStatus string
 
@@ -96,3 +75,58 @@ func (r GiftCardTransactionReason) IsValid() bool {
 
 // String returns the wire value for r.
 func (r GiftCardTransactionReason) String() string { return string(r) }
+
+// VoucherStatus is the lifecycle state of a single-use voucher. Reserved is a
+// temporary checkout hold and returns to issued when cancelled or expired.
+type VoucherStatus string
+
+const (
+	VoucherStatusIssued   VoucherStatus = "issued"
+	VoucherStatusReserved VoucherStatus = "reserved"
+	VoucherStatusRedeemed VoucherStatus = "redeemed"
+	VoucherStatusExpired  VoucherStatus = "expired"
+	VoucherStatusVoid     VoucherStatus = "void"
+)
+
+// IsValid reports whether s is a known VoucherStatus value.
+func (s VoucherStatus) IsValid() bool {
+	switch s {
+	case VoucherStatusIssued, VoucherStatusReserved, VoucherStatusRedeemed,
+		VoucherStatusExpired, VoucherStatusVoid:
+		return true
+	}
+	return false
+}
+
+// String returns the wire value for s.
+func (s VoucherStatus) String() string { return string(s) }
+
+// CheckoutBenefitReservationStatus is the durable lifecycle shared by a
+// checkout's coupon, voucher, and gift-card allocations.
+type CheckoutBenefitReservationStatus string
+
+const (
+	CheckoutBenefitReservationStatusReserved          CheckoutBenefitReservationStatus = "reserved"
+	CheckoutBenefitReservationStatusCommitted         CheckoutBenefitReservationStatus = "committed"
+	CheckoutBenefitReservationStatusCancelled         CheckoutBenefitReservationStatus = "cancelled"
+	CheckoutBenefitReservationStatusExpired           CheckoutBenefitReservationStatus = "expired"
+	CheckoutBenefitReservationStatusPartiallyRefunded CheckoutBenefitReservationStatus = "partially_refunded"
+	CheckoutBenefitReservationStatusRefunded          CheckoutBenefitReservationStatus = "refunded"
+)
+
+// IsValid reports whether s is a known CheckoutBenefitReservationStatus value.
+func (s CheckoutBenefitReservationStatus) IsValid() bool {
+	switch s {
+	case CheckoutBenefitReservationStatusReserved,
+		CheckoutBenefitReservationStatusCommitted,
+		CheckoutBenefitReservationStatusCancelled,
+		CheckoutBenefitReservationStatusExpired,
+		CheckoutBenefitReservationStatusPartiallyRefunded,
+		CheckoutBenefitReservationStatusRefunded:
+		return true
+	}
+	return false
+}
+
+// String returns the wire value for s.
+func (s CheckoutBenefitReservationStatus) String() string { return string(s) }

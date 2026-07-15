@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/notification"
-	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/notification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/notification"
+	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/notification"
 )
 
 func TestCustomerNotificationJSONRoundTrip(t *testing.T) {

@@ -3,7 +3,7 @@ package notification
 import (
 	"time"
 
-	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/notification"
+	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/notification"
 )
 
 // CustomerNotificationDelivery records one channel's durable delivery state.

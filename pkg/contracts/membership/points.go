@@ -3,8 +3,8 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/membership"
 )
 
 // PointLedgerEntry is a single points transaction for a membership account.

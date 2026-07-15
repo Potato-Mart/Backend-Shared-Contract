@@ -3,9 +3,9 @@ package identity
 import (
 	"time"
 
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/account"
-	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/identity"
-	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/wholesale"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/account"
+	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/identity"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/wholesale"
 )
 
 // UserAccountCreatedEvent is emitted when an account/persona is created for a

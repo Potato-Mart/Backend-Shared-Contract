@@ -1,8 +1,8 @@
-# Backend-Shared-Contract v16
+# Backend-Shared-Contract v17
 
 Potato Mart's shared Go module for cross-service data models.
 
-Version 16 is deliberately model-only. It contains domain entities, records,
+Version 17 is deliberately model-only. It contains domain entities, records,
 snapshots, events, value objects, typed enums, field names, JSON/BSON
 serialization, shared error-code enums, and module-version metadata.
 
@@ -15,23 +15,28 @@ OpenAPI document.
 ## Version and module path
 
 ```text
-v16.0.0
-github.com/Potato-Mart/Backend-Shared-Contract/v16
+v17.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v17
 ```
 
 Consumers pin the released module directly:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v16 v16.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v17 v17.0.0
 ```
 
 For example:
 
 ```go
 import (
-    walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/wallet"
+    walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/wallet"
 )
 ```
+
+Version 17 is a breaking wallet/checkout cutover. Wallet-export contracts are
+gone; coupon ownership supports retail and wholesale owners; gift cards expose
+committed, reserved, and available balances; and checkout benefit reservations,
+redemption snapshots, and gift-card payment references are first-class models.
 
 ## Boundary governance
 

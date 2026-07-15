@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/campaign"
+	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/campaign"
 )
 
 func TestCampaignEnumsValidateKnownValues(t *testing.T) {

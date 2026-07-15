@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/warehouse"
 )
 
 func TestSKUJSONIncludesPrimaryName(t *testing.T) {

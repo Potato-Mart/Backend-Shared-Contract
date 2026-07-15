@@ -3,9 +3,9 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/product"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/product"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/sales"
 )
 
 type Cart struct {

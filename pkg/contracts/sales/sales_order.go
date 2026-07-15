@@ -3,15 +3,15 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/warehouse"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/membership"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/payment"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/promotion"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/sales"
-	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/warehouse"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/membership"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/payment"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/promotion"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/sales"
+	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/shipping"
 )
 
 type Order struct {
@@ -69,6 +69,7 @@ type Order struct {
 	AppliedPromotions    []AppliedPromotion             `json:"applied_promotions,omitempty"`
 	PointRedemption      *PointRedemptionSnapshot       `json:"point_redemption,omitempty"`
 	RewardRedemptions    []RewardRedemptionSnapshot     `json:"reward_redemptions,omitempty"`
+	VoucherRedemption    *VoucherRedemptionSnapshot     `json:"voucher_redemption,omitempty"`
 	GiftCardRedemptions  []GiftCardRedemptionSnapshot   `json:"gift_card_redemptions,omitempty"`
 	TrackingNumber       string                         `json:"tracking_number,omitempty"`
 	TrackingURL          string                         `json:"tracking_url,omitempty"`
@@ -160,14 +161,21 @@ type RewardRedemptionSnapshot struct {
 	VoucherCode         string                              `json:"voucher_code,omitempty"`
 }
 
-// GiftCardRedemptionSnapshot records a gift-card amount applied to an order,
-// alongside PointRedemptionSnapshot and RewardRedemptionSnapshot. The gift card
-// is referenced by its code; its re-spendable balance ledger lives in
-// pkg/contracts/wallet.
+// VoucherRedemptionSnapshot records the single voucher applied to an order.
+type VoucherRedemptionSnapshot struct {
+	VoucherCode   string       `json:"voucher_code"`
+	AppliedAmount common.Money `json:"applied_amount"`
+	ReservationID string       `json:"reservation_id,omitempty"`
+}
+
+// GiftCardRedemptionSnapshot records one ordered gift-card allocation applied
+// to an order. WalletTransactionID links the snapshot and completed gift-card
+// payment to the committed wallet ledger entry.
 type GiftCardRedemptionSnapshot struct {
-	GiftCardCode string       `json:"gift_card_code"`
-	Amount       common.Money `json:"amount"`
-	OrderNumber  string       `json:"order_number,omitempty"`
+	GiftCardCode        string       `json:"gift_card_code"`
+	AppliedAmount       common.Money `json:"applied_amount"`
+	ReservationID       string       `json:"reservation_id,omitempty"`
+	WalletTransactionID string       `json:"wallet_transaction_id,omitempty"`
 }
 
 type SourceDevice struct {

@@ -6,14 +6,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/contracts/warehouse"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/membership"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/payment"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/sales"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v16/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/warehouse"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/membership"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/payment"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/sales"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/warehouse"
 )
 
 func TestOrderJSONRoundTripWithHistory(t *testing.T) {
@@ -78,7 +78,7 @@ func TestOrderJSONOmitsEmptyHistory(t *testing.T) {
 	}
 }
 
-func TestV16LineItemsRemovePropertiesAndRequireOrderItemID(t *testing.T) {
+func TestV17LineItemsRemovePropertiesAndRequireOrderItemID(t *testing.T) {
 	cartPayload, err := json.Marshal(sales.CartItem{Quantity: 1})
 	if err != nil {
 		t.Fatalf("marshal cart item: %v", err)
@@ -192,6 +192,19 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 				DiscountAmount:      &discount,
 			},
 		},
+		VoucherRedemption: &sales.VoucherRedemptionSnapshot{
+			VoucherCode:   "VOUCHER-1",
+			AppliedAmount: discount,
+			ReservationID: "benefit_res_1",
+		},
+		GiftCardRedemptions: []sales.GiftCardRedemptionSnapshot{
+			{
+				GiftCardCode:        "GC-1",
+				AppliedAmount:       common.Money{AmountMinor: 2500, Currency: "AUD"},
+				ReservationID:       "benefit_res_1",
+				WalletTransactionID: "wallet_tx_1",
+			},
+		},
 	}
 
 	payload, err := json.Marshal(order)
@@ -203,12 +216,15 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 	if err := json.Unmarshal(payload, &got); err != nil {
 		t.Fatalf("unmarshal order JSON: %v", err)
 	}
-	for _, key := range []string{"point_redemption", "reward_redemptions"} {
+	for _, key := range []string{"point_redemption", "reward_redemptions", "voucher_redemption", "gift_card_redemptions"} {
 		if _, ok := got[key]; !ok {
 			t.Fatalf("order JSON missing %q: %s", key, payload)
 		}
 	}
 	if _, ok := got["coupon_code"]; ok {
 		t.Fatalf("membership redemption should not require coupon_code: %s", payload)
+	}
+	if !strings.Contains(string(payload), `"applied_amount"`) || !strings.Contains(string(payload), `"wallet_transaction_id":"wallet_tx_1"`) {
+		t.Fatalf("wallet redemption snapshots are incomplete: %s", payload)
 	}
 }

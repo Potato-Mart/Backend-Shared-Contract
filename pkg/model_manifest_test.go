@@ -13,10 +13,10 @@ import (
 	"testing"
 )
 
-// v16ModelPackageManifest classifies every production package. Adding an
+// v17ModelPackageManifest classifies every production package. Adding an
 // exported type changes the digest below and requires an explicit manifest
 // review instead of silently expanding the shared module.
-var v16ModelPackageManifest = map[string]string{
+var v17ModelPackageManifest = map[string]string{
 	"common":                 "value",
 	"contracts/analytics":    "record",
 	"contracts/campaign":     "entity,event,snapshot,record",
@@ -57,9 +57,11 @@ var v16ModelPackageManifest = map[string]string{
 	"versioning":             "module-metadata",
 }
 
-const v16ExportedTypeManifestDigest = "ef1910f9ed02bcb51ddba334a688a9f1db1f66e84d2ddffea51f8acc9e008dc1"
+// Reviewed v17 additions cover checkout-benefit reservations, explicit gift
+// card payment references, and the removal of wallet-export models.
+const v17ExportedTypeManifestDigest = "182a028378d07ab1a684f87e805888e2bcb2bc45f56c044b8884728e5dea7416"
 
-func TestV16ExportedTypesMatchModelManifest(t *testing.T) {
+func TestV17ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)
 	var entries []string
 	err := filepath.WalkDir(".", func(path string, entry fs.DirEntry, walkErr error) error {
@@ -73,9 +75,9 @@ func TestV16ExportedTypesMatchModelManifest(t *testing.T) {
 		if packagePath == "." {
 			return nil
 		}
-		class, classified := v16ModelPackageManifest[packagePath]
+		class, classified := v17ModelPackageManifest[packagePath]
 		if !classified {
-			t.Errorf("%s is not classified in the v16 model manifest", packagePath)
+			t.Errorf("%s is not classified in the v17 model manifest", packagePath)
 			return nil
 		}
 		seenPackages[packagePath] = true
@@ -100,9 +102,9 @@ func TestV16ExportedTypesMatchModelManifest(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("read v16 model manifest: %v", err)
+		t.Fatalf("read v17 model manifest: %v", err)
 	}
-	for packagePath := range v16ModelPackageManifest {
+	for packagePath := range v17ModelPackageManifest {
 		if !seenPackages[packagePath] {
 			t.Errorf("manifest package %s has no production source", packagePath)
 		}
@@ -110,7 +112,7 @@ func TestV16ExportedTypesMatchModelManifest(t *testing.T) {
 	sort.Strings(entries)
 	sum := sha256.Sum256([]byte(strings.Join(entries, "\n")))
 	got := hex.EncodeToString(sum[:])
-	if got != v16ExportedTypeManifestDigest {
+	if got != v17ExportedTypeManifestDigest {
 		t.Fatalf("exported model manifest changed: got %s; classify the change and update the reviewed digest", got)
 	}
 }

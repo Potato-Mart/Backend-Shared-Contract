@@ -13,6 +13,7 @@ const (
 	PaymentMethodGooglePay    PaymentMethod = "google_pay"
 	PaymentMethodECPay        PaymentMethod = "ecpay"
 	PaymentMethodManual       PaymentMethod = "manual"
+	PaymentMethodGiftCard     PaymentMethod = "gift_card"
 
 	// EFTPOS-terminal-backed methods. These are distinct from the
 	// generic Card method so settlement reports and refund flows can
@@ -27,7 +28,7 @@ func (p PaymentMethod) IsValid() bool {
 	switch p {
 	case PaymentMethodCard, PaymentMethodCash, PaymentMethodQR, PaymentMethodBankTransfer,
 		PaymentMethodLinePay, PaymentMethodApplePay, PaymentMethodGooglePay, PaymentMethodECPay,
-		PaymentMethodManual, PaymentMethodEFTPOS, PaymentMethodMOTO, PaymentMethodCashout:
+		PaymentMethodManual, PaymentMethodGiftCard, PaymentMethodEFTPOS, PaymentMethodMOTO, PaymentMethodCashout:
 		return true
 	}
 	return false
