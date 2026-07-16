@@ -15,14 +15,14 @@ OpenAPI document.
 ## Version and module path
 
 ```text
-v17.1.0
+v17.2.0
 github.com/Potato-Mart/Backend-Shared-Contract/v17
 ```
 
 Consumers pin the released module directly:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v17 v17.1.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v17 v17.2.0
 ```
 
 For example:
@@ -37,6 +37,13 @@ Version 17 is a breaking wallet/checkout cutover. Wallet-export contracts are
 gone; coupon ownership supports retail and wholesale owners; gift cards expose
 committed, reserved, and available balances; and checkout benefit reservations,
 redemption snapshots, and gift-card payment references are first-class models.
+
+Version 17.2 adds model-only import-compliance records for revisioned settings,
+manufacturer declarations, product labels, tariff assessments/profiles,
+trademark evidence, Requests for Inspection, source evidence, catalogue pins,
+and generated-artifact references. Monetary and calculated values use fixed
+precision (`common.Money`, basis points, micros, grams, and cubic centimetres),
+while HTTP workflows and regulatory decisions remain backend-owned.
 
 ## Boundary governance
 
