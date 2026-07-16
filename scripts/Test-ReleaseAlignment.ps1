@@ -114,6 +114,11 @@ try {
         throw "Required release tag '$version' does not exist."
     }
 
+    # A missing tag is expected while a release change is still in a pull
+    # request. Do not let the successful probe's native exit code make the
+    # otherwise successful script fail its caller.
+    $global:LASTEXITCODE = 0
+
     Write-Host "Contract release metadata is aligned at $version ($moduleImportPath)."
     if ($PassThru) {
         Write-Output $version
