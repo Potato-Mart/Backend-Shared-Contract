@@ -59,8 +59,9 @@ var v17ModelPackageManifest = map[string]string{
 	"versioning":                 "module-metadata",
 }
 
-// Reviewed addition: import-compliance records and their stable value enums.
-const v17ExportedTypeManifestDigest = "2a6fae21d5b4909b8d1e979e80d3a49405e68622602b0f0422579daa4ca91d1b"
+// Reviewed additions: import-compliance records and the customer-safe
+// storefront promotion projection.
+const v17ExportedTypeManifestDigest = "53b5939a95b5dca717a1f2e50e62e88f954fc50ed2e5f13372acf503c6b3e328"
 
 func TestV17ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

@@ -56,6 +56,13 @@ func TestRetailCustomerJSONShape(t *testing.T) {
 		DefaultBilling: &common.ContactAddress{
 			Address: &common.Address{Label: "Billing", Line1: "1 Account St", City: "Springvale", State: "VIC", Postcode: "3171", Country: "AU"},
 		},
+		ShippingAddresses: []common.ContactAddress{
+			{
+				ID:      "addr_123",
+				Contact: &common.Recipient{Name: "Retail Customer"},
+				Address: &common.Address{Label: "Home", Line1: "2 Account St", City: "Springvale", State: "VIC", Postcode: "3171", Country: "AU"},
+			},
+		},
 	}
 
 	payload, err := json.Marshal(customer)
@@ -83,6 +90,7 @@ func TestRetailCustomerJSONShape(t *testing.T) {
 		"referral",
 		"profile_completion",
 		"default_billing",
+		"shipping_addresses",
 	} {
 		if _, ok := got[key]; !ok {
 			t.Fatalf("RetailCustomer JSON missing %q: %s", key, payload)
@@ -110,5 +118,10 @@ func TestRetailCustomerJSONShape(t *testing.T) {
 	}
 	if referral["used_referral_code_confirmed"] != true || referral["used_by_count"].(float64) != 2 {
 		t.Fatalf("RetailCustomer referral did not expose replacement fields: %+v", referral)
+	}
+	addresses := got["shipping_addresses"].([]any)
+	address := addresses[0].(map[string]any)
+	if address["id"] != "addr_123" {
+		t.Fatalf("RetailCustomer saved address id = %v, want addr_123: %s", address["id"], payload)
 	}
 }
