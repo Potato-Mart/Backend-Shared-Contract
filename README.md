@@ -15,14 +15,14 @@ OpenAPI document.
 ## Version and module path
 
 ```text
-v17.2.0
+v17.2.1
 github.com/Potato-Mart/Backend-Shared-Contract/v17
 ```
 
 Consumers pin the released module directly:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v17 v17.2.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v17 v17.2.1
 ```
 
 For example:
@@ -44,6 +44,10 @@ trademark evidence, Requests for Inspection, source evidence, catalogue pins,
 and generated-artifact references. Monetary and calculated values use fixed
 precision (`common.Money`, basis points, micros, grams, and cubic centimetres),
 while HTTP workflows and regulatory decisions remain backend-owned.
+
+Version 17.2.1 republishes the same model surface after the repository release
+alignment checks were strengthened. Consumers do not need model or wire-shape
+changes when upgrading from 17.2.0.
 
 ## Boundary governance
 
