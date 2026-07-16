@@ -78,6 +78,11 @@ type Promotion struct {
 	// â”€â”€ Control â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	Priority    int  `json:"priority"`
 	IsStackable bool `json:"is_stackable"`
+	// ReceiptEnabled explicitly approves this promotion's customer-facing copy
+	// for printing on POS receipts and tax invoices. Internal authoring names and
+	// descriptions must never be substituted for ReceiptMessages.
+	ReceiptEnabled  bool                   `json:"receipt_enabled"`
+	ReceiptMessages []common.LocalizedName `json:"receipt_messages"`
 	UsageLimits
 	ActiveWindow
 	Channels []salesenum.OrderType `json:"channels,omitempty"` // e.g. ["online","pos"]

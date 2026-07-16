@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v17.1.0` | 2026-07-16 | Minor | Receipt-safe promotion messaging: adds explicit customer-facing localized receipt copy and an opt-in print flag to promotions, plus a buyer/POS-safe `ReceiptOffer` projection that omits internal rules, discount configuration, counters, metadata, and authoring copy. Additive only; keeps the `/v17` module path. |
 | `v17.0.0` | 2026-07-15 | Major | Retail wallet and checkout-benefit hard cut: changes the module path to `/v17`; removes all wallet-export contracts and enums; generalizes coupon ownership; adds reservation-aware vouchers and gift cards, explicit gift-card balances, order redemption snapshots, and the `gift_card` payment method/provider reference. |
 | `v16.0.0` | 2026-07-13 | Major | Model-only hard cut: changes the module path to `/v16`; removes endpoint DTOs, paths, service scopes, HTTP envelopes, business functions/mappings/transitions, forbidden packages, standalone preorder models, and compatibility aliases; adds v16 identity, order-owned preorder, campaign prediction, packing/stock-arrival, and persisted discount decision models plus an AST/manifest boundary gate. |
 | `v15.2.0` | 2026-07-12 | Minor | Durable customer notifications and idempotent stock operations: adds customer notification topics/channels/delivery states, preorder availability and delivery receipt contracts, customer/internal notification paths, the `notification:send` scope, and atomic reservation/packing-settlement commands and results. Additive only; keeps the `/v15` module path. |
@@ -88,6 +89,46 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v17.1.0 (2026-07-16) - Receipt-Safe Promotion Messaging
+
+This additive minor release gives promotion authors an explicit, localized copy
+surface for POS receipts and tax invoices while keeping internal promotion
+configuration out of buyer-facing payloads. The module path remains `/v17`.
+
+### Added
+
+- `promotion.Promotion.receipt_enabled` explicitly approves a promotion for
+  receipt and tax-invoice printing.
+- `promotion.Promotion.receipt_messages` carries customer-facing copy as
+  `common.LocalizedName` values instead of reusing internal campaign names or
+  descriptions.
+- `promotion.ReceiptOffer` provides the buyer/POS-safe projection: promotion
+  id, localized receipt messages, optional active-window timestamps, and
+  priority.
+- JSON and exported-model manifest coverage verifies the new fields and guards
+  the projection from leaking rule details, discount configuration, usage
+  counters, source metadata, or internal authoring copy.
+
+### Compatibility
+
+- No existing fields, packages, or wire values are removed or renamed, and the
+  module continues to use
+  `github.com/Potato-Mart/Backend-Shared-Contract/v17`.
+- Promotion JSON now includes `receipt_enabled` and `receipt_messages`;
+  consumers with strict schemas must allow these additive fields.
+- `ReceiptOffer.starts_at` and `expires_at` remain absent when unset because
+  both fields use `omitempty`.
+
+### Consumer Action
+
+- Upgrade the `/v17` dependency to `v17.1.0` after the tag is published and run
+  `go mod tidy`.
+- Author and approve localized `receipt_messages`, and print them only when
+  `receipt_enabled` is true. Never substitute `Promotion.name` or
+  `Promotion.description` when approved receipt copy is unavailable.
+- Backends should expose the minimal `ReceiptOffer` projection to receipt/POS
+  consumers instead of serializing the full promotion model.
 
 ## v17.0.0 (2026-07-15) - Retail Wallet And Checkout Benefits
 
