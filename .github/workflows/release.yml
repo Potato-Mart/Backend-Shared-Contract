@@ -2,31 +2,26 @@ name: Release Contract
 
 on:
   push:
-    tags:
-      - 'v*.*.*'
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       version:
-        description: "Existing version tag to release, for example v3.0.0"
-        required: true
+        description: "Source version to repair or publish; defaults to ModuleVersion"
+        required: false
+        default: ""
         type: string
-      draft:
-        description: "Create release as draft"
-        required: false
-        default: false
-        type: boolean
-      prerelease:
-        description: "Mark release as prerelease"
-        required: false
-        default: false
-        type: boolean
 
 permissions:
   contents: write
 
+concurrency:
+  group: contract-release
+  cancel-in-progress: false
+
 jobs:
   release:
-    name: Build release notes and publish GitHub release
+    name: Ensure aligned tag and GitHub release
     runs-on: ubuntu-latest
 
     steps:
@@ -42,85 +37,133 @@ jobs:
 
       - name: Resolve release version
         id: version
-        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref_name }}
+          REF_TYPE: ${{ github.ref_type }}
+          REQUESTED_VERSION: ${{ inputs.version }}
+        shell: pwsh
         run: |
-          set -euo pipefail
+          $versions = @(& ./scripts/Test-ReleaseAlignment.ps1 -PassThru)
+          if ($LASTEXITCODE -ne 0 -or $versions.Count -ne 1) {
+              throw "Could not resolve exactly one aligned source version."
+          }
 
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            version="${{ inputs.version }}"
-          else
-            version="${{ github.ref_name }}"
-          fi
+          $sourceVersion = $versions[0].Trim()
+          if (
+              $env:EVENT_NAME -eq 'workflow_dispatch' -and
+              ($env:REF_TYPE -ne 'branch' -or $env:REF_NAME -ne 'main')
+          ) {
+              throw "Manual release repair must run from the main branch."
+          }
 
-          if [[ ! "$version" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
-            echo "Version '$version' is not valid semver. Expected vMAJOR.MINOR.PATCH." >&2
-            exit 1
-          fi
+          $requestedVersion = $sourceVersion
+          if ($env:EVENT_NAME -eq 'workflow_dispatch' -and $env:REQUESTED_VERSION) {
+              $requestedVersion = $env:REQUESTED_VERSION
+          }
 
-          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if ($requestedVersion -notmatch '^v\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$') {
+              throw "Requested version '$requestedVersion' is not valid release semver."
+          }
+          if ($requestedVersion -ne $sourceVersion) {
+              throw "Requested version '$requestedVersion' does not match source ModuleVersion '$sourceVersion'."
+          }
 
-      - name: Checkout requested tag for manual release
-        if: ${{ github.event_name == 'workflow_dispatch' }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          git fetch --tags
-          git rev-parse --verify "refs/tags/${{ steps.version.outputs.version }}"
-          git checkout "${{ steps.version.outputs.version }}"
+          Add-Content -LiteralPath $env:GITHUB_OUTPUT -Value "version=$sourceVersion"
 
       - name: Test contracts
         env:
           GOWORK: off
         run: go test ./...
 
-      - name: Generate release notes from commit messages
-        shell: bash
+      - name: Ensure immutable annotated version tag
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        shell: pwsh
         run: |
-          set -euo pipefail
+          & git fetch --force --tags origin
+          if ($LASTEXITCODE -ne 0) {
+              throw "Could not fetch remote release tags."
+          }
 
-          version="${{ steps.version.outputs.version }}"
-          previous_tag="$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || true)"
+          & git rev-parse --verify --quiet "refs/tags/$env:VERSION^{commit}" *> $null
+          if ($LASTEXITCODE -eq 0) {
+              & ./scripts/Test-ReleaseAlignment.ps1 -ExpectedVersion $env:VERSION -RequireTag
+              exit 0
+          }
 
-          if [[ -n "$previous_tag" ]]; then
-            range="$previous_tag..HEAD"
-          else
-            range="HEAD"
-          fi
+          & git config user.name 'github-actions[bot]'
+          & git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          & git tag -a $env:VERSION -m "Release $env:VERSION"
+          if ($LASTEXITCODE -ne 0) {
+              throw "Could not create annotated tag '$env:VERSION'."
+          }
 
-          {
-            echo "## $version"
-            echo ""
-            git log --no-merges --pretty=format:"- %s (%h)" "$range"
-            echo ""
-          } > release-notes.md
+          & git push origin "refs/tags/$env:VERSION"
+          if ($LASTEXITCODE -ne 0) {
+              throw "Could not publish annotated tag '$env:VERSION'."
+          }
 
-          echo "Generated release notes:"
-          cat release-notes.md
+          & ./scripts/Test-ReleaseAlignment.ps1 -ExpectedVersion $env:VERSION -RequireTag
 
-      - name: Create or update GitHub release
+      - name: Ensure published GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.version.outputs.version }}
-          DRAFT: ${{ github.event_name == 'workflow_dispatch' && inputs.draft || false }}
-          PRERELEASE: ${{ github.event_name == 'workflow_dispatch' && inputs.prerelease || contains(steps.version.outputs.version, '-') }}
-        shell: bash
+        shell: pwsh
         run: |
-          set -euo pipefail
+          $isPrerelease = $env:VERSION.Contains('-')
+          $releaseJson = & gh release view $env:VERSION --json tagName,name,isDraft,isPrerelease 2>$null
+          if ($LASTEXITCODE -eq 0) {
+              $release = $releaseJson | ConvertFrom-Json
+              if ($release.tagName -ne $env:VERSION) {
+                  throw "GitHub Release tag '$($release.tagName)' does not match '$env:VERSION'."
+              }
 
-          release_args=(--title "$VERSION" --notes-file release-notes.md)
+              $needsRepair = (
+                  $release.name -ne $env:VERSION -or
+                  $release.isDraft -or
+                  $release.isPrerelease -ne $isPrerelease
+              )
+              if ($needsRepair) {
+                  & gh release edit $env:VERSION `
+                      --title $env:VERSION `
+                      --draft=false `
+                      "--prerelease=$($isPrerelease.ToString().ToLowerInvariant())"
+                  if ($LASTEXITCODE -ne 0) {
+                      throw "Could not repair GitHub Release metadata for '$env:VERSION'."
+                  }
+              }
+              else {
+                  Write-Host "GitHub Release '$env:VERSION' is already aligned."
+              }
+              exit 0
+          }
 
-          if gh release view "$VERSION" >/dev/null 2>&1; then
-            gh release edit "$VERSION" "${release_args[@]}"
-          else
-            create_args=("$VERSION" "${release_args[@]}")
+          $releaseNotes = Get-Content -LiteralPath RELEASE_NOTES.md -Raw
+          $escapedVersion = [regex]::Escape($env:VERSION)
+          $sectionPattern = "(?ms)^##\s+$escapedVersion[^\r\n]*\r?\n.*?(?=^##\s+v\d+\.\d+\.\d+|\z)"
+          $section = [regex]::Match($releaseNotes, $sectionPattern)
+          if (-not $section.Success) {
+              throw "Could not extract release notes for '$env:VERSION'."
+          }
+          Set-Content -LiteralPath release-notes.md -Value $section.Value.TrimEnd() -Encoding utf8
 
-            if [[ "$DRAFT" == "true" ]]; then
-              create_args+=(--draft)
-            fi
+          $createArgs = @(
+              'release',
+              'create',
+              $env:VERSION,
+              '--verify-tag',
+              '--title',
+              $env:VERSION,
+              '--notes-file',
+              'release-notes.md'
+          )
+          if ($isPrerelease) {
+              $createArgs += '--prerelease'
+          }
 
-            if [[ "$PRERELEASE" == "true" ]]; then
-              create_args+=(--prerelease)
-            fi
-
-            gh release create "${create_args[@]}"
-          fi
+          & gh @createArgs
+          if ($LASTEXITCODE -ne 0) {
+              throw "Could not create GitHub Release '$env:VERSION'."
+          }
