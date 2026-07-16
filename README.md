@@ -15,14 +15,14 @@ OpenAPI document.
 ## Version and module path
 
 ```text
-v17.0.0
+v17.1.0
 github.com/Potato-Mart/Backend-Shared-Contract/v17
 ```
 
 Consumers pin the released module directly:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v17 v17.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v17 v17.1.0
 ```
 
 For example:
