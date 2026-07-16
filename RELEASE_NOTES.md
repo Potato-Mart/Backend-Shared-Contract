@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v17.3.0` | 2026-07-16 | Minor | Storefront customer support: adds optional stable IDs to persisted contact-address book entries and a customer-safe promotion catalogue projection that omits rule-engine internals. Additive only; keeps the `/v17` module path. |
 | `v17.2.1` | 2026-07-16 | Patch | Release-alignment publication of the existing V17.2 import-compliance model surface. No JSON shape, enum value, exported contract, or module-path change. |
 | `v17.2.0` | 2026-07-16 | Minor | Import-compliance model foundation: adds revisioned settings, manufacturer declarations, label masters, tariff profiles/assessments, trademark evidence, RFI records, immutable source snapshots, cited evidence/catalogue references, and generated-artifact references with fixed-point monetary, rate, exchange, weight, and volume fields. Additive only; keeps the `/v17` module path. |
 | `v17.1.0` | 2026-07-16 | Minor | Receipt-safe promotion messaging: adds explicit customer-facing localized receipt copy and an opt-in print flag to promotions, plus a buyer/POS-safe `ReceiptOffer` projection that omits internal rules, discount configuration, counters, metadata, and authoring copy. Additive only; keeps the `/v17` module path. |
@@ -91,6 +92,37 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v17.3.0 (2026-07-16) - Storefront Address And Promotion Models
+
+This minor release adds the model surface required for customer-owned saved
+address CRUD and a safe public promotions feed. The module path remains
+`/v17`.
+
+### Added
+
+- `common.ContactAddress.id` is an optional stable identifier for persisted
+  address-book entries. Inline checkout, order, billing, and fulfilment
+  snapshots may continue to omit it.
+- `promotion.StorefrontPromotion` is a customer-safe promotion catalogue
+  record with display copy, public target references, active window, and
+  computed active state.
+
+### Safety
+
+- `promotion.StorefrontPromotion` deliberately excludes discount rules,
+  pricing configuration, usage limits and counters, priority, stacking
+  settings, source metadata, audit history, and timestamps.
+- Backend-specific routes, request bodies, pagination, and authorization stay
+  in the owning services.
+
+### Compatibility
+
+- Additive JSON shape only; the Go module remains
+  `github.com/Potato-Mart/Backend-Shared-Contract/v17`.
+- Existing decoders may ignore `ContactAddress.id`.
+- Consumers that expose saved-address CRUD or storefront promotion lists should
+  upgrade to `v17.3.0` and run `go mod tidy`.
 
 ## v17.2.1 (2026-07-16) - Release Alignment Publication
 
