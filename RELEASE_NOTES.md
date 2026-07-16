@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v17.2.0` | 2026-07-16 | Minor | Import-compliance model foundation: adds revisioned settings, manufacturer declarations, label masters, tariff profiles/assessments, trademark evidence, RFI records, immutable source snapshots, cited evidence/catalogue references, and generated-artifact references with fixed-point monetary, rate, exchange, weight, and volume fields. Additive only; keeps the `/v17` module path. |
 | `v17.1.0` | 2026-07-16 | Minor | Receipt-safe promotion messaging: adds explicit customer-facing localized receipt copy and an opt-in print flag to promotions, plus a buyer/POS-safe `ReceiptOffer` projection that omits internal rules, discount configuration, counters, metadata, and authoring copy. Additive only; keeps the `/v17` module path. |
 | `v17.0.0` | 2026-07-15 | Major | Retail wallet and checkout-benefit hard cut: changes the module path to `/v17`; removes all wallet-export contracts and enums; generalizes coupon ownership; adds reservation-aware vouchers and gift cards, explicit gift-card balances, order redemption snapshots, and the `gift_card` payment method/provider reference. |
 | `v16.0.0` | 2026-07-13 | Major | Model-only hard cut: changes the module path to `/v16`; removes endpoint DTOs, paths, service scopes, HTTP envelopes, business functions/mappings/transitions, forbidden packages, standalone preorder models, and compatibility aliases; adds v16 identity, order-owned preorder, campaign prediction, packing/stock-arrival, and persisted discount decision models plus an AST/manifest boundary gate. |
@@ -89,6 +90,61 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v17.2.0 (2026-07-16) - Import-Compliance Model Foundation
+
+This additive minor release introduces reusable, model-only records for the
+administrative import-compliance workflow. It does not define HTTP DTOs,
+authorization, validation, lifecycle transitions, calculations, automation,
+external-provider behavior, or regulatory decisions. The module path remains
+`/v17`.
+
+### Added
+
+- `contracts/importcompliance.ImportSettings` and its nested air, ambient-sea,
+  frozen-sea, and ingredient-declaration models preserve the import settings
+  surface. Charges use `common.Money`; the exchange rate uses micros; margin
+  and Taiwan tax use basis points; and weight/volume inputs use grams and cubic
+  centimetres.
+- `ManufacturerDeclaration`, `LabelMaster`, `TariffAssessment`,
+  `TariffProfile`, `TrademarkEvidence`, and `RFIRecord` provide revisioned
+  records for the five administrative import pages. Declaration/order/product
+  source data is frozen in snapshots, while signature, package-photo,
+  attachment, and generated-file bytes are referenced through managed media.
+- `RevisionMetadata`, `EvidenceReference`, `CatalogueReference`, and
+  `ArtifactReference` preserve review history, cited provenance, official
+  catalogue versions/checksums, and deterministic artifact identity without
+  embedding transport or storage behavior.
+- `enums/importcompliance` defines stable review states, AU/TW jurisdictions,
+  import modes, evidence kinds, RFI channels/submission states/requested times,
+  label sizes/orientations, and generated-artifact kinds.
+- JSON-shape, enum-validation, model-boundary, and exported-model manifest
+  coverage protects the new wire values and fixed-point representations.
+
+### Compatibility
+
+- No existing package, exported type, field, or enum value is removed or
+  renamed. Existing V17 consumers can upgrade without changing unrelated
+  model usage.
+- The new models are deliberately persistence-neutral. Owning services must
+  continue to publish API DTOs and workflows through their own OpenAPI
+  documents.
+- Tariff rates retain authoritative raw text and expose basis points only when
+  a percentage representation is faithful. These models do not assert tariff
+  classification or trademark clearance.
+- RFI submission events record explicit external evidence; the model does not
+  treat opening a portal or downloading a package as submission.
+
+### Consumer Action
+
+- Upgrade the `/v17` dependency to `v17.2.0` after the tag is published and run
+  `go mod tidy`.
+- Use the fixed-point units documented on the models and preserve catalogue,
+  evidence, snapshot, revision, and artifact references when mapping service
+  persistence or API DTOs.
+- Keep review transitions, ETags/idempotency, permissions, AI/OCR proposals,
+  tariff ingestion, RFI handoff, and artifact rendering in the owning backend;
+  do not infer those behaviors from the shared records.
 
 ## v17.1.0 (2026-07-16) - Receipt-Safe Promotion Messaging
 
