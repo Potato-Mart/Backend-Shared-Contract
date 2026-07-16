@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v17.2.1` | 2026-07-16 | Patch | Release-alignment publication of the existing V17.2 import-compliance model surface. No JSON shape, enum value, exported contract, or module-path change. |
 | `v17.2.0` | 2026-07-16 | Minor | Import-compliance model foundation: adds revisioned settings, manufacturer declarations, label masters, tariff profiles/assessments, trademark evidence, RFI records, immutable source snapshots, cited evidence/catalogue references, and generated-artifact references with fixed-point monetary, rate, exchange, weight, and volume fields. Additive only; keeps the `/v17` module path. |
 | `v17.1.0` | 2026-07-16 | Minor | Receipt-safe promotion messaging: adds explicit customer-facing localized receipt copy and an opt-in print flag to promotions, plus a buyer/POS-safe `ReceiptOffer` projection that omits internal rules, discount configuration, counters, metadata, and authoring copy. Additive only; keeps the `/v17` module path. |
 | `v17.0.0` | 2026-07-15 | Major | Retail wallet and checkout-benefit hard cut: changes the module path to `/v17`; removes all wallet-export contracts and enums; generalizes coupon ownership; adds reservation-aware vouchers and gift cards, explicit gift-card balances, order redemption snapshots, and the `gift_card` payment method/provider reference. |
@@ -90,6 +91,25 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v17.2.1 (2026-07-16) - Release Alignment Publication
+
+This patch release republishes the existing V17.2 contract payload after the
+repository release-alignment workflow was strengthened. The module path remains
+`/v17`.
+
+### Compatibility
+
+- No JSON property, requiredness rule, enum wire value, exported contract type,
+  package path, or fixed-point representation changes from `v17.2.0`.
+- Existing V17.2 consumers can upgrade without model, serialization, or
+  migration changes.
+
+### Consumer Action
+
+- Upgrade the `/v17` dependency to `v17.2.1` and run `go mod tidy`.
+- Continue to keep API validation, persistence, authorization, workflows, and
+  OpenAPI metadata in the owning backend services.
 
 ## v17.2.0 (2026-07-16) - Import-Compliance Model Foundation
 
