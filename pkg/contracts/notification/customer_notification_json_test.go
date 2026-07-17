@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/notification"
-	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/notification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/notification"
+	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/notification"
 )
 
 func TestCustomerNotificationJSONRoundTrip(t *testing.T) {
@@ -16,6 +16,8 @@ func TestCustomerNotificationJSONRoundTrip(t *testing.T) {
 		ID: "ntf_1", EventID: "event_1",
 		Topic: notificationenum.CustomerNotificationTopicPreorderAvailable,
 		Title: "Your preorder is ready", Message: "Your order can now be processed.",
+		Status:    notificationenum.CustomerNotificationStatusUnread,
+		ExpiresAt: now.Add(14 * 24 * time.Hour),
 		Deliveries: []notification.CustomerNotificationDelivery{{
 			Channel:      notificationenum.CustomerNotificationChannelEmail,
 			Status:       notificationenum.CustomerNotificationDeliveryStatusDelivered,
@@ -28,7 +30,9 @@ func TestCustomerNotificationJSONRoundTrip(t *testing.T) {
 		t.Fatalf("marshal notification: %v", err)
 	}
 	if !strings.Contains(string(payload), `"event_id":"event_1"`) ||
-		!strings.Contains(string(payload), `"status":"delivered"`) {
+		!strings.Contains(string(payload), `"status":"delivered"`) ||
+		!strings.Contains(string(payload), `"status":"unread"`) ||
+		!strings.Contains(string(payload), `"expires_at":`) {
 		t.Fatalf("notification JSON = %s", payload)
 	}
 }

@@ -3,11 +3,19 @@ package enums_test
 import (
 	"testing"
 
-	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/notification"
+	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/notification"
 )
 
 func TestNotificationEnums(t *testing.T) {
 	assertStringEnums(t, []enumCase{
+		{
+			name: "notification.CustomerNotificationStatus",
+			valid: []stringEnum{
+				notificationenum.CustomerNotificationStatusUnread,
+				notificationenum.CustomerNotificationStatusDismissed,
+			},
+			invalid: notificationenum.CustomerNotificationStatus("__invalid__"),
+		},
 		{
 			name: "notification.BackInStockChannel",
 			valid: []stringEnum{

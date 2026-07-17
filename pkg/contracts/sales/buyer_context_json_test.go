@@ -5,12 +5,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/sales"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/customer"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/product"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/sales"
-	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/sales"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/customer"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/product"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/sales"
+	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/shipping"
 )
 
 // TestOrderBuyerAndItemPricingRoundTrip checks the additive buyer/commercial

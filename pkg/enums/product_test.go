@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/product"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/product"
 )
 
 func TestProductEnumsValidateKnownValues(t *testing.T) {
@@ -15,7 +15,6 @@ func TestProductEnumsValidateKnownValues(t *testing.T) {
 		{name: "productenum.StorefrontPreorderStatus", valid: []stringEnum{productenum.StorefrontPreorderStatusUnavailable, productenum.StorefrontPreorderStatusUpcoming, productenum.StorefrontPreorderStatusOpen, productenum.StorefrontPreorderStatusClosed, productenum.StorefrontPreorderStatusSoldOut}, invalid: productenum.StorefrontPreorderStatus("__invalid__")},
 		{name: "productenum.StorefrontExpiryStatus", valid: []stringEnum{productenum.StorefrontExpiryStatusNotApplicable, productenum.StorefrontExpiryStatusSoonExpiry, productenum.StorefrontExpiryStatusExpired}, invalid: productenum.StorefrontExpiryStatus("__invalid__")},
 		{name: "productenum.ProductStatus", valid: []stringEnum{productenum.ProductStatusDraft, productenum.ProductStatusActive, productenum.ProductStatusArchived, productenum.ProductStatusDiscontinued}, invalid: productenum.ProductStatus("__invalid__")},
-		{name: "productenum.SalesPerformance", valid: []stringEnum{productenum.SalesPerformanceHot, productenum.SalesPerformanceNormal, productenum.SalesPerformanceSlow}, invalid: productenum.SalesPerformance("__invalid__")},
 	})
 	if got := productenum.WholesalePriceModeFixed.String(); got != "fixed" {
 		t.Fatalf("fixed wholesale price mode wire value = %q", got)

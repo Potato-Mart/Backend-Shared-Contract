@@ -1,9 +1,9 @@
 package product
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/product"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/product"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/warehouse"
 )
 
 // Snapshot is the denormalised product summary embedded in carts, order

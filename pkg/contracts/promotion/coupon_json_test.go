@@ -6,11 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/promotion"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/membership"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/promotion"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/membership"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/promotion"
 )
 
 func TestCouponAssignmentRoundTrip(t *testing.T) {

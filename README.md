@@ -1,8 +1,8 @@
-# Backend-Shared-Contract v17
+# Backend-Shared-Contract v18
 
 Potato Mart's shared Go module for cross-service data models.
 
-Version 17 is deliberately model-only. It contains domain entities, records,
+Version 18 is deliberately model-only. It contains domain entities, records,
 snapshots, events, value objects, typed enums, field names, JSON/BSON
 serialization, shared error-code enums, and module-version metadata.
 
@@ -15,48 +15,30 @@ OpenAPI document.
 ## Version and module path
 
 ```text
-v17.4.0
-github.com/Potato-Mart/Backend-Shared-Contract/v17
+v18.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v18
 ```
 
 Consumers pin the released module directly:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v17 v17.4.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v18 v18.0.0
 ```
 
 For example:
 
 ```go
 import (
-    walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/wallet"
+    walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/wallet"
 )
 ```
 
-Version 17 is a breaking wallet/checkout cutover. Wallet-export contracts are
-gone; coupon ownership supports retail and wholesale owners; gift cards expose
-committed, reserved, and available balances; and checkout benefit reservations,
-redemption snapshots, and gift-card payment references are first-class models.
-
-Version 17.2 adds model-only import-compliance records for revisioned settings,
-manufacturer declarations, product labels, tariff assessments/profiles,
-trademark evidence, Requests for Inspection, source evidence, catalogue pins,
-and generated-artifact references. Monetary and calculated values use fixed
-precision (`common.Money`, basis points, micros, grams, and cubic centimetres),
-while HTTP workflows and regulatory decisions remain backend-owned.
-
-Version 17.2.1 republishes the same model surface after the repository release
-alignment checks were strengthened. Consumers do not need model or wire-shape
-changes when upgrading from 17.2.0.
-
-Version 17.3 adds a stable optional identifier for persisted contact-address
-book entries and a customer-safe storefront promotion projection. Backend-owned
-HTTP routes and request DTOs remain outside this module.
-
-Version 17.4 adds session-bound access-token and exact last-login-IP fields,
-provider-neutral membership-pass content, and wholesale fixed/on-request price
-mode enums. Provider routes, signing payloads, service scopes, and media types
-remain backend-owned.
+Version 18 is the customer-commerce contract cutover. It replaces manually
+authored product velocity fields with computed historical sales statistics and
+category ranks, adds Operations-owned retail and organisation favourite lists,
+adds terminal notification dismissal/expiry state, and introduces one
+customer-safe storefront product projection with audience-filtered pricing and
+promotion badges. Legacy Commerce wholesale list permissions are removed.
 
 ## Boundary governance
 

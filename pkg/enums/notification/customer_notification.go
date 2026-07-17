@@ -1,5 +1,25 @@
 package notification
 
+// CustomerNotificationStatus is the customer-visible inbox lifecycle. Reading
+// a notification is a terminal dismissal in the customer notification centre.
+type CustomerNotificationStatus string
+
+const (
+	CustomerNotificationStatusUnread    CustomerNotificationStatus = "unread"
+	CustomerNotificationStatusDismissed CustomerNotificationStatus = "dismissed"
+)
+
+func (s CustomerNotificationStatus) String() string { return string(s) }
+
+func (s CustomerNotificationStatus) IsValid() bool {
+	switch s {
+	case CustomerNotificationStatusUnread, CustomerNotificationStatusDismissed:
+		return true
+	default:
+		return false
+	}
+}
+
 // CustomerNotificationTopic identifies a Management-owned customer message.
 // The topic selects server-owned copy and delivery policy; callers cannot
 // provide arbitrary email subjects or bodies.
