@@ -1,8 +1,8 @@
 package importcompliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
-	importcomplianceenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/importcompliance"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+	importcomplianceenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/importcompliance"
 )
 
 // ManufacturerDeclaration is a revisioned declaration backed by an immutable

@@ -3,8 +3,8 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
-	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/wholesale"
 )
 
 // OrganisationAccess links a user account/persona to a wholesale organisation

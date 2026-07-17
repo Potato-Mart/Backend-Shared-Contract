@@ -3,12 +3,12 @@ package product
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/shared"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/customer"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/product"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/sales"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/shared"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/customer"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/product"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/sales"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/warehouse"
 )
 
 // Product is the master record for one sellable unit (v7.0.0).
@@ -35,23 +35,19 @@ type Product struct {
 	// Status is the admin-controlled lifecycle state (draft/active/
 	// archived/discontinued). Derived runtime states (new/restocked/
 	// out_of_stock) are computed by DisplayStatus, never stored here.
-	Status productenum.ProductStatus `json:"status,omitempty"`
-	// SalesPerformance is the best-seller / sales-velocity signal
-	// (hot/normal/slow). Replaces the former freshness_status string.
-	SalesPerformance productenum.SalesPerformance `json:"sales_performance,omitempty"`
-
-	Collection      *CollectionRef `json:"collection,omitempty"`
-	CategoryTags    []CategoryTag  `json:"category_tags,omitempty"`
-	SupplierCode    string         `json:"supplier_code,omitempty"`
-	PlacingAreaCode string         `json:"placing_area_code,omitempty"`
+	Status          productenum.ProductStatus `json:"status,omitempty"`
+	Collection      *CollectionRef            `json:"collection,omitempty"`
+	CategoryTags    []CategoryTag             `json:"category_tags,omitempty"`
+	SupplierCode    string                    `json:"supplier_code,omitempty"`
+	PlacingAreaCode string                    `json:"placing_area_code,omitempty"`
 
 	// CurrentStock is a denormalised cache of total sellable stock; the
 	// authoritative quantities live in the warehouse subsystem. It backs
 	// the out_of_stock display state.
 	CurrentStock int `json:"current_stock"`
-	// AvgWeeklySales is a denormalised analytics signal that typically
-	// drives SalesPerformance.
-	AvgWeeklySales float64 `json:"avg_weekly_sales,omitempty"`
+	// SalesPerformance contains backend-computed historical sales statistics.
+	// It is never manually authored on product create/update operations.
+	SalesPerformance *SalesPerformanceStats `json:"sales_performance,omitempty"`
 
 	// FirstListedAt is set exactly once, when the product first becomes
 	// active. It anchors the NEW (æ–°å“) 14-day window and is never reset

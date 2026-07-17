@@ -38,11 +38,8 @@ const (
 	WholesalePermissionInvoicesPay             WholesalePermission = "invoices.pay"
 	WholesalePermissionAccountView             WholesalePermission = "account.view"
 	WholesalePermissionTeamView                WholesalePermission = "team.view"
-	WholesalePermissionFavouritesWrite         WholesalePermission = "favourites.write"
-	WholesalePermissionOrderListsViewOwn       WholesalePermission = "order_lists.view_own"
-	WholesalePermissionOrderListsWriteOwn      WholesalePermission = "order_lists.write_own"
-	WholesalePermissionOrderListsViewOrg       WholesalePermission = "order_lists.view_org"
-	WholesalePermissionOrderListsWriteOrg      WholesalePermission = "order_lists.write_org"
+	WholesalePermissionFavouriteListsViewOrg   WholesalePermission = "favourite_lists.view_org"
+	WholesalePermissionFavouriteListsWriteOrg  WholesalePermission = "favourite_lists.write_org"
 	WholesalePermissionGroupOrdersViewOrg      WholesalePermission = "group_orders.view_org"
 	WholesalePermissionGroupOrdersManage       WholesalePermission = "group_orders.manage_org"
 	WholesalePermissionGroupOrdersInvite       WholesalePermission = "group_orders.invite"
@@ -59,9 +56,8 @@ func (p WholesalePermission) IsValid() bool {
 		WholesalePermissionOrdersViewOrg, WholesalePermissionOrdersReorder,
 		WholesalePermissionInvoicesViewOwn, WholesalePermissionInvoicesViewOrg,
 		WholesalePermissionInvoicesPay, WholesalePermissionAccountView,
-		WholesalePermissionTeamView, WholesalePermissionFavouritesWrite,
-		WholesalePermissionOrderListsViewOwn, WholesalePermissionOrderListsWriteOwn,
-		WholesalePermissionOrderListsViewOrg, WholesalePermissionOrderListsWriteOrg,
+		WholesalePermissionTeamView, WholesalePermissionFavouriteListsViewOrg,
+		WholesalePermissionFavouriteListsWriteOrg,
 		WholesalePermissionGroupOrdersViewOrg, WholesalePermissionGroupOrdersManage,
 		WholesalePermissionGroupOrdersInvite, WholesalePermissionGroupOrdersSubmit,
 		WholesalePermissionGroupOrderDiscountApply:

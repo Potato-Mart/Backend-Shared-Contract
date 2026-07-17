@@ -1,8 +1,8 @@
 package shared
 
 import (
-	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/identity"
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/security"
+	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/identity"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/security"
 )
 
 // ActorRef identifies the authenticated principal that performed an

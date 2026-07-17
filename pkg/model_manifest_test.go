@@ -13,15 +13,16 @@ import (
 	"testing"
 )
 
-// v17ModelPackageManifest classifies every production package. Adding an
+// v18ModelPackageManifest classifies every production package. Adding an
 // exported type changes the digest below and requires an explicit manifest
 // review instead of silently expanding the shared module.
-var v17ModelPackageManifest = map[string]string{
+var v18ModelPackageManifest = map[string]string{
 	"common":                     "value",
 	"contracts/analytics":        "record",
 	"contracts/campaign":         "entity,event,snapshot,record",
 	"contracts/category":         "value",
 	"contracts/customers":        "entity,snapshot,record",
+	"contracts/favourite":        "entity,record,value",
 	"contracts/identity":         "entity,claims,event,session,record",
 	"contracts/importcompliance": "entity,record,snapshot,value",
 	"contracts/marketing":        "entity,record",
@@ -41,6 +42,7 @@ var v17ModelPackageManifest = map[string]string{
 	"enums/apiresponse":          "enum",
 	"enums/campaign":             "enum",
 	"enums/customer":             "enum",
+	"enums/favourite":            "enum",
 	"enums/identity":             "enum",
 	"enums/importcompliance":     "enum",
 	"enums/marketing":            "enum",
@@ -59,12 +61,13 @@ var v17ModelPackageManifest = map[string]string{
 	"versioning":                 "module-metadata",
 }
 
-// Reviewed additions through v17.4: provider-neutral membership-pass models
-// and wallet/wholesale price enums. Identity field additions do not change the
-// exported-type digest.
-const v17ExportedTypeManifestDigest = "063ee5c40bddd3683af3d09ab8193c8bde3c9fa5a63c601748d7daa2bfabba50"
+// Reviewed additions through v18.0: favourite-list ownership, notification
+// lifecycle, customer-safe storefront product, and computed sales-ranking
+// models. The removed velocity enum and new packages are intentionally part of
+// the breaking exported-type digest.
+const v18ExportedTypeManifestDigest = "18b8ddf496726122658c9a31c7883a7e9ad6567e7174fd191deb62d2d225ee83"
 
-func TestV17ExportedTypesMatchModelManifest(t *testing.T) {
+func TestV18ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)
 	var entries []string
 	err := filepath.WalkDir(".", func(path string, entry fs.DirEntry, walkErr error) error {
@@ -78,9 +81,9 @@ func TestV17ExportedTypesMatchModelManifest(t *testing.T) {
 		if packagePath == "." {
 			return nil
 		}
-		class, classified := v17ModelPackageManifest[packagePath]
+		class, classified := v18ModelPackageManifest[packagePath]
 		if !classified {
-			t.Errorf("%s is not classified in the v17 model manifest", packagePath)
+			t.Errorf("%s is not classified in the v18 model manifest", packagePath)
 			return nil
 		}
 		seenPackages[packagePath] = true
@@ -105,9 +108,9 @@ func TestV17ExportedTypesMatchModelManifest(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("read v17 model manifest: %v", err)
+		t.Fatalf("read v18 model manifest: %v", err)
 	}
-	for packagePath := range v17ModelPackageManifest {
+	for packagePath := range v18ModelPackageManifest {
 		if !seenPackages[packagePath] {
 			t.Errorf("manifest package %s has no production source", packagePath)
 		}
@@ -115,7 +118,7 @@ func TestV17ExportedTypesMatchModelManifest(t *testing.T) {
 	sort.Strings(entries)
 	sum := sha256.Sum256([]byte(strings.Join(entries, "\n")))
 	got := hex.EncodeToString(sum[:])
-	if got != v17ExportedTypeManifestDigest {
+	if got != v18ExportedTypeManifestDigest {
 		t.Fatalf("exported model manifest changed: got %s; classify the change and update the reviewed digest", got)
 	}
 }

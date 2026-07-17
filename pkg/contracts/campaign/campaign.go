@@ -8,8 +8,8 @@ package campaign
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
-	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/campaign"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/campaign"
 )
 
 // Audience narrows who a campaign is shown to. An empty field means "any";

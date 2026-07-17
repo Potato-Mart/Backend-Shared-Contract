@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v18.0.0` | 2026-07-18 | Major | Customer-commerce hard cut: adds unified favourite-list, notification lifecycle, customer-safe product projection, promotion badge, and historical sales-ranking models; removes legacy editable product velocity fields and Commerce wholesale-list permissions; changes the module path to `/v18`. |
 | `v17.4.0` | 2026-07-17 | Minor | Account security and wallet-pass models: adds session-bound access-token claims, exact device last-login IP, provider-neutral membership-pass content/barcode enums, and wholesale fixed/on-request price modes. Additive only; keeps the `/v17` module path. |
 | `v17.3.0` | 2026-07-16 | Minor | Storefront customer support: adds optional stable IDs to persisted contact-address book entries and a customer-safe promotion catalogue projection that omits rule-engine internals. Additive only; keeps the `/v17` module path. |
 | `v17.2.1` | 2026-07-16 | Patch | Release-alignment publication of the existing V17.2 import-compliance model surface. No JSON shape, enum value, exported contract, or module-path change. |
@@ -93,6 +94,37 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v18.0.0 (2026-07-18) - Customer Commerce And Storefront Models
+
+This breaking release moves the module path to `/v18` and establishes shared
+model truth for customer lists, notification dismissal, customer-safe catalogue
+details, promotion ribbons, and computed product sales rankings.
+
+### Breaking Contract Changes
+
+- `product.Product.sales_performance` is now structured, computed history;
+  `avg_weekly_sales` and the `hot|normal|slow` enum are removed.
+- Legacy Commerce wholesale favourite/order-list permissions are replaced by
+  organisation-scoped favourite-list view/write permissions.
+- All consumers must update imports to `/v18` and pin `v18.0.0`.
+
+### Added
+
+- Retail-user and wholesale-organisation favourite-list entities, ownership,
+  stable limit/name error codes, and product-membership records.
+- Customer notification `unread|dismissed` status, read/dismiss timestamps,
+  and explicit expiry.
+- 7/30/90-day and lifetime order/unit statistics, refund-aware net units,
+  timestamps, timezone, and per-category rank/population.
+- A customer-safe storefront product model with audience-filtered pricing,
+  exact policy-approved catalogue details, promotion badges, and rankings.
+
+### Consumer Action / 使用方動作
+
+- Management, Operations, and Commerce must adopt `/v18` before publishing
+  dependent API changes. Storefront clients must consume backend projections,
+  not the raw product master or merchandising policy.
 
 ## v17.4.0 (2026-07-17) - Session, Membership Pass, And Wholesale Price Models
 

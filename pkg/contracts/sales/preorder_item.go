@@ -3,7 +3,7 @@ package sales
 import (
 	"time"
 
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/sales"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/sales"
 )
 
 // PreorderItemSnapshot is server-stamped from Operations' active SKU policy.

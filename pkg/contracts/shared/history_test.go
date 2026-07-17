@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/payments"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/contracts/shared"
-	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/identity"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/payment"
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v17/pkg/enums/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/payments"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/shared"
+	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/identity"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/payment"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/security"
 )
 
 func TestHistoryOmittedWhenEmpty(t *testing.T) {
