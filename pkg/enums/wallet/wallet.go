@@ -1,5 +1,43 @@
 package walletenum
 
+// WalletPassPlatform identifies a supported external wallet provider for a
+// customer-owned membership pass. Provider transport and signing payloads stay
+// in the backend that issues the pass.
+type WalletPassPlatform string
+
+const (
+	WalletPassPlatformGoogle WalletPassPlatform = "google_wallet"
+	WalletPassPlatformApple  WalletPassPlatform = "apple_wallet"
+)
+
+// IsValid reports whether p is a known WalletPassPlatform value.
+func (p WalletPassPlatform) IsValid() bool {
+	switch p {
+	case WalletPassPlatformGoogle, WalletPassPlatformApple:
+		return true
+	}
+	return false
+}
+
+// String returns the wire value for p.
+func (p WalletPassPlatform) String() string { return string(p) }
+
+// WalletPassBarcodeFormat identifies the canonical barcode representation in
+// membership-pass content. Provider adapters map it to their own payload type.
+type WalletPassBarcodeFormat string
+
+const (
+	WalletPassBarcodeFormatCode128 WalletPassBarcodeFormat = "code_128"
+)
+
+// IsValid reports whether f is a known WalletPassBarcodeFormat value.
+func (f WalletPassBarcodeFormat) IsValid() bool {
+	return f == WalletPassBarcodeFormatCode128
+}
+
+// String returns the wire value for f.
+func (f WalletPassBarcodeFormat) String() string { return string(f) }
+
 // WalletInstrumentType identifies the kind of value instrument linked in a
 // customer wallet.
 type WalletInstrumentType string

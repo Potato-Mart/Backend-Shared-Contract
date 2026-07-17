@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v17.4.0` | 2026-07-17 | Minor | Account security and wallet-pass models: adds session-bound access-token claims, exact device last-login IP, provider-neutral membership-pass content/barcode enums, and wholesale fixed/on-request price modes. Additive only; keeps the `/v17` module path. |
 | `v17.3.0` | 2026-07-16 | Minor | Storefront customer support: adds optional stable IDs to persisted contact-address book entries and a customer-safe promotion catalogue projection that omits rule-engine internals. Additive only; keeps the `/v17` module path. |
 | `v17.2.1` | 2026-07-16 | Patch | Release-alignment publication of the existing V17.2 import-compliance model surface. No JSON shape, enum value, exported contract, or module-path change. |
 | `v17.2.0` | 2026-07-16 | Minor | Import-compliance model foundation: adds revisioned settings, manufacturer declarations, label masters, tariff profiles/assessments, trademark evidence, RFI records, immutable source snapshots, cited evidence/catalogue references, and generated-artifact references with fixed-point monetary, rate, exchange, weight, and volume fields. Additive only; keeps the `/v17` module path. |
@@ -92,6 +93,41 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v17.4.0 (2026-07-17) - Session, Membership Pass, And Wholesale Price Models
+
+This additive minor release provides reusable model truth for immediate
+session revocation, exact device sign-in reporting, external membership-pass
+content, and wholesale price-on-request merchandising. The module path remains
+`/v17`.
+
+### Added
+
+- `identity.AccessTokenClaims.session_id` binds an access token to its durable
+  login-session record.
+- `identity.UserDevice.last_login_ip` records the IP used for the most recent
+  successful sign-in independently from the latest observed device IP.
+- `wallet.MembershipPassContent` and `wallet.MembershipPassBarcode` define the
+  provider-neutral membership, tier, points, and Code 128 barcode snapshot.
+- `walletenum.WalletPassPlatform` and
+  `walletenum.WalletPassBarcodeFormat` classify supported pass targets and the
+  canonical barcode format.
+- `productenum.WholesalePriceMode` distinguishes fixed prices from
+  approved-buyer price-on-request catalogue entries.
+
+### Safety And Ownership
+
+- No endpoint paths, service scopes, provider signing payloads, HTTP envelopes,
+  authorization policy, or Apple/Google media definitions are introduced.
+- Backend services remain responsible for session introspection, pass signing,
+  wholesale enquiry behavior, and transport validation.
+
+### Compatibility And Consumer Action
+
+- All fields and enums are additive and keep the
+  `github.com/Potato-Mart/Backend-Shared-Contract/v17` module path.
+- Management, Operations, and Commerce should upgrade to `v17.4.0`, run
+  `go mod tidy`, and update their backend-owned auth/API behavior together.
 
 ## v17.3.0 (2026-07-16) - Storefront Address And Promotion Models
 

@@ -27,6 +27,7 @@ type UserDevice struct {
 	FirstSeenAt        time.Time                          `json:"first_seen_at"`
 	LastSeenAt         time.Time                          `json:"last_seen_at"`
 	LastLoginAt        *time.Time                         `json:"last_login_at,omitempty"`
+	LastLoginIP        string                             `json:"last_login_ip,omitempty"`
 	LastRiskReviewedAt *time.Time                         `json:"last_risk_reviewed_at,omitempty"`
 	RevokedAt          *time.Time                         `json:"revoked_at,omitempty"`
 	RevokedReason      string                             `json:"revoked_reason,omitempty"`

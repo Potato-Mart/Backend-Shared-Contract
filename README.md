@@ -15,14 +15,14 @@ OpenAPI document.
 ## Version and module path
 
 ```text
-v17.3.0
+v17.4.0
 github.com/Potato-Mart/Backend-Shared-Contract/v17
 ```
 
 Consumers pin the released module directly:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v17 v17.3.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v17 v17.4.0
 ```
 
 For example:
@@ -52,6 +52,11 @@ changes when upgrading from 17.2.0.
 Version 17.3 adds a stable optional identifier for persisted contact-address
 book entries and a customer-safe storefront promotion projection. Backend-owned
 HTTP routes and request DTOs remain outside this module.
+
+Version 17.4 adds session-bound access-token and exact last-login-IP fields,
+provider-neutral membership-pass content, and wholesale fixed/on-request price
+mode enums. Provider routes, signing payloads, service scopes, and media types
+remain backend-owned.
 
 ## Boundary governance
 

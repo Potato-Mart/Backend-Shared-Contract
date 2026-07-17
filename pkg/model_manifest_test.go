@@ -34,7 +34,7 @@ var v17ModelPackageManifest = map[string]string{
 	"contracts/sales":            "entity,snapshot,record",
 	"contracts/shared":           "event,record,value",
 	"contracts/shipping":         "record,value",
-	"contracts/wallet":           "entity,record,snapshot",
+	"contracts/wallet":           "entity,record,snapshot,value",
 	"contracts/warehouse":        "entity,record,snapshot",
 	"contracts/wholesale":        "entity,record,snapshot",
 	"enums/account":              "enum",
@@ -59,9 +59,10 @@ var v17ModelPackageManifest = map[string]string{
 	"versioning":                 "module-metadata",
 }
 
-// Reviewed additions: import-compliance records and the customer-safe
-// storefront promotion projection.
-const v17ExportedTypeManifestDigest = "53b5939a95b5dca717a1f2e50e62e88f954fc50ed2e5f13372acf503c6b3e328"
+// Reviewed additions through v17.4: provider-neutral membership-pass models
+// and wallet/wholesale price enums. Identity field additions do not change the
+// exported-type digest.
+const v17ExportedTypeManifestDigest = "063ee5c40bddd3683af3d09ab8193c8bde3c9fa5a63c601748d7daa2bfabba50"
 
 func TestV17ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

@@ -57,6 +57,73 @@ func TestCustomerWalletRoundTrip(t *testing.T) {
 	}
 }
 
+func TestMembershipPassContentRoundTrip(t *testing.T) {
+	now := time.Date(2026, 7, 17, 1, 2, 3, 0, time.UTC)
+	content := wallet.MembershipPassContent{
+		CustomerNumber:      "RC-20260717-ABC123",
+		MembershipAccountID: "mem_1",
+		TierKey:             "standard",
+		AvailablePoints:     125,
+		Barcode: wallet.MembershipPassBarcode{
+			Format:        walletenum.WalletPassBarcodeFormatCode128,
+			Value:         "RC-20260717-ABC123",
+			AlternateText: "RC-20260717-ABC123",
+		},
+		GeneratedAt: now,
+	}
+
+	payload, err := json.Marshal(content)
+	if err != nil {
+		t.Fatalf("marshal membership pass content: %v", err)
+	}
+	for _, key := range []string{
+		`"customer_number":"RC-20260717-ABC123"`,
+		`"membership_account_id":"mem_1"`,
+		`"tier_key":"standard"`,
+		`"available_points":125`,
+		`"format":"code_128"`,
+		`"value":"RC-20260717-ABC123"`,
+		`"alternate_text":"RC-20260717-ABC123"`,
+		`"generated_at":"2026-07-17T01:02:03Z"`,
+	} {
+		if !strings.Contains(string(payload), key) {
+			t.Fatalf("membership pass JSON missing %s: %s", key, payload)
+		}
+	}
+	for _, forbidden := range []string{`"save_jwt"`, `"pkpass"`, `"class_id"`, `"object_id"`, `"platform"`} {
+		if strings.Contains(string(payload), forbidden) {
+			t.Fatalf("provider-neutral membership pass must not contain %s: %s", forbidden, payload)
+		}
+	}
+
+	var decoded wallet.MembershipPassContent
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal membership pass content: %v", err)
+	}
+	if decoded.CustomerNumber != content.CustomerNumber || decoded.Barcode.Value != content.CustomerNumber ||
+		decoded.Barcode.Format != walletenum.WalletPassBarcodeFormatCode128 || !decoded.GeneratedAt.Equal(now) {
+		t.Fatalf("membership pass content did not round-trip: %+v", decoded)
+	}
+
+	optionalPayload, err := json.Marshal(wallet.MembershipPassContent{
+		CustomerNumber:      "RC-1",
+		MembershipAccountID: "mem_1",
+		Barcode: wallet.MembershipPassBarcode{
+			Format: walletenum.WalletPassBarcodeFormatCode128,
+			Value:  "RC-1",
+		},
+		GeneratedAt: now,
+	})
+	if err != nil {
+		t.Fatalf("marshal membership pass without optional fields: %v", err)
+	}
+	for _, optional := range []string{`"tier_key"`, `"alternate_text"`} {
+		if strings.Contains(string(optionalPayload), optional) {
+			t.Fatalf("zero-value optional field %s must be omitted: %s", optional, optionalPayload)
+		}
+	}
+}
+
 func TestGiftCardRoundTrip(t *testing.T) {
 	now := time.Date(2026, 6, 30, 0, 0, 0, 0, time.UTC)
 	owner := membership.MembershipOwnerRef{OwnerType: membershipenum.MembershipOwnerTypeRetailCustomer, OwnerID: "retail_1"}
