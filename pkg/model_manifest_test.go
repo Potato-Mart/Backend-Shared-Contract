@@ -59,9 +59,10 @@ var v17ModelPackageManifest = map[string]string{
 	"versioning":                 "module-metadata",
 }
 
-// Reviewed additions: import-compliance records and the customer-safe
-// storefront promotion projection.
-const v17ExportedTypeManifestDigest = "53b5939a95b5dca717a1f2e50e62e88f954fc50ed2e5f13372acf503c6b3e328"
+// Reviewed additions through v17.4: provider-neutral membership-pass models
+// and wallet/wholesale price enums. Identity field additions do not change the
+// exported-type digest.
+const v17ExportedTypeManifestDigest = "3986d861eab8d701b6eaca159e65d58fe91f3d637e19a900e8855426a2e33a54"
 
 func TestV17ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

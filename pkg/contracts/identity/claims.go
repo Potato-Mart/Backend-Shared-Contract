@@ -13,6 +13,7 @@ import (
 type AccessTokenClaims struct {
 	Subject                   string                          `json:"sub"`
 	UserID                    string                          `json:"user_id"`
+	SessionID                 string                          `json:"session_id,omitempty"`
 	AuthIdentityID            string                          `json:"auth_identity_id"`
 	IdentityDomain            identityenum.IdentityDomain     `json:"identity_domain"`
 	AccountID                 string                          `json:"account_id,omitempty"`

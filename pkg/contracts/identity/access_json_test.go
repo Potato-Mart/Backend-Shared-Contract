@@ -59,6 +59,7 @@ func TestIdentityWholesaleAccessJSONUsesOrganisationAccessID(t *testing.T) {
 	claims := identity.AccessTokenClaims{
 		Subject:                   "user_1",
 		UserID:                    "user_1",
+		SessionID:                 "session_1",
 		AccountID:                 "acct_1",
 		Portal:                    accountenum.PortalWholesale,
 		WholesaleOrganisationCode: "org_1",
@@ -96,5 +97,31 @@ func TestIdentityWholesaleAccessJSONUsesOrganisationAccessID(t *testing.T) {
 		if _, ok := fields["membership_id"]; ok {
 			t.Fatalf("%s should not include legacy membership_id: %s", group, payload)
 		}
+	}
+	if got["claims"]["session_id"] != "session_1" {
+		t.Fatalf("claims missing session_id: %s", payload)
+	}
+}
+
+func TestUserDeviceExactLastLoginIPRoundTrip(t *testing.T) {
+	now := time.Date(2026, 7, 17, 1, 2, 3, 0, time.UTC)
+	device := identity.UserDevice{
+		ID:          "device_1",
+		UserID:      "user_1",
+		FirstSeenAt: now,
+		LastSeenAt:  now,
+		LastLoginAt: &now,
+		LastLoginIP: "203.0.113.7",
+	}
+	payload, err := json.Marshal(device)
+	if err != nil {
+		t.Fatalf("marshal user device: %v", err)
+	}
+	var decoded identity.UserDevice
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal user device: %v", err)
+	}
+	if decoded.LastLoginIP != "203.0.113.7" || decoded.LastLoginAt == nil || !decoded.LastLoginAt.Equal(now) {
+		t.Fatalf("last login fields did not round-trip: %+v", decoded)
 	}
 }

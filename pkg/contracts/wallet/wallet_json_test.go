@@ -57,6 +57,41 @@ func TestCustomerWalletRoundTrip(t *testing.T) {
 	}
 }
 
+func TestMembershipPassContentRoundTrip(t *testing.T) {
+	now := time.Date(2026, 7, 17, 1, 2, 3, 0, time.UTC)
+	content := wallet.MembershipPassContent{
+		CustomerNumber:      "RC-20260717-ABC123",
+		MembershipAccountID: "mem_1",
+		TierKey:             "standard",
+		AvailablePoints:     125,
+		Barcode: wallet.MembershipPassBarcode{
+			Format:        walletenum.WalletPassBarcodeFormatCode128,
+			Value:         "RC-20260717-ABC123",
+			AlternateText: "RC-20260717-ABC123",
+		},
+		GeneratedAt: now,
+	}
+
+	payload, err := json.Marshal(content)
+	if err != nil {
+		t.Fatalf("marshal membership pass content: %v", err)
+	}
+	for _, key := range []string{`"customer_number":"RC-20260717-ABC123"`, `"format":"code_128"`, `"available_points":125`} {
+		if !strings.Contains(string(payload), key) {
+			t.Fatalf("membership pass JSON missing %s: %s", key, payload)
+		}
+	}
+
+	var decoded wallet.MembershipPassContent
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal membership pass content: %v", err)
+	}
+	if decoded.CustomerNumber != content.CustomerNumber || decoded.Barcode.Value != content.CustomerNumber ||
+		decoded.Barcode.Format != walletenum.WalletPassBarcodeFormatCode128 || !decoded.GeneratedAt.Equal(now) {
+		t.Fatalf("membership pass content did not round-trip: %+v", decoded)
+	}
+}
+
 func TestGiftCardRoundTrip(t *testing.T) {
 	now := time.Date(2026, 6, 30, 0, 0, 0, 0, time.UTC)
 	owner := membership.MembershipOwnerRef{OwnerType: membershipenum.MembershipOwnerTypeRetailCustomer, OwnerID: "retail_1"}

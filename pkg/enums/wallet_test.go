@@ -8,6 +8,8 @@ import (
 
 func TestWalletEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
+		{name: "walletenum.WalletPassPlatform", valid: []stringEnum{walletenum.WalletPassPlatformGoogle, walletenum.WalletPassPlatformApple}, invalid: walletenum.WalletPassPlatform("__invalid__")},
+		{name: "walletenum.WalletPassBarcodeFormat", valid: []stringEnum{walletenum.WalletPassBarcodeFormatCode128}, invalid: walletenum.WalletPassBarcodeFormat("__invalid__")},
 		{name: "walletenum.WalletInstrumentType", valid: []stringEnum{walletenum.WalletInstrumentTypePoints, walletenum.WalletInstrumentTypeGiftCard, walletenum.WalletInstrumentTypeVoucher, walletenum.WalletInstrumentTypeCoupon, walletenum.WalletInstrumentTypeReward}, invalid: walletenum.WalletInstrumentType("__invalid__")},
 		{name: "walletenum.GiftCardStatus", valid: []stringEnum{walletenum.GiftCardStatusActive, walletenum.GiftCardStatusPartiallyRedeemed, walletenum.GiftCardStatusDepleted, walletenum.GiftCardStatusExpired, walletenum.GiftCardStatusVoid}, invalid: walletenum.GiftCardStatus("__invalid__")},
 		{name: "walletenum.GiftCardTransactionReason", valid: []stringEnum{walletenum.GiftCardTransactionReasonIssue, walletenum.GiftCardTransactionReasonRedeem, walletenum.GiftCardTransactionReasonRefund, walletenum.GiftCardTransactionReasonTopUp, walletenum.GiftCardTransactionReasonExpire, walletenum.GiftCardTransactionReasonAdjust}, invalid: walletenum.GiftCardTransactionReason("__invalid__")},
