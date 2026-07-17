@@ -11,7 +11,8 @@ This module follows semantic versioning for shared backend contracts.
 ## Release Flow
 
 1. Make contract changes.
-2. Prepare the version, commit, and tag.
+2. Prepare the version metadata and release notes on a feature branch, then
+   merge it to protected `main` through an approved pull request.
 
    From PowerShell:
 
@@ -45,7 +46,11 @@ This module follows semantic versioning for shared backend contracts.
    bash scripts/publish-contract-version.sh --version v3.1.0 --use-ai-release-notes --push
    ```
 
-3. Pushing the tag triggers `.github/workflows/release.yml`, which runs tests, generates release notes, and creates or updates the GitHub Release.
+3. Merging to `main` triggers `.github/workflows/release.yml`. The workflow
+   reruns the contract tests, verifies source-version alignment, creates the
+   immutable annotated tag, and creates or repairs the matching GitHub Release.
+   A manual workflow dispatch from `main` may repair an aligned release; a
+   tag-only push does not trigger the workflow.
 
 ## Useful Script Options
 

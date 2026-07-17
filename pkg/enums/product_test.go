@@ -17,4 +17,10 @@ func TestProductEnumsValidateKnownValues(t *testing.T) {
 		{name: "productenum.ProductStatus", valid: []stringEnum{productenum.ProductStatusDraft, productenum.ProductStatusActive, productenum.ProductStatusArchived, productenum.ProductStatusDiscontinued}, invalid: productenum.ProductStatus("__invalid__")},
 		{name: "productenum.SalesPerformance", valid: []stringEnum{productenum.SalesPerformanceHot, productenum.SalesPerformanceNormal, productenum.SalesPerformanceSlow}, invalid: productenum.SalesPerformance("__invalid__")},
 	})
+	if got := productenum.WholesalePriceModeFixed.String(); got != "fixed" {
+		t.Fatalf("fixed wholesale price mode wire value = %q", got)
+	}
+	if got := productenum.WholesalePriceModeOnRequest.String(); got != "on_request" {
+		t.Fatalf("on-request wholesale price mode wire value = %q", got)
+	}
 }

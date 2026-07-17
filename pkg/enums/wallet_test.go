@@ -16,4 +16,13 @@ func TestWalletEnumsValidateKnownValues(t *testing.T) {
 		{name: "walletenum.VoucherStatus", valid: []stringEnum{walletenum.VoucherStatusIssued, walletenum.VoucherStatusReserved, walletenum.VoucherStatusRedeemed, walletenum.VoucherStatusExpired, walletenum.VoucherStatusVoid}, invalid: walletenum.VoucherStatus("__invalid__")},
 		{name: "walletenum.CheckoutBenefitReservationStatus", valid: []stringEnum{walletenum.CheckoutBenefitReservationStatusReserved, walletenum.CheckoutBenefitReservationStatusCommitted, walletenum.CheckoutBenefitReservationStatusCancelled, walletenum.CheckoutBenefitReservationStatusExpired, walletenum.CheckoutBenefitReservationStatusPartiallyRefunded, walletenum.CheckoutBenefitReservationStatusRefunded}, invalid: walletenum.CheckoutBenefitReservationStatus("__invalid__")},
 	})
+	if got := walletenum.WalletPassPlatformGoogle.String(); got != "google_wallet" {
+		t.Fatalf("google wallet platform wire value = %q", got)
+	}
+	if got := walletenum.WalletPassPlatformApple.String(); got != "apple_wallet" {
+		t.Fatalf("apple wallet platform wire value = %q", got)
+	}
+	if got := walletenum.WalletPassBarcodeFormatCode128.String(); got != "code_128" {
+		t.Fatalf("Code 128 wallet-pass wire value = %q", got)
+	}
 }

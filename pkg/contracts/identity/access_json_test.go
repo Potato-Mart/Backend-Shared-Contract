@@ -2,6 +2,7 @@ package identity_test
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 	"time"
 
@@ -123,5 +124,20 @@ func TestUserDeviceExactLastLoginIPRoundTrip(t *testing.T) {
 	}
 	if decoded.LastLoginIP != "203.0.113.7" || decoded.LastLoginAt == nil || !decoded.LastLoginAt.Equal(now) {
 		t.Fatalf("last login fields did not round-trip: %+v", decoded)
+	}
+}
+
+func TestOptionalSessionAndLastLoginIPFieldsOmitZeroValues(t *testing.T) {
+	payload, err := json.Marshal(struct {
+		Claims identity.AccessTokenClaims `json:"claims"`
+		Device identity.UserDevice        `json:"device"`
+	}{})
+	if err != nil {
+		t.Fatalf("marshal zero-value identity projections: %v", err)
+	}
+	for _, key := range []string{`"session_id"`, `"last_login_ip"`} {
+		if strings.Contains(string(payload), key) {
+			t.Fatalf("zero-value optional field %s must be omitted: %s", key, payload)
+		}
 	}
 }
