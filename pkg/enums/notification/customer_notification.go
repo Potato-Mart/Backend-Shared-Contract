@@ -28,13 +28,34 @@ type CustomerNotificationTopic string
 const (
 	CustomerNotificationTopicPreorderAvailable CustomerNotificationTopic = "preorder_available"
 	CustomerNotificationTopicBackInStock       CustomerNotificationTopic = "back_in_stock"
+	CustomerNotificationTopicOrderConfirmed    CustomerNotificationTopic = "order_confirmed"
+	CustomerNotificationTopicOrderCancelled    CustomerNotificationTopic = "order_cancelled"
+	CustomerNotificationTopicPaymentReceived   CustomerNotificationTopic = "payment_received"
+	CustomerNotificationTopicPaymentFailed     CustomerNotificationTopic = "payment_failed"
+	CustomerNotificationTopicPaymentRefunded   CustomerNotificationTopic = "payment_refunded"
+	CustomerNotificationTopicPackingStarted    CustomerNotificationTopic = "packing_started"
+	CustomerNotificationTopicOrderPacked       CustomerNotificationTopic = "order_packed"
+	CustomerNotificationTopicOrderDispatched   CustomerNotificationTopic = "order_dispatched"
+	CustomerNotificationTopicOrderDelivered    CustomerNotificationTopic = "order_delivered"
+	CustomerNotificationTopicInvoiceAvailable  CustomerNotificationTopic = "invoice_available"
 )
 
 func (t CustomerNotificationTopic) String() string { return string(t) }
 
 func (t CustomerNotificationTopic) IsValid() bool {
 	switch t {
-	case CustomerNotificationTopicPreorderAvailable, CustomerNotificationTopicBackInStock:
+	case CustomerNotificationTopicPreorderAvailable,
+		CustomerNotificationTopicBackInStock,
+		CustomerNotificationTopicOrderConfirmed,
+		CustomerNotificationTopicOrderCancelled,
+		CustomerNotificationTopicPaymentReceived,
+		CustomerNotificationTopicPaymentFailed,
+		CustomerNotificationTopicPaymentRefunded,
+		CustomerNotificationTopicPackingStarted,
+		CustomerNotificationTopicOrderPacked,
+		CustomerNotificationTopicOrderDispatched,
+		CustomerNotificationTopicOrderDelivered,
+		CustomerNotificationTopicInvoiceAvailable:
 		return true
 	default:
 		return false

@@ -15,14 +15,14 @@ OpenAPI document.
 ## Version and module path
 
 ```text
-v18.0.0
+v18.1.0
 github.com/Potato-Mart/Backend-Shared-Contract/v18
 ```
 
 Consumers pin the released module directly:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v18 v18.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v18 v18.1.0
 ```
 
 For example:
@@ -39,6 +39,8 @@ category ranks, adds Operations-owned retail and organisation favourite lists,
 adds terminal notification dismissal/expiry state, and introduces one
 customer-safe storefront product projection with audience-filtered pricing and
 promotion badges. Legacy Commerce wholesale list permissions are removed.
+Version 18.1 adds typed retail and wholesale order-lifecycle notification topics
+without changing the module path or any existing JSON field.
 
 ## Boundary governance
 

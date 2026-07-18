@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v18.1.0` | 2026-07-18 | Minor | Adds typed customer notification topics for order, payment, packing, dispatch, delivery, and invoice lifecycle milestones. Additive only; keeps the `/v18` module path. |
 | `v18.0.0` | 2026-07-18 | Major | Customer-commerce hard cut: adds unified favourite-list, notification lifecycle, customer-safe product projection, promotion badge, and historical sales-ranking models; removes legacy editable product velocity fields and Commerce wholesale-list permissions; changes the module path to `/v18`. |
 | `v17.4.0` | 2026-07-17 | Minor | Account security and wallet-pass models: adds session-bound access-token claims, exact device last-login IP, provider-neutral membership-pass content/barcode enums, and wholesale fixed/on-request price modes. Additive only; keeps the `/v17` module path. |
 | `v17.3.0` | 2026-07-16 | Minor | Storefront customer support: adds optional stable IDs to persisted contact-address book entries and a customer-safe promotion catalogue projection that omits rule-engine internals. Additive only; keeps the `/v17` module path. |
@@ -94,6 +95,30 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v18.1.0 (2026-07-18) - Customer Order Lifecycle Notification Topics
+
+This additive release defines the Management-owned customer notification topics
+needed for retail and wholesale order lifecycle messaging. The module path
+remains `/v18` and no existing JSON field or enum value changes.
+
+此加法版本定義由 Management 擁有的顧客通知主題，支援零售與批發訂單生命週期訊息。
+模組路徑維持 `/v18`，既有 JSON 欄位及 enum 值皆不變。
+
+### Added / 新增
+
+- Order confirmation and cancellation topics.
+- Payment received, failed, and refunded topics.
+- Packing started, order packed, dispatched, delivered, and invoice available topics.
+- 訂單確認與取消、付款成功／失敗／退款、開始包裝、完成包裝、出貨、送達及發票可用通知主題。
+
+### Consumer Action / 使用方動作
+
+- Management, Commerce, and Operations must pin `v18.1.0` before publishing
+  lifecycle notification behavior. Frontends must consume the corresponding
+  backend OpenAPI topic values.
+- Management、Commerce 與 Operations 在發布生命週期通知功能前必須固定使用
+  `v18.1.0`；前端須採用對應後端 OpenAPI 的通知主題值。
 
 ## v18.0.0 (2026-07-18) - Customer Commerce And Storefront Models
 
