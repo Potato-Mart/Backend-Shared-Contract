@@ -36,3 +36,40 @@ func TestCustomerNotificationJSONRoundTrip(t *testing.T) {
 		t.Fatalf("notification JSON = %s", payload)
 	}
 }
+
+func TestCustomerLifecycleNotificationTopicJSONValues(t *testing.T) {
+	topics := []notificationenum.CustomerNotificationTopic{
+		notificationenum.CustomerNotificationTopicOrderConfirmed,
+		notificationenum.CustomerNotificationTopicOrderCancelled,
+		notificationenum.CustomerNotificationTopicPaymentReceived,
+		notificationenum.CustomerNotificationTopicPaymentFailed,
+		notificationenum.CustomerNotificationTopicPaymentRefunded,
+		notificationenum.CustomerNotificationTopicPackingStarted,
+		notificationenum.CustomerNotificationTopicOrderPacked,
+		notificationenum.CustomerNotificationTopicOrderDispatched,
+		notificationenum.CustomerNotificationTopicOrderDelivered,
+		notificationenum.CustomerNotificationTopicInvoiceAvailable,
+	}
+
+	payload, err := json.Marshal(topics)
+	if err != nil {
+		t.Fatalf("marshal lifecycle topics: %v", err)
+	}
+	wantValues := []string{
+		"order_confirmed",
+		"order_cancelled",
+		"payment_received",
+		"payment_failed",
+		"payment_refunded",
+		"packing_started",
+		"order_packed",
+		"order_dispatched",
+		"order_delivered",
+		"invoice_available",
+	}
+	for _, want := range wantValues {
+		if !strings.Contains(string(payload), `"`+want+`"`) {
+			t.Fatalf("lifecycle topic JSON = %s, missing %q", payload, want)
+		}
+	}
+}
