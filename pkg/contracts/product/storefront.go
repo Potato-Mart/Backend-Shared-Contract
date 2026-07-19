@@ -30,13 +30,15 @@ type StorefrontPromotionBadge struct {
 
 // StorefrontProduct is the shared customer-safe catalogue projection consumed
 // by retail and approved wholesale storefronts. Exact expiry is omitted unless
-// StorefrontDisplay explicitly allows it.
+// StorefrontDisplay explicitly allows it. BrandKey is the optional immutable,
+// lowercase, URL-safe brand navigation and exact-filter key.
 type StorefrontProduct struct {
 	SKUCode           string                        `json:"sku_code"`
 	SKU               string                        `json:"sku"`
 	Name              string                        `json:"name"`
 	Description       []common.LocalizedDescription `json:"description,omitempty"`
 	Brand             []common.LocalizedName        `json:"brand,omitempty"`
+	BrandKey          string                        `json:"brand_key,omitempty"`
 	BrandRef          *BrandRef                     `json:"brand_ref,omitempty"`
 	Storage           warehouseenum.StorageType     `json:"storage,omitempty"`
 	Status            productenum.ProductStatus     `json:"status,omitempty"`
