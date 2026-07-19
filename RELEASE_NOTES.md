@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v18.2.0` | 2026-07-19 | Minor | Adds canonical localized product brand masters, lightweight brand references, and optional product/snapshot/storefront `brand_ref` fields. Additive only; keeps legacy `brand` arrays and the `/v18` module path. |
 | `v18.1.0` | 2026-07-18 | Minor | Adds typed customer notification topics for order, payment, packing, dispatch, delivery, and invoice lifecycle milestones. Additive only; keeps the `/v18` module path. |
 | `v18.0.0` | 2026-07-18 | Major | Customer-commerce hard cut: adds unified favourite-list, notification lifecycle, customer-safe product projection, promotion badge, and historical sales-ranking models; removes legacy editable product velocity fields and Commerce wholesale-list permissions; changes the module path to `/v18`. |
 | `v17.4.0` | 2026-07-17 | Minor | Account security and wallet-pass models: adds session-bound access-token claims, exact device last-login IP, provider-neutral membership-pass content/barcode enums, and wholesale fixed/on-request price modes. Additive only; keeps the `/v17` module path. |
@@ -95,6 +96,41 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v18.2.0 (2026-07-19) - Canonical Product Brand Models
+
+This additive release defines reusable canonical product brand masters and
+lightweight embedded brand references. The module path remains `/v18`; existing
+localized `brand` arrays remain unchanged and `brand_ref` is optional.
+
+此加法版本定義可重用的正規商品品牌主檔與輕量嵌入式品牌參照。模組路徑維持
+`/v18`；既有本地化 `brand` 陣列保持不變，`brand_ref` 為選用欄位。
+
+### Added / 新增
+
+- `product.Brand` with stable ID and slug, localized canonical names,
+  localized aliases, and shared audit fields.
+- Lightweight `product.BrandRef` with stable ID, slug, and localized names.
+- Optional `brand_ref` on `product.Product`, `product.Snapshot`, and
+  `product.StorefrontProduct`.
+- `product.Brand` 新增穩定 ID、slug、本地化正規名稱、本地化別名與共用審計欄位。
+- `product.BrandRef` 提供穩定 ID、slug 與本地化名稱的輕量參照。
+
+### Compatibility / 相容性
+
+- Existing payloads without `brand_ref` decode unchanged.
+- Existing localized `brand` arrays remain present for compatible consumers;
+  this release adds no renamed or removed JSON keys.
+- 不含 `brand_ref` 的既有 payload 可繼續解析；本地化 `brand` 陣列仍保留，
+  本版本沒有改名或移除任何 JSON key。
+
+### Consumer Action / 使用方動作
+
+- Consumers that need canonical brand identity should pin `v18.2.0` and prefer
+  `brand_ref`; consumers may continue using the legacy localized `brand` array
+  during migration.
+- 需要正規品牌識別的使用方應固定 `v18.2.0` 並優先使用 `brand_ref`；
+  遷移期間仍可繼續使用既有本地化 `brand` 陣列。
 
 ## v18.1.0 (2026-07-18) - Customer Order Lifecycle Notification Topics
 

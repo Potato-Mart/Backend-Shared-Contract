@@ -15,14 +15,14 @@ OpenAPI document.
 ## Version and module path
 
 ```text
-v18.1.0
+v18.2.0
 github.com/Potato-Mart/Backend-Shared-Contract/v18
 ```
 
 Consumers pin the released module directly:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v18 v18.1.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v18 v18.2.0
 ```
 
 For example:
@@ -41,6 +41,9 @@ customer-safe storefront product projection with audience-filtered pricing and
 promotion badges. Legacy Commerce wholesale list permissions are removed.
 Version 18.1 adds typed retail and wholesale order-lifecycle notification topics
 without changing the module path or any existing JSON field.
+Version 18.2 adds canonical localized product brand masters and lightweight
+brand references. Existing localized `brand` arrays remain available, and the
+new `brand_ref` fields are optional.
 
 ## Boundary governance
 
