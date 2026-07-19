@@ -61,11 +61,11 @@ var v18ModelPackageManifest = map[string]string{
 	"versioning":                 "module-metadata",
 }
 
-// Reviewed additions through v18.0: favourite-list ownership, notification
-// lifecycle, customer-safe storefront product, and computed sales-ranking
-// models. The removed velocity enum and new packages are intentionally part of
-// the breaking exported-type digest.
-const v18ExportedTypeManifestDigest = "18b8ddf496726122658c9a31c7883a7e9ad6567e7174fd191deb62d2d225ee83"
+// Reviewed additions through v18.2: favourite-list ownership, notification
+// lifecycle, customer-safe storefront product, computed sales-ranking models,
+// and canonical product Brand/BrandRef models. The removed velocity enum and
+// new packages are intentionally part of the breaking exported-type digest.
+const v18ExportedTypeManifestDigest = "0d7d0003307f9b2b438bb354d92a46aa2bb08e398f312bef5097bebbc37652f3"
 
 func TestV18ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

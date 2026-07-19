@@ -27,6 +27,7 @@ type Product struct {
 	Name        string                        `json:"name"`
 	Description []common.LocalizedDescription `json:"description,omitempty"`
 	Brand       []common.LocalizedName        `json:"brand,omitempty"`
+	BrandRef    *BrandRef                     `json:"brand_ref,omitempty"`
 	Barcode     string                        `json:"barcode,omitempty"`
 	Taxed       bool                          `json:"taxed"`
 

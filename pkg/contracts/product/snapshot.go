@@ -29,6 +29,7 @@ type Snapshot struct {
 	OtherNames    []common.LocalizedName        `json:"other_names,omitempty"`
 	Description   []common.LocalizedDescription `json:"description,omitempty"`
 	Brand         []common.LocalizedName        `json:"brand,omitempty"`
+	BrandRef      *BrandRef                     `json:"brand_ref,omitempty"`
 	SupplierCode  string                        `json:"supplier_code,omitempty"`
 	ImageURL      string                        `json:"image_url,omitempty"`
 	Storage       warehouseenum.StorageType     `json:"storage,omitempty"`
