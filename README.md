@@ -15,14 +15,14 @@ OpenAPI document.
 ## Version and module path
 
 ```text
-v18.2.0
+v18.3.0
 github.com/Potato-Mart/Backend-Shared-Contract/v18
 ```
 
 Consumers pin the released module directly:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v18 v18.2.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v18 v18.3.0
 ```
 
 For example:
@@ -44,6 +44,9 @@ without changing the module path or any existing JSON field.
 Version 18.2 adds canonical localized product brand masters and lightweight
 brand references. Existing localized `brand` arrays remain available, and the
 new `brand_ref` fields are optional.
+Version 18.3 adds the public brand-catalogue summary and optional immutable
+`brand_key` fields to brand masters, lightweight references, and storefront
+products. Existing `slug`, `brand`, and `brand_ref` JSON remains unchanged.
 
 ## Boundary governance
 

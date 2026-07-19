@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v18.3.0` | 2026-07-19 | Minor | Adds the customer-safe brand catalogue summary and optional immutable `brand_key` fields on brand masters, references, and storefront products. Additive only; keeps existing brand JSON and the `/v18` module path. |
 | `v18.2.0` | 2026-07-19 | Minor | Adds canonical localized product brand masters, lightweight brand references, and optional product/snapshot/storefront `brand_ref` fields. Additive only; keeps legacy `brand` arrays and the `/v18` module path. |
 | `v18.1.0` | 2026-07-18 | Minor | Adds typed customer notification topics for order, payment, packing, dispatch, delivery, and invoice lifecycle milestones. Additive only; keeps the `/v18` module path. |
 | `v18.0.0` | 2026-07-18 | Major | Customer-commerce hard cut: adds unified favourite-list, notification lifecycle, customer-safe product projection, promotion badge, and historical sales-ranking models; removes legacy editable product velocity fields and Commerce wholesale-list permissions; changes the module path to `/v18`. |
@@ -96,6 +97,47 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v18.3.0 (2026-07-19) - Storefront Brand Catalogue
+
+This additive release defines the customer-safe brand catalogue projection and
+introduces an optional stable `brand_key` for brand masters, lightweight brand
+references, and storefront products. The module path remains `/v18`; all
+existing brand fields and payloads remain compatible.
+
+此加法版本定義顧客安全的品牌目錄投影，並在品牌主檔、輕量品牌參照及店面商品上新增
+選用且穩定的 `brand_key`。模組路徑維持 `/v18`；所有既有品牌欄位與 payload
+保持相容。
+
+### Added / 新增
+
+- `product.BrandSummary` with required `brand_key`, localized `names`,
+  `featured`, `sort_order`, and `active_product_count`, plus optional
+  `logo_url`.
+- Optional `brand_key` on `product.Brand`, `product.BrandRef`, and
+  `product.StorefrontProduct`.
+- `brand_key` is the lowercase URL-safe canonical filter/navigation key and is
+  immutable after assignment by the owning catalogue.
+- 新增 `product.BrandSummary`，包含必要的 `brand_key`、本地化 `names`、
+  `featured`、`sort_order`、`active_product_count`，以及選用的 `logo_url`。
+- `product.Brand`、`product.BrandRef` 與 `product.StorefrontProduct` 新增選用的
+  `brand_key`；此欄位為小寫、URL 安全且一經指定即不可變更的正規鍵值。
+
+### Compatibility / 相容性
+
+- Empty `brand_key` values are omitted from compatibility-bearing models.
+- Existing payloads without `brand_key` decode unchanged, and existing `slug`,
+  localized `brand`, and `brand_ref` fields remain present.
+- 不含 `brand_key` 的既有 payload 可繼續解析；空值不會輸出，既有 `slug`、
+  本地化 `brand` 及 `brand_ref` 欄位全部保留。
+
+### Consumer Action / 使用方動作
+
+- Operations should pin `v18.3.0`, populate `brand_key`, and expose
+  `BrandSummary` only after its brand backfill is validated. Storefront clients
+  may continue using existing brand fields during rollout.
+- Operations 應固定使用 `v18.3.0`，完成 `brand_key` 回填驗證後才公開
+  `BrandSummary`；店面客戶端在推出期間仍可使用既有品牌欄位。
 
 ## v18.2.0 (2026-07-19) - Canonical Product Brand Models
 
