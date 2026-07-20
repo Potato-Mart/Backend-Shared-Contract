@@ -31,6 +31,7 @@ type Snapshot struct {
 	Brand         []common.LocalizedName        `json:"brand,omitempty"`
 	BrandRef      *BrandRef                     `json:"brand_ref,omitempty"`
 	SupplierCode  string                        `json:"supplier_code,omitempty"`
+	Supply        *ProductSupply                `json:"supply,omitempty"`
 	ImageURL      string                        `json:"image_url,omitempty"`
 	Storage       warehouseenum.StorageType     `json:"storage,omitempty"`
 	Status        productenum.ProductStatus     `json:"status,omitempty"`

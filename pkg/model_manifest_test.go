@@ -32,12 +32,14 @@ var v18ModelPackageManifest = map[string]string{
 	"contracts/product":          "entity,snapshot,value",
 	"contracts/promotion":        "entity,record,value",
 	"contracts/purchase":         "entity,record",
+	"contracts/review":           "entity,record,value",
 	"contracts/sales":            "entity,snapshot,record",
 	"contracts/shared":           "event,record,value",
 	"contracts/shipping":         "record,value",
 	"contracts/wallet":           "entity,record,snapshot,value",
 	"contracts/warehouse":        "entity,record,snapshot",
 	"contracts/wholesale":        "entity,record,snapshot",
+	"contracts/wish":             "entity,record,value",
 	"enums/account":              "enum",
 	"enums/apiresponse":          "enum",
 	"enums/campaign":             "enum",
@@ -52,21 +54,24 @@ var v18ModelPackageManifest = map[string]string{
 	"enums/product":              "enum",
 	"enums/promotion":            "enum",
 	"enums/purchase":             "enum",
+	"enums/review":               "enum",
 	"enums/sales":                "enum",
 	"enums/security":             "enum",
 	"enums/shipping":             "enum",
 	"enums/wallet":               "enum",
 	"enums/warehouse":            "enum",
 	"enums/wholesale":            "enum",
+	"enums/wish":                 "enum",
 	"versioning":                 "module-metadata",
 }
 
-// Reviewed additions through v18.3: favourite-list ownership, notification
-// lifecycle, customer-safe storefront product, computed sales-ranking models,
-// canonical product Brand/BrandRef models, and the storefront BrandSummary.
-// The removed velocity enum and new packages are intentionally part of the
-// breaking exported-type digest.
-const v18ExportedTypeManifestDigest = "092ffde1367b099ea8c2f26457b899d414e854ed43f3a6e8db12056d28c7c72d"
+// Reviewed additions through v18.4: product supply and manufacturing
+// provenance, localized detail images, nullable display selling counts,
+// audience-specific BrandSummary, rating/review models, and Make a Wish
+// proposal, candidate, ballot, selection, and ranking models. The removed
+// velocity enum and new packages are intentionally part of the exported-type
+// digest.
+const v18ExportedTypeManifestDigest = "353633cbd8ddbae0a080197b67bcbb383cd8f3f0f9ae46e34f946a21171a1076"
 
 func TestV18ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v18.4.0` | 2026-07-20 | Minor | Adds customer-safe product supply/manufacturing provenance, ordered detail imagery, nullable display selling counts, audience-specific brand counts, rating/review models, and Make a Wish proposal/ballot models. Additive only; retains `supplier_code` and the `/v18` module path. |
 | `v18.3.0` | 2026-07-19 | Minor | Adds the customer-safe brand catalogue summary and optional immutable `brand_key` fields on brand masters, references, and storefront products. Additive only; keeps existing brand JSON and the `/v18` module path. |
 | `v18.2.0` | 2026-07-19 | Minor | Adds canonical localized product brand masters, lightweight brand references, and optional product/snapshot/storefront `brand_ref` fields. Additive only; keeps legacy `brand` arrays and the `/v18` module path. |
 | `v18.1.0` | 2026-07-18 | Minor | Adds typed customer notification topics for order, payment, packing, dispatch, delivery, and invoice lifecycle milestones. Additive only; keeps the `/v18` module path. |
@@ -97,6 +98,127 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v18.4.0 (2026-07-20) - Product Story, Reviews, and Make a Wish
+
+This additive release supplies shared model truth for customer-safe product
+provenance and detail imagery, rating and review projections, and Make a Wish
+proposals and ballots. It retains the `/v18` module path, preserves the legacy
+`supplier_code` field, and does not define HTTP routes, request DTOs, response
+envelopes, pagination, authorization, validation, ETags, or OpenAPI. Those
+remain owned by the implementing backend. All removals are deferred to v19.
+
+此加法版本提供顧客安全的商品供應來源、製造資訊與詳細圖片，以及評分、評論和
+「許願商品」提案與投票的共用模型真相。模組路徑維持 `/v18`，並保留既有
+`supplier_code` 欄位。本模組不定義 HTTP 路由、request DTO、response envelope、
+分頁、授權、驗證、ETag 或 OpenAPI；這些仍由實作後端擁有。所有移除項目延後至
+v19。
+
+### Added / 新增
+
+- `common.LocalizedText` with required `language` and `text` JSON fields for
+  localized customer-facing copy that is not a name or description.
+- `product.ProductSupplierRef` with customer-safe `code` and `name`;
+  `product.ProductManufacturing` with optional `company_name` and `location`;
+  and `product.ProductSupply` with independently optional `supplier` and
+  `manufacturing` sections. Supplier contacts, addresses, legal identifiers,
+  and operational fields are deliberately absent.
+- `product.DetailImage` with required `url` and optional localized `alt_text`
+  and `caption`. Array position is the canonical display order.
+- Optional `supply` and nullable/omittable `display_selling_count` on
+  `product.Product`; optional `supply` and `display_selling_count`, plus ordered
+  top-level `detail_images`, on `product.StorefrontProduct`; ordered
+  `detail_images` on `product.Media`; and optional `supply` on
+  `product.Snapshot` while retaining `supplier_code`.
+- Optional `audience` on `product.BrandSummary`, using
+  `productenum.PriceAudience`, so retail and wholesale
+  `active_product_count` values cannot be confused.
+- `review.RatingDistributionBucket` with `score` and `count`, and
+  `review.RatingSummary` with `average_score`, `rating_count`,
+  `published_text_review_count`, and an exactly five-bucket ordered
+  `distribution` for scores 1 through 5.
+- Public `review.ProductReview`, customer-owned `review.MyProductReview`, and
+  PII-free moderation `review.ProductReviewModeration` projections. Their JSON
+  fields cover review ID, `product_sku_code`, score, approved and/or original
+  title/body as appropriate, locale, verified-purchase truth, moderation
+  status/reason or note as appropriate, and explicit safe timestamps. None
+  embeds audit actors or customer identity.
+- `reviewenum.ReviewModerationStatus` values `not_required`, `pending`,
+  `approved`, `rejected`, and `suppressed`; `ReviewRejectionReason` values
+  `spam`, `off_topic`, `inappropriate`, `personal_information`,
+  `unsupported_language`, and `other`; and stable `ReviewErrorCode` values
+  `REVIEW_NOT_FOUND` and `REVIEW_PURCHASE_REQUIRED`.
+- `wish.WishProposal` with `id`, `product_name`, optional `description` and
+  `reference_url`, `state`, optional conversion/product references, and safe
+  timestamps; `wish.WishCandidate` with localized `name` and `description`,
+  ordered `image_urls`, state, publication/fulfilment facts, and safe
+  timestamps; revisioned `wish.WishBallot` with ordered `candidate_ids`,
+  opening/closing times, and `as_of`; `wish.WishRankingEntry` with
+  `candidate_id`, `rank`, and `vote_count`; and identity-free
+  `wish.WishSelection` with `ballot_id`, ordered `candidate_ids`, and
+  `updated_at`.
+- `wishenum.WishProposalState` values `pending`, `converted`, and `rejected`;
+  `WishCandidateState` values `draft`, `published`, `retired`, and `fulfilled`;
+  `WishBallotState` values `scheduled`, `open`, and `closed`; and stable
+  `WishErrorCode` values `WISH_NO_ACTIVE_BALLOT`, `WISH_BALLOT_CLOSED`, and
+  `WISH_CANDIDATE_UNAVAILABLE`.
+- 新增 `common.LocalizedText`、顧客安全的供應商／製造／供應資訊、依陣列順序顯示
+  的本地化詳細圖片，以及可接受缺少／`null` 並保留明確零值的手動銷售顯示數量。
+- 新增固定五個有序分數桶的評分摘要、公開／顧客本人／無 PII 的審核評論投影，
+  以及評論狀態、拒絕原因與穩定錯誤碼。
+- 新增許願提案、候選商品、修訂式投票、排序結果與無身份選擇模型，以及提案、
+  候選、投票狀態與穩定錯誤碼；所有公開時間欄位直接宣告，且不嵌入審計人員或
+  顧客身份。
+
+### Compatibility / 相容性
+
+- Every new product/storefront/snapshot field is additive and optional.
+  Pointer-backed `display_selling_count` preserves an explicit zero while an
+  absent value remains omitted. Existing v18.3 payloads decode unchanged.
+- Legacy `supplier_code`, localized `brand`, `brand_ref`, `image_urls`, and all
+  other existing v18 JSON keys remain present. Consumers may migrate from
+  `supplier_code` to `supply` during v18; no legacy removal is permitted before
+  v19.
+- Product supply may contain supplier-only, manufacturing-only, both sections,
+  or neither. Backends must expose only the customer-safe fields declared here.
+- Rating distributions are always five ordered buckets even when counts are
+  zero. Rating summaries are retail-only and must not be added to wholesale
+  responses.
+- Review and wish enums and error codes are stable wire values. Backend-owned
+  APIs may add transport-specific status and envelope details without changing
+  these shared domain values.
+- 所有新商品、店面與快照欄位均為選用加法欄位；既有 v18.3 payload 可原樣解析。
+  `display_selling_count` 可保留明確的零值；未提供時則省略。
+- `supplier_code`、既有品牌與圖片欄位全部保留。v18 期間可逐步改用 `supply`，
+  v19 前不得移除相容欄位。評分摘要僅供零售，不得出現在批發回應。
+
+### Consumer Action / 使用方動作
+
+- Operations must pin `v18.4.0`, adopt the released product/review/wish structs
+  at domain, persistence, and projection boundaries, migrate/hydrate supply
+  data, implement brands/reviews/wishes and their indexes/ETags/errors, publish
+  capability flags, and freeze its provider OpenAPI before Commerce regenerates
+  the catalogue consumer. Backend-local write DTOs must preserve omitted/set/null
+  validation semantics, and wishes must not reuse favourite-list persistence.
+- Commerce must pin `v18.4.0`, regenerate its Operations catalogue wire from the
+  frozen provider OpenAPI, explicitly preserve `Snapshot.Supply` through cart,
+  checkout, and durable order items, and add the least-privilege authenticated
+  review purchase-eligibility endpoint. It must not own review/wish moderation
+  or persistence.
+- Management must pin `v18.4.0`, add review read/moderate and wish read/manage
+  permissions, and issue only the frozen Operations-to-Commerce eligibility
+  service grant. Identity, RBAC, tokens, service scopes, and HTTP DTOs remain
+  Management-owned; product/review/wish persistence does not.
+- Retail web must consume the backend-owned OpenAPI for brands, product story,
+  rating/review, wish, conditional caching, errors, and runtime capabilities,
+  while excluding identity, moderator notes, supplier contacts, and operational
+  data. Wholesale web adopts only audience-correct brands and shared safe
+  product fields; it must not add ratings, reviews, proposals, ballots, or
+  voting.
+- Operations、Commerce 與 Management 必須在各自功能 branch 固定使用已發布的
+  `v18.4.0`，並依上述邊界採用結構、OpenAPI、快照相容性、權限與服務授權。
+  零售網頁採用品牌、商品故事、評論與許願 API；批發網頁只採用受眾正確的品牌
+  與顧客安全商品欄位，不得加入評分、評論、提案或投票。
 
 ## v18.3.0 (2026-07-19) - Storefront Brand Catalogue
 

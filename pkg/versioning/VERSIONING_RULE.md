@@ -10,82 +10,53 @@ This module follows semantic versioning for shared backend contracts.
 
 ## Release Flow
 
-1. Make contract changes.
-2. Prepare the version metadata and release notes on a feature branch, then
-   merge it to protected `main` through an approved pull request.
-
-   From PowerShell:
-
-   ```powershell
-   ./scripts/Publish-ContractVersion.ps1 -Bump minor -Push
-   ```
-
-   From Git Bash, Linux, macOS, or GitHub Actions-style shell:
-
-   ```bash
-   bash scripts/publish-contract-version.sh --bump minor --push
-   ```
-
-   Or use an explicit version.
+1. Create a feature branch from the latest protected `main` and make the
+   additive or breaking contract changes there.
+2. In the same feature-branch pull request, align `pkg/versioning/version.go`,
+   `pkg/versioning/version_test.go`, `README.md`, the model manifest, and the
+   existing canonical `RELEASE_NOTES.md`. The release notes must contain both
+   a release-index row and a detailed `## vX.Y.Z` section.
+3. Run the release-alignment and contract gates before pushing the branch:
 
    ```powershell
-   ./scripts/Publish-ContractVersion.ps1 -Version v2.2.0 -CommitMessage "chore(release): v2.2.0" -Push
+   ./scripts/Test-ReleaseAlignment.ps1 -ExpectedVersion vX.Y.Z
+   ./scripts/Test-Contract.ps1
+   git diff --check
    ```
 
-   ```bash
-   bash scripts/publish-contract-version.sh --version v2.2.0 --message "chore(release): v2.2.0" --push
-   ```
-
-   To use AI-polished release notes locally, set `OPENAI_API_KEY` and run one of these:
-
-   ```powershell
-   ./scripts/Publish-ContractVersion.ps1 -Version v3.1.0 -UseAIReleaseNotes -Push
-   ```
-
-   ```bash
-   bash scripts/publish-contract-version.sh --version v3.1.0 --use-ai-release-notes --push
-   ```
-
-3. Merging to `main` triggers `.github/workflows/release.yml`. The workflow
+4. Push only the feature branch, open an approved pull request, resolve review
+   threads, and wait for the required `Go tests` check. Do not create or push
+   the version tag from the feature branch.
+5. Merging to `main` triggers `.github/workflows/release.yml`. The workflow
    reruns the contract tests, verifies source-version alignment, creates the
    immutable annotated tag, and creates or repairs the matching GitHub Release.
    A manual workflow dispatch from `main` may repair an aligned release; a
    tag-only push does not trigger the workflow.
 
-## Useful Script Options
+The mutating `Publish-ContractVersion.ps1` and
+`publish-contract-version.sh` scripts predate this protected-main workflow.
+They generate a standalone `release-notes.md` and may create a tag before a
+pull request is merged. Do not use their mutating or push modes for repository
+releases. `-DryRun` / `--dry-run` remains safe for version calculation only.
 
-- `-Bump major|minor|patch`: calculate the next version from `pkg/versioning/version.go`.
-- `-Version vX.Y.Z`: use an exact version.
-- `-NoCommit`: update files and notes without committing.
-- `-NoTag`: commit but do not create a tag.
-- `-Push`: push the commit and tag.
-- `-DryRun`: validate the requested version without changing files.
-- `-UseAIReleaseNotes`: polish deterministic release notes through OpenAI. Requires `OPENAI_API_KEY`.
+## Safe Local Version Calculation
 
-Bash equivalents:
+The legacy preparation scripts may be used only in non-mutating dry-run mode:
 
-- `--bump major|minor|patch`
-- `--version vX.Y.Z`
-- `--no-commit`
-- `--no-tag`
-- `--push`
-- `--dry-run`
-- `--use-ai-release-notes`
+```powershell
+./scripts/Publish-ContractVersion.ps1 -Bump minor -DryRun
+```
 
-## AI Release Notes
+```bash
+bash scripts/publish-contract-version.sh --bump minor --dry-run
+```
 
-The release workflow always creates deterministic release notes first. If the repository has an `OPENAI_API_KEY` secret, the workflow can polish those notes with AI before publishing the GitHub Release.
-
-Recommended setup:
-
-- Add a repository secret named `OPENAI_API_KEY`.
-- Optionally add a repository variable named `OPENAI_RELEASE_NOTES_MODEL`. If omitted, the scripts use `gpt-5`.
-
-The AI step is a polish layer, not the source of truth. The input is limited to git commits, changed contract files, diff summary, and deterministic notes.
+Prepare the actual version metadata and canonical release notes explicitly in
+the protected-main pull request as described above.
 
 ## Release Notes
 
-Release notes are generated from git history since the previous tag and grouped into:
+`RELEASE_NOTES.md` is the source of truth. Each release records:
 
 - Breaking Contract Changes
 - Added

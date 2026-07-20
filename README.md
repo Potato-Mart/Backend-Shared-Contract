@@ -15,14 +15,14 @@ OpenAPI document.
 ## Version and module path
 
 ```text
-v18.3.0
+v18.4.0
 github.com/Potato-Mart/Backend-Shared-Contract/v18
 ```
 
 Consumers pin the released module directly:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v18 v18.3.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v18 v18.4.0
 ```
 
 For example:
@@ -47,6 +47,11 @@ new `brand_ref` fields are optional.
 Version 18.3 adds the public brand-catalogue summary and optional immutable
 `brand_key` fields to brand masters, lightweight references, and storefront
 products. Existing `slug`, `brand`, and `brand_ref` JSON remains unchanged.
+Version 18.4 adds customer-safe product supply and manufacturing provenance,
+ordered detailed imagery, nullable display selling counts, retail rating and
+review models, and Make a Wish proposal, ballot, selection, and ranking models.
+All additions retain the `/v18` module path and preserve legacy
+`supplier_code` fields for compatible consumers.
 
 ## Boundary governance
 
