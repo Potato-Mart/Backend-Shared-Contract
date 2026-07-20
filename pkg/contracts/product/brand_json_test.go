@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/product"
 )
 
 func TestBrandJSONRoundTrip(t *testing.T) {
@@ -170,6 +171,9 @@ func TestBrandSummaryJSONShape(t *testing.T) {
 	if strings.Contains(string(body), `"logo_url"`) {
 		t.Fatalf("BrandSummary JSON = %s, logo_url must be omitted when absent", body)
 	}
+	if strings.Contains(string(body), `"audience"`) {
+		t.Fatalf("BrandSummary JSON = %s, audience must be omitted for legacy-compatible summaries", body)
+	}
 	var decoded BrandSummary
 	if err := json.Unmarshal(body, &decoded); err != nil {
 		t.Fatalf("unmarshal brand summary: %v", err)
@@ -185,6 +189,21 @@ func TestBrandSummaryJSONShape(t *testing.T) {
 	}
 	if !strings.Contains(string(body), `"logo_url":"https://cdn.example.test/brands/happy-potato.png"`) {
 		t.Fatalf("BrandSummary JSON = %s, want logo_url", body)
+	}
+
+	summary.Audience = productenum.PriceAudienceWholesale
+	body, err = json.Marshal(summary)
+	if err != nil {
+		t.Fatalf("marshal wholesale brand summary: %v", err)
+	}
+	if !strings.Contains(string(body), `"audience":"wholesale"`) || !strings.Contains(string(body), `"active_product_count":0`) {
+		t.Fatalf("BrandSummary JSON = %s, want audience-specific product count metadata", body)
+	}
+	if err := json.Unmarshal(body, &decoded); err != nil {
+		t.Fatalf("unmarshal wholesale brand summary: %v", err)
+	}
+	if decoded.Audience != productenum.PriceAudienceWholesale {
+		t.Fatalf("BrandSummary audience = %q, want wholesale", decoded.Audience)
 	}
 }
 

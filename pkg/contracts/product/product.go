@@ -40,6 +40,7 @@ type Product struct {
 	Collection      *CollectionRef            `json:"collection,omitempty"`
 	CategoryTags    []CategoryTag             `json:"category_tags,omitempty"`
 	SupplierCode    string                    `json:"supplier_code,omitempty"`
+	Supply          *ProductSupply            `json:"supply,omitempty"`
 	PlacingAreaCode string                    `json:"placing_area_code,omitempty"`
 
 	// CurrentStock is a denormalised cache of total sellable stock; the
@@ -49,6 +50,9 @@ type Product struct {
 	// SalesPerformance contains backend-computed historical sales statistics.
 	// It is never manually authored on product create/update operations.
 	SalesPerformance *SalesPerformanceStats `json:"sales_performance,omitempty"`
+	// DisplaySellingCount is an optional manually curated storefront count.
+	// A non-nil pointer with value zero is distinct from an absent count.
+	DisplaySellingCount *int64 `json:"display_selling_count,omitempty"`
 
 	// FirstListedAt is set exactly once, when the product first becomes
 	// active. It anchors the NEW (æ–°å“) 14-day window and is never reset
@@ -115,8 +119,9 @@ type Localization struct {
 
 // Media groups the product imagery.
 type Media struct {
-	CoverURL  string   `json:"cover_url,omitempty"`
-	ImageURLs []string `json:"image_urls,omitempty"`
+	CoverURL     string        `json:"cover_url,omitempty"`
+	ImageURLs    []string      `json:"image_urls,omitempty"`
+	DetailImages []DetailImage `json:"detail_images,omitempty"`
 }
 
 // Physical groups the packaged-good physical attributes.

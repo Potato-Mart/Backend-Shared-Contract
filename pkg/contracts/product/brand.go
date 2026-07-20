@@ -1,6 +1,9 @@
 package product
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+import (
+	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/product"
+)
 
 // Brand is the canonical localized brand master used by product catalogues.
 // Aliases carry alternate localized spellings and search labels without
@@ -31,14 +34,16 @@ type BrandRef struct {
 
 // BrandSummary is the customer-safe brand catalogue projection. BrandKey is
 // the stable navigation/filter key; Names contains localized display labels.
-// Featured and SortOrder are explicit merchandising controls, while
-// ActiveProductCount includes only products eligible for the public retail
-// storefront. LogoURL is omitted when no approved HTTPS asset is configured.
+// Featured and SortOrder are explicit merchandising controls. Audience makes
+// ActiveProductCount unambiguous between retail and wholesale catalogues; an
+// omitted audience retains the legacy retail interpretation. LogoURL is
+// omitted when no approved HTTPS asset is configured.
 type BrandSummary struct {
-	BrandKey           string                 `json:"brand_key"`
-	Names              []common.LocalizedName `json:"names"`
-	LogoURL            string                 `json:"logo_url,omitempty"`
-	Featured           bool                   `json:"featured"`
-	SortOrder          int                    `json:"sort_order"`
-	ActiveProductCount int64                  `json:"active_product_count"`
+	BrandKey           string                    `json:"brand_key"`
+	Names              []common.LocalizedName    `json:"names"`
+	Audience           productenum.PriceAudience `json:"audience,omitempty"`
+	LogoURL            string                    `json:"logo_url,omitempty"`
+	Featured           bool                      `json:"featured"`
+	SortOrder          int                       `json:"sort_order"`
+	ActiveProductCount int64                     `json:"active_product_count"`
 }
