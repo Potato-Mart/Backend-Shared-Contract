@@ -70,6 +70,9 @@ type Product struct {
 	Localization Localization `json:"localization,omitempty"`
 	Media        Media        `json:"media,omitempty"`
 	Physical     Physical     `json:"physical,omitempty"`
+	// CountryOfOrigin is the customer-facing origin display block projected
+	// onto the storefront product (v18.6.0).
+	CountryOfOrigin *StorefrontOrigin `json:"country_of_origin,omitempty"`
 	// StorefrontMerchandising carries admin-managed retail display policy.
 	// Backend read models convert it into customer-safe display fields.
 	StorefrontMerchandising *StorefrontMerchandising `json:"storefront_merchandising,omitempty"`

@@ -11,12 +11,14 @@ const (
 	UserRoleWarehouse         UserRole = "warehouse"
 	UserRoleWarehouseOperator UserRole = "warehouseOperator"
 	UserRoleMarketing         UserRole = "marketing"
+	UserRoleCashier           UserRole = "cashier"
 )
 
 func (r UserRole) IsValid() bool {
 	switch r {
 	case UserRoleSuperAdmin, UserRoleAdmin, UserRoleSales,
-		UserRoleWarehouse, UserRoleWarehouseOperator, UserRoleMarketing:
+		UserRoleWarehouse, UserRoleWarehouseOperator, UserRoleMarketing,
+		UserRoleCashier:
 		return true
 	default:
 		return false

@@ -34,22 +34,59 @@ func (t EventTopic) String() string { return string(t) }
 type EventType string
 
 const (
-	EventTypeOrderCreated       EventType = "order.created"
-	EventTypeOrderPaid          EventType = "order.paid"
-	EventTypeOrderStatusChanged EventType = "order.status_changed"
-	EventTypeOrderCancelled     EventType = "order.cancelled"
-	EventTypePaymentCaptured    EventType = "payment.captured"
-	EventTypePaymentFailed      EventType = "payment.failed"
-	EventTypeRefundRequested    EventType = "refund.requested"
-	EventTypeRefundCompleted    EventType = "refund.completed"
-	EventTypeRefundFailed       EventType = "refund.failed"
+	EventTypeOrderCreated           EventType = "order.created"
+	EventTypeOrderPaid              EventType = "order.paid"
+	EventTypeOrderStatusChanged     EventType = "order.status_changed"
+	EventTypeOrderCancelled         EventType = "order.cancelled"
+	EventTypeOrderPreorderAvailable EventType = "order.preorder_available"
+	EventTypePaymentCaptured        EventType = "payment.captured"
+	EventTypePaymentFailed          EventType = "payment.failed"
+	EventTypeInvoiceIssued          EventType = "invoice.issued"
+	EventTypeRefundRequested        EventType = "refund.requested"
+	EventTypeRefundCompleted        EventType = "refund.completed"
+	EventTypeRefundFailed           EventType = "refund.failed"
+
+	EventTypeStockArrived  EventType = "stock.arrived"
+	EventTypeStockAdjusted EventType = "stock.adjusted"
+
+	EventTypeFulfilmentPackingUpdated  EventType = "fulfilment.packing_updated"
+	EventTypeFulfilmentShipped         EventType = "fulfilment.shipped"
+	EventTypeFulfilmentDelivered       EventType = "fulfilment.delivered"
+	EventTypeFulfilmentCompleted       EventType = "fulfilment.completed"
+	EventTypeFulfilmentTrackingUpdated EventType = "fulfilment.tracking_updated"
+
+	EventTypeCustomerRegistered     EventType = "customer.registered"
+	EventTypeCustomerProfileUpdated EventType = "customer.profile_updated"
+	EventTypeCustomerConsentChanged EventType = "customer.consent_changed"
+
+	EventTypeCatalogProductChanged  EventType = "catalog.product_changed"
+	EventTypeCatalogBrandChanged    EventType = "catalog.brand_changed"
+	EventTypeCatalogCategoryChanged EventType = "catalog.category_changed"
+
+	EventTypeEngagementNotificationDelivered EventType = "engagement.notification_delivered"
+	EventTypeEngagementNotificationOpened    EventType = "engagement.notification_opened"
+	EventTypeEngagementNotificationClicked   EventType = "engagement.notification_clicked"
+
+	EventTypeProductSalesPerformanceUpdated EventType = "product.sales_performance_updated"
 )
 
 func (t EventType) IsValid() bool {
 	switch t {
 	case EventTypeOrderCreated, EventTypeOrderPaid, EventTypeOrderStatusChanged,
-		EventTypeOrderCancelled, EventTypePaymentCaptured, EventTypePaymentFailed,
-		EventTypeRefundRequested, EventTypeRefundCompleted, EventTypeRefundFailed:
+		EventTypeOrderCancelled, EventTypeOrderPreorderAvailable,
+		EventTypePaymentCaptured, EventTypePaymentFailed, EventTypeInvoiceIssued,
+		EventTypeRefundRequested, EventTypeRefundCompleted, EventTypeRefundFailed,
+		EventTypeStockArrived, EventTypeStockAdjusted,
+		EventTypeFulfilmentPackingUpdated, EventTypeFulfilmentShipped,
+		EventTypeFulfilmentDelivered, EventTypeFulfilmentCompleted,
+		EventTypeFulfilmentTrackingUpdated,
+		EventTypeCustomerRegistered, EventTypeCustomerProfileUpdated,
+		EventTypeCustomerConsentChanged,
+		EventTypeCatalogProductChanged, EventTypeCatalogBrandChanged,
+		EventTypeCatalogCategoryChanged,
+		EventTypeEngagementNotificationDelivered, EventTypeEngagementNotificationOpened,
+		EventTypeEngagementNotificationClicked,
+		EventTypeProductSalesPerformanceUpdated:
 		return true
 	default:
 		return false

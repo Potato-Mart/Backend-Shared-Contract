@@ -16,7 +16,10 @@ type MembershipTier struct {
 	DiscountPercent       float64                             `json:"discount_percent"`
 	FreeShippingThreshold *common.Money                       `json:"free_shipping_threshold,omitempty"`
 	BirthdayBonusPoints   int                                 `json:"birthday_bonus_points"`
-	Perks                 common.Metadata                     `json:"perks,omitempty"`
+	// Perks is the legacy untyped perk map. Deprecated: prefer Benefits.
+	Perks common.Metadata `json:"perks,omitempty"`
+	// Benefits is the typed, localized benefit list (v18.6.0).
+	Benefits []TierBenefit `json:"benefits,omitempty"`
 	SortOrder             int                                 `json:"sort_order"`
 	IsActive              bool                                `json:"is_active"`
 	IsSystem              bool                                `json:"is_system"`

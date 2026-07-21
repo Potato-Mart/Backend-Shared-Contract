@@ -7,13 +7,14 @@ package paymentenum
 type TerminalProvider string
 
 const (
-	TerminalProviderMx51 TerminalProvider = "mx51"
+	TerminalProviderMx51   TerminalProvider = "mx51"
+	TerminalProviderStripe TerminalProvider = "stripe"
 )
 
 // IsValid reports whether p is a known TerminalProvider.
 func (p TerminalProvider) IsValid() bool {
 	switch p {
-	case TerminalProviderMx51:
+	case TerminalProviderMx51, TerminalProviderStripe:
 		return true
 	}
 	return false

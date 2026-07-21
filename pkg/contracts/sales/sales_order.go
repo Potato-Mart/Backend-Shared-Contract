@@ -178,10 +178,27 @@ type GiftCardRedemptionSnapshot struct {
 	WalletTransactionID string       `json:"wallet_transaction_id,omitempty"`
 }
 
+// POSAttribution carries first-class in-store sale attribution (store, event,
+// register, device, operator, shift, platform, form factor) on the order's
+// source device.
+type POSAttribution struct {
+	StoreID        string `json:"store_id,omitempty"`
+	EventID        string `json:"event_id,omitempty"`
+	RegisterID     string `json:"register_id,omitempty"`
+	ShiftID        string `json:"shift_id,omitempty"`
+	OperatorUserID string `json:"operator_user_id,omitempty"`
+	Platform       string `json:"platform,omitempty"`
+	FormFactor     string `json:"form_factor,omitempty"`
+}
+
 type SourceDevice struct {
 	Type    salesenum.OrderSourceDeviceType `json:"type,omitempty"`
 	LocalID string                          `json:"local_id,omitempty"`
 	Name    string                          `json:"name,omitempty"`
+
+	// POS carries first-class in-store attribution when the order originates
+	// at a point of sale (v18.6.0).
+	POS *POSAttribution `json:"pos,omitempty"`
 
 	// Metadata stores source-specific details that should not become first-class
 	// contract fields yet, for example app_version, terminal_id, store_id,
