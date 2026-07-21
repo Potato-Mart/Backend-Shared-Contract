@@ -15,7 +15,7 @@ func TestSKUJSONIncludesPrimaryName(t *testing.T) {
 		Storage: warehouseenum.StorageFrozen,
 		PrimaryName: common.LocalizedName{
 			Language: "zh-Hant",
-			Name:     "å†·å‡ - è‚‰å“",
+			Name:     "冷凍 - 肉品",
 		},
 		OtherNames: []common.LocalizedName{{Language: "en", Name: "Frozen meat"}},
 		SortOrder:  21,
@@ -32,15 +32,15 @@ func TestSKUJSONIncludesPrimaryName(t *testing.T) {
 	if !ok {
 		t.Fatalf("SKU JSON missing primary_name object: %s", body)
 	}
-	if primary["language"] != "zh-Hant" || primary["name"] != "å†·å‡ - è‚‰å“" {
-		t.Fatalf("primary_name = %#v, want zh-Hant/å†·å‡ - è‚‰å“ (%s)", primary, body)
+	if primary["language"] != "zh-Hant" || primary["name"] != "冷凍 - 肉品" {
+		t.Fatalf("primary_name = %#v, want zh-Hant/冷凍 - 肉品 (%s)", primary, body)
 	}
 
 	var decoded SKU
 	if err := json.Unmarshal(body, &decoded); err != nil {
 		t.Fatalf("unmarshal sku: %v", err)
 	}
-	if decoded.PrimaryName.Language != "zh-Hant" || decoded.PrimaryName.Name != "å†·å‡ - è‚‰å“" {
+	if decoded.PrimaryName.Language != "zh-Hant" || decoded.PrimaryName.Name != "冷凍 - 肉品" {
 		t.Fatalf("primary_name did not round-trip: %+v", decoded.PrimaryName)
 	}
 }

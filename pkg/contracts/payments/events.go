@@ -1,0 +1,73 @@
+package payments
+
+import (
+	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/payment"
+)
+
+// PaymentCapturedEvent is emitted on the payment-events topic when a payment
+// is captured (online provider webhook, terminal settlement or manual
+// record). AggregateID is the order number.
+type PaymentCapturedEvent struct {
+	PaymentID         string                    `json:"payment_id"`
+	OrderID           string                    `json:"order_id,omitempty"`
+	OrderNumber       string                    `json:"order_number"`
+	Method            paymentenum.PaymentMethod `json:"method,omitempty"`
+	Amount            common.Money              `json:"amount"`
+	ProviderSessionID string                    `json:"provider_session_id,omitempty"`
+	CapturedAt        time.Time                 `json:"captured_at"`
+	RequestID         string                    `json:"request_id,omitempty"`
+}
+
+// PaymentFailedEvent is emitted on the payment-events topic when a payment
+// attempt terminally fails (provider decline, validation failure, expiry).
+type PaymentFailedEvent struct {
+	PaymentID         string                    `json:"payment_id,omitempty"`
+	OrderID           string                    `json:"order_id,omitempty"`
+	OrderNumber       string                    `json:"order_number"`
+	Method            paymentenum.PaymentMethod `json:"method,omitempty"`
+	Amount            common.Money              `json:"amount,omitempty"`
+	ProviderSessionID string                    `json:"provider_session_id,omitempty"`
+	Reason            string                    `json:"reason,omitempty"`
+	FailedAt          time.Time                 `json:"failed_at"`
+	RequestID         string                    `json:"request_id,omitempty"`
+}
+
+// RefundRequestedEvent is emitted on the refund-events topic when a refund is
+// raised against an order's captured payments.
+type RefundRequestedEvent struct {
+	RefundID    string       `json:"refund_id"`
+	OrderID     string       `json:"order_id,omitempty"`
+	OrderNumber string       `json:"order_number"`
+	Amount      common.Money `json:"amount"`
+	RequestedBy string       `json:"requested_by,omitempty"`
+	RequestedAt time.Time    `json:"requested_at"`
+	Reason      string       `json:"reason,omitempty"`
+	RequestID   string       `json:"request_id,omitempty"`
+}
+
+// RefundCompletedEvent is emitted on the refund-events topic when a refund
+// settles. Consumers reverse benefits/points and update order payment state.
+type RefundCompletedEvent struct {
+	RefundID    string       `json:"refund_id"`
+	OrderID     string       `json:"order_id,omitempty"`
+	OrderNumber string       `json:"order_number"`
+	PaymentID   string       `json:"payment_id,omitempty"`
+	Amount      common.Money `json:"amount"`
+	CompletedAt time.Time    `json:"completed_at"`
+	RequestID   string       `json:"request_id,omitempty"`
+}
+
+// RefundFailedEvent is emitted on the refund-events topic when a refund
+// attempt terminally fails.
+type RefundFailedEvent struct {
+	RefundID    string       `json:"refund_id"`
+	OrderID     string       `json:"order_id,omitempty"`
+	OrderNumber string       `json:"order_number"`
+	Amount      common.Money `json:"amount,omitempty"`
+	Reason      string       `json:"reason,omitempty"`
+	FailedAt    time.Time    `json:"failed_at"`
+	RequestID   string       `json:"request_id,omitempty"`
+}

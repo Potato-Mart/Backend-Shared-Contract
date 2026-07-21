@@ -24,13 +24,13 @@ type Order struct {
 	FulfillmentStatus salesenum.FulfillmentStatus `json:"fulfillment_status"`
 	Customer          common.PartyRef             `json:"customer"`
 	// Buyer describes who is buying, independently of Channel. POS is a
-	// channel, not a buyer type â€” see sales.BuyerContext. Optional pointer
+	// channel, not a buyer type — see sales.BuyerContext. Optional pointer
 	// so it is omitted entirely when unset.
 	Buyer        *BuyerContext `json:"buyer,omitempty"`
 	Items        []OrderItem   `json:"items"`
 	SourceDevice SourceDevice  `json:"source_device,omitempty"`
 
-	// â”€â”€ Shipping & billing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+	// ── Shipping & billing ────────────────────────────────────────────
 	Shipping         common.ContactAddress         `json:"shipping"`
 	Billing          *common.ContactAddress        `json:"billing,omitempty"`
 	ShippingMethod   shippingenum.ShippingRateName `json:"shipping_method,omitempty"`
@@ -38,9 +38,9 @@ type Order struct {
 	ShippingRateID   string                        `json:"shipping_rate_id,omitempty"`
 	ShippingPackages []common.PhysicalPackage      `json:"shipping_packages,omitempty"`
 
-	// â”€â”€ Delivery scheduling â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+	// ── Delivery scheduling ───────────────────────────────────────────
 	// ExpectedDeliveryDate/Time are the promised delivery slot, set by
-	// staff or checkout â€” distinct from the DeliveredAt lifecycle
+	// staff or checkout — distinct from the DeliveredAt lifecycle
 	// timestamp recorded after the fact.
 	ExpectedDeliveryDate common.Date                 `json:"expected_delivery_date,omitempty"`
 	ExpectedDeliveryTime common.TimeOfDay            `json:"expected_delivery_time,omitempty"`
@@ -50,7 +50,7 @@ type Order struct {
 	OutsourcedCarrier string                      `json:"outsourced_carrier,omitempty"`
 	DeliveryRegion    shippingenum.DeliveryRegion `json:"delivery_region,omitempty"`
 
-	// â”€â”€ Money â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+	// ── Money ─────────────────────────────────────────────────────────
 	Subtotal       common.Money `json:"subtotal"`
 	DiscountAmount common.Money `json:"discount_amount"`
 	ShippingAmount common.Money `json:"shipping_amount"`
@@ -80,7 +80,7 @@ type Order struct {
 	InternalNote         string                         `json:"internal_note,omitempty"`
 	Tags                 []string                       `json:"tags,omitempty"`
 
-	// â”€â”€ Lifecycle timestamps â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+	// ── Lifecycle timestamps ──────────────────────────────────────────
 	ConfirmedAt      *time.Time `json:"confirmed_at,omitempty"`
 	PaidAt           *time.Time `json:"paid_at,omitempty"`
 	CancelledAt      *time.Time `json:"cancelled_at,omitempty"`

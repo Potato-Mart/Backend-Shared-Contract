@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v18.5.0` | 2026-07-21 | Minor | Adds the Pub/Sub event envelope (`contracts/events.EventEnvelope`), `EventTopic`/`EventType` enums, order lifecycle events (`contracts/sales`), and payment/refund events (`contracts/payments`) for the seven-service migration's eventing backbone. Additive only; keeps the `/v18` module path. |
 | `v18.4.1` | 2026-07-21 | Patch | Consolidates version history in this file, streamlines the README, and documents the protected-main release workflow. Documentation and version metadata only; no exported model, JSON shape, enum value, or module-path change. |
 | `v18.4.0` | 2026-07-20 | Minor | Adds customer-safe product supply/manufacturing provenance, ordered detail imagery, nullable display selling counts, audience-specific brand counts, rating/review models, and Make a Wish proposal/ballot models. Additive only; retains `supplier_code` and the `/v18` module path. |
 | `v18.3.0` | 2026-07-19 | Minor | Adds the customer-safe brand catalogue summary and optional immutable `brand_key` fields on brand masters, references, and storefront products. Additive only; keeps existing brand JSON and the `/v18` module path. |
@@ -99,6 +100,52 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v18.5.0 (2026-07-21) - Event Envelope and Domain Event Models
+
+This additive release supplies the shared model truth for the seven-service
+migration's GCP Pub/Sub eventing backbone: a transport-neutral event envelope,
+typed topic and event-type enums, and the first wired payload models for order,
+payment, and refund lifecycle facts. Payload models for the remaining topics
+(stock, fulfilment, customer, catalog, engagement, product-stats) will follow
+in later additive minors as those flows are wired.
+
+本次追加版本為七服務遷移的 GCP Pub/Sub 事件骨幹提供共用模型：與傳輸層無關的事件
+信封、型別化的 topic 與事件類型 enum，以及訂單、付款、退款生命週期事實的首批
+payload 模型。其餘 topic 的 payload 模型將於後續追加 minor 版本補齊。
+
+### Other Changes / 其他變更
+
+- Added `pkg/contracts/events` with `EventEnvelope` (`event_id`, `event_type`,
+  `event_version`, `occurred_at`, `aggregate_id`, raw JSON `payload`); the
+  envelope carries delivery metadata only — typed payloads stay with their
+  owning domain packages.
+- Added `pkg/enums/events` with `EventTopic` (the nine aggregate-family topics)
+  and `EventType` (the wired order/payment/refund event names).
+- Added `contracts/sales` order lifecycle events: `OrderCreatedEvent`,
+  `OrderPaidEvent`, `OrderStatusChangedEvent`, `OrderCancelledEvent`.
+- Added `contracts/payments` money-path events: `PaymentCapturedEvent`,
+  `PaymentFailedEvent`, `RefundRequestedEvent`, `RefundCompletedEvent`,
+  `RefundFailedEvent`.
+- Updated the model manifest classifications/digest and
+  `versioning.ModuleVersion` to `v18.5.0`.
+- 新增事件信封、topic/事件類型 enum，以及訂單/付款/退款事件模型；更新模型清單
+  分類、digest 與版本中繼資料至 `v18.5.0`。
+
+### Compatibility / 相容性
+
+- Additive only: no existing exported model, field, JSON/BSON shape, enum wire
+  value, package path, or Go module path changes.
+- Existing v18 consumers require no code or data migration.
+- 純追加變更；現有 v18 使用方不需遷移程式碼或資料。
+
+### Consumer Action / 使用方動作
+
+- Services adopting the Pub/Sub backbone should pin `v18.5.0` and build their
+  publisher/receiver runtime around `events.EventEnvelope`, deduping on
+  `event_id` (push delivery is at-least-once).
+- 採用 Pub/Sub 骨幹的服務應固定使用 `v18.5.0`，以 `events.EventEnvelope` 建置
+  發布/接收執行期，並以 `event_id` 去重（push 傳遞為 at-least-once）。
 
 ## v18.4.1 (2026-07-21) - Documentation and Release Guidance
 

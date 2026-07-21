@@ -8,7 +8,7 @@ import (
 )
 
 // UserProfile is the public projection of a canonical user. Secret fields such
-// as password hashes and refresh token material never appear here â€”
+// as password hashes and refresh token material never appear here —
 // they live only inside the service that manages identity.
 type UserProfile struct {
 	ID                 string                  `json:"id"`

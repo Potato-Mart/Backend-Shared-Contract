@@ -55,7 +55,7 @@ type LayoutNode struct {
 }
 
 // ModelAsset references a 3D model file stored elsewhere (object storage,
-// CDN). Never embed mesh data here â€” keep documents small to stay well
+// CDN). Never embed mesh data here — keep documents small to stay well
 // under large-document storage limits and keep reads fast.
 type ModelAsset struct {
 	ID        string                    `json:"id,omitempty"`
