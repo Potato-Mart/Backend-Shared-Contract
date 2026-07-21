@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v18.4.1` | 2026-07-21 | Patch | Consolidates version history in this file, streamlines the README, and documents the protected-main release workflow. Documentation and version metadata only; no exported model, JSON shape, enum value, or module-path change. |
 | `v18.4.0` | 2026-07-20 | Minor | Adds customer-safe product supply/manufacturing provenance, ordered detail imagery, nullable display selling counts, audience-specific brand counts, rating/review models, and Make a Wish proposal/ballot models. Additive only; retains `supplier_code` and the `/v18` module path. |
 | `v18.3.0` | 2026-07-19 | Minor | Adds the customer-safe brand catalogue summary and optional immutable `brand_key` fields on brand masters, references, and storefront products. Additive only; keeps existing brand JSON and the `/v18` module path. |
 | `v18.2.0` | 2026-07-19 | Minor | Adds canonical localized product brand masters, lightweight brand references, and optional product/snapshot/storefront `brand_ref` fields. Additive only; keeps legacy `brand` arrays and the `/v18` module path. |
@@ -98,6 +99,45 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v18.4.1 (2026-07-21) - Documentation and Release Guidance
+
+This patch consolidates release history and migration guidance in the canonical
+`RELEASE_NOTES.md`, keeps the README focused on module responsibility and
+consumer usage, and documents the protected-main contribution and release
+workflow. The `/v18` module path and all public contract behavior remain
+unchanged.
+
+本修補版本將發布歷史與遷移指引集中於標準 `RELEASE_NOTES.md`，並讓 README 專注於
+模組責任與使用方式，同時記錄受保護 `main` 分支的貢獻與發布流程。`/v18` 模組路徑及
+所有公開契約行為均維持不變。
+
+### Other Changes / 其他變更
+
+- Reorganized the README into responsibility, latest version, usage, boundary
+  governance, verification, and change policy sections.
+- Removed duplicated v18 release summaries from the README; the existing
+  detailed entries in this file remain the release-history source of truth.
+- Documented that contributors must use a feature branch and pull
+  request, align the next semantic version across release metadata, and allow
+  the post-merge workflow to publish the tag and GitHub release.
+- Updated `versioning.ModuleVersion` and its metadata test to `v18.4.1`.
+- 重新整理 README，移除重複的 v18 發布摘要，並記錄功能分支、pull request、版本
+  對齊及合併後自動發布的流程。
+
+### Compatibility / 相容性
+
+- No exported model, field, JSON/BSON shape, enum wire value, package path, or
+  Go module path changes.
+- Existing v18 consumers require no code or data migration.
+- 公開模型、欄位、JSON/BSON shape、enum wire value、package path 與 Go module
+  path 均無變更；現有 v18 使用方不需遷移程式碼或資料。
+
+### Consumer Action / 使用方動作
+
+- Consumers may pin `v18.4.1` after publication to use the aligned metadata;
+  no runtime behavior changes are required.
+- 使用方可在發布後固定使用 `v18.4.1` 以取得一致的版本中繼資料，無需變更執行期行為。
 
 ## v18.4.0 (2026-07-20) - Product Story, Reviews, and Make a Wish
 
