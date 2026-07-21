@@ -32,6 +32,13 @@ type StorefrontPromotionBadge struct {
 // by retail and approved wholesale storefronts. Exact expiry is omitted unless
 // StorefrontDisplay explicitly allows it. BrandKey is the optional immutable,
 // lowercase, URL-safe brand navigation and exact-filter key.
+// StorefrontOrigin is the customer-facing country-of-origin display block.
+type StorefrontOrigin struct {
+	CountryCode string                 `json:"country_code"`
+	Label       []common.LocalizedText `json:"label,omitempty"`
+	Statement   []common.LocalizedText `json:"statement,omitempty"`
+}
+
 type StorefrontProduct struct {
 	SKUCode             string                        `json:"sku_code"`
 	SKU                 string                        `json:"sku"`
@@ -57,4 +64,6 @@ type StorefrontProduct struct {
 	DisplaySellingCount *int64                        `json:"display_selling_count,omitempty"`
 	PromotionBadge      *StorefrontPromotionBadge     `json:"promotion_badge,omitempty"`
 	SalesPerformance    *SalesPerformanceStats        `json:"sales_performance,omitempty"`
+	CountryOfOrigin     *StorefrontOrigin             `json:"country_of_origin,omitempty"`
+	PhysicalWeight      *common.Weight                `json:"physical_weight,omitempty"`
 }

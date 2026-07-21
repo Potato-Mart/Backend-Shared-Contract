@@ -50,14 +50,32 @@ type RefundRequestedEvent struct {
 
 // RefundCompletedEvent is emitted on the refund-events topic when a refund
 // settles. Consumers reverse benefits/points and update order payment state.
+// The optional restoration fields carry everything the pricing owner needs to
+// reverse checkout benefits and points without a synchronous read-back.
 type RefundCompletedEvent struct {
-	RefundID    string       `json:"refund_id"`
-	OrderID     string       `json:"order_id,omitempty"`
-	OrderNumber string       `json:"order_number"`
-	PaymentID   string       `json:"payment_id,omitempty"`
-	Amount      common.Money `json:"amount"`
-	CompletedAt time.Time    `json:"completed_at"`
-	RequestID   string       `json:"request_id,omitempty"`
+	RefundID             string        `json:"refund_id"`
+	OrderID              string        `json:"order_id,omitempty"`
+	OrderNumber          string        `json:"order_number"`
+	PaymentID            string        `json:"payment_id,omitempty"`
+	Amount               common.Money  `json:"amount"`
+	BenefitReservationID string        `json:"benefit_reservation_id,omitempty"`
+	GiftCardRefundAmount *common.Money `json:"gift_card_refund_amount,omitempty"`
+	PointsToRestore      int           `json:"points_to_restore,omitempty"`
+	MembershipAccountID  string        `json:"membership_account_id,omitempty"`
+	FullOrderRefund      bool          `json:"full_order_refund,omitempty"`
+	CompletedAt          time.Time     `json:"completed_at"`
+	RequestID            string        `json:"request_id,omitempty"`
+}
+
+// InvoiceIssuedEvent is emitted on the payment-events topic when an invoice
+// is issued for an order. AggregateID is the order number.
+type InvoiceIssuedEvent struct {
+	InvoiceNumber        string    `json:"invoice_number"`
+	OrderNumber          string    `json:"order_number"`
+	RetailCustomerNumber string    `json:"retail_customer_number,omitempty"`
+	OrganisationAccessID string    `json:"organisation_access_id,omitempty"`
+	IssuedAt             time.Time `json:"issued_at"`
+	RequestID            string    `json:"request_id,omitempty"`
 }
 
 // RefundFailedEvent is emitted on the refund-events topic when a refund

@@ -21,7 +21,7 @@ var v18ModelPackageManifest = map[string]string{
 	"contracts/analytics":        "record",
 	"contracts/campaign":         "entity,event,snapshot,record",
 	"contracts/category":         "value",
-	"contracts/customers":        "entity,snapshot,record",
+	"contracts/customers":        "entity,event,snapshot,record",
 	"contracts/events":           "event",
 	"contracts/favourite":        "entity,record,value",
 	"contracts/identity":         "entity,claims,event,session,record",
@@ -30,7 +30,8 @@ var v18ModelPackageManifest = map[string]string{
 	"contracts/membership":       "entity,record",
 	"contracts/notification":     "entity,event,record",
 	"contracts/payments":         "entity,event,snapshot,record,value",
-	"contracts/product":          "entity,snapshot,value",
+	"contracts/pos":              "entity,record,snapshot",
+	"contracts/product":          "entity,event,snapshot,value",
 	"contracts/promotion":        "entity,record,value",
 	"contracts/purchase":         "entity,record",
 	"contracts/review":           "entity,record,value",
@@ -38,7 +39,7 @@ var v18ModelPackageManifest = map[string]string{
 	"contracts/shared":           "event,record,value",
 	"contracts/shipping":         "record,value",
 	"contracts/wallet":           "entity,record,snapshot,value",
-	"contracts/warehouse":        "entity,record,snapshot",
+	"contracts/warehouse":        "entity,event,record,snapshot",
 	"contracts/wholesale":        "entity,record,snapshot",
 	"contracts/wish":             "entity,record,value",
 	"enums/account":              "enum",
@@ -53,6 +54,7 @@ var v18ModelPackageManifest = map[string]string{
 	"enums/membership":           "enum",
 	"enums/notification":         "enum",
 	"enums/payment":              "enum",
+	"enums/pos":                  "enum",
 	"enums/product":              "enum",
 	"enums/promotion":            "enum",
 	"enums/purchase":             "enum",
@@ -78,7 +80,16 @@ var v18ModelPackageManifest = map[string]string{
 // the EventTopic/EventType enums (enums/events), order lifecycle events
 // (contracts/sales) and payment/refund events (contracts/payments) for the
 // seven-service migration's eventing backbone.
-const v18ExportedTypeManifestDigest = "b807a0f18c5e1901dbe56c1700bc926c0e824a17db05aee99d41e8cbaf1d2fb7"
+//
+// Reviewed additions in v18.6: event payloads for the remaining topic
+// families (warehouse stock, sales fulfilment + preorder availability,
+// customers, product catalog + sales rollup, notification engagement,
+// payments invoice-issued + refund restoration fields), the customer payment
+// summary/allocation and invoice-resend models, membership tier progress and
+// typed benefits, storefront origin/physical-weight fields, and the reuse-first
+// POS surface (contracts/pos registers/shifts/cash/receipts, enums/pos,
+// sales.POSAttribution, cashier role, Stripe terminal provider).
+const v18ExportedTypeManifestDigest = "99cf6280309c52cce176196a933a43af23aafc16345c4bc7dd477d40f0c84e98"
 
 func TestV18ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

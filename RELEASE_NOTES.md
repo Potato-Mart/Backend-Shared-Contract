@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v18.6.0` | 2026-07-22 | Minor | Completes the eventing model surface (stock, fulfilment, customer, catalog, engagement, product-stats payloads + enriched order/refund events and invoice-issued), adds customer payment summary/allocation, invoice resend, membership tier progress + typed benefits, storefront origin/physical weight, and the reuse-first POS surface (registers/shifts/cash movements/receipt snapshots, cashier role, Stripe terminal provider, POS attribution). Additive only; keeps the `/v18` module path. |
 | `v18.5.0` | 2026-07-21 | Minor | Adds the Pub/Sub event envelope (`contracts/events.EventEnvelope`), `EventTopic`/`EventType` enums, order lifecycle events (`contracts/sales`), and payment/refund events (`contracts/payments`) for the seven-service migration's eventing backbone. Additive only; keeps the `/v18` module path. |
 | `v18.4.1` | 2026-07-21 | Patch | Consolidates version history in this file, streamlines the README, and documents the protected-main release workflow. Documentation and version metadata only; no exported model, JSON shape, enum value, or module-path change. |
 | `v18.4.0` | 2026-07-20 | Minor | Adds customer-safe product supply/manufacturing provenance, ordered detail imagery, nullable display selling counts, audience-specific brand counts, rating/review models, and Make a Wish proposal/ballot models. Additive only; retains `supplier_code` and the `/v18` module path. |
@@ -100,6 +101,61 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v18.6.0 (2026-07-22) - Complete Event Taxonomy, Customer Payment Models, Membership Progress, POS Surface
+
+This additive release completes the event payload surface for all nine Pub/Sub
+topic families and delivers the storefront-experience and POS model
+foundations: customer-safe payment summaries, invoice redelivery, membership
+tier progress and typed benefits, product origin/weight display fields, and a
+reuse-first point-of-sale surface.
+
+本次追加版本補齊九個 Pub/Sub topic 家族的事件 payload 模型，並提供 storefront 體驗
+與 POS 模型基礎：客戶安全的付款摘要、發票重寄、會員等級進度與型別化權益、商品
+產地/重量顯示欄位，以及以重用為先的 POS 模型。
+
+### Other Changes / 其他變更
+
+- Events: `warehouse.StockAdjustedEvent`; `sales` fulfilment events
+  (`FulfilmentShippedEvent`/`Delivered`/`Completed`/`Tracking`) +
+  `PreorderAvailabilityEvent`; `customers` registered/profile/consent events;
+  `product` catalog-changed events + `ProductSalesRollup`;
+  `notification.NotificationEngagementEvent` + `EngagementAction`;
+  `payments.InvoiceIssuedEvent`; enriched `sales` order events (buyer/tracking/
+  invoice refs) and `payments.RefundCompletedEvent` (benefit/points restoration
+  fields). `stock.arrived` reuses `sales.PreorderStockArrivalEvent`;
+  `fulfilment.packing_updated` reuses `sales.OrderPackingProjection`.
+  19 new `EventType` constants.
+- Customer payments: `sales.CustomerPaymentSummary`/`CustomerPaymentAllocation`
+  (also the invoice payment-row shape), `sales.InvoiceEmailDelivery`, and
+  payment enums (allocation kind, completeness, summary component,
+  invoice-resend status).
+- Membership: `CustomerTierProgress`/`TierProgressTier`/`QualificationWindow`
+  + `TierProgressReason`; typed `TierBenefit`/`TierBenefitValue` +
+  `TierBenefitKind`; `MembershipTier.Benefits` (untyped `Perks` deprecated).
+- Product: `StorefrontOrigin` + `country_of_origin`/`physical_weight`
+  (reusing `common.Weight`) on the storefront projection and product master.
+- POS (reuse-first): `contracts/pos` (`Register`, `RegisterShift`,
+  `CashMovement`, `ShiftTotalsSnapshot`, `MethodTotal`, `ReceiptSnapshot`
+  reusing order items/payment rows/receipt offers), `enums/pos`
+  (`ShiftStatus`, `CashMovementKind`), `sales.POSAttribution` on
+  `SourceDevice`, `identityenum.UserRoleCashier`,
+  `paymentenum.TerminalProviderStripe`.
+- 事件、客戶付款、會員、商品與 POS 模型如上；模型清單分類、digest 與版本中繼資料
+  更新至 `v18.6.0`。
+
+### Compatibility / 相容性
+
+- Additive only: no existing exported model, field, JSON/BSON shape, enum wire
+  value, package path, or Go module path changes.
+- 純追加變更；現有 v18 使用方不需遷移程式碼或資料。
+
+### Consumer Action / 使用方動作
+
+- Services wiring the remaining topics pin `v18.6.0`; POS-facing services adopt
+  the `contracts/pos` + cashier/Stripe enums as their façades land.
+- 佈線其餘 topic 的服務請固定使用 `v18.6.0`；POS 相關服務於 façade 上線時採用
+  `contracts/pos` 與收銀員/Stripe enum。
 
 ## v18.5.0 (2026-07-21) - Event Envelope and Domain Event Models
 
