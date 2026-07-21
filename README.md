@@ -1,84 +1,80 @@
-# Backend-Shared-Contract v18
+# Backend-Shared-Contract
 
-Potato Mart's shared Go module for cross-service data models.
+## Responsibility Summary
 
-Version 18 is deliberately model-only. It contains domain entities, records,
-snapshots, events, value objects, typed enums, field names, JSON/BSON
-serialization, shared error-code enums, and module-version metadata.
+Backend-Shared-Contract is Potato Mart's shared Go module for reusable
+cross-service data models. It contains domain entities, records, snapshots,
+events, value objects, typed enums, field-name and error-code constants, and
+model-version metadata.
 
-It does not contain endpoint request or response DTOs, paths, route inventories,
-service-scope catalogues, HTTP envelopes, validation policy, authorization
-policy, state transitions, calculations, normalizers, or business workflows.
-Each backend owns those concerns and publishes its transport contract in its own
-OpenAPI document.
+The module is deliberately model-only. Backend services remain responsible for
+their routes, request and response DTOs, HTTP envelopes, validation,
+authorization, state transitions, calculations, normalization, persistence,
+and business workflows.
 
-## Version and module path
+## Latest Version
 
 ```text
-v18.4.0
+v18.4.1
 github.com/Potato-Mart/Backend-Shared-Contract/v18
 ```
 
-Consumers pin the released module directly:
+See [RELEASE_NOTES.md](RELEASE_NOTES.md) for the release history,
+compatibility notes, and consumer actions.
+
+## Usage
+
+Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v18 v18.4.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v18 v18.4.1
 ```
 
-For example:
+Import packages from the same `/v18` module path.
 
-```go
-import (
-    walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/wallet"
-)
-```
-
-Version 18 is the customer-commerce contract cutover. It replaces manually
-authored product velocity fields with computed historical sales statistics and
-category ranks, adds Operations-owned retail and organisation favourite lists,
-adds terminal notification dismissal/expiry state, and introduces one
-customer-safe storefront product projection with audience-filtered pricing and
-promotion badges. Legacy Commerce wholesale list permissions are removed.
-Version 18.1 adds typed retail and wholesale order-lifecycle notification topics
-without changing the module path or any existing JSON field.
-Version 18.2 adds canonical localized product brand masters and lightweight
-brand references. Existing localized `brand` arrays remain available, and the
-new `brand_ref` fields are optional.
-Version 18.3 adds the public brand-catalogue summary and optional immutable
-`brand_key` fields to brand masters, lightweight references, and storefront
-products. Existing `slug`, `brand`, and `brand_ref` JSON remains unchanged.
-Version 18.4 adds customer-safe product supply and manufacturing provenance,
-ordered detailed imagery, nullable display selling counts, retail rating and
-review models, and Make a Wish proposal, ballot, selection, and ranking models.
-All additions retain the `/v18` module path and preserve legacy
-`supplier_code` fields for compatible consumers.
-
-## Boundary governance
+## Boundary Governance
 
 The package manifest and AST boundary tests reject unclassified exported
-models, transport tags, endpoint DTO naming, paths, scopes, free business
-functions, and non-intrinsic receiver methods. Approved receiver behavior is
-limited to serialization plus single-value `String` and `IsValid` methods.
+models, transport-specific tags, endpoint DTO naming, paths, scopes, free
+business functions, and non-intrinsic receiver methods. Approved receiver
+behavior is limited to serialization and single-value `String` or `IsValid`
+methods.
+
+Published model changes follow semantic versioning. Breaking exported shapes
+or wire values require a new major module path. `RELEASE_NOTES.md` is the source
+of truth for release-specific changes and migration impact.
 
 ## Verification
 
-To avoid a parent workspace changing dependency resolution, run:
+Run the standalone contract gate so a parent Go workspace cannot alter
+dependency resolution:
 
 ```powershell
 ./scripts/Test-Contract.ps1
 ```
 
-or:
+On Bash-based systems, run `bash scripts/test-contract.sh`. The equivalent Go
+command is `GOWORK=off go test ./...`.
 
-```bash
-bash scripts/test-contract.sh
+## Change Policy
+
+Direct pushes to the protected `main` branch are prohibited. Create a feature
+branch from the latest `main`, make the change, and merge it through a pull
+request after the required checks pass.
+
+Before opening the pull request, choose the next semantic version after the
+latest published tag and keep `pkg/versioning/version.go`, its tests, this
+README's latest version and usage example, and `RELEASE_NOTES.md` aligned. Run:
+
+```powershell
+./scripts/Test-ReleaseAlignment.ps1 -ExpectedVersion vX.Y.Z
+./scripts/Test-Contract.ps1
+git diff --check
 ```
 
-The equivalent command is:
+Do not create or push the release tag from the feature branch. Merging to
+`main` triggers the release workflow, which verifies the aligned version and
+publishes the immutable tag and matching GitHub release.
 
-```bash
-GOWORK=off go test ./...
-```
-
-Published model changes follow semantic versioning. Breaking exported shape or
-wire-value changes require a new major module path.
+See [Contract Versioning](pkg/versioning/VERSIONING_RULE.md) for the complete
+version rules and release flow.
