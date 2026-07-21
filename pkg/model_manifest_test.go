@@ -22,18 +22,19 @@ var v18ModelPackageManifest = map[string]string{
 	"contracts/campaign":         "entity,event,snapshot,record",
 	"contracts/category":         "value",
 	"contracts/customers":        "entity,snapshot,record",
+	"contracts/events":           "event",
 	"contracts/favourite":        "entity,record,value",
 	"contracts/identity":         "entity,claims,event,session,record",
 	"contracts/importcompliance": "entity,record,snapshot,value",
 	"contracts/marketing":        "entity,record",
 	"contracts/membership":       "entity,record",
 	"contracts/notification":     "entity,event,record",
-	"contracts/payments":         "entity,snapshot,record,value",
+	"contracts/payments":         "entity,event,snapshot,record,value",
 	"contracts/product":          "entity,snapshot,value",
 	"contracts/promotion":        "entity,record,value",
 	"contracts/purchase":         "entity,record",
 	"contracts/review":           "entity,record,value",
-	"contracts/sales":            "entity,snapshot,record",
+	"contracts/sales":            "entity,event,snapshot,record",
 	"contracts/shared":           "event,record,value",
 	"contracts/shipping":         "record,value",
 	"contracts/wallet":           "entity,record,snapshot,value",
@@ -44,6 +45,7 @@ var v18ModelPackageManifest = map[string]string{
 	"enums/apiresponse":          "enum",
 	"enums/campaign":             "enum",
 	"enums/customer":             "enum",
+	"enums/events":               "enum",
 	"enums/favourite":            "enum",
 	"enums/identity":             "enum",
 	"enums/importcompliance":     "enum",
@@ -71,7 +73,12 @@ var v18ModelPackageManifest = map[string]string{
 // proposal, candidate, ballot, selection, and ranking models. The removed
 // velocity enum and new packages are intentionally part of the exported-type
 // digest.
-const v18ExportedTypeManifestDigest = "353633cbd8ddbae0a080197b67bcbb383cd8f3f0f9ae46e34f946a21171a1076"
+//
+// Reviewed additions in v18.5: the Pub/Sub event envelope (contracts/events),
+// the EventTopic/EventType enums (enums/events), order lifecycle events
+// (contracts/sales) and payment/refund events (contracts/payments) for the
+// seven-service migration's eventing backbone.
+const v18ExportedTypeManifestDigest = "b807a0f18c5e1901dbe56c1700bc926c0e824a17db05aee99d41e8cbaf1d2fb7"
 
 func TestV18ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

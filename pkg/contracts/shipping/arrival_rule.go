@@ -10,7 +10,7 @@ import (
 // a specific warehouse arrival day. Rules replace the hard-coded
 // Monday-14:00 cut-off logic and are evaluated in sort_order priority.
 //
-// Days of week: 0=Sunday â€¦ 6=Saturday.
+// Days of week: 0=Sunday … 6=Saturday.
 // Times are in "HH:MM" 24-hour format (Melbourne local time).
 type ShippingArrivalRule struct {
 	ID         string           `json:"id"`

@@ -16,7 +16,7 @@ type Cart struct {
 	// (online/pos/b2b/...). Optional and additive.
 	Channel salesenum.OrderType `json:"channel,omitempty"`
 	// Buyer describes who is buying, independently of Channel. POS is a
-	// channel, not a buyer type â€” see sales.BuyerContext. Optional pointer
+	// channel, not a buyer type — see sales.BuyerContext. Optional pointer
 	// so it is omitted entirely when unset.
 	Buyer      *BuyerContext `json:"buyer,omitempty"`
 	Items      []CartItem    `json:"items"`

@@ -12,7 +12,7 @@ import (
 // Entries are written by middleware on every successful write request
 // (HTTP method POST/PUT/PATCH/DELETE) plus explicit business events
 // (login, role change, refund issued, etc.). Reads are never audited
-// here â€“ use access logs for that.
+// here – use access logs for that.
 type AuditLogEntry struct {
 	ID         string    `json:"id"`
 	OccurredAt time.Time `json:"occurred_at"`
