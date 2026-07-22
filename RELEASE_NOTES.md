@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v18.6.1` | 2026-07-22 | Patch | Adds optional buyer-identity fields (`retail_customer_number`, `organisation_access_id`) to `payments.PaymentFailedEvent` and `payments.RefundCompletedEvent` so notification consumers need no local buyer lookup. Additive optional fields only; no exported-type, enum, or module-path change. |
 | `v18.6.0` | 2026-07-22 | Minor | Completes the eventing model surface (stock, fulfilment, customer, catalog, engagement, product-stats payloads + enriched order/refund events and invoice-issued), adds customer payment summary/allocation, invoice resend, membership tier progress + typed benefits, storefront origin/physical weight, and the reuse-first POS surface (registers/shifts/cash movements/receipt snapshots, cashier role, Stripe terminal provider, POS attribution). Additive only; keeps the `/v18` module path. |
 | `v18.5.0` | 2026-07-21 | Minor | Adds the Pub/Sub event envelope (`contracts/events.EventEnvelope`), `EventTopic`/`EventType` enums, order lifecycle events (`contracts/sales`), and payment/refund events (`contracts/payments`) for the seven-service migration's eventing backbone. Additive only; keeps the `/v18` module path. |
 | `v18.4.1` | 2026-07-21 | Patch | Consolidates version history in this file, streamlines the README, and documents the protected-main release workflow. Documentation and version metadata only; no exported model, JSON shape, enum value, or module-path change. |
@@ -101,6 +102,31 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v18.6.1 (2026-07-22) - Buyer Identity on Payment Failure and Refund Completion Events
+
+This patch adds optional `retail_customer_number` and `organisation_access_id`
+fields to `payments.PaymentFailedEvent` and `payments.RefundCompletedEvent`,
+matching the buyer-identity enrichment the sales events already carry, so
+notification consumers can resolve the recipient from the payload alone.
+
+本修補版本為 `payments.PaymentFailedEvent` 與 `payments.RefundCompletedEvent` 增加
+選填的 `retail_customer_number` 與 `organisation_access_id` 欄位，使通知消費端可
+僅憑 payload 解析收件人。
+
+### Compatibility / 相容性
+
+- Additive optional fields only; no exported-type, JSON-shape, enum, or
+  module-path change. Consumers tolerating unknown fields need no action.
+- 純追加選填欄位；使用方無需調整。
+
+### Consumer Action / 使用方動作
+
+- Publishers should populate the new fields where buyer identity is known;
+  consumers should prefer them over local lookups (keeping fallbacks for old
+  envelopes).
+- 發布端在已知買家身分時填入新欄位；消費端優先使用事件欄位，並保留舊信封的
+  後備解析。
 
 ## v18.6.0 (2026-07-22) - Complete Event Taxonomy, Customer Payment Models, Membership Progress, POS Surface
 

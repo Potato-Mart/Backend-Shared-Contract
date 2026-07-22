@@ -24,15 +24,17 @@ type PaymentCapturedEvent struct {
 // PaymentFailedEvent is emitted on the payment-events topic when a payment
 // attempt terminally fails (provider decline, validation failure, expiry).
 type PaymentFailedEvent struct {
-	PaymentID         string                    `json:"payment_id,omitempty"`
-	OrderID           string                    `json:"order_id,omitempty"`
-	OrderNumber       string                    `json:"order_number"`
-	Method            paymentenum.PaymentMethod `json:"method,omitempty"`
-	Amount            common.Money              `json:"amount,omitempty"`
-	ProviderSessionID string                    `json:"provider_session_id,omitempty"`
-	Reason            string                    `json:"reason,omitempty"`
-	FailedAt          time.Time                 `json:"failed_at"`
-	RequestID         string                    `json:"request_id,omitempty"`
+	PaymentID            string                    `json:"payment_id,omitempty"`
+	OrderID              string                    `json:"order_id,omitempty"`
+	OrderNumber          string                    `json:"order_number"`
+	Method               paymentenum.PaymentMethod `json:"method,omitempty"`
+	Amount               common.Money              `json:"amount,omitempty"`
+	ProviderSessionID    string                    `json:"provider_session_id,omitempty"`
+	RetailCustomerNumber string                    `json:"retail_customer_number,omitempty"`
+	OrganisationAccessID string                    `json:"organisation_access_id,omitempty"`
+	Reason               string                    `json:"reason,omitempty"`
+	FailedAt             time.Time                 `json:"failed_at"`
+	RequestID            string                    `json:"request_id,omitempty"`
 }
 
 // RefundRequestedEvent is emitted on the refund-events topic when a refund is
@@ -58,6 +60,8 @@ type RefundCompletedEvent struct {
 	OrderNumber          string        `json:"order_number"`
 	PaymentID            string        `json:"payment_id,omitempty"`
 	Amount               common.Money  `json:"amount"`
+	RetailCustomerNumber string        `json:"retail_customer_number,omitempty"`
+	OrganisationAccessID string        `json:"organisation_access_id,omitempty"`
 	BenefitReservationID string        `json:"benefit_reservation_id,omitempty"`
 	GiftCardRefundAmount *common.Money `json:"gift_card_refund_amount,omitempty"`
 	PointsToRestore      int           `json:"points_to_restore,omitempty"`
