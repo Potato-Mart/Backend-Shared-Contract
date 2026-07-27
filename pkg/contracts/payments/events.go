@@ -3,8 +3,9 @@ package payments
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/analytics"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/payment"
 )
 
 // PaymentCapturedEvent is emitted on the payment-events topic when a payment
@@ -55,20 +56,21 @@ type RefundRequestedEvent struct {
 // The optional restoration fields carry everything the pricing owner needs to
 // reverse checkout benefits and points without a synchronous read-back.
 type RefundCompletedEvent struct {
-	RefundID             string        `json:"refund_id"`
-	OrderID              string        `json:"order_id,omitempty"`
-	OrderNumber          string        `json:"order_number"`
-	PaymentID            string        `json:"payment_id,omitempty"`
-	Amount               common.Money  `json:"amount"`
-	RetailCustomerNumber string        `json:"retail_customer_number,omitempty"`
-	OrganisationAccessID string        `json:"organisation_access_id,omitempty"`
-	BenefitReservationID string        `json:"benefit_reservation_id,omitempty"`
-	GiftCardRefundAmount *common.Money `json:"gift_card_refund_amount,omitempty"`
-	PointsToRestore      int           `json:"points_to_restore,omitempty"`
-	MembershipAccountID  string        `json:"membership_account_id,omitempty"`
-	FullOrderRefund      bool          `json:"full_order_refund,omitempty"`
-	CompletedAt          time.Time     `json:"completed_at"`
-	RequestID            string        `json:"request_id,omitempty"`
+	RefundID                string                     `json:"refund_id"`
+	OrderID                 string                     `json:"order_id,omitempty"`
+	OrderNumber             string                     `json:"order_number"`
+	PaymentID               string                     `json:"payment_id,omitempty"`
+	Amount                  common.Money               `json:"amount"`
+	Items                   []analytics.RefundItemFact `json:"items,omitempty"`
+	RetailCustomerNumber    string                     `json:"retail_customer_number,omitempty"`
+	OrganisationAccessID    string                     `json:"organisation_access_id,omitempty"`
+	BenefitReservationID    string                     `json:"benefit_reservation_id,omitempty"`
+	GiftCardRefundAmount    *common.Money              `json:"gift_card_refund_amount,omitempty"`
+	QualifyingSpendReversal *common.Money              `json:"qualifying_spend_reversal,omitempty"`
+	PointsToRestore         int                        `json:"points_to_restore,omitempty"`
+	FullOrderRefund         bool                       `json:"full_order_refund,omitempty"`
+	CompletedAt             time.Time                  `json:"completed_at"`
+	RequestID               string                     `json:"request_id,omitempty"`
 }
 
 // InvoiceIssuedEvent is emitted on the payment-events topic when an invoice
@@ -79,6 +81,18 @@ type InvoiceIssuedEvent struct {
 	RetailCustomerNumber string    `json:"retail_customer_number,omitempty"`
 	OrganisationAccessID string    `json:"organisation_access_id,omitempty"`
 	IssuedAt             time.Time `json:"issued_at"`
+	RequestID            string    `json:"request_id,omitempty"`
+}
+
+// InvoiceDeliveryRequestedEvent requests an idempotent redelivery of an
+// already-issued invoice through the customer-notification consumer.
+type InvoiceDeliveryRequestedEvent struct {
+	DeliveryID           string    `json:"delivery_id"`
+	InvoiceNumber        string    `json:"invoice_number"`
+	OrderNumber          string    `json:"order_number"`
+	RetailCustomerNumber string    `json:"retail_customer_number,omitempty"`
+	OrganisationAccessID string    `json:"organisation_access_id,omitempty"`
+	RequestedAt          time.Time `json:"requested_at"`
 	RequestID            string    `json:"request_id,omitempty"`
 }
 

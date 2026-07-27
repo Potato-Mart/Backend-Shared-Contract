@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v19.0.0` | 2026-07-27 | Major | Admin Portal hard cutover: retail-only membership keyed by customer number, non-membership benefit ownership, wholesale applications/freight presets, qualified product placement, managed media visibility, analytical facts, and complete removal of deprecated shapes and `sort_order`. Requires every consumer to adopt `/v19`. |
 | `v18.6.1` | 2026-07-22 | Patch | Adds optional buyer-identity fields (`retail_customer_number`, `organisation_access_id`) to `payments.PaymentFailedEvent` and `payments.RefundCompletedEvent` so notification consumers need no local buyer lookup. Additive optional fields only; no exported-type, enum, or module-path change. |
 | `v18.6.0` | 2026-07-22 | Minor | Completes the eventing model surface (stock, fulfilment, customer, catalog, engagement, product-stats payloads + enriched order/refund events and invoice-issued), adds customer payment summary/allocation, invoice resend, membership tier progress + typed benefits, storefront origin/physical weight, and the reuse-first POS surface (registers/shifts/cash movements/receipt snapshots, cashier role, Stripe terminal provider, POS attribution). Additive only; keeps the `/v18` module path. |
 | `v18.5.0` | 2026-07-21 | Minor | Adds the Pub/Sub event envelope (`contracts/events.EventEnvelope`), `EventTopic`/`EventType` enums, order lifecycle events (`contracts/sales`), and payment/refund events (`contracts/payments`) for the seven-service migration's eventing backbone. Additive only; keeps the `/v18` module path. |
@@ -102,6 +103,31 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v19.0.0 (2026-07-27) - Admin Portal Hard Cutover
+
+This breaking release establishes the final model surface for the fully wired
+Admin Portal. Membership is retail-only and uses the customer number as its
+aggregate key. Wholesale commercial benefits use a separate owner reference,
+wholesale applications are durable records, freight presets have no tier
+semantics, product placements are qualified by depot and location, media
+records carry bucket/visibility/reference metadata, and analytical facts are
+typed for Admin reporting.
+
+All deprecated models, enum values, fallback fields, and every serialized
+`sort_order` field are removed. Consumers must update imports to `/v19`, use
+domain-derived ordering, migrate affected data, and regenerate service-owned
+OpenAPI and client types before deployment. There is no dual-read or alias
+period.
+
+### Consumer Action / 使用方動作
+
+- Pin `github.com/Potato-Mart/Backend-Shared-Contract/v19 v19.0.0`.
+- Re-key retail membership references to customer number and remove wholesale
+  membership/tier fields.
+- Migrate product brand, placement, media, freight, and ordering fields to the
+  v19 models.
+- Regenerate OpenAPI and every generated/manual client model.
 
 ## v18.6.1 (2026-07-22) - Buyer Identity on Payment Failure and Refund Completion Events
 

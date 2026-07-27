@@ -1,14 +1,10 @@
 package wholesale
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
 
-// WholesaleTerms groups B2B price-tier configuration, checkout policy, credit,
+// WholesaleTerms groups B2B checkout policy, credit,
 // and freight terms for a wholesale organisation/business account.
 type WholesaleTerms struct {
-	TierKey                string          `json:"tier_key,omitempty"`
-	PriceTier              int             `json:"price_tier,omitempty"`
-	PriceTierSea           *int            `json:"price_tier_sea,omitempty"`
-	PriceTierAir           *int            `json:"price_tier_air,omitempty"`
 	RebateRate             *float64        `json:"rebate_rate,omitempty"`
 	ShippingFee            *common.Money   `json:"shipping_fee,omitempty"`
 	FreightRule            common.Metadata `json:"freight_rule,omitempty"`

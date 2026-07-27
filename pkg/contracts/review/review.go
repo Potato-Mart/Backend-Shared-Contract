@@ -3,7 +3,7 @@ package review
 import (
 	"time"
 
-	reviewenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/review"
+	reviewenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/review"
 )
 
 // RatingDistributionBucket records the number of ratings for one score.

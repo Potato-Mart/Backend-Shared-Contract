@@ -46,10 +46,10 @@ const (
 	CodeUserEmailTaken Code = "USER_EMAIL_TAKEN"
 
 	// Products
-	CodeSKUCodeTaken         Code = "SKU_CODE_TAKEN"
-	CodePlacingAreaCodeTaken Code = "PLACING_AREA_CODE_TAKEN"
-	CodeProductCodeTaken     Code = "PRODUCT_CODE_TAKEN"
-	CodeStorageMismatch      Code = "STORAGE_MISMATCH"
+	CodeSKUCodeTaken             Code = "SKU_CODE_TAKEN"
+	CodeStorageLocationCodeTaken Code = "STORAGE_LOCATION_CODE_TAKEN"
+	CodeProductCodeTaken         Code = "PRODUCT_CODE_TAKEN"
+	CodeStorageMismatch          Code = "STORAGE_MISMATCH"
 
 	// Inventory
 	CodeInsufficientStock Code = "INSUFFICIENT_STOCK"
@@ -94,7 +94,7 @@ func (c Code) IsValid() bool {
 		CodeIdentityOrganisationAccessRequired, CodeMembershipNotFound,
 		CodeMembershipInactive, CodeMembershipInsufficientPoints,
 		CodeMembershipRewardUnavailable, CodeMembershipPointReservationExpired,
-		CodeUserEmailTaken, CodeSKUCodeTaken, CodePlacingAreaCodeTaken,
+		CodeUserEmailTaken, CodeSKUCodeTaken, CodeStorageLocationCodeTaken,
 		CodeProductCodeTaken, CodeStorageMismatch, CodeInsufficientStock,
 		CodeOrderInvalidTransition, CodeOrderTerminal, CodeOrderEmpty,
 		CodeDiscountNotFound, CodeDiscountInactive, CodeDiscountNotStarted,

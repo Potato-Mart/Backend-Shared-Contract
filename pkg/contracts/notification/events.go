@@ -3,18 +3,22 @@ package notification
 import (
 	"time"
 
-	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/notification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
 )
 
-// NotificationEngagementEvent is emitted on the engagement-events topic when
-// a customer notification is delivered, opened, or clicked. Only delivery has
-// a publisher today; opened/clicked activate once tracking exists.
-type NotificationEngagementEvent struct {
-	NotificationID string                                       `json:"notification_id"`
-	Topic          notificationenum.CustomerNotificationTopic   `json:"topic"`
-	Channel        notificationenum.CustomerNotificationChannel `json:"channel"`
-	CustomerNumber string                                       `json:"customer_number,omitempty"`
-	Action         notificationenum.EngagementAction            `json:"action"`
-	OccurredAt     time.Time                                    `json:"occurred_at"`
-	RequestID      string                                       `json:"request_id,omitempty"`
+// GiftCardIssuedEvent requests delivery of the email for a captured gift-card
+// purchase after the stored-value instrument has been committed. IssuanceID is
+// the idempotency key. ClaimCode is present only when the recipient did not yet
+// have a verified retail customer account and must never be persisted outside
+// the protected notification delivery record.
+type GiftCardIssuedEvent struct {
+	IssuanceID     string       `json:"issuance_id"`
+	RecipientEmail string       `json:"recipient_email"`
+	RecipientName  string       `json:"recipient_name"`
+	SenderName     string       `json:"sender_name"`
+	Amount         common.Money `json:"amount"`
+	Message        string       `json:"message,omitempty"`
+	ClaimCode      string       `json:"claim_code,omitempty"`
+	Locale         string       `json:"locale,omitempty"`
+	IssuedAt       time.Time    `json:"issued_at"`
 }

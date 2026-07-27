@@ -3,10 +3,10 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/shared"
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/account"
-	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/identity"
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/shared"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/account"
+	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/identity"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/security"
 )
 
 // LoginSession is a non-secret projection of an active login. A session is
@@ -30,7 +30,7 @@ type LoginSession struct {
 	WholesaleOrganisationCode string                          `json:"wholesale_organisation_code,omitempty"`
 	OrganisationAccessID      string                          `json:"organisation_access_id,omitempty"`
 	RoleKey                   string                          `json:"role_key,omitempty"`
-	DeviceKey                 string                          `json:"device_key,omitempty"`
+	DeviceKey                 string                          `json:"device_key"`
 	DeviceName                string                          `json:"device_name,omitempty"`
 	DeviceType                identityenum.DeviceType         `json:"device_type,omitempty"`
 	IPAddress                 string                          `json:"ip_address,omitempty"`

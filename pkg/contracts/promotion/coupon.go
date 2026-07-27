@@ -3,11 +3,11 @@ package promotion
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/shared"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/shared"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/promotion"
 )
 
 // Coupon is a code-based discount that customers enter at checkout.
@@ -35,28 +35,28 @@ type Coupon struct {
 // both retail customers and wholesale organisations. The Coupon aggregate
 // remains the source of discount math and eligibility.
 type CouponAssignment struct {
-	ID                  string                        `json:"id"`
-	CouponID            string                        `json:"coupon_id"`
-	CouponCode          string                        `json:"coupon_code"`
-	Owner               membership.MembershipOwnerRef `json:"owner"`
-	Source              promotionenum.CouponSource    `json:"source"`
-	Status              string                        `json:"status"`
-	ExpiresAt           *time.Time                    `json:"expires_at,omitempty"`
-	RedeemedAt          *time.Time                    `json:"redeemed_at,omitempty"`
-	RedeemedOrderNumber string                        `json:"redeemed_order_number,omitempty"`
-	VoidedAt            *time.Time                    `json:"voided_at,omitempty"`
-	Note                string                        `json:"note,omitempty"`
-	History             []shared.HistoryEntry         `json:"history,omitempty"`
-	CreatedAt           time.Time                     `json:"created_at"`
+	ID                  string                     `json:"id"`
+	CouponID            string                     `json:"coupon_id"`
+	CouponCode          string                     `json:"coupon_code"`
+	Owner               benefit.OwnerRef           `json:"owner"`
+	Source              promotionenum.CouponSource `json:"source"`
+	Status              string                     `json:"status"`
+	ExpiresAt           *time.Time                 `json:"expires_at,omitempty"`
+	RedeemedAt          *time.Time                 `json:"redeemed_at,omitempty"`
+	RedeemedOrderNumber string                     `json:"redeemed_order_number,omitempty"`
+	VoidedAt            *time.Time                 `json:"voided_at,omitempty"`
+	Note                string                     `json:"note,omitempty"`
+	History             []shared.HistoryEntry      `json:"history,omitempty"`
+	CreatedAt           time.Time                  `json:"created_at"`
 }
 
-// CouponUsageRecord is Management's durable idempotent redemption result.
+// CouponUsageRecord is Pricing's durable idempotent redemption result.
 type CouponUsageRecord struct {
-	ID                  string                         `json:"id"`
-	CouponCode          string                         `json:"coupon_code"`
-	Owner               *membership.MembershipOwnerRef `json:"owner,omitempty"`
-	RedeemedOrderNumber string                         `json:"redeemed_order_number"`
-	DiscountAmount      common.Money                   `json:"discount_amount"`
-	RedeemedAt          time.Time                      `json:"redeemed_at"`
-	CreatedAt           time.Time                      `json:"created_at"`
+	ID                  string            `json:"id"`
+	CouponCode          string            `json:"coupon_code"`
+	Owner               *benefit.OwnerRef `json:"owner,omitempty"`
+	RedeemedOrderNumber string            `json:"redeemed_order_number"`
+	DiscountAmount      common.Money      `json:"discount_amount"`
+	RedeemedAt          time.Time         `json:"redeemed_at"`
+	CreatedAt           time.Time         `json:"created_at"`
 }

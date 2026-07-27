@@ -3,8 +3,8 @@ package product
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/product"
 )
 
 // StorefrontMerchandising groups admin-configurable product merchandising policy

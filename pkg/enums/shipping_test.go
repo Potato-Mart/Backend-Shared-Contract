@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/shipping"
+	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/shipping"
 )
 
 func TestShippingEnumsValidateKnownValues(t *testing.T) {

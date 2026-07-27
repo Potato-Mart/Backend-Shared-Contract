@@ -3,10 +3,10 @@ package wallet
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/shared"
-	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/shared"
+	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/wallet"
 )
 
 // GiftCard is a stored-value instrument with a re-spendable balance. The
@@ -15,13 +15,13 @@ import (
 // produce AvailableBalance. It is referenced everywhere by Code (the business
 // key), never by ID.
 type GiftCard struct {
-	ID               string                        `json:"id"`
-	Code             string                        `json:"code"`
-	Owner            membership.MembershipOwnerRef `json:"owner"`
-	CommittedBalance common.Money                  `json:"committed_balance"`
-	ReservedBalance  common.Money                  `json:"reserved_balance"`
-	AvailableBalance common.Money                  `json:"available_balance"`
-	InitialValue     common.Money                  `json:"initial_value"`
+	ID               string           `json:"id"`
+	Code             string           `json:"code"`
+	Owner            benefit.OwnerRef `json:"owner"`
+	CommittedBalance common.Money     `json:"committed_balance"`
+	ReservedBalance  common.Money     `json:"reserved_balance"`
+	AvailableBalance common.Money     `json:"available_balance"`
+	InitialValue     common.Money     `json:"initial_value"`
 	// ReplacesGiftCardCode links a refund-issued replacement to an original
 	// source card that could not be reactivated because it expired or was voided.
 	ReplacesGiftCardCode string                    `json:"replaces_gift_card_code,omitempty"`

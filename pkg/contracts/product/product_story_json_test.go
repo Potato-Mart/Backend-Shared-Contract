@@ -5,17 +5,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
 )
 
 func TestProductSupplyAndDetailImagesJSONShape(t *testing.T) {
 	zero := int64(0)
 	want := Product{
-		ID:           "prd_1",
-		SKUCode:      "A0001",
-		SKU:          "A1",
-		Name:         "Golden potato",
-		SupplierCode: "SUP-LEGACY",
+		ID:      "prd_1",
+		SKUCode: "A0001",
+		SKU:     "A1",
+		Name:    "Golden potato",
 		Supply: &ProductSupply{
 			Supplier: &ProductSupplierRef{
 				Code: "SUP-1",
@@ -169,15 +168,15 @@ func TestProductStoryFieldsAreOptional(t *testing.T) {
 	}{
 		{
 			name:  "product",
-			value: Product{ID: "prd_1", SKUCode: "A0001", SKU: "A1", Name: "Legacy product"},
+			value: Product{ID: "prd_1", SKUCode: "A0001", SKU: "A1", Name: "Product"},
 		},
 		{
 			name:  "storefront product",
-			value: StorefrontProduct{SKUCode: "A0001", SKU: "A1", Name: "Legacy product"},
+			value: StorefrontProduct{SKUCode: "A0001", SKU: "A1", Name: "Product"},
 		},
 		{
 			name:  "snapshot",
-			value: Snapshot{SKUCode: "A0001", Name: "Legacy product", SupplierCode: "SUP-LEGACY"},
+			value: Snapshot{SKUCode: "A0001", Name: "Product"},
 		},
 	}
 
@@ -185,11 +184,11 @@ func TestProductStoryFieldsAreOptional(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			body, err := json.Marshal(tc.value)
 			if err != nil {
-				t.Fatalf("marshal legacy-compatible shape: %v", err)
+				t.Fatalf("marshal product shape: %v", err)
 			}
 			for _, optionalKey := range []string{`"supply"`, `"display_selling_count"`, `"detail_images"`} {
 				if strings.Contains(string(body), optionalKey) {
-					t.Fatalf("legacy-compatible JSON unexpectedly contains %s: %s", optionalKey, body)
+					t.Fatalf("optional JSON unexpectedly contains %s: %s", optionalKey, body)
 				}
 			}
 		})
@@ -202,7 +201,7 @@ func TestDisplaySellingCountAcceptsAbsentNullAndZero(t *testing.T) {
 		payload   string
 		wantValue *int64
 	}{
-		{name: "absent", payload: `{"sku_code":"A0001","sku":"A1","name":"Legacy product"}`},
+		{name: "absent", payload: `{"sku_code":"A0001","sku":"A1","name":"Product"}`},
 		{name: "null", payload: `{"sku_code":"A0001","sku":"A1","name":"Product","display_selling_count":null}`},
 		{name: "zero", payload: `{"sku_code":"A0001","sku":"A1","name":"Product","display_selling_count":0}`, wantValue: int64Pointer(0)},
 	}
@@ -265,11 +264,10 @@ func TestProductSupplySectionsAreIndependent(t *testing.T) {
 	}
 }
 
-func TestSnapshotSupplyIsAdditiveAndRetainsSupplierCode(t *testing.T) {
+func TestSnapshotUsesCanonicalNestedSupply(t *testing.T) {
 	want := Snapshot{
-		SKUCode:      "A0001",
-		Name:         "Golden potato",
-		SupplierCode: "SUP-LEGACY",
+		SKUCode: "A0001",
+		Name:    "Golden potato",
 		Supply: &ProductSupply{
 			Supplier: &ProductSupplierRef{Code: "SUP-1", Name: "Taiwan Foods"},
 		},
@@ -279,16 +277,7 @@ func TestSnapshotSupplyIsAdditiveAndRetainsSupplierCode(t *testing.T) {
 	if err != nil {
 		t.Fatalf("marshal snapshot supply: %v", err)
 	}
-	if !strings.Contains(string(body), `"supplier_code":"SUP-LEGACY"`) || !strings.Contains(string(body), `"supply":{"supplier":{"code":"SUP-1","name":"Taiwan Foods"}}`) {
-		t.Fatalf("Snapshot JSON = %s, want retained supplier_code and additive supply", body)
-	}
-
-	const legacyPayload = `{"sku_code":"A0001","name":"Legacy product","supplier_code":"SUP-LEGACY","taxed":false}`
-	var legacy Snapshot
-	if err := json.Unmarshal([]byte(legacyPayload), &legacy); err != nil {
-		t.Fatalf("unmarshal legacy snapshot: %v", err)
-	}
-	if legacy.SupplierCode != "SUP-LEGACY" || legacy.Supply != nil {
-		t.Fatalf("legacy snapshot compatibility changed: %+v", legacy)
+	if strings.Contains(string(body), `"supplier_code"`) || !strings.Contains(string(body), `"supply":{"supplier":{"code":"SUP-1","name":"Taiwan Foods"}}`) {
+		t.Fatalf("Snapshot JSON = %s, want canonical nested supply only", body)
 	}
 }

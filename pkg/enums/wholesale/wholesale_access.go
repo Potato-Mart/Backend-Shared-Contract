@@ -23,7 +23,7 @@ func (r WholesaleBuyerRole) IsValid() bool {
 }
 
 // WholesalePermission is a persisted/signed permission value. Role resolution
-// and forbidden-permission policy are owned by Management.
+// and forbidden-permission policy are owned by Customers.
 type WholesalePermission string
 
 const (

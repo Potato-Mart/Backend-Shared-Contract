@@ -20,7 +20,7 @@ func (s CustomerNotificationStatus) IsValid() bool {
 	}
 }
 
-// CustomerNotificationTopic identifies a Management-owned customer message.
+// CustomerNotificationTopic identifies a Customers-owned customer message.
 // The topic selects server-owned copy and delivery policy; callers cannot
 // provide arbitrary email subjects or bodies.
 type CustomerNotificationTopic string
@@ -62,7 +62,7 @@ func (t CustomerNotificationTopic) IsValid() bool {
 	}
 }
 
-// CustomerNotificationChannel is a delivery route owned by Management.
+// CustomerNotificationChannel is a delivery route owned by Customers.
 type CustomerNotificationChannel string
 
 const (

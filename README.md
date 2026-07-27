@@ -15,8 +15,8 @@ and business workflows.
 ## Latest Version
 
 ```text
-v18.6.1
-github.com/Potato-Mart/Backend-Shared-Contract/v18
+v19.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v19
 ```
 
 See [RELEASE_NOTES.md](RELEASE_NOTES.md) for the release history,
@@ -27,10 +27,10 @@ compatibility notes, and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v18 v18.6.1
+require github.com/Potato-Mart/Backend-Shared-Contract/v19 v19.0.0
 ```
 
-Import packages from the same `/v18` module path.
+Import packages from the same `/v19` module path.
 
 ## Boundary Governance
 

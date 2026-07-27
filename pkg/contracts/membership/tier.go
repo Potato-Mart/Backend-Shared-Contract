@@ -1,8 +1,8 @@
 package membership
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/membership"
 )
 
 // MembershipTier defines the qualification and benefit rules for the global
@@ -16,13 +16,10 @@ type MembershipTier struct {
 	DiscountPercent       float64                             `json:"discount_percent"`
 	FreeShippingThreshold *common.Money                       `json:"free_shipping_threshold,omitempty"`
 	BirthdayBonusPoints   int                                 `json:"birthday_bonus_points"`
-	// Perks is the legacy untyped perk map. Deprecated: prefer Benefits.
-	Perks common.Metadata `json:"perks,omitempty"`
-	// Benefits is the typed, localized benefit list (v18.6.0).
+	// Benefits is the typed, localized benefit list.
 	Benefits []TierBenefit `json:"benefits,omitempty"`
-	SortOrder             int                                 `json:"sort_order"`
-	IsActive              bool                                `json:"is_active"`
-	IsSystem              bool                                `json:"is_system"`
+	IsActive bool          `json:"is_active"`
+	IsSystem bool          `json:"is_system"`
 
 	common.AuditFields
 }

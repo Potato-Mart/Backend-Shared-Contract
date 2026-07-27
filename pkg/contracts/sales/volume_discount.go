@@ -1,8 +1,8 @@
 package sales
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/promotion"
 )
 
 // VolumeDiscountTier defines a carton-quantity threshold for bulk purchase
@@ -14,7 +14,5 @@ type VolumeDiscountTier struct {
 	DiscountPercent float64                               `json:"discount_percent"`
 	AppliesTo       promotionenum.VolumeDiscountAppliesTo `json:"applies_to"`
 	IsActive        bool                                  `json:"is_active"`
-	SortOrder       int                                   `json:"sort_order"`
-
 	common.AuditFields
 }

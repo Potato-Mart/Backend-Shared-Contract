@@ -3,9 +3,9 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/shared"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/shared"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/warehouse"
 )
 
 type OutboundShipment struct {
@@ -14,8 +14,7 @@ type OutboundShipment struct {
 	PickingListID  string                               `json:"picking_list_id,omitempty"`
 	OrderNumber    string                               `json:"order_number,omitempty"`
 	CustomerName   string                               `json:"customer_name,omitempty"`
-	Address        string                               `json:"address,omitempty"`
-	State          string                               `json:"state,omitempty"`
+	Address        *common.Address                      `json:"address,omitempty"`
 	Operator       string                               `json:"operator"`
 	Status         warehouseenum.OutboundShipmentStatus `json:"status"`
 	TrackingNumber string                               `json:"tracking_number,omitempty"`

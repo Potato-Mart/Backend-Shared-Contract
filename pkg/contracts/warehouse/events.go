@@ -3,7 +3,7 @@ package warehouse
 import (
 	"time"
 
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/warehouse"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/warehouse"
 )
 
 // StockAdjustedEvent is emitted on the stock-events topic for every stock

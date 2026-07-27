@@ -3,10 +3,10 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/shared"
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/account"
-	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/identity"
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/shared"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/account"
+	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/identity"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/security"
 )
 
 // UserDevice is a non-secret projection of a browser, mobile app, or
@@ -42,7 +42,7 @@ type UserDeviceSeenEvent struct {
 	UserID    string             `json:"user_id"`
 	SessionID string             `json:"session_id,omitempty"`
 	Portal    accountenum.Portal `json:"portal,omitempty"`
-	DeviceKey string             `json:"device_key,omitempty"`
+	DeviceKey string             `json:"device_key"`
 	IPAddress string             `json:"ip_address,omitempty"`
 	UserAgent string             `json:"user_agent,omitempty"`
 	SeenAt    time.Time          `json:"seen_at"`

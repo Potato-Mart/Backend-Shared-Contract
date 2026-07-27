@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/favourite"
-	favouriteenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/favourite"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/favourite"
+	favouriteenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/favourite"
 )
 
 func TestFavouriteListJSONShape(t *testing.T) {

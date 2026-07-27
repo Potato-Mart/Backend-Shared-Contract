@@ -31,7 +31,7 @@ var modelBoundaryApprovedMethods = map[string]struct{}{
 	"MarshalBSONValue": {}, "UnmarshalBSONValue": {},
 }
 
-func TestV18ContractIsModelOnly(t *testing.T) {
+func TestV19ContractIsModelOnly(t *testing.T) {
 	var violations []string
 	err := filepath.WalkDir(".", func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
@@ -87,7 +87,7 @@ func TestV18ContractIsModelOnly(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v18 contract: %v", err)
+		t.Fatalf("scan v19 contract: %v", err)
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)

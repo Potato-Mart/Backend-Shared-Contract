@@ -3,9 +3,9 @@ package wallet
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/membership"
-	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/benefit"
+	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/wallet"
 )
 
 // CouponBenefitReservation is the coupon capacity held by one checkout.
@@ -40,7 +40,7 @@ type GiftCardBenefitReservation struct {
 type CheckoutBenefitReservation struct {
 	ID             string                                      `json:"id"`
 	IdempotencyKey string                                      `json:"idempotency_key"`
-	Owner          membership.MembershipOwnerRef               `json:"owner"`
+	Owner          benefit.OwnerRef                            `json:"owner"`
 	OrderNumber    string                                      `json:"order_number,omitempty"`
 	Coupon         *CouponBenefitReservation                   `json:"coupon,omitempty"`
 	Voucher        *VoucherBenefitReservation                  `json:"voucher,omitempty"`

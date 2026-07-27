@@ -3,9 +3,9 @@ package product
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/product"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/product"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/warehouse"
 )
 
 // StorefrontPricing contains only prices approved for the current storefront
@@ -44,7 +44,6 @@ type StorefrontProduct struct {
 	SKU                 string                        `json:"sku"`
 	Name                string                        `json:"name"`
 	Description         []common.LocalizedDescription `json:"description,omitempty"`
-	Brand               []common.LocalizedName        `json:"brand,omitempty"`
 	BrandKey            string                        `json:"brand_key,omitempty"`
 	BrandRef            *BrandRef                     `json:"brand_ref,omitempty"`
 	Storage             warehouseenum.StorageType     `json:"storage,omitempty"`
@@ -52,7 +51,6 @@ type StorefrontProduct struct {
 	Collection          *CollectionRef                `json:"collection,omitempty"`
 	CategoryTags        []CategoryTag                 `json:"category_tags,omitempty"`
 	Supply              *ProductSupply                `json:"supply,omitempty"`
-	PlacingAreaCode     string                        `json:"placing_area_code,omitempty"`
 	CurrentStock        int                           `json:"current_stock"`
 	Pricing             StorefrontPricing             `json:"pricing"`
 	StorefrontDisplay   StorefrontDisplay             `json:"storefront_display"`

@@ -5,10 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/customer"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/product"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/customer"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/product"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/sales"
 )
 
 func TestProductJSONIncludesTaxed(t *testing.T) {
@@ -20,12 +20,12 @@ func TestProductJSONIncludesTaxed(t *testing.T) {
 		Description: []common.LocalizedDescription{
 			{Language: "en", Description: "Localized description"},
 		},
-		Brand:           []common.LocalizedName{{Language: "en", Name: "Localized brand"}},
-		Taxed:           true,
-		Collection:      &CollectionRef{ID: "col_frozen", Slug: "frozen", Name: []common.LocalizedName{{Language: "en", Name: "Frozen"}}},
-		CategoryTags:    []CategoryTag{{ID: "tag_hotpot", Slug: "hotpot", Name: []common.LocalizedName{{Language: "en", Name: "Hotpot"}}, CollectionID: "col_frozen", CollectionName: []common.LocalizedName{{Language: "en", Name: "Frozen"}}}},
-		SupplierCode:    "sup_1",
-		PlacingAreaCode: "A1",
+		BrandRef:     &BrandRef{BrandKey: "localized-brand", Name: []common.LocalizedName{{Language: "en", Name: "Localized brand"}}},
+		Taxed:        true,
+		Collection:   &CollectionRef{ID: "col_frozen", Slug: "frozen", Name: []common.LocalizedName{{Language: "en", Name: "Frozen"}}},
+		CategoryTags: []CategoryTag{{ID: "tag_hotpot", Slug: "hotpot", Name: []common.LocalizedName{{Language: "en", Name: "Hotpot"}}, CollectionID: "col_frozen", CollectionName: []common.LocalizedName{{Language: "en", Name: "Frozen"}}}},
+		Supply:       &ProductSupply{Supplier: &ProductSupplierRef{Code: "sup_1", Name: "Supplier"}},
+		PlacingArea:  &ProductPlacement{DepotCode: "MEL", LocationCode: "A1"},
 	})
 	if err != nil {
 		t.Fatalf("marshal product: %v", err)
@@ -33,8 +33,8 @@ func TestProductJSONIncludesTaxed(t *testing.T) {
 	if !strings.Contains(string(body), `"taxed":true`) {
 		t.Fatalf("Product JSON = %s, want taxed true field", body)
 	}
-	if !strings.Contains(string(body), `"description":[`) || !strings.Contains(string(body), `"brand":[`) {
-		t.Fatalf("Product JSON = %s, want localized description and brand arrays", body)
+	if !strings.Contains(string(body), `"description":[`) || !strings.Contains(string(body), `"brand_ref":`) {
+		t.Fatalf("Product JSON = %s, want localized description and canonical brand reference", body)
 	}
 
 	var got map[string]any
@@ -71,7 +71,7 @@ func TestProductJSONIncludesTaxed(t *testing.T) {
 	if !ok || len(tagCollectionName) != 1 || tagCollectionName[0].(map[string]any)["name"] != "Frozen" {
 		t.Fatalf("Product JSON = %s, want localized category tag collection_name", body)
 	}
-	for _, keyValue := range []string{`"supplier_code":"sup_1"`, `"placing_area_code":"A1"`} {
+	for _, keyValue := range []string{`"supply":{"supplier":{"code":"sup_1","name":"Supplier"}}`, `"placing_area":{"depot_code":"MEL","location_code":"A1"}`} {
 		if !strings.Contains(string(body), keyValue) {
 			t.Fatalf("Product JSON = %s, want flat %s", body, keyValue)
 		}
@@ -138,9 +138,9 @@ func TestSnapshotJSONIncludesTaxed(t *testing.T) {
 		Description: []common.LocalizedDescription{
 			{Language: "en", Description: "Snapshot description"},
 		},
-		Brand:        []common.LocalizedName{{Language: "en", Name: "Snapshot brand"}},
-		SupplierCode: "sup_1",
-		Taxed:        true,
+		BrandRef: &BrandRef{BrandKey: "snapshot-brand", Name: []common.LocalizedName{{Language: "en", Name: "Snapshot brand"}}},
+		Supply:   &ProductSupply{Supplier: &ProductSupplierRef{Code: "sup_1", Name: "Supplier"}},
+		Taxed:    true,
 	})
 	if err != nil {
 		t.Fatalf("marshal snapshot: %v", err)
@@ -148,8 +148,8 @@ func TestSnapshotJSONIncludesTaxed(t *testing.T) {
 	if !strings.Contains(string(body), `"taxed":true`) {
 		t.Fatalf("Snapshot JSON = %s, want taxed true field", body)
 	}
-	if strings.Contains(string(body), `"vendor"`) || !strings.Contains(string(body), `"supplier_code":"sup_1"`) {
-		t.Fatalf("Snapshot JSON = %s, want supplier_code and no legacy vendor", body)
+	if strings.Contains(string(body), `"supplier_code"`) || !strings.Contains(string(body), `"supply":{"supplier":{"code":"sup_1","name":"Supplier"}}`) {
+		t.Fatalf("Snapshot JSON = %s, want canonical nested supply only", body)
 	}
 }
 

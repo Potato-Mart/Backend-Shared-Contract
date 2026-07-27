@@ -16,7 +16,7 @@ func TestCodeIsValidAndString(t *testing.T) {
 		CodeIdentityOrganisationAccessRequired, CodeMembershipNotFound,
 		CodeMembershipInactive, CodeMembershipInsufficientPoints,
 		CodeMembershipRewardUnavailable, CodeMembershipPointReservationExpired,
-		CodeUserEmailTaken, CodeSKUCodeTaken, CodePlacingAreaCodeTaken,
+		CodeUserEmailTaken, CodeSKUCodeTaken, CodeStorageLocationCodeTaken,
 		CodeProductCodeTaken, CodeStorageMismatch, CodeInsufficientStock,
 		CodeOrderInvalidTransition, CodeOrderTerminal, CodeOrderEmpty,
 		CodeDiscountNotFound, CodeDiscountInactive, CodeDiscountNotStarted,

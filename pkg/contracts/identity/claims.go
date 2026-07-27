@@ -3,9 +3,9 @@ package identity
 import (
 	"time"
 
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/account"
-	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/identity"
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/security"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/account"
+	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/identity"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/security"
 )
 
 // AccessTokenClaims is a framework-agnostic token-claim shape. This contract

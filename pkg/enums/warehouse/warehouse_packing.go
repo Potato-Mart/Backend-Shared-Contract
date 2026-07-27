@@ -24,18 +24,17 @@ func (s PackingDiscrepancyKind) String() string { return string(s) }
 type PackingSessionStatus string
 
 const (
-	PackingSessionStatusPending     PackingSessionStatus = "pending"
-	PackingSessionStatusPacking     PackingSessionStatus = "packing"
-	PackingSessionStatusPacked      PackingSessionStatus = "packed"
-	PackingSessionStatusSyncPending PackingSessionStatus = "sync_pending"
-	PackingSessionStatusResolved    PackingSessionStatus = "resolved"
+	PackingSessionStatusPending  PackingSessionStatus = "pending"
+	PackingSessionStatusPacking  PackingSessionStatus = "packing"
+	PackingSessionStatusPacked   PackingSessionStatus = "packed"
+	PackingSessionStatusResolved PackingSessionStatus = "resolved"
 )
 
 // IsValid reports whether s is a known packing session state.
 func (s PackingSessionStatus) IsValid() bool {
 	switch s {
 	case PackingSessionStatusPending, PackingSessionStatusPacking, PackingSessionStatusPacked,
-		PackingSessionStatusSyncPending, PackingSessionStatusResolved:
+		PackingSessionStatusResolved:
 		return true
 	}
 	return false

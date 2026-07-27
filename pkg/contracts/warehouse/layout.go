@@ -3,8 +3,8 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/warehouse"
 )
 
 // WarehouseLayout is the root 3D scene description for a depot.
@@ -48,7 +48,6 @@ type LayoutNode struct {
 	Color         string                       `json:"color,omitempty"`         // hex like "#3b82f6"
 	Model         *ModelAsset                  `json:"model,omitempty"`         // optional model override for this node
 	LocationCode  string                       `json:"location_code,omitempty"` // links a BIN node to a StockLocation
-	SortOrder     int                          `json:"sort_order,omitempty"`
 	IsActive      bool                         `json:"is_active"`
 
 	common.AuditFields

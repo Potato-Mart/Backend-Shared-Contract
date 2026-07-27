@@ -3,15 +3,14 @@ package enums_test
 import (
 	"testing"
 
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/membership"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/membership"
 )
 
 func TestMembershipEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
 		{name: "membershipenum.MembershipAccountStatus", valid: []stringEnum{membershipenum.MembershipAccountStatusActive, membershipenum.MembershipAccountStatusSuspended, membershipenum.MembershipAccountStatusClosed}, invalid: membershipenum.MembershipAccountStatus("__invalid__")},
-		{name: "membershipenum.MembershipOwnerType", valid: []stringEnum{membershipenum.MembershipOwnerTypeRetailCustomer, membershipenum.MembershipOwnerTypeWholesaleOrganisation}, invalid: membershipenum.MembershipOwnerType("__invalid__")},
 		{name: "membershipenum.MembershipPointReason", valid: []stringEnum{membershipenum.MembershipPointReasonOrder, membershipenum.MembershipPointReasonBirthday, membershipenum.MembershipPointReasonRedeem, membershipenum.MembershipPointReasonRefund, membershipenum.MembershipPointReasonRewardRedeem, membershipenum.MembershipPointReasonAdminAdjust, membershipenum.MembershipPointReasonExpired, membershipenum.MembershipPointReasonReferral, membershipenum.MembershipPointReasonSignupBonus, membershipenum.MembershipPointReasonTierUpgrade, membershipenum.MembershipPointReasonManual}, invalid: membershipenum.MembershipPointReason("__invalid__")},
-		{name: "membershipenum.MembershipPromotionTarget", valid: []stringEnum{membershipenum.MembershipPromotionTargetAll, membershipenum.MembershipPromotionTargetWholesale, membershipenum.MembershipPromotionTargetRetail, membershipenum.MembershipPromotionTargetTierSpecific}, invalid: membershipenum.MembershipPromotionTarget("__invalid__")},
+		{name: "membershipenum.MembershipPromotionTarget", valid: []stringEnum{membershipenum.MembershipPromotionTargetAll, membershipenum.MembershipPromotionTargetRetail, membershipenum.MembershipPromotionTargetTierSpecific}, invalid: membershipenum.MembershipPromotionTarget("__invalid__")},
 		{name: "membershipenum.MembershipRedemptionType", valid: []stringEnum{membershipenum.MembershipRedemptionTypeCheckoutDiscount, membershipenum.MembershipRedemptionTypeRewardCatalog}, invalid: membershipenum.MembershipRedemptionType("__invalid__")},
 		{name: "membershipenum.MembershipRewardRedemptionStatus", valid: []stringEnum{membershipenum.MembershipRewardRedemptionStatusReserved, membershipenum.MembershipRewardRedemptionStatusRedeemed, membershipenum.MembershipRewardRedemptionStatusCancelled, membershipenum.MembershipRewardRedemptionStatusExpired}, invalid: membershipenum.MembershipRewardRedemptionStatus("__invalid__")},
 		{name: "membershipenum.MembershipRewardType", valid: []stringEnum{membershipenum.MembershipRewardTypeOrderDiscount, membershipenum.MembershipRewardTypeProduct, membershipenum.MembershipRewardTypeFreeShipping, membershipenum.MembershipRewardTypeVoucher}, invalid: membershipenum.MembershipRewardType("__invalid__")},

@@ -7,12 +7,35 @@ package pos
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/sales"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/payment"
-	posenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/pos"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/sales"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/payment"
+	posenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/pos"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/product"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/warehouse"
 )
+
+// CatalogProduct is the cashier-safe product projection returned by the POS
+// catalogue. Supply remains the source of truth and is responsible for
+// projecting the current offline price and sellable-stock snapshot. The POS
+// client must never reconstruct this shape from an admin Product response.
+type CatalogProduct struct {
+	ID           string                    `json:"id"`
+	SKUCode      string                    `json:"sku_code"`
+	SKU          string                    `json:"sku"`
+	Name         string                    `json:"name"`
+	Barcode      string                    `json:"barcode,omitempty"`
+	Taxed        bool                      `json:"taxed"`
+	Storage      warehouseenum.StorageType `json:"storage,omitempty"`
+	Status       productenum.ProductStatus `json:"status"`
+	Price        *common.Money             `json:"price,omitempty"`
+	ImageURL     string                    `json:"image_url,omitempty"`
+	CategoryTags []product.CategoryTag     `json:"category_tags,omitempty"`
+	CurrentStock int                       `json:"current_stock"`
+	UpdatedAt    time.Time                 `json:"updated_at"`
+}
 
 // Register is one physical or virtual point-of-sale register.
 type Register struct {

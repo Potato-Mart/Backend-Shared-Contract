@@ -3,8 +3,8 @@ package notification
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/identity"
-	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/notification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/identity"
+	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/notification"
 )
 
 // BackInStockConsentSnapshot records the account and customer-level consent
@@ -44,7 +44,7 @@ type BackInStockSubscription struct {
 	NotificationEventID string                                   `json:"notification_event_id,omitempty"`
 }
 
-// BackInStockRestockEvent is emitted by Operations after a SKU crosses from
+// BackInStockRestockEvent is emitted by Supply after a SKU crosses from
 // unavailable to sellable stock while remaining visible to storefronts.
 type BackInStockRestockEvent struct {
 	ProductSKUCode string    `json:"product_sku_code"`

@@ -6,11 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/promotion"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/membership"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/promotion"
+	benefitenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/benefit"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/promotion"
 )
 
 func TestCouponAssignmentRoundTrip(t *testing.T) {
@@ -19,8 +19,8 @@ func TestCouponAssignmentRoundTrip(t *testing.T) {
 		ID:         "ca_1",
 		CouponID:   "coupon_1",
 		CouponCode: "SAVE10",
-		Owner: membership.MembershipOwnerRef{
-			OwnerType: membershipenum.MembershipOwnerTypeRetailCustomer,
+		Owner: benefit.OwnerRef{
+			OwnerType: benefitenum.OwnerTypeRetailCustomer,
 			OwnerID:   "RC-1",
 		},
 		Source:              promotionenum.CouponSourceCampaign,
@@ -55,8 +55,8 @@ func TestCouponAssignmentRoundTrip(t *testing.T) {
 
 func TestCouponUsageRoundTripsWholesaleOwner(t *testing.T) {
 	now := time.Date(2026, 7, 15, 0, 0, 0, 0, time.UTC)
-	owner := membership.MembershipOwnerRef{
-		OwnerType: membershipenum.MembershipOwnerTypeWholesaleOrganisation,
+	owner := benefit.OwnerRef{
+		OwnerType: benefitenum.OwnerTypeWholesaleOrganisation,
 		OwnerID:   "ORG-1",
 	}
 	record := promotion.CouponUsageRecord{

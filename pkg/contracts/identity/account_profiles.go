@@ -1,6 +1,6 @@
 package identity
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
 
 // AdminAccountProfile contains optional workforce profile data for an
 // adminUser account.
@@ -18,15 +18,13 @@ type AdminAccountProfile struct {
 	common.AuditFields
 }
 
-// RetailCustomerAccountProfile contains lightweight references to existing
-// retail customer, membership, and marketing records for a retailCustomer account.
+// RetailCustomerAccountProfile contains lightweight references for a retail
+// customer account. CustomerNumber is also the membership account key.
 type RetailCustomerAccountProfile struct {
 	ID                  string `json:"id,omitempty"`
 	UserID              string `json:"user_id"`
 	AccountID           string `json:"account_id"`
 	CustomerNumber      string `json:"customer_number,omitempty"`
-	MembershipAccountID string `json:"membership_account_id,omitempty"`
-	MembershipTierKey   string `json:"membership_tier_key,omitempty"`
 	MarketingConsentRef string `json:"marketing_consent_ref,omitempty"`
 	ReferralCode        string `json:"referral_code,omitempty"`
 
@@ -41,7 +39,6 @@ type WholesaleCustomerAccountProfile struct {
 	AccountID                        string `json:"account_id"`
 	DefaultWholesaleOrganisationCode string `json:"default_wholesale_organisation_code,omitempty"`
 	DefaultOrganisationAccessID      string `json:"default_organisation_access_id,omitempty"`
-	MembershipAccountID              string `json:"membership_account_id,omitempty"`
 	JobTitle                         string `json:"job_title,omitempty"`
 
 	common.AuditFields

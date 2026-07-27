@@ -6,14 +6,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/warehouse"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/membership"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/payment"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/sales"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/warehouse"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/membership"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/payment"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/sales"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/warehouse"
 )
 
 func TestOrderJSONRoundTripWithHistory(t *testing.T) {
@@ -174,22 +174,20 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 		ID:          "ord_points",
 		OrderNumber: "1002",
 		PointRedemption: &sales.PointRedemptionSnapshot{
-			MembershipAccountID: "mem_1",
-			OwnerType:           membershipenum.MembershipOwnerTypeRetailCustomer,
-			OwnerID:             "retail_1",
-			ReservationID:       "res_1",
-			LedgerEntryID:       "ledger_1",
-			Points:              500,
-			DiscountAmount:      discount,
+			CustomerNumber: "RC-20260727-ABCDEF",
+			ReservationID:  "res_1",
+			LedgerEntryID:  "ledger_1",
+			Points:         500,
+			DiscountAmount: discount,
 		},
 		RewardRedemptions: []sales.RewardRedemptionSnapshot{
 			{
-				RewardRedemptionID:  "reward_redemption_1",
-				RewardCode:          "reward_1",
-				MembershipAccountID: "mem_1",
-				RewardType:          membershipenum.MembershipRewardTypeOrderDiscount,
-				PointsSpent:         500,
-				DiscountAmount:      &discount,
+				RewardRedemptionID: "reward_redemption_1",
+				RewardCode:         "reward_1",
+				CustomerNumber:     "RC-20260727-ABCDEF",
+				RewardType:         membershipenum.MembershipRewardTypeOrderDiscount,
+				PointsSpent:        500,
+				DiscountAmount:     &discount,
 			},
 		},
 		VoucherRedemption: &sales.VoucherRedemptionSnapshot{

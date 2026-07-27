@@ -3,9 +3,9 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/shared"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/customer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/shared"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/customer"
 )
 
 // RetailCustomer is the grouped business profile for a retailCustomer
@@ -21,7 +21,6 @@ type RetailCustomer struct {
 	BasicInfo             RetailCustomerBasicInfo          `json:"basic_info"`
 	Lifecycle             RetailCustomerLifecycle          `json:"lifecycle"`
 	Management            RetailCustomerManagementProfile  `json:"management"`
-	Membership            RetailCustomerMembershipProfile  `json:"membership"`
 	Marketing             RetailCustomerMarketingProfile   `json:"marketing"`
 	Commerce              RetailCustomerCommerceProfile    `json:"commerce"`
 	Analytics             *RetailCustomerAnalyticsProfile  `json:"analytics,omitempty"`
@@ -39,18 +38,16 @@ type RetailCustomer struct {
 // RetailCustomerSummary is a compact retail customer projection for lists,
 // search results, and relationship references.
 type RetailCustomerSummary struct {
-	ID                  string                      `json:"id"`
-	AccountID           string                      `json:"account_id,omitempty"`
-	UserID              string                      `json:"user_id,omitempty"`
-	CustomerNumber      string                      `json:"customer_number,omitempty"`
-	DisplayName         string                      `json:"display_name,omitempty"`
-	Email               string                      `json:"email,omitempty"`
-	Phone               string                      `json:"phone,omitempty"`
-	Status              customerenum.CustomerStatus `json:"status"`
-	MembershipAccountID string                      `json:"membership_account_id,omitempty"`
-	MembershipTierKey   string                      `json:"membership_tier_key,omitempty"`
-	Tags                []string                    `json:"tags,omitempty"`
-	Metadata            common.Metadata             `json:"metadata,omitempty"`
+	ID             string                      `json:"id"`
+	AccountID      string                      `json:"account_id,omitempty"`
+	UserID         string                      `json:"user_id,omitempty"`
+	CustomerNumber string                      `json:"customer_number,omitempty"`
+	DisplayName    string                      `json:"display_name,omitempty"`
+	Email          string                      `json:"email,omitempty"`
+	Phone          string                      `json:"phone,omitempty"`
+	Status         customerenum.CustomerStatus `json:"status"`
+	Tags           []string                    `json:"tags,omitempty"`
+	Metadata       common.Metadata             `json:"metadata,omitempty"`
 }
 
 // RetailCustomerBasicInfo groups stable name, contact, and acquisition fields

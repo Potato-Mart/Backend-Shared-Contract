@@ -3,12 +3,12 @@ package product
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/shared"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/customer"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/product"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/sales"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/shared"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/customer"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/product"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/sales"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/warehouse"
 )
 
 // Product is the master record for one sellable unit (v7.0.0).
@@ -26,7 +26,6 @@ type Product struct {
 	SKU         string                        `json:"sku"`
 	Name        string                        `json:"name"`
 	Description []common.LocalizedDescription `json:"description,omitempty"`
-	Brand       []common.LocalizedName        `json:"brand,omitempty"`
 	BrandRef    *BrandRef                     `json:"brand_ref,omitempty"`
 	Barcode     string                        `json:"barcode,omitempty"`
 	Taxed       bool                          `json:"taxed"`
@@ -36,12 +35,11 @@ type Product struct {
 	// Status is the admin-controlled lifecycle state (draft/active/
 	// archived/discontinued). Derived runtime states (new/restocked/
 	// out_of_stock) are computed by DisplayStatus, never stored here.
-	Status          productenum.ProductStatus `json:"status,omitempty"`
-	Collection      *CollectionRef            `json:"collection,omitempty"`
-	CategoryTags    []CategoryTag             `json:"category_tags,omitempty"`
-	SupplierCode    string                    `json:"supplier_code,omitempty"`
-	Supply          *ProductSupply            `json:"supply,omitempty"`
-	PlacingAreaCode string                    `json:"placing_area_code,omitempty"`
+	Status       productenum.ProductStatus `json:"status,omitempty"`
+	Collection   *CollectionRef            `json:"collection,omitempty"`
+	CategoryTags []CategoryTag             `json:"category_tags,omitempty"`
+	Supply       *ProductSupply            `json:"supply,omitempty"`
+	PlacingArea  *ProductPlacement         `json:"placing_area,omitempty"`
 
 	// CurrentStock is a denormalised cache of total sellable stock; the
 	// authoritative quantities live in the warehouse subsystem. It backs
@@ -71,7 +69,7 @@ type Product struct {
 	Media        Media        `json:"media,omitempty"`
 	Physical     Physical     `json:"physical,omitempty"`
 	// CountryOfOrigin is the customer-facing origin display block projected
-	// onto the storefront product (v18.6.0).
+	// onto the storefront product.
 	CountryOfOrigin *StorefrontOrigin `json:"country_of_origin,omitempty"`
 	// StorefrontMerchandising carries admin-managed retail display policy.
 	// Backend read models convert it into customer-safe display fields.
@@ -110,25 +108,29 @@ type Selling struct {
 	Visibility productenum.PriceVisibility `json:"visibility,omitempty"`
 }
 
-// Localization groups secondary per-language display fields. Product
-// Description and Brand are the canonical localized display fields; these
-// slices remain for compatibility with older clients that read localization
-// as a nested group.
+// Localization groups secondary per-language display fields.
 type Localization struct {
-	OtherNames   []common.LocalizedName        `json:"other_names,omitempty"`
-	BrandNames   []common.LocalizedName        `json:"brand_names,omitempty"`
-	Descriptions []common.LocalizedDescription `json:"descriptions,omitempty"`
+	OtherNames []common.LocalizedName `json:"other_names,omitempty"`
 }
 
 // Media groups the product imagery.
 type Media struct {
-	CoverURL     string        `json:"cover_url,omitempty"`
-	ImageURLs    []string      `json:"image_urls,omitempty"`
-	DetailImages []DetailImage `json:"detail_images,omitempty"`
+	CoverMediaID  string        `json:"cover_media_id,omitempty"`
+	CoverURL      string        `json:"cover_url,omitempty"`
+	ImageMediaIDs []string      `json:"image_media_ids,omitempty"`
+	ImageURLs     []string      `json:"image_urls,omitempty"`
+	DetailImages  []DetailImage `json:"detail_images,omitempty"`
 }
 
 // Physical groups the packaged-good physical attributes.
 type Physical struct {
 	Dimensions *common.Dimensions `json:"dimensions,omitempty"`
 	Weight     *common.Weight     `json:"weight,omitempty"`
+}
+
+// ProductPlacement identifies a stock location unambiguously. Location codes
+// are unique only within a depot, so both values are required together.
+type ProductPlacement struct {
+	DepotCode    string `json:"depot_code"`
+	LocationCode string `json:"location_code"`
 }

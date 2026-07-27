@@ -1,8 +1,8 @@
 package importcompliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	importcomplianceenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/importcompliance"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	importcomplianceenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/importcompliance"
 )
 
 // LabelMaster is one SKU/variant label revision. It remains independent of the
@@ -39,9 +39,9 @@ type LabelMaster struct {
 }
 
 type LabelImporter struct {
-	Name    string `json:"name,omitempty"`
-	Address string `json:"address,omitempty"`
-	Phone   string `json:"phone,omitempty"`
+	Name    string          `json:"name,omitempty"`
+	Address *common.Address `json:"address,omitempty"`
+	Phone   string          `json:"phone,omitempty"`
 }
 
 // LabelLayout stores the local preview controls. FontScaleBasisPoints uses
