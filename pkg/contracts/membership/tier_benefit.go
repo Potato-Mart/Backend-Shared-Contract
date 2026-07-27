@@ -1,8 +1,8 @@
 package membership
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/membership"
 )
 
 // TierBenefit is one typed, localized membership tier benefit. Exactly one
@@ -14,7 +14,6 @@ type TierBenefit struct {
 	Title       []common.LocalizedText         `json:"title,omitempty"`
 	Description []common.LocalizedText         `json:"description,omitempty"`
 	Value       TierBenefitValue               `json:"value"`
-	SortOrder   int                            `json:"sort_order"`
 }
 
 // TierBenefitValue carries the benefit's value in exactly one representation.

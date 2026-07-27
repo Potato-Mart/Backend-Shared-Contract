@@ -3,9 +3,10 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/payment"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/analytics"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/payment"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/sales"
 )
 
 // OrderCreatedEvent is emitted on the order-events topic when a sales order
@@ -29,11 +30,28 @@ type OrderPaidEvent struct {
 	OrderNumber          string                    `json:"order_number"`
 	PaymentID            string                    `json:"payment_id,omitempty"`
 	Method               paymentenum.PaymentMethod `json:"method,omitempty"`
+	Channel              salesenum.OrderType       `json:"channel,omitempty"`
 	AmountPaid           common.Money              `json:"amount_paid"`
+	Items                []analytics.OrderItemFact `json:"items,omitempty"`
 	RetailCustomerNumber string                    `json:"retail_customer_number,omitempty"`
 	OrganisationAccessID string                    `json:"organisation_access_id,omitempty"`
 	PaidAt               time.Time                 `json:"paid_at"`
 	RequestID            string                    `json:"request_id,omitempty"`
+}
+
+// CheckoutCompensationRequestedEvent restores Pricing-owned value after a
+// checkout saga has committed points or benefits but cannot complete. It is
+// replay-safe by CompensationID and carries no customer PII.
+type CheckoutCompensationRequestedEvent struct {
+	CompensationID       string       `json:"compensation_id"`
+	OrderNumber          string       `json:"order_number"`
+	RetailCustomerNumber string       `json:"retail_customer_number"`
+	BenefitReservationID string       `json:"benefit_reservation_id,omitempty"`
+	GiftCardAmount       common.Money `json:"gift_card_amount"`
+	PointsToRestore      int          `json:"points_to_restore,omitempty"`
+	FullOrder            bool         `json:"full_order"`
+	RequestedAt          time.Time    `json:"requested_at"`
+	RequestID            string       `json:"request_id,omitempty"`
 }
 
 // OrderStatusChangedEvent is emitted on the order-events topic for every

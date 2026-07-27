@@ -4,11 +4,9 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/customers"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/membership"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/customer"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/customers"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/customer"
 )
 
 func TestRetailCustomerJSONShape(t *testing.T) {
@@ -26,17 +24,6 @@ func TestRetailCustomerJSONShape(t *testing.T) {
 		},
 		Lifecycle: customers.RetailCustomerLifecycle{
 			Status: customerenum.CustomerStatusActive,
-		},
-		Membership: customers.RetailCustomerMembershipProfile{
-			MembershipAccountID: "mem_retail_123",
-			Summary: &membership.MembershipAccountSummary{
-				ID:              "mem_retail_123",
-				Owner:           membership.MembershipOwnerRef{OwnerType: membershipenum.MembershipOwnerTypeRetailCustomer, OwnerID: "retail_123"},
-				TierKey:         "standard",
-				Status:          membershipenum.MembershipAccountStatusActive,
-				AvailablePoints: 120,
-				TotalPoints:     120,
-			},
 		},
 		Marketing: customers.RetailCustomerMarketingProfile{EmailOptIn: true},
 		Commerce:  customers.RetailCustomerCommerceProfile{TotalOrders: 2},
@@ -84,7 +71,6 @@ func TestRetailCustomerJSONShape(t *testing.T) {
 		"auth_identity_ids",
 		"basic_info",
 		"lifecycle",
-		"membership",
 		"marketing",
 		"commerce",
 		"referral",

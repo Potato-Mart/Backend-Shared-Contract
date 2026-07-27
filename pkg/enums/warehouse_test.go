@@ -3,13 +3,13 @@ package enums_test
 import (
 	"testing"
 
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/warehouse"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/warehouse"
 )
 
 func TestWarehouseEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
 		{name: "warehouseenum.PackingDamageHandling", valid: []stringEnum{warehouseenum.PackingDamageReplaceFromStock, warehouseenum.PackingDamageShortShipRefund}, invalid: warehouseenum.PackingDamageHandling("__invalid__")},
-		{name: "warehouseenum.PackingSessionStatus", valid: []stringEnum{warehouseenum.PackingSessionStatusPending, warehouseenum.PackingSessionStatusPacking, warehouseenum.PackingSessionStatusPacked, warehouseenum.PackingSessionStatusSyncPending, warehouseenum.PackingSessionStatusResolved}, invalid: warehouseenum.PackingSessionStatus("__invalid__")},
+		{name: "warehouseenum.PackingSessionStatus", valid: []stringEnum{warehouseenum.PackingSessionStatusPending, warehouseenum.PackingSessionStatusPacking, warehouseenum.PackingSessionStatusPacked, warehouseenum.PackingSessionStatusResolved}, invalid: warehouseenum.PackingSessionStatus("__invalid__")},
 		{name: "warehouseenum.CameraProjection", valid: []stringEnum{warehouseenum.CameraPerspective, warehouseenum.CameraOrthographic}, invalid: warehouseenum.CameraProjection("__invalid__")},
 		{name: "warehouseenum.DamageStage", valid: []stringEnum{warehouseenum.DamageStageInbound, warehouseenum.DamageStagePicking, warehouseenum.DamageStagePacking, warehouseenum.DamageStageStorage}, invalid: warehouseenum.DamageStage("__invalid__")},
 		{name: "warehouseenum.InboundReceiptStatus", valid: []stringEnum{warehouseenum.InboundReceiptStatusDraft, warehouseenum.InboundReceiptStatusConfirmed}, invalid: warehouseenum.InboundReceiptStatus("__invalid__")},

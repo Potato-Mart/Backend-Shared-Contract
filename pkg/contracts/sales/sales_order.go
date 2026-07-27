@@ -3,15 +3,15 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/warehouse"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/membership"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/payment"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/promotion"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/sales"
-	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/warehouse"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/membership"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/payment"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/promotion"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/sales"
+	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/shipping"
 )
 
 type Order struct {
@@ -139,26 +139,23 @@ type AppliedPromotion struct {
 // PointRedemptionSnapshot records a points discount applied to an order without
 // overloading coupon or promotion fields.
 type PointRedemptionSnapshot struct {
-	MembershipAccountID  string                             `json:"membership_account_id"`
-	OwnerType            membershipenum.MembershipOwnerType `json:"owner_type"`
-	OwnerID              string                             `json:"owner_id"`
-	OrganisationAccessID string                             `json:"organisation_access_id,omitempty"`
-	ReservationID        string                             `json:"reservation_id,omitempty"`
-	LedgerEntryID        string                             `json:"ledger_entry_id,omitempty"`
-	Points               int                                `json:"points"`
-	DiscountAmount       common.Money                       `json:"discount_amount"`
+	CustomerNumber string       `json:"customer_number"`
+	ReservationID  string       `json:"reservation_id,omitempty"`
+	LedgerEntryID  string       `json:"ledger_entry_id,omitempty"`
+	Points         int          `json:"points"`
+	DiscountAmount common.Money `json:"discount_amount"`
 }
 
 // RewardRedemptionSnapshot records a catalog reward applied to an order.
 type RewardRedemptionSnapshot struct {
-	RewardRedemptionID  string                              `json:"reward_redemption_id"`
-	RewardCode          string                              `json:"reward_code"`
-	MembershipAccountID string                              `json:"membership_account_id"`
-	RewardType          membershipenum.MembershipRewardType `json:"reward_type"`
-	PointsSpent         int                                 `json:"points_spent"`
-	DiscountAmount      *common.Money                       `json:"discount_amount,omitempty"`
-	ProductSKUCode      string                              `json:"product_sku_code,omitempty"`
-	VoucherCode         string                              `json:"voucher_code,omitempty"`
+	RewardRedemptionID string                              `json:"reward_redemption_id"`
+	RewardCode         string                              `json:"reward_code"`
+	CustomerNumber     string                              `json:"customer_number"`
+	RewardType         membershipenum.MembershipRewardType `json:"reward_type"`
+	PointsSpent        int                                 `json:"points_spent"`
+	DiscountAmount     *common.Money                       `json:"discount_amount,omitempty"`
+	ProductSKUCode     string                              `json:"product_sku_code,omitempty"`
+	VoucherCode        string                              `json:"voucher_code,omitempty"`
 }
 
 // VoucherRedemptionSnapshot records the single voucher applied to an order.
@@ -197,7 +194,7 @@ type SourceDevice struct {
 	Name    string                          `json:"name,omitempty"`
 
 	// POS carries first-class in-store attribution when the order originates
-	// at a point of sale (v18.6.0).
+	// at a point of sale.
 	POS *POSAttribution `json:"pos,omitempty"`
 
 	// Metadata stores source-specific details that should not become first-class

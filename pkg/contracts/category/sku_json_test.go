@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/warehouse"
 )
 
 func TestSKUJSONIncludesPrimaryName(t *testing.T) {
@@ -18,7 +18,6 @@ func TestSKUJSONIncludesPrimaryName(t *testing.T) {
 			Name:     "冷凍 - 肉品",
 		},
 		OtherNames: []common.LocalizedName{{Language: "en", Name: "Frozen meat"}},
-		SortOrder:  21,
 	})
 	if err != nil {
 		t.Fatalf("marshal sku: %v", err)

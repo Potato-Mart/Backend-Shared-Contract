@@ -3,9 +3,9 @@ package shipping
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/shipping"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/shipping"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/warehouse"
 )
 
 type Rate struct {
@@ -18,6 +18,5 @@ type Rate struct {
 	StorageType   warehouseenum.StorageType     `json:"storage_type,omitempty"`
 	PackageLimits *PackageLimits                `json:"package_limits,omitempty"`
 	IsActive      bool                          `json:"is_active"`
-	SortOrder     int                           `json:"sort_order"`
 	CreatedAt     time.Time                     `json:"created_at"`
 }

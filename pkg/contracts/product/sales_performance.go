@@ -3,7 +3,7 @@ package product
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
 )
 
 // SalesTotals records paid-order unit activity for one measurement period.

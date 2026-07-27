@@ -2,7 +2,7 @@
 
 This module defines shared identity data only. Authentication flows, password
 handling, token issuance, portal admission, permission resolution, HTTP
-transport, persistence, and authorization policy belong to Backend-Management
+transport, persistence, and authorization policy belong to Backend-Identity
 and to each backend's local enforcement layer.
 
 ## Core records

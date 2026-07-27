@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/warehouse"
 )
 
 func TestLayoutNodeUsesBusinessKeys(t *testing.T) {

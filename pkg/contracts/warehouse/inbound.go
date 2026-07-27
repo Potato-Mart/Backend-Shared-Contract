@@ -3,9 +3,9 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/shared"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/shared"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/warehouse"
 )
 
 type InboundReceipt struct {

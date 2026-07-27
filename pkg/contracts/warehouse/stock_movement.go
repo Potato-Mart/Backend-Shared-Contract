@@ -3,8 +3,8 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/warehouse"
 )
 
 // StockMovement is the shared read model for every stock balance change.

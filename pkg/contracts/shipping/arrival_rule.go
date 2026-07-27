@@ -3,12 +3,12 @@ package shipping
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
 )
 
 // ShippingArrivalRule defines a time window within the week that maps to
 // a specific warehouse arrival day. Rules replace the hard-coded
-// Monday-14:00 cut-off logic and are evaluated in sort_order priority.
+// Monday-14:00 cut-off logic. Active windows must not overlap.
 //
 // Days of week: 0=Sunday … 6=Saturday.
 // Times are in "HH:MM" 24-hour format (Melbourne local time).
@@ -22,8 +22,6 @@ type ShippingArrivalRule struct {
 	ArrivalDOW int              `json:"arrival_dow"` // 0-6
 	WeekOffset int              `json:"week_offset"` // 0 = this week, 1 = next week
 	IsActive   bool             `json:"is_active"`
-	SortOrder  int              `json:"sort_order"`
-
 	common.AuditFields
 }
 

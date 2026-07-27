@@ -1,3 +1,3 @@
-// Package wholesale defines wholesale customer, organisation, membership, and
-// tier contracts for wholesaleCustomer account/persona operations.
+// Package wholesale defines wholesale applications, organisations, access,
+// account terms, and freight presets.
 package wholesale

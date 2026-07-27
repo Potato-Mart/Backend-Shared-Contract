@@ -3,8 +3,8 @@ package importcompliance
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	importcomplianceenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/importcompliance"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	importcomplianceenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/importcompliance"
 )
 
 // RFIRecord is a revisioned Request for Inspection record. External submission
@@ -42,12 +42,12 @@ type RFIBookingAgent struct {
 }
 
 type RFIInspectionLocation struct {
-	BusinessNameAndAANumber string `json:"business_name_and_aa_number,omitempty"`
-	PremiseAddress          string `json:"premise_address,omitempty"`
-	OpeningHours            string `json:"opening_hours,omitempty"`
-	ContactName             string `json:"contact_name,omitempty"`
-	ContactPhone            string `json:"contact_phone,omitempty"`
-	PrivateResidence        bool   `json:"private_residence"`
+	BusinessNameAndAANumber string          `json:"business_name_and_aa_number,omitempty"`
+	PremiseAddress          *common.Address `json:"premise_address,omitempty"`
+	OpeningHours            string          `json:"opening_hours,omitempty"`
+	ContactName             string          `json:"contact_name,omitempty"`
+	ContactPhone            string          `json:"contact_phone,omitempty"`
+	PrivateResidence        bool            `json:"private_residence"`
 }
 
 type RFIExternalEvent struct {

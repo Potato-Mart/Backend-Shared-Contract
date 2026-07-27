@@ -3,8 +3,8 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/account"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/account"
 )
 
 // RoleAssignment grants a role key to a user in an account, portal, and

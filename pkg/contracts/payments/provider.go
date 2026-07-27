@@ -21,8 +21,8 @@ type ProviderOperationContext struct {
 	IdempotencyKey    string `json:"idempotency_key,omitempty"`
 }
 
-// ProviderPayloads keeps raw provider messages together for diagnostics and
-// future compatibility. Normalized contract fields remain the source of truth.
+// ProviderPayloads keeps raw provider messages together for diagnostics.
+// Normalized contract fields remain the source of truth.
 type ProviderPayloads struct {
 	Request             json.RawMessage `json:"request,omitempty"`
 	Response            json.RawMessage `json:"response,omitempty"`

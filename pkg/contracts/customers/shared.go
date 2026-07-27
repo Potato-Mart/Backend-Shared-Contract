@@ -3,18 +3,9 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/membership"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/customer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/customer"
 )
-
-// RetailCustomerMembershipProfile links a retail customer profile to the
-// global membership programme. Wallet values are projections; membership
-// ledger contracts remain the source of truth.
-type RetailCustomerMembershipProfile struct {
-	MembershipAccountID string                               `json:"membership_account_id,omitempty"`
-	Summary             *membership.MembershipAccountSummary `json:"summary,omitempty"`
-}
 
 // RetailCustomerCommerceProfile groups aggregated commerce statistics. Values
 // are computed by sync jobs and must never be manually edited.

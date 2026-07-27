@@ -3,7 +3,7 @@ package sales
 import "time"
 
 // OrderPackingProjection is the durable packing snapshot shared between
-// Operations and Commerce. Transport acknowledgement types stay provider-local.
+// Supply and Orders. Transport acknowledgement types stay provider-local.
 type OrderPackingProjection struct {
 	OrderNumber string               `json:"order_number"`
 	Revision    int64                `json:"revision"`
@@ -11,8 +11,8 @@ type OrderPackingProjection struct {
 	UpdatedAt   time.Time            `json:"updated_at"`
 }
 
-// PreorderStockArrivalEvent is durably emitted by Operations after a positive
-// SKU stock mutation. Commerce stores an inbox receipt before allocating.
+// PreorderStockArrivalEvent is durably emitted by Supply after a positive
+// SKU stock mutation. Orders stores an inbox receipt before allocating.
 type PreorderStockArrivalEvent struct {
 	EventID        string    `json:"event_id"`
 	ProductSKUCode string    `json:"product_sku_code"`

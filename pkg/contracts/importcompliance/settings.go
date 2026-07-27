@@ -1,6 +1,6 @@
 package importcompliance
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
 
 // ImportSettings is one revision of the shared import-cost and declaration
 // configuration. TWDPerAUDMicros stores the TWD-per-AUD exchange rate scaled by
@@ -32,7 +32,6 @@ type IngredientDeclarationRule struct {
 type AirCargoSettings struct {
 	ReferenceWeightGrams                         int64        `json:"reference_weight_grams"`
 	TaiwanInspectionCost                         common.Money `json:"taiwan_inspection_cost"`
-	TaiwanStorageLegacyCost                      common.Money `json:"taiwan_storage_legacy_cost"`
 	StorageThresholdGrams                        int64        `json:"storage_threshold_grams"`
 	StorageUnderThresholdCost                    common.Money `json:"storage_under_threshold_cost"`
 	StorageAtOrOverThresholdCost                 common.Money `json:"storage_at_or_over_threshold_cost"`

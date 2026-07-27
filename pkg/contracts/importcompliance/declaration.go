@@ -1,8 +1,8 @@
 package importcompliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	importcomplianceenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/importcompliance"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	importcomplianceenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/importcompliance"
 )
 
 // ManufacturerDeclaration is a revisioned declaration backed by an immutable
@@ -34,10 +34,9 @@ type DeclarationShipment struct {
 }
 
 type ManufacturerDetails struct {
-	Name       string `json:"name"`
-	Address    string `json:"address,omitempty"`
-	Phone      string `json:"phone,omitempty"`
-	PostalCode string `json:"postal_code,omitempty"`
+	Name    string          `json:"name"`
+	Address *common.Address `json:"address,omitempty"`
+	Phone   string          `json:"phone,omitempty"`
 }
 
 // DeclarationSignatory references a managed image rather than embedding a

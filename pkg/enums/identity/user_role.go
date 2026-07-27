@@ -1,7 +1,7 @@
 package identityenum
 
 // UserRole is a persisted workforce RBAC role key. Role-to-permission policy
-// is owned by Management and enforced independently by each backend.
+// is owned by Identity and enforced independently by each backend.
 type UserRole string
 
 const (

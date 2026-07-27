@@ -1,24 +1,5 @@
 package membershipenum
 
-// MembershipOwnerType identifies the business entity that owns a membership
-// wallet and tier.
-type MembershipOwnerType string
-
-const (
-	MembershipOwnerTypeRetailCustomer        MembershipOwnerType = "retail_customer"
-	MembershipOwnerTypeWholesaleOrganisation MembershipOwnerType = "wholesale_organisation"
-)
-
-func (m MembershipOwnerType) IsValid() bool {
-	switch m {
-	case MembershipOwnerTypeRetailCustomer, MembershipOwnerTypeWholesaleOrganisation:
-		return true
-	}
-	return false
-}
-
-func (m MembershipOwnerType) String() string { return string(m) }
-
 // MembershipAccountStatus describes the lifecycle of a global membership
 // account.
 type MembershipAccountStatus string
@@ -94,15 +75,14 @@ type MembershipPromotionTarget string
 
 const (
 	MembershipPromotionTargetAll          MembershipPromotionTarget = "ALL"
-	MembershipPromotionTargetWholesale    MembershipPromotionTarget = "WHOLESALE"
 	MembershipPromotionTargetRetail       MembershipPromotionTarget = "RETAIL"
 	MembershipPromotionTargetTierSpecific MembershipPromotionTarget = "TIER_SPECIFIC"
 )
 
 func (m MembershipPromotionTarget) IsValid() bool {
 	switch m {
-	case MembershipPromotionTargetAll, MembershipPromotionTargetWholesale,
-		MembershipPromotionTargetRetail, MembershipPromotionTargetTierSpecific:
+	case MembershipPromotionTargetAll, MembershipPromotionTargetRetail,
+		MembershipPromotionTargetTierSpecific:
 		return true
 	}
 	return false

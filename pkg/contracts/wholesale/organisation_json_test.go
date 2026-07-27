@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/wholesale"
-	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/wholesale"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/wholesale"
 )
 
 func TestWholesaleOrganisationJSONShape(t *testing.T) {
@@ -39,9 +39,7 @@ func TestWholesaleOrganisationJSONShape(t *testing.T) {
 		PrimaryAuthIdentityID:       "auth_123",
 		AuthIdentityIDs:             []string{"auth_123"},
 		PrimaryOrganisationAccessID: "access_123",
-		MembershipAccountID:         "mem_org_123",
 		Status:                      wholesaleenum.WholesaleOrganisationStatusApproved,
-		TierKey:                     "standard",
 		Approval:                    &common.LifecycleAction{By: "admin_1", At: &approvedAt, Reason: "verified"},
 	}
 
@@ -66,13 +64,16 @@ func TestWholesaleOrganisationJSONShape(t *testing.T) {
 		"primary_auth_identity_id",
 		"auth_identity_ids",
 		"primary_organisation_access_id",
-		"membership_account_id",
 		"status",
-		"tier_key",
 		"approval",
 	} {
 		if _, ok := got[key]; !ok {
 			t.Fatalf("WholesaleOrganisation JSON missing %q: %s", key, payload)
+		}
+	}
+	for _, removed := range []string{"membership_account_id", "tier_key", "price_tier"} {
+		if _, ok := got[removed]; ok {
+			t.Fatalf("WholesaleOrganisation JSON contains removed field %q: %s", removed, payload)
 		}
 	}
 

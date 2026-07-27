@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/product"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/product"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/product"
 )
 
 func TestStorefrontProductJSONIsCustomerSafe(t *testing.T) {
@@ -16,7 +16,7 @@ func TestStorefrontProductJSONIsCustomerSafe(t *testing.T) {
 	discount := 20
 	projection := product.StorefrontProduct{
 		SKUCode: "SKU-CODE-1", SKU: "SKU-1", Name: "Product",
-		PlacingAreaCode: "A-01", CurrentStock: 12,
+		CurrentStock: 12,
 		Pricing: product.StorefrontPricing{
 			Audience: productenum.PriceAudienceRetail,
 			Current:  &common.Money{AmountMinor: 800, Currency: "AUD"},

@@ -3,29 +3,26 @@ package wallet
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/membership"
-	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/wallet"
 )
 
 // CustomerWallet is the retail read-model aggregate of every value instrument
 // a customer holds: loyalty points, gift cards, vouchers, assigned coupons,
-// and membership rewards. It is owner-keyed via
-// membership.MembershipOwnerRef (the same owner key the membership programme
-// uses) and links each instrument by its business key. The per-instrument
-// ledgers remain the source of truth; this is a projection. Wholesale APIs use
-// a separate benefits projection and must not expose this wallet model.
+// and membership rewards. CustomerNumber is the canonical membership and
+// wallet key. The per-instrument ledgers remain the source of truth; this is a
+// projection. Wholesale APIs use a separate benefits projection and must not
+// expose this wallet model.
 type CustomerWallet struct {
-	Owner               membership.MembershipOwnerRef `json:"owner"`
-	MembershipAccountID string                        `json:"membership_account_id,omitempty"`
-	Instruments         []WalletInstrument            `json:"instruments,omitempty"`
-	Summary             CustomerWalletSummary         `json:"summary"`
-	CalculatedAt        time.Time                     `json:"calculated_at"`
+	CustomerNumber string                `json:"customer_number"`
+	Instruments    []WalletInstrument    `json:"instruments,omitempty"`
+	Summary        CustomerWalletSummary `json:"summary"`
+	CalculatedAt   time.Time             `json:"calculated_at"`
 }
 
 // WalletInstrument is a uniform link row pointing at one value instrument by its
 // business key (gift_card_code, voucher_code, coupon_code, reward_code, or the
-// membership_account_id for points). Gift cards expose their committed ledger
+// customer_number for points). Gift cards expose their committed ledger
 // balance, amount held by live reservations, and amount currently available to
 // checkout. Value is the single-use face value for vouchers.
 type WalletInstrument struct {

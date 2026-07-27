@@ -3,8 +3,8 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/membership"
 )
 
 // CustomerTierProgress is the customer-safe projection of progress toward the
@@ -28,7 +28,6 @@ type CustomerTierProgress struct {
 type TierProgressTier struct {
 	TierKey             string                 `json:"tier_key"`
 	Label               []common.LocalizedText `json:"label,omitempty"`
-	SortOrder           int                    `json:"sort_order"`
 	QualifyingThreshold *common.Money          `json:"qualifying_threshold,omitempty"`
 }
 

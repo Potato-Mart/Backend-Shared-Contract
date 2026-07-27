@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/contracts/importcompliance"
-	importcomplianceenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/importcompliance"
-	purchaseenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/purchase"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/importcompliance"
+	importcomplianceenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/importcompliance"
+	purchaseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/purchase"
 )
 
 func TestImportSettingsJSONUsesFixedPointFields(t *testing.T) {
@@ -24,7 +24,6 @@ func TestImportSettingsJSONUsesFixedPointFields(t *testing.T) {
 		AirCargo: importcompliance.AirCargoSettings{
 			ReferenceWeightGrams:                         100_000,
 			TaiwanInspectionCost:                         common.Money{AmountMinor: 1500, Currency: "TWD"},
-			TaiwanStorageLegacyCost:                      common.Money{AmountMinor: 100, Currency: "TWD"},
 			StorageThresholdGrams:                        50_000,
 			StorageUnderThresholdCost:                    common.Money{AmountMinor: 200, Currency: "TWD"},
 			StorageAtOrOverThresholdCost:                 common.Money{AmountMinor: 300, Currency: "TWD"},
@@ -49,13 +48,12 @@ func TestImportSettingsJSONUsesFixedPointFields(t *testing.T) {
 		`"reference_weight_grams":100000`,
 		`"volumetric_divisor_cubic_centimetres_per_kilogram":6000`,
 		`"reference_volume_cubic_centimetres":1000000`,
-		`"taiwan_storage_legacy_cost"`,
 	} {
 		if !strings.Contains(text, key) {
 			t.Fatalf("settings JSON missing fixed-point field %s: %s", key, payload)
 		}
 	}
-	for _, forbidden := range []string{`"exchange_rate"`, `"export_margin"`, `"air_ref_weight"`} {
+	for _, forbidden := range []string{`"exchange_rate"`, `"export_margin"`, `"air_ref_weight"`, `"taiwan_base_storage_cost"`} {
 		if strings.Contains(text, forbidden) {
 			t.Fatalf("settings JSON exposed ambiguous floating-point field %s: %s", forbidden, payload)
 		}
@@ -78,7 +76,7 @@ func TestDeclarationAndLabelRoundTripManagedMediaAndMeasurements(t *testing.T) {
 			ShippingMethod: "Air", TransportReference: "BR-315", ConsignmentIdentifier: "AWB-1",
 			PortOfLoading: "TPE", DestinationPort: "SYD",
 		},
-		Manufacturer: importcompliance.ManufacturerDetails{Name: "Maker", Address: "Taipei", Phone: "+886", PostalCode: "100"},
+		Manufacturer: importcompliance.ManufacturerDetails{Name: "Maker", Address: &common.Address{Label: "Manufacturer", Line1: "1 Zhongxiao Road", City: "Taipei", Postcode: "100", Country: "Taiwan", FormattedAddress: "1 Zhongxiao Road, Taipei 100, Taiwan", PlaceID: "place-2"}, Phone: "+886"},
 		Signatory:    importcompliance.DeclarationSignatory{Name: "Signer", Title: "Director", SignatureMediaID: "media_signature"},
 		Lines: []importcompliance.DeclarationLine{{
 			ID: "line_1", SourceLineID: "po_line_1", ProductReference: "SKU-1", EnglishName: "Product", ChineseName: "產品",
@@ -106,7 +104,7 @@ func TestDeclarationAndLabelRoundTripManagedMediaAndMeasurements(t *testing.T) {
 		SKUCode:       "SKU-1", SKU: "retail-sku", VariantCode: "au-65x45", Brand: "Brand", EnglishName: "Product", ChineseName: "產品",
 		Barcode: "930000000001", NetWeightGrams: 500, PackageDimensions: common.Dimensions{WidthMM: 65, LengthMM: 45, HeightMM: 10},
 		Ingredients: "Milk", Allergens: "Milk", ManufacturingProcess: "Cooked", BestBefore: "Shown on package (YYYY/MM/DD)", ShelfLife: "12 months",
-		Importer: importcompliance.LabelImporter{Name: "Potato Mart", Address: "Sydney", Phone: "+61"}, CountryOfOrigin: "Taiwan",
+		Importer: importcompliance.LabelImporter{Name: "Potato Mart", Address: &common.Address{Label: "Importer", Line1: "1 Market Street", City: "Sydney", State: "NSW", Postcode: "2000", Country: "Australia", FormattedAddress: "1 Market Street, Sydney NSW 2000, Australia", PlaceID: "place-1"}, Phone: "+61"}, CountryOfOrigin: "Taiwan",
 		SecondNutritionEnabled: true,
 		NutritionPanels: []importcompliance.NutritionPanel{
 			{Title: "Prepared", ServingsPerPack: "2", ServingSize: "250 g", EnergyPerServe: "500", SodiumPer100Grams: "30"},
@@ -159,7 +157,11 @@ func TestRFIRecordRoundTripKeepsExternalEventsExplicit(t *testing.T) {
 		Channel: importcomplianceenum.RFIChannelEmailException, CurrentSubmissionState: importcomplianceenum.RFISubmissionStateSubmitted,
 		QuarantineNumber: "Q-1", AirwayBill: "AWB-1", AvailableFrom: common.Date("2026-07-20"), RequestedDate: common.Date("2026-07-21"),
 		Comments: "Handle frozen", BookingAgent: importcompliance.RFIBookingAgent{Name: "Agent", Phone: "+61", Email: "agent@example.com"},
-		InspectionLocation:  importcompliance.RFIInspectionLocation{BusinessNameAndAANumber: "Potato Mart / AA-1", PremiseAddress: "Sydney", OpeningHours: "09:00-17:00", ContactName: "Receiver", ContactPhone: "+61", PrivateResidence: false},
+		InspectionLocation: importcompliance.RFIInspectionLocation{
+			BusinessNameAndAANumber: "Potato Mart / AA-1",
+			PremiseAddress:          &common.Address{Label: "Inspection premise", Line1: "1 Market Street", City: "Sydney", State: "NSW", Postcode: "2000", Country: "Australia", FormattedAddress: "1 Market Street, Sydney NSW 2000, Australia", PlaceID: "place-rfi-1"},
+			OpeningHours:            "09:00-17:00", ContactName: "Receiver", ContactPhone: "+61", PrivateResidence: false,
+		},
 		InspectionDirection: "Dock 2", RequestedTime: importcomplianceenum.RFIRequestedTimeAM, Overtime: true,
 		EmailSubjectPrefix: "RFI", EmailBody: "Please inspect", AttachmentMediaIDs: []string{"media_1"},
 		SubmissionEvents: []importcompliance.RFIExternalEvent{{ID: "event_1", State: importcomplianceenum.RFISubmissionStateSubmitted, ExternalReference: "DAFF-1", OccurredAt: now, RecordedBy: "admin_1"}},
@@ -173,7 +175,8 @@ func TestRFIRecordRoundTripKeepsExternalEventsExplicit(t *testing.T) {
 		t.Fatalf("unmarshal RFI record: %v", err)
 	}
 	if decoded.CurrentSubmissionState != importcomplianceenum.RFISubmissionStateSubmitted || len(decoded.SubmissionEvents) != 1 ||
-		decoded.SubmissionEvents[0].ExternalReference != "DAFF-1" || decoded.EmailSubjectPrefix != "RFI" {
+		decoded.SubmissionEvents[0].ExternalReference != "DAFF-1" || decoded.EmailSubjectPrefix != "RFI" ||
+		decoded.InspectionLocation.PremiseAddress == nil || decoded.InspectionLocation.PremiseAddress.PlaceID != "place-rfi-1" {
 		t.Fatalf("RFI fields did not round-trip: %+v", decoded)
 	}
 }

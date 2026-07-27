@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
 )
 
 func TestReceiptOfferOmitsPromotionRuleInternals(t *testing.T) {

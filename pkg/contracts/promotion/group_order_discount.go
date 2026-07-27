@@ -3,8 +3,8 @@ package promotion
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/common"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/promotion"
 )
 
 // A wholesale group-order manager applies for (or selects) a per-group discount
@@ -24,12 +24,11 @@ type GroupOrderDiscountProposal struct {
 	MaxDiscount *common.Money `json:"max_discount,omitempty"`
 }
 
-// GroupOrderDiscountApplication is the shared application record produced by
-// Backend-Management and read by Backend-Commerce: its lifecycle state and,
-// once approved, the backing
-// promotion id Commerce must apply. Exactly one of SelectedPromotionID (an
+// GroupOrderDiscountApplication is the shared application record owned by
+// Pricing: its lifecycle state and, once approved, the backing promotion ID
+// Orders must apply. Exactly one of SelectedPromotionID (an
 // existing eligible promotion) or Proposal (a newly requested benefit) is set.
-// The wire request/decision envelopes are owned by Backend-Management.
+// The wire request/decision envelopes are owned by Pricing.
 type GroupOrderDiscountApplication struct {
 	ID                        string                                `json:"id"`
 	GroupOrderCode            string                                `json:"group_order_code"`
@@ -38,7 +37,7 @@ type GroupOrderDiscountApplication struct {
 	State                     promotionenum.GroupOrderDiscountState `json:"state"`
 	SelectedPromotionID       string                                `json:"selected_promotion_id,omitempty"`
 	Proposal                  *GroupOrderDiscountProposal           `json:"proposal,omitempty"`
-	// ApprovedPromotionID is the published promotion Commerce applies at
+	// ApprovedPromotionID is the published promotion Orders applies at
 	// pricing/submit; set only when State is approved.
 	ApprovedPromotionID string     `json:"approved_promotion_id,omitempty"`
 	RequestedBy         string     `json:"requested_by,omitempty"`

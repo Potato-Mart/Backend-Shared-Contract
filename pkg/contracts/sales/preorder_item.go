@@ -3,10 +3,10 @@ package sales
 import (
 	"time"
 
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v18/pkg/enums/sales"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/sales"
 )
 
-// PreorderItemSnapshot is server-stamped from Operations' active SKU policy.
+// PreorderItemSnapshot is server-stamped from Supply's active SKU policy.
 // Clients cannot choose or alter preorder state.
 type PreorderItemSnapshot struct {
 	ProductSKUCode         string     `json:"product_sku_code"`
