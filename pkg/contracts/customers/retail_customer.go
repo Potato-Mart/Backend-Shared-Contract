@@ -3,9 +3,9 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/shared"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/customer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/shared"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/customer"
 )
 
 // RetailCustomer is the grouped business profile for a retailCustomer

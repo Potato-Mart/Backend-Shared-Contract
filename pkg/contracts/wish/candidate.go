@@ -3,8 +3,8 @@ package wish
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
-	wishenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/wish"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
+	wishenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/wish"
 )
 
 // WishCandidate is an admin-authored, customer-safe ballot choice. Name,

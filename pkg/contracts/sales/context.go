@@ -1,9 +1,9 @@
 package sales
 
 import (
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/customer"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/product"
-	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/shipping"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/customer"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/product"
+	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/shipping"
 )
 
 // BuyerContext is the shared, channel-independent description of who is

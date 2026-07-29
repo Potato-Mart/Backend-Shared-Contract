@@ -3,9 +3,9 @@ package purchase
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/shared"
-	purchaseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/purchase"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/shared"
+	purchaseenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/purchase"
 )
 
 type Receipt struct {

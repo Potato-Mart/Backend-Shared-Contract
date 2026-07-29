@@ -3,11 +3,11 @@ package promotion
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/benefit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/shared"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/shared"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/promotion"
 )
 
 // Coupon is a code-based discount that customers enter at checkout.

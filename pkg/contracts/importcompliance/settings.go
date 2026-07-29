@@ -1,6 +1,6 @@
 package importcompliance
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
 
 // ImportSettings is one revision of the shared import-cost and declaration
 // configuration. TWDPerAUDMicros stores the TWD-per-AUD exchange rate scaled by

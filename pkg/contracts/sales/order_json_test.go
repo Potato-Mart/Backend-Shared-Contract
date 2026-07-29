@@ -6,14 +6,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/warehouse"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/membership"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/payment"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/sales"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/warehouse"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/membership"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/payment"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/sales"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/warehouse"
 )
 
 func TestOrderJSONRoundTripWithHistory(t *testing.T) {

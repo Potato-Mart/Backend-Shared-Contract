@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/payments"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/payments"
 )
 
 func TestWalletPaymentReferenceRoundTrip(t *testing.T) {

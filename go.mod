@@ -1,3 +1,3 @@
-module github.com/Potato-Mart/Backend-Shared-Contract/v19
+module github.com/Potato-Mart/Backend-Shared-Contract/v20
 
 go 1.26

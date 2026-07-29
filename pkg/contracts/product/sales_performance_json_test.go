@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/product"
 )
 
 func TestSalesPerformanceJSONShape(t *testing.T) {

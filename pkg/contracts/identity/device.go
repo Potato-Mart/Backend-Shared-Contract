@@ -3,10 +3,10 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/shared"
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/account"
-	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/identity"
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/shared"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/account"
+	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/identity"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/security"
 )
 
 // UserDevice is a non-secret projection of a browser, mobile app, or

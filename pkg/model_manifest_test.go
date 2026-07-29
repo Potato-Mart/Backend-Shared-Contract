@@ -13,10 +13,10 @@ import (
 	"testing"
 )
 
-// v19ModelPackageManifest classifies every production package. Adding an
+// v20ModelPackageManifest classifies every production package. Adding an
 // exported type changes the digest below and requires an explicit manifest
 // review instead of silently expanding the shared module.
-var v19ModelPackageManifest = map[string]string{
+var v20ModelPackageManifest = map[string]string{
 	"common":                     "value",
 	"contracts/analytics":        "record",
 	"contracts/benefit":          "value",
@@ -71,18 +71,13 @@ var v19ModelPackageManifest = map[string]string{
 	"versioning":                 "module-metadata",
 }
 
-// Reviewed for the v19 hard cut: retail-only customer-number membership,
-// typed tier qualification and benefits, wholesale applications and freight
-// presets, qualified placement and media references, audited email
-// verification, typed analytical facts, and versioned service events,
-// including the durable gift-card issuance notification event. Removed
-// compatibility owners, wholesale membership shapes, aliases, and ordering
-// fields, fixed customer-tier enum, embedded customer membership projection,
-// and the retired packing-sync state are intentionally absent from this
-// reviewed exported-type digest.
-const v19ExportedTypeManifestDigest = "c6af7f6bb279c76acf5297a053e7e8bee9d321ab7e00a0feb6e6cfad8c8a234e"
+// Reviewed for the v20 catalog hard cut: brand masters and product references
+// use Mongo-backed brand IDs, localized names, immutable slugs, and optional
+// logo URLs; BrandSummary and brand-key fields are absent. SKU masters no
+// longer embed derived product snapshots.
+const v20ExportedTypeManifestDigest = "a358d9027f761b6030149e98fa72ce7a5e5b8bfcac7f8de2b3d1a84eb8e1e9ee"
 
-func TestV19ExportedTypesMatchModelManifest(t *testing.T) {
+func TestV20ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)
 	var entries []string
 	err := filepath.WalkDir(".", func(path string, entry fs.DirEntry, walkErr error) error {
@@ -96,9 +91,9 @@ func TestV19ExportedTypesMatchModelManifest(t *testing.T) {
 		if packagePath == "." {
 			return nil
 		}
-		class, classified := v19ModelPackageManifest[packagePath]
+		class, classified := v20ModelPackageManifest[packagePath]
 		if !classified {
-			t.Errorf("%s is not classified in the v19 model manifest", packagePath)
+			t.Errorf("%s is not classified in the v20 model manifest", packagePath)
 			return nil
 		}
 		seenPackages[packagePath] = true
@@ -123,9 +118,9 @@ func TestV19ExportedTypesMatchModelManifest(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("read v19 model manifest: %v", err)
+		t.Fatalf("read v20 model manifest: %v", err)
 	}
-	for packagePath := range v19ModelPackageManifest {
+	for packagePath := range v20ModelPackageManifest {
 		if !seenPackages[packagePath] {
 			t.Errorf("manifest package %s has no production source", packagePath)
 		}
@@ -133,7 +128,7 @@ func TestV19ExportedTypesMatchModelManifest(t *testing.T) {
 	sort.Strings(entries)
 	sum := sha256.Sum256([]byte(strings.Join(entries, "\n")))
 	got := hex.EncodeToString(sum[:])
-	if got != v19ExportedTypeManifestDigest {
+	if got != v20ExportedTypeManifestDigest {
 		t.Fatalf("exported model manifest changed: got %s; classify the change and update the reviewed digest", got)
 	}
 }

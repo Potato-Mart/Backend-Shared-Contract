@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/warehouse"
 )
 
 func TestSKUJSONIncludesPrimaryName(t *testing.T) {
@@ -33,6 +33,9 @@ func TestSKUJSONIncludesPrimaryName(t *testing.T) {
 	}
 	if primary["language"] != "zh-Hant" || primary["name"] != "冷凍 - 肉品" {
 		t.Fatalf("primary_name = %#v, want zh-Hant/冷凍 - 肉品 (%s)", primary, body)
+	}
+	if _, exists := got["products"]; exists {
+		t.Fatalf("SKU JSON must not embed products: %s", body)
 	}
 
 	var decoded SKU

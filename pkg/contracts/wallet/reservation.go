@@ -3,9 +3,9 @@ package wallet
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/benefit"
-	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/benefit"
+	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/wallet"
 )
 
 // CouponBenefitReservation is the coupon capacity held by one checkout.

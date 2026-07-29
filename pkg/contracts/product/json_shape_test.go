@@ -5,10 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/customer"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/product"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/customer"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/product"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/sales"
 )
 
 func TestProductJSONIncludesTaxed(t *testing.T) {
@@ -20,7 +20,7 @@ func TestProductJSONIncludesTaxed(t *testing.T) {
 		Description: []common.LocalizedDescription{
 			{Language: "en", Description: "Localized description"},
 		},
-		BrandRef:     &BrandRef{BrandKey: "localized-brand", Name: []common.LocalizedName{{Language: "en", Name: "Localized brand"}}},
+		BrandRef:     &BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "localized-brand", Name: []common.LocalizedName{{Language: "en", Name: "Localized brand"}}},
 		Taxed:        true,
 		Collection:   &CollectionRef{ID: "col_frozen", Slug: "frozen", Name: []common.LocalizedName{{Language: "en", Name: "Frozen"}}},
 		CategoryTags: []CategoryTag{{ID: "tag_hotpot", Slug: "hotpot", Name: []common.LocalizedName{{Language: "en", Name: "Hotpot"}}, CollectionID: "col_frozen", CollectionName: []common.LocalizedName{{Language: "en", Name: "Frozen"}}}},
@@ -138,7 +138,7 @@ func TestSnapshotJSONIncludesTaxed(t *testing.T) {
 		Description: []common.LocalizedDescription{
 			{Language: "en", Description: "Snapshot description"},
 		},
-		BrandRef: &BrandRef{BrandKey: "snapshot-brand", Name: []common.LocalizedName{{Language: "en", Name: "Snapshot brand"}}},
+		BrandRef: &BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "snapshot-brand", Name: []common.LocalizedName{{Language: "en", Name: "Snapshot brand"}}},
 		Supply:   &ProductSupply{Supplier: &ProductSupplierRef{Code: "sup_1", Name: "Supplier"}},
 		Taxed:    true,
 	})
