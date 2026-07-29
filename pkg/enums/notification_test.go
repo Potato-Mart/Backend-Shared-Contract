@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/notification"
+	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/notification"
 )
 
 func TestNotificationEnums(t *testing.T) {
@@ -46,6 +46,7 @@ func TestNotificationEnums(t *testing.T) {
 			valid: []stringEnum{
 				notificationenum.CustomerNotificationTopicPreorderAvailable,
 				notificationenum.CustomerNotificationTopicBackInStock,
+				notificationenum.CustomerNotificationTopicOrderPlaced,
 				notificationenum.CustomerNotificationTopicOrderConfirmed,
 				notificationenum.CustomerNotificationTopicOrderCancelled,
 				notificationenum.CustomerNotificationTopicPaymentReceived,
@@ -56,6 +57,8 @@ func TestNotificationEnums(t *testing.T) {
 				notificationenum.CustomerNotificationTopicOrderDispatched,
 				notificationenum.CustomerNotificationTopicOrderDelivered,
 				notificationenum.CustomerNotificationTopicInvoiceAvailable,
+				notificationenum.CustomerNotificationTopicPromotionAvailable,
+				notificationenum.CustomerNotificationTopicAnnouncement,
 			},
 			invalid: notificationenum.CustomerNotificationTopic("__invalid__"),
 		},
@@ -64,6 +67,7 @@ func TestNotificationEnums(t *testing.T) {
 			valid: []stringEnum{
 				notificationenum.CustomerNotificationChannelPortal,
 				notificationenum.CustomerNotificationChannelEmail,
+				notificationenum.CustomerNotificationChannelPush,
 			},
 			invalid: notificationenum.CustomerNotificationChannel("__invalid__"),
 		},

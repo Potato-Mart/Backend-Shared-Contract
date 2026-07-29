@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/promotion"
 )
 
 func TestStorefrontPromotionOmitsRuleEngineInternals(t *testing.T) {

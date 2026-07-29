@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/warehouse"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/warehouse"
 )
 
 func TestWarehouseEnumsValidateKnownValues(t *testing.T) {

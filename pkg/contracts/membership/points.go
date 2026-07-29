@@ -3,9 +3,20 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/membership"
 )
+
+// PointsPolicy is server-authored redemption metadata. PointsPerMinorUnit,
+// MinimumEligibleBalance, and RedemptionStepPoints expose the active policy;
+// MaximumRedemptionPoints is calculated for the current customer/context and
+// must not be recomputed by clients.
+type PointsPolicy struct {
+	PointsPerMinorUnit      int `json:"points_per_minor_unit"`
+	MinimumEligibleBalance  int `json:"minimum_eligible_balance"`
+	RedemptionStepPoints    int `json:"redemption_step_points"`
+	MaximumRedemptionPoints int `json:"maximum_redemption_points"`
+}
 
 // PointLedgerEntry is a single points transaction for a retail customer.
 // Positive delta = earned; negative = redeemed or expired. Remaining tracks how

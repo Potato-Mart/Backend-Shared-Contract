@@ -3,11 +3,12 @@ package enums_test
 import (
 	"testing"
 
-	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/campaign"
+	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/campaign"
 )
 
 func TestCampaignEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
+		{name: "campaignenum.CampaignCTADestinationType", valid: []stringEnum{campaignenum.CampaignCTADestinationProduct, campaignenum.CampaignCTADestinationCollection, campaignenum.CampaignCTADestinationCategory, campaignenum.CampaignCTADestinationCart, campaignenum.CampaignCTADestinationPromotions}, invalid: campaignenum.CampaignCTADestinationType("__invalid__")},
 		{name: "campaignenum.CampaignCustomerType", valid: []stringEnum{campaignenum.CampaignCustomerTypeGuest, campaignenum.CampaignCustomerTypeRetail, campaignenum.CampaignCustomerTypeWholesale}, invalid: campaignenum.CampaignCustomerType("__invalid__")},
 		{name: "campaignenum.CampaignPlacement", valid: []stringEnum{campaignenum.CampaignPlacementTopBanner, campaignenum.CampaignPlacementHomeHero, campaignenum.CampaignPlacementModal, campaignenum.CampaignPlacementCheckoutNotice, campaignenum.CampaignPlacementProductNotice}, invalid: campaignenum.CampaignPlacement("__invalid__")},
 		{name: "campaignenum.CampaignPlatform", valid: []stringEnum{campaignenum.CampaignPlatformWeb, campaignenum.CampaignPlatformMobile}, invalid: campaignenum.CampaignPlatform("__invalid__")},

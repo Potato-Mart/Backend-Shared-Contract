@@ -6,9 +6,9 @@ package importcompliance
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
-	importcomplianceenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/importcompliance"
-	purchaseenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/purchase"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
+	importcomplianceenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/importcompliance"
+	purchaseenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/purchase"
 )
 
 // RevisionMetadata identifies one immutable-or-editable revision and records

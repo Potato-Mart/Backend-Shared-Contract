@@ -3,8 +3,9 @@ package wallet
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
-	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/membership"
+	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/wallet"
 )
 
 // CustomerWallet is the retail read-model aggregate of every value instrument
@@ -41,12 +42,13 @@ type WalletInstrument struct {
 // committed ledger value from live reservations and checkout-available value;
 // storefront headline totals use GiftCardAvailableBalanceTotal.
 type CustomerWalletSummary struct {
-	AvailablePoints               int          `json:"available_points"`
-	GiftCardCommittedBalanceTotal common.Money `json:"gift_card_committed_balance_total"`
-	GiftCardReservedBalanceTotal  common.Money `json:"gift_card_reserved_balance_total"`
-	GiftCardAvailableBalanceTotal common.Money `json:"gift_card_available_balance_total"`
-	ActiveGiftCards               int          `json:"active_gift_cards"`
-	ActiveVouchers                int          `json:"active_vouchers"`
-	ActiveCoupons                 int          `json:"active_coupons"`
-	AvailableRewards              int          `json:"available_rewards"`
+	AvailablePoints               int                      `json:"available_points"`
+	PointsPolicy                  *membership.PointsPolicy `json:"points_policy,omitempty"`
+	GiftCardCommittedBalanceTotal common.Money             `json:"gift_card_committed_balance_total"`
+	GiftCardReservedBalanceTotal  common.Money             `json:"gift_card_reserved_balance_total"`
+	GiftCardAvailableBalanceTotal common.Money             `json:"gift_card_available_balance_total"`
+	ActiveGiftCards               int                      `json:"active_gift_cards"`
+	ActiveVouchers                int                      `json:"active_vouchers"`
+	ActiveCoupons                 int                      `json:"active_coupons"`
+	AvailableRewards              int                      `json:"available_rewards"`
 }

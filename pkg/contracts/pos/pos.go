@@ -7,14 +7,14 @@ package pos
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/sales"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/payment"
-	posenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/pos"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/product"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/sales"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/payment"
+	posenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/pos"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/product"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/warehouse"
 )
 
 // CatalogProduct is the cashier-safe product projection returned by the POS

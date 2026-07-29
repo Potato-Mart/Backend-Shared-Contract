@@ -3,7 +3,7 @@ package sales
 import (
 	"time"
 
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/sales"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/sales"
 )
 
 type StatusHistory struct {

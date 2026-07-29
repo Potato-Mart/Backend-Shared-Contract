@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/notification"
-	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/notification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/notification"
+	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/notification"
 )
 
 func TestCustomerNotificationJSONRoundTrip(t *testing.T) {
@@ -40,6 +40,7 @@ func TestCustomerNotificationJSONRoundTrip(t *testing.T) {
 func TestCustomerLifecycleNotificationTopicJSONValues(t *testing.T) {
 	topics := []notificationenum.CustomerNotificationTopic{
 		notificationenum.CustomerNotificationTopicOrderConfirmed,
+		notificationenum.CustomerNotificationTopicOrderPlaced,
 		notificationenum.CustomerNotificationTopicOrderCancelled,
 		notificationenum.CustomerNotificationTopicPaymentReceived,
 		notificationenum.CustomerNotificationTopicPaymentFailed,
@@ -49,6 +50,8 @@ func TestCustomerLifecycleNotificationTopicJSONValues(t *testing.T) {
 		notificationenum.CustomerNotificationTopicOrderDispatched,
 		notificationenum.CustomerNotificationTopicOrderDelivered,
 		notificationenum.CustomerNotificationTopicInvoiceAvailable,
+		notificationenum.CustomerNotificationTopicPromotionAvailable,
+		notificationenum.CustomerNotificationTopicAnnouncement,
 	}
 
 	payload, err := json.Marshal(topics)
@@ -57,6 +60,7 @@ func TestCustomerLifecycleNotificationTopicJSONValues(t *testing.T) {
 	}
 	wantValues := []string{
 		"order_confirmed",
+		"order_placed",
 		"order_cancelled",
 		"payment_received",
 		"payment_failed",
@@ -66,10 +70,41 @@ func TestCustomerLifecycleNotificationTopicJSONValues(t *testing.T) {
 		"order_dispatched",
 		"order_delivered",
 		"invoice_available",
+		"promotion_available",
+		"announcement",
 	}
 	for _, want := range wantValues {
 		if !strings.Contains(string(payload), `"`+want+`"`) {
 			t.Fatalf("lifecycle topic JSON = %s, missing %q", payload, want)
+		}
+	}
+}
+
+func TestCampaignNotificationReferenceAndPushChannelJSON(t *testing.T) {
+	now := time.Date(2026, 7, 29, 1, 2, 3, 0, time.UTC)
+	n := notification.CustomerNotification{
+		ID: "notification_1", EventID: "event_1",
+		Topic:   notificationenum.CustomerNotificationTopicPromotionAvailable,
+		Title:   "Promotion available",
+		Message: "Open the app to see the current promotion.",
+		Campaign: &notification.CampaignReference{
+			CampaignID: "campaign_1", CampaignKey: "winter-sale", PromotionID: "promotion_1",
+			ActivationRevision: 2, ContentRevision: 5,
+		},
+		Deliveries: []notification.CustomerNotificationDelivery{{
+			Channel: notificationenum.CustomerNotificationChannelPush,
+			Status:  notificationenum.CustomerNotificationDeliveryStatusPending,
+		}},
+		CreatedAt: now, ExpiresAt: now.Add(30 * 24 * time.Hour),
+		Status: notificationenum.CustomerNotificationStatusUnread,
+	}
+	payload, err := json.Marshal(n)
+	if err != nil {
+		t.Fatalf("marshal campaign push notification: %v", err)
+	}
+	for _, field := range []string{`"channel":"push"`, `"campaign_key":"winter-sale"`, `"promotion_id":"promotion_1"`, `"activation_revision":2`, `"content_revision":5`} {
+		if !strings.Contains(string(payload), field) {
+			t.Fatalf("campaign push notification missing %s: %s", field, payload)
 		}
 	}
 }

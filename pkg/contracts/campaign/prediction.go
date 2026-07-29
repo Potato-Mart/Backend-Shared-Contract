@@ -3,7 +3,7 @@ package campaign
 import (
 	"time"
 
-	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/campaign"
+	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/campaign"
 )
 
 type CampaignComparableEvent struct {

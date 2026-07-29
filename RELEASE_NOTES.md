@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v21.0.0` | 2026-07-29 | Major | Delivery, campaign, native notification, and wallet-policy cutover: adds revisioned delivery schedules/rates/preferences, campaign-promotion/media/typed-CTA linkage, safe storefront events, typed campaign notification references and push values; removes quiet-hours and requires every consumer to adopt `/v21`. |
 | `v20.0.0` | 2026-07-29 | Major | Catalog brand identity and SKU relationship hard cut: canonical brands use Mongo-backed IDs, immutable slugs, localized names, and optional logo URLs; brand keys, summaries, counters, and embedded SKU product lists are removed. Requires Supply to adopt `/v20` and consumers to migrate explicitly. |
 | `v19.0.0` | 2026-07-27 | Major | Admin Portal hard cutover: retail-only membership keyed by customer number, non-membership benefit ownership, wholesale applications/freight presets, qualified product placement, managed media visibility, analytical facts, and complete removal of deprecated shapes and `sort_order`. Requires every consumer to adopt `/v19`. |
 | `v18.6.1` | 2026-07-22 | Patch | Adds optional buyer-identity fields (`retail_customer_number`, `organisation_access_id`) to `payments.PaymentFailedEvent` and `payments.RefundCompletedEvent` so notification consumers need no local buyer lookup. Additive optional fields only; no exported-type, enum, or module-path change. |
@@ -104,6 +105,103 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v21.0.0 (2026-07-29) - Delivery, Campaign, Notification, and Wallet Policy Cutover
+
+### Breaking Contract Changes / 破壞性契約變更
+
+- The module path changes from `/v20` to `/v21`; consumers must update every
+  contract import together and must not mix types from the two major lines.
+- `identity.UserNotificationPreferences.quiet_hours` and the exported
+  `identity.NotificationQuietHours` type are removed without a compatibility
+  alias. Services and clients must remove quiet-hours validation, storage,
+  scheduling, and UI before adopting V21.
+- V20's catalog hard cut remains intact: `product.BrandRef.ID`,
+  `analytics.OrderItemFact.BrandID`, and `analytics.RefundItemFact.BrandID`
+  remain the only canonical shared brand identity fields; `brand_key` does not
+  return.
+
+### Added / 新增
+
+- Shipping models `DeliverySlot`, `DeliveryDateGroup`, `DeliverySchedule`,
+  `DeliveryAreaRate`, and `PreferredDeliverySlot`. Area rates expose
+  `postcode`, optional `suburb`, `delivery_region`, depot code/name,
+  `shipping_fee`, and `free_shipping_threshold`; monetary values use
+  `common.Money` integer minor units and services emit AUD.
+- Retail profile fields `billing_same_as_delivery` and
+  `preferred_delivery_slot`. A preferred slot is display-only metadata and
+  remains subject to authoritative checkout revalidation.
+- Campaign-promotion linkage, stable managed-media identity, typed CTA
+  destinations, content revision, activation revision, and deactivation
+  timestamp on `campaign.Campaign`; the existing `cta_href` remains available
+  to current storefront clients.
+- Customer-safe `promotion.PromotionChangedEvent` and
+  `campaign.CampaignChangedEvent`, the `storefront-events` topic, and
+  `promotion.changed` / `campaign.changed` event-type values. These payloads
+  carry identifiers, lifecycle/revision state, and timestamps only so
+  storefront consumers can refetch authoritative content.
+- Typed `notification.CampaignReference` on durable customer notifications,
+  the `push` notification channel, and the `order_placed`,
+  `promotion_available`, and `announcement` notification topics.
+- Stable API error codes `CART_NOT_ACTIVE` and
+  `EMAIL_VERIFICATION_REQUIRED` for deterministic native recovery flows.
+- Reusable `membership.PointsPolicy`, surfaced optionally from the customer
+  wallet summary. Services publish `points_per_minor_unit=2`,
+  `minimum_eligible_balance=1000`, `redemption_step_points=200`, and the
+  server-calculated `maximum_redemption_points`; clients do not reproduce the
+  calculation.
+
+### Fixed / 修正
+
+- Makes campaign activation and content changes independently revisioned so
+  one push can be deduplicated per activation revision while content updates
+  remain safe refetch signals.
+- Gives retail clients a shared cart-independent delivery schedule/preference
+  shape while preserving checkout as the authority for availability and fees.
+
+### Model-Only Boundary / 僅模型邊界
+
+- FCM/FID destinations, encryption and destination hashes remain Customers
+  service-local; V21 intentionally exports no destination/token model.
+- Coupon previews, request/response DTOs, routes, query parameters, validation,
+  authorization, state transitions, activation/push logic, and points
+  calculations remain in their owning services.
+- The model-only AST boundary, reviewed exported-type manifest, and hard-cut
+  searches guard these exclusions and reject reintroduction of quiet-hours,
+  FCM destination, or coupon-preview fields.
+
+### Contract Files Changed / 契約檔案變更
+
+- `pkg/contracts/shipping/delivery_slots.go`
+- `pkg/contracts/customers/retail_customer.go`
+- `pkg/contracts/campaign/campaign.go` and `events.go`
+- `pkg/contracts/promotion/events.go`
+- `pkg/contracts/notification/customer_notification.go`
+- `pkg/contracts/identity/notification_preferences.go`
+- `pkg/contracts/membership/points.go` and `pkg/contracts/wallet/wallet.go`
+- `pkg/enums/{apiresponse,campaign,events,notification}`
+- Module/version metadata, release notes, boundary/manifest gates, and JSON
+  shape tests across the V21 module path.
+
+### Compatibility Notes / 相容性
+
+- This is a hard major-version cutover. Existing `/v20` consumers continue to
+  compile against `v20.0.0`, but no `/v20` value can be passed as a `/v21`
+  value and there is no dual-import compatibility layer.
+- Existing stored quiet-hours values must be unset by the owning service;
+  changing the shared model does not mutate persistence.
+- Delivery availability strings, route DTOs, and service persistence are not
+  defined by this module. Consumers should use the owning service's OpenAPI
+  contract and treat checkout responses as authoritative.
+
+### Consumer Action / 使用方動作
+
+- Pin `github.com/Potato-Mart/Backend-Shared-Contract/v21 v21.0.0` and update
+  every import to `/v21` after this tag is published.
+- Remove quiet-hours reads/writes/UI, migrate delivery/campaign/notification
+  projections to the new shared shapes, and refetch on safe storefront events.
+- Keep FCM destination and coupon-preview DTOs inside Customers and Orders,
+  respectively. Do not add them to the shared module.
 
 ## v20.0.0 (2026-07-29) - Catalog Brand Identity and SKU Relationship Hard Cut
 

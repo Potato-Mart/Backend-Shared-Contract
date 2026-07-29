@@ -2,11 +2,13 @@ package customers_test
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/customers"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/customer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/customers"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/shipping"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/customer"
 )
 
 func TestRetailCustomerJSONShape(t *testing.T) {
@@ -109,5 +111,24 @@ func TestRetailCustomerJSONShape(t *testing.T) {
 	address := addresses[0].(map[string]any)
 	if address["id"] != "addr_123" {
 		t.Fatalf("RetailCustomer saved address id = %v, want addr_123: %s", address["id"], payload)
+	}
+}
+
+func TestRetailCustomerDeliveryPreferenceJSONShape(t *testing.T) {
+	customer := customers.RetailCustomer{
+		ID:                    "customer_1",
+		BillingSameAsDelivery: true,
+		PreferredDeliverySlot: &shipping.PreferredDeliverySlot{
+			Date: "2026-08-01", SlotID: "slot_7", ScheduleRevision: 7,
+		},
+	}
+	payload, err := json.Marshal(customer)
+	if err != nil {
+		t.Fatalf("marshal retail customer delivery preference: %v", err)
+	}
+	for _, field := range []string{`"billing_same_as_delivery":true`, `"preferred_delivery_slot"`, `"schedule_revision":7`} {
+		if !strings.Contains(string(payload), field) {
+			t.Fatalf("retail customer delivery preference missing %s: %s", field, payload)
+		}
 	}
 }

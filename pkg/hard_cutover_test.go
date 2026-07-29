@@ -6,11 +6,12 @@ import (
 	"go/token"
 	"io/fs"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"testing"
 )
 
-func TestV20ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
+func TestV21ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	removedIdentifiers := map[string]struct{}{
 		"MembershipOwnerRef":              {},
 		"MembershipOwnerType":             {},
@@ -21,6 +22,14 @@ func TestV20ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"BrandSummary":                    {},
 		"ActiveProductCount":              {},
 		"WholesaleProductCount":           {},
+		"NotificationQuietHours":          {},
+		"QuietHours":                      {},
+		"FCMDestination":                  {},
+		"FCMDestinations":                 {},
+		"PushDestination":                 {},
+		"PushDestinations":                {},
+		"CouponPreview":                   {},
+		"CouponPreviews":                  {},
 	}
 	err := filepath.WalkDir(".", func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
@@ -42,18 +51,56 @@ func TestV20ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		ast.Inspect(file, func(node ast.Node) bool {
 			if identifier, ok := node.(*ast.Ident); ok {
 				if _, removed := removedIdentifiers[identifier.Name]; removed {
-					t.Errorf("%s contains removed v20 identifier %s", path, identifier.Name)
+					t.Errorf("%s contains removed v21 identifier %s", path, identifier.Name)
 				}
 			}
 			field, ok := node.(*ast.Field)
 			if !ok {
 				return true
 			}
-			if field.Tag != nil && strings.Contains(field.Tag.Value, "sort_order") {
-				t.Errorf("%s contains removed serialized field sort_order", path)
+			if field.Tag != nil {
+				for _, removedTag := range []string{
+					"sort_order", "quiet_hours", "fcm_destination", "fcm_destinations",
+					"fcm_token", "coupon_preview", "coupon_previews",
+				} {
+					if strings.Contains(field.Tag.Value, removedTag) {
+						t.Errorf("%s contains removed or service-local serialized field %s", path, removedTag)
+					}
+				}
 			}
 			return true
 		})
+		return nil
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestV21GoSourcesContainNoOlderContractImports(t *testing.T) {
+	err := filepath.WalkDir(".", func(path string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if entry.IsDir() || !strings.HasSuffix(path, ".go") {
+			return nil
+		}
+		fset := token.NewFileSet()
+		file, parseErr := parser.ParseFile(fset, path, nil, parser.ImportsOnly)
+		if parseErr != nil {
+			return parseErr
+		}
+		for _, spec := range file.Imports {
+			importPath, unquoteErr := strconv.Unquote(spec.Path.Value)
+			if unquoteErr != nil {
+				return unquoteErr
+			}
+			for _, oldMajor := range []string{"/v19/", "/v20/"} {
+				if strings.Contains(importPath, "Backend-Shared-Contract"+oldMajor) {
+					t.Errorf("%s imports older shared-contract major %s", path, importPath)
+				}
+			}
+		}
 		return nil
 	})
 	if err != nil {
