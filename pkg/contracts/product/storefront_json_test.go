@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/product"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/product"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/product"
 )
 
 func TestStorefrontProductJSONIsCustomerSafe(t *testing.T) {
@@ -16,6 +16,10 @@ func TestStorefrontProductJSONIsCustomerSafe(t *testing.T) {
 	discount := 20
 	projection := product.StorefrontProduct{
 		SKUCode: "SKU-CODE-1", SKU: "SKU-1", Name: "Product",
+		BrandRef: &product.BrandRef{
+			ID: "64c13ab08edf48a008793ca1", Slug: "happy-potato",
+			Name: []common.LocalizedName{{Language: "en", Name: "Happy Potato"}},
+		},
 		CurrentStock: 12,
 		Pricing: product.StorefrontPricing{
 			Audience: productenum.PriceAudienceRetail,
@@ -41,5 +45,8 @@ func TestStorefrontProductJSONIsCustomerSafe(t *testing.T) {
 		if strings.Contains(string(payload), forbidden) {
 			t.Fatalf("storefront product JSON = %s, must omit %s", payload, forbidden)
 		}
+	}
+	if strings.Contains(string(payload), `"brand_key"`) || !strings.Contains(string(payload), `"brand_ref":{"id":"64c13ab08edf48a008793ca1"`) {
+		t.Fatalf("storefront product brand JSON = %s", payload)
 	}
 }

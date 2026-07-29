@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v20.0.0` | 2026-07-29 | Major | Catalog brand identity and SKU relationship hard cut: canonical brands use Mongo-backed IDs, immutable slugs, localized names, and optional logo URLs; brand keys, summaries, counters, and embedded SKU product lists are removed. Requires Supply to adopt `/v20` and consumers to migrate explicitly. |
 | `v19.0.0` | 2026-07-27 | Major | Admin Portal hard cutover: retail-only membership keyed by customer number, non-membership benefit ownership, wholesale applications/freight presets, qualified product placement, managed media visibility, analytical facts, and complete removal of deprecated shapes and `sort_order`. Requires every consumer to adopt `/v19`. |
 | `v18.6.1` | 2026-07-22 | Patch | Adds optional buyer-identity fields (`retail_customer_number`, `organisation_access_id`) to `payments.PaymentFailedEvent` and `payments.RefundCompletedEvent` so notification consumers need no local buyer lookup. Additive optional fields only; no exported-type, enum, or module-path change. |
 | `v18.6.0` | 2026-07-22 | Minor | Completes the eventing model surface (stock, fulfilment, customer, catalog, engagement, product-stats payloads + enriched order/refund events and invoice-issued), adds customer payment summary/allocation, invoice resend, membership tier progress + typed benefits, storefront origin/physical weight, and the reuse-first POS surface (registers/shifts/cash movements/receipt snapshots, cashier role, Stripe terminal provider, POS attribution). Additive only; keeps the `/v18` module path. |
@@ -103,6 +104,64 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v20.0.0 (2026-07-29) - Catalog Brand Identity and SKU Relationship Hard Cut
+
+### Breaking Contract Changes / 破壞性契約變更
+
+- `product.Brand` and embedded `product.BrandRef` now use exactly `id`,
+  immutable `slug`, localized `name`, and optional `logo_url`.
+- Removed `product.BrandSummary`, `brand_key`, brand audience, featured state,
+  active-product counters, and public brand audit fields. Storefront product
+  projections expose only `brand_ref`.
+- `analytics.OrderItemFact` and `analytics.RefundItemFact` now carry
+  `brand_id` instead of `brand_key`.
+- `category.SKU` no longer embeds a derived `products` list. Canonical product
+  records own SKU-family membership through their `sku` field.
+- The module path changes from `/v19` to `/v20`; there is no compatibility
+  alias, fallback decoder, or dual-read period.
+
+### Added / 新增
+
+- Optional HTTPS-capable `logo_url` on canonical brand masters and embedded
+  brand references.
+- Stable canonical brand identity in `BrandRef.id`, matching the master Mongo
+  ObjectId represented as a 24-character hexadecimal string.
+
+### Fixed / 修正
+
+- Removes stale SKU-product snapshot modelling from the shared contract so
+  SKU membership has one authoritative source.
+
+### Other Changes / 其他變更
+
+- Supply-owned brand activity, validation, API routes, persistence indexes,
+  and product-browse endpoints remain implementation concerns in
+  Backend-Supply rather than shared DTO fields.
+
+### Contract Files Changed / 契約檔案變更
+
+- `pkg/contracts/product/brand.go`
+- `pkg/contracts/product/storefront.go`
+- `pkg/contracts/category/sku.go`
+- `pkg/contracts/analytics/facts.go`
+- Module/version metadata, model-manifest, and JSON-shape tests.
+
+### Compatibility Notes / 相容性
+
+- This is a hard major-version cutover. Existing `/v19` consumers continue to
+  work against `v19.0.0`; they must not mix `/v19` types with `/v20` types.
+- Existing data must be imported in the v20 clean shape. This release does not
+  provide a live-data migration or compatibility read path.
+
+### Consumer Action / 使用方動作
+
+- Pin `github.com/Potato-Mart/Backend-Shared-Contract/v20 v20.0.0` and update
+  imports to `/v20`.
+- Update catalog consumers to link brands by `brand_ref.id`, use slugs for
+  public navigation, and stop reading/writing `brand_key` and brand summaries.
+- Fetch related products through Backend-Supply relationship endpoints instead
+  of a `SKU.products` response field.
 
 ## v19.0.0 (2026-07-27) - Admin Portal Hard Cutover
 

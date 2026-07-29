@@ -3,8 +3,8 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/customer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/customer"
 )
 
 // RetailCustomerCommerceProfile groups aggregated commerce statistics. Values

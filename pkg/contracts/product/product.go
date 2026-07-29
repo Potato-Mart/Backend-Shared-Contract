@@ -3,12 +3,12 @@ package product
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/shared"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/customer"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/product"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/sales"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/shared"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/customer"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/product"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/sales"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/warehouse"
 )
 
 // Product is the master record for one sellable unit (v7.0.0).

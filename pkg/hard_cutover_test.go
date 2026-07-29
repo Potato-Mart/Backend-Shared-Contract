@@ -10,13 +10,17 @@ import (
 	"testing"
 )
 
-func TestV19ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
+func TestV20ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	removedIdentifiers := map[string]struct{}{
 		"MembershipOwnerRef":              {},
 		"MembershipOwnerType":             {},
 		"EligibleOwnerTypes":              {},
 		"PackingSessionStatusSyncPending": {},
 		"SortOrder":                       {},
+		"BrandKey":                        {},
+		"BrandSummary":                    {},
+		"ActiveProductCount":              {},
+		"WholesaleProductCount":           {},
 	}
 	err := filepath.WalkDir(".", func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
@@ -38,7 +42,7 @@ func TestV19ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		ast.Inspect(file, func(node ast.Node) bool {
 			if identifier, ok := node.(*ast.Ident); ok {
 				if _, removed := removedIdentifiers[identifier.Name]; removed {
-					t.Errorf("%s contains removed v19 identifier %s", path, identifier.Name)
+					t.Errorf("%s contains removed v20 identifier %s", path, identifier.Name)
 				}
 			}
 			field, ok := node.(*ast.Field)

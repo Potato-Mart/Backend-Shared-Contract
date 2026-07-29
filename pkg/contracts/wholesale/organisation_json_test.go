@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/wholesale"
-	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/wholesale"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/wholesale"
 )
 
 func TestWholesaleOrganisationJSONShape(t *testing.T) {

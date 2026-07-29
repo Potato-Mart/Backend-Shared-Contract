@@ -2,7 +2,7 @@
 // and checkout benefits. Membership ownership remains retail-only.
 package benefit
 
-import benefitenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/benefit"
+import benefitenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/benefit"
 
 // OwnerRef is the stable business owner of a non-membership benefit.
 type OwnerRef struct {

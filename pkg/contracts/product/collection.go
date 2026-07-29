@@ -1,6 +1,6 @@
 package product
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
 
 type CollectionRef struct {
 	ID   string                 `json:"id"`

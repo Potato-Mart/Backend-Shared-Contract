@@ -1,8 +1,8 @@
 package membership
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/membership"
 )
 
 // MembershipTier defines the qualification and benefit rules for the global

@@ -3,7 +3,7 @@ package promotion
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
 )
 
 // ReceiptOffer is the buyer/POS-safe projection of one active promotion. It

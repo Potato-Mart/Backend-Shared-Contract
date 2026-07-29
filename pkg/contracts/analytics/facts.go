@@ -3,16 +3,16 @@ package analytics
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
 )
 
 // OrderItemFact is the immutable product and merchandising snapshot used by
-// sales rollups. Dimension values are canonical keys captured at purchase
+// sales rollups. Dimension values are canonical identifiers captured at purchase
 // time, so later catalogue edits cannot rewrite historical analytics.
 type OrderItemFact struct {
 	ProductSKUCode string       `json:"product_sku_code"`
 	ProductName    string       `json:"product_name,omitempty"`
-	BrandKey       string       `json:"brand_key,omitempty"`
+	BrandID        string       `json:"brand_id,omitempty"`
 	StorageType    string       `json:"storage_type,omitempty"`
 	CollectionSlug string       `json:"collection_slug,omitempty"`
 	CategorySlugs  []string     `json:"category_slugs,omitempty"`
@@ -25,7 +25,7 @@ type OrderItemFact struct {
 // line-level refund. Amount-only refunds intentionally carry no item rows.
 type RefundItemFact struct {
 	ProductSKUCode string       `json:"product_sku_code"`
-	BrandKey       string       `json:"brand_key,omitempty"`
+	BrandID        string       `json:"brand_id,omitempty"`
 	StorageType    string       `json:"storage_type,omitempty"`
 	CollectionSlug string       `json:"collection_slug,omitempty"`
 	CategorySlugs  []string     `json:"category_slugs,omitempty"`

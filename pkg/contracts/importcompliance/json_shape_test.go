@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/contracts/importcompliance"
-	importcomplianceenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/importcompliance"
-	purchaseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/purchase"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/importcompliance"
+	importcomplianceenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/importcompliance"
+	purchaseenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/purchase"
 )
 
 func TestImportSettingsJSONUsesFixedPointFields(t *testing.T) {

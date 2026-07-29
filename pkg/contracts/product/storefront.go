@@ -3,9 +3,9 @@ package product
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/common"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/product"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v19/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/product"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/warehouse"
 )
 
 // StorefrontPricing contains only prices approved for the current storefront
@@ -30,8 +30,7 @@ type StorefrontPromotionBadge struct {
 
 // StorefrontProduct is the shared customer-safe catalogue projection consumed
 // by retail and approved wholesale storefronts. Exact expiry is omitted unless
-// StorefrontDisplay explicitly allows it. BrandKey is the optional immutable,
-// lowercase, URL-safe brand navigation and exact-filter key.
+// StorefrontDisplay explicitly allows it.
 // StorefrontOrigin is the customer-facing country-of-origin display block.
 type StorefrontOrigin struct {
 	CountryCode string                 `json:"country_code"`
@@ -44,7 +43,6 @@ type StorefrontProduct struct {
 	SKU                 string                        `json:"sku"`
 	Name                string                        `json:"name"`
 	Description         []common.LocalizedDescription `json:"description,omitempty"`
-	BrandKey            string                        `json:"brand_key,omitempty"`
 	BrandRef            *BrandRef                     `json:"brand_ref,omitempty"`
 	Storage             warehouseenum.StorageType     `json:"storage,omitempty"`
 	Status              productenum.ProductStatus     `json:"status,omitempty"`
