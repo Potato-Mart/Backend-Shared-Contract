@@ -1,15 +1,16 @@
 // Package campaign defines the Campaign content model: admin-authored
 // banners, announcements, modals and notices surfaced across every storefront
 // surface (3 web + 2 mobile clients). A campaign is pure presentational
-// content with scheduling and audience targeting; it carries no pricing logic
-// (that is promotion's job — a campaign may LINK to a promotion via CTAHref).
+// content with scheduling and audience targeting; it carries no pricing logic.
+// PromotionID links optional Pricing-owned promotion content without embedding
+// any discount rules.
 package campaign
 
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
-	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/campaign"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
+	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/campaign"
 )
 
 // Audience narrows who a campaign is shown to. An empty field means "any";
@@ -21,18 +22,33 @@ type Audience struct {
 	Region       string                            `json:"region,omitempty"`
 }
 
+// CTADestination is the parsed, allowlisted route for a campaign call to
+// action. Services validate that only fields relevant to Type are populated.
+// CTAHref remains the canonical authored href for existing storefront clients.
+type CTADestination struct {
+	Type           campaignenum.CampaignCTADestinationType `json:"type"`
+	ProductSKUCode string                                  `json:"product_sku_code,omitempty"`
+	CollectionSlug string                                  `json:"collection_slug,omitempty"`
+	CategorySlug   string                                  `json:"category_slug,omitempty"`
+	PromotionID    string                                  `json:"promotion_id,omitempty"`
+}
+
 // Campaign is one piece of scheduled, targeted storefront content.
 type Campaign struct {
-	ID          string `json:"id,omitempty"`
-	CampaignKey string `json:"campaign_key"`
-	SeriesKey   string `json:"series_key,omitempty"`
-	Title       string `json:"title"`
-	Message     string `json:"message,omitempty"`
-	CTAText     string `json:"cta_text,omitempty"`
-	CTAHref     string `json:"cta_href,omitempty"`
+	ID          string          `json:"id,omitempty"`
+	CampaignKey string          `json:"campaign_key"`
+	SeriesKey   string          `json:"series_key,omitempty"`
+	PromotionID string          `json:"promotion_id,omitempty"`
+	Title       string          `json:"title"`
+	Message     string          `json:"message,omitempty"`
+	CTAText     string          `json:"cta_text,omitempty"`
+	CTAHref     string          `json:"cta_href,omitempty"`
+	CTA         *CTADestination `json:"cta,omitempty"`
 
-	// MediaURL is the slide/hero image (used by home_hero, modal). BackgroundToken
-	// is an optional theme token name for the banner background.
+	// MediaID is the managed media identity. MediaURL is the stable backend
+	// content URL projected for storefronts (used by home_hero and modal).
+	// BackgroundToken is an optional theme token name for banner styling.
+	MediaID         string `json:"media_id,omitempty"`
 	MediaURL        string `json:"media_url,omitempty"`
 	BackgroundToken string `json:"background_token,omitempty"`
 
@@ -50,12 +66,15 @@ type Campaign struct {
 	StartsAt *time.Time `json:"starts_at,omitempty"`
 	EndsAt   *time.Time `json:"ends_at,omitempty"`
 
-	Audience    *Audience                   `json:"audience,omitempty"`
-	Targets     CampaignTarget              `json:"targets,omitempty"`
-	Planning    *CampaignPlanning           `json:"planning,omitempty"`
-	Status      campaignenum.CampaignStatus `json:"status"`
-	ActivatedAt *time.Time                  `json:"activated_at,omitempty"`
-	ArchivedAt  *time.Time                  `json:"archived_at,omitempty"`
+	Audience           *Audience                   `json:"audience,omitempty"`
+	Targets            CampaignTarget              `json:"targets,omitempty"`
+	Planning           *CampaignPlanning           `json:"planning,omitempty"`
+	Status             campaignenum.CampaignStatus `json:"status"`
+	Revision           int64                       `json:"revision"`
+	ActivationRevision int64                       `json:"activation_revision"`
+	ActivatedAt        *time.Time                  `json:"activated_at,omitempty"`
+	DeactivatedAt      *time.Time                  `json:"deactivated_at,omitempty"`
+	ArchivedAt         *time.Time                  `json:"archived_at,omitempty"`
 
 	common.AuditFields
 }

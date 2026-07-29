@@ -8,7 +8,8 @@ func TestCodeIsValidAndString(t *testing.T) {
 		CodeConflict, CodeUnauthorized, CodeForbidden, CodeTooManyRequests,
 		CodeRequestTooLarge, CodeServiceUnavailable, CodeAuthInvalidCredentials, CodeAuthInvalidToken,
 		CodeAuthExpiredToken, CodeAuthWrongPortal, CodeAuthAccountDisabled,
-		CodeAuthMFARequired, CodeAuthReauthRequired, CodeSecurityPolicyViolation,
+		CodeAuthMFARequired, CodeAuthReauthRequired, CodeEmailVerificationRequired,
+		CodeSecurityPolicyViolation,
 		CodeIdentityAccountTypeNotAllowed, CodeIdentityPortalAccessDenied,
 		CodeIdentityPortalAccessRevoked, CodeIdentityAccountSuspended,
 		CodeIdentityAuthIdentityDisabled, CodeIdentityMFARequired,
@@ -18,7 +19,7 @@ func TestCodeIsValidAndString(t *testing.T) {
 		CodeMembershipRewardUnavailable, CodeMembershipPointReservationExpired,
 		CodeUserEmailTaken, CodeSKUCodeTaken, CodeStorageLocationCodeTaken,
 		CodeProductCodeTaken, CodeStorageMismatch, CodeInsufficientStock,
-		CodeOrderInvalidTransition, CodeOrderTerminal, CodeOrderEmpty,
+		CodeOrderInvalidTransition, CodeOrderTerminal, CodeOrderEmpty, CodeCartNotActive,
 		CodeDiscountNotFound, CodeDiscountInactive, CodeDiscountNotStarted,
 		CodeDiscountExpired, CodeDiscountExhausted, CodeDiscountMinNotMet,
 		CodeDiscountCodeTaken, CodeDiscountInapplicable,
@@ -38,5 +39,9 @@ func TestCodeIsValidAndString(t *testing.T) {
 
 	if Code("__invalid__").IsValid() {
 		t.Fatal("invalid code should not be valid")
+	}
+	if CodeCartNotActive.String() != "CART_NOT_ACTIVE" ||
+		CodeEmailVerificationRequired.String() != "EMAIL_VERIFICATION_REQUIRED" {
+		t.Fatal("v21 mobile recovery error codes changed")
 	}
 }

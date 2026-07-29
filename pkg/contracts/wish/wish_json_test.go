@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/wish"
-	wishenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/wish"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/wish"
+	wishenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/wish"
 )
 
 func TestWishProposalJSONIsIdentityFree(t *testing.T) {

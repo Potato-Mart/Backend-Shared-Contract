@@ -13,10 +13,10 @@ import (
 	"testing"
 )
 
-// v20ModelPackageManifest classifies every production package. Adding an
+// v21ModelPackageManifest classifies every production package. Adding an
 // exported type changes the digest below and requires an explicit manifest
 // review instead of silently expanding the shared module.
-var v20ModelPackageManifest = map[string]string{
+var v21ModelPackageManifest = map[string]string{
 	"common":                     "value",
 	"contracts/analytics":        "record",
 	"contracts/benefit":          "value",
@@ -28,12 +28,12 @@ var v20ModelPackageManifest = map[string]string{
 	"contracts/identity":         "entity,claims,event,session,record",
 	"contracts/importcompliance": "entity,record,snapshot,value",
 	"contracts/marketing":        "entity,record",
-	"contracts/membership":       "entity,record",
+	"contracts/membership":       "entity,record,value",
 	"contracts/notification":     "entity,event,record",
 	"contracts/payments":         "entity,event,snapshot,record,value",
 	"contracts/pos":              "entity,record,snapshot",
 	"contracts/product":          "entity,event,snapshot,value",
-	"contracts/promotion":        "entity,record,value",
+	"contracts/promotion":        "entity,event,record,value",
 	"contracts/purchase":         "entity,record",
 	"contracts/review":           "entity,record,value",
 	"contracts/sales":            "entity,event,snapshot,record",
@@ -71,13 +71,15 @@ var v20ModelPackageManifest = map[string]string{
 	"versioning":                 "module-metadata",
 }
 
-// Reviewed for the v20 catalog hard cut: brand masters and product references
-// use Mongo-backed brand IDs, localized names, immutable slugs, and optional
-// logo URLs; BrandSummary and brand-key fields are absent. SKU masters no
-// longer embed derived product snapshots.
-const v20ExportedTypeManifestDigest = "a358d9027f761b6030149e98fa72ce7a5e5b8bfcac7f8de2b3d1a84eb8e1e9ee"
+// Reviewed for the v21 delivery, campaign, notification, and wallet cutover:
+// v20 BrandID/BrandRef identity remains canonical; delivery schedules and
+// preferences are modelled; campaigns link promotions and expose media, typed
+// CTA, content/activation revisions, and safe storefront events; notification
+// campaign references and push wire values are typed; points policy metadata
+// is reusable; quiet-hours and service-local FCM/coupon-preview shapes are absent.
+const v21ExportedTypeManifestDigest = "cc3a8493be29692b30813ac17645f3ad5d3469b5fa48351d736477ebe891e15c"
 
-func TestV20ExportedTypesMatchModelManifest(t *testing.T) {
+func TestV21ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)
 	var entries []string
 	err := filepath.WalkDir(".", func(path string, entry fs.DirEntry, walkErr error) error {
@@ -91,9 +93,9 @@ func TestV20ExportedTypesMatchModelManifest(t *testing.T) {
 		if packagePath == "." {
 			return nil
 		}
-		class, classified := v20ModelPackageManifest[packagePath]
+		class, classified := v21ModelPackageManifest[packagePath]
 		if !classified {
-			t.Errorf("%s is not classified in the v20 model manifest", packagePath)
+			t.Errorf("%s is not classified in the v21 model manifest", packagePath)
 			return nil
 		}
 		seenPackages[packagePath] = true
@@ -118,9 +120,9 @@ func TestV20ExportedTypesMatchModelManifest(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("read v20 model manifest: %v", err)
+		t.Fatalf("read v21 model manifest: %v", err)
 	}
-	for packagePath := range v20ModelPackageManifest {
+	for packagePath := range v21ModelPackageManifest {
 		if !seenPackages[packagePath] {
 			t.Errorf("manifest package %s has no production source", packagePath)
 		}
@@ -128,7 +130,7 @@ func TestV20ExportedTypesMatchModelManifest(t *testing.T) {
 	sort.Strings(entries)
 	sum := sha256.Sum256([]byte(strings.Join(entries, "\n")))
 	got := hex.EncodeToString(sum[:])
-	if got != v20ExportedTypeManifestDigest {
+	if got != v21ExportedTypeManifestDigest {
 		t.Fatalf("exported model manifest changed: got %s; classify the change and update the reviewed digest", got)
 	}
 }

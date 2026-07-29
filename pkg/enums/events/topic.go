@@ -1,7 +1,8 @@
 package eventsenum
 
-// EventTopic identifies a Potato Mart Pub/Sub topic. One topic exists per
-// aggregate family; every subscriber owns its own subscription and DLQ.
+// EventTopic identifies a Potato Mart Pub/Sub topic. Domain-fact topics are
+// aggregate-family scoped; storefront-events carries only customer-safe
+// invalidation facts. Every subscriber owns its own subscription and DLQ.
 type EventTopic string
 
 const (
@@ -12,13 +13,14 @@ const (
 	EventTopicFulfilmentEvents EventTopic = "fulfilment-events"
 	EventTopicCustomerEvents   EventTopic = "customer-events"
 	EventTopicProductStats     EventTopic = "product-stats"
+	EventTopicStorefrontEvents EventTopic = "storefront-events"
 )
 
 func (t EventTopic) IsValid() bool {
 	switch t {
 	case EventTopicOrderEvents, EventTopicPaymentEvents, EventTopicRefundEvents,
 		EventTopicStockEvents, EventTopicFulfilmentEvents, EventTopicCustomerEvents,
-		EventTopicProductStats:
+		EventTopicProductStats, EventTopicStorefrontEvents:
 		return true
 	default:
 		return false
@@ -61,6 +63,8 @@ const (
 	EventTypeWalletGiftCardIssued   EventType = "wallet.gift_card_issued"
 
 	EventTypeProductSalesPerformanceUpdated EventType = "product.sales_performance_updated"
+	EventTypePromotionChanged               EventType = "promotion.changed"
+	EventTypeCampaignChanged                EventType = "campaign.changed"
 
 	EventTypeAnalyticsOrderFact   EventType = "analytics.order_fact"
 	EventTypeAnalyticsPaymentFact EventType = "analytics.payment_fact"
@@ -80,6 +84,7 @@ func (t EventType) IsValid() bool {
 		EventTypeCustomerRegistered, EventTypeCustomerProfileUpdated,
 		EventTypeCustomerConsentChanged, EventTypeWalletGiftCardIssued,
 		EventTypeProductSalesPerformanceUpdated,
+		EventTypePromotionChanged, EventTypeCampaignChanged,
 		EventTypeAnalyticsOrderFact, EventTypeAnalyticsPaymentFact,
 		EventTypeAnalyticsRefundFact:
 		return true

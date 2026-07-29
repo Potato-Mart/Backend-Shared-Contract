@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/promotion"
 )
 
 // A fixed-amount group discount must cross the wire as common.Money minor units,

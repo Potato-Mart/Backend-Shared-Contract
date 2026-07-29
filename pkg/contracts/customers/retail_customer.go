@@ -3,9 +3,10 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/shared"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/customer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/shipping"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/customer"
 )
 
 // RetailCustomer is the grouped business profile for a retailCustomer
@@ -28,6 +29,8 @@ type RetailCustomer struct {
 	ProfileCompletion     *RetailCustomerProfileCompletion `json:"profile_completion,omitempty"`
 	DefaultShipping       *common.ContactAddress           `json:"default_shipping,omitempty"`
 	DefaultBilling        *common.ContactAddress           `json:"default_billing,omitempty"`
+	BillingSameAsDelivery bool                             `json:"billing_same_as_delivery"`
+	PreferredDeliverySlot *shipping.PreferredDeliverySlot  `json:"preferred_delivery_slot,omitempty"`
 	ShippingAddresses     []common.ContactAddress          `json:"shipping_addresses,omitempty"`
 	History               []shared.HistoryEntry            `json:"history,omitempty"`
 

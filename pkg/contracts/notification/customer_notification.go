@@ -3,7 +3,7 @@ package notification
 import (
 	"time"
 
-	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/notification"
+	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/notification"
 )
 
 // CustomerNotificationDelivery records one channel's durable delivery state.
@@ -15,6 +15,17 @@ type CustomerNotificationDelivery struct {
 	DeliveredAt   *time.Time                                          `json:"delivered_at,omitempty"`
 	ErrorCode     string                                              `json:"error_code,omitempty"`
 	ErrorMessage  string                                              `json:"error_message,omitempty"`
+}
+
+// CampaignReference gives a campaign notification enough typed identity to
+// refetch authoritative content without embedding campaign copy or provider
+// destinations in the durable notification row.
+type CampaignReference struct {
+	CampaignID         string `json:"campaign_id"`
+	CampaignKey        string `json:"campaign_key"`
+	PromotionID        string `json:"promotion_id,omitempty"`
+	ActivationRevision int64  `json:"activation_revision"`
+	ContentRevision    int64  `json:"content_revision"`
 }
 
 // CustomerNotification is the customer-safe portal projection. Recipient
@@ -29,6 +40,7 @@ type CustomerNotification struct {
 	OrderNumber    string                                      `json:"order_number,omitempty"`
 	ProductSKUCode string                                      `json:"product_sku_code,omitempty"`
 	ProductName    string                                      `json:"product_name,omitempty"`
+	Campaign       *CampaignReference                          `json:"campaign,omitempty"`
 	Deliveries     []CustomerNotificationDelivery              `json:"deliveries,omitempty"`
 	CreatedAt      time.Time                                   `json:"created_at"`
 	Status         notificationenum.CustomerNotificationStatus `json:"status"`

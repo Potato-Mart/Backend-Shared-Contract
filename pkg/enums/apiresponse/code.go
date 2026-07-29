@@ -16,14 +16,15 @@ const (
 	CodeServiceUnavailable Code = "SERVICE_UNAVAILABLE"
 
 	// Auth
-	CodeAuthInvalidCredentials  Code = "AUTH_INVALID_CREDENTIALS"
-	CodeAuthInvalidToken        Code = "AUTH_INVALID_TOKEN"
-	CodeAuthExpiredToken        Code = "AUTH_EXPIRED_TOKEN"
-	CodeAuthWrongPortal         Code = "AUTH_WRONG_PORTAL"
-	CodeAuthAccountDisabled     Code = "AUTH_ACCOUNT_DISABLED"
-	CodeAuthMFARequired         Code = "AUTH_MFA_REQUIRED"
-	CodeAuthReauthRequired      Code = "AUTH_REAUTH_REQUIRED"
-	CodeSecurityPolicyViolation Code = "SECURITY_POLICY_VIOLATION"
+	CodeAuthInvalidCredentials    Code = "AUTH_INVALID_CREDENTIALS"
+	CodeAuthInvalidToken          Code = "AUTH_INVALID_TOKEN"
+	CodeAuthExpiredToken          Code = "AUTH_EXPIRED_TOKEN"
+	CodeAuthWrongPortal           Code = "AUTH_WRONG_PORTAL"
+	CodeAuthAccountDisabled       Code = "AUTH_ACCOUNT_DISABLED"
+	CodeAuthMFARequired           Code = "AUTH_MFA_REQUIRED"
+	CodeAuthReauthRequired        Code = "AUTH_REAUTH_REQUIRED"
+	CodeEmailVerificationRequired Code = "EMAIL_VERIFICATION_REQUIRED"
+	CodeSecurityPolicyViolation   Code = "SECURITY_POLICY_VIOLATION"
 
 	// Identity/access
 	CodeIdentityAccountTypeNotAllowed            Code = "IDENTITY_ACCOUNT_TYPE_NOT_ALLOWED"
@@ -58,6 +59,7 @@ const (
 	CodeOrderInvalidTransition Code = "ORDER_INVALID_TRANSITION"
 	CodeOrderTerminal          Code = "ORDER_TERMINAL"
 	CodeOrderEmpty             Code = "ORDER_EMPTY"
+	CodeCartNotActive          Code = "CART_NOT_ACTIVE"
 
 	// Discount
 	CodeDiscountNotFound     Code = "DISCOUNT_NOT_FOUND"
@@ -87,6 +89,7 @@ func (c Code) IsValid() bool {
 		CodeRequestTooLarge, CodeServiceUnavailable, CodeAuthInvalidCredentials, CodeAuthInvalidToken,
 		CodeAuthExpiredToken, CodeAuthWrongPortal, CodeAuthAccountDisabled,
 		CodeAuthMFARequired, CodeAuthReauthRequired, CodeSecurityPolicyViolation,
+		CodeEmailVerificationRequired,
 		CodeIdentityAccountTypeNotAllowed, CodeIdentityPortalAccessDenied,
 		CodeIdentityPortalAccessRevoked, CodeIdentityAccountSuspended,
 		CodeIdentityAuthIdentityDisabled, CodeIdentityMFARequired,
@@ -96,7 +99,7 @@ func (c Code) IsValid() bool {
 		CodeMembershipRewardUnavailable, CodeMembershipPointReservationExpired,
 		CodeUserEmailTaken, CodeSKUCodeTaken, CodeStorageLocationCodeTaken,
 		CodeProductCodeTaken, CodeStorageMismatch, CodeInsufficientStock,
-		CodeOrderInvalidTransition, CodeOrderTerminal, CodeOrderEmpty,
+		CodeOrderInvalidTransition, CodeOrderTerminal, CodeOrderEmpty, CodeCartNotActive,
 		CodeDiscountNotFound, CodeDiscountInactive, CodeDiscountNotStarted,
 		CodeDiscountExpired, CodeDiscountExhausted, CodeDiscountMinNotMet,
 		CodeDiscountCodeTaken, CodeDiscountInapplicable,

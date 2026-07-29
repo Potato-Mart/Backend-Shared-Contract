@@ -6,11 +6,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/benefit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/wallet"
-	benefitenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/benefit"
-	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/wallet"
+	benefitenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/benefit"
+	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/wallet"
 )
 
 func TestCustomerWalletRoundTrip(t *testing.T) {
@@ -25,7 +26,11 @@ func TestCustomerWalletRoundTrip(t *testing.T) {
 			{Type: walletenum.WalletInstrumentTypePoints, Code: "mem_1"},
 		},
 		Summary: wallet.CustomerWalletSummary{
-			AvailablePoints:               1000,
+			AvailablePoints: 1000,
+			PointsPolicy: &membership.PointsPolicy{
+				PointsPerMinorUnit: 2, MinimumEligibleBalance: 1000,
+				RedemptionStepPoints: 200, MaximumRedemptionPoints: 1000,
+			},
 			GiftCardCommittedBalanceTotal: bal,
 			GiftCardReservedBalanceTotal:  reserved,
 			GiftCardAvailableBalanceTotal: available,
@@ -40,6 +45,11 @@ func TestCustomerWalletRoundTrip(t *testing.T) {
 	}
 	if strings.Contains(string(payload), `"balance":`) || !strings.Contains(string(payload), `"available_balance"`) {
 		t.Fatalf("wallet JSON must expose explicit gift-card balances: %s", payload)
+	}
+	for _, field := range []string{`"points_per_minor_unit":2`, `"minimum_eligible_balance":1000`, `"redemption_step_points":200`, `"maximum_redemption_points":1000`} {
+		if !strings.Contains(string(payload), field) {
+			t.Fatalf("wallet points policy missing %s: %s", field, payload)
+		}
 	}
 
 	var decoded wallet.CustomerWallet

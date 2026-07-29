@@ -3,8 +3,8 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/enums/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/payment"
 )
 
 // CustomerPaymentSummary is the customer-safe projection of how an order was

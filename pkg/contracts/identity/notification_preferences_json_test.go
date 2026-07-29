@@ -2,9 +2,10 @@ package identity_test
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/contracts/identity"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/identity"
 )
 
 func TestUserNotificationTopicsJSONShape(t *testing.T) {
@@ -29,6 +30,9 @@ func TestUserNotificationTopicsJSONShape(t *testing.T) {
 	var got map[string]any
 	if err := json.Unmarshal(raw, &got); err != nil {
 		t.Fatalf("unmarshal notification preferences: %v", err)
+	}
+	if strings.Contains(string(raw), "quiet_hours") {
+		t.Fatalf("removed quiet-hours field reappeared: %s", raw)
 	}
 	topics, ok := got["topics"].(map[string]any)
 	if !ok {

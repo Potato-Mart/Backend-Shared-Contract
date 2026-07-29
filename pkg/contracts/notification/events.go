@@ -3,7 +3,7 @@ package notification
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
 )
 
 // GiftCardIssuedEvent requests delivery of the email for a captured gift-card

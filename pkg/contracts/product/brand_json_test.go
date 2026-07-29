@@ -5,10 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v20/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
 )
 
-func TestBrandJSONUsesV20PublicShape(t *testing.T) {
+func TestBrandJSONUsesV21PublicShape(t *testing.T) {
 	want := Brand{
 		ID:      "64c13ab08edf48a008793ca1",
 		Slug:    "happy-potato",
@@ -38,7 +38,7 @@ func TestBrandJSONUsesV20PublicShape(t *testing.T) {
 	}
 }
 
-func TestBrandRefUsesV20IdentityAndDisplayShape(t *testing.T) {
+func TestBrandRefUsesV21IdentityAndDisplayShape(t *testing.T) {
 	body, err := json.Marshal(BrandRef{
 		ID:      "64c13ab08edf48a008793ca1",
 		Slug:    "happy-potato",
