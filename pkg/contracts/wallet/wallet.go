@@ -34,7 +34,13 @@ type WalletInstrument struct {
 	CommittedBalance *common.Money                   `json:"committed_balance,omitempty"`
 	ReservedBalance  *common.Money                   `json:"reserved_balance,omitempty"`
 	AvailableBalance *common.Money                   `json:"available_balance,omitempty"`
-	ExpiresAt        *time.Time                      `json:"expires_at,omitempty"`
+	IssuedAt         *time.Time                      `json:"issued_at,omitempty"`
+	ActivatedAt      *time.Time                      `json:"activated_at,omitempty"`
+	// RedeemedAt applies only to single-use instruments such as vouchers,
+	// coupons, and rewards. Re-spendable gift cards expose transaction history
+	// instead of a singular redemption timestamp.
+	RedeemedAt *time.Time `json:"redeemed_at,omitempty"`
+	ExpiresAt  *time.Time `json:"expires_at,omitempty"`
 }
 
 // CustomerWalletSummary is a thin headline projection. The points figure mirrors
@@ -43,6 +49,7 @@ type WalletInstrument struct {
 // storefront headline totals use GiftCardAvailableBalanceTotal.
 type CustomerWalletSummary struct {
 	AvailablePoints               int                      `json:"available_points"`
+	PointDebt                     int                      `json:"point_debt"`
 	PointsPolicy                  *membership.PointsPolicy `json:"points_policy,omitempty"`
 	GiftCardCommittedBalanceTotal common.Money             `json:"gift_card_committed_balance_total"`
 	GiftCardReservedBalanceTotal  common.Money             `json:"gift_card_reserved_balance_total"`

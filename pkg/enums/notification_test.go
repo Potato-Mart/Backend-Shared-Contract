@@ -12,6 +12,7 @@ func TestNotificationEnums(t *testing.T) {
 			name: "notification.CustomerNotificationStatus",
 			valid: []stringEnum{
 				notificationenum.CustomerNotificationStatusUnread,
+				notificationenum.CustomerNotificationStatusRead,
 				notificationenum.CustomerNotificationStatusDismissed,
 			},
 			invalid: notificationenum.CustomerNotificationStatus("__invalid__"),

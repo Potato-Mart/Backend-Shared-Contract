@@ -19,8 +19,11 @@ type PointsPolicy struct {
 }
 
 // PointLedgerEntry is a single points transaction for a retail customer.
-// Positive delta = earned; negative = redeemed or expired. Remaining tracks how
+// Positive Delta = earned; negative = redeemed or expired. Remaining tracks how
 // many points from an earn row are still available for FIFO redemption.
+// DebtDelta is positive when debt is incurred and negative when it is repaid;
+// DebtAfter is always non-negative. The pointers distinguish legacy rows with
+// no debt accounting from a debt-aware row whose resulting debt is zero.
 type PointLedgerEntry struct {
 	ID                        string                               `json:"id"`
 	CustomerNumber            string                               `json:"customer_number"`
@@ -30,6 +33,8 @@ type PointLedgerEntry struct {
 	RelatedReservationID      string                               `json:"related_reservation_id,omitempty"`
 	RelatedRewardRedemptionID string                               `json:"related_reward_redemption_id,omitempty"`
 	BalanceAfter              int                                  `json:"balance_after"`
+	DebtDelta                 *int                                 `json:"debt_delta,omitempty"`
+	DebtAfter                 *int                                 `json:"debt_after,omitempty"`
 	Remaining                 int                                  `json:"remaining"`
 	ExpiresAt                 *time.Time                           `json:"expires_at,omitempty"`
 	Allocations               []PointAllocation                    `json:"allocations,omitempty"`
@@ -62,6 +67,7 @@ type PointBalanceBreakdown struct {
 	TotalPoints     int           `json:"total_points"`
 	ReservedPoints  int           `json:"reserved_points"`
 	AvailablePoints int           `json:"available_points"`
+	PointDebt       int           `json:"point_debt"`
 	ExpiringPoints  int           `json:"expiring_points"`
 	Buckets         []PointBucket `json:"buckets,omitempty"`
 	CalculatedAt    time.Time     `json:"calculated_at"`

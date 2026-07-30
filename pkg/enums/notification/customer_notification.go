@@ -1,11 +1,12 @@
 package notification
 
-// CustomerNotificationStatus is the customer-visible inbox lifecycle. Reading
-// a notification is a terminal dismissal in the customer notification centre.
+// CustomerNotificationStatus is the customer-visible inbox lifecycle. Read
+// notifications remain visible until the customer explicitly dismisses them.
 type CustomerNotificationStatus string
 
 const (
 	CustomerNotificationStatusUnread    CustomerNotificationStatus = "unread"
+	CustomerNotificationStatusRead      CustomerNotificationStatus = "read"
 	CustomerNotificationStatusDismissed CustomerNotificationStatus = "dismissed"
 )
 
@@ -13,7 +14,8 @@ func (s CustomerNotificationStatus) String() string { return string(s) }
 
 func (s CustomerNotificationStatus) IsValid() bool {
 	switch s {
-	case CustomerNotificationStatusUnread, CustomerNotificationStatusDismissed:
+	case CustomerNotificationStatusUnread, CustomerNotificationStatusRead,
+		CustomerNotificationStatusDismissed:
 		return true
 	default:
 		return false

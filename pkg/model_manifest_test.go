@@ -71,13 +71,11 @@ var v21ModelPackageManifest = map[string]string{
 	"versioning":                 "module-metadata",
 }
 
-// Reviewed for the v21 delivery, campaign, notification, and wallet cutover:
-// v20 BrandID/BrandRef identity remains canonical; delivery schedules and
-// preferences are modelled; campaigns link promotions and expose media, typed
-// CTA, content/activation revisions, and safe storefront events; notification
-// campaign references and push wire values are typed; points policy metadata
-// is reusable; quiet-hours and service-local FCM/coupon-preview shapes are absent.
-const v21ExportedTypeManifestDigest = "cc3a8493be29692b30813ac17645f3ad5d3469b5fa48351d736477ebe891e15c"
+// Reviewed for the v21.1 backend-gaps release: the additive exported surface is
+// limited to PointAwardStatus, GiftCardDenominationPolicy, and
+// VoucherClaimIssuedEvent. Routes, HTTP DTOs, validation, persistence,
+// authorization, timers, and service business behavior remain absent.
+const v21ExportedTypeManifestDigest = "c493c1bd0ef23d897ca39f815662daf8ecf965ac0d9a99cba74a58ea2afaa639"
 
 func TestV21ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

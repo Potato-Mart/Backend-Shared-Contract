@@ -170,6 +170,10 @@ func TestOrderJSONRoundTripsPackingProgress(t *testing.T) {
 
 func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 	discount := common.Money{AmountMinor: 500, Currency: "AUD"}
+	pointOccurredAt := time.Date(2026, 7, 30, 1, 2, 3, 0, time.UTC)
+	rewardOccurredAt := pointOccurredAt.Add(time.Second)
+	voucherOccurredAt := pointOccurredAt.Add(2 * time.Second)
+	giftCardOccurredAt := pointOccurredAt.Add(3 * time.Second)
 	order := sales.Order{
 		ID:          "ord_points",
 		OrderNumber: "1002",
@@ -179,6 +183,7 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 			LedgerEntryID:  "ledger_1",
 			Points:         500,
 			DiscountAmount: discount,
+			OccurredAt:     &pointOccurredAt,
 		},
 		RewardRedemptions: []sales.RewardRedemptionSnapshot{
 			{
@@ -188,12 +193,14 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 				RewardType:         membershipenum.MembershipRewardTypeOrderDiscount,
 				PointsSpent:        500,
 				DiscountAmount:     &discount,
+				OccurredAt:         &rewardOccurredAt,
 			},
 		},
 		VoucherRedemption: &sales.VoucherRedemptionSnapshot{
 			VoucherCode:   "VOUCHER-1",
 			AppliedAmount: discount,
 			ReservationID: "benefit_res_1",
+			OccurredAt:    &voucherOccurredAt,
 		},
 		GiftCardRedemptions: []sales.GiftCardRedemptionSnapshot{
 			{
@@ -201,6 +208,7 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 				AppliedAmount:       common.Money{AmountMinor: 2500, Currency: "AUD"},
 				ReservationID:       "benefit_res_1",
 				WalletTransactionID: "wallet_tx_1",
+				OccurredAt:          &giftCardOccurredAt,
 			},
 		},
 	}
@@ -224,5 +232,15 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 	}
 	if !strings.Contains(string(payload), `"applied_amount"`) || !strings.Contains(string(payload), `"wallet_transaction_id":"wallet_tx_1"`) {
 		t.Fatalf("wallet redemption snapshots are incomplete: %s", payload)
+	}
+	for _, timestamp := range []string{
+		`"occurred_at":"2026-07-30T01:02:03Z"`,
+		`"occurred_at":"2026-07-30T01:02:04Z"`,
+		`"occurred_at":"2026-07-30T01:02:05Z"`,
+		`"occurred_at":"2026-07-30T01:02:06Z"`,
+	} {
+		if !strings.Contains(string(payload), timestamp) {
+			t.Fatalf("redemption commit timestamp missing %s: %s", timestamp, payload)
+		}
 	}
 }

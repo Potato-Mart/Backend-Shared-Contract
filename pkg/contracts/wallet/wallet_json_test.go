@@ -19,14 +19,22 @@ func TestCustomerWalletRoundTrip(t *testing.T) {
 	bal := common.Money{AmountMinor: 2500, Currency: "AUD"}
 	reserved := common.Money{AmountMinor: 500, Currency: "AUD"}
 	available := common.Money{AmountMinor: 2000, Currency: "AUD"}
+	activatedAt := now.Add(time.Hour)
+	redeemedAt := now.Add(2 * time.Hour)
 	w := wallet.CustomerWallet{
 		CustomerNumber: "RC-20260727-ABCDEF",
 		Instruments: []wallet.WalletInstrument{
-			{Type: walletenum.WalletInstrumentTypeGiftCard, Code: "GC-1", Status: "active", CommittedBalance: &bal, ReservedBalance: &reserved, AvailableBalance: &available},
+			{
+				Type: walletenum.WalletInstrumentTypeGiftCard, Code: "GC-1", Status: "active",
+				CommittedBalance: &bal, ReservedBalance: &reserved, AvailableBalance: &available,
+				IssuedAt: &now, ActivatedAt: &activatedAt,
+			},
 			{Type: walletenum.WalletInstrumentTypePoints, Code: "mem_1"},
+			{Type: walletenum.WalletInstrumentTypeVoucher, Code: "VOUCHER-1", IssuedAt: &now, RedeemedAt: &redeemedAt},
 		},
 		Summary: wallet.CustomerWalletSummary{
 			AvailablePoints: 1000,
+			PointDebt:       25,
 			PointsPolicy: &membership.PointsPolicy{
 				PointsPerMinorUnit: 2, MinimumEligibleBalance: 1000,
 				RedemptionStepPoints: 200, MaximumRedemptionPoints: 1000,
@@ -46,7 +54,16 @@ func TestCustomerWalletRoundTrip(t *testing.T) {
 	if strings.Contains(string(payload), `"balance":`) || !strings.Contains(string(payload), `"available_balance"`) {
 		t.Fatalf("wallet JSON must expose explicit gift-card balances: %s", payload)
 	}
-	for _, field := range []string{`"points_per_minor_unit":2`, `"minimum_eligible_balance":1000`, `"redemption_step_points":200`, `"maximum_redemption_points":1000`} {
+	for _, field := range []string{
+		`"point_debt":25`,
+		`"issued_at":"2026-06-30T00:00:00Z"`,
+		`"activated_at":"2026-06-30T01:00:00Z"`,
+		`"redeemed_at":"2026-06-30T02:00:00Z"`,
+		`"points_per_minor_unit":2`,
+		`"minimum_eligible_balance":1000`,
+		`"redemption_step_points":200`,
+		`"maximum_redemption_points":1000`,
+	} {
 		if !strings.Contains(string(payload), field) {
 			t.Fatalf("wallet points policy missing %s: %s", field, payload)
 		}
@@ -56,12 +73,41 @@ func TestCustomerWalletRoundTrip(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal wallet: %v", err)
 	}
-	if decoded.CustomerNumber != "RC-20260727-ABCDEF" || len(decoded.Instruments) != 2 ||
+	if decoded.CustomerNumber != "RC-20260727-ABCDEF" || len(decoded.Instruments) != 3 ||
 		decoded.Summary.GiftCardAvailableBalanceTotal.AmountMinor != 2000 {
 		t.Fatalf("wallet did not round-trip: %+v", decoded)
 	}
-	if decoded.Instruments[0].AvailableBalance == nil || decoded.Instruments[0].AvailableBalance.AmountMinor != 2000 {
+	if decoded.Instruments[0].AvailableBalance == nil || decoded.Instruments[0].AvailableBalance.AmountMinor != 2000 ||
+		decoded.Instruments[0].IssuedAt == nil || decoded.Instruments[0].ActivatedAt == nil ||
+		decoded.Instruments[0].RedeemedAt != nil || decoded.Summary.PointDebt != 25 {
 		t.Fatalf("gift-card instrument balance did not round-trip: %+v", decoded.Instruments[0])
+	}
+	if decoded.Instruments[2].RedeemedAt == nil || !decoded.Instruments[2].RedeemedAt.Equal(redeemedAt) {
+		t.Fatalf("single-use instrument lifecycle did not round-trip: %+v", decoded.Instruments[2])
+	}
+}
+
+func TestGiftCardDenominationPolicyRoundTrip(t *testing.T) {
+	policy := wallet.GiftCardDenominationPolicy{
+		Version:             2,
+		Currency:            "AUD",
+		AllowedAmountsMinor: []int64{50_000, 80_000, 100_000, 150_000, 200_000},
+	}
+
+	payload, err := json.Marshal(policy)
+	if err != nil {
+		t.Fatalf("marshal gift-card denomination policy: %v", err)
+	}
+	if string(payload) != `{"version":2,"currency":"AUD","allowed_amounts_minor":[50000,80000,100000,150000,200000]}` {
+		t.Fatalf("gift-card denomination policy JSON = %s", payload)
+	}
+
+	var decoded wallet.GiftCardDenominationPolicy
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal gift-card denomination policy: %v", err)
+	}
+	if decoded.Version != 2 || decoded.Currency != "AUD" || len(decoded.AllowedAmountsMinor) != 5 || decoded.AllowedAmountsMinor[1] != 80_000 {
+		t.Fatalf("gift-card denomination policy did not round-trip: %+v", decoded)
 	}
 }
 

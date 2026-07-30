@@ -58,5 +58,7 @@ type CouponUsageRecord struct {
 	RedeemedOrderNumber string            `json:"redeemed_order_number"`
 	DiscountAmount      common.Money      `json:"discount_amount"`
 	RedeemedAt          time.Time         `json:"redeemed_at"`
+	RefundID            string            `json:"refund_id,omitempty"`
+	RefundedAt          *time.Time        `json:"refunded_at,omitempty"`
 	CreatedAt           time.Time         `json:"created_at"`
 }

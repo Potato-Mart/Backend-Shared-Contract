@@ -66,6 +66,8 @@ func TestCouponUsageRoundTripsWholesaleOwner(t *testing.T) {
 		RedeemedOrderNumber: "MAMA260715ABC123",
 		DiscountAmount:      common.Money{AmountMinor: 1000, Currency: "AUD"},
 		RedeemedAt:          now,
+		RefundID:            "refund_1",
+		RefundedAt:          &now,
 		CreatedAt:           now,
 	}
 
@@ -76,12 +78,23 @@ func TestCouponUsageRoundTripsWholesaleOwner(t *testing.T) {
 	if strings.Contains(string(payload), "customer_number") || !strings.Contains(string(payload), `"owner_type":"wholesale_organisation"`) {
 		t.Fatalf("coupon usage must use the wholesale owner reference: %s", payload)
 	}
+	legacyRecord := record
+	legacyRecord.RefundID = ""
+	legacyRecord.RefundedAt = nil
+	legacyPayload, err := json.Marshal(legacyRecord)
+	if err != nil {
+		t.Fatalf("marshal unrefunded coupon usage: %v", err)
+	}
+	if strings.Contains(string(legacyPayload), "refund_id") || strings.Contains(string(legacyPayload), "refunded_at") {
+		t.Fatalf("unrefunded coupon usage should omit refund audit fields: %s", legacyPayload)
+	}
 
 	var decoded promotion.CouponUsageRecord
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal wholesale coupon usage: %v", err)
 	}
-	if decoded.Owner == nil || decoded.Owner.OwnerID != "ORG-1" {
+	if decoded.Owner == nil || decoded.Owner.OwnerID != "ORG-1" ||
+		decoded.RefundID != "refund_1" || decoded.RefundedAt == nil || !decoded.RefundedAt.Equal(now) {
 		t.Fatalf("wholesale coupon owner did not round-trip: %+v", decoded)
 	}
 }

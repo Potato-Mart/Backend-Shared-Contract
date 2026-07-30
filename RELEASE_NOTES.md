@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v21.1.0` | 2026-07-30 | Minor | Additive backend-gap models for persistent notification read state and consent provenance, refund-linked coupon usage, redemption/wallet timestamps, point award and debt summaries, secret-free voucher claim delivery, and versioned gift-card denomination policy. Keeps the `/v21` module path. |
 | `v21.0.0` | 2026-07-29 | Major | Delivery, campaign, native notification, and wallet-policy cutover: adds revisioned delivery schedules/rates/preferences, campaign-promotion/media/typed-CTA linkage, safe storefront events, typed campaign notification references and push values; removes quiet-hours and requires every consumer to adopt `/v21`. |
 | `v20.0.0` | 2026-07-29 | Major | Catalog brand identity and SKU relationship hard cut: canonical brands use Mongo-backed IDs, immutable slugs, localized names, and optional logo URLs; brand keys, summaries, counters, and embedded SKU product lists are removed. Requires Supply to adopt `/v20` and consumers to migrate explicitly. |
 | `v19.0.0` | 2026-07-27 | Major | Admin Portal hard cutover: retail-only membership keyed by customer number, non-membership benefit ownership, wholesale applications/freight presets, qualified product placement, managed media visibility, analytical facts, and complete removal of deprecated shapes and `sort_order`. Requires every consumer to adopt `/v19`. |
@@ -105,6 +106,84 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v21.1.0 (2026-07-30) - Backend Gap Models and Gift-Card Policy V2
+
+### Breaking Contract Changes / 破壞性契約變更
+
+- None. This is an additive minor release and retains the `/v21` module path.
+
+### Added / 新增
+
+- Notification status value `read`; read notifications remain distinct from
+  dismissed notifications and continue to use the existing optional `read_at`.
+- Retail marketing `push_opt_in` plus optional email, SMS, Line, and push
+  consent timestamps and source provenance. The customer-consent event also
+  carries the push decision.
+- Optional `refund_id` and `refunded_at` on coupon usage records.
+- Optional authoritative `occurred_at` timestamps on point, reward, voucher,
+  and gift-card order redemption snapshots.
+- Optional issued, activated, and single-use redeemed timestamps on wallet
+  instruments. Re-spendable gift cards do not use a singular redemption time.
+- Point-award status values `ineligible`, `disabled`, `pending`, `awarded`, and
+  `failed`; customer payment summaries now distinguish gross points earned,
+  debt repaid, net points credited, and remaining debt.
+- Point-debt totals on membership and customer wallet projections, optional
+  debt transitions on ledger entries, and `DEBT_INCURRED` / `DEBT_REPAID`
+  ledger reasons.
+- `voucher.claim_issued` and its reusable event payload containing only an
+  issuance ID and a Customers-bound delivery handle. Claim tokens, recipient
+  addresses, and other claim material are deliberately absent.
+- Reusable `wallet.GiftCardDenominationPolicy` with a policy version, currency,
+  and ordered minor-unit amounts. Gift-card issuance events can carry an
+  optional denomination-policy version for V1/V2 coexistence.
+
+### Fixed / 修正
+
+- Makes read and dismissed notification lifecycle states independently
+  representable.
+- Makes refund reversal, point debt, and redemption commit timing explicit
+  without fabricating values for historical records.
+
+### Other Changes / 其他變更
+
+- Adds JSON round-trip and omission tests for all new fields and events,
+  including known-zero debt, claim-material exclusion, and the five V2 policy
+  values `50000`, `80000`, `100000`, `150000`, and `200000` AUD minor units.
+- Updates the reviewed exported-type manifest for the three new model/enum
+  types while preserving the model-only boundary.
+
+### Contract Files Changed / 契約檔案變更
+
+- `pkg/contracts/{customers,membership,notification,promotion,sales,wallet}`
+- `pkg/enums/{events,membership,notification}`
+- Module/version metadata, release notes, the exported-type manifest, and JSON
+  shape tests.
+
+### Compatibility Notes / 相容性
+
+- Existing V21 consumers remain source-compatible. New scalar fields decode to
+  zero values and new optional timestamps/debt transitions may be absent on
+  historical records and V1 events.
+- This module does not define gift-card routes, cache behavior, validation,
+  authorization, cutover timestamps, the rolling purchase cap, or persistence.
+  Pricing remains the runtime policy owner; service-local APIs must return this
+  model and enforce business rules.
+- Existing issued gift cards and delayed V1 events remain valid. The V2 allowed
+  amounts apply only when owning services authorize a new purchase-backed
+  issuance.
+
+### Consumer Action / 使用方動作
+
+- Pin `github.com/Potato-Mart/Backend-Shared-Contract/v21 v21.1.0` exactly and
+  regenerate or update service-local mappings after the release is published.
+- Customers should support both V1 and V2 issuance events before Pricing and
+  Orders start publishing V2. Pricing should return policy version `2`, currency
+  `AUD`, and exactly `50000`, `80000`, `100000`, `150000`, `200000`; Orders must
+  validate new quote/start flows against that policy.
+- Preserve missing historical timestamps rather than substituting unrelated
+  order times, and never put voucher claim material into Pub/Sub, outboxes,
+  logs, traces, or DLQs.
 
 ## v21.0.0 (2026-07-29) - Delivery, Campaign, Notification, and Wallet Policy Cutover
 

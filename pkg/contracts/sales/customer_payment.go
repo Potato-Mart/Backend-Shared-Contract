@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/membership"
 	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/payment"
 )
 
@@ -19,7 +20,11 @@ type CustomerPaymentSummary struct {
 	RefundedTotal       *common.Money                         `json:"refunded_total,omitempty"`
 	TotalPaid           *common.Money                         `json:"total_paid,omitempty"`
 	Allocations         []CustomerPaymentAllocation           `json:"allocations,omitempty"`
+	PointsAwardStatus   membershipenum.PointAwardStatus       `json:"points_award_status,omitempty"`
 	PointsEarned        *int                                  `json:"points_earned,omitempty"`
+	PointsAppliedToDebt *int                                  `json:"points_applied_to_debt,omitempty"`
+	PointsNetCredited   *int                                  `json:"points_net_credited,omitempty"`
+	PointDebtRemaining  *int                                  `json:"point_debt_remaining,omitempty"`
 	PointsLedgerEntryID string                                `json:"points_ledger_entry_id,omitempty"`
 	PointsEarnedAt      *time.Time                            `json:"points_earned_at,omitempty"`
 	Completeness        paymentenum.PaymentCompleteness       `json:"completeness"`

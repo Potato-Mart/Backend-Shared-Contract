@@ -15,7 +15,7 @@ and business workflows.
 ## Latest Version
 
 ```text
-v21.0.0
+v21.1.0
 github.com/Potato-Mart/Backend-Shared-Contract/v21
 ```
 
@@ -27,7 +27,7 @@ compatibility notes, and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v21 v21.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v21 v21.1.0
 ```
 
 Import packages from the same `/v21` module path.
