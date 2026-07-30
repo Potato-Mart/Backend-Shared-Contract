@@ -61,6 +61,7 @@ const (
 	EventTypeCustomerProfileUpdated EventType = "customer.profile_updated"
 	EventTypeCustomerConsentChanged EventType = "customer.consent_changed"
 	EventTypeWalletGiftCardIssued   EventType = "wallet.gift_card_issued"
+	EventTypeVoucherClaimIssued     EventType = "voucher.claim_issued"
 
 	EventTypeProductSalesPerformanceUpdated EventType = "product.sales_performance_updated"
 	EventTypePromotionChanged               EventType = "promotion.changed"
@@ -83,6 +84,7 @@ func (t EventType) IsValid() bool {
 		EventTypeFulfilmentTrackingUpdated,
 		EventTypeCustomerRegistered, EventTypeCustomerProfileUpdated,
 		EventTypeCustomerConsentChanged, EventTypeWalletGiftCardIssued,
+		EventTypeVoucherClaimIssued,
 		EventTypeProductSalesPerformanceUpdated,
 		EventTypePromotionChanged, EventTypeCampaignChanged,
 		EventTypeAnalyticsOrderFact, EventTypeAnalyticsPaymentFact,

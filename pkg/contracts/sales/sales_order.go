@@ -144,6 +144,7 @@ type PointRedemptionSnapshot struct {
 	LedgerEntryID  string       `json:"ledger_entry_id,omitempty"`
 	Points         int          `json:"points"`
 	DiscountAmount common.Money `json:"discount_amount"`
+	OccurredAt     *time.Time   `json:"occurred_at,omitempty"`
 }
 
 // RewardRedemptionSnapshot records a catalog reward applied to an order.
@@ -156,6 +157,7 @@ type RewardRedemptionSnapshot struct {
 	DiscountAmount     *common.Money                       `json:"discount_amount,omitempty"`
 	ProductSKUCode     string                              `json:"product_sku_code,omitempty"`
 	VoucherCode        string                              `json:"voucher_code,omitempty"`
+	OccurredAt         *time.Time                          `json:"occurred_at,omitempty"`
 }
 
 // VoucherRedemptionSnapshot records the single voucher applied to an order.
@@ -163,6 +165,7 @@ type VoucherRedemptionSnapshot struct {
 	VoucherCode   string       `json:"voucher_code"`
 	AppliedAmount common.Money `json:"applied_amount"`
 	ReservationID string       `json:"reservation_id,omitempty"`
+	OccurredAt    *time.Time   `json:"occurred_at,omitempty"`
 }
 
 // GiftCardRedemptionSnapshot records one ordered gift-card allocation applied
@@ -173,6 +176,7 @@ type GiftCardRedemptionSnapshot struct {
 	AppliedAmount       common.Money `json:"applied_amount"`
 	ReservationID       string       `json:"reservation_id,omitempty"`
 	WalletTransactionID string       `json:"wallet_transaction_id,omitempty"`
+	OccurredAt          *time.Time   `json:"occurred_at,omitempty"`
 }
 
 // POSAttribution carries first-class in-store sale attribution (store, event,

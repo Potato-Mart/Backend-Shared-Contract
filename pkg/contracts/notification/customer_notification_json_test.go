@@ -37,6 +37,36 @@ func TestCustomerNotificationJSONRoundTrip(t *testing.T) {
 	}
 }
 
+func TestReadCustomerNotificationRemainsVisible(t *testing.T) {
+	readAt := time.Date(2026, 7, 30, 4, 5, 6, 0, time.UTC)
+	n := notification.CustomerNotification{
+		ID: "ntf_read", EventID: "event_read",
+		Topic: notificationenum.CustomerNotificationTopicOrderConfirmed,
+		Title: "Order confirmed", Message: "Your order is confirmed.",
+		Status:    notificationenum.CustomerNotificationStatusRead,
+		ReadAt:    &readAt,
+		CreatedAt: readAt.Add(-time.Hour),
+		ExpiresAt: readAt.Add(30 * 24 * time.Hour),
+	}
+
+	payload, err := json.Marshal(n)
+	if err != nil {
+		t.Fatalf("marshal read notification: %v", err)
+	}
+	if !strings.Contains(string(payload), `"status":"read"`) ||
+		!strings.Contains(string(payload), `"read_at":"2026-07-30T04:05:06Z"`) {
+		t.Fatalf("read notification JSON = %s", payload)
+	}
+
+	var decoded notification.CustomerNotification
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal read notification: %v", err)
+	}
+	if decoded.Status != notificationenum.CustomerNotificationStatusRead || decoded.ReadAt == nil || !decoded.ReadAt.Equal(readAt) {
+		t.Fatalf("read notification did not round-trip: %+v", decoded)
+	}
+}
+
 func TestCustomerLifecycleNotificationTopicJSONValues(t *testing.T) {
 	topics := []notificationenum.CustomerNotificationTopic{
 		notificationenum.CustomerNotificationTopicOrderConfirmed,

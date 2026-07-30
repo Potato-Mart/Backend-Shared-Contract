@@ -53,6 +53,8 @@ const (
 	MembershipPointReasonReferral     MembershipPointReason = "REFERRAL"
 	MembershipPointReasonSignupBonus  MembershipPointReason = "SIGNUP_BONUS"
 	MembershipPointReasonTierUpgrade  MembershipPointReason = "TIER_UPGRADE"
+	MembershipPointReasonDebtIncurred MembershipPointReason = "DEBT_INCURRED"
+	MembershipPointReasonDebtRepaid   MembershipPointReason = "DEBT_REPAID"
 	MembershipPointReasonManual       MembershipPointReason = "MANUAL"
 )
 
@@ -61,13 +63,37 @@ func (m MembershipPointReason) IsValid() bool {
 	case MembershipPointReasonOrder, MembershipPointReasonBirthday, MembershipPointReasonRedeem,
 		MembershipPointReasonRefund, MembershipPointReasonRewardRedeem, MembershipPointReasonAdminAdjust, MembershipPointReasonExpired,
 		MembershipPointReasonReferral, MembershipPointReasonSignupBonus, MembershipPointReasonTierUpgrade,
-		MembershipPointReasonManual:
+		MembershipPointReasonDebtIncurred, MembershipPointReasonDebtRepaid, MembershipPointReasonManual:
 		return true
 	}
 	return false
 }
 
 func (m MembershipPointReason) String() string { return string(m) }
+
+// PointAwardStatus describes the durable processing state of an order's
+// membership-points award.
+type PointAwardStatus string
+
+const (
+	PointAwardStatusIneligible PointAwardStatus = "ineligible"
+	PointAwardStatusDisabled   PointAwardStatus = "disabled"
+	PointAwardStatusPending    PointAwardStatus = "pending"
+	PointAwardStatusAwarded    PointAwardStatus = "awarded"
+	PointAwardStatusFailed     PointAwardStatus = "failed"
+)
+
+func (s PointAwardStatus) IsValid() bool {
+	switch s {
+	case PointAwardStatusIneligible, PointAwardStatusDisabled, PointAwardStatusPending,
+		PointAwardStatusAwarded, PointAwardStatusFailed:
+		return true
+	default:
+		return false
+	}
+}
+
+func (s PointAwardStatus) String() string { return string(s) }
 
 // MembershipPromotionTarget restricts which membership segment a points
 // multiplier applies to.

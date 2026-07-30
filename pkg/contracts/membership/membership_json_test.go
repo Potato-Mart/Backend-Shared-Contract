@@ -2,6 +2,7 @@ package membership_test
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 	"time"
 
@@ -21,6 +22,7 @@ func TestMembershipAccountAndTierRoundTrip(t *testing.T) {
 			TotalPoints:     1200,
 			ReservedPoints:  200,
 			AvailablePoints: 1000,
+			PointDebt:       25,
 			ExpiringPoints:  300,
 			CalculatedAt:    now,
 		},
@@ -51,7 +53,8 @@ func TestMembershipAccountAndTierRoundTrip(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal membership account/tier: %v", err)
 	}
-	if decoded.Account.Wallet.AvailablePoints != 1000 || decoded.Tier.QualificationMetric != membershipenum.MembershipTierMetricAnnualSpend {
+	if decoded.Account.Wallet.AvailablePoints != 1000 || decoded.Account.Wallet.PointDebt != 25 ||
+		decoded.Tier.QualificationMetric != membershipenum.MembershipTierMetricAnnualSpend {
 		t.Fatalf("membership account/tier did not round-trip: %+v", decoded)
 	}
 }
@@ -60,12 +63,16 @@ func TestPointLedgerBucketsAndReservationRoundTrip(t *testing.T) {
 	now := time.Date(2026, 6, 23, 0, 0, 0, 0, time.UTC)
 	expiresSoon := time.Date(2026, 7, 7, 0, 0, 0, 0, time.UTC)
 	expiresLater := time.Date(2026, 10, 15, 0, 0, 0, 0, time.UTC)
+	debtDelta := 20
+	debtAfter := 20
 	entry := membership.PointLedgerEntry{
 		ID:             "redeem_1",
 		CustomerNumber: "RC-20260727-ABCDEF",
 		Delta:          -40,
 		Reason:         membershipenum.MembershipPointReasonRedeem,
 		BalanceAfter:   60,
+		DebtDelta:      &debtDelta,
+		DebtAfter:      &debtAfter,
 		Allocations: []membership.PointAllocation{
 			{LedgerEntryID: "earn_1", Points: 30, ExpiresAt: &expiresSoon},
 			{LedgerEntryID: "earn_2", Points: 10, ExpiresAt: &expiresLater},
@@ -77,6 +84,7 @@ func TestPointLedgerBucketsAndReservationRoundTrip(t *testing.T) {
 		TotalPoints:     100,
 		ReservedPoints:  40,
 		AvailablePoints: 60,
+		PointDebt:       20,
 		ExpiringPoints:  100,
 		Buckets: []membership.PointBucket{
 			{Points: 30, ExpiresAt: &expiresSoon, SourceLedgerEntryID: "earn_1", Reason: membershipenum.MembershipPointReasonOrder},
@@ -113,8 +121,24 @@ func TestPointLedgerBucketsAndReservationRoundTrip(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal point contracts: %v", err)
 	}
-	if len(decoded.Entry.Allocations) != 2 || len(decoded.Breakdown.Buckets) != 2 || decoded.Reservation.Points != 40 {
+	if len(decoded.Entry.Allocations) != 2 || decoded.Entry.DebtDelta == nil || *decoded.Entry.DebtDelta != 20 ||
+		decoded.Entry.DebtAfter == nil || *decoded.Entry.DebtAfter != 20 ||
+		decoded.Breakdown.PointDebt != 20 || len(decoded.Breakdown.Buckets) != 2 || decoded.Reservation.Points != 40 {
 		t.Fatalf("point contracts did not round-trip: %+v", decoded)
+	}
+
+	zero := 0
+	repaymentDelta := -20
+	repaidPayload, err := json.Marshal(membership.PointLedgerEntry{
+		ID: "debt_repaid_1", CustomerNumber: "RC-20260727-ABCDEF",
+		Reason:    membershipenum.MembershipPointReasonDebtRepaid,
+		DebtDelta: &repaymentDelta, DebtAfter: &zero, CreatedAt: now,
+	})
+	if err != nil {
+		t.Fatalf("marshal final debt repayment: %v", err)
+	}
+	if !strings.Contains(string(repaidPayload), `"debt_after":0`) {
+		t.Fatalf("final debt repayment must preserve known zero: %s", repaidPayload)
 	}
 }
 

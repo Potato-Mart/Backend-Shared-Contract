@@ -1,0 +1,10 @@
+package wallet
+
+// GiftCardDenominationPolicy is the versioned, server-authored set of purchase
+// denominations for one currency. Owning services remain responsible for
+// validation, caching, cutover, and authorization behavior.
+type GiftCardDenominationPolicy struct {
+	Version             int     `json:"version"`
+	Currency            string  `json:"currency"`
+	AllowedAmountsMinor []int64 `json:"allowed_amounts_minor"`
+}

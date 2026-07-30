@@ -24,11 +24,20 @@ type RetailCustomerCommerceProfile struct {
 // RetailCustomerMarketingProfile groups per-channel marketing opt-ins together
 // with the provenance of the consent decision.
 type RetailCustomerMarketingProfile struct {
-	EmailOptIn bool       `json:"email_opt_in"`
-	SMSOptIn   bool       `json:"sms_opt_in"`
-	LineOptIn  bool       `json:"line_opt_in"`
-	UpdatedAt  *time.Time `json:"updated_at,omitempty"`
-	Source     string     `json:"source,omitempty"`
+	EmailOptIn            bool       `json:"email_opt_in"`
+	SMSOptIn              bool       `json:"sms_opt_in"`
+	LineOptIn             bool       `json:"line_opt_in"`
+	PushOptIn             bool       `json:"push_opt_in"`
+	EmailConsentUpdatedAt *time.Time `json:"email_consent_updated_at,omitempty"`
+	EmailConsentSource    string     `json:"email_consent_source,omitempty"`
+	SMSConsentUpdatedAt   *time.Time `json:"sms_consent_updated_at,omitempty"`
+	SMSConsentSource      string     `json:"sms_consent_source,omitempty"`
+	LineConsentUpdatedAt  *time.Time `json:"line_consent_updated_at,omitempty"`
+	LineConsentSource     string     `json:"line_consent_source,omitempty"`
+	PushConsentUpdatedAt  *time.Time `json:"push_consent_updated_at,omitempty"`
+	PushConsentSource     string     `json:"push_consent_source,omitempty"`
+	UpdatedAt             *time.Time `json:"updated_at,omitempty"`
+	Source                string     `json:"source,omitempty"`
 }
 
 // RetailCustomerAnalyticsProfile groups the recency/frequency/monetary

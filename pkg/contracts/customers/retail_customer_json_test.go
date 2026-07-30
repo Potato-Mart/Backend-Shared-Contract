@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/customers"
@@ -130,5 +131,86 @@ func TestRetailCustomerDeliveryPreferenceJSONShape(t *testing.T) {
 		if !strings.Contains(string(payload), field) {
 			t.Fatalf("retail customer delivery preference missing %s: %s", field, payload)
 		}
+	}
+}
+
+func TestRetailCustomerMarketingConsentProvenanceRoundTrip(t *testing.T) {
+	consentedAt := time.Date(2026, 7, 30, 1, 2, 3, 0, time.UTC)
+	profile := customers.RetailCustomerMarketingProfile{
+		EmailOptIn:            true,
+		SMSOptIn:              true,
+		LineOptIn:             true,
+		PushOptIn:             true,
+		EmailConsentUpdatedAt: &consentedAt,
+		EmailConsentSource:    "checkout",
+		SMSConsentUpdatedAt:   &consentedAt,
+		SMSConsentSource:      "account_preferences",
+		LineConsentUpdatedAt:  &consentedAt,
+		LineConsentSource:     "account_preferences",
+		PushConsentUpdatedAt:  &consentedAt,
+		PushConsentSource:     "account_preferences",
+	}
+
+	payload, err := json.Marshal(profile)
+	if err != nil {
+		t.Fatalf("marshal retail customer marketing profile: %v", err)
+	}
+	for _, field := range []string{
+		`"push_opt_in":true`,
+		`"email_consent_updated_at":"2026-07-30T01:02:03Z"`,
+		`"email_consent_source":"checkout"`,
+		`"sms_consent_updated_at":"2026-07-30T01:02:03Z"`,
+		`"sms_consent_source":"account_preferences"`,
+		`"line_consent_updated_at":"2026-07-30T01:02:03Z"`,
+		`"line_consent_source":"account_preferences"`,
+		`"push_consent_updated_at":"2026-07-30T01:02:03Z"`,
+		`"push_consent_source":"account_preferences"`,
+	} {
+		if !strings.Contains(string(payload), field) {
+			t.Fatalf("marketing profile JSON missing %s: %s", field, payload)
+		}
+	}
+
+	var decoded customers.RetailCustomerMarketingProfile
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal retail customer marketing profile: %v", err)
+	}
+	if !decoded.PushOptIn || decoded.EmailConsentUpdatedAt == nil || decoded.SMSConsentUpdatedAt == nil ||
+		decoded.LineConsentUpdatedAt == nil || decoded.PushConsentUpdatedAt == nil ||
+		!decoded.PushConsentUpdatedAt.Equal(consentedAt) || decoded.PushConsentSource != "account_preferences" {
+		t.Fatalf("marketing consent provenance did not round-trip: %+v", decoded)
+	}
+}
+
+func TestCustomerConsentChangedEventIncludesPushOptIn(t *testing.T) {
+	changedAt := time.Date(2026, 7, 30, 2, 3, 4, 0, time.UTC)
+	event := customers.CustomerConsentChangedEvent{
+		CustomerNumber: "RC-1",
+		EmailOptIn:     true,
+		PushOptIn:      true,
+		Source:         "account_preferences",
+		ChangedAt:      changedAt,
+	}
+
+	payload, err := json.Marshal(event)
+	if err != nil {
+		t.Fatalf("marshal customer consent changed event: %v", err)
+	}
+	for _, field := range []string{
+		`"push_opt_in":true`,
+		`"source":"account_preferences"`,
+		`"changed_at":"2026-07-30T02:03:04Z"`,
+	} {
+		if !strings.Contains(string(payload), field) {
+			t.Fatalf("customer consent event missing %s: %s", field, payload)
+		}
+	}
+
+	var decoded customers.CustomerConsentChangedEvent
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal customer consent changed event: %v", err)
+	}
+	if !decoded.PushOptIn || !decoded.ChangedAt.Equal(changedAt) {
+		t.Fatalf("customer consent event did not round-trip: %+v", decoded)
 	}
 }
