@@ -4,34 +4,35 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/warehouse"
 )
 
 // OrderItemFact is the immutable product and merchandising snapshot used by
 // sales rollups. Dimension values are canonical identifiers captured at purchase
 // time, so later catalogue edits cannot rewrite historical analytics.
 type OrderItemFact struct {
-	ProductSKUCode string       `json:"product_sku_code"`
-	ProductName    string       `json:"product_name,omitempty"`
-	BrandID        string       `json:"brand_id,omitempty"`
-	StorageType    string       `json:"storage_type,omitempty"`
-	CollectionSlug string       `json:"collection_slug,omitempty"`
-	CategorySlugs  []string     `json:"category_slugs,omitempty"`
-	Production     string       `json:"production,omitempty"`
-	Quantity       int64        `json:"quantity"`
-	Gross          common.Money `json:"gross"`
+	ProductSKUCode     string                            `json:"product_sku_code"`
+	ProductName        string                            `json:"product_name,omitempty"`
+	BrandID            string                            `json:"brand_id,omitempty"`
+	StorageType        warehouseenum.StorageType         `json:"storage_type,omitempty"`
+	CollectionSlug     string                            `json:"collection_slug,omitempty"`
+	CategorySlugs      []string                          `json:"category_slugs,omitempty"`
+	Production         string                            `json:"production,omitempty"`
+	PackageComposition common.PackageCompositionSnapshot `json:"package_composition"`
+	Gross              common.Money                      `json:"gross"`
 }
 
 // RefundItemFact identifies quantities and value reversed by a completed
 // line-level refund. Amount-only refunds intentionally carry no item rows.
 type RefundItemFact struct {
-	ProductSKUCode string       `json:"product_sku_code"`
-	BrandID        string       `json:"brand_id,omitempty"`
-	StorageType    string       `json:"storage_type,omitempty"`
-	CollectionSlug string       `json:"collection_slug,omitempty"`
-	CategorySlugs  []string     `json:"category_slugs,omitempty"`
-	Production     string       `json:"production,omitempty"`
-	Quantity       int64        `json:"quantity"`
-	Amount         common.Money `json:"amount"`
+	ProductSKUCode     string                            `json:"product_sku_code"`
+	BrandID            string                            `json:"brand_id,omitempty"`
+	StorageType        warehouseenum.StorageType         `json:"storage_type,omitempty"`
+	CollectionSlug     string                            `json:"collection_slug,omitempty"`
+	CategorySlugs      []string                          `json:"category_slugs,omitempty"`
+	Production         string                            `json:"production,omitempty"`
+	PackageComposition common.PackageCompositionSnapshot `json:"package_composition"`
+	Amount             common.Money                      `json:"amount"`
 }
 
 // OrderFact is the immutable analytical projection of an order event.

@@ -2,6 +2,7 @@ package warehouse_test
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 	"time"
 
@@ -10,61 +11,78 @@ import (
 	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/warehouse"
 )
 
-func TestStockMovementRoundTripWithPurchaseLinks(t *testing.T) {
+func TestPackageConversionMovementRoundTrip(t *testing.T) {
 	occurredAt := time.Date(2026, 6, 17, 9, 30, 0, 0, time.UTC)
+	sourceBalance := int64(0)
+	destinationBalance := int64(25)
+	caseComposition := common.PackageCompositionSnapshot{
+		TotalBaseUnits: 12,
+		Components: []common.PackageComponentSnapshot{{
+			PackageOptionID: "pkg_case_12",
+			HandlingUnit:    common.PackageHandlingUnitCase,
+			PackageCount:    1,
+			UnitsPerPackage: 12,
+			BaseUnits:       12,
+		}},
+	}
+	eachComposition := common.PackageCompositionSnapshot{
+		TotalBaseUnits: 12,
+		Components: []common.PackageComponentSnapshot{{
+			PackageOptionID: "pkg_each",
+			HandlingUnit:    common.PackageHandlingUnitEach,
+			PackageCount:    12,
+			UnitsPerPackage: 1,
+			BaseUnits:       12,
+		}},
+	}
 	movement := warehouse.StockMovement{
-		ID:                  "mov_1",
-		ProductSKUCode:      "SKU-001",
-		SKU:                 "SKU-001",
-		ProductName:         "Potato Chips",
-		DepotCode:           "DEPOT-1",
-		LocationCode:        "A-01",
-		Type:                warehouseenum.StockMovementTypePurchaseReceipt,
-		QtyDelta:            30,
-		BalanceAfter:        130,
-		OccurredAt:          occurredAt,
-		CreatedBy:           "ops@example.com",
-		ReasonCode:          "supplier_delivery",
-		Note:                "Received from supplier PO.",
-		PurchaseOrderNumber: "PO-1001",
-		PurchaseReceiptID:   "pr_1",
-		SalesOrderNumber:    "SO-1001",
-		ReferenceType:       "purchase_receipt",
-		ReferenceID:         "pr_1",
-		Metadata: common.Metadata{
-			"batch": "B-20260617",
-		},
+		ID:                               "mov_1",
+		ProductSKUCode:                   "A00001",
+		Type:                             warehouseenum.StockMovementTypePackageConversion,
+		SourceBucketID:                   "bucket_case",
+		DestinationBucketID:              "bucket_each",
+		LotID:                            "lot_1",
+		SourcePackageOptionID:            "pkg_case_12",
+		DestinationPackageOptionID:       "pkg_each",
+		BaseUnits:                        12,
+		SourcePackageComposition:         &caseComposition,
+		DestinationPackageComposition:    &eachComposition,
+		SourceBalanceAfterBaseUnits:      &sourceBalance,
+		DestinationBalanceAfterBaseUnits: &destinationBalance,
+		Cause:                            &warehouse.InventoryCauseRef{Type: "PACKING", ID: "packing_1"},
+		PerformedBy:                      "operator_1",
+		OccurredAt:                       occurredAt,
 	}
 
 	payload, err := json.Marshal(movement)
 	if err != nil {
 		t.Fatalf("marshal stock movement: %v", err)
 	}
+	if !strings.Contains(string(payload), `"occurred_at":"2026-06-17T09:30:00Z"`) {
+		t.Fatalf("movement timestamp is not UTC RFC3339 JSON: %s", payload)
+	}
+
+	var shape map[string]any
+	if err := json.Unmarshal(payload, &shape); err != nil {
+		t.Fatalf("unmarshal movement shape: %v", err)
+	}
+	for _, key := range []string{"qty_delta", "balance_after", "sku", "location_code"} {
+		if _, exists := shape[key]; exists {
+			t.Fatalf("movement retained removed key %q: %s", key, payload)
+		}
+	}
 
 	var decoded warehouse.StockMovement
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal stock movement: %v", err)
 	}
-
-	if decoded.PurchaseOrderNumber != "PO-1001" || decoded.PurchaseReceiptID != "pr_1" {
-		t.Fatalf("purchase links did not round-trip: %+v", decoded)
+	if decoded.Type != warehouseenum.StockMovementTypePackageConversion || decoded.BaseUnits != 12 {
+		t.Fatalf("movement identity did not round-trip: %+v", decoded)
 	}
-	if decoded.SalesOrderNumber != "SO-1001" {
-		t.Fatalf("sales order number did not round-trip: %+v", decoded)
+	if decoded.SourcePackageComposition == nil || decoded.DestinationPackageComposition == nil {
+		t.Fatalf("conversion compositions did not round-trip: %+v", decoded)
 	}
-	if decoded.ProductSKUCode != "SKU-001" || decoded.DepotCode != "DEPOT-1" {
-		t.Fatalf("canonical codes did not round-trip: %+v", decoded)
-	}
-	if decoded.Type != warehouseenum.StockMovementTypePurchaseReceipt {
-		t.Fatalf("type = %q, want %q", decoded.Type, warehouseenum.StockMovementTypePurchaseReceipt)
-	}
-	if decoded.QtyDelta != 30 || decoded.BalanceAfter != 130 {
-		t.Fatalf("stock quantities did not round-trip: %+v", decoded)
-	}
-	if !decoded.OccurredAt.Equal(occurredAt) {
-		t.Fatalf("occurred_at = %s, want %s", decoded.OccurredAt, occurredAt)
-	}
-	if decoded.Metadata["batch"] != "B-20260617" {
-		t.Fatalf("metadata batch = %v, want B-20260617", decoded.Metadata["batch"])
+	if decoded.SourcePackageComposition.TotalBaseUnits != decoded.DestinationPackageComposition.TotalBaseUnits {
+		t.Fatalf("conversion base-unit totals differ: %+v", decoded)
 	}
 }

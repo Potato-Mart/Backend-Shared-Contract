@@ -24,7 +24,7 @@ func TestOutboundShipmentDeliveredContractRoundTrips(t *testing.T) {
 	}
 	var payload map[string]any
 	if err := json.Unmarshal(raw, &payload); err != nil {
-		t.Fatalf("decode delivered shipment JSON shape: %v", err)
+		t.Fatalf("unmarshal delivered shipment JSON shape: %v", err)
 	}
 	if _, ok := payload["delivered_at"]; !ok {
 		t.Fatalf("delivered shipment JSON = %s, want delivered_at", raw)
@@ -47,7 +47,7 @@ func TestOutboundShipmentDeliveredContractRoundTrips(t *testing.T) {
 	}
 	payload = nil
 	if err := json.Unmarshal(raw, &payload); err != nil {
-		t.Fatalf("decode shipment JSON without delivery time: %v", err)
+		t.Fatalf("unmarshal shipment JSON without delivery time: %v", err)
 	}
 	if _, ok := payload["delivered_at"]; ok {
 		t.Fatalf("shipment JSON = %s, want delivered_at omitted", raw)

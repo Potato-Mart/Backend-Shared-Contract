@@ -53,9 +53,7 @@ type LayoutNode struct {
 	common.AuditFields
 }
 
-// ModelAsset references a 3D model file stored elsewhere (object storage,
-// CDN). Never embed mesh data here — keep documents small to stay well
-// under large-document storage limits and keep reads fast.
+// ModelAsset is the JSON reference and rendering metadata for a 3D model file.
 type ModelAsset struct {
 	ID        string                    `json:"id,omitempty"`
 	URL       string                    `json:"url"`

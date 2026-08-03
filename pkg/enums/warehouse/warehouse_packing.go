@@ -20,28 +20,6 @@ func (s PackingDiscrepancyKind) IsValid() bool {
 
 func (s PackingDiscrepancyKind) String() string { return string(s) }
 
-// PackingSessionStatus is the workflow state for an order packing session.
-type PackingSessionStatus string
-
-const (
-	PackingSessionStatusPending  PackingSessionStatus = "pending"
-	PackingSessionStatusPacking  PackingSessionStatus = "packing"
-	PackingSessionStatusPacked   PackingSessionStatus = "packed"
-	PackingSessionStatusResolved PackingSessionStatus = "resolved"
-)
-
-// IsValid reports whether s is a known packing session state.
-func (s PackingSessionStatus) IsValid() bool {
-	switch s {
-	case PackingSessionStatusPending, PackingSessionStatusPacking, PackingSessionStatusPacked,
-		PackingSessionStatusResolved:
-		return true
-	}
-	return false
-}
-
-func (s PackingSessionStatus) String() string { return string(s) }
-
 // PackingDamageHandling captures what the operator did for a damaged packed unit.
 type PackingDamageHandling string
 

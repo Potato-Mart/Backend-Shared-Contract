@@ -38,7 +38,6 @@ const (
 	EventTypeOrderPaid                     EventType = "order.paid"
 	EventTypeOrderStatusChanged            EventType = "order.status_changed"
 	EventTypeOrderCancelled                EventType = "order.cancelled"
-	EventTypeOrderPreorderAvailable        EventType = "order.preorder_available"
 	EventTypeCheckoutCompensationRequested EventType = "checkout.compensation_requested"
 	EventTypePaymentCaptured               EventType = "payment.captured"
 	EventTypePaymentFailed                 EventType = "payment.failed"
@@ -48,8 +47,17 @@ const (
 	EventTypeRefundCompleted               EventType = "refund.completed"
 	EventTypeRefundFailed                  EventType = "refund.failed"
 
-	EventTypeStockArrived  EventType = "stock.arrived"
-	EventTypeStockAdjusted EventType = "stock.adjusted"
+	EventTypeInventoryLotReceived              EventType = "inventory.lot_received"
+	EventTypeInventoryStockBucketChanged       EventType = "inventory.stock_bucket_changed"
+	EventTypeInventoryPackageConverted         EventType = "inventory.package_converted"
+	EventTypeInventoryQualityAssessed          EventType = "inventory.quality_assessed"
+	EventTypeInventoryReservationChanged       EventType = "inventory.reservation_changed"
+	EventTypeInventoryStaged                   EventType = "inventory.staged"
+	EventTypeInventorySold                     EventType = "inventory.sold"
+	EventTypeInventoryDateMarkThresholdReached EventType = "inventory.date_mark_threshold_reached"
+	EventTypeInventorySellableOfferAvailable   EventType = "inventory.sellable_offer_available"
+	EventTypeInventorySellableOfferWithdrawn   EventType = "inventory.sellable_offer_withdrawn"
+	EventTypeStockLocationAvailabilityChanged  EventType = "stock.location_availability_changed"
 
 	EventTypeFulfilmentPackingUpdated  EventType = "fulfilment.packing_updated"
 	EventTypeFulfilmentShipped         EventType = "fulfilment.shipped"
@@ -75,10 +83,15 @@ const (
 func (t EventType) IsValid() bool {
 	switch t {
 	case EventTypeOrderCreated, EventTypeOrderPaid, EventTypeOrderStatusChanged,
-		EventTypeOrderCancelled, EventTypeOrderPreorderAvailable, EventTypeCheckoutCompensationRequested,
+		EventTypeOrderCancelled, EventTypeCheckoutCompensationRequested,
 		EventTypePaymentCaptured, EventTypePaymentFailed, EventTypeInvoiceIssued, EventTypeInvoiceDeliveryRequested,
 		EventTypeRefundRequested, EventTypeRefundCompleted, EventTypeRefundFailed,
-		EventTypeStockArrived, EventTypeStockAdjusted,
+		EventTypeInventoryLotReceived, EventTypeInventoryStockBucketChanged,
+		EventTypeInventoryPackageConverted, EventTypeInventoryQualityAssessed,
+		EventTypeInventoryReservationChanged, EventTypeInventoryStaged,
+		EventTypeInventorySold, EventTypeInventoryDateMarkThresholdReached,
+		EventTypeInventorySellableOfferAvailable, EventTypeInventorySellableOfferWithdrawn,
+		EventTypeStockLocationAvailabilityChanged,
 		EventTypeFulfilmentPackingUpdated, EventTypeFulfilmentShipped,
 		EventTypeFulfilmentDelivered, EventTypeFulfilmentCompleted,
 		EventTypeFulfilmentTrackingUpdated,

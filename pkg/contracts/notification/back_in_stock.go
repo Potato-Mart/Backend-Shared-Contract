@@ -43,12 +43,3 @@ type BackInStockSubscription struct {
 	LastDeliveryError   *BackInStockDeliveryError                `json:"last_delivery_error,omitempty"`
 	NotificationEventID string                                   `json:"notification_event_id,omitempty"`
 }
-
-// BackInStockRestockEvent is emitted by Supply after a SKU crosses from
-// unavailable to sellable stock while remaining visible to storefronts.
-type BackInStockRestockEvent struct {
-	ProductSKUCode string    `json:"product_sku_code"`
-	RestockedAt    time.Time `json:"restocked_at"`
-	AvailableQty   int       `json:"available_qty"`
-	EventID        string    `json:"event_id,omitempty"`
-}

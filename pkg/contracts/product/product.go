@@ -39,7 +39,6 @@ type Product struct {
 	Collection   *CollectionRef            `json:"collection,omitempty"`
 	CategoryTags []CategoryTag             `json:"category_tags,omitempty"`
 	Supply       *ProductSupply            `json:"supply,omitempty"`
-	PlacingArea  *ProductPlacement         `json:"placing_area,omitempty"`
 
 	// CurrentStock is a denormalised cache of total sellable stock; the
 	// authoritative quantities live in the warehouse subsystem. It backs
@@ -126,11 +125,4 @@ type Media struct {
 type Physical struct {
 	Dimensions *common.Dimensions `json:"dimensions,omitempty"`
 	Weight     *common.Weight     `json:"weight,omitempty"`
-}
-
-// ProductPlacement identifies a stock location unambiguously. Location codes
-// are unique only within a depot, so both values are required together.
-type ProductPlacement struct {
-	DepotCode    string `json:"depot_code"`
-	LocationCode string `json:"location_code"`
 }

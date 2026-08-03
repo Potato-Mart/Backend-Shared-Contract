@@ -25,12 +25,17 @@ type InboundReceipt struct {
 }
 
 type InboundItem struct {
-	ProductSKUCode string                    `json:"product_sku_code"`
-	Barcode        string                    `json:"barcode,omitempty"`
-	ProductName    string                    `json:"product_name,omitempty"`
-	Storage        warehouseenum.StorageType `json:"storage,omitempty"`
-	ExpectedQty    int                       `json:"expected_qty"`
-	ReceivedQty    int                       `json:"received_qty"`
-	LocationCode   string                    `json:"location_code,omitempty"`
-	CreatedAt      time.Time                 `json:"created_at"`
+	ID                  string                            `json:"id"`
+	ProductSKUCode      string                            `json:"product_sku_code"`
+	ProductName         string                            `json:"product_name,omitempty"`
+	ScannedBarcode      string                            `json:"scanned_barcode,omitempty"`
+	LotID               string                            `json:"lot_id,omitempty"`
+	PackageOptionID     string                            `json:"package_option_id"`
+	HandlingUnit        common.PackageHandlingUnit        `json:"handling_unit"`
+	StorageType         warehouseenum.StorageType         `json:"storage_type"`
+	ExpectedComposition common.PackageCompositionSnapshot `json:"expected_composition"`
+	ReceivedComposition common.PackageCompositionSnapshot `json:"received_composition"`
+	DestinationLocation StockLocationRef                  `json:"destination_location"`
+	DestinationBucketID string                            `json:"destination_bucket_id,omitempty"`
+	CreatedAt           time.Time                         `json:"created_at"`
 }

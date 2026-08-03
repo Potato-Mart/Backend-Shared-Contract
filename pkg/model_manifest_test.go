@@ -17,7 +17,7 @@ import (
 // exported type changes the digest below and requires an explicit manifest
 // review instead of silently expanding the shared module.
 var v22ModelPackageManifest = map[string]string{
-	"common":                     "value",
+	"common":                     "enum,value",
 	"contracts/analytics":        "record",
 	"contracts/benefit":          "value",
 	"contracts/campaign":         "entity,event,snapshot,record",
@@ -72,9 +72,10 @@ var v22ModelPackageManifest = map[string]string{
 	"versioning":                 "module-metadata",
 }
 
-// Reviewed for the v22 typed-geography, depot-hierarchy, shipping-coverage,
-// and geographically scoped campaign and promotion surface.
-const v22ExportedTypeManifestDigest = "0cc051cdae12972190d8121d6f542d4da7c968886a670fd99da9078ea2893056"
+// Reviewed for the v22 depot-qualified stock-location, package-composition,
+// lot, bucket, quality, reservation, staging, movement, and inventory-event
+// surface.
+const v22ExportedTypeManifestDigest = "c06b02b655e2d6e0511201d2694dcb792b764efe1918ff85b225ac0f7173d416"
 
 func TestV22ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

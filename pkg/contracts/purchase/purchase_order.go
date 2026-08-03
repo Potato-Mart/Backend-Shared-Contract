@@ -35,14 +35,13 @@ type Order struct {
 }
 
 type OrderItem struct {
-	ID           string           `json:"id,omitempty"`
-	Product      product.Snapshot `json:"product"`
-	UnitCost     common.Money     `json:"unit_cost"`
-	OrderedQty   int              `json:"ordered_qty"`
-	ReceivedQty  int              `json:"received_qty"`
-	RejectedQty  int              `json:"rejected_qty,omitempty"`
-	LineTotal    common.Money     `json:"line_total"`
-	LocationCode string           `json:"location_code,omitempty"`
-	Note         string           `json:"note,omitempty"`
-	ExpireAt     time.Time        `json:"expire_at"`
+	ID                  string                            `json:"id,omitempty"`
+	Product             product.Snapshot                  `json:"product"`
+	PackageOptionID     string                            `json:"package_option_id"`
+	UnitCost            common.Money                      `json:"unit_cost"`
+	OrderedComposition  common.PackageCompositionSnapshot `json:"ordered_composition"`
+	ReceivedComposition common.PackageCompositionSnapshot `json:"received_composition"`
+	RejectedComposition common.PackageCompositionSnapshot `json:"rejected_composition"`
+	LineTotal           common.Money                      `json:"line_total"`
+	Note                string                            `json:"note,omitempty"`
 }

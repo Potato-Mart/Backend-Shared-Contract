@@ -1,9 +1,7 @@
 package warehouseenum
 
 // StorageType classifies the physical storage conditions required by a
-// product. It is used both on SKU categories and on placing areas so
-// that products can only be assigned to an area with matching
-// refrigeration requirements.
+// product or stock location.
 type StorageType string
 
 const (
