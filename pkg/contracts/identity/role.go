@@ -3,8 +3,8 @@ package identity
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/identity"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/identity"
 )
 
 // Role is the projection of a role definition stored in mgmt_roles.

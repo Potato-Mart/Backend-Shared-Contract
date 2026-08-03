@@ -3,8 +3,8 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/wholesale"
 )
 
 type GroupOrderManagerApplicantSnapshot struct {

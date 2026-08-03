@@ -6,12 +6,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/benefit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/wallet"
-	benefitenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/benefit"
-	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/wallet"
+	benefitenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/benefit"
+	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/wallet"
 )
 
 func TestCustomerWalletRoundTrip(t *testing.T) {

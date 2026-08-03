@@ -4,45 +4,48 @@
 
 Backend-Shared-Contract is Potato Mart's shared Go module for reusable
 cross-service data models. It contains domain entities, records, snapshots,
-events, value objects, typed enums, field-name and error-code constants, and
+events, value objects, typed enums, required model-identity constants, and
 model-version metadata.
 
 The module is deliberately model-only. Backend services remain responsible for
 their routes, request and response DTOs, HTTP envelopes, validation,
-authorization, state transitions, calculations, normalization, persistence,
-and business workflows.
+authorization, state transitions, calculations, normalization, and business
+workflows.
 
 ## Latest Version
 
 ```text
-v21.1.0
-github.com/Potato-Mart/Backend-Shared-Contract/v21
+v22.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v22
 ```
 
 See [RELEASE_NOTES.md](RELEASE_NOTES.md) for the release history,
-compatibility notes, and consumer actions.
+breaking JSON changes and consumer actions.
 
 ## Usage
 
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v21 v21.1.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v22 v22.0.0
 ```
 
-Import packages from the same `/v21` module path.
+Import packages from the same `/v22` module path.
 
 ## Boundary Governance
 
-The package manifest and AST boundary tests reject unclassified exported
-models, transport-specific tags, endpoint DTO naming, paths, scopes, free
-business functions, and non-intrinsic receiver methods. Approved receiver
-behavior is limited to serialization and single-value `String` or `IsValid`
-methods.
+Ordinary `json` struct tags and standard `encoding/json` define every shared
+wire shape. The package manifest and AST boundary tests reject unclassified
+exported models, non-JSON tags, custom codecs, endpoint DTO naming, paths,
+scopes, free business functions, type aliases, deprecated declarations, and
+non-intrinsic receiver methods. Approved receiver behavior is limited to
+single-value `String` or `IsValid` enum methods.
 
 Published model changes follow semantic versioning. Breaking exported shapes
-or wire values require a new major module path. `RELEASE_NOTES.md` is the source
-of truth for release-specific changes and migration impact.
+or wire values require a new major module path. A cut-over removes the replaced
+field, type, enum value, event, and test in the same change; deprecated aliases
+and fallback JSON shapes are not retained. `RELEASE_NOTES.md` is the source of
+truth for release-specific JSON changes and consumer actions.
 
 ## Verification
 

@@ -3,7 +3,7 @@ package campaign
 import (
 	"time"
 
-	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/campaign"
+	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/campaign"
 )
 
 // CampaignChangedEvent is the customer-safe storefront-events projection used

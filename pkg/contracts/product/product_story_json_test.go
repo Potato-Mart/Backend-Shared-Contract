@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
 )
 
 func TestProductSupplyAndDetailImagesJSONShape(t *testing.T) {

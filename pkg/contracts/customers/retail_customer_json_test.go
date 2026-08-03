@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/customers"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/shipping"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/customer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/customers"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/shipping"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/customer"
 )
 
 func TestRetailCustomerJSONShape(t *testing.T) {

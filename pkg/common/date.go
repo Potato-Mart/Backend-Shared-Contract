@@ -2,8 +2,8 @@ package common
 
 // Date is a calendar date in YYYY-MM-DD format.
 //
-// Use Date for date-only contract fields where a timestamp, timezone, or
-// database-specific date type would change the meaning at service boundaries.
+// Use Date for date-only JSON fields where a timestamp or timezone would
+// change the meaning at service boundaries.
 type Date string
 
 // TimeOfDay is a wall-clock time in 24-hour "HH:MM" format.

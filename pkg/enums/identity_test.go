@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/identity"
+	identityenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/identity"
 )
 
 func TestIdentityEnumsValidateKnownValues(t *testing.T) {

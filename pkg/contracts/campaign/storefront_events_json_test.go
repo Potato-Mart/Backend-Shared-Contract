@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/campaign"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/promotion"
-	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/campaign"
-	eventsenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/events"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/campaign"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/promotion"
+	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/campaign"
+	eventsenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/events"
 )
 
 func TestCustomerSafeStorefrontEventsJSON(t *testing.T) {

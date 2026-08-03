@@ -3,9 +3,9 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/warehouse"
-	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/warehouse"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/wholesale"
 )
 
 // WholesaleApplicantSnapshot freezes the applicant identity reviewed by an

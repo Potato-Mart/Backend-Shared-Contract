@@ -1,21 +1,21 @@
 # Version Log / 版本紀錄
 
-Backend-Shared-Contract is the shared contract layer for the Potato Mart backend ecosystem. This file records public contract changes, migration impact, and consumer actions for backend services, web clients, mobile clients, and future service-to-service integrations.
+Backend-Shared-Contract is the shared contract layer for the Potato Mart backend ecosystem. This file records public contract changes, upgrade impact, and consumer actions for backend services, web clients, mobile clients, and future service-to-service integrations.
 
 Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本文件記錄公開契約變更、遷移影響，以及後端服務、前端、行動端與未來服務間整合需要採取的動作。
 
 ## Governance / 治理原則
 
-- This module contains reusable domain entities, records, snapshots, events, value objects, typed enums, field-name/error-code constants, serialization methods, and single-value `IsValid` methods only.
+- This module contains reusable JSON domain entities, records, snapshots, events, value objects, typed enums, required model-identity constants, and single-value `String`/`IsValid` enum methods only.
 - HTTP/API wire DTOs, response envelopes, command payloads, and backend-specific request/response structs belong in the owning backend service.
-- It must not depend on database drivers, web frameworks, authentication middleware, or runtime service implementations.
+- It must not depend on web frameworks, authentication middleware, runtime service implementations, non-JSON struct tags, or custom codecs.
 - Semantic versioning is enforced. Any removal, rename, JSON shape change, module path change, or incompatible exported type change requires a major version.
 - Consumers should pin a released module tag and review the "Consumer Action / 使用方動作" section before upgrading.
 - Remote release history was reconciled from GitHub tags in `Potato-Mart/Backend-Shared-Contract` on 2026-06-18.
 
-- 本模組只包含可重用的 domain entity、record、snapshot、event、value object、typed enum、欄位名稱/錯誤碼常數、序列化方法，以及單一值 `IsValid` 方法。
+- 本模組只包含可重用的 JSON domain entity、record、snapshot、event、value object、typed enum、必要的模型識別常數，以及單一值 `String`/`IsValid` enum 方法。
 - HTTP/API wire DTO、回應信封、command payload，以及後端專屬 request/response struct 應由各自擁有的後端服務維護。
-- 本模組不得依賴資料庫驅動、Web 框架、身份驗證 middleware，或任何服務執行期實作。
+- 本模組不得依賴 Web 框架、身份驗證 middleware、服務執行期實作、非 JSON struct tag 或自訂 codec。
 - 本模組遵循 semantic versioning。任何移除、改名、JSON shape 改變、module path 改變，或不相容的 exported type 變更，都必須升 major version。
 - 使用方應固定依賴已發布 tag，並在升級前閱讀 "Consumer Action / 使用方動作"。
 
@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v22.0.0` | 2026-08-04 | Major | JSON-only geography, depot, package-aware inventory, consolidated group fulfilment, and geographically scoped campaign/promotion cut-over. Replaces superseded fields and requires every consumer to adopt `/v22`. |
 | `v21.1.0` | 2026-07-30 | Minor | Additive backend-gap models for persistent notification read state and consent provenance, refund-linked coupon usage, redemption/wallet timestamps, point award and debt summaries, secret-free voucher claim delivery, and versioned gift-card denomination policy. Keeps the `/v21` module path. |
 | `v21.0.0` | 2026-07-29 | Major | Delivery, campaign, native notification, and wallet-policy cutover: adds revisioned delivery schedules/rates/preferences, campaign-promotion/media/typed-CTA linkage, safe storefront events, typed campaign notification references and push values; removes quiet-hours and requires every consumer to adopt `/v21`. |
 | `v20.0.0` | 2026-07-29 | Major | Catalog brand identity and SKU relationship hard cut: canonical brands use Mongo-backed IDs, immutable slugs, localized names, and optional logo URLs; brand keys, summaries, counters, and embedded SKU product lists are removed. Requires Supply to adopt `/v20` and consumers to migrate explicitly. |
@@ -106,6 +107,83 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v22.0.0 (2026-08-04) - Geography, Depot, Packaging, and Inventory JSON Cut-over
+
+### Breaking JSON Changes / 破壞性 JSON 變更
+
+- Changes the module path from `/v21` to `/v22` and removes each replaced
+  field, type, enum value, event, test fixture, and compatibility alias.
+- Replaces free-text address and delivery-region geography with typed country,
+  administrative-area, depot-region, depot, shipping-zone, and coverage JSON.
+- Replaces product placing-area and depot-product shapes with qualified stock
+  location assignments and per-location product availability.
+- Replaces singular product barcodes and scalar carton fields with stable
+  package options, barcode assignments, and priced CASE/EACH components.
+- Replaces scalar product, storefront, POS, and forecast stock/expiry fields
+  with lot, bucket, package, offer, and structured availability snapshots.
+- Replaces ambiguous stock-location and packing-box fields with
+  `location_code`, `storage_type`, product CASE, and outbound CONTAINER models.
+- Replaces free-text campaign region and unscoped promotion/coupon models with
+  explicit GLOBAL/TARGETED scope and resolved profile geography.
+- Replaces competing stock-arrival/restock payloads with revisioned,
+  depot-qualified inventory and location-availability events.
+
+The cut-over removes the following v21 surface and uses only the listed v22
+replacement JSON:
+
+| Removed v21 surface | v22 replacement JSON |
+| --- | --- |
+| Address `city`, `state`, `postcode`, and string `country` | `locality`, typed `administrative_area`, `postal_code`, and typed `country` |
+| `PostcodeRule`, `PostcodeRules`, and Melbourne `DeliveryRegion` values | typed `country_code`, `administrative_area_codes`, `postal_codes`, `DepotRegion`, and `DepotCoverageRule` |
+| Shipping `states`, `postcodes`, and `is_local` | typed `country_code`, `administrative_area_codes`, and `postal_codes` |
+| Depot postcode rules and unqualified depot codes | globally qualified `code`, `region_code`, required `address`, and required `timezone` |
+| `Product.PlacingArea`, `ProductPlacement`, `DepotProduct`, stock-location `code`, and `zone` | `StockLocationRef`, `location_code`, `storage_type`, location policy, `StockLocationAssignment`, and `StockLocationProductBalance` |
+| Product `sku`, singular `barcode`, `physical`, and ambiguous `storage` | `category_sku_code`, `package_options`, `barcode_assignments`, and `storage_type`; `sku_code` remains the product identity |
+| Product/storefront/POS `current_stock`, `restocked_at`, stock-derived `display_status`, scalar price, and product-wide expiry | `ProductStockSummary`, `SellableOffer`, and immutable `SellableOfferSnapshot` |
+| Purchase/WMS scalar expiry and location fields, including `expired_at`, `expire_at`, `expiry_ym`, and singular `location_code` | `InventoryLot`, `InventoryDateMark`, `InventoryStockBucket`, bucket/location references, and package compositions |
+| Legacy stock-adjust, reserve/release movement values, and competing arrival/restock events | physical `StockMovement`, logical `StockReservation`, `StockReservationAllocation`, `StockStagingRecord`, package conversion, quality, availability, and offer events |
+| Cart/order `quantity`, `unit_price`, `carton_qty`, and `carton_size` | `components`, `requested_package_count`, `requested_base_units`, accepted offer/package snapshots, and package compositions |
+| `PackingBoxPlan`, `PackingBoxContent`, scalar picking/packing quantities, and duplicated damage balances | `OutboundContainerPlan`, `OutboundContainerContent`, package-aware picking/packing compositions, substitution snapshots, and quality-assessment references |
+| Participant-owned group inventory fields | `GroupOrderContext` and parent-owned `GroupOrderFulfilmentPlan` aggregate lines with participant shares |
+| Campaign audience `region` and unscoped campaign/promotion/coupon projections | required `geographic_scope`, resolved `geographic_context`, promotion `series_key`, revisions, and schedule timezone |
+
+Operational instants use standard `time.Time`/`*time.Time` JSON values. Values
+are normalized to UTC before encoding; local-calendar meaning carries an
+explicit IANA timezone, and global schedules use `Etc/UTC`.
+
+### Added / 新增
+
+- Typed country/subdivision references, administrative-area kinds,
+  `DepotRegion`, `DepotCoverageRule`, and required depot IANA timezone.
+- Location purpose, handling, customer access, collection eligibility,
+  system-location identity, SKU assignment, and electronic-shelf-label fields.
+- Product package options, package-qualified barcode assignments, package
+  composition snapshots, inventory lots/date marks/buckets/units, physical
+  condition, stock disposition, quality assessment, and package conversion.
+- Logical reservation/allocation, physical staging, canonical movement,
+  sellable offer, product stock summary, and zero-crossing availability models.
+- Mixed CASE/EACH cart and order components, explicit loose-case substitution,
+  consolidated group fulfilment, participant shares, and outbound containers.
+- Reusable geographic scope/context on campaigns, marketing campaigns,
+  promotions, coupons, pricing snapshots, offers, and order records.
+
+### Contract Boundary / 契約邊界
+
+- Ordinary `json` tags and standard `encoding/json` are the only wire-shape
+  mechanism. Production non-JSON tags and custom codecs are rejected.
+- Production code remains structs and enums only. Receiver methods are limited
+  to `String()` and single-value `IsValid()` enum helpers.
+- Deprecated declarations, type aliases, fallback fields, and dual JSON shapes
+  are rejected by the v22 hard-cut tests.
+
+### Consumer Action / 使用方動作
+
+- Adopt `github.com/Potato-Mart/Backend-Shared-Contract/v22 v22.0.0` and replace
+  every `/v21` import in one consumer release.
+- Update JSON mappings for typed geography, qualified depot locations,
+  package-aware quantities, lots/buckets/offers, group fulfilment, and resolved
+  campaign/promotion geography before publishing or consuming v22 events.
 
 ## v21.1.0 (2026-07-30) - Backend Gap Models and Gift-Card Policy V2
 

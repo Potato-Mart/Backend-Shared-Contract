@@ -7,14 +7,14 @@ package pos
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/sales"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/payment"
-	posenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/pos"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/product"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/sales"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/payment"
+	posenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/pos"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/product"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/warehouse"
 )
 
 // CatalogProduct is the cashier-safe product projection returned by the POS
@@ -44,7 +44,7 @@ type Register struct {
 	Name    string `json:"name"`
 	Status  string `json:"status,omitempty"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 // RegisterShift is one operator shift on a register, from open to close-out.
@@ -60,7 +60,7 @@ type RegisterShift struct {
 	CashVariance   *common.Money       `json:"cash_variance,omitempty"`
 	Status         posenum.ShiftStatus `json:"status"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 // CashMovement is one cash-drawer movement recorded during a shift.

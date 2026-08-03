@@ -3,8 +3,8 @@ package notification
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/identity"
-	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/notification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/identity"
+	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/notification"
 )
 
 // BackInStockConsentSnapshot records the account and customer-level consent

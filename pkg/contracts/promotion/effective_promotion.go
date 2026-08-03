@@ -3,7 +3,7 @@ package promotion
 import (
 	"time"
 
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/promotion"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/promotion"
 )
 
 // EffectivePromotion is the result of resolving the single promotion that

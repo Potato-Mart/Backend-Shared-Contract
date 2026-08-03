@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	eventsenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/events"
+	eventsenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/events"
 )
 
 func TestVoucherClaimIssuedEventType(t *testing.T) {
