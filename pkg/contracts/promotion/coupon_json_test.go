@@ -78,15 +78,15 @@ func TestCouponUsageRoundTripsWholesaleOwner(t *testing.T) {
 	if strings.Contains(string(payload), "customer_number") || !strings.Contains(string(payload), `"owner_type":"wholesale_organisation"`) {
 		t.Fatalf("coupon usage must use the wholesale owner reference: %s", payload)
 	}
-	legacyRecord := record
-	legacyRecord.RefundID = ""
-	legacyRecord.RefundedAt = nil
-	legacyPayload, err := json.Marshal(legacyRecord)
+	unrefundedRecord := record
+	unrefundedRecord.RefundID = ""
+	unrefundedRecord.RefundedAt = nil
+	unrefundedPayload, err := json.Marshal(unrefundedRecord)
 	if err != nil {
 		t.Fatalf("marshal unrefunded coupon usage: %v", err)
 	}
-	if strings.Contains(string(legacyPayload), "refund_id") || strings.Contains(string(legacyPayload), "refunded_at") {
-		t.Fatalf("unrefunded coupon usage should omit refund audit fields: %s", legacyPayload)
+	if strings.Contains(string(unrefundedPayload), "refund_id") || strings.Contains(string(unrefundedPayload), "refunded_at") {
+		t.Fatalf("unrefunded coupon usage should omit refund audit fields: %s", unrefundedPayload)
 	}
 
 	var decoded promotion.CouponUsageRecord

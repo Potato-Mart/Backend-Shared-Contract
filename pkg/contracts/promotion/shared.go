@@ -17,9 +17,10 @@ type DiscountSpec struct {
 // ActiveWindow groups the activation flag with the optional start/expiry
 // window of a promotion or coupon.
 type ActiveWindow struct {
-	StartsAt  *time.Time `json:"starts_at,omitempty"`
-	ExpiresAt *time.Time `json:"expires_at,omitempty"`
-	IsActive  bool       `json:"is_active"`
+	StartsAt         *time.Time `json:"starts_at,omitempty"`
+	ExpiresAt        *time.Time `json:"expires_at,omitempty"`
+	ScheduleTimezone string     `json:"schedule_timezone"`
+	IsActive         bool       `json:"is_active"`
 }
 
 // UsageLimits groups redemption caps and counters shared by promotions

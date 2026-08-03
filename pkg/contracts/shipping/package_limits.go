@@ -3,8 +3,8 @@ package shipping
 import "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
 
 // PackageLimits describes the physical package constraints for a shipping
-// option. All units use the shared measurement primitives to avoid carrier,
-// database, or service-specific unit assumptions.
+// option. All units use the shared measurement primitives to avoid carrier-
+// or service-specific unit assumptions.
 type PackageLimits struct {
 	MinPackageWeight        *common.Weight     `json:"min_package_weight,omitempty"`
 	MaxPackageWeight        *common.Weight     `json:"max_package_weight,omitempty"`

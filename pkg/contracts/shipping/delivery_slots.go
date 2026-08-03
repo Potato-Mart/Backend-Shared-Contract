@@ -9,7 +9,7 @@ import (
 // DeliverySlot is one customer-selectable delivery window. ID is opaque and
 // stable for the area, date, window, and schedule revision that produced it.
 // Availability is a service-owned wire value such as available, limited, or
-// full. Checkout remains authoritative for both capacity and final fees.
+// full.
 type DeliverySlot struct {
 	ID           string        `json:"id"`
 	StartAt      time.Time     `json:"start_at"`
@@ -27,21 +27,22 @@ type DeliveryDateGroup struct {
 	Slots []DeliverySlot `json:"slots"`
 }
 
-// DeliveryAreaRate is the customer-safe rate and depot projection selected by
-// postcode and, where supplied, suburb. Monetary values use AUD minor units
-// through common.Money.
+// DeliveryAreaRate is the customer-safe geographic rate and depot projection.
 type DeliveryAreaRate struct {
-	Postcode              string       `json:"postcode"`
-	Suburb                string       `json:"suburb,omitempty"`
-	DeliveryRegion        string       `json:"delivery_region"`
-	DepotCode             string       `json:"depot_code"`
-	DepotName             string       `json:"depot_name"`
-	ShippingFee           common.Money `json:"shipping_fee"`
-	FreeShippingThreshold common.Money `json:"free_shipping_threshold"`
+	CountryCode            common.CountryCode     `json:"country_code"`
+	AdministrativeAreaCode common.SubdivisionCode `json:"administrative_area_code,omitempty"`
+	PostalCode             string                 `json:"postal_code"`
+	Locality               string                 `json:"locality,omitempty"`
+	ZoneID                 string                 `json:"zone_id"`
+	DepotRegionCode        string                 `json:"depot_region_code,omitempty"`
+	DepotCode              string                 `json:"depot_code"`
+	DepotName              string                 `json:"depot_name"`
+	ShippingFee            common.Money           `json:"shipping_fee"`
+	FreeShippingThreshold  common.Money           `json:"free_shipping_threshold"`
 }
 
 // DeliverySchedule is a cart-free, revisioned view of delivery windows for an
-// area. Checkout revalidates every selected slot and calculates the final fee.
+// area.
 type DeliverySchedule struct {
 	Availability      string              `json:"availability"`
 	UnavailableReason string              `json:"unavailable_reason,omitempty"`
@@ -52,9 +53,7 @@ type DeliverySchedule struct {
 	DateGroups        []DeliveryDateGroup `json:"date_groups"`
 }
 
-// PreferredDeliverySlot is the customer's cart-independent preference. It is
-// display metadata only: checkout must revalidate the opaque slot ID and time
-// window against the current cart-bound schedule.
+// PreferredDeliverySlot is the customer's cart-independent display snapshot.
 type PreferredDeliverySlot struct {
 	Date             string `json:"date"`
 	SlotID           string `json:"slot_id,omitempty"`

@@ -48,7 +48,6 @@ type Order struct {
 	// OutsourcedCarrier names the third-party delivery company; set only
 	// when DeliveryMethod is outsourced.
 	OutsourcedCarrier string                      `json:"outsourced_carrier,omitempty"`
-	DeliveryRegion    shippingenum.DeliveryRegion `json:"delivery_region,omitempty"`
 
 	// ── Money ─────────────────────────────────────────────────────────
 	Subtotal       common.Money `json:"subtotal"`

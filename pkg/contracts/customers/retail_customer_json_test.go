@@ -44,13 +44,13 @@ func TestRetailCustomerJSONShape(t *testing.T) {
 			MissingFields:   []string{"default_shipping", "default_billing"},
 		},
 		DefaultBilling: &common.ContactAddress{
-			Address: &common.Address{Label: "Billing", Line1: "1 Account St", City: "Springvale", State: "VIC", Postcode: "3171", Country: "AU"},
+			Address: &common.Address{Label: "Billing", Line1: "1 Account St", Locality: "Springvale", AdministrativeArea: &common.AdministrativeAreaRef{Code: "AU-VIC"}, PostalCode: "3171", Country: common.CountryRef{Code: "AU"}},
 		},
 		ShippingAddresses: []common.ContactAddress{
 			{
 				ID:      "addr_123",
 				Contact: &common.Recipient{Name: "Retail Customer"},
-				Address: &common.Address{Label: "Home", Line1: "2 Account St", City: "Springvale", State: "VIC", Postcode: "3171", Country: "AU"},
+				Address: &common.Address{Label: "Home", Line1: "2 Account St", Locality: "Springvale", AdministrativeArea: &common.AdministrativeAreaRef{Code: "AU-VIC"}, PostalCode: "3171", Country: common.CountryRef{Code: "AU"}},
 			},
 		},
 	}

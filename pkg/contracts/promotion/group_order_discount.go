@@ -54,6 +54,7 @@ type GroupOrderDiscountDecision struct {
 	ApplicationID       string                           `json:"application_id,omitempty"`
 	ApprovedPromotionID string                           `json:"approved_promotion_id,omitempty"`
 	DiscountAmount      common.Money                     `json:"discount_amount"`
+	GeographicContext   common.GeographicContext         `json:"geographic_context"`
 	Lines               []GroupOrderDiscountDecisionLine `json:"lines,omitempty"`
 	RuleVersion         string                           `json:"rule_version,omitempty"`
 	EvaluatedAt         time.Time                        `json:"evaluated_at"`

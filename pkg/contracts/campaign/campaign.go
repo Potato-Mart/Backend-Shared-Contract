@@ -13,13 +13,11 @@ import (
 	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/campaign"
 )
 
-// Audience narrows who a campaign is shown to. An empty field means "any";
-// clients pass their own context (customer_type/platform/region) when querying
-// and the server filters server-side.
+// Audience narrows a campaign by customer type and client platform.
+// GeographicScope carries all geographic eligibility.
 type Audience struct {
 	CustomerType campaignenum.CampaignCustomerType `json:"customer_type,omitempty"`
 	Platform     campaignenum.CampaignPlatform     `json:"platform,omitempty"`
-	Region       string                            `json:"region,omitempty"`
 }
 
 // CTADestination is the parsed, allowlisted route for a campaign call to
@@ -63,10 +61,12 @@ type Campaign struct {
 	DismissKey  string `json:"dismiss_key,omitempty"`
 
 	// StartsAt/EndsAt bound the active window; nil means open-ended.
-	StartsAt *time.Time `json:"starts_at,omitempty"`
-	EndsAt   *time.Time `json:"ends_at,omitempty"`
+	StartsAt         *time.Time `json:"starts_at,omitempty"`
+	EndsAt           *time.Time `json:"ends_at,omitempty"`
+	ScheduleTimezone string     `json:"schedule_timezone"`
 
 	Audience           *Audience                   `json:"audience,omitempty"`
+	GeographicScope    common.GeographicScope      `json:"geographic_scope"`
 	Targets            CampaignTarget              `json:"targets,omitempty"`
 	Planning           *CampaignPlanning           `json:"planning,omitempty"`
 	Status             campaignenum.CampaignStatus `json:"status"`

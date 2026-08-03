@@ -1,16 +1,17 @@
 package shipping
 
-import "time"
+import (
+	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+)
 
 type Zone struct {
-	ID     string   `json:"id"`
-	Name   string   `json:"name"`
-	States []string `json:"states,omitempty"`
-	// Postcodes limits the zone to specific postcodes within States.
-	Postcodes []string `json:"postcodes,omitempty"`
-	// IsLocal marks the zone as the local metro area (e.g. Metro
-	// Melbourne) used for order delivery-region classification.
-	IsLocal   bool      `json:"is_local,omitempty"`
-	IsActive  bool      `json:"is_active"`
-	CreatedAt time.Time `json:"created_at"`
+	ID                      string                   `json:"id"`
+	Name                    string                   `json:"name"`
+	CountryCode             common.CountryCode       `json:"country_code"`
+	AdministrativeAreaCodes []common.SubdivisionCode `json:"administrative_area_codes,omitempty"`
+	PostalCodes             []string                 `json:"postal_codes,omitempty"`
+	IsActive                bool                     `json:"is_active"`
+	CreatedAt               time.Time                `json:"created_at"`
 }

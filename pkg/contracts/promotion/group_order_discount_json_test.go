@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	geographyenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/geography"
 	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/promotion"
 )
 
@@ -43,6 +44,32 @@ func TestGroupOrderDiscountFixedAmountUsesMinorUnitMoney(t *testing.T) {
 	}
 	if got["state"] != "approved" {
 		t.Fatalf("state = %v, want approved (%s)", got["state"], body)
+	}
+}
+
+func TestGroupOrderDiscountDecisionFreezesGeographicContext(t *testing.T) {
+	payload, err := json.Marshal(GroupOrderDiscountDecision{
+		QuoteKey: "quote_1", GroupOrderCode: "GO-2601010001", Applied: true,
+		ApprovedPromotionID: "prm_1",
+		DiscountAmount:      common.Money{AmountMinor: 500, Currency: "AUD"},
+		GeographicContext: common.GeographicContext{
+			Source:      geographyenum.GeographicContextSourceWholesaleOrganisationProfile,
+			CountryCode: "AU", SubdivisionCode: "AU-VIC",
+			MatchedTargetKind: geographyenum.GeographicTargetSubdivision,
+			MatchedTargetCode: "AU-VIC", ScopeRevision: 3, RuleRevision: 7,
+			EvaluationTimezone: "Australia/Melbourne",
+		},
+	})
+	if err != nil {
+		t.Fatalf("marshal group-order discount decision: %v", err)
+	}
+	var got map[string]any
+	if err := json.Unmarshal(payload, &got); err != nil {
+		t.Fatalf("unmarshal group-order discount decision: %v", err)
+	}
+	context, ok := got["geographic_context"].(map[string]any)
+	if !ok || context["source"] != "WHOLESALE_ORGANISATION_PROFILE" || context["matched_target_code"] != "AU-VIC" {
+		t.Fatalf("group-order discount geographic context mismatch: %s", payload)
 	}
 }
 

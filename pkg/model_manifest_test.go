@@ -13,10 +13,10 @@ import (
 	"testing"
 )
 
-// v21ModelPackageManifest classifies every production package. Adding an
+// v22ModelPackageManifest classifies every production package. Adding an
 // exported type changes the digest below and requires an explicit manifest
 // review instead of silently expanding the shared module.
-var v21ModelPackageManifest = map[string]string{
+var v22ModelPackageManifest = map[string]string{
 	"common":                     "value",
 	"contracts/analytics":        "record",
 	"contracts/benefit":          "value",
@@ -50,6 +50,7 @@ var v21ModelPackageManifest = map[string]string{
 	"enums/customer":             "enum",
 	"enums/events":               "enum",
 	"enums/favourite":            "enum",
+	"enums/geography":            "enum",
 	"enums/identity":             "enum",
 	"enums/importcompliance":     "enum",
 	"enums/marketing":            "enum",
@@ -71,13 +72,11 @@ var v21ModelPackageManifest = map[string]string{
 	"versioning":                 "module-metadata",
 }
 
-// Reviewed for the v21.1 backend-gaps release: the additive exported surface is
-// limited to PointAwardStatus, GiftCardDenominationPolicy, and
-// VoucherClaimIssuedEvent. Routes, HTTP DTOs, validation, persistence,
-// authorization, timers, and service business behavior remain absent.
-const v21ExportedTypeManifestDigest = "c493c1bd0ef23d897ca39f815662daf8ecf965ac0d9a99cba74a58ea2afaa639"
+// Reviewed for the v22 typed-geography, depot-hierarchy, shipping-coverage,
+// and geographically scoped campaign and promotion surface.
+const v22ExportedTypeManifestDigest = "0cc051cdae12972190d8121d6f542d4da7c968886a670fd99da9078ea2893056"
 
-func TestV21ExportedTypesMatchModelManifest(t *testing.T) {
+func TestV22ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)
 	var entries []string
 	err := filepath.WalkDir(".", func(path string, entry fs.DirEntry, walkErr error) error {
@@ -91,9 +90,9 @@ func TestV21ExportedTypesMatchModelManifest(t *testing.T) {
 		if packagePath == "." {
 			return nil
 		}
-		class, classified := v21ModelPackageManifest[packagePath]
+		class, classified := v22ModelPackageManifest[packagePath]
 		if !classified {
-			t.Errorf("%s is not classified in the v21 model manifest", packagePath)
+			t.Errorf("%s is not classified in the v22 model manifest", packagePath)
 			return nil
 		}
 		seenPackages[packagePath] = true
@@ -118,9 +117,9 @@ func TestV21ExportedTypesMatchModelManifest(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("read v21 model manifest: %v", err)
+		t.Fatalf("read v22 model manifest: %v", err)
 	}
-	for packagePath := range v21ModelPackageManifest {
+	for packagePath := range v22ModelPackageManifest {
 		if !seenPackages[packagePath] {
 			t.Errorf("manifest package %s has no production source", packagePath)
 		}
@@ -128,7 +127,7 @@ func TestV21ExportedTypesMatchModelManifest(t *testing.T) {
 	sort.Strings(entries)
 	sum := sha256.Sum256([]byte(strings.Join(entries, "\n")))
 	got := hex.EncodeToString(sum[:])
-	if got != v21ExportedTypeManifestDigest {
+	if got != v22ExportedTypeManifestDigest {
 		t.Fatalf("exported model manifest changed: got %s; classify the change and update the reviewed digest", got)
 	}
 }

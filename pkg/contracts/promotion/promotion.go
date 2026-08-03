@@ -12,20 +12,19 @@ import (
 // bogo, bundle, and tiered_pricing.
 type Promotion struct {
 	ID          string                      `json:"id"`
+	SeriesKey   string                      `json:"series_key"`
 	Name        string                      `json:"name"`
 	Description string                      `json:"description,omitempty"`
 	Type        promotionenum.PromotionType `json:"type"`
 
-	// ── Classification & targeting (additive, v5.2.0) ─────────────────
+	// ── Classification & targeting ─────────────────────────────────────
 	// Class separates standing promotions (常態特價, normal_promotion)
 	// from time-boxed special campaigns (特殊活動, special_campaign).
-	// Empty is read as normal_promotion so existing documents keep their
-	// behaviour; see EffectiveClass.
-	Class promotionenum.PromotionClass `json:"class,omitempty"`
+	Class promotionenum.PromotionClass `json:"class"`
 	// TargetScope narrows the promotion to one product or one category tag.
-	// Empty / "all" applies cart-wide.
+	// The explicit "all" value applies cart-wide.
 	// Product targets are keyed by the product SKU code.
-	TargetScope promotionenum.DiscountScope `json:"target_scope,omitempty"`
+	TargetScope promotionenum.DiscountScope `json:"target_scope"`
 	// TargetProductSKUCode is required when TargetScope is "product".
 	TargetProductSKUCode string `json:"target_product_sku_code,omitempty"`
 	// TargetCategoryTagID and TargetCategoryTagName are required when
@@ -85,7 +84,8 @@ type Promotion struct {
 	ReceiptMessages []common.LocalizedName `json:"receipt_messages"`
 	UsageLimits
 	ActiveWindow
-	Channels []salesenum.OrderType `json:"channels,omitempty"` // e.g. ["online","pos"]
+	GeographicScope common.GeographicScope `json:"geographic_scope"`
+	Channels        []salesenum.OrderType  `json:"channels,omitempty"` // e.g. ["online","pos"]
 
 	// Source tracking for promotions synced from external systems.
 	Source    string                `json:"source,omitempty"`

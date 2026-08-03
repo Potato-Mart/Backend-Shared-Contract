@@ -76,7 +76,7 @@ func TestDeclarationAndLabelRoundTripManagedMediaAndMeasurements(t *testing.T) {
 			ShippingMethod: "Air", TransportReference: "BR-315", ConsignmentIdentifier: "AWB-1",
 			PortOfLoading: "TPE", DestinationPort: "SYD",
 		},
-		Manufacturer: importcompliance.ManufacturerDetails{Name: "Maker", Address: &common.Address{Label: "Manufacturer", Line1: "1 Zhongxiao Road", City: "Taipei", Postcode: "100", Country: "Taiwan", FormattedAddress: "1 Zhongxiao Road, Taipei 100, Taiwan", PlaceID: "place-2"}, Phone: "+886"},
+		Manufacturer: importcompliance.ManufacturerDetails{Name: "Maker", Address: &common.Address{Label: "Manufacturer", Line1: "1 Zhongxiao Road", Locality: "Taipei", PostalCode: "100", Country: common.CountryRef{Code: "TW", Name: "Taiwan"}, FormattedAddress: "1 Zhongxiao Road, Taipei 100, Taiwan", PlaceID: "place-2"}, Phone: "+886"},
 		Signatory:    importcompliance.DeclarationSignatory{Name: "Signer", Title: "Director", SignatureMediaID: "media_signature"},
 		Lines: []importcompliance.DeclarationLine{{
 			ID: "line_1", SourceLineID: "po_line_1", ProductReference: "SKU-1", EnglishName: "Product", ChineseName: "產品",
@@ -104,7 +104,7 @@ func TestDeclarationAndLabelRoundTripManagedMediaAndMeasurements(t *testing.T) {
 		SKUCode:       "SKU-1", SKU: "retail-sku", VariantCode: "au-65x45", Brand: "Brand", EnglishName: "Product", ChineseName: "產品",
 		Barcode: "930000000001", NetWeightGrams: 500, PackageDimensions: common.Dimensions{WidthMM: 65, LengthMM: 45, HeightMM: 10},
 		Ingredients: "Milk", Allergens: "Milk", ManufacturingProcess: "Cooked", BestBefore: "Shown on package (YYYY/MM/DD)", ShelfLife: "12 months",
-		Importer: importcompliance.LabelImporter{Name: "Potato Mart", Address: &common.Address{Label: "Importer", Line1: "1 Market Street", City: "Sydney", State: "NSW", Postcode: "2000", Country: "Australia", FormattedAddress: "1 Market Street, Sydney NSW 2000, Australia", PlaceID: "place-1"}, Phone: "+61"}, CountryOfOrigin: "Taiwan",
+		Importer: importcompliance.LabelImporter{Name: "Potato Mart", Address: &common.Address{Label: "Importer", Line1: "1 Market Street", Locality: "Sydney", AdministrativeArea: &common.AdministrativeAreaRef{Code: "AU-NSW"}, PostalCode: "2000", Country: common.CountryRef{Code: "AU", Name: "Australia"}, FormattedAddress: "1 Market Street, Sydney NSW 2000, Australia", PlaceID: "place-1"}, Phone: "+61"}, CountryOfOrigin: "Taiwan",
 		SecondNutritionEnabled: true,
 		NutritionPanels: []importcompliance.NutritionPanel{
 			{Title: "Prepared", ServingsPerPack: "2", ServingSize: "250 g", EnergyPerServe: "500", SodiumPer100Grams: "30"},
@@ -159,7 +159,7 @@ func TestRFIRecordRoundTripKeepsExternalEventsExplicit(t *testing.T) {
 		Comments: "Handle frozen", BookingAgent: importcompliance.RFIBookingAgent{Name: "Agent", Phone: "+61", Email: "agent@example.com"},
 		InspectionLocation: importcompliance.RFIInspectionLocation{
 			BusinessNameAndAANumber: "Potato Mart / AA-1",
-			PremiseAddress:          &common.Address{Label: "Inspection premise", Line1: "1 Market Street", City: "Sydney", State: "NSW", Postcode: "2000", Country: "Australia", FormattedAddress: "1 Market Street, Sydney NSW 2000, Australia", PlaceID: "place-rfi-1"},
+			PremiseAddress:          &common.Address{Label: "Inspection premise", Line1: "1 Market Street", Locality: "Sydney", AdministrativeArea: &common.AdministrativeAreaRef{Code: "AU-NSW"}, PostalCode: "2000", Country: common.CountryRef{Code: "AU", Name: "Australia"}, FormattedAddress: "1 Market Street, Sydney NSW 2000, Australia", PlaceID: "place-rfi-1"},
 			OpeningHours:            "09:00-17:00", ContactName: "Receiver", ContactPhone: "+61", PrivateResidence: false,
 		},
 		InspectionDirection: "Dock 2", RequestedTime: importcomplianceenum.RFIRequestedTimeAM, Overtime: true,

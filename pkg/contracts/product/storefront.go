@@ -33,7 +33,7 @@ type StorefrontPromotionBadge struct {
 // StorefrontDisplay explicitly allows it.
 // StorefrontOrigin is the customer-facing country-of-origin display block.
 type StorefrontOrigin struct {
-	CountryCode string                 `json:"country_code"`
+	CountryCode common.CountryCode     `json:"country_code"`
 	Label       []common.LocalizedText `json:"label,omitempty"`
 	Statement   []common.LocalizedText `json:"statement,omitempty"`
 }

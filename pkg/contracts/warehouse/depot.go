@@ -7,24 +7,20 @@ import (
 	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/warehouse"
 )
 
+// Depot is a fulfilment site within a depot region. Code is its canonical
+// cross-service reference and Timezone is an IANA time-zone identifier.
 type Depot struct {
-	ID            string          `json:"id"`
-	Code          string          `json:"code"`
-	Name          string          `json:"name"`
-	Address       *common.Address `json:"address,omitempty"`
-	Phone         string          `json:"phone,omitempty"`
-	IsActive      bool            `json:"is_active"`
-	PostcodeRules []PostcodeRule  `json:"postcode_rules,omitempty"`
-	// LayoutID points at the published WarehouseLayout for this depot's
-	// 3D viewer. Empty when no layout has been built yet.
-	LayoutID string `json:"layout_id,omitempty"`
+	ID         string         `json:"id"`
+	Code       string         `json:"code"`
+	Name       string         `json:"name"`
+	RegionCode string         `json:"region_code"`
+	Address    common.Address `json:"address"`
+	Timezone   string         `json:"timezone"`
+	Phone      string         `json:"phone,omitempty"`
+	IsActive   bool           `json:"is_active"`
+	LayoutID   string         `json:"layout_id,omitempty"`
 
 	common.AuditFields
-}
-
-type PostcodeRule struct {
-	Postcode string `json:"postcode"`
-	Priority int    `json:"priority"`
 }
 
 type DepotProduct struct {
@@ -37,12 +33,6 @@ type DepotProduct struct {
 }
 
 // StockLocation is the inventory bin a product physically lives in.
-//
-// The 3D fields below are optional: services that do not render the
-// warehouse can ignore them entirely. When LayoutNodeID is set, the
-// authoritative 3D placement lives on that LayoutNode and the inline
-// Transform/Size are a denormalised cache for renderers that fetch
-// locations directly without joining the layout tree.
 type StockLocation struct {
 	ID           string                    `json:"id"`
 	DepotCode    string                    `json:"depot_code"`

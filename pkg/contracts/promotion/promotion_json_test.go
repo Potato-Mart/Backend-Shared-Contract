@@ -5,17 +5,22 @@ import (
 	"testing"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	geographyenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/geography"
 	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/promotion"
 )
 
 func TestPromotionCategoryTagTargetNameIsLocalized(t *testing.T) {
 	body, err := json.Marshal(Promotion{
 		ID:                    "prm_1",
+		SeriesKey:             "series_hotpot",
 		Name:                  "Hotpot tag discount",
 		Type:                  promotionenum.PromotionTypeAutoDiscount,
+		Class:                 promotionenum.PromotionClassNormal,
 		TargetScope:           promotionenum.DiscountScopeCategoryTag,
 		TargetCategoryTagID:   "tag_hotpot",
 		TargetCategoryTagName: []common.LocalizedName{{Language: "en", Name: "Hotpot"}},
+		ActiveWindow:          ActiveWindow{ScheduleTimezone: "Australia/Sydney"},
+		GeographicScope:       common.GeographicScope{Mode: geographyenum.GeographicScopeModeTargeted, Targets: []common.GeographicTarget{{Kind: geographyenum.GeographicTargetCountry, Code: "AU"}}},
 	})
 	if err != nil {
 		t.Fatalf("marshal promotion: %v", err)
@@ -38,10 +43,15 @@ func TestPromotionCategoryTagTargetNameIsLocalized(t *testing.T) {
 func TestPromotionReceiptMessagesUseExplicitCustomerFacingShape(t *testing.T) {
 	body, err := json.Marshal(Promotion{
 		ID:              "prm_receipt",
+		SeriesKey:       "series_receipt",
 		Name:            "Internal campaign name",
 		Type:            promotionenum.PromotionTypeAutoDiscount,
+		Class:           promotionenum.PromotionClassNormal,
+		TargetScope:     promotionenum.DiscountScopeAll,
 		ReceiptEnabled:  true,
 		ReceiptMessages: []common.LocalizedName{{Language: "en", Name: "Save 10% this weekend"}},
+		ActiveWindow:    ActiveWindow{ScheduleTimezone: "Etc/UTC"},
+		GeographicScope: common.GeographicScope{Mode: geographyenum.GeographicScopeModeGlobal},
 	})
 	if err != nil {
 		t.Fatalf("marshal promotion: %v", err)
@@ -53,6 +63,10 @@ func TestPromotionReceiptMessagesUseExplicitCustomerFacingShape(t *testing.T) {
 	}
 	if got["receipt_enabled"] != true {
 		t.Fatalf("receipt_enabled = %#v, want true (%s)", got["receipt_enabled"], body)
+	}
+	scope, ok := got["geographic_scope"].(map[string]any)
+	if !ok || scope["mode"] != "GLOBAL" || got["schedule_timezone"] != "Etc/UTC" {
+		t.Fatalf("promotion geographic schedule mismatch: %s", body)
 	}
 	messages, ok := got["receipt_messages"].([]any)
 	if !ok || len(messages) != 1 {

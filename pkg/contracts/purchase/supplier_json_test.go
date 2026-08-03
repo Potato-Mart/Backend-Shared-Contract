@@ -21,12 +21,12 @@ func TestSupplierOrganisationDetailJSONShape(t *testing.T) {
 			Website:   "https://supplier.example.com",
 			RegisteredAddress: &common.ContactAddress{
 				Address: &common.Address{
-					Label:    "HQ",
-					Line1:    "2 Supply Road",
-					City:     "Melbourne",
-					State:    "VIC",
-					Postcode: "3000",
-					Country:  "AU",
+					Label:              "HQ",
+					Line1:              "2 Supply Road",
+					Locality:           "Melbourne",
+					AdministrativeArea: &common.AdministrativeAreaRef{Code: "AU-VIC"},
+					PostalCode:         "3000",
+					Country:            common.CountryRef{Code: "AU"},
 				},
 			},
 		},

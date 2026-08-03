@@ -3,6 +3,7 @@ package campaign
 import (
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
 	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/campaign"
 )
 
@@ -13,7 +14,9 @@ type CampaignComparableEvent struct {
 	ResolvedProductSKUCodes []string                              `json:"resolved_product_sku_codes"`
 	StartsAt                time.Time                             `json:"starts_at"`
 	EndsAt                  time.Time                             `json:"ends_at"`
+	ScheduleTimezone        string                                `json:"schedule_timezone"`
 	Audience                *Audience                             `json:"audience,omitempty"`
+	GeographicScope         common.GeographicScope                `json:"geographic_scope"`
 	Placement               campaignenum.CampaignPlacement        `json:"placement"`
 }
 
@@ -37,8 +40,7 @@ type CampaignProductPrediction struct {
 	ConfirmedInboundUnits  int                                   `json:"confirmed_inbound_units"`
 	NetRequiredUnits       int                                   `json:"net_required_units"`
 	SuggestedOrderUnits    int                                   `json:"suggested_order_units"`
-	SuggestedCartons       int                                   `json:"suggested_cartons,omitempty"`
-	CartonSize             int                                   `json:"carton_size,omitempty"`
+	SuggestedComposition   common.PackageCompositionSnapshot     `json:"suggested_composition"`
 	MinimumOrderQuantity   int                                   `json:"minimum_order_quantity,omitempty"`
 	Orderable              bool                                  `json:"orderable"`
 	Warnings               []string                              `json:"warnings,omitempty"`

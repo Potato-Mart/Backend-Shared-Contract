@@ -3,14 +3,15 @@ package promotion
 import (
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
 	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/promotion"
 )
 
 // EffectivePromotion is the result of resolving the single promotion that
-// prices one product at one instant. Targeted promotions never stack: exactly
-// one wins (or none). It is produced by promotionlogic.ResolveEffective.
+// prices one product at one instant.
 type EffectivePromotion struct {
 	PromotionID   string                       `json:"promotion_id"`
+	SeriesKey     string                       `json:"series_key"`
 	PromotionName string                       `json:"promotion_name,omitempty"`
 	Class         promotionenum.PromotionClass `json:"class"`
 	TargetScope   promotionenum.DiscountScope  `json:"target_scope"`
@@ -19,8 +20,10 @@ type EffectivePromotion struct {
 	DiscountedPriceMinor int64  `json:"discounted_price_minor"`
 	Currency             string `json:"currency,omitempty"`
 
-	StartsAt  *time.Time `json:"starts_at,omitempty"`
-	ExpiresAt *time.Time `json:"expires_at,omitempty"`
+	StartsAt          *time.Time               `json:"starts_at,omitempty"`
+	ExpiresAt         *time.Time               `json:"expires_at,omitempty"`
+	ScheduleTimezone  string                   `json:"schedule_timezone"`
+	GeographicContext common.GeographicContext `json:"geographic_context"`
 
 	// OverrideReason is set when a special_campaign displaced a
 	// normal_promotion that also matched; OverriddenPromotionID names the
