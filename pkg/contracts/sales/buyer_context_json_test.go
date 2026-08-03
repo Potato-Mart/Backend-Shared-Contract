@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/sales"
@@ -16,6 +17,7 @@ import (
 // TestOrderBuyerAndItemPricingRoundTrip checks the additive buyer/commercial
 // context round-trips on a sales order and its line item.
 func TestOrderBuyerAndItemPricingRoundTrip(t *testing.T) {
+	capturedAt := time.Date(2026, 8, 4, 0, 0, 0, 0, time.UTC)
 	order := sales.Order{
 		ID:          "ord_b2b_1",
 		OrderNumber: "B2B-1001",
@@ -28,12 +30,13 @@ func TestOrderBuyerAndItemPricingRoundTrip(t *testing.T) {
 		},
 		Items: []sales.OrderItem{
 			{
-				UnitPrice: common.Money{AmountMinor: 8000, Currency: "AUD"},
+				Components:     []sales.PricedPackageComponent{{RequestedPackageCount: 10, RequestedBaseUnits: 10, PackagePrice: common.Money{AmountMinor: 8000, Currency: "AUD"}}},
+				TotalBaseUnits: 10,
 				Pricing: &sales.PricingContext{
 					Audience:   productenum.PriceAudienceWholesale,
 					Visibility: productenum.PriceVisibilityWholesaleApprovedOnly,
 				},
-				Quantity: 10,
+				SubstitutionPolicy: sales.LooseSubstitutionPolicySnapshot{Allowed: true, Source: salesenum.LooseSubstitutionPolicySourceChannelDefault, CapturedAt: capturedAt},
 			},
 		},
 	}
@@ -70,6 +73,7 @@ func TestOrderBuyerAndItemPricingRoundTrip(t *testing.T) {
 
 // TestCartChannelAndBuyerRoundTrip checks a POS walk-in cart round-trips.
 func TestCartChannelAndBuyerRoundTrip(t *testing.T) {
+	capturedAt := time.Date(2026, 8, 4, 0, 0, 0, 0, time.UTC)
 	cart := sales.Cart{
 		ID:        "cart_1",
 		SessionID: "sess_1",
@@ -77,8 +81,10 @@ func TestCartChannelAndBuyerRoundTrip(t *testing.T) {
 		Buyer:     &sales.BuyerContext{Type: customerenum.BuyerTypeGuestRetail},
 		Items: []sales.CartItem{
 			{
-				Price:   common.Money{AmountMinor: 500, Currency: "AUD"},
-				Pricing: &sales.PricingContext{Audience: productenum.PriceAudienceRetail},
+				Components:         []sales.PricedPackageComponent{{RequestedPackageCount: 1, RequestedBaseUnits: 1, PackagePrice: common.Money{AmountMinor: 500, Currency: "AUD"}}},
+				TotalBaseUnits:     1,
+				Pricing:            &sales.PricingContext{Audience: productenum.PriceAudienceRetail},
+				SubstitutionPolicy: sales.LooseSubstitutionPolicySnapshot{Allowed: false, Source: salesenum.LooseSubstitutionPolicySourceBuyerSelected, CapturedAt: capturedAt},
 			},
 		},
 	}

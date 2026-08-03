@@ -1,6 +1,7 @@
 package sales
 
 import (
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
 	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/customer"
 	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/product"
 	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/shipping"
@@ -29,6 +30,7 @@ type BuyerContext struct {
 // audience and visibility that applied, never the resolver logic that picked
 // the price.
 type PricingContext struct {
-	Audience   productenum.PriceAudience   `json:"audience,omitempty"`
-	Visibility productenum.PriceVisibility `json:"visibility,omitempty"`
+	Audience          productenum.PriceAudience   `json:"audience,omitempty"`
+	Visibility        productenum.PriceVisibility `json:"visibility,omitempty"`
+	GeographicContext common.GeographicContext    `json:"geographic_context"`
 }

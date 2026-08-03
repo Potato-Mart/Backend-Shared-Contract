@@ -8,6 +8,8 @@ import (
 
 func TestSalesEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
+		{name: "salesenum.LooseSubstitutionPolicySource", valid: []stringEnum{salesenum.LooseSubstitutionPolicySourceChannelDefault, salesenum.LooseSubstitutionPolicySourceBuyerSelected, salesenum.LooseSubstitutionPolicySourceGroupManager}, invalid: salesenum.LooseSubstitutionPolicySource("__invalid__")},
+		{name: "salesenum.GroupOrderRole", valid: []stringEnum{salesenum.GroupOrderRoleConsolidatedParent, salesenum.GroupOrderRoleParticipant}, invalid: salesenum.GroupOrderRole("__invalid__")},
 		{name: "salesenum.FulfillmentStatus", valid: []stringEnum{salesenum.FulfillmentStatusUnfulfilled, salesenum.FulfillmentStatusPickingPrinted, salesenum.FulfillmentStatusPacking, salesenum.FulfillmentStatusPacked, salesenum.FulfillmentStatusPartial, salesenum.FulfillmentStatusFulfilled}, invalid: salesenum.FulfillmentStatus("__invalid__")},
 		{name: "salesenum.OrderSourceDeviceType", valid: []stringEnum{salesenum.OrderSourceDeviceTypeIOS, salesenum.OrderSourceDeviceTypeAndroid, salesenum.OrderSourceDeviceTypePC, salesenum.OrderSourceDeviceTypeMobileWeb, salesenum.OrderSourceDeviceTypeTablet, salesenum.OrderSourceDeviceTypePos, salesenum.OrderSourceDeviceTypeManual, salesenum.OrderSourceDeviceTypePhone, salesenum.OrderSourceDeviceTypeVR}, invalid: salesenum.OrderSourceDeviceType("__invalid__")},
 		{name: "salesenum.OrderType", valid: []stringEnum{salesenum.OrderTypeOnline, salesenum.OrderTypePOS, salesenum.OrderTypeB2B, salesenum.OrderTypeRelay, salesenum.OrderTypeManual, salesenum.OrderTypeImport}, invalid: salesenum.OrderType("__invalid__")},

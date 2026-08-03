@@ -1,7 +1,7 @@
 package promotionenum
 
-// VolumeDiscountAppliesTo restricts which customer channel a
-// carton-based volume discount tier applies to.
+// VolumeDiscountAppliesTo restricts which customer channel a CASE-package
+// volume discount tier applies to.
 type VolumeDiscountAppliesTo string
 
 const (
