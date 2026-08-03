@@ -43,7 +43,7 @@ func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {
 	if err != nil {
 		t.Fatalf("marshal mixed package order item: %v", err)
 	}
-	for _, want := range []string{`"handling_unit":"CASE"`, `"handling_unit":"EACH"`, `"requested_package_count":2`, `"requested_package_count":3`, `"total_base_units":27`, `"allowed":true`, `"source":"BUYER_SELECTED"`, `"replacement_base_units":12`} {
+	for _, want := range []string{`"handling_unit":"CASE"`, `"handling_unit":"EACH"`, `"requested_package_count":2`, `"requested_package_count":3`, `"total_base_units":27`, `"allowed":true`, `"source":"BUYER_SELECTED"`, `"requested_case_count":1`, `"replacement_base_units":12`} {
 		if !strings.Contains(string(body), want) {
 			t.Fatalf("mixed package JSON missing %s: %s", want, body)
 		}

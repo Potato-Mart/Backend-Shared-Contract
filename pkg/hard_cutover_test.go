@@ -122,7 +122,15 @@ func TestV22ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 			"Region",
 		),
 		"contracts/campaign.CampaignProductPrediction": v22StringSet(
+			"PredictedDemandUnits", "SellableAvailableUnits", "ConfirmedInboundUnits",
+			"NetRequiredUnits", "SuggestedOrderUnits", "MinimumOrderQuantity",
 			"SuggestedCartons", "CartonSize",
+		),
+		"contracts/campaign.CampaignPredictionEvidence": v22StringSet(
+			"RawNetUnits", "NormalizedUnits",
+		),
+		"contracts/campaign.CampaignSupplierPrediction": v22StringSet(
+			"TotalUnits",
 		),
 		"contracts/category.SKU": v22StringSet(
 			"Storage",
@@ -271,7 +279,15 @@ func TestV22ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 			"region",
 		),
 		"contracts/campaign.CampaignProductPrediction": v22StringSet(
+			"predicted_demand_units", "sellable_available_units", "confirmed_inbound_units",
+			"net_required_units", "suggested_order_units", "minimum_order_quantity",
 			"suggested_cartons", "carton_size",
+		),
+		"contracts/campaign.CampaignPredictionEvidence": v22StringSet(
+			"raw_net_units", "normalized_units",
+		),
+		"contracts/campaign.CampaignSupplierPrediction": v22StringSet(
+			"total_units",
 		),
 		"contracts/category.SKU": v22StringSet(
 			"storage",

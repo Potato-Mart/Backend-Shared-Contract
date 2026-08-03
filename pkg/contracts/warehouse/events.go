@@ -59,6 +59,7 @@ type InventoryStockBucketChangedEvent struct {
 type InventoryPackageConvertedEvent struct {
 	MovementID                    string                            `json:"movement_id"`
 	ProductSKUCode                string                            `json:"product_sku_code"`
+	DepotCode                     string                            `json:"depot_code"`
 	LotID                         string                            `json:"lot_id"`
 	SourceBucketID                string                            `json:"source_bucket_id"`
 	DestinationBucketID           string                            `json:"destination_bucket_id"`
@@ -75,6 +76,7 @@ type InventoryPackageConvertedEvent struct {
 type InventoryQualityAssessedEvent struct {
 	QualityAssessmentID string                             `json:"quality_assessment_id"`
 	ProductSKUCode      string                             `json:"product_sku_code"`
+	DepotCode           string                             `json:"depot_code"`
 	BucketID            string                             `json:"bucket_id"`
 	StockUnitID         string                             `json:"stock_unit_id,omitempty"`
 	AssessedComposition common.PackageCompositionSnapshot  `json:"assessed_composition"`
@@ -116,6 +118,7 @@ type StockStagingChangedEvent struct {
 type InventorySaleCommittedEvent struct {
 	MovementID           string                            `json:"movement_id"`
 	OrderNumber          string                            `json:"order_number"`
+	DepotCode            string                            `json:"depot_code"`
 	ReservationID        string                            `json:"reservation_id"`
 	AllocationID         string                            `json:"allocation_id"`
 	BucketID             string                            `json:"bucket_id"`

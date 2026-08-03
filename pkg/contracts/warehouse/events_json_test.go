@@ -44,25 +44,25 @@ func TestV22InventoryEventJSONShapes(t *testing.T) {
 		{
 			name: "package converted",
 			value: warehouse.InventoryPackageConvertedEvent{
-				MovementID: "movement_conversion", ProductSKUCode: "A00001", LotID: "lot_1",
+				MovementID: "movement_conversion", ProductSKUCode: "A00001", DepotCode: location.DepotCode, LotID: "lot_1",
 				SourceBucketID: "bucket_case", DestinationBucketID: "bucket_each",
 				SourcePackageOptionID: "pkg_case_12", DestinationPackageOptionID: "pkg_each",
 				BaseUnits: 12, SourcePackageComposition: caseComposition, DestinationPackageComposition: eachComposition,
 				SourceBucketRevision: 4, DestinationBucketRevision: 2, OccurredAt: now,
 			},
-			required: []string{"source_bucket_id", "destination_bucket_id", "source_bucket_revision", "destination_bucket_revision", "occurred_at"},
+			required: []string{"depot_code", "source_bucket_id", "destination_bucket_id", "source_bucket_revision", "destination_bucket_revision", "occurred_at"},
 		},
 		{
 			name: "quality assessed",
 			value: warehouse.InventoryQualityAssessedEvent{
-				QualityAssessmentID: "assessment_1", ProductSKUCode: "A00001", BucketID: "bucket_each",
+				QualityAssessmentID: "assessment_1", ProductSKUCode: "A00001", DepotCode: location.DepotCode, BucketID: "bucket_each",
 				AssessedComposition: eachComposition, PreviousCondition: warehouseenum.InventoryConditionGood,
 				ResultCondition:     warehouseenum.InventoryConditionPackagingDamagedMinor,
 				PreviousDisposition: warehouseenum.InventoryDispositionStandardSellable,
 				ResultDisposition:   warehouseenum.InventoryDispositionReducedSellable,
 				MovementIDs:         []string{"movement_quality"}, Revision: 2, OccurredAt: now,
 			},
-			required: []string{"quality_assessment_id", "previous_condition", "result_disposition", "revision"},
+			required: []string{"quality_assessment_id", "depot_code", "previous_condition", "result_disposition", "revision"},
 		},
 		{
 			name: "reservation changed",
@@ -86,12 +86,12 @@ func TestV22InventoryEventJSONShapes(t *testing.T) {
 		{
 			name: "sale committed",
 			value: warehouse.InventorySaleCommittedEvent{
-				MovementID: "movement_sale", OrderNumber: "SO-1", ReservationID: "reservation_1",
+				MovementID: "movement_sale", OrderNumber: "SO-1", DepotCode: location.DepotCode, ReservationID: "reservation_1",
 				AllocationID: "allocation_1", BucketID: "bucket_case", ProductSKUCode: "A00001",
 				LotID: "lot_1", PackageOptionID: "pkg_case_12", CommittedComposition: caseComposition,
 				InventoryRevision: 5, OccurredAt: now,
 			},
-			required: []string{"order_number", "allocation_id", "committed_composition", "inventory_revision"},
+			required: []string{"order_number", "depot_code", "allocation_id", "committed_composition", "inventory_revision"},
 		},
 		{
 			name: "date mark threshold",

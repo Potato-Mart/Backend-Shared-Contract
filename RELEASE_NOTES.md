@@ -144,6 +144,7 @@ replacement JSON:
 | Purchase/WMS scalar expiry and location fields, including `expired_at`, `expire_at`, `expiry_ym`, and singular `location_code` | `InventoryLot`, `InventoryDateMark`, `InventoryStockBucket`, bucket/location references, and package compositions |
 | Legacy stock-adjust, reserve/release movement values, and competing arrival/restock events | physical `StockMovement`, logical `StockReservation`, `StockReservationAllocation`, `StockStagingRecord`, package conversion, quality, availability, and offer events |
 | Cart/order `quantity`, `unit_price`, `carton_qty`, and `carton_size` | `components`, `requested_package_count`, `requested_base_units`, accepted offer/package snapshots, and package compositions |
+| Campaign planning `*_units`, `minimum_order_quantity`, and supplier `total_units` | explicit `int64` `*_base_units` fields and `suggested_composition` |
 | `PackingBoxPlan`, `PackingBoxContent`, scalar picking/packing quantities, and duplicated damage balances | `OutboundContainerPlan`, `OutboundContainerContent`, package-aware picking/packing compositions, substitution snapshots, and quality-assessment references |
 | Participant-owned group inventory fields | `GroupOrderContext` and parent-owned `GroupOrderFulfilmentPlan` aggregate lines with participant shares |
 | Campaign audience `region` and unscoped campaign/promotion/coupon projections | required `geographic_scope`, resolved `geographic_context`, promotion `series_key`, revisions, and schedule timezone |

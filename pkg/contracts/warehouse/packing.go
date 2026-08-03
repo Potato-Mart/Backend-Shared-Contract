@@ -7,8 +7,8 @@ import (
 	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/warehouse"
 )
 
-// PackageSubstitutionSnapshot records the exact loose-item replacement for one
-// or more requested sealed cases.
+// PackageSubstitutionSnapshot records the exact loose-item replacement evidence
+// for one requested sealed-case substitution.
 type PackageSubstitutionSnapshot struct {
 	ID                             string    `json:"id"`
 	RequestedCasePackageOptionID   string    `json:"requested_case_package_option_id"`
