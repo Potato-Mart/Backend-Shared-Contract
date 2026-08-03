@@ -72,10 +72,9 @@ var v22ModelPackageManifest = map[string]string{
 	"versioning":                 "module-metadata",
 }
 
-// Reviewed for the v22 depot-qualified stock-location, package-composition,
-// lot, bucket, quality, reservation, staging, movement, and inventory-event
-// surface.
-const v22ExportedTypeManifestDigest = "c06b02b655e2d6e0511201d2694dcb792b764efe1918ff85b225ac0f7173d416"
+// Reviewed for the v22 stable package-option, barcode-assignment, sellable
+// offer, and structured product/POS/storefront availability surface.
+const v22ExportedTypeManifestDigest = "b4980b9b0852de8a9c62a53ef4b92c8c2cfd8f046f5112dd07c511cd5c300214"
 
 func TestV22ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

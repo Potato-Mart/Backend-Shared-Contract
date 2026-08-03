@@ -10,9 +10,9 @@ import (
 
 func TestSKUJSONIncludesPrimaryName(t *testing.T) {
 	body, err := json.Marshal(SKU{
-		ID:      "sku_f2",
-		Code:    "F2",
-		Storage: warehouseenum.StorageFrozen,
+		ID:          "sku_f2",
+		Code:        "F2",
+		StorageType: warehouseenum.StorageFrozen,
 		PrimaryName: common.LocalizedName{
 			Language: "zh-Hant",
 			Name:     "冷凍 - 肉品",
@@ -36,6 +36,12 @@ func TestSKUJSONIncludesPrimaryName(t *testing.T) {
 	}
 	if _, exists := got["products"]; exists {
 		t.Fatalf("SKU JSON must not embed products: %s", body)
+	}
+	if got["storage_type"] != "FROZEN" {
+		t.Fatalf("SKU JSON storage_type = %v, want FROZEN: %s", got["storage_type"], body)
+	}
+	if _, exists := got["storage"]; exists {
+		t.Fatalf("SKU JSON retained vague storage key: %s", body)
 	}
 
 	var decoded SKU

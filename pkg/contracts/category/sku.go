@@ -11,7 +11,7 @@ import (
 type SKU struct {
 	ID          string                    `json:"id"`
 	Code        string                    `json:"code"`
-	Storage     warehouseenum.StorageType `json:"storage"`
+	StorageType warehouseenum.StorageType `json:"storage_type"`
 	PrimaryName common.LocalizedName      `json:"primary_name"`
 	OtherNames  []common.LocalizedName    `json:"other_names,omitempty"`
 	common.AuditFields

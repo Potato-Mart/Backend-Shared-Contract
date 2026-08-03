@@ -6,36 +6,23 @@ import (
 	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/warehouse"
 )
 
-// Snapshot is the denormalised product summary embedded in carts, order
-// lines, purchase orders, and membership subscription plans. It captures what the
-// product looked like at the time of the transaction so historical rows
-// survive later product edits.
-//
-// Price is intentionally not part of the snapshot: each consumer carries
-// its own price field (unit price, unit cost, plan price) with its own
-// semantics.
-//
-// DisplayStatus is the read-time merge of status + recency + stock (see
-// Product.DisplayStatus). It is populated only on LIVE snapshots built
-// for display (e.g. a SKU's product lineup, replenishment suggestions);
-// it is left empty on snapshots persisted into orders/carts/POs, because
-// freezing a transient state like "new" or "out_of_stock" into a
-// historical row would be wrong.
+// Snapshot is the immutable product summary carried by transaction records.
+// Live availability and accepted prices are represented by their own
+// revisioned snapshots.
 type Snapshot struct {
-	ID            string                        `json:"id,omitempty"`
-	SKUCode       string                        `json:"sku_code,omitempty"`
-	SKU           string                        `json:"sku,omitempty"`
-	Name          string                        `json:"name,omitempty"`
-	OtherNames    []common.LocalizedName        `json:"other_names,omitempty"`
-	Description   []common.LocalizedDescription `json:"description,omitempty"`
-	BrandRef      *BrandRef                     `json:"brand_ref,omitempty"`
-	Collection    *CollectionRef                `json:"collection,omitempty"`
-	CategoryTags  []CategoryTag                 `json:"category_tags,omitempty"`
-	Supply        *ProductSupply                `json:"supply,omitempty"`
-	ImageURL      string                        `json:"image_url,omitempty"`
-	Storage       warehouseenum.StorageType     `json:"storage,omitempty"`
-	Status        productenum.ProductStatus     `json:"status,omitempty"`
-	DisplayStatus string                        `json:"display_status,omitempty"`
-	Barcode       string                        `json:"barcode,omitempty"`
-	Taxed         bool                          `json:"taxed"`
+	SKUCode            string                             `json:"sku_code,omitempty"`
+	CategorySKUCode    string                             `json:"category_sku_code,omitempty"`
+	Name               string                             `json:"name,omitempty"`
+	OtherNames         []common.LocalizedName             `json:"other_names,omitempty"`
+	Description        []common.LocalizedDescription      `json:"description,omitempty"`
+	BrandRef           *BrandRef                          `json:"brand_ref,omitempty"`
+	Collection         *CollectionRef                     `json:"collection,omitempty"`
+	CategoryTags       []CategoryTag                      `json:"category_tags,omitempty"`
+	Supply             *ProductSupply                     `json:"supply,omitempty"`
+	ImageURL           string                             `json:"image_url,omitempty"`
+	StorageType        warehouseenum.StorageType          `json:"storage_type,omitempty"`
+	Status             productenum.ProductStatus          `json:"status,omitempty"`
+	PackageOptions     []ProductPackageOptionSnapshot     `json:"package_options,omitempty"`
+	BarcodeAssignments []ProductBarcodeAssignmentSnapshot `json:"barcode_assignments,omitempty"`
+	Taxed              bool                               `json:"taxed"`
 }

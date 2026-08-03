@@ -11,10 +11,9 @@ import (
 func TestProductSupplyAndDetailImagesJSONShape(t *testing.T) {
 	zero := int64(0)
 	want := Product{
-		ID:      "prd_1",
-		SKUCode: "A0001",
-		SKU:     "A1",
-		Name:    "Golden potato",
+		SKUCode:         "A0001",
+		CategorySKUCode: "A1",
+		Name:            "Golden potato",
 		Supply: &ProductSupply{
 			Supplier: &ProductSupplierRef{
 				Code: "SUP-1",
@@ -112,9 +111,9 @@ func TestProductSupplyAndDetailImagesJSONShape(t *testing.T) {
 func TestStorefrontProductStoryJSONShape(t *testing.T) {
 	zero := int64(0)
 	want := StorefrontProduct{
-		SKUCode: "A0001",
-		SKU:     "A1",
-		Name:    "Golden potato",
+		SKUCode:         "A0001",
+		CategorySKUCode: "A1",
+		Name:            "Golden potato",
 		Supply: &ProductSupply{
 			Manufacturing: &ProductManufacturing{Location: "Taiwan"},
 		},
@@ -168,11 +167,11 @@ func TestProductStoryFieldsAreOptional(t *testing.T) {
 	}{
 		{
 			name:  "product",
-			value: Product{ID: "prd_1", SKUCode: "A0001", SKU: "A1", Name: "Product"},
+			value: Product{SKUCode: "A0001", CategorySKUCode: "A1", Name: "Product"},
 		},
 		{
 			name:  "storefront product",
-			value: StorefrontProduct{SKUCode: "A0001", SKU: "A1", Name: "Product"},
+			value: StorefrontProduct{SKUCode: "A0001", CategorySKUCode: "A1", Name: "Product"},
 		},
 		{
 			name:  "snapshot",
@@ -201,9 +200,9 @@ func TestDisplaySellingCountAcceptsAbsentNullAndZero(t *testing.T) {
 		payload   string
 		wantValue *int64
 	}{
-		{name: "absent", payload: `{"sku_code":"A0001","sku":"A1","name":"Product"}`},
-		{name: "null", payload: `{"sku_code":"A0001","sku":"A1","name":"Product","display_selling_count":null}`},
-		{name: "zero", payload: `{"sku_code":"A0001","sku":"A1","name":"Product","display_selling_count":0}`, wantValue: int64Pointer(0)},
+		{name: "absent", payload: `{"sku_code":"A0001","category_sku_code":"A1","name":"Product"}`},
+		{name: "null", payload: `{"sku_code":"A0001","category_sku_code":"A1","name":"Product","display_selling_count":null}`},
+		{name: "zero", payload: `{"sku_code":"A0001","category_sku_code":"A1","name":"Product","display_selling_count":0}`, wantValue: int64Pointer(0)},
 	}
 
 	for _, tc := range tests {

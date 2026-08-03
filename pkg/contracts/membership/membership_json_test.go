@@ -166,7 +166,7 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 	}
 	plan := membership.SubscriptionPlan{
 		ID:            "plan_1",
-		Product:       product.Snapshot{ID: "prod_1", Name: "Weekly Potatoes"},
+		Product:       product.Snapshot{SKUCode: "A00001", Name: "Weekly Potatoes"},
 		UnitPrice:     common.Money{AmountMinor: 1200, Currency: "AUD"},
 		FrequencyDays: 7,
 		IsActive:      true,
