@@ -2,40 +2,35 @@ package product
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/product"
 )
 
 func TestProductStorefrontMerchandisingJSONShape(t *testing.T) {
 	start := time.Date(2026, 7, 7, 0, 0, 0, 0, time.UTC)
 	expected := time.Date(2026, 7, 21, 0, 0, 0, 0, time.UTC)
-	product := Product{
-		ID:      "prd_preorder",
-		SKUCode: "A00084",
-		SKU:     "A00084",
-		Name:    "Preorder product",
+	record := Product{
+		SKUCode:         "A00084",
+		CategorySKUCode: "A00084",
+		Name:            "Preorder product",
 		StorefrontMerchandising: &StorefrontMerchandising{
 			Preorder: &PreorderPolicy{
 				Enabled:                true,
 				StartsAt:               &start,
 				ExpectedAvailableAt:    &expected,
+				ScheduleTimezone:       "Australia/Melbourne",
 				MaxQuantityPerOrder:    3,
 				MaxQuantityPerCustomer: 6,
 				Labels:                 []common.LocalizedName{{Language: "en", Name: "Preorder"}},
 			},
-			SoonExpiry: &SoonExpiryMerchandisingPolicy{
-				Enabled:             true,
-				WindowDays:          14,
-				ShowExactExpiryDate: true,
-				Labels:              []common.LocalizedName{{Language: "en", Name: "Limited shelf life"}},
-			},
 		},
 	}
 
-	body, err := json.Marshal(product)
+	body, err := json.Marshal(record)
 	if err != nil {
 		t.Fatalf("marshal product: %v", err)
 	}
@@ -53,33 +48,26 @@ func TestProductStorefrontMerchandisingJSONShape(t *testing.T) {
 		t.Fatalf("Product preorder policy JSON mismatch: %s", body)
 	}
 	if preorder["expected_available_at"] != "2026-07-21T00:00:00Z" {
-		t.Fatalf("expected_available_at = %v, want 2026-07-21T00:00:00Z (%s)", preorder["expected_available_at"], body)
+		t.Fatalf("expected_available_at = %v, want UTC timestamp (%s)", preorder["expected_available_at"], body)
 	}
-	soonExpiry, ok := merchandising["soon_expiry"].(map[string]any)
-	if !ok || soonExpiry["window_days"] != float64(14) || soonExpiry["show_exact_expiry_date"] != true {
-		t.Fatalf("Product soon-expiry policy JSON mismatch: %s", body)
+	if preorder["schedule_timezone"] != "Australia/Melbourne" {
+		t.Fatalf("schedule_timezone = %v, want Australia/Melbourne (%s)", preorder["schedule_timezone"], body)
+	}
+	if strings.Contains(string(body), `"soon_expiry"`) || strings.Contains(string(body), `"expiry"`) {
+		t.Fatalf("product-wide expiry merchandising must be absent: %s", body)
 	}
 }
 
 func TestStorefrontDisplayJSONShape(t *testing.T) {
-	expiresAt := time.Date(2026, 7, 12, 0, 0, 0, 0, time.UTC)
-	days := 6
+	expectedAt := time.Date(2026, 7, 12, 0, 0, 0, 0, time.UTC)
 	display := StorefrontDisplay{
 		Preorder: &StorefrontPreorderDisplay{
 			Available:           true,
 			Status:              productenum.StorefrontPreorderStatusOpen,
-			ExpectedAvailableAt: &expiresAt,
+			ExpectedAvailableAt: &expectedAt,
+			ScheduleTimezone:    "Australia/Melbourne",
 			MaxQuantityPerOrder: 2,
 			Labels:              []common.LocalizedName{{Language: "en", Name: "Preorder now"}},
-		},
-		Expiry: &StorefrontExpiryDisplay{
-			SoonExpiry:          true,
-			Status:              productenum.StorefrontExpiryStatusSoonExpiry,
-			ExpiresAt:           &expiresAt,
-			DaysToExpiry:        &days,
-			WindowDays:          14,
-			ShowExactExpiryDate: true,
-			Labels:              []common.LocalizedName{{Language: "en", Name: "Soon expiry"}},
 		},
 	}
 
@@ -96,8 +84,10 @@ func TestStorefrontDisplayJSONShape(t *testing.T) {
 	if !ok || preorder["available"] != true || preorder["status"] != "open" {
 		t.Fatalf("preorder display JSON mismatch: %s", body)
 	}
-	expiry, ok := got["expiry"].(map[string]any)
-	if !ok || expiry["soon_expiry"] != true || expiry["status"] != "soon_expiry" || expiry["days_to_expiry"] != float64(6) {
-		t.Fatalf("expiry display JSON mismatch: %s", body)
+	if preorder["schedule_timezone"] != "Australia/Melbourne" {
+		t.Fatalf("preorder display lost schedule timezone: %s", body)
+	}
+	if _, exists := got["expiry"]; exists {
+		t.Fatalf("storefront display must not expose product-wide expiry: %s", body)
 	}
 }

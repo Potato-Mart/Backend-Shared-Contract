@@ -1,6 +1,6 @@
 package identity
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
 
 // AdminAccountProfile contains optional workforce profile data for an
 // adminUser account.

@@ -3,8 +3,8 @@ package importcompliance
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	importcomplianceenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/importcompliance"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	importcomplianceenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/importcompliance"
 )
 
 // RateValue preserves official source text because tariff schedules may use

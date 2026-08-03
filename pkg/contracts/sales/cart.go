@@ -3,9 +3,9 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/product"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/product"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/sales"
 )
 
 type Cart struct {
@@ -18,22 +18,21 @@ type Cart struct {
 	// Buyer describes who is buying, independently of Channel. POS is a
 	// channel, not a buyer type — see sales.BuyerContext. Optional pointer
 	// so it is omitted entirely when unset.
-	Buyer      *BuyerContext `json:"buyer,omitempty"`
-	Items      []CartItem    `json:"items"`
-	CouponCode string        `json:"coupon_code,omitempty"`
-	Subtotal   common.Money  `json:"subtotal"`
-	ExpiresAt  time.Time     `json:"expires_at"`
+	Buyer             *BuyerContext            `json:"buyer,omitempty"`
+	GeographicContext common.GeographicContext `json:"geographic_context"`
+	Items             []CartItem               `json:"items"`
+	CouponCode        string                   `json:"coupon_code,omitempty"`
+	Subtotal          common.Money             `json:"subtotal"`
+	ExpiresAt         time.Time                `json:"expires_at"`
 
 	common.AuditFields
 }
 
 type CartItem struct {
-	Product product.Snapshot `json:"product"`
-	Price   common.Money     `json:"price"`
-	// Pricing is the commercial pricing context under which Price was set
-	// (retail vs wholesale audience, visibility). Optional pointer so it is
-	// omitted entirely when unset.
-	Pricing  *PricingContext       `json:"pricing,omitempty"`
-	Quantity int                   `json:"quantity"`
-	Preorder *PreorderItemSnapshot `json:"preorder,omitempty"`
+	Product            product.Snapshot                `json:"product"`
+	Components         []PricedPackageComponent        `json:"components"`
+	TotalBaseUnits     int64                           `json:"total_base_units"`
+	Pricing            *PricingContext                 `json:"pricing,omitempty"`
+	SubstitutionPolicy LooseSubstitutionPolicySnapshot `json:"substitution_policy"`
+	Preorder           *PreorderItemSnapshot           `json:"preorder,omitempty"`
 }

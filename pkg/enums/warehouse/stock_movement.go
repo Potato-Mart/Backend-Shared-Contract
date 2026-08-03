@@ -1,29 +1,35 @@
 package warehouseenum
 
-// StockMovementType identifies why a product's stock balance changed.
+// StockMovementType identifies the physical inventory change represented by a
+// stock movement.
 type StockMovementType string
 
 const (
-	StockMovementTypePurchaseReceipt StockMovementType = "PURCHASE_RECEIPT"
-	StockMovementTypeSaleReserve     StockMovementType = "SALE_RESERVE"
-	StockMovementTypeSaleCommit      StockMovementType = "SALE_COMMIT"
-	StockMovementTypeSaleRelease     StockMovementType = "SALE_RELEASE"
-	StockMovementTypeAdjustment      StockMovementType = "ADJUSTMENT"
-	StockMovementTypeDamage          StockMovementType = "DAMAGE"
-	StockMovementTypeReturn          StockMovementType = "RETURN"
-	StockMovementTypeTransferIn      StockMovementType = "TRANSFER_IN"
-	StockMovementTypeTransferOut     StockMovementType = "TRANSFER_OUT"
-	StockMovementTypeStocktake       StockMovementType = "STOCKTAKE"
+	StockMovementTypeReceipt           StockMovementType = "RECEIPT"
+	StockMovementTypeTransfer          StockMovementType = "TRANSFER"
+	StockMovementTypeStage             StockMovementType = "STAGE"
+	StockMovementTypeUnstage           StockMovementType = "UNSTAGE"
+	StockMovementTypePackageConversion StockMovementType = "PACKAGE_CONVERSION"
+	StockMovementTypeSaleCommit        StockMovementType = "SALE_COMMIT"
+	StockMovementTypeReturn            StockMovementType = "RETURN"
+	StockMovementTypeQualityHold       StockMovementType = "QUALITY_HOLD"
+	StockMovementTypeQualityRelease    StockMovementType = "QUALITY_RELEASE"
+	StockMovementTypeQualityReject     StockMovementType = "QUALITY_REJECT"
+	StockMovementTypeAdjustment        StockMovementType = "ADJUSTMENT"
+	StockMovementTypeReturnToVendor    StockMovementType = "RETURN_TO_VENDOR"
+	StockMovementTypeScrap             StockMovementType = "SCRAP"
 )
 
 // IsValid reports whether t is a known StockMovementType.
 func (t StockMovementType) IsValid() bool {
 	switch t {
-	case StockMovementTypePurchaseReceipt, StockMovementTypeSaleReserve,
-		StockMovementTypeSaleCommit, StockMovementTypeSaleRelease,
-		StockMovementTypeAdjustment, StockMovementTypeDamage,
-		StockMovementTypeReturn, StockMovementTypeTransferIn,
-		StockMovementTypeTransferOut, StockMovementTypeStocktake:
+	case StockMovementTypeReceipt, StockMovementTypeTransfer,
+		StockMovementTypeStage, StockMovementTypeUnstage,
+		StockMovementTypePackageConversion, StockMovementTypeSaleCommit,
+		StockMovementTypeReturn, StockMovementTypeQualityHold,
+		StockMovementTypeQualityRelease, StockMovementTypeQualityReject,
+		StockMovementTypeAdjustment, StockMovementTypeReturnToVendor,
+		StockMovementTypeScrap:
 		return true
 	}
 	return false

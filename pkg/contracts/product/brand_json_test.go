@@ -5,10 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
 )
 
-func TestBrandJSONUsesV21PublicShape(t *testing.T) {
+func TestBrandJSONUsesV22PublicShape(t *testing.T) {
 	want := Brand{
 		ID:      "64c13ab08edf48a008793ca1",
 		Slug:    "happy-potato",
@@ -38,7 +38,7 @@ func TestBrandJSONUsesV21PublicShape(t *testing.T) {
 	}
 }
 
-func TestBrandRefUsesV21IdentityAndDisplayShape(t *testing.T) {
+func TestBrandRefUsesV22IdentityAndDisplayShape(t *testing.T) {
 	body, err := json.Marshal(BrandRef{
 		ID:      "64c13ab08edf48a008793ca1",
 		Slug:    "happy-potato",
@@ -63,9 +63,9 @@ func TestBrandRefUsesV21IdentityAndDisplayShape(t *testing.T) {
 func TestCanonicalBrandReferenceAcrossProductShapes(t *testing.T) {
 	ref := &BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "happy-potato", Name: []common.LocalizedName{{Language: "en", Name: "Happy Potato"}}}
 	for name, value := range map[string]any{
-		"product":    Product{ID: "prd_1", SKUCode: "A0001", SKU: "A1", Name: "Product", BrandRef: ref},
-		"snapshot":   Snapshot{ID: "prd_1", SKUCode: "A0001", Name: "Product", BrandRef: ref},
-		"storefront": StorefrontProduct{SKUCode: "A0001", SKU: "A1", Name: "Product", BrandRef: ref},
+		"product":    Product{SKUCode: "A0001", CategorySKUCode: "A1", Name: "Product", BrandRef: ref},
+		"snapshot":   Snapshot{SKUCode: "A0001", Name: "Product", BrandRef: ref},
+		"storefront": StorefrontProduct{SKUCode: "A0001", CategorySKUCode: "A1", Name: "Product", BrandRef: ref},
 	} {
 		t.Run(name, func(t *testing.T) {
 			body, err := json.Marshal(value)

@@ -3,48 +3,32 @@ package product
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/shared"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/customer"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/product"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/sales"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/shared"
+	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/customer"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/product"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/sales"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/warehouse"
 )
 
-// Product is the master record for one sellable unit (v7.0.0).
-//
-// The struct is split into a small set of FLAT top-level fields -- the
-// hot identity, filter, and sort keys that stay directly indexable for
-// fast fetch/sort/search -- and a handful of nested GROUP structs that
-// keep the remaining attributes tidy (pricing, localization, media,
-// physical). Keep new descriptive attributes
-// inside a group; only promote a field to the top level when it must be
-// indexed or filtered hot.
+// Product is the JSON master record for one product SKU.
 type Product struct {
-	ID          string                        `json:"id"`
-	SKUCode     string                        `json:"sku_code"`
-	SKU         string                        `json:"sku"`
-	Name        string                        `json:"name"`
-	Description []common.LocalizedDescription `json:"description,omitempty"`
-	BrandRef    *BrandRef                     `json:"brand_ref,omitempty"`
-	Barcode     string                        `json:"barcode,omitempty"`
-	Taxed       bool                          `json:"taxed"`
+	SKUCode            string                        `json:"sku_code"`
+	CategorySKUCode    string                        `json:"category_sku_code"`
+	Name               string                        `json:"name"`
+	Description        []common.LocalizedDescription `json:"description,omitempty"`
+	BrandRef           *BrandRef                     `json:"brand_ref,omitempty"`
+	PackageOptions     []ProductPackageOption        `json:"package_options"`
+	BarcodeAssignments []ProductBarcodeAssignment    `json:"barcode_assignments,omitempty"`
+	Taxed              bool                          `json:"taxed"`
 
-	// Storage is the physical storage zone (DRY/CHILLED/FROZEN)
-	Storage warehouseenum.StorageType `json:"storage,omitempty"`
-	// Status is the admin-controlled lifecycle state (draft/active/
-	// archived/discontinued). Derived runtime states (new/restocked/
-	// out_of_stock) are computed by DisplayStatus, never stored here.
+	StorageType warehouseenum.StorageType `json:"storage_type,omitempty"`
+	// Status is the admin-controlled product lifecycle state.
 	Status       productenum.ProductStatus `json:"status,omitempty"`
 	Collection   *CollectionRef            `json:"collection,omitempty"`
 	CategoryTags []CategoryTag             `json:"category_tags,omitempty"`
 	Supply       *ProductSupply            `json:"supply,omitempty"`
-	PlacingArea  *ProductPlacement         `json:"placing_area,omitempty"`
 
-	// CurrentStock is a denormalised cache of total sellable stock; the
-	// authoritative quantities live in the warehouse subsystem. It backs
-	// the out_of_stock display state.
-	CurrentStock int `json:"current_stock"`
 	// SalesPerformance contains backend-computed historical sales statistics.
 	// It is never manually authored on product create/update operations.
 	SalesPerformance *SalesPerformanceStats `json:"sales_performance,omitempty"`
@@ -52,22 +36,15 @@ type Product struct {
 	// A non-nil pointer with value zero is distinct from an absent count.
 	DisplaySellingCount *int64 `json:"display_selling_count,omitempty"`
 
-	// FirstListedAt is set exactly once, when the product first becomes
-	// active. It anchors the NEW (新品) 14-day window and is never reset
-	// on delist/relist. RestockedAt is the most recent 0->(>=1) sellable-
-	// stock transition; it refreshes the RESTOCKED (補貨) window.
+	// FirstListedAt is the absolute instant at which the product was first
+	// listed. Producers serialize operational instants in UTC.
 	FirstListedAt *time.Time `json:"first_listed_at,omitempty"`
-	RestockedAt   *time.Time `json:"restocked_at,omitempty"`
-	ExpiredAt     time.Time  `json:"expired_at,omitempty"`
 
-	// ── Nested groups ─────────────────────────────────────────────────
-	Pricing Pricing `json:"pricing"`
-	// Selling is an optional pointer (unlike the always-present groups
-	// below) so a product with no channel/buyer sellability rules omits it.
+	// Selling is an optional pointer so a product with no channel/buyer
+	// sellability rules omits it.
 	Selling      *Selling     `json:"selling,omitempty"`
 	Localization Localization `json:"localization,omitempty"`
 	Media        Media        `json:"media,omitempty"`
-	Physical     Physical     `json:"physical,omitempty"`
 	// CountryOfOrigin is the customer-facing origin display block projected
 	// onto the storefront product.
 	CountryOfOrigin *StorefrontOrigin `json:"country_of_origin,omitempty"`
@@ -80,20 +57,6 @@ type Product struct {
 	History []shared.HistoryEntry `json:"history,omitempty"`
 
 	common.AuditFields
-}
-
-// Pricing groups the prices a product can carry. Every field is an
-// optional *common.Money so each price can be absent and can even carry
-// its own currency (international trading). Online is the canonical
-// storefront price and is the one indexed for price sort
-// (pricing.online.amount_minor).
-type Pricing struct {
-	Online    *common.Money `json:"online,omitempty"`    // online selling price
-	Offline   *common.Money `json:"offline,omitempty"`   // offline / POS selling price
-	Original  *common.Money `json:"original,omitempty"`  // original / RRP ("was") price
-	Tag       *common.Money `json:"tag,omitempty"`       // temporary e-tag price
-	Wholesale *common.Money `json:"wholesale,omitempty"` // wholesale price
-	Cost      *common.Money `json:"cost,omitempty"`      // purchase cost
 }
 
 // Selling groups the channel/buyer sellability rules for a product: which
@@ -120,17 +83,4 @@ type Media struct {
 	ImageMediaIDs []string      `json:"image_media_ids,omitempty"`
 	ImageURLs     []string      `json:"image_urls,omitempty"`
 	DetailImages  []DetailImage `json:"detail_images,omitempty"`
-}
-
-// Physical groups the packaged-good physical attributes.
-type Physical struct {
-	Dimensions *common.Dimensions `json:"dimensions,omitempty"`
-	Weight     *common.Weight     `json:"weight,omitempty"`
-}
-
-// ProductPlacement identifies a stock location unambiguously. Location codes
-// are unique only within a depot, so both values are required together.
-type ProductPlacement struct {
-	DepotCode    string `json:"depot_code"`
-	LocationCode string `json:"location_code"`
 }

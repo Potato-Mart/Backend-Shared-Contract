@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/wholesale"
-	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/wholesale"
+	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/wholesale"
 )
 
 func TestWholesaleOrganisationJSONShape(t *testing.T) {
@@ -25,12 +25,12 @@ func TestWholesaleOrganisationJSONShape(t *testing.T) {
 			ABN:       "12345678901",
 			RegisteredAddress: &common.ContactAddress{
 				Address: &common.Address{
-					Label:    "HQ",
-					Line1:    "1 Market Street",
-					City:     "Sydney",
-					State:    "NSW",
-					Postcode: "2000",
-					Country:  "AU",
+					Label:              "HQ",
+					Line1:              "1 Market Street",
+					Locality:           "Sydney",
+					AdministrativeArea: &common.AdministrativeAreaRef{Code: "AU-NSW"},
+					PostalCode:         "2000",
+					Country:            common.CountryRef{Code: "AU"},
 				},
 			},
 		},

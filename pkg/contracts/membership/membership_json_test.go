@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/product"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/product"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/membership"
 )
 
 func TestMembershipAccountAndTierRoundTrip(t *testing.T) {
@@ -166,7 +166,7 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 	}
 	plan := membership.SubscriptionPlan{
 		ID:            "plan_1",
-		Product:       product.Snapshot{ID: "prod_1", Name: "Weekly Potatoes"},
+		Product:       product.Snapshot{SKUCode: "A00001", Name: "Weekly Potatoes"},
 		UnitPrice:     common.Money{AmountMinor: 1200, Currency: "AUD"},
 		FrequencyDays: 7,
 		IsActive:      true,

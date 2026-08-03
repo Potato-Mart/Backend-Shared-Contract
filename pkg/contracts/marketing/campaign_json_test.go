@@ -5,10 +5,33 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/marketing"
-	marketingenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/marketing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/marketing"
+	geographyenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/geography"
+	marketingenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/marketing"
 )
+
+func TestMarketingCampaignIncludesGeographicScopeAndScheduleTimezone(t *testing.T) {
+	value := marketing.MarketingCampaign{
+		ID: "campaign_1", Name: "National launch",
+		Channel:          marketingenum.MarketingChannelEmail,
+		Status:           marketingenum.MarketingCampaignStatusDraft,
+		GeographicScope:  common.GeographicScope{Mode: geographyenum.GeographicScopeModeGlobal},
+		ScheduleTimezone: "Etc/UTC",
+	}
+	payload, err := json.Marshal(value)
+	if err != nil {
+		t.Fatalf("marshal marketing campaign: %v", err)
+	}
+	var got map[string]any
+	if err := json.Unmarshal(payload, &got); err != nil {
+		t.Fatalf("unmarshal marketing campaign JSON: %v", err)
+	}
+	scope, ok := got["geographic_scope"].(map[string]any)
+	if !ok || scope["mode"] != "GLOBAL" || got["schedule_timezone"] != "Etc/UTC" {
+		t.Fatalf("marketing campaign geographic schedule mismatch: %s", payload)
+	}
+}
 
 func TestMarketingCampaignRecipientJSONGroupsContactChannels(t *testing.T) {
 	recipient := marketing.MarketingCampaignRecipient{

@@ -7,34 +7,32 @@ package pos
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/sales"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/payment"
-	posenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/pos"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/product"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/sales"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/payment"
+	posenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/pos"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/product"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/warehouse"
 )
 
-// CatalogProduct is the cashier-safe product projection returned by the POS
-// catalogue. Supply remains the source of truth and is responsible for
-// projecting the current offline price and sellable-stock snapshot. The POS
-// client must never reconstruct this shape from an admin Product response.
+// CatalogProduct is the cashier-safe package, offer, and availability
+// projection returned by the POS catalogue.
 type CatalogProduct struct {
-	ID           string                    `json:"id"`
-	SKUCode      string                    `json:"sku_code"`
-	SKU          string                    `json:"sku"`
-	Name         string                    `json:"name"`
-	Barcode      string                    `json:"barcode,omitempty"`
-	Taxed        bool                      `json:"taxed"`
-	Storage      warehouseenum.StorageType `json:"storage,omitempty"`
-	Status       productenum.ProductStatus `json:"status"`
-	Price        *common.Money             `json:"price,omitempty"`
-	ImageURL     string                    `json:"image_url,omitempty"`
-	CategoryTags []product.CategoryTag     `json:"category_tags,omitempty"`
-	CurrentStock int                       `json:"current_stock"`
-	UpdatedAt    time.Time                 `json:"updated_at"`
+	SKUCode            string                                     `json:"sku_code"`
+	CategorySKUCode    string                                     `json:"category_sku_code"`
+	Name               string                                     `json:"name"`
+	Taxed              bool                                       `json:"taxed"`
+	StorageType        warehouseenum.StorageType                  `json:"storage_type,omitempty"`
+	Status             productenum.ProductStatus                  `json:"status"`
+	PackageOptions     []product.ProductPackageOptionSnapshot     `json:"package_options"`
+	BarcodeAssignments []product.ProductBarcodeAssignmentSnapshot `json:"barcode_assignments,omitempty"`
+	Offers             []product.SellableOfferSnapshot            `json:"offers"`
+	Availability       *product.ProductStockSummary               `json:"availability,omitempty"`
+	ImageURL           string                                     `json:"image_url,omitempty"`
+	CategoryTags       []product.CategoryTag                      `json:"category_tags,omitempty"`
+	UpdatedAt          time.Time                                  `json:"updated_at"`
 }
 
 // Register is one physical or virtual point-of-sale register.
@@ -44,7 +42,7 @@ type Register struct {
 	Name    string `json:"name"`
 	Status  string `json:"status,omitempty"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 // RegisterShift is one operator shift on a register, from open to close-out.
@@ -60,7 +58,7 @@ type RegisterShift struct {
 	CashVariance   *common.Money       `json:"cash_variance,omitempty"`
 	Status         posenum.ShiftStatus `json:"status"`
 
-	common.AuditFields `bson:",inline"`
+	common.AuditFields
 }
 
 // CashMovement is one cash-drawer movement recorded during a shift.

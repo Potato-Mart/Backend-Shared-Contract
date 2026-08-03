@@ -3,9 +3,9 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/payment"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/payment"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/sales"
 )
 
 // OrderSummary is a slim, customer-facing projection of an Order for "my orders"
@@ -30,13 +30,15 @@ type OrderSummary struct {
 	TrackingURL    string                 `json:"tracking_url,omitempty"`
 }
 
-// OrderLineSummary is a tiny per-line snapshot: the SKU code, the product's
-// primary name, and the unit price paid at order time.
+// OrderLineSummary is a customer-facing package-aware order-line snapshot.
 type OrderLineSummary struct {
-	SKUCode   string       `json:"sku_code"`
-	Name      string       `json:"name"`
-	ImageURL  string       `json:"image_url,omitempty"`
-	Quantity  int          `json:"quantity"`
-	UnitPrice common.Money `json:"unit_price"`
-	Total     common.Money `json:"total"`
+	SKUCode             string                            `json:"sku_code"`
+	Name                string                            `json:"name"`
+	ImageURL            string                            `json:"image_url,omitempty"`
+	Components          []PricedPackageComponent          `json:"components"`
+	TotalBaseUnits      int64                             `json:"total_base_units"`
+	PackedComposition   common.PackageCompositionSnapshot `json:"packed_composition"`
+	ReturnedComposition common.PackageCompositionSnapshot `json:"returned_composition"`
+	RefundedComposition common.PackageCompositionSnapshot `json:"refunded_composition"`
+	Total               common.Money                      `json:"total"`
 }

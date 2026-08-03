@@ -3,8 +3,8 @@ package shared
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/product"
 )
 
 // Media is the public projection of a stored asset (image, document,

@@ -1,6 +1,6 @@
 package salesenum
 
-// SalesOrderStatus is the persisted lifecycle state of a sales order.
+// SalesOrderStatus is the lifecycle state of a sales order.
 type SalesOrderStatus string
 
 const (

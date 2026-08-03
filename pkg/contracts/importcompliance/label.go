@@ -1,8 +1,8 @@
 package importcompliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	importcomplianceenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/importcompliance"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	importcomplianceenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/importcompliance"
 )
 
 // LabelMaster is one SKU/variant label revision. It remains independent of the

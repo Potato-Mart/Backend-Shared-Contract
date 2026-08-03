@@ -3,26 +3,28 @@ package marketing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/shared"
-	marketingenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/marketing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/shared"
+	marketingenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/marketing"
 )
 
 // MarketingCampaign records a single EDM / SMS / LINE push broadcast.
 // Actual delivery is handled by edge functions (Resend, Twilio, etc.);
 // this contract is the shared data shape for admin UI and reporting.
 type MarketingCampaign struct {
-	ID             string                                `json:"id"`
-	Name           string                                `json:"name"`
-	Channel        marketingenum.MarketingChannel        `json:"channel"`
-	SegmentKey     string                                `json:"segment_key,omitempty"` // e.g. "churn_high" / "vip" / "all"
-	Subject        string                                `json:"subject,omitempty"`
-	Body           string                                `json:"body,omitempty"`
-	RecipientCount int                                   `json:"recipient_count"`
-	Status         marketingenum.MarketingCampaignStatus `json:"status"`
-	SentAt         *time.Time                            `json:"sent_at,omitempty"`
-	Metadata       common.Metadata                       `json:"metadata,omitempty"`
-	History        []shared.HistoryEntry                 `json:"history,omitempty"`
+	ID               string                                `json:"id"`
+	Name             string                                `json:"name"`
+	Channel          marketingenum.MarketingChannel        `json:"channel"`
+	SegmentKey       string                                `json:"segment_key,omitempty"` // e.g. "churn_high" / "vip" / "all"
+	Subject          string                                `json:"subject,omitempty"`
+	Body             string                                `json:"body,omitempty"`
+	RecipientCount   int                                   `json:"recipient_count"`
+	Status           marketingenum.MarketingCampaignStatus `json:"status"`
+	GeographicScope  common.GeographicScope                `json:"geographic_scope"`
+	ScheduleTimezone string                                `json:"schedule_timezone"`
+	SentAt           *time.Time                            `json:"sent_at,omitempty"`
+	Metadata         common.Metadata                       `json:"metadata,omitempty"`
+	History          []shared.HistoryEntry                 `json:"history,omitempty"`
 
 	common.AuditFields
 }

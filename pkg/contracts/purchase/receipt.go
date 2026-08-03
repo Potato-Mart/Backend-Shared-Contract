@@ -3,9 +3,10 @@ package purchase
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/shared"
-	purchaseenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/purchase"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/warehouse"
+	purchaseenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/purchase"
 )
 
 type Receipt struct {
@@ -26,13 +27,16 @@ type Receipt struct {
 }
 
 type ReceiptItem struct {
-	ID             string `json:"id,omitempty"`
-	ProductSKUCode string `json:"product_sku_code,omitempty"`
-	SKU            string `json:"sku,omitempty"`
-	ProductName    string `json:"product_name,omitempty"`
-	OrderedQty     int    `json:"ordered_qty"`
-	ReceivedQty    int    `json:"received_qty"`
-	RejectedQty    int    `json:"rejected_qty,omitempty"`
-	LocationCode   string `json:"location_code,omitempty"`
-	Note           string `json:"note,omitempty"`
+	ID                  string                            `json:"id,omitempty"`
+	ProductSKUCode      string                            `json:"product_sku_code"`
+	ProductName         string                            `json:"product_name,omitempty"`
+	PackageOptionID     string                            `json:"package_option_id"`
+	LotID               string                            `json:"lot_id"`
+	DestinationBucketID string                            `json:"destination_bucket_id"`
+	DestinationLocation warehouse.StockLocationRef        `json:"destination_location"`
+	DateMark            *warehouse.InventoryDateMark      `json:"date_mark,omitempty"`
+	OrderedComposition  common.PackageCompositionSnapshot `json:"ordered_composition"`
+	ReceivedComposition common.PackageCompositionSnapshot `json:"received_composition"`
+	RejectedComposition common.PackageCompositionSnapshot `json:"rejected_composition"`
+	Note                string                            `json:"note,omitempty"`
 }

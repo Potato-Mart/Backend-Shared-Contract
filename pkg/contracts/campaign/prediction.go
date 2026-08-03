@@ -3,7 +3,8 @@ package campaign
 import (
 	"time"
 
-	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/campaign"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	campaignenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/campaign"
 )
 
 type CampaignComparableEvent struct {
@@ -13,42 +14,43 @@ type CampaignComparableEvent struct {
 	ResolvedProductSKUCodes []string                              `json:"resolved_product_sku_codes"`
 	StartsAt                time.Time                             `json:"starts_at"`
 	EndsAt                  time.Time                             `json:"ends_at"`
+	ScheduleTimezone        string                                `json:"schedule_timezone"`
 	Audience                *Audience                             `json:"audience,omitempty"`
+	GeographicScope         common.GeographicScope                `json:"geographic_scope"`
 	Placement               campaignenum.CampaignPlacement        `json:"placement"`
 }
 
 type CampaignPredictionEvidence struct {
-	CampaignKey     string                                `json:"campaign_key,omitempty"`
-	Source          campaignenum.CampaignPredictionSource `json:"source"`
-	WindowStart     time.Time                             `json:"window_start"`
-	WindowEnd       time.Time                             `json:"window_end"`
-	RawNetUnits     int                                   `json:"raw_net_units"`
-	NormalizedUnits int                                   `json:"normalized_units"`
-	Weight          float64                               `json:"weight"`
+	CampaignKey         string                                `json:"campaign_key,omitempty"`
+	Source              campaignenum.CampaignPredictionSource `json:"source"`
+	WindowStart         time.Time                             `json:"window_start"`
+	WindowEnd           time.Time                             `json:"window_end"`
+	RawNetBaseUnits     int64                                 `json:"raw_net_base_units"`
+	NormalizedBaseUnits int64                                 `json:"normalized_base_units"`
+	Weight              float64                               `json:"weight"`
 }
 
 type CampaignProductPrediction struct {
-	ProductSKUCode         string                                `json:"product_sku_code"`
-	SupplierCode           string                                `json:"supplier_code,omitempty"`
-	Source                 campaignenum.CampaignPredictionSource `json:"source"`
-	Evidence               []CampaignPredictionEvidence          `json:"evidence,omitempty"`
-	PredictedDemandUnits   int                                   `json:"predicted_demand_units"`
-	SellableAvailableUnits int                                   `json:"sellable_available_units"`
-	ConfirmedInboundUnits  int                                   `json:"confirmed_inbound_units"`
-	NetRequiredUnits       int                                   `json:"net_required_units"`
-	SuggestedOrderUnits    int                                   `json:"suggested_order_units"`
-	SuggestedCartons       int                                   `json:"suggested_cartons,omitempty"`
-	CartonSize             int                                   `json:"carton_size,omitempty"`
-	MinimumOrderQuantity   int                                   `json:"minimum_order_quantity,omitempty"`
-	Orderable              bool                                  `json:"orderable"`
-	Warnings               []string                              `json:"warnings,omitempty"`
+	ProductSKUCode             string                                `json:"product_sku_code"`
+	SupplierCode               string                                `json:"supplier_code,omitempty"`
+	Source                     campaignenum.CampaignPredictionSource `json:"source"`
+	Evidence                   []CampaignPredictionEvidence          `json:"evidence,omitempty"`
+	PredictedDemandBaseUnits   int64                                 `json:"predicted_demand_base_units"`
+	SellableAvailableBaseUnits int64                                 `json:"sellable_available_base_units"`
+	ConfirmedInboundBaseUnits  int64                                 `json:"confirmed_inbound_base_units"`
+	NetRequiredBaseUnits       int64                                 `json:"net_required_base_units"`
+	SuggestedOrderBaseUnits    int64                                 `json:"suggested_order_base_units"`
+	SuggestedComposition       common.PackageCompositionSnapshot     `json:"suggested_composition"`
+	MinimumOrderBaseUnits      int64                                 `json:"minimum_order_base_units,omitempty"`
+	Orderable                  bool                                  `json:"orderable"`
+	Warnings                   []string                              `json:"warnings,omitempty"`
 }
 
 type CampaignSupplierPrediction struct {
-	SupplierCode string                      `json:"supplier_code"`
-	Products     []CampaignProductPrediction `json:"products"`
-	TotalUnits   int                         `json:"total_units"`
-	Warnings     []string                    `json:"warnings,omitempty"`
+	SupplierCode   string                      `json:"supplier_code"`
+	Products       []CampaignProductPrediction `json:"products"`
+	TotalBaseUnits int64                       `json:"total_base_units"`
+	Warnings       []string                    `json:"warnings,omitempty"`
 }
 
 type CampaignPrediction struct {

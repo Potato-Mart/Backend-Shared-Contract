@@ -3,8 +3,8 @@ package promotion
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/promotion"
 )
 
 // A wholesale group-order manager applies for (or selects) a per-group discount
@@ -54,6 +54,7 @@ type GroupOrderDiscountDecision struct {
 	ApplicationID       string                           `json:"application_id,omitempty"`
 	ApprovedPromotionID string                           `json:"approved_promotion_id,omitempty"`
 	DiscountAmount      common.Money                     `json:"discount_amount"`
+	GeographicContext   common.GeographicContext         `json:"geographic_context"`
 	Lines               []GroupOrderDiscountDecisionLine `json:"lines,omitempty"`
 	RuleVersion         string                           `json:"rule_version,omitempty"`
 	EvaluatedAt         time.Time                        `json:"evaluated_at"`

@@ -3,15 +3,15 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/warehouse"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/membership"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/payment"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/promotion"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/sales"
-	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/warehouse"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/membership"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/payment"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/promotion"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/sales"
+	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/shipping"
 )
 
 type Order struct {
@@ -26,9 +26,12 @@ type Order struct {
 	// Buyer describes who is buying, independently of Channel. POS is a
 	// channel, not a buyer type — see sales.BuyerContext. Optional pointer
 	// so it is omitted entirely when unset.
-	Buyer        *BuyerContext `json:"buyer,omitempty"`
-	Items        []OrderItem   `json:"items"`
-	SourceDevice SourceDevice  `json:"source_device,omitempty"`
+	Buyer                *BuyerContext             `json:"buyer,omitempty"`
+	GeographicContext    common.GeographicContext  `json:"geographic_context"`
+	GroupOrder           *GroupOrderContext        `json:"group_order,omitempty"`
+	GroupOrderFulfilment *GroupOrderFulfilmentPlan `json:"group_order_fulfilment,omitempty"`
+	Items                []OrderItem               `json:"items"`
+	SourceDevice         SourceDevice              `json:"source_device,omitempty"`
 
 	// ── Shipping & billing ────────────────────────────────────────────
 	Shipping         common.ContactAddress         `json:"shipping"`
@@ -47,8 +50,7 @@ type Order struct {
 	DeliveryMethod       shippingenum.DeliveryMethod `json:"delivery_method,omitempty"`
 	// OutsourcedCarrier names the third-party delivery company; set only
 	// when DeliveryMethod is outsourced.
-	OutsourcedCarrier string                      `json:"outsourced_carrier,omitempty"`
-	DeliveryRegion    shippingenum.DeliveryRegion `json:"delivery_region,omitempty"`
+	OutsourcedCarrier string `json:"outsourced_carrier,omitempty"`
 
 	// ── Money ─────────────────────────────────────────────────────────
 	Subtotal       common.Money `json:"subtotal"`
@@ -99,41 +101,45 @@ type Order struct {
 // and customer order views. It replaces admin-facing dependence on a separate
 // packing-session aggregate for current packing progress.
 type OrderPackingProgress struct {
-	Status        salesenum.FulfillmentStatus    `json:"status,omitempty"`
-	Operator      string                         `json:"operator,omitempty"`
-	Lines         []warehouse.PackingLine        `json:"lines,omitempty"`
-	BoxPlan       *warehouse.PackingBoxPlan      `json:"box_plan,omitempty"`
-	Damages       []warehouse.PackingDamage      `json:"damages,omitempty"`
-	Discrepancies []warehouse.PackingDiscrepancy `json:"discrepancies,omitempty"`
-	StartedAt     *time.Time                     `json:"started_at,omitempty"`
-	UpdatedAt     *time.Time                     `json:"updated_at,omitempty"`
-	PackedAt      *time.Time                     `json:"packed_at,omitempty"`
-	FulfilledAt   *time.Time                     `json:"fulfilled_at,omitempty"`
+	Status        salesenum.FulfillmentStatus       `json:"status,omitempty"`
+	Operator      string                            `json:"operator,omitempty"`
+	Lines         []warehouse.PackingLine           `json:"lines,omitempty"`
+	Containers    []warehouse.OutboundContainerPlan `json:"containers,omitempty"`
+	Damages       []warehouse.PackingDamage         `json:"damages,omitempty"`
+	Discrepancies []warehouse.PackingDiscrepancy    `json:"discrepancies,omitempty"`
+	StartedAt     *time.Time                        `json:"started_at,omitempty"`
+	UpdatedAt     *time.Time                        `json:"updated_at,omitempty"`
+	PackedAt      *time.Time                        `json:"packed_at,omitempty"`
+	FulfilledAt   *time.Time                        `json:"fulfilled_at,omitempty"`
 }
 
 type OrderItem struct {
-	ID           string           `json:"id"`
-	Product      product.Snapshot `json:"product"`
-	VariantTitle string           `json:"variant_title,omitempty"`
-	UnitPrice    common.Money     `json:"unit_price"`
-	// Pricing is the commercial pricing context under which UnitPrice was
-	// set (retail vs wholesale audience, visibility). Optional pointer so it
-	// is omitted entirely when unset.
-	Pricing        *PricingContext    `json:"pricing,omitempty"`
-	Quantity       int                `json:"quantity"`
-	DiscountAmount common.Money       `json:"discount_amount"`
-	Total          common.Money       `json:"total"`
-	CartonQty      int                `json:"carton_qty,omitempty"`
-	CartonSize     int                `json:"carton_size,omitempty"`
-	Preorder       *PreorderItemState `json:"preorder,omitempty"`
+	ID                   string                                  `json:"id"`
+	Product              product.Snapshot                        `json:"product"`
+	VariantTitle         string                                  `json:"variant_title,omitempty"`
+	Components           []PricedPackageComponent                `json:"components"`
+	TotalBaseUnits       int64                                   `json:"total_base_units"`
+	Pricing              *PricingContext                         `json:"pricing,omitempty"`
+	SubstitutionPolicy   LooseSubstitutionPolicySnapshot         `json:"substitution_policy"`
+	RequestedComposition common.PackageCompositionSnapshot       `json:"requested_composition"`
+	AllocatedComposition common.PackageCompositionSnapshot       `json:"allocated_composition"`
+	PickedComposition    common.PackageCompositionSnapshot       `json:"picked_composition"`
+	PackedComposition    common.PackageCompositionSnapshot       `json:"packed_composition"`
+	ReturnedComposition  common.PackageCompositionSnapshot       `json:"returned_composition"`
+	RefundedComposition  common.PackageCompositionSnapshot       `json:"refunded_composition"`
+	Substitutions        []warehouse.PackageSubstitutionSnapshot `json:"substitutions,omitempty"`
+	DiscountAmount       common.Money                            `json:"discount_amount"`
+	Total                common.Money                            `json:"total"`
+	Preorder             *PreorderItemState                      `json:"preorder,omitempty"`
 }
 
 type AppliedPromotion struct {
-	ID             string                     `json:"id,omitempty"`
-	Name           string                     `json:"name,omitempty"`
-	DiscountType   promotionenum.DiscountType `json:"discount_type,omitempty"`
-	DiscountValue  string                     `json:"discount_value,omitempty"`
-	DiscountAmount *common.Money              `json:"discount_amount,omitempty"`
+	ID                string                     `json:"id,omitempty"`
+	Name              string                     `json:"name,omitempty"`
+	DiscountType      promotionenum.DiscountType `json:"discount_type,omitempty"`
+	DiscountValue     string                     `json:"discount_value,omitempty"`
+	DiscountAmount    *common.Money              `json:"discount_amount,omitempty"`
+	GeographicContext common.GeographicContext   `json:"geographic_context"`
 }
 
 // PointRedemptionSnapshot records a points discount applied to an order without

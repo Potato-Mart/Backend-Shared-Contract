@@ -3,7 +3,7 @@ package promotion
 import (
 	"time"
 
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/promotion"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/promotion"
 )
 
 // DiscountSpec is the discount type/value pair shared by promotions and
@@ -17,9 +17,10 @@ type DiscountSpec struct {
 // ActiveWindow groups the activation flag with the optional start/expiry
 // window of a promotion or coupon.
 type ActiveWindow struct {
-	StartsAt  *time.Time `json:"starts_at,omitempty"`
-	ExpiresAt *time.Time `json:"expires_at,omitempty"`
-	IsActive  bool       `json:"is_active"`
+	StartsAt         *time.Time `json:"starts_at,omitempty"`
+	ExpiresAt        *time.Time `json:"expires_at,omitempty"`
+	ScheduleTimezone string     `json:"schedule_timezone"`
+	IsActive         bool       `json:"is_active"`
 }
 
 // UsageLimits groups redemption caps and counters shared by promotions

@@ -1,6 +1,6 @@
 package product
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
 
 // DetailImage is one product-gallery image. Slice position defines display
 // order; AltText and Caption carry optional localized customer-facing copy.

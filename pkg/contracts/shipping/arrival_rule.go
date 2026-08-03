@@ -3,18 +3,15 @@ package shipping
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
 )
 
-// ShippingArrivalRule defines a time window within the week that maps to
-// a specific warehouse arrival day. Rules replace the hard-coded
-// Monday-14:00 cut-off logic. Active windows must not overlap.
-//
-// Days of week: 0=Sunday … 6=Saturday.
-// Times are in "HH:MM" 24-hour format (Melbourne local time).
+// ShippingArrivalRule represents a weekly warehouse-arrival window.
+// Days of week: 0=Sunday … 6=Saturday. Times are interpreted in Timezone.
 type ShippingArrivalRule struct {
 	ID         string           `json:"id"`
 	Name       string           `json:"name"`
+	Timezone   string           `json:"timezone"`
 	FromDOW    int              `json:"from_dow"` // 0-6
 	FromTime   common.TimeOfDay `json:"from_time"`
 	ToDOW      int              `json:"to_dow"` // 0-6
@@ -25,13 +22,12 @@ type ShippingArrivalRule struct {
 	common.AuditFields
 }
 
-// ShippingArrivalBlacklist lists calendar dates on which warehouse arrivals
-// are not permitted (public holidays, depot closures, etc.).
-// When a computed arrival date falls on a blocked date it rolls forward
-// one day at a time until a non-blocked date is found.
+// ShippingArrivalBlacklist represents a local calendar date on which warehouse
+// arrivals are unavailable.
 type ShippingArrivalBlacklist struct {
 	ID          string      `json:"id"`
 	BlockedDate common.Date `json:"blocked_date"`
+	Timezone    string      `json:"timezone"`
 	Reason      string      `json:"reason,omitempty"`
 	CreatedAt   time.Time   `json:"created_at"`
 }

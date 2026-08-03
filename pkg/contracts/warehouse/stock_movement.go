@@ -3,36 +3,44 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/warehouse"
 )
 
-// StockMovement is the shared read model for every stock balance change.
-//
-// Product.CurrentStock and DepotProduct.StockQty are projections; this ledger
-// explains how the balance changed and links the movement to the business
-// document that caused it.
+// InventoryCauseRef identifies the contract record that caused an inventory
+// change.
+type InventoryCauseRef struct {
+	Type string `json:"type"`
+	ID   string `json:"id"`
+}
+
+// StockMovement represents a physical base-unit transfer or state change.
+// Logical reservation lifecycle changes are represented by StockReservation.
 type StockMovement struct {
-	ID             string                          `json:"id"`
-	ProductSKUCode string                          `json:"product_sku_code"`
-	SKU            string                          `json:"sku,omitempty"`
-	ProductName    string                          `json:"product_name,omitempty"`
-	DepotCode      string                          `json:"depot_code,omitempty"`
-	LocationCode   string                          `json:"location_code,omitempty"`
-	Type           warehouseenum.StockMovementType `json:"type"`
-	QtyDelta       int                             `json:"qty_delta"`
-	BalanceAfter   int                             `json:"balance_after"`
-	OccurredAt     time.Time                       `json:"occurred_at"`
-	CreatedBy      string                          `json:"created_by,omitempty"`
-	ReasonCode     string                          `json:"reason_code,omitempty"`
-	Note           string                          `json:"note,omitempty"`
-
-	PurchaseOrderNumber string `json:"purchase_order_number,omitempty"`
-	PurchaseReceiptID   string `json:"purchase_receipt_id,omitempty"`
-	SalesOrderNumber    string `json:"sales_order_number,omitempty"`
-	DamageReportID      string `json:"damage_report_id,omitempty"`
-	ReferenceType       string `json:"reference_type,omitempty"`
-	ReferenceID         string `json:"reference_id,omitempty"`
-
-	Metadata common.Metadata `json:"metadata,omitempty"`
+	ID                               string                             `json:"id"`
+	ProductSKUCode                   string                             `json:"product_sku_code"`
+	Type                             warehouseenum.StockMovementType    `json:"type"`
+	SourceBucketID                   string                             `json:"source_bucket_id,omitempty"`
+	DestinationBucketID              string                             `json:"destination_bucket_id,omitempty"`
+	LotID                            string                             `json:"lot_id,omitempty"`
+	SourcePackageOptionID            string                             `json:"source_package_option_id,omitempty"`
+	DestinationPackageOptionID       string                             `json:"destination_package_option_id,omitempty"`
+	BaseUnits                        int64                              `json:"base_units"`
+	SourcePackageComposition         *common.PackageCompositionSnapshot `json:"source_package_composition,omitempty"`
+	DestinationPackageComposition    *common.PackageCompositionSnapshot `json:"destination_package_composition,omitempty"`
+	SourceBalanceAfterBaseUnits      *int64                             `json:"source_balance_after_base_units,omitempty"`
+	DestinationBalanceAfterBaseUnits *int64                             `json:"destination_balance_after_base_units,omitempty"`
+	Cause                            *InventoryCauseRef                 `json:"cause,omitempty"`
+	PurchaseOrderNumber              string                             `json:"purchase_order_number,omitempty"`
+	PurchaseReceiptID                string                             `json:"purchase_receipt_id,omitempty"`
+	OrderNumber                      string                             `json:"order_number,omitempty"`
+	ReservationID                    string                             `json:"reservation_id,omitempty"`
+	AllocationID                     string                             `json:"allocation_id,omitempty"`
+	StagingRecordID                  string                             `json:"staging_record_id,omitempty"`
+	QualityAssessmentID              string                             `json:"quality_assessment_id,omitempty"`
+	DamageReportID                   string                             `json:"damage_report_id,omitempty"`
+	ReasonCode                       string                             `json:"reason_code,omitempty"`
+	Note                             string                             `json:"note,omitempty"`
+	PerformedBy                      string                             `json:"performed_by,omitempty"`
+	OccurredAt                       time.Time                          `json:"occurred_at"`
 }

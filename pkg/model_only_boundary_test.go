@@ -6,6 +6,7 @@ import (
 	"go/token"
 	"io/fs"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -19,19 +20,17 @@ var modelBoundaryForbiddenTypeSuffixes = []string{
 }
 
 var modelBoundaryForbiddenPackagePrefixes = []string{
-	"apiresponse", "logic", "serviceauth", "enums/serviceauth",
-	"contracts/pricing", "contracts/stockops",
+	"pkg/apiresponse", "pkg/logic", "pkg/serviceauth", "pkg/enums/serviceauth",
+	"pkg/contracts/pricing", "pkg/contracts/stockops",
 }
 
 var modelBoundaryApprovedMethods = map[string]struct{}{
 	"String": {}, "IsValid": {},
-	"MarshalJSON": {}, "UnmarshalJSON": {},
-	"MarshalText": {}, "UnmarshalText": {},
-	"MarshalBSON": {}, "UnmarshalBSON": {},
-	"MarshalBSONValue": {}, "UnmarshalBSONValue": {},
 }
 
-func TestV21ContractIsModelOnly(t *testing.T) {
+var modelBoundaryJSONTag = regexp.MustCompile(`^json:"[^"]*"$`)
+
+func TestV22ContractIsJSONModelOnly(t *testing.T) {
 	var violations []string
 	err := filepath.WalkDir(".", func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
@@ -49,10 +48,26 @@ func TestV21ContractIsModelOnly(t *testing.T) {
 		}
 
 		fset := token.NewFileSet()
-		file, parseErr := parser.ParseFile(fset, path, nil, 0)
+		file, parseErr := parser.ParseFile(fset, path, nil, parser.ImportsOnly)
 		if parseErr != nil {
 			return parseErr
 		}
+		for _, imported := range file.Imports {
+			importPath, unquoteErr := strconv.Unquote(imported.Path.Value)
+			if unquoteErr != nil {
+				return unquoteErr
+			}
+			for _, forbidden := range []string{"database/sql", "go.mongodb.org/", "gorm.io/", "github.com/jmoiron/sqlx", "github.com/jackc/pgx", "cloud.google.com/go/firestore", "cloud.google.com/go/datastore"} {
+				if importPath == forbidden || strings.HasPrefix(importPath, forbidden) {
+					violations = append(violations, modelBoundaryPosition(fset, imported.Pos())+": non-JSON dependency "+importPath)
+				}
+			}
+		}
+		file, parseErr = parser.ParseFile(fset, path, nil, parser.ParseComments)
+		if parseErr != nil {
+			return parseErr
+		}
+		stringEnumTypes := modelBoundaryStringEnumTypes(file)
 
 		for _, decl := range file.Decls {
 			switch typed := decl.(type) {
@@ -65,29 +80,41 @@ func TestV21ContractIsModelOnly(t *testing.T) {
 					violations = append(violations, modelBoundaryPosition(fset, typed.Pos())+": non-intrinsic method "+typed.Name.Name)
 					continue
 				}
-				modelBoundaryValidateIntrinsicMethod(fset, typed, &violations)
+				modelBoundaryValidateIntrinsicMethod(fset, typed, stringEnumTypes, &violations)
 			case *ast.GenDecl:
 				modelBoundaryInspectDeclaration(fset, typed, &violations)
 			}
 		}
 
+		for _, group := range file.Comments {
+			if strings.Contains(group.Text(), "Deprecated:") || strings.Contains(group.Text(), "@deprecated") {
+				violations = append(violations, normalized+": deprecated production declaration")
+			}
+		}
+
 		ast.Inspect(file, func(node ast.Node) bool {
 			field, ok := node.(*ast.Field)
-			if !ok || field.Tag == nil {
+			if !ok {
 				return true
 			}
-			tag := strings.ToLower(field.Tag.Value)
-			for _, transportTag := range []string{"binding:", "form:", "query:", "header:", "uri:"} {
-				if strings.Contains(tag, transportTag) {
-					violations = append(violations, modelBoundaryPosition(fset, field.Tag.Pos())+": transport struct tag "+transportTag)
+			if field.Tag == nil {
+				for _, name := range field.Names {
+					if name.IsExported() {
+						violations = append(violations, modelBoundaryPosition(fset, name.Pos())+": exported JSON field without json tag "+name.Name)
+					}
 				}
+				return true
+			}
+			tag, unquoteErr := strconv.Unquote(field.Tag.Value)
+			if unquoteErr != nil || !modelBoundaryJSONTag.MatchString(tag) {
+				violations = append(violations, modelBoundaryPosition(fset, field.Tag.Pos())+": struct tags must contain exactly one json tag")
 			}
 			return true
 		})
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v21 contract: %v", err)
+		t.Fatalf("scan v22 contract: %v", err)
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)
@@ -95,15 +122,56 @@ func TestV21ContractIsModelOnly(t *testing.T) {
 	}
 }
 
+func modelBoundaryStringEnumTypes(file *ast.File) map[string]struct{} {
+	stringTypes := make(map[string]struct{})
+	for _, decl := range file.Decls {
+		general, ok := decl.(*ast.GenDecl)
+		if !ok || general.Tok != token.TYPE {
+			continue
+		}
+		for _, spec := range general.Specs {
+			typeSpec, ok := spec.(*ast.TypeSpec)
+			if !ok || typeSpec.Assign.IsValid() {
+				continue
+			}
+			underlying, ok := typeSpec.Type.(*ast.Ident)
+			if ok && underlying.Name == "string" {
+				stringTypes[typeSpec.Name.Name] = struct{}{}
+			}
+		}
+	}
+	enumTypes := make(map[string]struct{})
+	for _, decl := range file.Decls {
+		general, ok := decl.(*ast.GenDecl)
+		if !ok || general.Tok != token.CONST {
+			continue
+		}
+		for _, spec := range general.Specs {
+			valueSpec, ok := spec.(*ast.ValueSpec)
+			if !ok || valueSpec.Type == nil {
+				continue
+			}
+			constantType, ok := valueSpec.Type.(*ast.Ident)
+			if !ok {
+				continue
+			}
+			if _, stringBacked := stringTypes[constantType.Name]; stringBacked {
+				enumTypes[constantType.Name] = struct{}{}
+			}
+		}
+	}
+	return enumTypes
+}
+
 func modelBoundaryInspectDeclaration(fset *token.FileSet, decl *ast.GenDecl, violations *[]string) {
 	for _, spec := range decl.Specs {
 		switch typed := spec.(type) {
 		case *ast.TypeSpec:
+			if typed.Assign.IsValid() {
+				*violations = append(*violations, modelBoundaryPosition(fset, typed.Pos())+": compatibility/type alias "+typed.Name.Name)
+			}
 			if !typed.Name.IsExported() {
 				continue
-			}
-			if typed.Assign.IsValid() {
-				*violations = append(*violations, modelBoundaryPosition(fset, typed.Pos())+": exported compatibility/type alias "+typed.Name.Name)
 			}
 			for _, suffix := range modelBoundaryForbiddenTypeSuffixes {
 				if strings.HasSuffix(typed.Name.Name, suffix) {
@@ -143,8 +211,21 @@ func modelBoundaryInspectDeclaration(fset *token.FileSet, decl *ast.GenDecl, vio
 	}
 }
 
-func modelBoundaryValidateIntrinsicMethod(fset *token.FileSet, method *ast.FuncDecl, violations *[]string) {
+func modelBoundaryValidateIntrinsicMethod(fset *token.FileSet, method *ast.FuncDecl, stringEnumTypes map[string]struct{}, violations *[]string) {
 	if method.Name.Name != "String" && method.Name.Name != "IsValid" {
+		return
+	}
+	if method.Recv == nil || len(method.Recv.List) != 1 {
+		*violations = append(*violations, modelBoundaryPosition(fset, method.Pos())+": "+method.Name.Name+" must have one enum receiver")
+		return
+	}
+	receiver, ok := method.Recv.List[0].Type.(*ast.Ident)
+	if !ok {
+		*violations = append(*violations, modelBoundaryPosition(fset, method.Pos())+": "+method.Name.Name+" requires a value receiver on a string-backed enum")
+		return
+	}
+	if _, approved := stringEnumTypes[receiver.Name]; !approved {
+		*violations = append(*violations, modelBoundaryPosition(fset, method.Pos())+": "+method.Name.Name+" receiver "+receiver.Name+" is not a string-backed enum")
 		return
 	}
 	if method.Type.Params != nil && len(method.Type.Params.List) != 0 {

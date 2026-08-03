@@ -3,14 +3,14 @@ package sales
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/analytics"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/payment"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/analytics"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/payment"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/sales"
 )
 
 // OrderCreatedEvent is emitted on the order-events topic when a sales order
-// is first persisted. AggregateID is the order number.
+// is first recorded. AggregateID is the order number.
 type OrderCreatedEvent struct {
 	OrderID                   string              `json:"order_id"`
 	OrderNumber               string              `json:"order_number"`
@@ -84,19 +84,6 @@ type OrderCancelledEvent struct {
 	CancelledAt          time.Time `json:"cancelled_at"`
 	Reason               string    `json:"reason,omitempty"`
 	RequestID            string    `json:"request_id,omitempty"`
-}
-
-// PreorderAvailabilityEvent is emitted on the order-events topic when a
-// preorder line becomes available to fulfil. AggregateID is the order number.
-type PreorderAvailabilityEvent struct {
-	OrderNumber          string     `json:"order_number"`
-	RetailCustomerNumber string     `json:"retail_customer_number,omitempty"`
-	ProductSKUCode       string     `json:"product_sku_code"`
-	ProductName          string     `json:"product_name,omitempty"`
-	Quantity             int64      `json:"quantity"`
-	AvailableAt          time.Time  `json:"available_at"`
-	ExpectedAvailableAt  *time.Time `json:"expected_available_at,omitempty"`
-	RequestID            string     `json:"request_id,omitempty"`
 }
 
 // FulfilmentShippedEvent is emitted on the fulfilment-events topic when a

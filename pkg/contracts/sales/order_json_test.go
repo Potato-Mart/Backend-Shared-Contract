@@ -6,14 +6,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/warehouse"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/membership"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/payment"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/sales"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/warehouse"
+	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/membership"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/payment"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/sales"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/warehouse"
 )
 
 func TestOrderJSONRoundTripWithHistory(t *testing.T) {
@@ -78,8 +78,8 @@ func TestOrderJSONOmitsEmptyHistory(t *testing.T) {
 	}
 }
 
-func TestV17LineItemsRemovePropertiesAndRequireOrderItemID(t *testing.T) {
-	cartPayload, err := json.Marshal(sales.CartItem{Quantity: 1})
+func TestV22LineItemsUsePackageComponentsAndRequireOrderItemID(t *testing.T) {
+	cartPayload, err := json.Marshal(sales.CartItem{TotalBaseUnits: 1})
 	if err != nil {
 		t.Fatalf("marshal cart item: %v", err)
 	}
@@ -87,15 +87,22 @@ func TestV17LineItemsRemovePropertiesAndRequireOrderItemID(t *testing.T) {
 		t.Fatalf("removed cart item properties remain: %s", cartPayload)
 	}
 
-	orderPayload, err := json.Marshal(sales.OrderItem{Quantity: 1})
+	orderPayload, err := json.Marshal(sales.OrderItem{TotalBaseUnits: 1})
 	if err != nil {
 		t.Fatalf("marshal order item: %v", err)
 	}
 	if !strings.Contains(string(orderPayload), `"id":""`) {
 		t.Fatalf("order item id must remain a required JSON key: %s", orderPayload)
 	}
-	if strings.Contains(string(orderPayload), `"properties"`) {
-		t.Fatalf("removed order item properties remain: %s", orderPayload)
+	for _, removed := range []string{`"properties"`, `"quantity"`, `"unit_price"`, `"carton_qty"`, `"carton_size"`} {
+		if strings.Contains(string(cartPayload), removed) || strings.Contains(string(orderPayload), removed) {
+			t.Fatalf("removed scalar order field %s remains: cart=%s order=%s", removed, cartPayload, orderPayload)
+		}
+	}
+	for _, required := range []string{`"components"`, `"total_base_units":1`, `"substitution_policy"`} {
+		if !strings.Contains(string(orderPayload), required) {
+			t.Fatalf("package-aware order item missing %s: %s", required, orderPayload)
+		}
 	}
 }
 
@@ -113,34 +120,37 @@ func TestOrderJSONRoundTripsPackingProgress(t *testing.T) {
 			UpdatedAt: &updatedAt,
 			Lines: []warehouse.PackingLine{
 				{
-					ProductSKUCode: "SKU-001",
-					SKU:            "POT-001",
-					ProductName:    "Washed potatoes",
-					OrderedQty:     4,
-					ScannedQty:     3,
-					DamagedQty:     1,
+					ID:                   "pack_line_1",
+					OrderItemID:          "item_1",
+					ProductSKUCode:       "A00001",
+					ProductName:          "Washed potatoes",
+					RequestedComposition: common.PackageCompositionSnapshot{TotalBaseUnits: 4},
+					AllocatedComposition: common.PackageCompositionSnapshot{TotalBaseUnits: 4},
+					PickedComposition:    common.PackageCompositionSnapshot{TotalBaseUnits: 4},
+					PackedComposition:    common.PackageCompositionSnapshot{TotalBaseUnits: 3},
 				},
 			},
-			BoxPlan: &warehouse.PackingBoxPlan{AmbientBoxes: 1, UpdatedAt: updatedAt},
+			Containers: []warehouse.OutboundContainerPlan{{ID: "container_1", ContainerCode: "OUT-1", StorageType: warehouseenum.StorageDry, UpdatedAt: updatedAt}},
 			Damages: []warehouse.PackingDamage{
 				{
-					ID:             "damage_1",
-					ProductSKUCode: "SKU-001",
-					DamagedQty:     1,
-					Handling:       warehouseenum.PackingDamageShortShipRefund,
-					CreatedAt:      updatedAt,
+					ID:                  "damage_1",
+					ProductSKUCode:      "A00001",
+					SourceBucketID:      "bucket_1",
+					QualityAssessmentID: "qa_1",
+					AffectedComposition: common.PackageCompositionSnapshot{TotalBaseUnits: 1},
+					Handling:            warehouseenum.PackingDamageShortShipRefund,
+					CreatedAt:           updatedAt,
 				},
 			},
 			Discrepancies: []warehouse.PackingDiscrepancy{
 				{
-					ID:             "disc_1",
-					OrderNumber:    "MAMA260709ABC123",
-					ProductSKUCode: "SKU-001",
-					Kind:           warehouseenum.PackingDiscrepancyKindShortage,
-					OrderedQty:     4,
-					ScannedQty:     3,
-					DiffQty:        1,
-					RecordedAt:     updatedAt,
+					ID:                   "disc_1",
+					OrderNumber:          "MAMA260709ABC123",
+					ProductSKUCode:       "A00001",
+					Kind:                 warehouseenum.PackingDiscrepancyKindShortage,
+					RequestedComposition: common.PackageCompositionSnapshot{TotalBaseUnits: 4},
+					ObservedComposition:  common.PackageCompositionSnapshot{TotalBaseUnits: 3},
+					RecordedAt:           updatedAt,
 				},
 			},
 		},
@@ -150,7 +160,7 @@ func TestOrderJSONRoundTripsPackingProgress(t *testing.T) {
 	if err != nil {
 		t.Fatalf("marshal order with packing progress: %v", err)
 	}
-	for _, key := range []string{`"packing"`, `"scanned_qty"`, `"box_plan"`, `"discrepancies"`, `"started_at"`} {
+	for _, key := range []string{`"packing"`, `"packed_composition"`, `"containers"`, `"discrepancies"`, `"started_at"`} {
 		if !strings.Contains(string(payload), key) {
 			t.Fatalf("order packing JSON missing %s: %s", key, payload)
 		}
@@ -160,11 +170,11 @@ func TestOrderJSONRoundTripsPackingProgress(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal order with packing progress: %v", err)
 	}
-	if decoded.Packing == nil || len(decoded.Packing.Lines) != 1 || decoded.Packing.Lines[0].ScannedQty != 3 {
+	if decoded.Packing == nil || len(decoded.Packing.Lines) != 1 || decoded.Packing.Lines[0].PackedComposition.TotalBaseUnits != 3 {
 		t.Fatalf("packing progress did not round-trip: %+v", decoded.Packing)
 	}
-	if decoded.Packing.BoxPlan == nil || decoded.Packing.BoxPlan.AmbientBoxes != 1 {
-		t.Fatalf("packing box plan did not round-trip: %+v", decoded.Packing.BoxPlan)
+	if len(decoded.Packing.Containers) != 1 || decoded.Packing.Containers[0].ContainerCode != "OUT-1" {
+		t.Fatalf("outbound containers did not round-trip: %+v", decoded.Packing.Containers)
 	}
 }
 

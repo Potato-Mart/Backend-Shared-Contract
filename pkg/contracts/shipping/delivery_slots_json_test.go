@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/shipping"
 )
 
 func TestDeliveryScheduleJSONShape(t *testing.T) {
@@ -19,8 +19,9 @@ func TestDeliveryScheduleJSONShape(t *testing.T) {
 		Timezone:     "Australia/Sydney",
 		Carrier:      "potato-mart",
 		AreaRate: &shipping.DeliveryAreaRate{
-			Postcode: "2000", Suburb: "Sydney", DeliveryRegion: "NSW",
-			DepotCode: "SYD", DepotName: "Sydney",
+			CountryCode: "AU", AdministrativeAreaCode: "AU-NSW", PostalCode: "2000", Locality: "Sydney",
+			ZoneID: "zone_au_nsw_sydney", DepotRegionCode: "AU-NSW-SYD",
+			DepotCode: "AU-NSW-SYD-DC-01", DepotName: "Sydney",
 			ShippingFee:           common.Money{AmountMinor: 1000, Currency: "AUD"},
 			FreeShippingThreshold: common.Money{AmountMinor: 10000, Currency: "AUD"},
 		},
@@ -37,13 +38,20 @@ func TestDeliveryScheduleJSONShape(t *testing.T) {
 		t.Fatalf("marshal delivery schedule: %v", err)
 	}
 	for _, field := range []string{
-		`"revision":7`, `"carrier":"potato-mart"`, `"postcode":"2000"`, `"suburb":"Sydney"`,
-		`"delivery_region":"NSW"`, `"depot_code":"SYD"`, `"depot_name":"Sydney"`,
+		`"revision":7`, `"carrier":"potato-mart"`, `"country_code":"AU"`,
+		`"administrative_area_code":"AU-NSW"`, `"postal_code":"2000"`, `"locality":"Sydney"`,
+		`"zone_id":"zone_au_nsw_sydney"`, `"depot_region_code":"AU-NSW-SYD"`,
+		`"depot_code":"AU-NSW-SYD-DC-01"`, `"depot_name":"Sydney"`,
 		`"shipping_fee":{"amount_minor":1000,"currency":"AUD"}`,
 		`"free_shipping_threshold":{"amount_minor":10000,"currency":"AUD"}`,
 	} {
 		if !strings.Contains(string(payload), field) {
 			t.Fatalf("delivery schedule missing %s: %s", field, payload)
+		}
+	}
+	for _, removed := range []string{`"postcode"`, `"suburb"`, `"delivery_region"`} {
+		if strings.Contains(string(payload), removed) {
+			t.Fatalf("delivery schedule retained removed field %s: %s", removed, payload)
 		}
 	}
 }

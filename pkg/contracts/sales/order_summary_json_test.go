@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/sales"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/payment"
-	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/sales"
+	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/payment"
+	salesenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/sales"
 )
 
 func TestOrderSummaryJSONShape(t *testing.T) {
@@ -25,11 +25,11 @@ func TestOrderSummaryJSONShape(t *testing.T) {
 		ItemCount:         1,
 		Items: []sales.OrderLineSummary{
 			{
-				SKUCode:   "A0001",
-				Name:      "Potato 1kg",
-				Quantity:  2,
-				UnitPrice: common.Money{AmountMinor: 2100, Currency: "AUD"},
-				Total:     common.Money{AmountMinor: 4200, Currency: "AUD"},
+				SKUCode:        "A0001",
+				Name:           "Potato 1kg",
+				Components:     []sales.PricedPackageComponent{{RequestedPackageCount: 2, RequestedBaseUnits: 2, PackagePrice: common.Money{AmountMinor: 2100, Currency: "AUD"}}},
+				TotalBaseUnits: 2,
+				Total:          common.Money{AmountMinor: 4200, Currency: "AUD"},
 			},
 		},
 	}
@@ -57,7 +57,7 @@ func TestOrderSummaryJSONShape(t *testing.T) {
 		t.Fatalf("unmarshal order summary: %v", err)
 	}
 	if len(decoded.Items) != 1 || decoded.Items[0].SKUCode != "A0001" ||
-		decoded.Items[0].UnitPrice.AmountMinor != 2100 {
+		len(decoded.Items[0].Components) != 1 || decoded.Items[0].Components[0].PackagePrice.AmountMinor != 2100 {
 		t.Fatalf("order summary did not round-trip: %+v", decoded)
 	}
 }

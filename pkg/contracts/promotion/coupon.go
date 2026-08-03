@@ -3,11 +3,11 @@ package promotion
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/benefit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/contracts/shared"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/shared"
+	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/promotion"
 )
 
 // Coupon is a code-based discount that customers enter at checkout.
@@ -22,6 +22,7 @@ type Coupon struct {
 	MaxDiscountAmount *common.Money `json:"max_discount_amount,omitempty"`
 	UsageLimits
 	ActiveWindow
+	GeographicScope common.GeographicScope `json:"geographic_scope"`
 
 	AppliesTo       promotionenum.CouponAppliesTo `json:"applies_to"`
 	ProductSKUCodes []string                      `json:"product_sku_codes,omitempty"`
@@ -52,13 +53,14 @@ type CouponAssignment struct {
 
 // CouponUsageRecord is Pricing's durable idempotent redemption result.
 type CouponUsageRecord struct {
-	ID                  string            `json:"id"`
-	CouponCode          string            `json:"coupon_code"`
-	Owner               *benefit.OwnerRef `json:"owner,omitempty"`
-	RedeemedOrderNumber string            `json:"redeemed_order_number"`
-	DiscountAmount      common.Money      `json:"discount_amount"`
-	RedeemedAt          time.Time         `json:"redeemed_at"`
-	RefundID            string            `json:"refund_id,omitempty"`
-	RefundedAt          *time.Time        `json:"refunded_at,omitempty"`
-	CreatedAt           time.Time         `json:"created_at"`
+	ID                  string                   `json:"id"`
+	CouponCode          string                   `json:"coupon_code"`
+	Owner               *benefit.OwnerRef        `json:"owner,omitempty"`
+	RedeemedOrderNumber string                   `json:"redeemed_order_number"`
+	DiscountAmount      common.Money             `json:"discount_amount"`
+	GeographicContext   common.GeographicContext `json:"geographic_context"`
+	RedeemedAt          time.Time                `json:"redeemed_at"`
+	RefundID            string                   `json:"refund_id,omitempty"`
+	RefundedAt          *time.Time               `json:"refunded_at,omitempty"`
+	CreatedAt           time.Time                `json:"created_at"`
 }

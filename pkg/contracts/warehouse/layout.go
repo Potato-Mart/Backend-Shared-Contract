@@ -3,8 +3,8 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/common"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v21/pkg/enums/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
+	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/warehouse"
 )
 
 // WarehouseLayout is the root 3D scene description for a depot.
@@ -53,9 +53,7 @@ type LayoutNode struct {
 	common.AuditFields
 }
 
-// ModelAsset references a 3D model file stored elsewhere (object storage,
-// CDN). Never embed mesh data here — keep documents small to stay well
-// under large-document storage limits and keep reads fast.
+// ModelAsset is the JSON reference and rendering metadata for a 3D model file.
 type ModelAsset struct {
 	ID        string                    `json:"id,omitempty"`
 	URL       string                    `json:"url"`
