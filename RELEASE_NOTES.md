@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v22.0.1` | 2026-08-05 | Patch | Locks the existing V22 geography, buyer, `EACH` offer, availability, revision, and stock/dependency error primitives required by the backend gate-closure wave. No exported model, JSON shape, enum value, or module-path change. |
 | `v22.0.0` | 2026-08-04 | Major | JSON-only geography, depot, package-aware inventory, consolidated group fulfilment, and geographically scoped campaign/promotion cut-over. Replaces superseded fields and requires every consumer to adopt `/v22`. |
 | `v21.1.0` | 2026-07-30 | Minor | Additive backend-gap models for persistent notification read state and consent provenance, refund-linked coupon usage, redemption/wallet timestamps, point award and debt summaries, secret-free voucher claim delivery, and versioned gift-card denomination policy. Keeps the `/v21` module path. |
 | `v21.0.0` | 2026-07-29 | Major | Delivery, campaign, native notification, and wallet-policy cutover: adds revisioned delivery schedules/rates/preferences, campaign-promotion/media/typed-CTA linkage, safe storefront events, typed campaign notification references and push values; removes quiet-hours and requires every consumer to adopt `/v21`. |
@@ -107,6 +108,47 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v22.0.1 (2026-08-05) - Backend Gate Model Lock
+
+### Breaking Contract Changes / 破壞性契約變更
+
+- None. The `/v22` module path and every exported JSON model and enum value are
+  unchanged.
+
+### Added / 新增
+
+- Adds a focused contract test that locks the existing canonical address,
+  geographic context, buyer context, `EACH` handling unit, accepted-offer
+  revision, product availability, and shared stock/dependency error primitives
+  used by the V22 backend gate-closure implementation.
+
+### Fixed / 修正
+
+- Makes the contract release consumed by the backend gate wave explicitly prove
+  that the required reusable model surface is present without moving resolver
+  DTOs, stock commands, HTTP semantics, authorization, or business rules into
+  the shared module.
+
+### Other Changes / 其他變更
+
+- Aligns module metadata and consumer documentation at `v22.0.1`.
+
+### Contract Files Changed / 契約檔案變更
+
+- `pkg/v22_backend_gate_lock_test.go`
+- `pkg/versioning/version.go`
+- `pkg/versioning/version_test.go`
+- `README.md`
+- `RELEASE_NOTES.md`
+
+### Compatibility Notes / 相容性說明
+
+- Consumers remain on `github.com/Potato-Mart/Backend-Shared-Contract/v22` and
+  may update the required version from `v22.0.0` to `v22.0.1` without source or
+  data migration.
+- Provider and consumer route DTOs, validation, authorization, persistence,
+  idempotency, and orchestration remain owned by their service repositories.
 
 ## v22.0.0 (2026-08-04) - Geography, Depot, Packaging, and Inventory JSON Cut-over
 
