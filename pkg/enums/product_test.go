@@ -14,6 +14,7 @@ func TestProductEnumsValidateKnownValues(t *testing.T) {
 		{name: "productenum.PriceVisibility", valid: []stringEnum{productenum.PriceVisibilityPublic, productenum.PriceVisibilityLoginRequired, productenum.PriceVisibilityWholesaleApprovedOnly, productenum.PriceVisibilityHidden}, invalid: productenum.PriceVisibility("__invalid__")},
 		{name: "productenum.WholesalePriceMode", valid: []stringEnum{productenum.WholesalePriceModeFixed, productenum.WholesalePriceModeOnRequest}, invalid: productenum.WholesalePriceMode("__invalid__")},
 		{name: "productenum.StorefrontPreorderStatus", valid: []stringEnum{productenum.StorefrontPreorderStatusUnavailable, productenum.StorefrontPreorderStatusUpcoming, productenum.StorefrontPreorderStatusOpen, productenum.StorefrontPreorderStatusClosed, productenum.StorefrontPreorderStatusSoldOut}, invalid: productenum.StorefrontPreorderStatus("__invalid__")},
+		{name: "productenum.StorefrontStockState", valid: []stringEnum{productenum.StorefrontStockStateUnknown, productenum.StorefrontStockStateInStock, productenum.StorefrontStockStateOutOfStock}, invalid: productenum.StorefrontStockState("__invalid__")},
 		{name: "productenum.ProductStatus", valid: []stringEnum{productenum.ProductStatusDraft, productenum.ProductStatusActive, productenum.ProductStatusArchived, productenum.ProductStatusDiscontinued}, invalid: productenum.ProductStatus("__invalid__")},
 	})
 	if got := productenum.WholesalePriceModeFixed.String(); got != "fixed" {
