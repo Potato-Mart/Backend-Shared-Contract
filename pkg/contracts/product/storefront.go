@@ -44,6 +44,7 @@ type StorefrontProduct struct {
 	BarcodeAssignments  []ProductBarcodeAssignmentSnapshot `json:"barcode_assignments,omitempty"`
 	Offers              []SellableOfferSnapshot            `json:"offers"`
 	Availability        *ProductStockSummary               `json:"availability,omitempty"`
+	Commercial          *StorefrontCommercial              `json:"commercial,omitempty"`
 	Audience            productenum.PriceAudience          `json:"audience"`
 	WholesaleMode       productenum.WholesalePriceMode     `json:"wholesale_mode,omitempty"`
 	StorefrontDisplay   StorefrontDisplay                  `json:"storefront_display"`
@@ -54,4 +55,16 @@ type StorefrontProduct struct {
 	PromotionBadge      *StorefrontPromotionBadge          `json:"promotion_badge,omitempty"`
 	SalesPerformance    *SalesPerformanceStats             `json:"sales_performance,omitempty"`
 	CountryOfOrigin     *StorefrontOrigin                  `json:"country_of_origin,omitempty"`
+}
+
+// StorefrontCommercial is the public AU commercial projection. It is safe for
+// guests because it contains one canonical EACH package, one retail price, an
+// aggregate stock state, market identity, and freshness only; it never carries
+// depot, lot, offer, geographic-resolution, or raw quantity data.
+type StorefrontCommercial struct {
+	Price      *common.Money                    `json:"price,omitempty"`
+	Package    ProductPackageOptionSnapshot     `json:"package_option"`
+	StockState productenum.StorefrontStockState `json:"stock_state"`
+	Market     common.CountryCode               `json:"market"`
+	AsOf       time.Time                        `json:"as_of"`
 }

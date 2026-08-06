@@ -38,8 +38,6 @@ func TestV22ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"DepotProduct",
 		"ProductPlacement",
 		"StorefrontPricing",
-		"SoonExpiryMerchandisingPolicy",
-		"StorefrontExpiryDisplay",
 		"PackingBoxPlan",
 		"PackingBoxContent",
 		"StockAdjustedEvent",
@@ -48,7 +46,6 @@ func TestV22ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"BackInStockRestockEvent",
 		"ProductSellabilityChangedEvent",
 		"DeliveryRegion",
-		"StorefrontExpiryStatus",
 		"PackingSessionStatus",
 
 		// Removed Melbourne-specific delivery values.
@@ -57,9 +54,6 @@ func TestV22ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"DeliveryRegionInterstate",
 
 		// Removed expiry-merchandising values.
-		"StorefrontExpiryStatusNotApplicable",
-		"StorefrontExpiryStatusSoonExpiry",
-		"StorefrontExpiryStatusExpired",
 
 		// Removed packing-session values.
 		"PackingSessionStatusPending",
@@ -89,8 +83,6 @@ func TestV22ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"contracts/product.Physical",
 		"contracts/product.Pricing",
 		"contracts/product.ProductPlacement",
-		"contracts/product.SoonExpiryMerchandisingPolicy",
-		"contracts/product.StorefrontExpiryDisplay",
 		"contracts/product.StorefrontPricing",
 		"contracts/sales.PreorderAvailabilityEvent",
 		"contracts/sales.PreorderStockArrivalEvent",
@@ -100,7 +92,6 @@ func TestV22ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"contracts/warehouse.PackingBoxPlan",
 		"contracts/warehouse.PostcodeRule",
 		"contracts/warehouse.StockAdjustedEvent",
-		"enums/product.StorefrontExpiryStatus",
 		"enums/shipping.DeliveryRegion",
 		"enums/warehouse.PackingSessionStatus",
 	)
@@ -145,12 +136,8 @@ func TestV22ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"contracts/product.Snapshot": v22StringSet(
 			"ID", "SKU", "Storage", "DisplayStatus", "Barcode",
 		),
-		"contracts/product.StorefrontDisplay": v22StringSet(
-			"Expiry",
-		),
-		"contracts/product.StorefrontMerchandising": v22StringSet(
-			"SoonExpiry",
-		),
+		"contracts/product.StorefrontDisplay":       v22StringSet(),
+		"contracts/product.StorefrontMerchandising": v22StringSet(),
 		"contracts/product.StorefrontProduct": v22StringSet(
 			"SKU", "Barcode", "Storage", "CurrentStock", "Pricing", "ExpiryDate", "DisplayStatus",
 		),
@@ -302,12 +289,8 @@ func TestV22ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"contracts/product.Snapshot": v22StringSet(
 			"id", "sku", "storage", "display_status", "barcode",
 		),
-		"contracts/product.StorefrontDisplay": v22StringSet(
-			"expiry",
-		),
-		"contracts/product.StorefrontMerchandising": v22StringSet(
-			"soon_expiry",
-		),
+		"contracts/product.StorefrontDisplay":       v22StringSet(),
+		"contracts/product.StorefrontMerchandising": v22StringSet(),
 		"contracts/product.StorefrontProduct": v22StringSet(
 			"sku", "barcode", "storage", "current_stock", "pricing", "expiry_date", "display_status",
 		),

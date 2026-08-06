@@ -72,10 +72,11 @@ var v22ModelPackageManifest = map[string]string{
 	"versioning":                 "module-metadata",
 }
 
-// Reviewed for the final v22 JSON-only surface: typed geography, package
+// Reviewed for the v22.1.0 JSON-only surface: typed geography, package
 // identity and composition, depot-qualified inventory, consolidated group
-// fulfilment, geographic scope/context, and revisioned inventory events.
-const v22ExportedTypeManifestDigest = "be967b1c83cc10e1bb14516904c5b2c8e0a535874360c9f53221176aff6054fd"
+// fulfilment, geographic scope/context, revisioned inventory events, and the
+// public storefront commercial/expiry projections.
+const v22ExportedTypeManifestDigest = "a99fcc9ab563e1f5893070af2d102898e6ee828ad7cf84741fb270e6c243e2e8"
 
 func TestV22ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

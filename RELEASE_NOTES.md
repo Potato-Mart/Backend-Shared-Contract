@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v22.1.0` | 2026-08-06 | Minor | Adds the customer-safe public AU commercial projection and expiry display fields for price, canonical `EACH` package, aggregate stock state, market/freshness, soon-expiry thresholds, localized labels, and optional exact date. Keeps the `/v22` module path. |
 | `v22.0.1` | 2026-08-05 | Patch | Locks the existing V22 geography, buyer, `EACH` offer, availability, revision, and stock/dependency error primitives required by the backend gate-closure wave. No exported model, JSON shape, enum value, or module-path change. |
 | `v22.0.0` | 2026-08-04 | Major | JSON-only geography, depot, package-aware inventory, consolidated group fulfilment, and geographically scoped campaign/promotion cut-over. Replaces superseded fields and requires every consumer to adopt `/v22`. |
 | `v21.1.0` | 2026-07-30 | Minor | Additive backend-gap models for persistent notification read state and consent provenance, refund-linked coupon usage, redemption/wallet timestamps, point award and debt summaries, secret-free voucher claim delivery, and versioned gift-card denomination policy. Keeps the `/v21` module path. |
@@ -108,6 +109,32 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v22.1.0 (2026-08-06) - Public AU Storefront Commercial And Expiry Projection
+
+### Added / 新增
+
+- Adds `product.StorefrontCommercial` to the public retail product projection.
+  It contains the canonical `EACH` package snapshot, optional retail `AUD`
+  price, aggregate `stock_state`, `AU` market, and `as_of` freshness timestamp.
+  Depot, lot, offer identity, geographic-resolution, and raw stock quantities
+  remain outside the public shape.
+- Restores the customer-safe `storefront_display.expiry` projection and its
+  merchandising policy. It carries `soon_expiry`, the existing broad status,
+  warning/critical `alert_level`, remaining days, the 30-day display window,
+  localized labels/descriptions, and an optional exact date controlled by
+  `show_exact_expiry_date`.
+- Adds JSON, enum, compatibility-surface, and version-alignment coverage for
+  the new public fields.
+
+### Consumer Action / 使用方動作
+
+- Consumers remain on the `github.com/Potato-Mart/Backend-Shared-Contract/v22`
+  module path and must upgrade the required version to `v22.1.0`.
+- Supply owns population and filtering of the public AU projection. Orders
+  remains the authenticated authority for cart offer resolution.
+- Frontends must treat `stock_state=unknown` as unknown, not as out of stock,
+  and must never reconstruct price or stock from raw offers or availability.
 
 ## v22.0.1 (2026-08-05) - Backend Gate Model Lock
 

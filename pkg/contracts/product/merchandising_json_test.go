@@ -8,6 +8,7 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
 	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/product"
+	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/security"
 )
 
 func TestProductStorefrontMerchandisingJSONShape(t *testing.T) {
@@ -26,6 +27,12 @@ func TestProductStorefrontMerchandisingJSONShape(t *testing.T) {
 				MaxQuantityPerOrder:    3,
 				MaxQuantityPerCustomer: 6,
 				Labels:                 []common.LocalizedName{{Language: "en", Name: "Preorder"}},
+			},
+			SoonExpiry: &SoonExpiryMerchandisingPolicy{
+				Enabled:             true,
+				WindowDays:          30,
+				ShowExactExpiryDate: true,
+				Labels:              []common.LocalizedName{{Language: "en", Name: "Short dated"}},
 			},
 		},
 	}
@@ -53,8 +60,8 @@ func TestProductStorefrontMerchandisingJSONShape(t *testing.T) {
 	if preorder["schedule_timezone"] != "Australia/Melbourne" {
 		t.Fatalf("schedule_timezone = %v, want Australia/Melbourne (%s)", preorder["schedule_timezone"], body)
 	}
-	if strings.Contains(string(body), `"soon_expiry"`) || strings.Contains(string(body), `"expiry"`) {
-		t.Fatalf("product-wide expiry merchandising must be absent: %s", body)
+	if !strings.Contains(string(body), `"soon_expiry"`) {
+		t.Fatalf("product expiry merchandising policy missing: %s", body)
 	}
 }
 
@@ -68,6 +75,15 @@ func TestStorefrontDisplayJSONShape(t *testing.T) {
 			ScheduleTimezone:    "Australia/Melbourne",
 			MaxQuantityPerOrder: 2,
 			Labels:              []common.LocalizedName{{Language: "en", Name: "Preorder now"}},
+		},
+		Expiry: &StorefrontExpiryDisplay{
+			SoonExpiry:          true,
+			Status:              StorefrontExpiryStatusSoonExpiry,
+			AlertLevel:          securityenum.AlertLevelCritical,
+			DaysToExpiry:        intPtr(5),
+			WindowDays:          30,
+			ShowExactExpiryDate: true,
+			Labels:              []common.LocalizedName{{Language: "en", Name: "Use soon"}},
 		},
 	}
 
@@ -87,7 +103,10 @@ func TestStorefrontDisplayJSONShape(t *testing.T) {
 	if preorder["schedule_timezone"] != "Australia/Melbourne" {
 		t.Fatalf("preorder display lost schedule timezone: %s", body)
 	}
-	if _, exists := got["expiry"]; exists {
-		t.Fatalf("storefront display must not expose product-wide expiry: %s", body)
+	expiry, ok := got["expiry"].(map[string]any)
+	if !ok || expiry["soon_expiry"] != true || expiry["alert_level"] != string(securityenum.AlertLevelCritical) || expiry["days_to_expiry"] != float64(5) {
+		t.Fatalf("expiry display JSON mismatch: %s", body)
 	}
 }
+
+func intPtr(value int) *int { return &value }

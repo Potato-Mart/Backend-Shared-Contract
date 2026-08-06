@@ -2,6 +2,7 @@ package product_test
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 	"time"
 
@@ -46,6 +47,17 @@ func TestStorefrontProductJSONUsesPackageOffersAndAvailability(t *testing.T) {
 			AllDepots:      product.ProductStockQuantitySnapshot{AvailableBaseUnits: 24, SellableBaseUnits: 24},
 			Revision:       9, Timezone: "Australia/Melbourne", AsOf: now,
 		},
+		Commercial: &product.StorefrontCommercial{
+			Price: &common.Money{AmountMinor: 800, Currency: "AUD"},
+			Package: product.ProductPackageOptionSnapshot{
+				ID: "pkg_each", Code: "EACH", ProductSKUCode: "A00001",
+				HandlingUnit: common.PackageHandlingUnitEach, UnitsPerPackage: 1,
+				EffectiveFrom: now, CapturedAt: now,
+			},
+			StockState: productenum.StorefrontStockStateInStock,
+			Market:     "AU",
+			AsOf:       now,
+		},
 		Audience:          productenum.PriceAudienceRetail,
 		StorefrontDisplay: product.StorefrontDisplay{},
 		PromotionBadge: &product.StorefrontPromotionBadge{
@@ -67,9 +79,31 @@ func TestStorefrontProductJSONUsesPackageOffersAndAvailability(t *testing.T) {
 	if err := json.Unmarshal(payload, &got); err != nil {
 		t.Fatalf("unmarshal storefront product: %v", err)
 	}
-	for _, key := range []string{"sku_code", "category_sku_code", "package_options", "barcode_assignments", "offers", "availability", "audience"} {
+	for _, key := range []string{"sku_code", "category_sku_code", "package_options", "barcode_assignments", "offers", "availability", "commercial", "audience"} {
 		if _, ok := got[key]; !ok {
 			t.Fatalf("storefront product JSON missing %s: %s", key, payload)
+		}
+	}
+	commercial := got["commercial"].(map[string]any)
+	if commercial["market"] != "AU" || commercial["stock_state"] != "in_stock" || commercial["as_of"] != "2026-08-04T01:02:03Z" {
+		t.Fatalf("commercial projection JSON mismatch: %s", payload)
+	}
+	packageOption := commercial["package_option"].(map[string]any)
+	if packageOption["handling_unit"] != "EACH" || packageOption["units_per_package"] != float64(1) {
+		t.Fatalf("commercial package option mismatch: %s", payload)
+	}
+	commercialJSON, _ := json.Marshal(product.StorefrontCommercial{
+		Price: &common.Money{AmountMinor: 800, Currency: "AUD"},
+		Package: product.ProductPackageOptionSnapshot{
+			ID: "pkg_each", Code: "EACH", ProductSKUCode: "A00001",
+			HandlingUnit: common.PackageHandlingUnitEach, UnitsPerPackage: 1,
+			EffectiveFrom: now, CapturedAt: now,
+		},
+		StockState: productenum.StorefrontStockStateInStock, Market: "AU", AsOf: now,
+	})
+	for _, forbidden := range []string{`"depot_code"`, `"lot_id"`, `"available_base_units"`, `"geographic_context"`} {
+		if strings.Contains(string(commercialJSON), forbidden) {
+			t.Fatalf("commercial projection leaked %s: %s", forbidden, commercialJSON)
 		}
 	}
 	for _, removed := range []string{"sku", "current_stock", "pricing", "expiry_date", "display_status", "physical_weight", "barcode"} {
