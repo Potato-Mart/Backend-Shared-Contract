@@ -20,7 +20,7 @@ function Assert-Match {
     }
 }
 
-$repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..')
+$repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..\..')
 Push-Location $repoRoot
 try {
     $versionPath = Join-Path $repoRoot 'pkg/versioning/version.go'

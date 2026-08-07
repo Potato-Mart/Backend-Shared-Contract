@@ -8,7 +8,7 @@ output_path=""
 usage() {
   cat <<'USAGE'
 Usage:
-  bash scripts/get-contract-release-notes.sh --version v3.0.0 [--output release-notes.md] [--previous-tag v2.1.1]
+  bash scripts/bash/get-contract-release-notes.sh --version v3.0.0 [--output release-notes.md] [--previous-tag v2.1.1]
 
 Generates deterministic Markdown release notes from git commits and changed contract files.
 USAGE

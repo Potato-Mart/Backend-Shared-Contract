@@ -373,7 +373,8 @@ func TestV22ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		),
 	}
 
-	err := filepath.WalkDir(".", func(path string, entry fs.DirEntry, walkErr error) error {
+	pkgRoot := sharedContractPkgRoot(t)
+	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
 			return walkErr
 		}
@@ -414,7 +415,7 @@ func TestV22ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 					continue
 				}
 
-				typeKey := v22ProductionTypeKey(path, typeSpecification.Name.Name)
+				typeKey := v22ProductionTypeKey(pkgRoot, path, typeSpecification.Name.Name)
 				if _, removed := removedTypes[typeKey]; removed {
 					t.Errorf("%s declares removed v22 type %s", path, typeKey)
 				}
@@ -451,7 +452,8 @@ func TestV22ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 }
 
 func TestV22GoSourcesContainNoOlderContractImports(t *testing.T) {
-	err := filepath.WalkDir(".", func(path string, entry fs.DirEntry, walkErr error) error {
+	pkgRoot := sharedContractPkgRoot(t)
+	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
 			return walkErr
 		}
@@ -489,9 +491,9 @@ func v22StringSet(values ...string) map[string]struct{} {
 	return set
 }
 
-func v22ProductionTypeKey(path string, typeName string) string {
-	directory := filepath.ToSlash(filepath.Dir(path))
-	directory = strings.TrimPrefix(directory, "./")
+func v22ProductionTypeKey(pkgRoot string, path string, typeName string) string {
+	relativePath, _ := filepath.Rel(pkgRoot, path)
+	directory := filepath.ToSlash(filepath.Dir(relativePath))
 	if directory == "." || directory == "" {
 		return typeName
 	}

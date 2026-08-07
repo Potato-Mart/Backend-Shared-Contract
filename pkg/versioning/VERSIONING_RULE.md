@@ -19,8 +19,8 @@ This module follows semantic versioning for shared backend contracts.
 3. Run the release-alignment and contract gates before pushing the branch:
 
    ```powershell
-   ./scripts/Test-ReleaseAlignment.ps1 -ExpectedVersion vX.Y.Z
-   ./scripts/Test-Contract.ps1
+   ./scripts/powershell/Test-ReleaseAlignment.ps1 -ExpectedVersion vX.Y.Z
+   ./scripts/powershell/Test-Contract.ps1
    git diff --check
    ```
 
@@ -33,8 +33,8 @@ This module follows semantic versioning for shared backend contracts.
    A manual workflow dispatch from `main` may repair an aligned release; a
    tag-only push does not trigger the workflow.
 
-The mutating `Publish-ContractVersion.ps1` and
-`publish-contract-version.sh` scripts predate this protected-main workflow.
+The mutating `scripts/powershell/Publish-ContractVersion.ps1` and
+`scripts/bash/publish-contract-version.sh` scripts predate this protected-main workflow.
 They generate a standalone `release-notes.md` and may create a tag before a
 pull request is merged. Do not use their mutating or push modes for repository
 releases. `-DryRun` / `--dry-run` remains safe for version calculation only.
@@ -44,11 +44,11 @@ releases. `-DryRun` / `--dry-run` remains safe for version calculation only.
 The legacy preparation scripts may be used only in non-mutating dry-run mode:
 
 ```powershell
-./scripts/Publish-ContractVersion.ps1 -Bump minor -DryRun
+./scripts/powershell/Publish-ContractVersion.ps1 -Bump minor -DryRun
 ```
 
 ```bash
-bash scripts/publish-contract-version.sh --bump minor --dry-run
+bash scripts/bash/publish-contract-version.sh --bump minor --dry-run
 ```
 
 Prepare the actual version metadata and canonical release notes explicitly in

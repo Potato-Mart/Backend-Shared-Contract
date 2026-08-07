@@ -27,7 +27,7 @@ function Invoke-CheckedGit {
 }
 
 function Get-CurrentContractVersion {
-    $versionFile = Join-Path $PSScriptRoot '..\pkg\versioning\version.go'
+    $versionFile = Join-Path $PSScriptRoot '..\..\pkg\versioning\version.go'
     $content = Get-Content $versionFile -Raw
     if ($content -notmatch 'ModuleVersion\s*=\s*"(?<version>v\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)"') {
         throw "Could not find ModuleVersion in $versionFile"
@@ -62,7 +62,7 @@ function Get-BumpedVersion {
 function Set-ContractVersion {
     param([string]$NewVersion)
 
-    $versionFile = Join-Path $PSScriptRoot '..\pkg\versioning\version.go'
+    $versionFile = Join-Path $PSScriptRoot '..\..\pkg\versioning\version.go'
     $majorVersion = ($NewVersion -replace '^v(\d+)\..*$', 'v$1')
     $content = Get-Content $versionFile -Raw
     $content = $content -replace 'ModuleVersion\s*=\s*"v\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?"', "ModuleVersion = `"$NewVersion`""
@@ -70,7 +70,7 @@ function Set-ContractVersion {
     Set-Content -Path $versionFile -Value $content -Encoding utf8
 }
 
-$repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..')
+$repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..\..')
 Set-Location $repoRoot
 
 Invoke-CheckedGit rev-parse --is-inside-work-tree | Out-Null

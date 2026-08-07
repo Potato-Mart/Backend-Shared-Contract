@@ -14,8 +14,8 @@ dry_run=false
 usage() {
   cat <<'USAGE'
 Usage:
-  bash scripts/publish-contract-version.sh --version v3.0.0 [--push]
-  bash scripts/publish-contract-version.sh --bump major|minor|patch [--push]
+  bash scripts/bash/publish-contract-version.sh --version v3.0.0 [--push]
+  bash scripts/bash/publish-contract-version.sh --bump major|minor|patch [--push]
 
 Options:
   --version vX.Y.Z              Exact version to release.
@@ -80,7 +80,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$repo_root"
 
 git rev-parse --is-inside-work-tree >/dev/null
@@ -167,10 +167,10 @@ text = re.sub(r'MajorVersion\s*=\s*"v\d+"', f'MajorVersion  = "{major}"', text)
 path.write_text(text, encoding="utf-8")
 PY
 
-bash scripts/get-contract-release-notes.sh --version "$version" --output "$release_notes_path"
+bash scripts/bash/get-contract-release-notes.sh --version "$version" --output "$release_notes_path"
 
 if [[ "$use_ai_release_notes" == true ]]; then
-  bash scripts/get-ai-contract-release-notes.sh --version "$version" --input "$release_notes_path" --output "$release_notes_path"
+  bash scripts/bash/get-ai-contract-release-notes.sh --version "$version" --input "$release_notes_path" --output "$release_notes_path"
 fi
 
 if [[ -n "$(git status --porcelain)" ]]; then

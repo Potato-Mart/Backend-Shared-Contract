@@ -5,13 +5,12 @@ type InventoryDateMarkKind string
 
 const (
 	InventoryDateMarkBestBefore InventoryDateMarkKind = "BEST_BEFORE"
-	InventoryDateMarkUseBy      InventoryDateMarkKind = "USE_BY"
 	InventoryDateMarkExpiry     InventoryDateMarkKind = "EXPIRY"
 )
 
 func (k InventoryDateMarkKind) IsValid() bool {
 	switch k {
-	case InventoryDateMarkBestBefore, InventoryDateMarkUseBy, InventoryDateMarkExpiry:
+	case InventoryDateMarkBestBefore, InventoryDateMarkExpiry:
 		return true
 	}
 	return false

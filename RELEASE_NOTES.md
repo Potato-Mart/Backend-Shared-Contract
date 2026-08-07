@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v22.2.0` | 2026-08-07 | Minor | Repository cleanup and requested warehouse date-mark cutover: removes `InventoryDateMarkUseBy` / `USE_BY`, reorganizes repository and enum tests, groups scripts by language, and adds filename and Git workflow rules. Keeps the `/v22` module path; consumers must complete the documented breaking migration. |
 | `v22.1.0` | 2026-08-06 | Minor | Adds the customer-safe public AU commercial projection and expiry display fields for price, canonical `EACH` package, aggregate stock state, market/freshness, soon-expiry thresholds, localized labels, and optional exact date. Keeps the `/v22` module path. |
 | `v22.0.1` | 2026-08-05 | Patch | Locks the existing V22 geography, buyer, `EACH` offer, availability, revision, and stock/dependency error primitives required by the backend gate-closure wave. No exported model, JSON shape, enum value, or module-path change. |
 | `v22.0.0` | 2026-08-04 | Major | JSON-only geography, depot, package-aware inventory, consolidated group fulfilment, and geographically scoped campaign/promotion cut-over. Replaces superseded fields and requires every consumer to adopt `/v22`. |
@@ -110,6 +111,45 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
 
+## v22.2.0 (2026-08-07) - Repository Cleanup And Warehouse Date-Mark Cutover
+
+### Breaking Contract Changes / 破壞性契約變更
+
+- Removes `warehouseenum.InventoryDateMarkUseBy` and the `USE_BY` wire value.
+  Consumers must stop constructing or advertising that value and coordinate
+  their route, test, and generated-documentation updates before upgrading.
+- This requested release remains on the `/v22` module path even though enum
+  value removal is normally classified as a major-version change.
+
+### Other Changes / 其他變更
+
+- Moves repository gates to `pkg/test` and aggregate enum tests to
+  `pkg/enums/enums_test`, while keeping package boundary tests beside their
+  packages.
+- Groups PowerShell scripts under `scripts/powershell` and Bash scripts under
+  `scripts/bash`, updating all repository consumers and script-relative paths.
+- Adds stable filename rules to `README.md` and commit/push/release rules to
+  `GIT_WORKFLOW.md`.
+
+### Contract Files Changed / 契約檔案變更
+
+- `pkg/enums/warehouse/inventory.go`
+- `pkg/enums/enums_test/warehouse_test.go`
+- `pkg/contracts/warehouse/geo_regional_json_test.go`
+- `pkg/versioning/version.go`
+- `pkg/versioning/version_test.go`
+- `README.md`
+- `GIT_WORKFLOW.md`
+- `RELEASE_NOTES.md`
+
+### Compatibility Notes / 相容性說明
+
+- The seven backend services currently pin `v22.1.0`; upgrade consumers only
+  after replacing `InventoryDateMarkUseBy` / `USE_BY` references.
+- Known downstream references remain in Supply source/tests and generated
+  Swagger documentation. This repository release does not modify those
+  service repositories.
+
 ## v22.1.0 (2026-08-06) - Public AU Storefront Commercial And Expiry Projection
 
 ### Added / 新增
@@ -163,7 +203,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 ### Contract Files Changed / 契約檔案變更
 
-- `pkg/v22_backend_gate_lock_test.go`
+- `pkg/test/backend_gate_lock_test.go`
 - `pkg/versioning/version.go`
 - `pkg/versioning/version_test.go`
 - `README.md`
@@ -1652,8 +1692,8 @@ behaviour can be maintained without growing a single large test file.
 - The previous large `pkg/enums/enums_test.go` file is split into small
   domain-focused enum test files under `pkg/enums`.
 - Shared enum assertions now live in `pkg/enums/enum_assertions_test.go`.
-- Contract tests can be run with `scripts/Test-Contract.ps1` or
-  `scripts/test-contract.sh`, both using `GOWORK=off go test ./...` so the
+- Contract tests can be run with `scripts/powershell/Test-Contract.ps1` or
+  `scripts/bash/test-contract.sh`, both using `GOWORK=off go test ./...` so the
   parent Potato Mart workspace does not hide this standalone module.
 - GitHub test and release workflows run with `GOWORK=off`.
 

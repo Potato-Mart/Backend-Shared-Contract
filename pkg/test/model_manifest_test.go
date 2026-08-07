@@ -72,7 +72,7 @@ var v22ModelPackageManifest = map[string]string{
 	"versioning":                 "module-metadata",
 }
 
-// Reviewed for the v22.1.0 JSON-only surface: typed geography, package
+// Reviewed for the v22.2.0 JSON-only surface: typed geography, package
 // identity and composition, depot-qualified inventory, consolidated group
 // fulfilment, geographic scope/context, revisioned inventory events, and the
 // public storefront commercial/expiry projections.
@@ -81,14 +81,15 @@ const v22ExportedTypeManifestDigest = "a99fcc9ab563e1f5893070af2d102898e6ee828ad
 func TestV22ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)
 	var entries []string
-	err := filepath.WalkDir(".", func(path string, entry fs.DirEntry, walkErr error) error {
+	pkgRoot := sharedContractPkgRoot(t)
+	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
 			return walkErr
 		}
 		if entry.IsDir() || !strings.HasSuffix(path, ".go") || strings.HasSuffix(path, "_test.go") {
 			return nil
 		}
-		packagePath := filepath.ToSlash(filepath.Dir(path))
+		packagePath := filepath.ToSlash(filepath.Dir(filepath.FromSlash(relativePkgPath(t, pkgRoot, path))))
 		if packagePath == "." {
 			return nil
 		}
