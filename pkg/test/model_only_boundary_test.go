@@ -20,8 +20,7 @@ var modelBoundaryForbiddenTypeSuffixes = []string{
 }
 
 var modelBoundaryForbiddenPackagePrefixes = []string{
-	"pkg/apiresponse", "pkg/logic", "pkg/serviceauth", "pkg/enums/serviceauth",
-	"pkg/contracts/pricing", "pkg/contracts/stockops",
+	"enums", "logic", "serviceauth",
 }
 
 var modelBoundaryApprovedMethods = map[string]struct{}{
@@ -30,7 +29,7 @@ var modelBoundaryApprovedMethods = map[string]struct{}{
 
 var modelBoundaryJSONTag = regexp.MustCompile(`^json:"[^"]*"$`)
 
-func TestV22ContractIsJSONModelOnly(t *testing.T) {
+func TestV23ContractIsJSONModelOnly(t *testing.T) {
 	var violations []string
 	pkgRoot := sharedContractPkgRoot(t)
 	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
@@ -115,7 +114,7 @@ func TestV22ContractIsJSONModelOnly(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v22 contract: %v", err)
+		t.Fatalf("scan v23 contract: %v", err)
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)

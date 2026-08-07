@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v23.0.0` | 2026-08-07 | Major | Domain-oriented `pkg` layout hard cutover: moves contracts and enums into cohesive domain packages, centralizes routed Pub/Sub events, changes the module path to `/v23`, and requires downstream consumers to migrate explicitly. No JSON fields, tags, enum values, event versions, or runtime behavior change. |
 | `v22.2.0` | 2026-08-07 | Minor | Repository cleanup and requested warehouse date-mark cutover: removes `InventoryDateMarkUseBy` / `USE_BY`, reorganizes repository and enum tests, groups scripts by language, and adds filename and Git workflow rules. Keeps the `/v22` module path; consumers must complete the documented breaking migration. |
 | `v22.1.0` | 2026-08-06 | Minor | Adds the customer-safe public AU commercial projection and expiry display fields for price, canonical `EACH` package, aggregate stock state, market/freshness, soon-expiry thresholds, localized labels, and optional exact date. Keeps the `/v22` module path. |
 | `v22.0.1` | 2026-08-05 | Patch | Locks the existing V22 geography, buyer, `EACH` offer, availability, revision, and stock/dependency error primitives required by the backend gate-closure wave. No exported model, JSON shape, enum value, or module-path change. |
@@ -110,6 +111,37 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v23.0.0 (2026-08-07) - Contract Domain Layout Hard Cutover
+
+### Breaking Contract Changes / 破壞性契約變更
+
+- Changes the module path from `/v22` to `/v23` and replaces the legacy split
+  between `pkg/contracts/<legacy-domain>` and `pkg/enums/<domain>` with merged
+  domain packages under `pkg/contracts/<domain>`, without compatibility aliases.
+- Restructures the shared model surface under the `pkg/contracts` domain root,
+  including the requested identity, pricing, supply, orders, payments,
+  insights, customers, notifications, and `pubsub/envelop` / `pubsub/event`
+  layout.
+
+### Other Changes / 其他變更
+
+- Merges each domain's cohesive contract and enum files into the same Go
+  package, using descriptive filenames where names would otherwise collide.
+- Keeps routed Pub/Sub payloads centralized in `pkg/contracts/pubsub/event` and leaves
+  identity lifecycle, device, audit, and security records with their owning
+  domains.
+- Removes the four workflow SHA pins in favor of the stable
+  `actions/checkout@v7.0.1` and `actions/setup-go@v7.0.0` tags.
+
+### Consumer Action / 使用方動作
+
+- The seven consumer repositories and the parent `go.work` are intentionally
+  untouched. Each downstream repository must migrate its module requirement
+  and imports from `/v22` legacy domain paths to `/v23/pkg/contracts/<domain>`
+  as a separate change.
+- Regenerate or update downstream package references only after choosing the
+  matching V23 contract domain package; no compatibility aliases are provided.
 
 ## v22.2.0 (2026-08-07) - Repository Cleanup And Warehouse Date-Mark Cutover
 

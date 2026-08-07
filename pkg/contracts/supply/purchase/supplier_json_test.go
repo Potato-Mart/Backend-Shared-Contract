@@ -1,0 +1,63 @@
+package purchase_test
+
+import (
+	"encoding/json"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
+	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/purchase"
+	"strings"
+	"testing"
+)
+
+func TestSupplierOrganisationDetailJSONShape(t *testing.T) {
+	supplier := purchase.Supplier{
+		OrganisationDetail: common.OrganisationDetail{
+			PartyRef: common.PartyRef{
+				ID:   "supplier_123",
+				Name: "Supplier Co",
+			},
+			LegalName: "Supplier Legal Pty Ltd",
+			ABN:       "10987654321",
+			Website:   "https://supplier.example.com",
+			RegisteredAddress: &common.ContactAddress{
+				Address: &common.Address{
+					Label:              "HQ",
+					Line1:              "2 Supply Road",
+					Locality:           "Melbourne",
+					AdministrativeArea: &geography.AdministrativeAreaRef{Code: "AU-VIC"},
+					PostalCode:         "3000",
+					Country:            geography.CountryRef{Code: "AU"},
+				},
+			},
+		},
+	}
+
+	payload, err := json.Marshal(supplier)
+	if err != nil {
+		t.Fatalf("Marshal Supplier: %v", err)
+	}
+
+	var got map[string]any
+	if err := json.Unmarshal(payload, &got); err != nil {
+		t.Fatalf("Unmarshal Supplier JSON: %v", err)
+	}
+
+	for _, key := range []string{
+		"id",
+		"name",
+		"legal_name",
+		"abn",
+		"website",
+		"registered_address",
+	} {
+		if _, ok := got[key]; !ok {
+			t.Fatalf("Supplier JSON missing %q: %s", key, payload)
+		}
+	}
+
+	for key := range got {
+		if strings.HasPrefix(key, "company_") {
+			t.Fatalf("Supplier JSON should not include company-prefixed key %q: %s", key, payload)
+		}
+	}
+}

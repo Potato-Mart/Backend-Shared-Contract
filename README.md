@@ -15,8 +15,8 @@ workflows.
 ## Latest Version
 
 ```text
-v22.2.0
-github.com/Potato-Mart/Backend-Shared-Contract/v22
+v23.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v23
 ```
 
 See [RELEASE_NOTES.md](RELEASE_NOTES.md) for the release history,
@@ -27,10 +27,10 @@ breaking JSON changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v22 v22.2.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v23 v23.0.0
 ```
 
-Import packages from the same `/v22` module path.
+Import packages from the same `/v23` module path.
 
 ## Boundary Governance
 
@@ -53,7 +53,7 @@ truth for release-specific JSON changes and consumer actions.
   tokens in source, test, script, or documentation filenames.
 - Keep unit tests beside the code they test, package boundary tests beside
   their packages, repository gates in `pkg/test`, and aggregate enum tests in
-  `pkg/enums/enums_test`.
+  `pkg/test/enums`.
 - Keep Bash scripts in `scripts/bash` and PowerShell scripts in
   `scripts/powershell`.
 - Version numbers remain allowed in release tags, module paths, version

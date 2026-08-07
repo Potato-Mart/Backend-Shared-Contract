@@ -11,11 +11,11 @@ import (
 	"testing"
 )
 
-func TestV17RemovesWalletExportProductionSymbols(t *testing.T) {
+func TestV23RemovesWalletExportProductionSymbols(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	for _, removedPath := range []string{
-		filepath.Join("contracts", "wallet", "export.go"),
-		filepath.Join("enums", "wallet", "export_status.go"),
+		filepath.Join("contracts", "pricing", "wallet", "export.go"),
+		filepath.Join("contracts", "pricing", "wallet", "export_status.go"),
 	} {
 		absolutePath := filepath.Join(pkgRoot, removedPath)
 		if _, err := os.Stat(absolutePath); err == nil {
@@ -24,7 +24,7 @@ func TestV17RemovesWalletExportProductionSymbols(t *testing.T) {
 	}
 
 	fset := token.NewFileSet()
-	for _, root := range []string{filepath.Join("contracts", "wallet"), filepath.Join("enums", "wallet")} {
+	for _, root := range []string{filepath.Join("contracts", "pricing", "wallet")} {
 		absoluteRoot := filepath.Join(pkgRoot, root)
 		err := filepath.WalkDir(absoluteRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 			if walkErr != nil {
