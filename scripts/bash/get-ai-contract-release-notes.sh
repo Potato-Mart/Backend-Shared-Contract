@@ -10,7 +10,7 @@ model="${ANTHROPIC_MODEL:-claude-sonnet-4-6}"
 usage() {
   cat <<'USAGE'
 Usage:
-  bash scripts/get-ai-contract-release-notes.sh --version v3.0.0 --input release-notes.md --output release-notes.md
+  bash scripts/bash/get-ai-contract-release-notes.sh --version v3.0.0 --input release-notes.md --output release-notes.md
 
 Polishes deterministic release notes using the Anthropic API.
 Requires ANTHROPIC_API_KEY.

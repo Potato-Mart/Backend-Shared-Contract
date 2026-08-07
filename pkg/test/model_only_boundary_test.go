@@ -32,7 +32,8 @@ var modelBoundaryJSONTag = regexp.MustCompile(`^json:"[^"]*"$`)
 
 func TestV22ContractIsJSONModelOnly(t *testing.T) {
 	var violations []string
-	err := filepath.WalkDir(".", func(path string, entry fs.DirEntry, walkErr error) error {
+	pkgRoot := sharedContractPkgRoot(t)
+	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
 			return walkErr
 		}
@@ -40,7 +41,7 @@ func TestV22ContractIsJSONModelOnly(t *testing.T) {
 			return nil
 		}
 
-		normalized := filepath.ToSlash(path)
+		normalized := relativePkgPath(t, pkgRoot, path)
 		for _, prefix := range modelBoundaryForbiddenPackagePrefixes {
 			if normalized == prefix || strings.HasPrefix(normalized, prefix+"/") {
 				violations = append(violations, normalized+": forbidden non-model package")

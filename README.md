@@ -15,7 +15,7 @@ workflows.
 ## Latest Version
 
 ```text
-v22.1.0
+v22.2.0
 github.com/Potato-Mart/Backend-Shared-Contract/v22
 ```
 
@@ -27,7 +27,7 @@ breaking JSON changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v22 v22.1.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v22 v22.2.0
 ```
 
 Import packages from the same `/v22` module path.
@@ -47,37 +47,34 @@ field, type, enum value, event, and test in the same change; deprecated aliases
 and fallback JSON shapes are not retained. `RELEASE_NOTES.md` is the source of
 truth for release-specific JSON changes and consumer actions.
 
+## Repository Layout and Naming
+
+- Use stable, descriptive filenames. Do not include numeric release or version
+  tokens in source, test, script, or documentation filenames.
+- Keep unit tests beside the code they test, package boundary tests beside
+  their packages, repository gates in `pkg/test`, and aggregate enum tests in
+  `pkg/enums/enums_test`.
+- Keep Bash scripts in `scripts/bash` and PowerShell scripts in
+  `scripts/powershell`.
+- Version numbers remain allowed in release tags, module paths, version
+  metadata, and historical release content.
+
 ## Verification
 
 Run the standalone contract gate so a parent Go workspace cannot alter
 dependency resolution:
 
 ```powershell
-./scripts/Test-Contract.ps1
+./scripts/powershell/Test-Contract.ps1
 ```
 
-On Bash-based systems, run `bash scripts/test-contract.sh`. The equivalent Go
-command is `GOWORK=off go test ./...`.
+On Bash-based systems, run `bash scripts/bash/test-contract.sh`. The equivalent
+Go command is `GOWORK=off go test ./...`.
 
-## Change Policy
+## Change and Release Workflow
 
-Direct pushes to the protected `main` branch are prohibited. Create a feature
-branch from the latest `main`, make the change, and merge it through a pull
-request after the required checks pass.
-
-Before opening the pull request, choose the next semantic version after the
-latest published tag and keep `pkg/versioning/version.go`, its tests, this
-README's latest version and usage example, and `RELEASE_NOTES.md` aligned. Run:
-
-```powershell
-./scripts/Test-ReleaseAlignment.ps1 -ExpectedVersion vX.Y.Z
-./scripts/Test-Contract.ps1
-git diff --check
-```
-
-Do not create or push the release tag from the feature branch. Merging to
-`main` triggers the release workflow, which verifies the aligned version and
-publishes the immutable tag and matching GitHub release.
+Follow [GIT_WORKFLOW.md](GIT_WORKFLOW.md) for required branch, commit, push,
+pull request, merge, and release-tag rules.
 
 See [Contract Versioning](pkg/versioning/VERSIONING_RULE.md) for the complete
 version rules and release flow.

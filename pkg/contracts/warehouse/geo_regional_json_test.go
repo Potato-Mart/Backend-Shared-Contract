@@ -13,7 +13,7 @@ import (
 func TestLotBucketReservationAndStagingJSONShapes(t *testing.T) {
 	dateMarkAt := time.Date(2026, 12, 1, 0, 0, 0, 0, time.UTC)
 	dateMark := warehouse.InventoryDateMark{
-		Kind:       warehouseenum.InventoryDateMarkUseBy,
+		Kind:       warehouseenum.InventoryDateMarkExpiry,
 		DateMarkAt: dateMarkAt,
 		Timezone:   "Australia/Melbourne",
 	}

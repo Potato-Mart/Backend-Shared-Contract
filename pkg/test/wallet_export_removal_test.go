@@ -12,18 +12,21 @@ import (
 )
 
 func TestV17RemovesWalletExportProductionSymbols(t *testing.T) {
+	pkgRoot := sharedContractPkgRoot(t)
 	for _, removedPath := range []string{
 		filepath.Join("contracts", "wallet", "export.go"),
 		filepath.Join("enums", "wallet", "export_status.go"),
 	} {
-		if _, err := os.Stat(removedPath); err == nil {
-			t.Errorf("removed wallet-export source still exists: %s", removedPath)
+		absolutePath := filepath.Join(pkgRoot, removedPath)
+		if _, err := os.Stat(absolutePath); err == nil {
+			t.Errorf("removed wallet-export source still exists: %s", absolutePath)
 		}
 	}
 
 	fset := token.NewFileSet()
 	for _, root := range []string{filepath.Join("contracts", "wallet"), filepath.Join("enums", "wallet")} {
-		err := filepath.WalkDir(root, func(path string, entry fs.DirEntry, walkErr error) error {
+		absoluteRoot := filepath.Join(pkgRoot, root)
+		err := filepath.WalkDir(absoluteRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 			if walkErr != nil {
 				return walkErr
 			}

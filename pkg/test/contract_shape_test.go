@@ -53,7 +53,8 @@ func TestSharedContractHasNoTransportTags(t *testing.T) {
 
 func walkGoFiles(t *testing.T, inspect func(string, *token.FileSet, *ast.File)) {
 	t.Helper()
-	err := filepath.WalkDir(".", func(path string, entry fs.DirEntry, walkErr error) error {
+	pkgRoot := sharedContractPkgRoot(t)
+	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
 			return walkErr
 		}

@@ -22,7 +22,7 @@ jobs:
 
       - name: Validate release alignment
         shell: pwsh
-        run: ./scripts/Test-ReleaseAlignment.ps1
+        run: ./scripts/powershell/Test-ReleaseAlignment.ps1
 
       - name: Set up Go
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
