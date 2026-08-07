@@ -1,26 +1,26 @@
 package pkg_test
 
 import (
+	apiresponseenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/apiresponse"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
+	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/product"
 	"reflect"
 	"testing"
-
-	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/common"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/contracts/sales"
-	apiresponseenum "github.com/Potato-Mart/Backend-Shared-Contract/v22/pkg/enums/apiresponse"
 )
 
-// TestV22BackendGateModelSurface locks the reusable model primitives needed by
-// the V22 stock, geography, offer, and availability gates. HTTP DTOs, stock
+// TestV23BackendGateModelSurface locks the reusable model primitives needed by
+// the V23 stock, geography, offer, and availability gates. HTTP DTOs, stock
 // commands, resolution rules, and error envelopes remain service-owned.
-func TestV22BackendGateModelSurface(t *testing.T) {
+func TestV23BackendGateModelSurface(t *testing.T) {
 	assertJSONFields(t, reflect.TypeOf(common.Address{}), map[string]string{
 		"Locality":           "locality",
 		"AdministrativeArea": "administrative_area,omitempty",
 		"PostalCode":         "postal_code",
 		"Country":            "country",
 	})
-	assertJSONFields(t, reflect.TypeOf(common.GeographicContext{}), map[string]string{
+	assertJSONFields(t, reflect.TypeOf(geography.GeographicContext{}), map[string]string{
 		"DepotCode":          "depot_code,omitempty",
 		"ScopeRevision":      "scope_revision",
 		"RuleRevision":       "rule_revision",

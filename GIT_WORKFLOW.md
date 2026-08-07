@@ -5,8 +5,9 @@ These rules apply to every commit and push in this repository.
 ## Branches
 
 - Start from the latest protected `main`.
-- Use `feature/<description>` for feature branches.
-- For this release, use `feature/repo-cleanup-v22.2.0`.
+- Use `feature/<description>` for feature branches unless a release task
+  specifies another `refactor/<description>` branch.
+- For this release, use `refactor/v23-contract-domain-layout`.
 - Do not push directly to `main`.
 
 ## Commits and Pull Requests

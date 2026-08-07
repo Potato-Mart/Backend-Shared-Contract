@@ -1,0 +1,33 @@
+package access
+
+import (
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/security"
+	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"time"
+
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/identity/account"
+)
+
+// AccessTokenClaims is a framework-agnostic token-claim shape. This contract
+// intentionally does not import JWT libraries or implement token validation.
+type AccessTokenClaims struct {
+	Subject                   string                      `json:"sub"`
+	UserID                    string                      `json:"user_id"`
+	SessionID                 string                      `json:"session_id,omitempty"`
+	AuthIdentityID            string                      `json:"auth_identity_id"`
+	IdentityDomain            security.IdentityDomain     `json:"identity_domain"`
+	AccountID                 string                      `json:"account_id,omitempty"`
+	AccountType               accountenum.AccountType     `json:"account_type,omitempty"`
+	Portal                    common.Portal               `json:"portal,omitempty"`
+	Audience                  string                      `json:"aud,omitempty"`
+	Roles                     []string                    `json:"roles,omitempty"`
+	Permissions               []string                    `json:"permissions,omitempty"`
+	WholesaleOrganisationCode string                      `json:"wholesale_organisation_code,omitempty"`
+	OrganisationAccessID      string                      `json:"organisation_access_id,omitempty"`
+	RetailCustomerNumber      string                      `json:"retail_customer_number,omitempty"`
+	RoleKey                   string                      `json:"role_key,omitempty"`
+	AuthAssuranceLevel        security.AuthAssuranceLevel `json:"auth_assurance_level,omitempty"`
+	MFAVerifiedAt             *time.Time                  `json:"mfa_verified_at,omitempty"`
+	IssuedAt                  int64                       `json:"iat,omitempty"`
+	ExpiresAt                 int64                       `json:"exp,omitempty"`
+}
