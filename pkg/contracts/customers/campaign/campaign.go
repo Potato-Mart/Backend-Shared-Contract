@@ -7,28 +7,29 @@
 package campaign
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/customers/campaign/campaign_enums"
 )
 
 // Audience narrows a campaign by customer type and client platform.
 // GeographicScope carries all geographic eligibility.
 type Audience struct {
-	CustomerType CampaignCustomerType `json:"customer_type,omitempty"`
-	Platform     CampaignPlatform     `json:"platform,omitempty"`
+	CustomerType campaign_enums.CampaignCustomerType `json:"customer_type,omitempty"`
+	Platform     campaign_enums.CampaignPlatform     `json:"platform,omitempty"`
 }
 
 // CTADestination is the parsed, allowlisted route for a campaign call to
 // action. Services validate that only fields relevant to Type are populated.
 // CTAHref remains the canonical authored href for existing storefront clients.
 type CTADestination struct {
-	Type           CampaignCTADestinationType `json:"type"`
-	ProductSKUCode string                     `json:"product_sku_code,omitempty"`
-	CollectionSlug string                     `json:"collection_slug,omitempty"`
-	CategorySlug   string                     `json:"category_slug,omitempty"`
-	PromotionID    string                     `json:"promotion_id,omitempty"`
+	Type           campaign_enums.CampaignCTADestinationType `json:"type"`
+	ProductSKUCode string                                    `json:"product_sku_code,omitempty"`
+	CollectionSlug string                                    `json:"collection_slug,omitempty"`
+	CategorySlug   string                                    `json:"category_slug,omitempty"`
+	PromotionID    string                                    `json:"promotion_id,omitempty"`
 }
 
 // Campaign is one piece of scheduled, targeted storefront content.
@@ -50,8 +51,8 @@ type Campaign struct {
 	MediaURL        string `json:"media_url,omitempty"`
 	BackgroundToken string `json:"background_token,omitempty"`
 
-	Placement CampaignPlacement `json:"placement"`
-	Severity  CampaignSeverity  `json:"severity"`
+	Placement campaign_enums.CampaignPlacement `json:"placement"`
+	Severity  campaign_enums.CampaignSeverity  `json:"severity"`
 
 	// Priority orders competing campaigns for the same placement (higher first).
 	Priority int `json:"priority"`
@@ -65,18 +66,18 @@ type Campaign struct {
 	EndsAt           *time.Time `json:"ends_at,omitempty"`
 	ScheduleTimezone string     `json:"schedule_timezone"`
 
-	Audience           *Audience                 `json:"audience,omitempty"`
-	GeographicScope    geography.GeographicScope `json:"geographic_scope"`
-	Targets            CampaignTarget            `json:"targets,omitempty"`
-	Planning           *CampaignPlanning         `json:"planning,omitempty"`
-	Status             CampaignStatus            `json:"status"`
-	Revision           int64                     `json:"revision"`
-	ActivationRevision int64                     `json:"activation_revision"`
-	ActivatedAt        *time.Time                `json:"activated_at,omitempty"`
-	DeactivatedAt      *time.Time                `json:"deactivated_at,omitempty"`
-	ArchivedAt         *time.Time                `json:"archived_at,omitempty"`
+	Audience           *Audience                     `json:"audience,omitempty"`
+	GeographicScope    geography.GeographicScope     `json:"geographic_scope"`
+	Targets            CampaignTarget                `json:"targets,omitempty"`
+	Planning           *CampaignPlanning             `json:"planning,omitempty"`
+	Status             campaign_enums.CampaignStatus `json:"status"`
+	Revision           int64                         `json:"revision"`
+	ActivationRevision int64                         `json:"activation_revision"`
+	ActivatedAt        *time.Time                    `json:"activated_at,omitempty"`
+	DeactivatedAt      *time.Time                    `json:"deactivated_at,omitempty"`
+	ArchivedAt         *time.Time                    `json:"archived_at,omitempty"`
 
-	common.AuditFields
+	audit.AuditFields
 }
 
 type CampaignCategoryTarget struct {

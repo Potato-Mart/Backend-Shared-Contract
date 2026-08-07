@@ -2,27 +2,34 @@ package product
 
 import (
 	"encoding/json"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
+
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestProductPackageOptionsAndBarcodeAssignmentsJSON(t *testing.T) {
 	effectiveFrom := time.Date(2026, 8, 4, 2, 3, 4, 0, time.UTC)
 	product := Product{
 		SKUCode: "A00001", CategorySKUCode: "CAT-1", Name: "Potatoes",
-		StorageType: warehouseenum.StorageDry,
+		StorageType: warehouse_enums.StorageDry,
 		PackageOptions: []ProductPackageOption{
-			{ID: "pkg_each", Code: "EACH", ProductSKUCode: "A00001", HandlingUnit: common.PackageHandlingUnitEach, UnitsPerPackage: 1, IsCanonical: true, IsActive: true, EffectiveFrom: effectiveFrom},
-			{ID: "pkg_case_6", Code: "CASE-6", ProductSKUCode: "A00001", HandlingUnit: common.PackageHandlingUnitCase, UnitsPerPackage: 6, IsActive: true, EffectiveFrom: effectiveFrom},
-			{ID: "pkg_case_12", Code: "CASE-12", ProductSKUCode: "A00001", HandlingUnit: common.PackageHandlingUnitCase, UnitsPerPackage: 12, IsActive: true, EffectiveFrom: effectiveFrom},
+			{ID: "pkg_each", Code: "EACH", ProductSKUCode: "A00001", HandlingUnit: packaging_enums.PackageHandlingUnitEach, UnitsPerPackage: 1, IsCanonical: true, IsActive: true, EffectiveFrom: effectiveFrom},
+			{ID: "pkg_case_6", Code: "CASE-6", ProductSKUCode: "A00001", HandlingUnit: packaging_enums.PackageHandlingUnitCase, UnitsPerPackage: 6, IsActive: true, EffectiveFrom: effectiveFrom},
+			{ID: "pkg_case_12", Code: "CASE-12", ProductSKUCode: "A00001", HandlingUnit: packaging_enums.PackageHandlingUnitCase, UnitsPerPackage: 12, IsActive: true, EffectiveFrom: effectiveFrom},
 		},
 		BarcodeAssignments: []ProductBarcodeAssignment{
-			{ID: "barcode_each", ProductSKUCode: "A00001", PackageOptionID: "pkg_each", Value: "930000000001", Format: BarcodeFormatEAN13, IsPrimary: true, EffectiveFrom: effectiveFrom},
-			{ID: "barcode_case", ProductSKUCode: "A00001", PackageOptionID: "pkg_case_12", Value: "19300000000018", Format: BarcodeFormatEAN13, IsPrimary: true, EffectiveFrom: effectiveFrom},
+			{ID: "barcode_each", ProductSKUCode: "A00001", PackageOptionID: "pkg_each", Value: "930000000001", Format: product_enums.BarcodeFormatEAN13, IsPrimary: true, EffectiveFrom: effectiveFrom},
+			{ID: "barcode_case", ProductSKUCode: "A00001", PackageOptionID: "pkg_case_12", Value: "19300000000018", Format: product_enums.BarcodeFormatEAN13, IsPrimary: true, EffectiveFrom: effectiveFrom},
 		},
 	}
 
@@ -51,10 +58,10 @@ func TestHistoricalEndedPackageOptionSnapshotCoexistsWithCurrentOptionJSON(t *te
 			ID:              "pkg_case_6_v1",
 			Code:            "CASE-6-V1",
 			ProductSKUCode:  "A00001",
-			HandlingUnit:    common.PackageHandlingUnitCase,
+			HandlingUnit:    packaging_enums.PackageHandlingUnitCase,
 			UnitsPerPackage: 6,
-			Dimensions:      &common.Dimensions{WidthMM: 200, LengthMM: 300, HeightMM: 150},
-			Weight:          &common.Weight{Grams: 4200},
+			Dimensions:      &measurement.Dimensions{WidthMM: 200, LengthMM: 300, HeightMM: 150},
+			Weight:          &measurement.Weight{Grams: 4200},
 			EffectiveFrom:   historicalFrom,
 			EffectiveTo:     &historicalTo,
 			CapturedAt:      capturedAt,
@@ -63,10 +70,10 @@ func TestHistoricalEndedPackageOptionSnapshotCoexistsWithCurrentOptionJSON(t *te
 			ID:              "pkg_case_8_v2",
 			Code:            "CASE-8-V2",
 			ProductSKUCode:  "A00001",
-			HandlingUnit:    common.PackageHandlingUnitCase,
+			HandlingUnit:    packaging_enums.PackageHandlingUnitCase,
 			UnitsPerPackage: 8,
-			Dimensions:      &common.Dimensions{WidthMM: 240, LengthMM: 360, HeightMM: 180},
-			Weight:          &common.Weight{Grams: 5600},
+			Dimensions:      &measurement.Dimensions{WidthMM: 240, LengthMM: 360, HeightMM: 180},
+			Weight:          &measurement.Weight{Grams: 5600},
 			EffectiveFrom:   historicalTo,
 			CapturedAt:      capturedAt,
 		},
@@ -116,8 +123,8 @@ func TestHistoricalEndedPackageOptionSnapshotCoexistsWithCurrentOptionJSON(t *te
 func TestBarcodeValueMayBeAssignedAcrossProducts(t *testing.T) {
 	now := time.Date(2026, 8, 4, 0, 0, 0, 0, time.UTC)
 	products := []Product{
-		{SKUCode: "A00001", Name: "First", BarcodeAssignments: []ProductBarcodeAssignment{{ID: "ba_1", ProductSKUCode: "A00001", PackageOptionID: "pkg_1", Value: "930000000001", Format: BarcodeFormatEAN13, EffectiveFrom: now}}},
-		{SKUCode: "A00002", Name: "Second", BarcodeAssignments: []ProductBarcodeAssignment{{ID: "ba_2", ProductSKUCode: "A00002", PackageOptionID: "pkg_2", Value: "930000000001", Format: BarcodeFormatEAN13, EffectiveFrom: now}}},
+		{SKUCode: "A00001", Name: "First", BarcodeAssignments: []ProductBarcodeAssignment{{ID: "ba_1", ProductSKUCode: "A00001", PackageOptionID: "pkg_1", Value: "930000000001", Format: product_enums.BarcodeFormatEAN13, EffectiveFrom: now}}},
+		{SKUCode: "A00002", Name: "Second", BarcodeAssignments: []ProductBarcodeAssignment{{ID: "ba_2", ProductSKUCode: "A00002", PackageOptionID: "pkg_2", Value: "930000000001", Format: product_enums.BarcodeFormatEAN13, EffectiveFrom: now}}},
 	}
 
 	body, err := json.Marshal(products)
@@ -133,15 +140,15 @@ func TestSellableOfferSnapshotJSONFreezesPackageInventoryTimeAndGeography(t *tes
 	now := time.Date(2026, 8, 4, 5, 6, 7, 0, time.UTC)
 	offer := SellableOfferSnapshot{
 		ID: "offer_1", ProductSKUCode: "A00001", DepotCode: "AU-VIC-MEL-DC-01", SourceBucketID: "bucket_1",
-		PackageOption:         ProductPackageOptionSnapshot{ID: "pkg_case_6", Code: "CASE-6", ProductSKUCode: "A00001", HandlingUnit: common.PackageHandlingUnitCase, UnitsPerPackage: 6, EffectiveFrom: now, CapturedAt: now},
+		PackageOption:         ProductPackageOptionSnapshot{ID: "pkg_case_6", Code: "CASE-6", ProductSKUCode: "A00001", HandlingUnit: packaging_enums.PackageHandlingUnitCase, UnitsPerPackage: 6, EffectiveFrom: now, CapturedAt: now},
 		AvailablePackageCount: 3, AvailableBaseUnits: 18,
-		Condition: warehouseenum.InventoryConditionGood, Disposition: warehouseenum.InventoryDispositionStandardSellable,
-		DateMark: &SellableOfferDateMarkSnapshot{Kind: warehouseenum.InventoryDateMarkBestBefore, DateMarkAt: now.Add(30 * 24 * time.Hour), Timezone: "Australia/Melbourne"},
+		Condition: warehouse_enums.InventoryConditionGood, Disposition: warehouse_enums.InventoryDispositionStandardSellable,
+		DateMark: &SellableOfferDateMarkSnapshot{Kind: warehouse_enums.InventoryDateMarkBestBefore, DateMarkAt: now.Add(30 * 24 * time.Hour), Timezone: "Australia/Melbourne"},
 		Revision: 7, InventoryRevision: 13,
-		PackagePrice: common.Money{AmountMinor: 1200, Currency: "AUD"}, TaxAmount: common.Money{AmountMinor: 109, Currency: "AUD"},
-		Discounts: []SellableOfferDiscountSnapshot{{ID: "promo_1", Amount: common.Money{AmountMinor: 200, Currency: "AUD"}}},
+		PackagePrice: money.Money{AmountMinor: 1200, Currency: "AUD"}, TaxAmount: money.Money{AmountMinor: 109, Currency: "AUD"},
+		Discounts: []SellableOfferDiscountSnapshot{{ID: "promo_1", Amount: money.Money{AmountMinor: 200, Currency: "AUD"}}},
 		ValidFrom: now, Timezone: "Etc/UTC", CapturedAt: now,
-		GeographicContext: geography.GeographicContext{Source: geography.GeographicContextSourceRetailCustomerProfile, CountryCode: "AU", SubdivisionCode: "AU-VIC", DepotCode: "AU-VIC-MEL-DC-01", ScopeRevision: 2, RuleRevision: 7, EvaluationTimezone: "Australia/Melbourne"},
+		GeographicContext: geography.GeographicContext{Source: geography_enums.GeographicContextSourceRetailCustomerProfile, CountryCode: "AU", SubdivisionCode: "AU-VIC", DepotCode: "AU-VIC-MEL-DC-01", ScopeRevision: 2, RuleRevision: 7, EvaluationTimezone: "Australia/Melbourne"},
 	}
 
 	body, err := json.Marshal(offer)

@@ -3,25 +3,25 @@ package enums_test
 import (
 	"testing"
 
-	securityenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/security"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product/product_enums"
 )
 
 func TestProductEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
-		{name: "productenum.BarcodeFormat", valid: []stringEnum{productenum.BarcodeFormatEAN8, productenum.BarcodeFormatEAN13, productenum.BarcodeFormatUPCA, productenum.BarcodeFormatUPCE, productenum.BarcodeFormatCode128, productenum.BarcodeFormatQRCode}, invalid: productenum.BarcodeFormat("__invalid__")},
-		{name: "securityenum.MediaStatus", valid: []stringEnum{securityenum.MediaStatusPending, securityenum.MediaStatusActive, securityenum.MediaStatusDeleted}, invalid: securityenum.MediaStatus("__invalid__")},
-		{name: "productenum.PriceAudience", valid: []stringEnum{productenum.PriceAudienceRetail, productenum.PriceAudienceWholesale}, invalid: productenum.PriceAudience("__invalid__")},
-		{name: "productenum.PriceVisibility", valid: []stringEnum{productenum.PriceVisibilityPublic, productenum.PriceVisibilityLoginRequired, productenum.PriceVisibilityWholesaleApprovedOnly, productenum.PriceVisibilityHidden}, invalid: productenum.PriceVisibility("__invalid__")},
-		{name: "productenum.WholesalePriceMode", valid: []stringEnum{productenum.WholesalePriceModeFixed, productenum.WholesalePriceModeOnRequest}, invalid: productenum.WholesalePriceMode("__invalid__")},
-		{name: "productenum.StorefrontPreorderStatus", valid: []stringEnum{productenum.StorefrontPreorderStatusUnavailable, productenum.StorefrontPreorderStatusUpcoming, productenum.StorefrontPreorderStatusOpen, productenum.StorefrontPreorderStatusClosed, productenum.StorefrontPreorderStatusSoldOut}, invalid: productenum.StorefrontPreorderStatus("__invalid__")},
-		{name: "productenum.StorefrontStockState", valid: []stringEnum{productenum.StorefrontStockStateUnknown, productenum.StorefrontStockStateInStock, productenum.StorefrontStockStateOutOfStock}, invalid: productenum.StorefrontStockState("__invalid__")},
-		{name: "productenum.ProductStatus", valid: []stringEnum{productenum.ProductStatusDraft, productenum.ProductStatusActive, productenum.ProductStatusArchived, productenum.ProductStatusDiscontinued}, invalid: productenum.ProductStatus("__invalid__")},
+		{name: "productenum.BarcodeFormat", valid: []stringEnum{product_enums.BarcodeFormatEAN8, product_enums.BarcodeFormatEAN13, product_enums.BarcodeFormatUPCA, product_enums.BarcodeFormatUPCE, product_enums.BarcodeFormatCode128, product_enums.BarcodeFormatQRCode}, invalid: product_enums.BarcodeFormat("__invalid__")},
+		{name: "securityenum.MediaStatus", valid: []stringEnum{security_enums.MediaStatusPending, security_enums.MediaStatusActive, security_enums.MediaStatusDeleted}, invalid: security_enums.MediaStatus("__invalid__")},
+		{name: "productenum.PriceAudience", valid: []stringEnum{product_enums.PriceAudienceRetail, product_enums.PriceAudienceWholesale}, invalid: product_enums.PriceAudience("__invalid__")},
+		{name: "productenum.PriceVisibility", valid: []stringEnum{product_enums.PriceVisibilityPublic, product_enums.PriceVisibilityLoginRequired, product_enums.PriceVisibilityWholesaleApprovedOnly, product_enums.PriceVisibilityHidden}, invalid: product_enums.PriceVisibility("__invalid__")},
+		{name: "productenum.WholesalePriceMode", valid: []stringEnum{product_enums.WholesalePriceModeFixed, product_enums.WholesalePriceModeOnRequest}, invalid: product_enums.WholesalePriceMode("__invalid__")},
+		{name: "productenum.StorefrontPreorderStatus", valid: []stringEnum{product_enums.StorefrontPreorderStatusUnavailable, product_enums.StorefrontPreorderStatusUpcoming, product_enums.StorefrontPreorderStatusOpen, product_enums.StorefrontPreorderStatusClosed, product_enums.StorefrontPreorderStatusSoldOut}, invalid: product_enums.StorefrontPreorderStatus("__invalid__")},
+		{name: "productenum.StorefrontStockState", valid: []stringEnum{product_enums.StorefrontStockStateUnknown, product_enums.StorefrontStockStateInStock, product_enums.StorefrontStockStateOutOfStock}, invalid: product_enums.StorefrontStockState("__invalid__")},
+		{name: "productenum.ProductStatus", valid: []stringEnum{product_enums.ProductStatusDraft, product_enums.ProductStatusActive, product_enums.ProductStatusArchived, product_enums.ProductStatusDiscontinued}, invalid: product_enums.ProductStatus("__invalid__")},
 	})
-	if got := productenum.WholesalePriceModeFixed.String(); got != "fixed" {
+	if got := product_enums.WholesalePriceModeFixed.String(); got != "fixed" {
 		t.Fatalf("fixed wholesale price mode wire value = %q", got)
 	}
-	if got := productenum.WholesalePriceModeOnRequest.String(); got != "on_request" {
+	if got := product_enums.WholesalePriceModeOnRequest.String(); got != "on_request" {
 		t.Fatalf("on-request wholesale price mode wire value = %q", got)
 	}
 }

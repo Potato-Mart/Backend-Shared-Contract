@@ -1,8 +1,9 @@
 package shipping
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
 	"time"
+
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
 )
 
 type Zone struct {

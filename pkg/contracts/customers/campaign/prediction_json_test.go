@@ -2,9 +2,12 @@ package campaign
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+
 	"strings"
 	"testing"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging/packaging_enums"
 )
 
 func TestCampaignPredictionUsesPackageComposition(t *testing.T) {
@@ -20,11 +23,11 @@ func TestCampaignPredictionUsesPackageComposition(t *testing.T) {
 			ConfirmedInboundBaseUnits:  0,
 			NetRequiredBaseUnits:       27,
 			SuggestedOrderBaseUnits:    27,
-			SuggestedComposition: common.PackageCompositionSnapshot{
+			SuggestedComposition: packaging.PackageCompositionSnapshot{
 				TotalBaseUnits: 27,
-				Components: []common.PackageComponentSnapshot{
-					{PackageOptionID: "case_12", HandlingUnit: common.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24},
-					{PackageOptionID: "each_1", HandlingUnit: common.PackageHandlingUnitEach, PackageCount: 3, UnitsPerPackage: 1, BaseUnits: 3},
+				Components: []packaging.PackageComponentSnapshot{
+					{PackageOptionID: "case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24},
+					{PackageOptionID: "each_1", HandlingUnit: packaging_enums.PackageHandlingUnitEach, PackageCount: 3, UnitsPerPackage: 1, BaseUnits: 3},
 				},
 			},
 			MinimumOrderBaseUnits: 12,

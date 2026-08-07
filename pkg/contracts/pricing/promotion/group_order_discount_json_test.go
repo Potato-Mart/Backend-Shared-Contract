@@ -2,23 +2,29 @@ package promotion
 
 import (
 	"encoding/json"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+
 	"testing"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography/geography_enums"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
-// A fixed-amount group discount must cross the wire as common.Money minor units,
+// A fixed-amount group discount must cross the wire as money.Money minor units,
 // never as a stringified major-unit value like DiscountSpec.DiscountValue.
 func TestGroupOrderDiscountFixedAmountUsesMinorUnitMoney(t *testing.T) {
 	body, err := json.Marshal(GroupOrderDiscountApplication{
 		ID:                        "goda_1",
 		GroupOrderCode:            "GO-2601010001",
 		WholesaleOrganisationCode: "WO-1",
-		State:                     GroupOrderDiscountStateApproved,
+		State:                     promotion_enums.GroupOrderDiscountStateApproved,
 		ApprovedPromotionID:       "prm_1",
 		Proposal: &GroupOrderDiscountProposal{
-			DiscountType: DiscountTypeFixedAmount,
-			Amount:       &common.Money{AmountMinor: 500, Currency: "AUD"},
+			DiscountType: promotion_enums.DiscountTypeFixedAmount,
+			Amount:       &money.Money{AmountMinor: 500, Currency: "AUD"},
 		},
 	})
 	if err != nil {
@@ -49,11 +55,11 @@ func TestGroupOrderDiscountDecisionFreezesGeographicContext(t *testing.T) {
 	payload, err := json.Marshal(GroupOrderDiscountDecision{
 		QuoteKey: "quote_1", GroupOrderCode: "GO-2601010001", Applied: true,
 		ApprovedPromotionID: "prm_1",
-		DiscountAmount:      common.Money{AmountMinor: 500, Currency: "AUD"},
+		DiscountAmount:      money.Money{AmountMinor: 500, Currency: "AUD"},
 		GeographicContext: geography.GeographicContext{
-			Source:      geography.GeographicContextSourceWholesaleOrganisationProfile,
+			Source:      geography_enums.GeographicContextSourceWholesaleOrganisationProfile,
 			CountryCode: "AU", SubdivisionCode: "AU-VIC",
-			MatchedTargetKind: geography.GeographicTargetSubdivision,
+			MatchedTargetKind: geography_enums.GeographicTargetSubdivision,
 			MatchedTargetCode: "AU-VIC", ScopeRevision: 3, RuleRevision: 7,
 			EvaluationTimezone: "Australia/Melbourne",
 		},
@@ -74,7 +80,7 @@ func TestGroupOrderDiscountDecisionFreezesGeographicContext(t *testing.T) {
 // A percentage group discount carries integer basis points, not a float/string.
 func TestGroupOrderDiscountPercentUsesBasisPoints(t *testing.T) {
 	body, err := json.Marshal(GroupOrderDiscountProposal{
-		DiscountType:       DiscountTypePercentage,
+		DiscountType:       promotion_enums.DiscountTypePercentage,
 		PercentBasisPoints: 1000,
 	})
 	if err != nil {

@@ -1,8 +1,9 @@
 package product
 
 import (
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
 )
 
 // SalesTotals records paid-order unit activity for one measurement period.
@@ -24,13 +25,13 @@ type SalesWindowStats struct {
 // Rankings use the embedded window and are computed across the complete result
 // set, never from one paginated storefront response.
 type CategorySalesRank struct {
-	CategoryTagID   string                 `json:"category_tag_id"`
-	CategoryTagSlug string                 `json:"category_tag_slug,omitempty"`
-	CategoryTagName []common.LocalizedName `json:"category_tag_name,omitempty"`
-	Rank            int                    `json:"rank"`
-	Population      int                    `json:"population"`
-	WindowDays      int                    `json:"window_days"`
-	NetUnits        int64                  `json:"net_units"`
+	CategoryTagID   string                       `json:"category_tag_id"`
+	CategoryTagSlug string                       `json:"category_tag_slug,omitempty"`
+	CategoryTagName []localization.LocalizedName `json:"category_tag_name,omitempty"`
+	Rank            int                          `json:"rank"`
+	Population      int                          `json:"population"`
+	WindowDays      int                          `json:"window_days"`
+	NetUnits        int64                        `json:"net_units"`
 }
 
 // SalesPerformanceStats is the computed, read-only sales-performance model.

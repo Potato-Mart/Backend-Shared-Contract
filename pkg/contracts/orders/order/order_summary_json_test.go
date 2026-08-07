@@ -2,32 +2,37 @@ package order_test
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/orders/order"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/payments/payment"
+
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/order"
+
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/payments/payment/payment_enums"
 )
 
 func TestOrderSummaryJSONShape(t *testing.T) {
 	now := time.Date(2026, 6, 30, 0, 0, 0, 0, time.UTC)
 	summary := sales.OrderSummary{
 		OrderNumber:       "MAMA260703ABC123",
-		Status:            sales.SalesOrderStatusConfirmed,
-		PaymentStatus:     paymentenum.PaymentStatusPaid,
-		FulfillmentStatus: sales.FulfillmentStatusUnfulfilled,
-		Channel:           common.OrderTypeOnline,
+		Status:            order_enums.SalesOrderStatusConfirmed,
+		PaymentStatus:     payment_enums.PaymentStatusPaid,
+		FulfillmentStatus: order_enums.FulfillmentStatusUnfulfilled,
+		Channel:           commerce_enums.OrderTypeOnline,
 		PlacedAt:          now,
 		UpdatedAt:         now,
-		Total:             common.Money{AmountMinor: 4200, Currency: "AUD"},
+		Total:             money.Money{AmountMinor: 4200, Currency: "AUD"},
 		ItemCount:         1,
 		Items: []sales.OrderLineSummary{
 			{
 				SKUCode:        "A0001",
 				Name:           "Potato 1kg",
-				Components:     []sales.PricedPackageComponent{{RequestedPackageCount: 2, RequestedBaseUnits: 2, PackagePrice: common.Money{AmountMinor: 2100, Currency: "AUD"}}},
+				Components:     []sales.PricedPackageComponent{{RequestedPackageCount: 2, RequestedBaseUnits: 2, PackagePrice: money.Money{AmountMinor: 2100, Currency: "AUD"}}},
 				TotalBaseUnits: 2,
-				Total:          common.Money{AmountMinor: 4200, Currency: "AUD"},
+				Total:          money.Money{AmountMinor: 4200, Currency: "AUD"},
 			},
 		},
 	}

@@ -2,14 +2,18 @@ package retail_test
 
 import (
 	"encoding/json"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	customers "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/customers/retail"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/orders/shipping"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pubsub/event"
+
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/party"
+	customers "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/customers/retail"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/shipping"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pubsub/event"
 )
 
 func TestRetailCustomerJSONShape(t *testing.T) {
@@ -21,12 +25,12 @@ func TestRetailCustomerJSONShape(t *testing.T) {
 		PrimaryAuthIdentityID: "auth_123",
 		AuthIdentityIDs:       []string{"auth_123"},
 		BasicInfo: customers.RetailCustomerBasicInfo{
-			Name:     common.PersonName{DisplayName: "Retail Customer"},
-			Contacts: common.ContactChannels{Email: "retail@example.com"},
-			Gender:   customers.CustomerGenderNonBinary,
+			Name:     party.PersonName{DisplayName: "Retail Customer"},
+			Contacts: party.ContactChannels{Email: "retail@example.com"},
+			Gender:   retail_enums.CustomerGenderNonBinary,
 		},
 		Lifecycle: customers.RetailCustomerLifecycle{
-			Status: customers.CustomerStatusActive,
+			Status: retail_enums.CustomerStatusActive,
 		},
 		Marketing: customers.RetailCustomerMarketingProfile{EmailOptIn: true},
 		Commerce:  customers.RetailCustomerCommerceProfile{TotalOrders: 2},
@@ -43,14 +47,14 @@ func TestRetailCustomerJSONShape(t *testing.T) {
 			CompletedFields: []string{"email", "full_name", "date_of_birth", "phone", "gender"},
 			MissingFields:   []string{"default_shipping", "default_billing"},
 		},
-		DefaultBilling: &common.ContactAddress{
-			Address: &common.Address{Label: "Billing", Line1: "1 Account St", Locality: "Springvale", AdministrativeArea: &geography.AdministrativeAreaRef{Code: "AU-VIC"}, PostalCode: "3171", Country: geography.CountryRef{Code: "AU"}},
+		DefaultBilling: &party.ContactAddress{
+			Address: &geography.Address{Label: "Billing", Line1: "1 Account St", Locality: "Springvale", AdministrativeArea: &geography.AdministrativeAreaRef{Code: "AU-VIC"}, PostalCode: "3171", Country: geography.CountryRef{Code: "AU"}},
 		},
-		ShippingAddresses: []common.ContactAddress{
+		ShippingAddresses: []party.ContactAddress{
 			{
 				ID:      "addr_123",
-				Contact: &common.Recipient{Name: "Retail Customer"},
-				Address: &common.Address{Label: "Home", Line1: "2 Account St", Locality: "Springvale", AdministrativeArea: &geography.AdministrativeAreaRef{Code: "AU-VIC"}, PostalCode: "3171", Country: geography.CountryRef{Code: "AU"}},
+				Contact: &party.Recipient{Name: "Retail Customer"},
+				Address: &geography.Address{Label: "Home", Line1: "2 Account St", Locality: "Springvale", AdministrativeArea: &geography.AdministrativeAreaRef{Code: "AU-VIC"}, PostalCode: "3171", Country: geography.CountryRef{Code: "AU"}},
 			},
 		},
 	}

@@ -3,7 +3,10 @@ package membership
 import (
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/membership/membership_enums"
 )
 
 // PointsPolicy is server-authored redemption metadata. PointsPerMinorUnit,
@@ -24,22 +27,22 @@ type PointsPolicy struct {
 // DebtAfter is always non-negative. The pointers distinguish legacy rows with
 // no debt accounting from a debt-aware row whose resulting debt is zero.
 type PointLedgerEntry struct {
-	ID                        string                `json:"id"`
-	CustomerNumber            string                `json:"customer_number"`
-	Delta                     int                   `json:"delta"`
-	Reason                    MembershipPointReason `json:"reason"`
-	RelatedOrderNumber        string                `json:"related_order_number,omitempty"`
-	RelatedReservationID      string                `json:"related_reservation_id,omitempty"`
-	RelatedRewardRedemptionID string                `json:"related_reward_redemption_id,omitempty"`
-	BalanceAfter              int                   `json:"balance_after"`
-	DebtDelta                 *int                  `json:"debt_delta,omitempty"`
-	DebtAfter                 *int                  `json:"debt_after,omitempty"`
-	Remaining                 int                   `json:"remaining"`
-	ExpiresAt                 *time.Time            `json:"expires_at,omitempty"`
-	Allocations               []PointAllocation     `json:"allocations,omitempty"`
-	Note                      string                `json:"note,omitempty"`
-	CreatedBy                 string                `json:"created_by,omitempty"`
-	CreatedAt                 time.Time             `json:"created_at"`
+	ID                        string                                 `json:"id"`
+	CustomerNumber            string                                 `json:"customer_number"`
+	Delta                     int                                    `json:"delta"`
+	Reason                    membership_enums.MembershipPointReason `json:"reason"`
+	RelatedOrderNumber        string                                 `json:"related_order_number,omitempty"`
+	RelatedReservationID      string                                 `json:"related_reservation_id,omitempty"`
+	RelatedRewardRedemptionID string                                 `json:"related_reward_redemption_id,omitempty"`
+	BalanceAfter              int                                    `json:"balance_after"`
+	DebtDelta                 *int                                   `json:"debt_delta,omitempty"`
+	DebtAfter                 *int                                   `json:"debt_after,omitempty"`
+	Remaining                 int                                    `json:"remaining"`
+	ExpiresAt                 *time.Time                             `json:"expires_at,omitempty"`
+	Allocations               []PointAllocation                      `json:"allocations,omitempty"`
+	Note                      string                                 `json:"note,omitempty"`
+	CreatedBy                 string                                 `json:"created_by,omitempty"`
+	CreatedAt                 time.Time                              `json:"created_at"`
 }
 
 // PointAllocation shows which earned points row was consumed by a redemption
@@ -53,11 +56,11 @@ type PointAllocation struct {
 // PointBucket is one currently available points batch for expiry-aware
 // customer-facing and admin wallet views.
 type PointBucket struct {
-	Points              int                   `json:"points"`
-	ExpiresAt           *time.Time            `json:"expires_at,omitempty"`
-	SourceLedgerEntryID string                `json:"source_ledger_entry_id"`
-	Reason              MembershipPointReason `json:"reason"`
-	RelatedOrderNumber  string                `json:"related_order_number,omitempty"`
+	Points              int                                    `json:"points"`
+	ExpiresAt           *time.Time                             `json:"expires_at,omitempty"`
+	SourceLedgerEntryID string                                 `json:"source_ledger_entry_id"`
+	Reason              membership_enums.MembershipPointReason `json:"reason"`
+	RelatedOrderNumber  string                                 `json:"related_order_number,omitempty"`
 }
 
 // PointBalanceBreakdown is a projected view of active point buckets.
@@ -75,39 +78,39 @@ type PointBalanceBreakdown struct {
 // PointReservation holds points during checkout or reward redemption. A
 // reservation must be committed before a negative ledger entry is created.
 type PointReservation struct {
-	ID                        string                   `json:"id"`
-	CustomerNumber            string                   `json:"customer_number"`
-	Points                    int                      `json:"points"`
-	Status                    PointReservationStatus   `json:"status"`
-	Reason                    MembershipPointReason    `json:"reason"`
-	RedemptionType            MembershipRedemptionType `json:"redemption_type"`
-	RelatedOrderID            string                   `json:"related_order_id,omitempty"`
-	RelatedRewardCode         string                   `json:"related_reward_code,omitempty"`
-	RelatedRewardRedemptionID string                   `json:"related_reward_redemption_id,omitempty"`
-	Allocations               []PointAllocation        `json:"allocations,omitempty"`
-	ExpiresAt                 time.Time                `json:"expires_at"`
-	CommittedAt               *time.Time               `json:"committed_at,omitempty"`
-	CancelledAt               *time.Time               `json:"cancelled_at,omitempty"`
-	CancelReason              string                   `json:"cancel_reason,omitempty"`
-	CreatedBy                 string                   `json:"created_by,omitempty"`
-	CreatedAt                 time.Time                `json:"created_at"`
+	ID                        string                                    `json:"id"`
+	CustomerNumber            string                                    `json:"customer_number"`
+	Points                    int                                       `json:"points"`
+	Status                    membership_enums.PointReservationStatus   `json:"status"`
+	Reason                    membership_enums.MembershipPointReason    `json:"reason"`
+	RedemptionType            membership_enums.MembershipRedemptionType `json:"redemption_type"`
+	RelatedOrderID            string                                    `json:"related_order_id,omitempty"`
+	RelatedRewardCode         string                                    `json:"related_reward_code,omitempty"`
+	RelatedRewardRedemptionID string                                    `json:"related_reward_redemption_id,omitempty"`
+	Allocations               []PointAllocation                         `json:"allocations,omitempty"`
+	ExpiresAt                 time.Time                                 `json:"expires_at"`
+	CommittedAt               *time.Time                                `json:"committed_at,omitempty"`
+	CancelledAt               *time.Time                                `json:"cancelled_at,omitempty"`
+	CancelReason              string                                    `json:"cancel_reason,omitempty"`
+	CreatedBy                 string                                    `json:"created_by,omitempty"`
+	CreatedAt                 time.Time                                 `json:"created_at"`
 }
 
 // PointPromotion is a time-limited points multiplier event. The effective earn
 // rate is tier multiplier times promotion multiplier.
 type PointPromotion struct {
-	ID             string                    `json:"id"`
-	Name           string                    `json:"name"`
-	Description    string                    `json:"description,omitempty"`
-	Multiplier     float64                   `json:"multiplier"`
-	StartAt        time.Time                 `json:"start_at"`
-	EndAt          time.Time                 `json:"end_at"`
-	AppliesTo      MembershipPromotionTarget `json:"applies_to"`
-	TargetTierKeys []string                  `json:"target_tier_keys,omitempty"`
-	MinOrderAmount *common.Money             `json:"min_order_amount,omitempty"`
-	IsActive       bool                      `json:"is_active"`
+	ID             string                                     `json:"id"`
+	Name           string                                     `json:"name"`
+	Description    string                                     `json:"description,omitempty"`
+	Multiplier     float64                                    `json:"multiplier"`
+	StartAt        time.Time                                  `json:"start_at"`
+	EndAt          time.Time                                  `json:"end_at"`
+	AppliesTo      membership_enums.MembershipPromotionTarget `json:"applies_to"`
+	TargetTierKeys []string                                   `json:"target_tier_keys,omitempty"`
+	MinOrderAmount *money.Money                               `json:"min_order_amount,omitempty"`
+	IsActive       bool                                       `json:"is_active"`
 
-	common.AuditFields
+	audit.AuditFields
 }
 
 // MemberCheckIn records a daily check-in for streak-based point awards.

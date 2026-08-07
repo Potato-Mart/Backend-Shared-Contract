@@ -3,8 +3,10 @@ package wallet
 import (
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pricing/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/membership"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 // CustomerWallet is the retail read-model aggregate of every value instrument
@@ -26,15 +28,15 @@ type CustomerWallet struct {
 // balance, amount held by live reservations, and amount currently available to
 // checkout. Value is the single-use face value for vouchers.
 type WalletInstrument struct {
-	Type             WalletInstrumentType `json:"type"`
-	Code             string               `json:"code"`
-	Status           string               `json:"status,omitempty"`
-	Value            *common.Money        `json:"value,omitempty"`
-	CommittedBalance *common.Money        `json:"committed_balance,omitempty"`
-	ReservedBalance  *common.Money        `json:"reserved_balance,omitempty"`
-	AvailableBalance *common.Money        `json:"available_balance,omitempty"`
-	IssuedAt         *time.Time           `json:"issued_at,omitempty"`
-	ActivatedAt      *time.Time           `json:"activated_at,omitempty"`
+	Type             wallet_enums.WalletInstrumentType `json:"type"`
+	Code             string                            `json:"code"`
+	Status           string                            `json:"status,omitempty"`
+	Value            *money.Money                      `json:"value,omitempty"`
+	CommittedBalance *money.Money                      `json:"committed_balance,omitempty"`
+	ReservedBalance  *money.Money                      `json:"reserved_balance,omitempty"`
+	AvailableBalance *money.Money                      `json:"available_balance,omitempty"`
+	IssuedAt         *time.Time                        `json:"issued_at,omitempty"`
+	ActivatedAt      *time.Time                        `json:"activated_at,omitempty"`
 	// RedeemedAt applies only to single-use instruments such as vouchers,
 	// coupons, and rewards. Re-spendable gift cards expose transaction history
 	// instead of a singular redemption timestamp.
@@ -50,9 +52,9 @@ type CustomerWalletSummary struct {
 	AvailablePoints               int                      `json:"available_points"`
 	PointDebt                     int                      `json:"point_debt"`
 	PointsPolicy                  *membership.PointsPolicy `json:"points_policy,omitempty"`
-	GiftCardCommittedBalanceTotal common.Money             `json:"gift_card_committed_balance_total"`
-	GiftCardReservedBalanceTotal  common.Money             `json:"gift_card_reserved_balance_total"`
-	GiftCardAvailableBalanceTotal common.Money             `json:"gift_card_available_balance_total"`
+	GiftCardCommittedBalanceTotal money.Money              `json:"gift_card_committed_balance_total"`
+	GiftCardReservedBalanceTotal  money.Money              `json:"gift_card_reserved_balance_total"`
+	GiftCardAvailableBalanceTotal money.Money              `json:"gift_card_available_balance_total"`
 	ActiveGiftCards               int                      `json:"active_gift_cards"`
 	ActiveVouchers                int                      `json:"active_vouchers"`
 	ActiveCoupons                 int                      `json:"active_coupons"`

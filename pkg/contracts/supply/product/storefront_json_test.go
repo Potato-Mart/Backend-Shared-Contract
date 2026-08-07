@@ -2,14 +2,21 @@ package product_test
 
 import (
 	"encoding/json"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/product"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/product"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
+
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product"
+
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestStorefrontProductJSONUsesPackageOffersAndAvailability(t *testing.T) {
@@ -17,28 +24,28 @@ func TestStorefrontProductJSONUsesPackageOffersAndAvailability(t *testing.T) {
 	discount := 20
 	option := product.ProductPackageOptionSnapshot{
 		ID: "pkg_case_12", Code: "CASE-12", ProductSKUCode: "A00001",
-		HandlingUnit: common.PackageHandlingUnitCase, UnitsPerPackage: 12,
+		HandlingUnit: packaging_enums.PackageHandlingUnitCase, UnitsPerPackage: 12,
 		EffectiveFrom: now, CapturedAt: now,
 	}
 	projection := product.StorefrontProduct{
 		SKUCode: "A00001", CategorySKUCode: "CAT-A", Name: "Product",
 		BrandRef: &product.BrandRef{
 			ID: "64c13ab08edf48a008793ca1", Slug: "happy-potato",
-			Name: []common.LocalizedName{{Language: "en", Name: "Happy Potato"}},
+			Name: []localization.LocalizedName{{Language: "en", Name: "Happy Potato"}},
 		},
 		PackageOptions: []product.ProductPackageOptionSnapshot{option},
 		BarcodeAssignments: []product.ProductBarcodeAssignmentSnapshot{
-			{ID: "barcode_1", ProductSKUCode: "A00001", PackageOptionID: "pkg_case_12", Value: "930000000001", Format: productenum.BarcodeFormatEAN13, IsPrimary: true, EffectiveFrom: now, CapturedAt: now},
+			{ID: "barcode_1", ProductSKUCode: "A00001", PackageOptionID: "pkg_case_12", Value: "930000000001", Format: product_enums.BarcodeFormatEAN13, IsPrimary: true, EffectiveFrom: now, CapturedAt: now},
 		},
 		Offers: []product.SellableOfferSnapshot{
 			{
 				ID: "offer_1", ProductSKUCode: "A00001", DepotCode: "AU-VIC-MEL-DC-01",
 				PackageOption: option, AvailablePackageCount: 2, AvailableBaseUnits: 24,
-				Condition: warehouseenum.InventoryConditionGood, Disposition: warehouseenum.InventoryDispositionStandardSellable,
+				Condition: warehouse_enums.InventoryConditionGood, Disposition: warehouse_enums.InventoryDispositionStandardSellable,
 				Revision: 4, InventoryRevision: 9,
-				PackagePrice: common.Money{AmountMinor: 800, Currency: "AUD"}, TaxAmount: common.Money{AmountMinor: 73, Currency: "AUD"},
+				PackagePrice: money.Money{AmountMinor: 800, Currency: "AUD"}, TaxAmount: money.Money{AmountMinor: 73, Currency: "AUD"},
 				ValidFrom: now, Timezone: "Etc/UTC", CapturedAt: now,
-				GeographicContext: geography.GeographicContext{Source: geography.GeographicContextSourceRetailCustomerProfile, CountryCode: "AU", ScopeRevision: 2, RuleRevision: 4, EvaluationTimezone: "Australia/Melbourne"},
+				GeographicContext: geography.GeographicContext{Source: geography_enums.GeographicContextSourceRetailCustomerProfile, CountryCode: "AU", ScopeRevision: 2, RuleRevision: 4, EvaluationTimezone: "Australia/Melbourne"},
 			},
 		},
 		Availability: &product.ProductStockSummary{
@@ -47,24 +54,24 @@ func TestStorefrontProductJSONUsesPackageOffersAndAvailability(t *testing.T) {
 			Revision:       9, Timezone: "Australia/Melbourne", AsOf: now,
 		},
 		Commercial: &product.StorefrontCommercial{
-			Price: &common.Money{AmountMinor: 800, Currency: "AUD"},
+			Price: &money.Money{AmountMinor: 800, Currency: "AUD"},
 			Package: product.ProductPackageOptionSnapshot{
 				ID: "pkg_each", Code: "EACH", ProductSKUCode: "A00001",
-				HandlingUnit: common.PackageHandlingUnitEach, UnitsPerPackage: 1,
+				HandlingUnit: packaging_enums.PackageHandlingUnitEach, UnitsPerPackage: 1,
 				EffectiveFrom: now, CapturedAt: now,
 			},
-			StockState: productenum.StorefrontStockStateInStock,
+			StockState: product_enums.StorefrontStockStateInStock,
 			Market:     "AU",
 			AsOf:       now,
 		},
-		Audience:          productenum.PriceAudienceRetail,
+		Audience:          product_enums.PriceAudienceRetail,
 		StorefrontDisplay: product.StorefrontDisplay{},
 		PromotionBadge: &product.StorefrontPromotionBadge{
 			PromotionID: "promo_1", SeriesKey: "potato-august", DiscountPercent: &discount,
 			ScheduleTimezone: "Etc/UTC",
 			GeographicContext: geography.GeographicContext{
-				Source: geography.GeographicContextSourceRetailCustomerProfile, CountryCode: "AU",
-				MatchedTargetKind: geography.GeographicTargetCountry, MatchedTargetCode: "AU",
+				Source: geography_enums.GeographicContextSourceRetailCustomerProfile, CountryCode: "AU",
+				MatchedTargetKind: geography_enums.GeographicTargetCountry, MatchedTargetCode: "AU",
 				ScopeRevision: 2, RuleRevision: 4, EvaluationTimezone: "Australia/Melbourne",
 			},
 		},
@@ -92,13 +99,13 @@ func TestStorefrontProductJSONUsesPackageOffersAndAvailability(t *testing.T) {
 		t.Fatalf("commercial package option mismatch: %s", payload)
 	}
 	commercialJSON, _ := json.Marshal(product.StorefrontCommercial{
-		Price: &common.Money{AmountMinor: 800, Currency: "AUD"},
+		Price: &money.Money{AmountMinor: 800, Currency: "AUD"},
 		Package: product.ProductPackageOptionSnapshot{
 			ID: "pkg_each", Code: "EACH", ProductSKUCode: "A00001",
-			HandlingUnit: common.PackageHandlingUnitEach, UnitsPerPackage: 1,
+			HandlingUnit: packaging_enums.PackageHandlingUnitEach, UnitsPerPackage: 1,
 			EffectiveFrom: now, CapturedAt: now,
 		},
-		StockState: productenum.StorefrontStockStateInStock, Market: "AU", AsOf: now,
+		StockState: product_enums.StorefrontStockStateInStock, Market: "AU", AsOf: now,
 	})
 	for _, forbidden := range []string{`"depot_code"`, `"lot_id"`, `"available_base_units"`, `"geographic_context"`} {
 		if strings.Contains(string(commercialJSON), forbidden) {

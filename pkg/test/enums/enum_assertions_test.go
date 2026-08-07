@@ -33,6 +33,9 @@ func assertStringEnums(t *testing.T, cases []enumCase) {
 			if tt.invalid.IsValid() {
 				t.Fatalf("%T(%q) should be invalid", tt.invalid, reflect.ValueOf(tt.invalid).String())
 			}
+			if got, want := tt.invalid.String(), reflect.ValueOf(tt.invalid).String(); got != want {
+				t.Fatalf("%T.String() = %q for invalid value, want %q", tt.invalid, got, want)
+			}
 		})
 	}
 }

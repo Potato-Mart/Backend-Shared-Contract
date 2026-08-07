@@ -2,9 +2,11 @@ package product
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+
 	"strings"
 	"testing"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
 )
 
 func TestProductSupplyAndDetailImagesJSONShape(t *testing.T) {
@@ -27,14 +29,14 @@ func TestProductSupplyAndDetailImagesJSONShape(t *testing.T) {
 		Media: Media{DetailImages: []DetailImage{
 			{
 				URL: "https://cdn.example.test/products/A0001/front.jpg",
-				AltText: []common.LocalizedText{
+				AltText: []localization.LocalizedText{
 					{Language: "en", Text: "Front of package"},
 					{Language: "zh-TW", Text: "包裝正面"},
 				},
 			},
 			{
 				URL: "https://cdn.example.test/products/A0001/back.jpg",
-				Caption: []common.LocalizedText{
+				Caption: []localization.LocalizedText{
 					{Language: "en", Text: "Cooking instructions"},
 				},
 			},

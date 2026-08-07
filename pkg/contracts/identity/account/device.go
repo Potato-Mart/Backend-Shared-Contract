@@ -1,10 +1,14 @@
 package account
 
 import (
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/security"
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/device"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/identity/identity_enums"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/security"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/identity/account/account_enums"
 )
 
 // UserDevice is a non-secret projection of a browser, mobile app, or
@@ -12,37 +16,37 @@ import (
 // fingerprinting and trust decisions; this contract lets admin and security
 // surfaces show every known device and the IP addresses seen for it.
 type UserDevice struct {
-	ID                 string                     `json:"id"`
-	UserID             string                     `json:"user_id"`
-	Portal             common.Portal              `json:"portal,omitempty"`
-	DeviceName         string                     `json:"device_name,omitempty"`
-	DeviceType         DeviceType                 `json:"device_type,omitempty"`
-	PreferredLanguage  UserPreferredLanguage      `json:"preferred_language,omitempty"`
-	IPHistory          []DeviceIP                 `json:"ip_history,omitempty"`
-	Trusted            bool                       `json:"trusted"`
-	RiskLevel          security.SecurityRiskLevel `json:"risk_level,omitempty"`
-	TrustReason        string                     `json:"trust_reason,omitempty"`
-	FirstSeenAt        time.Time                  `json:"first_seen_at"`
-	LastSeenAt         time.Time                  `json:"last_seen_at"`
-	LastLoginAt        *time.Time                 `json:"last_login_at,omitempty"`
-	LastLoginIP        string                     `json:"last_login_ip,omitempty"`
-	LastRiskReviewedAt *time.Time                 `json:"last_risk_reviewed_at,omitempty"`
-	RevokedAt          *time.Time                 `json:"revoked_at,omitempty"`
-	RevokedReason      string                     `json:"revoked_reason,omitempty"`
-	History            []security.HistoryEntry    `json:"history,omitempty"`
-	common.DeviceRecord
+	ID                 string                              `json:"id"`
+	UserID             string                              `json:"user_id"`
+	Portal             identity_enums.Portal               `json:"portal,omitempty"`
+	DeviceName         string                              `json:"device_name,omitempty"`
+	DeviceType         account_enums.DeviceType            `json:"device_type,omitempty"`
+	PreferredLanguage  account_enums.UserPreferredLanguage `json:"preferred_language,omitempty"`
+	IPHistory          []DeviceIP                          `json:"ip_history,omitempty"`
+	Trusted            bool                                `json:"trusted"`
+	RiskLevel          security_enums.SecurityRiskLevel    `json:"risk_level,omitempty"`
+	TrustReason        string                              `json:"trust_reason,omitempty"`
+	FirstSeenAt        time.Time                           `json:"first_seen_at"`
+	LastSeenAt         time.Time                           `json:"last_seen_at"`
+	LastLoginAt        *time.Time                          `json:"last_login_at,omitempty"`
+	LastLoginIP        string                              `json:"last_login_ip,omitempty"`
+	LastRiskReviewedAt *time.Time                          `json:"last_risk_reviewed_at,omitempty"`
+	RevokedAt          *time.Time                          `json:"revoked_at,omitempty"`
+	RevokedReason      string                              `json:"revoked_reason,omitempty"`
+	History            []security.HistoryEntry             `json:"history,omitempty"`
+	device.DeviceRecord
 }
 
 // UserDeviceSeenEvent is emitted when a known user authenticates or makes an
 // identified request from a device/IP pair. Consumers can use it to maintain
 // device inventories, IP history, and security alerts.
 type UserDeviceSeenEvent struct {
-	UserID    string        `json:"user_id"`
-	SessionID string        `json:"session_id,omitempty"`
-	Portal    common.Portal `json:"portal,omitempty"`
-	DeviceKey string        `json:"device_key"`
-	IPAddress string        `json:"ip_address,omitempty"`
-	UserAgent string        `json:"user_agent,omitempty"`
-	SeenAt    time.Time     `json:"seen_at"`
-	RequestID string        `json:"request_id,omitempty"`
+	UserID    string                `json:"user_id"`
+	SessionID string                `json:"session_id,omitempty"`
+	Portal    identity_enums.Portal `json:"portal,omitempty"`
+	DeviceKey string                `json:"device_key"`
+	IPAddress string                `json:"ip_address,omitempty"`
+	UserAgent string                `json:"user_agent,omitempty"`
+	SeenAt    time.Time             `json:"seen_at"`
+	RequestID string                `json:"request_id,omitempty"`
 }

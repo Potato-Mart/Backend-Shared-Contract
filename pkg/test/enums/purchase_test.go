@@ -3,11 +3,11 @@ package enums_test
 import (
 	"testing"
 
-	purchaseenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/purchase"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/purchase/purchase_enums"
 )
 
 func TestPurchaseEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
-		{name: "purchaseenum.PurchaseOrderStatus", valid: []stringEnum{purchaseenum.PurchaseOrderStatusDraft, purchaseenum.PurchaseOrderStatusSubmitted, purchaseenum.PurchaseOrderStatusConfirmed, purchaseenum.PurchaseOrderStatusPartiallyReceived, purchaseenum.PurchaseOrderStatusReceived, purchaseenum.PurchaseOrderStatusCancelled, purchaseenum.PurchaseOrderStatusRefunded}, invalid: purchaseenum.PurchaseOrderStatus("__invalid__")},
+		{name: "purchaseenum.PurchaseOrderStatus", valid: []stringEnum{purchase_enums.PurchaseOrderStatusDraft, purchase_enums.PurchaseOrderStatusSubmitted, purchase_enums.PurchaseOrderStatusConfirmed, purchase_enums.PurchaseOrderStatusPartiallyReceived, purchase_enums.PurchaseOrderStatusReceived, purchase_enums.PurchaseOrderStatusCancelled, purchase_enums.PurchaseOrderStatusRefunded}, invalid: purchase_enums.PurchaseOrderStatus("__invalid__")},
 	})
 }

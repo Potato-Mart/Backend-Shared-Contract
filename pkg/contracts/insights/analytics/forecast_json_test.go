@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/commerce/commerce_enums"
 )
 
 func TestSKUDemandForecastJSONUsesQualifiedAvailabilitySnapshot(t *testing.T) {
@@ -14,7 +14,7 @@ func TestSKUDemandForecastJSONUsesQualifiedAvailabilitySnapshot(t *testing.T) {
 	forecast := SKUDemandForecast{
 		ProductSKUCode:       "A00001",
 		DepotCode:            "AU-VIC-MEL-DC-01",
-		Channel:              common.OrderTypeOnline,
+		Channel:              commerce_enums.OrderTypeOnline,
 		Timezone:             "Australia/Melbourne",
 		ComputedAt:           computedAt,
 		HistoryDays:          30,

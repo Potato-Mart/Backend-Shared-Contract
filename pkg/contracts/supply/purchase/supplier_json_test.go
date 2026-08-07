@@ -2,25 +2,28 @@ package purchase_test
 
 import (
 	"encoding/json"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/purchase"
+
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+
 	"strings"
 	"testing"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/purchase"
 )
 
 func TestSupplierOrganisationDetailJSONShape(t *testing.T) {
 	supplier := purchase.Supplier{
-		OrganisationDetail: common.OrganisationDetail{
-			PartyRef: common.PartyRef{
+		OrganisationDetail: party.OrganisationDetail{
+			PartyRef: party.PartyRef{
 				ID:   "supplier_123",
 				Name: "Supplier Co",
 			},
 			LegalName: "Supplier Legal Pty Ltd",
 			ABN:       "10987654321",
 			Website:   "https://supplier.example.com",
-			RegisteredAddress: &common.ContactAddress{
-				Address: &common.Address{
+			RegisteredAddress: &party.ContactAddress{
+				Address: &geography.Address{
 					Label:              "HQ",
 					Line1:              "2 Supply Road",
 					Locality:           "Melbourne",

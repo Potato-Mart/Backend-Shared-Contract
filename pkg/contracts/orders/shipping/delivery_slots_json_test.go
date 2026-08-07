@@ -2,11 +2,13 @@ package shipping_test
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/orders/shipping"
+
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/shipping"
 )
 
 func TestDeliveryScheduleJSONShape(t *testing.T) {
@@ -21,8 +23,8 @@ func TestDeliveryScheduleJSONShape(t *testing.T) {
 			CountryCode: "AU", AdministrativeAreaCode: "AU-NSW", PostalCode: "2000", Locality: "Sydney",
 			ZoneID: "zone_au_nsw_sydney", DepotRegionCode: "AU-NSW-SYD",
 			DepotCode: "AU-NSW-SYD-DC-01", DepotName: "Sydney",
-			ShippingFee:           common.Money{AmountMinor: 1000, Currency: "AUD"},
-			FreeShippingThreshold: common.Money{AmountMinor: 10000, Currency: "AUD"},
+			ShippingFee:           money.Money{AmountMinor: 1000, Currency: "AUD"},
+			FreeShippingThreshold: money.Money{AmountMinor: 10000, Currency: "AUD"},
 		},
 		DateGroups: []shipping.DeliveryDateGroup{{
 			Date: "2026-08-01",

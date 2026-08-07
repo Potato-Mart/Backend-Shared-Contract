@@ -2,20 +2,25 @@ package promotion
 
 import (
 	"encoding/json"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 func TestCouponCarriesRequiredGeographicScope(t *testing.T) {
 	payload, err := json.Marshal(Coupon{
 		ID: "coupon_1", Code: "NSW10",
-		AppliesTo:    CouponAppliesToAll,
+		AppliesTo:    promotion_enums.CouponAppliesToAll,
 		ActiveWindow: ActiveWindow{ScheduleTimezone: "Australia/Sydney", IsActive: true},
 		GeographicScope: geography.GeographicScope{
-			Mode:    geography.GeographicScopeModeTargeted,
-			Targets: []geography.GeographicTarget{{Kind: geography.GeographicTargetSubdivision, Code: "AU-NSW"}},
+			Mode:    geography_enums.GeographicScopeModeTargeted,
+			Targets: []geography.GeographicTarget{{Kind: geography_enums.GeographicTargetSubdivision, Code: "AU-NSW"}},
 		},
 	})
 	if err != nil {
@@ -34,20 +39,20 @@ func TestCouponCarriesRequiredGeographicScope(t *testing.T) {
 func TestEffectivePromotionAndCouponUsageFreezeGeographicContext(t *testing.T) {
 	now := time.Date(2026, 8, 1, 0, 0, 0, 0, time.UTC)
 	context := geography.GeographicContext{
-		Source:      geography.GeographicContextSourceWholesaleOrganisationProfile,
+		Source:      geography_enums.GeographicContextSourceWholesaleOrganisationProfile,
 		CountryCode: "AU", SubdivisionCode: "AU-VIC", DepotRegionCode: "AU-VIC-MEL",
-		MatchedTargetKind: geography.GeographicTargetSubdivision, MatchedTargetCode: "AU-VIC",
+		MatchedTargetKind: geography_enums.GeographicTargetSubdivision, MatchedTargetCode: "AU-VIC",
 		ScopeRevision: 5, RuleRevision: 8, EvaluationTimezone: "Australia/Melbourne",
 	}
 	values := []any{
 		EffectivePromotion{
-			PromotionID: "prm_1", SeriesKey: "series_1", Class: PromotionClassNormal,
-			TargetScope: DiscountScopeProduct, ScheduleTimezone: "Australia/Melbourne",
+			PromotionID: "prm_1", SeriesKey: "series_1", Class: promotion_enums.PromotionClassNormal,
+			TargetScope: promotion_enums.DiscountScopeProduct, ScheduleTimezone: "Australia/Melbourne",
 			GeographicContext: context,
 		},
 		CouponUsageRecord{
 			ID: "usage_1", CouponCode: "VIC10", RedeemedOrderNumber: "order_1",
-			DiscountAmount:    common.Money{AmountMinor: 1000, Currency: "AUD"},
+			DiscountAmount:    money.Money{AmountMinor: 1000, Currency: "AUD"},
 			GeographicContext: context, RedeemedAt: now, CreatedAt: now,
 		},
 	}

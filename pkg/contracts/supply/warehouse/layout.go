@@ -3,86 +3,90 @@ package warehouse
 import (
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geometry"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // WarehouseLayout is the root 3D scene description for a depot.
 type WarehouseLayout struct {
-	ID              string         `json:"id"`
-	DepotCode       string         `json:"depot_code"`
-	Name            string         `json:"name,omitempty"`
-	Version         int            `json:"version"`
-	Origin          common.Vector3 `json:"origin"`
-	Size            common.Size3D  `json:"size"`
-	UpAxis          string         `json:"up_axis,omitempty"`    // "Y" (default for Three.js) or "Z"
-	UnitScale       float64        `json:"unit_scale,omitempty"` // scene units per metre, default 1.0
-	BackgroundColor string         `json:"background_color,omitempty"`
-	FloorTextureURL string         `json:"floor_texture_url,omitempty"`
-	GridSizeMM      int64          `json:"grid_size_mm,omitempty"`
-	PrimaryModel    *ModelAsset    `json:"primary_model,omitempty"` // optional GLB shell of the floor plan
-	Walls           []LayoutWall   `json:"walls,omitempty"`
-	Cameras         []CameraPreset `json:"cameras,omitempty"`
-	Note            string         `json:"note,omitempty"`
-	IsPublished     bool           `json:"is_published"`
-	PublishedAt     *time.Time     `json:"published_at,omitempty"`
+	ID              string           `json:"id"`
+	DepotCode       string           `json:"depot_code"`
+	Name            string           `json:"name,omitempty"`
+	Version         int              `json:"version"`
+	Origin          geometry.Vector3 `json:"origin"`
+	Size            geometry.Size3D  `json:"size"`
+	UpAxis          string           `json:"up_axis,omitempty"`    // "Y" (default for Three.js) or "Z"
+	UnitScale       float64          `json:"unit_scale,omitempty"` // scene units per metre, default 1.0
+	BackgroundColor string           `json:"background_color,omitempty"`
+	FloorTextureURL string           `json:"floor_texture_url,omitempty"`
+	GridSizeMM      int64            `json:"grid_size_mm,omitempty"`
+	PrimaryModel    *ModelAsset      `json:"primary_model,omitempty"` // optional GLB shell of the floor plan
+	Walls           []LayoutWall     `json:"walls,omitempty"`
+	Cameras         []CameraPreset   `json:"cameras,omitempty"`
+	Note            string           `json:"note,omitempty"`
+	IsPublished     bool             `json:"is_published"`
+	PublishedAt     *time.Time       `json:"published_at,omitempty"`
 
-	common.AuditFields
+	audit.AuditFields
 }
 
 // LayoutNode is a single element in the warehouse 3D hierarchy:
 // Zone > Aisle > Rack > Shelf > Bin.
 type LayoutNode struct {
-	ID            string           `json:"id"`
-	DepotCode     string           `json:"depot_code"`
-	LayoutVersion int              `json:"layout_version"`
-	ParentCode    string           `json:"parent_code,omitempty"`
-	PathCodes     []string         `json:"path_codes,omitempty"` // ancestor codes from root to immediate parent
-	Type          LayoutNodeType   `json:"type"`
-	Code          string           `json:"code"` // human code, e.g. "A-12-3-2"
-	Name          string           `json:"name,omitempty"`
-	Storage       StorageType      `json:"storage,omitempty"`
-	Shape         ShapeType        `json:"shape,omitempty"`
-	Transform     common.Transform `json:"transform"`
-	Size          common.Size3D    `json:"size"`
-	Color         string           `json:"color,omitempty"`         // hex like "#3b82f6"
-	Model         *ModelAsset      `json:"model,omitempty"`         // optional model override for this node
-	LocationCode  string           `json:"location_code,omitempty"` // links a BIN node to a StockLocation
-	IsActive      bool             `json:"is_active"`
+	ID            string                         `json:"id"`
+	DepotCode     string                         `json:"depot_code"`
+	LayoutVersion int                            `json:"layout_version"`
+	ParentCode    string                         `json:"parent_code,omitempty"`
+	PathCodes     []string                       `json:"path_codes,omitempty"` // ancestor codes from root to immediate parent
+	Type          warehouse_enums.LayoutNodeType `json:"type"`
+	Code          string                         `json:"code"` // human code, e.g. "A-12-3-2"
+	Name          string                         `json:"name,omitempty"`
+	Storage       warehouse_enums.StorageType    `json:"storage,omitempty"`
+	Shape         warehouse_enums.ShapeType      `json:"shape,omitempty"`
+	Transform     geometry.Transform             `json:"transform"`
+	Size          geometry.Size3D                `json:"size"`
+	Color         string                         `json:"color,omitempty"`         // hex like "#3b82f6"
+	Model         *ModelAsset                    `json:"model,omitempty"`         // optional model override for this node
+	LocationCode  string                         `json:"location_code,omitempty"` // links a BIN node to a StockLocation
+	IsActive      bool                           `json:"is_active"`
 
-	common.AuditFields
+	audit.AuditFields
 }
 
 // ModelAsset is the JSON reference and rendering metadata for a 3D model file.
 type ModelAsset struct {
-	ID        string              `json:"id,omitempty"`
-	URL       string              `json:"url"`
-	Format    ModelFormat         `json:"format,omitempty"`
-	SizeBytes int64               `json:"size_bytes,omitempty"`
-	SHA256    string              `json:"sha256,omitempty"`
-	Anchor    *common.Vector3     `json:"anchor,omitempty"` // offset to apply when placing the model
-	Bounds    *common.BoundingBox `json:"bounds,omitempty"`
-	Metadata  common.Metadata     `json:"metadata,omitempty"`
+	ID        string                      `json:"id,omitempty"`
+	URL       string                      `json:"url"`
+	Format    warehouse_enums.ModelFormat `json:"format,omitempty"`
+	SizeBytes int64                       `json:"size_bytes,omitempty"`
+	SHA256    string                      `json:"sha256,omitempty"`
+	Anchor    *geometry.Vector3           `json:"anchor,omitempty"` // offset to apply when placing the model
+	Bounds    *geometry.BoundingBox       `json:"bounds,omitempty"`
+	Metadata  metadata.Metadata           `json:"metadata,omitempty"`
 }
 
 // CameraPreset is a saved viewpoint a user can jump to in the 3D viewer.
 type CameraPreset struct {
-	ID         string           `json:"id"`
-	Name       string           `json:"name"`
-	Position   common.Vector3   `json:"position"`
-	Target     common.Vector3   `json:"target"`
-	FOV        float64          `json:"fov,omitempty"`
-	OrthoZoom  float64          `json:"ortho_zoom,omitempty"`
-	Projection CameraProjection `json:"projection,omitempty"`
-	IsDefault  bool             `json:"is_default,omitempty"`
+	ID         string                           `json:"id"`
+	Name       string                           `json:"name"`
+	Position   geometry.Vector3                 `json:"position"`
+	Target     geometry.Vector3                 `json:"target"`
+	FOV        float64                          `json:"fov,omitempty"`
+	OrthoZoom  float64                          `json:"ortho_zoom,omitempty"`
+	Projection warehouse_enums.CameraProjection `json:"projection,omitempty"`
+	IsDefault  bool                             `json:"is_default,omitempty"`
 }
 
 // LayoutWall is a vertical wall segment used when a depot does not have
 // a baked-in PrimaryModel and the renderer should draw walls from data.
 type LayoutWall struct {
-	ID          string         `json:"id,omitempty"`
-	Start       common.Vector3 `json:"start"`
-	End         common.Vector3 `json:"end"`
-	HeightMM    int64          `json:"height_mm"`
-	ThicknessMM int64          `json:"thickness_mm,omitempty"`
-	Color       string         `json:"color,omitempty"`
+	ID          string           `json:"id,omitempty"`
+	Start       geometry.Vector3 `json:"start"`
+	End         geometry.Vector3 `json:"end"`
+	HeightMM    int64            `json:"height_mm"`
+	ThicknessMM int64            `json:"thickness_mm,omitempty"`
+	Color       string           `json:"color,omitempty"`
 }

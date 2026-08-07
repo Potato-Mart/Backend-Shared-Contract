@@ -2,9 +2,14 @@ package promotion
 
 import (
 	"encoding/json"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+
 	"testing"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 func TestPromotionCategoryTagTargetNameIsLocalized(t *testing.T) {
@@ -12,13 +17,13 @@ func TestPromotionCategoryTagTargetNameIsLocalized(t *testing.T) {
 		ID:                    "prm_1",
 		SeriesKey:             "series_hotpot",
 		Name:                  "Hotpot tag discount",
-		Type:                  PromotionTypeAutoDiscount,
-		Class:                 PromotionClassNormal,
-		TargetScope:           DiscountScopeCategoryTag,
+		Type:                  promotion_enums.PromotionTypeAutoDiscount,
+		Class:                 promotion_enums.PromotionClassNormal,
+		TargetScope:           promotion_enums.DiscountScopeCategoryTag,
 		TargetCategoryTagID:   "tag_hotpot",
-		TargetCategoryTagName: []common.LocalizedName{{Language: "en", Name: "Hotpot"}},
+		TargetCategoryTagName: []localization.LocalizedName{{Language: "en", Name: "Hotpot"}},
 		ActiveWindow:          ActiveWindow{ScheduleTimezone: "Australia/Sydney"},
-		GeographicScope:       geography.GeographicScope{Mode: geography.GeographicScopeModeTargeted, Targets: []geography.GeographicTarget{{Kind: geography.GeographicTargetCountry, Code: "AU"}}},
+		GeographicScope:       geography.GeographicScope{Mode: geography_enums.GeographicScopeModeTargeted, Targets: []geography.GeographicTarget{{Kind: geography_enums.GeographicTargetCountry, Code: "AU"}}},
 	})
 	if err != nil {
 		t.Fatalf("marshal promotion: %v", err)
@@ -43,13 +48,13 @@ func TestPromotionReceiptMessagesUseExplicitCustomerFacingShape(t *testing.T) {
 		ID:              "prm_receipt",
 		SeriesKey:       "series_receipt",
 		Name:            "Internal campaign name",
-		Type:            PromotionTypeAutoDiscount,
-		Class:           PromotionClassNormal,
-		TargetScope:     DiscountScopeAll,
+		Type:            promotion_enums.PromotionTypeAutoDiscount,
+		Class:           promotion_enums.PromotionClassNormal,
+		TargetScope:     promotion_enums.DiscountScopeAll,
 		ReceiptEnabled:  true,
-		ReceiptMessages: []common.LocalizedName{{Language: "en", Name: "Save 10% this weekend"}},
+		ReceiptMessages: []localization.LocalizedName{{Language: "en", Name: "Save 10% this weekend"}},
 		ActiveWindow:    ActiveWindow{ScheduleTimezone: "Etc/UTC"},
-		GeographicScope: geography.GeographicScope{Mode: geography.GeographicScopeModeGlobal},
+		GeographicScope: geography.GeographicScope{Mode: geography_enums.GeographicScopeModeGlobal},
 	})
 	if err != nil {
 		t.Fatalf("marshal promotion: %v", err)

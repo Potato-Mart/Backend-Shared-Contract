@@ -2,20 +2,25 @@ package wholesale_test
 
 import (
 	"encoding/json"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/customers/wholesale"
-	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/customers/wholesale"
+
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/customers/wholesale"
+
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/customers/wholesale/wholesale_enums"
 )
 
 func TestWholesaleOrganisationJSONShape(t *testing.T) {
 	approvedAt := time.Date(2026, 6, 18, 5, 0, 0, 0, time.UTC)
 	organisation := wholesale.WholesaleOrganisation{
-		OrganisationDetail: common.OrganisationDetail{
-			PartyRef: common.PartyRef{
+		OrganisationDetail: party.OrganisationDetail{
+			PartyRef: party.PartyRef{
 				ID:    "org_123",
 				Name:  "Potato Buyer Co",
 				Email: "accounts@example.com",
@@ -23,8 +28,8 @@ func TestWholesaleOrganisationJSONShape(t *testing.T) {
 			},
 			LegalName: "Potato Buyer Pty Ltd",
 			ABN:       "12345678901",
-			RegisteredAddress: &common.ContactAddress{
-				Address: &common.Address{
+			RegisteredAddress: &party.ContactAddress{
+				Address: &geography.Address{
 					Label:              "HQ",
 					Line1:              "1 Market Street",
 					Locality:           "Sydney",
@@ -39,8 +44,8 @@ func TestWholesaleOrganisationJSONShape(t *testing.T) {
 		PrimaryAuthIdentityID:       "auth_123",
 		AuthIdentityIDs:             []string{"auth_123"},
 		PrimaryOrganisationAccessID: "access_123",
-		Status:                      wholesaleenum.WholesaleOrganisationStatusApproved,
-		Approval:                    &common.LifecycleAction{By: "admin_1", At: &approvedAt, Reason: "verified"},
+		Status:                      wholesale_enums.WholesaleOrganisationStatusApproved,
+		Approval:                    &audit.LifecycleAction{By: "admin_1", At: &approvedAt, Reason: "verified"},
 	}
 
 	payload, err := json.Marshal(organisation)

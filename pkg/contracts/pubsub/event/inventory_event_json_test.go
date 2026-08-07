@@ -2,18 +2,22 @@ package event_test
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pubsub/event"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
+
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pubsub/event"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse"
+
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
-func TestV23InventoryEventJSONShapes(t *testing.T) {
+func TestV24InventoryEventJSONShapes(t *testing.T) {
 	now := time.Date(2026, 8, 4, 7, 8, 9, 0, time.UTC)
-	caseComposition := composition(common.PackageHandlingUnitCase, "pkg_case_12", 1, 12)
-	eachComposition := composition(common.PackageHandlingUnitEach, "pkg_each", 12, 1)
+	caseComposition := composition(packaging_enums.PackageHandlingUnitCase, "pkg_case_12", 1, 12)
+	eachComposition := composition(packaging_enums.PackageHandlingUnitEach, "pkg_each", 12, 1)
 	cause := warehouse.InventoryCauseRef{Type: "SALE_COMMIT", ID: "movement_1"}
 	location := warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01-03"}
 
@@ -35,8 +39,8 @@ func TestV23InventoryEventJSONShapes(t *testing.T) {
 			name: "bucket changed",
 			value: event.InventoryStockBucketChangedEvent{
 				BucketID: "bucket_case", Location: location, ProductSKUCode: "A00001", LotID: "lot_1",
-				PackageOptionID: "pkg_case_12", HandlingUnit: common.PackageHandlingUnitCase,
-				Condition: warehouseenum.InventoryConditionGood, Disposition: warehouseenum.InventoryDispositionStandardSellable,
+				PackageOptionID: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase,
+				Condition: warehouse_enums.InventoryConditionGood, Disposition: warehouse_enums.InventoryDispositionStandardSellable,
 				OnHandBeforeBaseUnits: 12, OnHandAfterBaseUnits: 0, AvailableBeforeBaseUnits: 12,
 				AvailableAfterBaseUnits: 0, Cause: cause, Revision: 3, OccurredAt: now,
 			},
@@ -57,10 +61,10 @@ func TestV23InventoryEventJSONShapes(t *testing.T) {
 			name: "quality assessed",
 			value: event.InventoryQualityAssessedEvent{
 				QualityAssessmentID: "assessment_1", ProductSKUCode: "A00001", DepotCode: location.DepotCode, BucketID: "bucket_each",
-				AssessedComposition: eachComposition, PreviousCondition: warehouseenum.InventoryConditionGood,
-				ResultCondition:     warehouseenum.InventoryConditionPackagingDamagedMinor,
-				PreviousDisposition: warehouseenum.InventoryDispositionStandardSellable,
-				ResultDisposition:   warehouseenum.InventoryDispositionReducedSellable,
+				AssessedComposition: eachComposition, PreviousCondition: warehouse_enums.InventoryConditionGood,
+				ResultCondition:     warehouse_enums.InventoryConditionPackagingDamagedMinor,
+				PreviousDisposition: warehouse_enums.InventoryDispositionStandardSellable,
+				ResultDisposition:   warehouse_enums.InventoryDispositionReducedSellable,
 				MovementIDs:         []string{"movement_quality"}, Revision: 2, OccurredAt: now,
 			},
 			required: []string{"quality_assessment_id", "depot_code", "previous_condition", "result_disposition", "revision"},
@@ -69,7 +73,7 @@ func TestV23InventoryEventJSONShapes(t *testing.T) {
 			name: "reservation changed",
 			value: event.InventoryReservationChangedEvent{
 				ReservationID: "reservation_1", ProductSKUCode: "A00001", DepotCode: location.DepotCode,
-				PreviousStatus: warehouseenum.StockReservationStatusReserved, Status: warehouseenum.StockReservationStatusStaged,
+				PreviousStatus: warehouse_enums.StockReservationStatusReserved, Status: warehouse_enums.StockReservationStatusStaged,
 				RequestedComposition: caseComposition, ReservedComposition: caseComposition, Revision: 4, OccurredAt: now,
 			},
 			required: []string{"reservation_id", "previous_status", "status", "requested_composition", "revision"},
@@ -98,8 +102,8 @@ func TestV23InventoryEventJSONShapes(t *testing.T) {
 			name: "date mark threshold",
 			value: event.InventoryDateMarkThresholdEvent{
 				LotID: "lot_1", ProductSKUCode: "A00001", DepotCode: location.DepotCode,
-				DateMark:  warehouse.InventoryDateMark{Kind: warehouseenum.InventoryDateMarkBestBefore, DateMarkAt: now, Timezone: "Australia/Melbourne"},
-				Threshold: warehouseenum.InventoryDateMarkThresholdApproaching, ThresholdAt: now, LotRevision: 3, OccurredAt: now,
+				DateMark:  warehouse.InventoryDateMark{Kind: warehouse_enums.InventoryDateMarkBestBefore, DateMarkAt: now, Timezone: "Australia/Melbourne"},
+				Threshold: warehouse_enums.InventoryDateMarkThresholdApproaching, ThresholdAt: now, LotRevision: 3, OccurredAt: now,
 			},
 			required: []string{"date_mark", "threshold", "threshold_at", "lot_revision"},
 		},
@@ -129,10 +133,10 @@ func TestV23InventoryEventJSONShapes(t *testing.T) {
 	}
 }
 
-func composition(unit common.PackageHandlingUnit, optionID string, count, unitsPerPackage int64) common.PackageCompositionSnapshot {
-	return common.PackageCompositionSnapshot{
+func composition(unit packaging_enums.PackageHandlingUnit, optionID string, count, unitsPerPackage int64) packaging.PackageCompositionSnapshot {
+	return packaging.PackageCompositionSnapshot{
 		TotalBaseUnits: count * unitsPerPackage,
-		Components: []common.PackageComponentSnapshot{{
+		Components: []packaging.PackageComponentSnapshot{{
 			PackageOptionID: optionID,
 			HandlingUnit:    unit,
 			PackageCount:    count,

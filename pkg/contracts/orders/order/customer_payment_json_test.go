@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/orders/order"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pricing/membership"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/membership/membership_enums"
 )
 
 func TestCustomerPaymentSummaryPointAwardAndDebtRoundTrip(t *testing.T) {
@@ -16,7 +16,7 @@ func TestCustomerPaymentSummaryPointAwardAndDebtRoundTrip(t *testing.T) {
 	remainingDebt := 3
 	summary := sales.CustomerPaymentSummary{
 		OrderNumber:         "MAMA260730ABC123",
-		PointsAwardStatus:   membershipenum.PointAwardStatusAwarded,
+		PointsAwardStatus:   membership_enums.PointAwardStatusAwarded,
 		PointsEarned:        &gross,
 		PointsAppliedToDebt: &debtRepaid,
 		PointsNetCredited:   &netCredit,
@@ -43,7 +43,7 @@ func TestCustomerPaymentSummaryPointAwardAndDebtRoundTrip(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal customer payment summary: %v", err)
 	}
-	if decoded.PointsAwardStatus != membershipenum.PointAwardStatusAwarded ||
+	if decoded.PointsAwardStatus != membership_enums.PointAwardStatusAwarded ||
 		decoded.PointsEarned == nil || *decoded.PointsEarned != gross ||
 		decoded.PointsAppliedToDebt == nil || *decoded.PointsAppliedToDebt != debtRepaid ||
 		decoded.PointsNetCredited == nil || *decoded.PointsNetCredited != netCredit ||
@@ -53,12 +53,12 @@ func TestCustomerPaymentSummaryPointAwardAndDebtRoundTrip(t *testing.T) {
 }
 
 func TestCustomerPaymentSummaryPointAwardStatusesAndKnownZero(t *testing.T) {
-	statuses := []membershipenum.PointAwardStatus{
-		membershipenum.PointAwardStatusIneligible,
-		membershipenum.PointAwardStatusDisabled,
-		membershipenum.PointAwardStatusPending,
-		membershipenum.PointAwardStatusAwarded,
-		membershipenum.PointAwardStatusFailed,
+	statuses := []membership_enums.PointAwardStatus{
+		membership_enums.PointAwardStatusIneligible,
+		membership_enums.PointAwardStatusDisabled,
+		membership_enums.PointAwardStatusPending,
+		membership_enums.PointAwardStatusAwarded,
+		membership_enums.PointAwardStatusFailed,
 	}
 	zero := 0
 	for _, status := range statuses {

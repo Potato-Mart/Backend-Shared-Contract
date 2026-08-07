@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/review"
-	reviewenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/review"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/review"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/review/review_enums"
 )
 
 func TestRatingSummaryJSONHasFiveOrderedBuckets(t *testing.T) {
@@ -89,8 +89,8 @@ func TestProductReviewProjectionsKeepIdentityAndModerationSeparated(t *testing.T
 		OriginalBody:     "Original body",
 		Locale:           public.Locale,
 		VerifiedPurchase: public.VerifiedPurchase,
-		ModerationStatus: reviewenum.ReviewModerationStatusRejected,
-		RejectionReason:  reviewenum.ReviewRejectionReasonOffTopic,
+		ModerationStatus: review_enums.ReviewModerationStatusRejected,
+		RejectionReason:  review_enums.ReviewRejectionReasonOffTopic,
 		CreatedAt:        public.CreatedAt,
 		UpdatedAt:        public.UpdatedAt,
 	}
@@ -139,7 +139,7 @@ func TestProductReviewProjectionsKeepIdentityAndModerationSeparated(t *testing.T
 
 func TestOptionalReviewFieldsAreOmitted(t *testing.T) {
 	payload := marshalReviewJSON(t, review.MyProductReview{
-		ModerationStatus: reviewenum.ReviewModerationStatusNotRequired,
+		ModerationStatus: review_enums.ReviewModerationStatusNotRequired,
 	})
 	assertReviewJSONOmits(t, payload,
 		"title", "body", "locale", "original_title", "original_body", "rejection_reason")

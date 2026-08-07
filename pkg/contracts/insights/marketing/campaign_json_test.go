@@ -2,20 +2,25 @@ package marketing_test
 
 import (
 	"encoding/json"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/insights/marketing"
-	marketingenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/insights/marketing"
+
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/insights/marketing"
+
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/insights/marketing/marketing_enums"
 )
 
 func TestMarketingCampaignIncludesGeographicScopeAndScheduleTimezone(t *testing.T) {
 	value := marketing.MarketingCampaign{
 		ID: "campaign_1", Name: "National launch",
-		Channel:          marketingenum.MarketingChannelEmail,
-		Status:           marketingenum.MarketingCampaignStatusDraft,
-		GeographicScope:  geography.GeographicScope{Mode: geography.GeographicScopeModeGlobal},
+		Channel:          marketing_enums.MarketingChannelEmail,
+		Status:           marketing_enums.MarketingCampaignStatusDraft,
+		GeographicScope:  geography.GeographicScope{Mode: geography_enums.GeographicScopeModeGlobal},
 		ScheduleTimezone: "Etc/UTC",
 	}
 	payload, err := json.Marshal(value)
@@ -37,13 +42,13 @@ func TestMarketingCampaignRecipientJSONGroupsContactChannels(t *testing.T) {
 		ID:             "recipient_1",
 		CampaignID:     "campaign_1",
 		CustomerNumber: "customer_1",
-		Contacts: common.ContactChannels{
+		Contacts: party.ContactChannels{
 			Email:           "buyer@example.com",
 			Phone:           "+61000000000",
 			ExternalHandles: map[string]string{"line_id": "line_1"},
 		},
 		CustomerName: "Retail Customer",
-		Status:       marketingenum.MarketingRecipientStatusPending,
+		Status:       marketing_enums.MarketingRecipientStatusPending,
 		CreatedAt:    time.Date(2026, 6, 18, 6, 30, 0, 0, time.UTC),
 	}
 

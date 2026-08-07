@@ -3,7 +3,8 @@ package wholesale
 import (
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/customers/wholesale/wholesale_enums"
 )
 
 type GroupOrderManagerApplicantSnapshot struct {
@@ -15,19 +16,19 @@ type GroupOrderManagerApplicantSnapshot struct {
 }
 
 type GroupOrderManagerApplication struct {
-	ID                        string                             `json:"id,omitempty"`
-	ApplicationNumber         string                             `json:"application_number"`
-	Applicant                 GroupOrderManagerApplicantSnapshot `json:"applicant"`
-	ProposedGroupName         string                             `json:"proposed_group_name"`
-	ApplicantNote             string                             `json:"applicant_note,omitempty"`
-	Status                    GroupOrderManagerApplicationStatus `json:"status"`
-	WholesaleAccountID        string                             `json:"wholesale_account_id,omitempty"`
-	WholesaleOrganisationCode string                             `json:"wholesale_organisation_code,omitempty"`
-	OrganisationAccessID      string                             `json:"organisation_access_id,omitempty"`
-	SubmittedAt               time.Time                          `json:"submitted_at"`
-	ReviewedAt                *time.Time                         `json:"reviewed_at,omitempty"`
-	ReviewedBy                string                             `json:"reviewed_by,omitempty"`
-	DecisionReason            string                             `json:"decision_reason,omitempty"`
+	ID                        string                                             `json:"id,omitempty"`
+	ApplicationNumber         string                                             `json:"application_number"`
+	Applicant                 GroupOrderManagerApplicantSnapshot                 `json:"applicant"`
+	ProposedGroupName         string                                             `json:"proposed_group_name"`
+	ApplicantNote             string                                             `json:"applicant_note,omitempty"`
+	Status                    wholesale_enums.GroupOrderManagerApplicationStatus `json:"status"`
+	WholesaleAccountID        string                                             `json:"wholesale_account_id,omitempty"`
+	WholesaleOrganisationCode string                                             `json:"wholesale_organisation_code,omitempty"`
+	OrganisationAccessID      string                                             `json:"organisation_access_id,omitempty"`
+	SubmittedAt               time.Time                                          `json:"submitted_at"`
+	ReviewedAt                *time.Time                                         `json:"reviewed_at,omitempty"`
+	ReviewedBy                string                                             `json:"reviewed_by,omitempty"`
+	DecisionReason            string                                             `json:"decision_reason,omitempty"`
 
-	common.AuditFields
+	audit.AuditFields
 }

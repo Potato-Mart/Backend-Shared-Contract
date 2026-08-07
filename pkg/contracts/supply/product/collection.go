@@ -1,18 +1,21 @@
 package product
 
-import common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+import (
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
+)
 
 type CollectionRef struct {
-	ID   string                 `json:"id"`
-	Slug string                 `json:"slug,omitempty"`
-	Name []common.LocalizedName `json:"name"`
+	ID   string                       `json:"id"`
+	Slug string                       `json:"slug,omitempty"`
+	Name []localization.LocalizedName `json:"name"`
 }
 
 type Collection struct {
-	ID           string                 `json:"id"`
-	Slug         string                 `json:"slug,omitempty"`
-	Name         []common.LocalizedName `json:"name"`
-	CategoryTags []CategoryTag          `json:"category_tags"`
+	ID           string                       `json:"id"`
+	Slug         string                       `json:"slug,omitempty"`
+	Name         []localization.LocalizedName `json:"name"`
+	CategoryTags []CategoryTag                `json:"category_tags"`
 
-	common.AuditFields
+	audit.AuditFields
 }

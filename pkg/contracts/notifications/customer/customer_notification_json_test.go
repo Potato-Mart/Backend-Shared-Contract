@@ -6,20 +6,21 @@ import (
 	"testing"
 	"time"
 
-	notification "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/notifications/customer"
+	notification "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/notifications/customer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/notifications/customer/customer_enums"
 )
 
 func TestCustomerNotificationJSONRoundTrip(t *testing.T) {
 	now := time.Date(2026, 7, 12, 2, 3, 4, 0, time.UTC)
 	n := notification.CustomerNotification{
 		ID: "ntf_1", EventID: "event_1",
-		Topic: notification.CustomerNotificationTopicPreorderAvailable,
+		Topic: customer_enums.CustomerNotificationTopicPreorderAvailable,
 		Title: "Your preorder is ready", Message: "Your order can now be processed.",
-		Status:    notification.CustomerNotificationStatusUnread,
+		Status:    customer_enums.CustomerNotificationStatusUnread,
 		ExpiresAt: now.Add(14 * 24 * time.Hour),
 		Deliveries: []notification.CustomerNotificationDelivery{{
-			Channel:      notification.CustomerNotificationChannelEmail,
-			Status:       notification.CustomerNotificationDeliveryStatusDelivered,
+			Channel:      customer_enums.CustomerNotificationChannelEmail,
+			Status:       customer_enums.CustomerNotificationDeliveryStatusDelivered,
 			AttemptCount: 1, DeliveredAt: &now,
 		}},
 		CreatedAt: now,
@@ -40,9 +41,9 @@ func TestReadCustomerNotificationRemainsVisible(t *testing.T) {
 	readAt := time.Date(2026, 7, 30, 4, 5, 6, 0, time.UTC)
 	n := notification.CustomerNotification{
 		ID: "ntf_read", EventID: "event_read",
-		Topic: notification.CustomerNotificationTopicOrderConfirmed,
+		Topic: customer_enums.CustomerNotificationTopicOrderConfirmed,
 		Title: "Order confirmed", Message: "Your order is confirmed.",
-		Status:    notification.CustomerNotificationStatusRead,
+		Status:    customer_enums.CustomerNotificationStatusRead,
 		ReadAt:    &readAt,
 		CreatedAt: readAt.Add(-time.Hour),
 		ExpiresAt: readAt.Add(30 * 24 * time.Hour),
@@ -61,26 +62,26 @@ func TestReadCustomerNotificationRemainsVisible(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal read notification: %v", err)
 	}
-	if decoded.Status != notification.CustomerNotificationStatusRead || decoded.ReadAt == nil || !decoded.ReadAt.Equal(readAt) {
+	if decoded.Status != customer_enums.CustomerNotificationStatusRead || decoded.ReadAt == nil || !decoded.ReadAt.Equal(readAt) {
 		t.Fatalf("read notification did not round-trip: %+v", decoded)
 	}
 }
 
 func TestCustomerLifecycleNotificationTopicJSONValues(t *testing.T) {
-	topics := []notification.CustomerNotificationTopic{
-		notification.CustomerNotificationTopicOrderConfirmed,
-		notification.CustomerNotificationTopicOrderPlaced,
-		notification.CustomerNotificationTopicOrderCancelled,
-		notification.CustomerNotificationTopicPaymentReceived,
-		notification.CustomerNotificationTopicPaymentFailed,
-		notification.CustomerNotificationTopicPaymentRefunded,
-		notification.CustomerNotificationTopicPackingStarted,
-		notification.CustomerNotificationTopicOrderPacked,
-		notification.CustomerNotificationTopicOrderDispatched,
-		notification.CustomerNotificationTopicOrderDelivered,
-		notification.CustomerNotificationTopicInvoiceAvailable,
-		notification.CustomerNotificationTopicPromotionAvailable,
-		notification.CustomerNotificationTopicAnnouncement,
+	topics := []customer_enums.CustomerNotificationTopic{
+		customer_enums.CustomerNotificationTopicOrderConfirmed,
+		customer_enums.CustomerNotificationTopicOrderPlaced,
+		customer_enums.CustomerNotificationTopicOrderCancelled,
+		customer_enums.CustomerNotificationTopicPaymentReceived,
+		customer_enums.CustomerNotificationTopicPaymentFailed,
+		customer_enums.CustomerNotificationTopicPaymentRefunded,
+		customer_enums.CustomerNotificationTopicPackingStarted,
+		customer_enums.CustomerNotificationTopicOrderPacked,
+		customer_enums.CustomerNotificationTopicOrderDispatched,
+		customer_enums.CustomerNotificationTopicOrderDelivered,
+		customer_enums.CustomerNotificationTopicInvoiceAvailable,
+		customer_enums.CustomerNotificationTopicPromotionAvailable,
+		customer_enums.CustomerNotificationTopicAnnouncement,
 	}
 
 	payload, err := json.Marshal(topics)
@@ -113,7 +114,7 @@ func TestCampaignNotificationReferenceAndPushChannelJSON(t *testing.T) {
 	now := time.Date(2026, 7, 29, 1, 2, 3, 0, time.UTC)
 	n := notification.CustomerNotification{
 		ID: "notification_1", EventID: "event_1",
-		Topic:   notification.CustomerNotificationTopicPromotionAvailable,
+		Topic:   customer_enums.CustomerNotificationTopicPromotionAvailable,
 		Title:   "Promotion available",
 		Message: "Open the app to see the current promotion.",
 		Campaign: &notification.CampaignReference{
@@ -121,11 +122,11 @@ func TestCampaignNotificationReferenceAndPushChannelJSON(t *testing.T) {
 			ActivationRevision: 2, ContentRevision: 5,
 		},
 		Deliveries: []notification.CustomerNotificationDelivery{{
-			Channel: notification.CustomerNotificationChannelPush,
-			Status:  notification.CustomerNotificationDeliveryStatusPending,
+			Channel: customer_enums.CustomerNotificationChannelPush,
+			Status:  customer_enums.CustomerNotificationDeliveryStatusPending,
 		}},
 		CreatedAt: now, ExpiresAt: now.Add(30 * 24 * time.Hour),
-		Status: notification.CustomerNotificationStatusUnread,
+		Status: customer_enums.CustomerNotificationStatusUnread,
 	}
 	payload, err := json.Marshal(n)
 	if err != nil {

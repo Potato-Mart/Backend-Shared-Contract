@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	reviewenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/review"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/review/review_enums"
 )
 
 func TestReviewEnumsValidateKnownValues(t *testing.T) {
@@ -11,52 +11,52 @@ func TestReviewEnumsValidateKnownValues(t *testing.T) {
 		{
 			name: "reviewenum.ReviewModerationStatus",
 			valid: []stringEnum{
-				reviewenum.ReviewModerationStatusNotRequired,
-				reviewenum.ReviewModerationStatusPending,
-				reviewenum.ReviewModerationStatusApproved,
-				reviewenum.ReviewModerationStatusRejected,
-				reviewenum.ReviewModerationStatusSuppressed,
+				review_enums.ReviewModerationStatusNotRequired,
+				review_enums.ReviewModerationStatusPending,
+				review_enums.ReviewModerationStatusApproved,
+				review_enums.ReviewModerationStatusRejected,
+				review_enums.ReviewModerationStatusSuppressed,
 			},
-			invalid: reviewenum.ReviewModerationStatus("__invalid__"),
+			invalid: review_enums.ReviewModerationStatus("__invalid__"),
 		},
 		{
 			name: "reviewenum.ReviewRejectionReason",
 			valid: []stringEnum{
-				reviewenum.ReviewRejectionReasonSpam,
-				reviewenum.ReviewRejectionReasonOffTopic,
-				reviewenum.ReviewRejectionReasonInappropriate,
-				reviewenum.ReviewRejectionReasonPersonalInformation,
-				reviewenum.ReviewRejectionReasonUnsupportedLanguage,
-				reviewenum.ReviewRejectionReasonOther,
+				review_enums.ReviewRejectionReasonSpam,
+				review_enums.ReviewRejectionReasonOffTopic,
+				review_enums.ReviewRejectionReasonInappropriate,
+				review_enums.ReviewRejectionReasonPersonalInformation,
+				review_enums.ReviewRejectionReasonUnsupportedLanguage,
+				review_enums.ReviewRejectionReasonOther,
 			},
-			invalid: reviewenum.ReviewRejectionReason("__invalid__"),
+			invalid: review_enums.ReviewRejectionReason("__invalid__"),
 		},
 		{
 			name: "reviewenum.ReviewErrorCode",
 			valid: []stringEnum{
-				reviewenum.ReviewErrorCodeNotFound,
-				reviewenum.ReviewErrorCodePurchaseRequired,
+				review_enums.ReviewErrorCodeNotFound,
+				review_enums.ReviewErrorCodePurchaseRequired,
 			},
-			invalid: reviewenum.ReviewErrorCode("__invalid__"),
+			invalid: review_enums.ReviewErrorCode("__invalid__"),
 		},
 	})
 }
 
 func TestReviewEnumWireValuesAreStable(t *testing.T) {
 	want := map[stringEnum]string{
-		reviewenum.ReviewModerationStatusNotRequired:        "not_required",
-		reviewenum.ReviewModerationStatusPending:            "pending",
-		reviewenum.ReviewModerationStatusApproved:           "approved",
-		reviewenum.ReviewModerationStatusRejected:           "rejected",
-		reviewenum.ReviewModerationStatusSuppressed:         "suppressed",
-		reviewenum.ReviewRejectionReasonSpam:                "spam",
-		reviewenum.ReviewRejectionReasonOffTopic:            "off_topic",
-		reviewenum.ReviewRejectionReasonInappropriate:       "inappropriate",
-		reviewenum.ReviewRejectionReasonPersonalInformation: "personal_information",
-		reviewenum.ReviewRejectionReasonUnsupportedLanguage: "unsupported_language",
-		reviewenum.ReviewRejectionReasonOther:               "other",
-		reviewenum.ReviewErrorCodeNotFound:                  "REVIEW_NOT_FOUND",
-		reviewenum.ReviewErrorCodePurchaseRequired:          "REVIEW_PURCHASE_REQUIRED",
+		review_enums.ReviewModerationStatusNotRequired:        "not_required",
+		review_enums.ReviewModerationStatusPending:            "pending",
+		review_enums.ReviewModerationStatusApproved:           "approved",
+		review_enums.ReviewModerationStatusRejected:           "rejected",
+		review_enums.ReviewModerationStatusSuppressed:         "suppressed",
+		review_enums.ReviewRejectionReasonSpam:                "spam",
+		review_enums.ReviewRejectionReasonOffTopic:            "off_topic",
+		review_enums.ReviewRejectionReasonInappropriate:       "inappropriate",
+		review_enums.ReviewRejectionReasonPersonalInformation: "personal_information",
+		review_enums.ReviewRejectionReasonUnsupportedLanguage: "unsupported_language",
+		review_enums.ReviewRejectionReasonOther:               "other",
+		review_enums.ReviewErrorCodeNotFound:                  "REVIEW_NOT_FOUND",
+		review_enums.ReviewErrorCodePurchaseRequired:          "REVIEW_PURCHASE_REQUIRED",
 	}
 	for value, wire := range want {
 		if got := value.String(); got != wire {

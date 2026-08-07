@@ -1,22 +1,20 @@
 package product
 
-import (
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-)
+import "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
 
 // Brand is the canonical localized brand master used by product catalogues.
 type Brand struct {
-	ID      string                 `json:"id"`
-	Slug    string                 `json:"slug"`
-	Name    []common.LocalizedName `json:"name"`
-	LogoURL string                 `json:"logo_url,omitempty"`
+	ID      string                       `json:"id"`
+	Slug    string                       `json:"slug"`
+	Name    []localization.LocalizedName `json:"name"`
+	LogoURL string                       `json:"logo_url,omitempty"`
 }
 
 // BrandRef is the stable display identity embedded in product records and
 // snapshots. ID is the matching canonical brand master identifier.
 type BrandRef struct {
-	ID      string                 `json:"id"`
-	Slug    string                 `json:"slug"`
-	Name    []common.LocalizedName `json:"name"`
-	LogoURL string                 `json:"logo_url,omitempty"`
+	ID      string                       `json:"id"`
+	Slug    string                       `json:"slug"`
+	Name    []localization.LocalizedName `json:"name"`
+	LogoURL string                       `json:"logo_url,omitempty"`
 }

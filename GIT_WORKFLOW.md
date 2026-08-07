@@ -7,7 +7,7 @@ These rules apply to every commit and push in this repository.
 - Start from the latest protected `main`.
 - Use `feature/<description>` for feature branches unless a release task
   specifies another `refactor/<description>` branch.
-- For this release, use `refactor/v23-contract-domain-layout`.
+- For this release, use `feature/contract-v24-common-enum-layout`.
 - Do not push directly to `main`.
 
 ## Commits and Pull Requests

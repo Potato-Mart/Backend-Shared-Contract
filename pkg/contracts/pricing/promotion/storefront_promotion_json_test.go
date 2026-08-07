@@ -2,10 +2,15 @@ package promotion
 
 import (
 	"encoding/json"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 func TestStorefrontPromotionOmitsRuleEngineInternals(t *testing.T) {
@@ -15,16 +20,16 @@ func TestStorefrontPromotionOmitsRuleEngineInternals(t *testing.T) {
 		SeriesKey:        "series_weekly",
 		Name:             "Weekly special",
 		Description:      "Save on pantry favourites",
-		Type:             PromotionTypeAutoDiscount,
-		Class:            PromotionClassSpecialCampaign,
-		TargetScope:      DiscountScopeCategoryTag,
+		Type:             promotion_enums.PromotionTypeAutoDiscount,
+		Class:            promotion_enums.PromotionClassSpecialCampaign,
+		TargetScope:      promotion_enums.DiscountScopeCategoryTag,
 		CategoryTagIDs:   []string{"pantry:rice"},
-		CategoryTagNames: []common.LocalizedName{{Language: "en", Name: "Rice"}},
+		CategoryTagNames: []localization.LocalizedName{{Language: "en", Name: "Rice"}},
 		StartsAt:         &now,
 		ScheduleTimezone: "Australia/Sydney",
 		GeographicScope: geography.GeographicScope{
-			Mode:    geography.GeographicScopeModeTargeted,
-			Targets: []geography.GeographicTarget{{Kind: geography.GeographicTargetSubdivision, Code: "AU-NSW"}},
+			Mode:    geography_enums.GeographicScopeModeTargeted,
+			Targets: []geography.GeographicTarget{{Kind: geography_enums.GeographicTargetSubdivision, Code: "AU-NSW"}},
 		},
 		IsActive: true,
 	})

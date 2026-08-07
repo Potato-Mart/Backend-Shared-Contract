@@ -3,14 +3,16 @@ package geography
 import (
 	"encoding/json"
 	"testing"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography/geography_enums"
 )
 
 func TestGeographicScopeAndContextJSON(t *testing.T) {
 	scope := GeographicScope{
-		Mode: GeographicScopeModeTargeted,
+		Mode: geography_enums.GeographicScopeModeTargeted,
 		Targets: []GeographicTarget{
-			{Kind: GeographicTargetCountry, Code: "AU"},
-			{Kind: GeographicTargetDepot, Code: "AU-VIC-MEL-DC-01"},
+			{Kind: geography_enums.GeographicTargetCountry, Code: "AU"},
+			{Kind: geography_enums.GeographicTargetDepot, Code: "AU-VIC-MEL-DC-01"},
 		},
 	}
 	payload, err := json.Marshal(scope)
@@ -22,12 +24,12 @@ func TestGeographicScopeAndContextJSON(t *testing.T) {
 	}
 
 	context := GeographicContext{
-		Source:             GeographicContextSourceRetailCustomerProfile,
+		Source:             geography_enums.GeographicContextSourceRetailCustomerProfile,
 		CountryCode:        "AU",
 		SubdivisionCode:    "AU-VIC",
 		DepotRegionCode:    "AU-VIC-MEL",
 		DepotCode:          "AU-VIC-MEL-DC-01",
-		MatchedTargetKind:  GeographicTargetDepot,
+		MatchedTargetKind:  geography_enums.GeographicTargetDepot,
 		MatchedTargetCode:  "AU-VIC-MEL-DC-01",
 		ScopeRevision:      7,
 		RuleRevision:       11,
@@ -50,7 +52,7 @@ func TestGeographicScopeAndContextJSON(t *testing.T) {
 
 func TestGlobalFallbackGeographicContextOmitsUnresolvedProfileGeography(t *testing.T) {
 	payload, err := json.Marshal(GeographicContext{
-		Source:             GeographicContextSourceGlobalFallback,
+		Source:             geography_enums.GeographicContextSourceGlobalFallback,
 		ScopeRevision:      2,
 		RuleRevision:       4,
 		EvaluationTimezone: "Etc/UTC",
