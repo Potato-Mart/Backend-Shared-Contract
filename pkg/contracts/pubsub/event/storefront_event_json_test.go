@@ -2,12 +2,16 @@ package event_test
 
 import (
 	"encoding/json"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/customers/campaign"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pubsub/event"
 	"strings"
 	"testing"
 	"time"
+
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/customers/campaign"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/customers/campaign/campaign_enums"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pubsub/event"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pubsub/event/event_enums"
 )
 
 func TestCustomerSafeStorefrontEventsJSON(t *testing.T) {
@@ -15,13 +19,13 @@ func TestCustomerSafeStorefrontEventsJSON(t *testing.T) {
 	values := []any{
 		event.PromotionChangedEvent{
 			PromotionID: "promotion_1", CampaignID: "campaign_1", CampaignKey: "winter-sale",
-			ScopeMode: geography.GeographicScopeModeGlobal, ScopeRevision: 3,
+			ScopeMode: geography_enums.GeographicScopeModeGlobal, ScopeRevision: 3,
 			Published: true, Revision: 3, RefetchRequired: true, ChangedAt: now,
 		},
 		event.CampaignChangedEvent{
 			CampaignID: "campaign_1", CampaignKey: "winter-sale", PromotionID: "promotion_1",
-			Status: campaign.CampaignStatusActive, IsActive: true,
-			ScopeMode: geography.GeographicScopeModeGlobal, ScopeRevision: 5,
+			Status: campaign_enums.CampaignStatusActive, IsActive: true,
+			ScopeMode: geography_enums.GeographicScopeModeGlobal, ScopeRevision: 5,
 			ActivationRevision: 2, ContentRevision: 5, RefetchRequired: true, ChangedAt: now,
 		},
 	}
@@ -45,9 +49,9 @@ func TestCustomerSafeStorefrontEventsJSON(t *testing.T) {
 		}
 	}
 
-	if event.EventTopicStorefrontEvents.String() != "storefront-events" ||
-		event.EventTypePromotionChanged.String() != "promotion.changed" ||
-		event.EventTypeCampaignChanged.String() != "campaign.changed" {
+	if event_enums.EventTopicStorefrontEvents.String() != "storefront-events" ||
+		event_enums.EventTypePromotionChanged.String() != "promotion.changed" ||
+		event_enums.EventTypeCampaignChanged.String() != "campaign.changed" {
 		t.Fatal("storefront event topic/type values changed")
 	}
 }
@@ -57,14 +61,14 @@ func TestCampaignLinkRevisionCTAAndMediaJSON(t *testing.T) {
 		ID: "campaign_1", CampaignKey: "winter-sale", PromotionID: "promotion_1",
 		Title: "Winter sale", CTAHref: "potatomart://product/SKU-1",
 		CTA: &campaign.CTADestination{
-			Type: campaign.CampaignCTADestinationProduct, ProductSKUCode: "SKU-1",
+			Type: campaign_enums.CampaignCTADestinationProduct, ProductSKUCode: "SKU-1",
 		},
 		MediaID: "media_1", MediaURL: "/v1/storefront/campaigns/campaign_1/media",
-		Placement:        campaign.CampaignPlacementHomeHero,
-		Severity:         campaign.CampaignSeverityInfo,
-		Status:           campaign.CampaignStatusActive,
+		Placement:        campaign_enums.CampaignPlacementHomeHero,
+		Severity:         campaign_enums.CampaignSeverityInfo,
+		Status:           campaign_enums.CampaignStatusActive,
 		ScheduleTimezone: "Etc/UTC",
-		GeographicScope:  geography.GeographicScope{Mode: geography.GeographicScopeModeGlobal},
+		GeographicScope:  geography.GeographicScope{Mode: geography_enums.GeographicScopeModeGlobal},
 		Revision:         5, ActivationRevision: 2,
 	}
 	payload, err := json.Marshal(value)

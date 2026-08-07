@@ -2,22 +2,25 @@ package warehouse_test
 
 import (
 	"encoding/json"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
+
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse"
 )
 
 func TestDepotHierarchyJSONShapes(t *testing.T) {
 	now := time.Date(2026, 8, 4, 4, 30, 0, 0, time.UTC)
-	audit := common.AuditFields{CreatedAt: now, UpdatedAt: now}
+	audit := audit.AuditFields{CreatedAt: now, UpdatedAt: now}
 	depot := warehouse.Depot{
 		ID:         "depot_1",
 		Code:       "AU-VIC-MEL-DC-01",
 		Name:       "Melbourne DC",
 		RegionCode: "AU-VIC-MEL",
-		Address: common.Address{
+		Address: geography.Address{
 			Line1:      "1 Example Drive",
 			Locality:   "Dandenong South",
 			PostalCode: "3175",

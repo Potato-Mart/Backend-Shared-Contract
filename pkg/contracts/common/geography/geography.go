@@ -1,5 +1,7 @@
 package geography
 
+import "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography/geography_enums"
+
 // CountryCode is an ISO 3166-1 alpha-2 country code such as AU, TW, JP, or US.
 type CountryCode string
 
@@ -15,7 +17,7 @@ type CountryRef struct {
 // AdministrativeAreaRef carries an authoritative subdivision code and
 // optional display metadata.
 type AdministrativeAreaRef struct {
-	Code SubdivisionCode        `json:"code"`
-	Name string                 `json:"name,omitempty"`
-	Type AdministrativeAreaType `json:"type,omitempty"`
+	Code SubdivisionCode                        `json:"code"`
+	Name string                                 `json:"name,omitempty"`
+	Type geography_enums.AdministrativeAreaType `json:"type,omitempty"`
 }

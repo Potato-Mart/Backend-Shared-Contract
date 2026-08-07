@@ -2,39 +2,47 @@ package order_test
 
 import (
 	"encoding/json"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
+
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse"
+
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {
 	now := time.Date(2026, 8, 4, 4, 5, 6, 0, time.UTC)
-	caseOption := packageOptionSnapshot("pkg_case_12", "CASE-12", common.PackageHandlingUnitCase, 12, now)
-	eachOption := packageOptionSnapshot("pkg_each", "EACH", common.PackageHandlingUnitEach, 1, now)
-	caseOffer := offerSnapshot("offer_case", caseOption, common.Money{AmountMinor: 1800, Currency: "AUD"}, now)
-	eachOffer := offerSnapshot("offer_each", eachOption, common.Money{AmountMinor: 175, Currency: "AUD"}, now)
+	caseOption := packageOptionSnapshot("pkg_case_12", "CASE-12", packaging_enums.PackageHandlingUnitCase, 12, now)
+	eachOption := packageOptionSnapshot("pkg_each", "EACH", packaging_enums.PackageHandlingUnitEach, 1, now)
+	caseOffer := offerSnapshot("offer_case", caseOption, money.Money{AmountMinor: 1800, Currency: "AUD"}, now)
+	eachOffer := offerSnapshot("offer_each", eachOption, money.Money{AmountMinor: 175, Currency: "AUD"}, now)
 
 	item := sales.OrderItem{
 		ID: "item_1",
 		Components: []sales.PricedPackageComponent{
-			{AcceptedOffer: caseOffer, RequestedPackageCount: 2, RequestedBaseUnits: 24, PackagePrice: caseOffer.PackagePrice, ComponentTotal: common.Money{AmountMinor: 3600, Currency: "AUD"}},
-			{AcceptedOffer: eachOffer, RequestedPackageCount: 3, RequestedBaseUnits: 3, PackagePrice: eachOffer.PackagePrice, ComponentTotal: common.Money{AmountMinor: 525, Currency: "AUD"}},
+			{AcceptedOffer: caseOffer, RequestedPackageCount: 2, RequestedBaseUnits: 24, PackagePrice: caseOffer.PackagePrice, ComponentTotal: money.Money{AmountMinor: 3600, Currency: "AUD"}},
+			{AcceptedOffer: eachOffer, RequestedPackageCount: 3, RequestedBaseUnits: 3, PackagePrice: eachOffer.PackagePrice, ComponentTotal: money.Money{AmountMinor: 525, Currency: "AUD"}},
 		},
 		TotalBaseUnits:     27,
-		SubstitutionPolicy: sales.LooseSubstitutionPolicySnapshot{Allowed: true, Source: sales.LooseSubstitutionPolicySourceBuyerSelected, CapturedAt: now},
-		RequestedComposition: common.PackageCompositionSnapshot{TotalBaseUnits: 27, Components: []common.PackageComponentSnapshot{
-			{PackageOptionID: "pkg_case_12", HandlingUnit: common.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24},
-			{PackageOptionID: "pkg_each", HandlingUnit: common.PackageHandlingUnitEach, PackageCount: 3, UnitsPerPackage: 1, BaseUnits: 3},
+		SubstitutionPolicy: sales.LooseSubstitutionPolicySnapshot{Allowed: true, Source: order_enums.LooseSubstitutionPolicySourceBuyerSelected, CapturedAt: now},
+		RequestedComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 27, Components: []packaging.PackageComponentSnapshot{
+			{PackageOptionID: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24},
+			{PackageOptionID: "pkg_each", HandlingUnit: packaging_enums.PackageHandlingUnitEach, PackageCount: 3, UnitsPerPackage: 1, BaseUnits: 3},
 		}},
 		Substitutions:  []warehouse.PackageSubstitutionSnapshot{{ID: "sub_1", RequestedCasePackageOptionID: "pkg_case_12", RequestedCaseCount: 1, RequestedUnitsPerCase: 12, FulfilledSealedCaseCount: 0, ReplacementEachPackageOptionID: "pkg_each", ReplacementBaseUnits: 12, LotID: "lot_1", SourceBucketID: "bucket_each_1", ReasonCode: "NO_SEALED_CASE", Operator: "packer_1", CapturedAt: now}},
-		DiscountAmount: common.Money{Currency: "AUD"},
-		Total:          common.Money{AmountMinor: 4125, Currency: "AUD"},
+		DiscountAmount: money.Money{Currency: "AUD"},
+		Total:          money.Money{AmountMinor: 4125, Currency: "AUD"},
 	}
 
 	body, err := json.Marshal(item)
@@ -55,20 +63,20 @@ func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {
 
 func TestGroupOrderFulfilmentJSONUsesOneParentAllocation(t *testing.T) {
 	now := time.Date(2026, 8, 4, 6, 7, 8, 0, time.UTC)
-	composition := common.PackageCompositionSnapshot{TotalBaseUnits: 24, Components: []common.PackageComponentSnapshot{{PackageOptionID: "pkg_case_12", HandlingUnit: common.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24}}}
-	participantComposition := common.PackageCompositionSnapshot{TotalBaseUnits: 12, Components: []common.PackageComponentSnapshot{{PackageOptionID: "pkg_case_12", HandlingUnit: common.PackageHandlingUnitCase, PackageCount: 1, UnitsPerPackage: 12, BaseUnits: 12}}}
-	zeroComposition := common.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []common.PackageComponentSnapshot{}}
-	caseOption := packageOptionSnapshot("pkg_case_12", "CASE-12", common.PackageHandlingUnitCase, 12, now)
-	caseOffer := offerSnapshot("offer_case", caseOption, common.Money{AmountMinor: 1800, Currency: "AUD"}, now)
+	composition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 24, Components: []packaging.PackageComponentSnapshot{{PackageOptionID: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24}}}
+	participantComposition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 12, Components: []packaging.PackageComponentSnapshot{{PackageOptionID: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 1, UnitsPerPackage: 12, BaseUnits: 12}}}
+	zeroComposition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}}
+	caseOption := packageOptionSnapshot("pkg_case_12", "CASE-12", packaging_enums.PackageHandlingUnitCase, 12, now)
+	caseOffer := offerSnapshot("offer_case", caseOption, money.Money{AmountMinor: 1800, Currency: "AUD"}, now)
 	aggregateComponent := sales.PricedPackageComponent{
 		AcceptedOffer: caseOffer, RequestedPackageCount: 2, RequestedBaseUnits: 24,
-		PackagePrice: common.Money{AmountMinor: 1800, Currency: "AUD"}, TaxAmount: common.Money{AmountMinor: 300, Currency: "AUD"},
-		DiscountAmount: common.Money{AmountMinor: 200, Currency: "AUD"}, ComponentTotal: common.Money{AmountMinor: 3700, Currency: "AUD"},
+		PackagePrice: money.Money{AmountMinor: 1800, Currency: "AUD"}, TaxAmount: money.Money{AmountMinor: 300, Currency: "AUD"},
+		DiscountAmount: money.Money{AmountMinor: 200, Currency: "AUD"}, ComponentTotal: money.Money{AmountMinor: 3700, Currency: "AUD"},
 	}
 	participantComponent := sales.PricedPackageComponent{
 		AcceptedOffer: caseOffer, RequestedPackageCount: 1, RequestedBaseUnits: 12,
-		PackagePrice: common.Money{AmountMinor: 1800, Currency: "AUD"}, TaxAmount: common.Money{AmountMinor: 150, Currency: "AUD"},
-		DiscountAmount: common.Money{AmountMinor: 100, Currency: "AUD"}, ComponentTotal: common.Money{AmountMinor: 1850, Currency: "AUD"},
+		PackagePrice: money.Money{AmountMinor: 1800, Currency: "AUD"}, TaxAmount: money.Money{AmountMinor: 150, Currency: "AUD"},
+		DiscountAmount: money.Money{AmountMinor: 100, Currency: "AUD"}, ComponentTotal: money.Money{AmountMinor: 1850, Currency: "AUD"},
 	}
 	plan := sales.GroupOrderFulfilmentPlan{
 		ID: "group_fulfilment_1", GroupOrderCode: "GROUP-1", ParentOrderNumber: "PARENT-1", ParentFulfilmentID: "fulfilment_1",
@@ -76,17 +84,17 @@ func TestGroupOrderFulfilmentJSONUsesOneParentAllocation(t *testing.T) {
 			ID: "aggregate_1", ProductSKUCode: "A00001", OfferID: "offer_case", OfferRevision: 3, PackageOptionID: "pkg_case_12",
 			RequestedComposition: composition, AllocatedComposition: composition, ShortageComposition: zeroComposition,
 			ReturnedComposition: participantComposition, RefundedComposition: participantComposition,
-			Components: []sales.PricedPackageComponent{aggregateComponent}, DiscountAmount: common.Money{AmountMinor: 200, Currency: "AUD"},
-			TaxAmount: common.Money{AmountMinor: 300, Currency: "AUD"}, Total: common.Money{AmountMinor: 3700, Currency: "AUD"},
-			RefundAmount: common.Money{AmountMinor: 1800, Currency: "AUD"}, ReservationID: "reservation_parent_1", AllocationLineID: "allocation_parent_1",
+			Components: []sales.PricedPackageComponent{aggregateComponent}, DiscountAmount: money.Money{AmountMinor: 200, Currency: "AUD"},
+			TaxAmount: money.Money{AmountMinor: 300, Currency: "AUD"}, Total: money.Money{AmountMinor: 3700, Currency: "AUD"},
+			RefundAmount: money.Money{AmountMinor: 1800, Currency: "AUD"}, ReservationID: "reservation_parent_1", AllocationLineID: "allocation_parent_1",
 		}},
 		ParticipantShares: []sales.GroupOrderParticipantShare{
-			{ParticipantOrderNumber: "PART-1", ParticipantOrderItemID: "item_part_1", ParentAllocationLineID: "allocation_parent_1", Sequence: 1, RequestedComposition: participantComposition, FulfilledComposition: participantComposition, ShortageComposition: zeroComposition, ReturnedComposition: participantComposition, RefundedComposition: participantComposition, Components: []sales.PricedPackageComponent{participantComponent}, DiscountAmount: common.Money{AmountMinor: 100, Currency: "AUD"}, TaxAmount: common.Money{AmountMinor: 150, Currency: "AUD"}, Total: common.Money{AmountMinor: 1850, Currency: "AUD"}, RefundAmount: common.Money{AmountMinor: 1800, Currency: "AUD"}},
-			{ParticipantOrderNumber: "PART-2", ParticipantOrderItemID: "item_part_2", ParentAllocationLineID: "allocation_parent_1", Sequence: 2, RequestedComposition: participantComposition, FulfilledComposition: participantComposition, ShortageComposition: zeroComposition, ReturnedComposition: zeroComposition, RefundedComposition: zeroComposition, Components: []sales.PricedPackageComponent{participantComponent}, DiscountAmount: common.Money{AmountMinor: 100, Currency: "AUD"}, TaxAmount: common.Money{AmountMinor: 150, Currency: "AUD"}, Total: common.Money{AmountMinor: 1850, Currency: "AUD"}, RefundAmount: common.Money{Currency: "AUD"}},
+			{ParticipantOrderNumber: "PART-1", ParticipantOrderItemID: "item_part_1", ParentAllocationLineID: "allocation_parent_1", Sequence: 1, RequestedComposition: participantComposition, FulfilledComposition: participantComposition, ShortageComposition: zeroComposition, ReturnedComposition: participantComposition, RefundedComposition: participantComposition, Components: []sales.PricedPackageComponent{participantComponent}, DiscountAmount: money.Money{AmountMinor: 100, Currency: "AUD"}, TaxAmount: money.Money{AmountMinor: 150, Currency: "AUD"}, Total: money.Money{AmountMinor: 1850, Currency: "AUD"}, RefundAmount: money.Money{AmountMinor: 1800, Currency: "AUD"}},
+			{ParticipantOrderNumber: "PART-2", ParticipantOrderItemID: "item_part_2", ParentAllocationLineID: "allocation_parent_1", Sequence: 2, RequestedComposition: participantComposition, FulfilledComposition: participantComposition, ShortageComposition: zeroComposition, ReturnedComposition: zeroComposition, RefundedComposition: zeroComposition, Components: []sales.PricedPackageComponent{participantComponent}, DiscountAmount: money.Money{AmountMinor: 100, Currency: "AUD"}, TaxAmount: money.Money{AmountMinor: 150, Currency: "AUD"}, Total: money.Money{AmountMinor: 1850, Currency: "AUD"}, RefundAmount: money.Money{Currency: "AUD"}},
 		},
 		Revision: 1, Timezone: "Australia/Melbourne", CapturedAt: now,
 	}
-	parent := sales.Order{OrderNumber: "PARENT-1", GroupOrder: &sales.GroupOrderContext{GroupOrderCode: "GROUP-1", Role: sales.GroupOrderRoleConsolidatedParent, ParentFulfilmentID: "fulfilment_1"}, GroupOrderFulfilment: &plan}
+	parent := sales.Order{OrderNumber: "PARENT-1", GroupOrder: &sales.GroupOrderContext{GroupOrderCode: "GROUP-1", Role: order_enums.GroupOrderRoleConsolidatedParent, ParentFulfilmentID: "fulfilment_1"}, GroupOrderFulfilment: &plan}
 
 	body, err := json.Marshal(parent)
 	if err != nil {
@@ -134,17 +142,17 @@ func TestGroupOrderFulfilmentJSONUsesOneParentAllocation(t *testing.T) {
 	}
 }
 
-func packageOptionSnapshot(id string, code string, handling common.PackageHandlingUnit, units int64, capturedAt time.Time) product.ProductPackageOptionSnapshot {
+func packageOptionSnapshot(id string, code string, handling packaging_enums.PackageHandlingUnit, units int64, capturedAt time.Time) product.ProductPackageOptionSnapshot {
 	return product.ProductPackageOptionSnapshot{ID: id, Code: code, ProductSKUCode: "A00001", HandlingUnit: handling, UnitsPerPackage: units, EffectiveFrom: capturedAt, CapturedAt: capturedAt}
 }
 
-func offerSnapshot(id string, option product.ProductPackageOptionSnapshot, price common.Money, capturedAt time.Time) product.SellableOfferSnapshot {
+func offerSnapshot(id string, option product.ProductPackageOptionSnapshot, price money.Money, capturedAt time.Time) product.SellableOfferSnapshot {
 	return product.SellableOfferSnapshot{
 		ID: id, ProductSKUCode: "A00001", DepotCode: "AU-VIC-MEL-DC-01", PackageOption: option,
 		AvailablePackageCount: 10, AvailableBaseUnits: 120,
-		Condition: warehouseenum.InventoryConditionGood, Disposition: warehouseenum.InventoryDispositionStandardSellable,
-		Revision: 3, InventoryRevision: 9, PackagePrice: price, TaxAmount: common.Money{Currency: "AUD"},
+		Condition: warehouse_enums.InventoryConditionGood, Disposition: warehouse_enums.InventoryDispositionStandardSellable,
+		Revision: 3, InventoryRevision: 9, PackagePrice: price, TaxAmount: money.Money{Currency: "AUD"},
 		ValidFrom: capturedAt, Timezone: "Etc/UTC", CapturedAt: capturedAt,
-		GeographicContext: geography.GeographicContext{Source: geography.GeographicContextSourceRetailCustomerProfile, CountryCode: "AU", ScopeRevision: 1, RuleRevision: 3, EvaluationTimezone: "Australia/Melbourne"},
+		GeographicContext: geography.GeographicContext{Source: geography_enums.GeographicContextSourceRetailCustomerProfile, CountryCode: "AU", ScopeRevision: 1, RuleRevision: 3, EvaluationTimezone: "Australia/Melbourne"},
 	}
 }

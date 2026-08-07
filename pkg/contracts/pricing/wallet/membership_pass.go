@@ -2,6 +2,8 @@ package wallet
 
 import (
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 // MembershipPassContent is the provider-neutral snapshot used to issue a
@@ -18,7 +20,7 @@ type MembershipPassContent struct {
 // MembershipPassBarcode is the canonical scannable membership identifier.
 // Value is the raw retail customer number; AlternateText is safe display copy.
 type MembershipPassBarcode struct {
-	Format        WalletPassBarcodeFormat `json:"format"`
-	Value         string                  `json:"value"`
-	AlternateText string                  `json:"alternate_text,omitempty"`
+	Format        wallet_enums.WalletPassBarcodeFormat `json:"format"`
+	Value         string                               `json:"value"`
+	AlternateText string                               `json:"alternate_text,omitempty"`
 }

@@ -3,7 +3,8 @@ package account
 import (
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/identity/account/account_enums"
 )
 
 // UserProfile is the public projection of a canonical user. Secret fields such
@@ -18,7 +19,7 @@ type UserProfile struct {
 	Active                  bool                         `json:"active"`
 	Accounts                []UserAccountSummary         `json:"accounts,omitempty"`
 	PrimaryAccountID        string                       `json:"primary_account_id,omitempty"`
-	PrimaryAccountType      AccountType                  `json:"primary_account_type,omitempty"`
+	PrimaryAccountType      account_enums.AccountType    `json:"primary_account_type,omitempty"`
 	MFAEnabled              bool                         `json:"mfa_enabled,omitempty"`
 	EmailVerified           bool                         `json:"email_verified"`
 	NotificationPreferences *UserNotificationPreferences `json:"notification_preferences,omitempty"`
@@ -29,5 +30,5 @@ type UserProfile struct {
 	PasswordChangedAt *time.Time `json:"password_changed_at,omitempty"`
 	AccessReviewedAt  *time.Time `json:"access_reviewed_at,omitempty"`
 
-	common.AuditFields
+	audit.AuditFields
 }

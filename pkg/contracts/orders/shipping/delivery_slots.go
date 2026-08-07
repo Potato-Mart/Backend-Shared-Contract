@@ -1,9 +1,11 @@
 package shipping
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
 )
 
 // DeliverySlot is one customer-selectable delivery window. ID is opaque and
@@ -11,12 +13,12 @@ import (
 // Availability is a service-owned wire value such as available, limited, or
 // full.
 type DeliverySlot struct {
-	ID           string        `json:"id"`
-	StartAt      time.Time     `json:"start_at"`
-	EndAt        time.Time     `json:"end_at"`
-	Label        string        `json:"label,omitempty"`
-	Availability string        `json:"availability"`
-	Fee          *common.Money `json:"fee,omitempty"`
+	ID           string       `json:"id"`
+	StartAt      time.Time    `json:"start_at"`
+	EndAt        time.Time    `json:"end_at"`
+	Label        string       `json:"label,omitempty"`
+	Availability string       `json:"availability"`
+	Fee          *money.Money `json:"fee,omitempty"`
 }
 
 // DeliveryDateGroup groups the selectable windows for one store-local date.
@@ -37,8 +39,8 @@ type DeliveryAreaRate struct {
 	DepotRegionCode        string                    `json:"depot_region_code,omitempty"`
 	DepotCode              string                    `json:"depot_code"`
 	DepotName              string                    `json:"depot_name"`
-	ShippingFee            common.Money              `json:"shipping_fee"`
-	FreeShippingThreshold  common.Money              `json:"free_shipping_threshold"`
+	ShippingFee            money.Money               `json:"shipping_fee"`
+	FreeShippingThreshold  money.Money               `json:"free_shipping_threshold"`
 }
 
 // DeliverySchedule is a cart-free, revisioned view of delivery windows for an

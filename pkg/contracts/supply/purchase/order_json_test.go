@@ -2,17 +2,21 @@ package purchase_test
 
 import (
 	"encoding/json"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/security"
 	"strings"
 	"testing"
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/purchase"
-	purchaseenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/purchase"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/security"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/purchase"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/purchase/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestOrderJSONRoundTripWithHistory(t *testing.T) {
@@ -23,27 +27,27 @@ func TestOrderJSONRoundTripWithHistory(t *testing.T) {
 		OrderNumber:  "PO-1001",
 		SupplierCode: "sup_1",
 		SupplierName: "Supplier One",
-		Status:       purchaseenum.PurchaseOrderStatusSubmitted,
+		Status:       purchase_enums.PurchaseOrderStatusSubmitted,
 		Currency:     "AUD",
-		Subtotal:     common.Money{AmountMinor: 10000, Currency: "AUD"},
-		TaxAmount:    common.Money{AmountMinor: 1000, Currency: "AUD"},
-		Total:        common.Money{AmountMinor: 11000, Currency: "AUD"},
+		Subtotal:     money.Money{AmountMinor: 10000, Currency: "AUD"},
+		TaxAmount:    money.Money{AmountMinor: 1000, Currency: "AUD"},
+		Total:        money.Money{AmountMinor: 11000, Currency: "AUD"},
 		ExpectedAt:   &expectedAt,
 		Items: []purchase.OrderItem{
 			{
 				ID:              "po_line_1",
 				Product:         product.Snapshot{SKUCode: "A00001", Name: "Potato Crisps"},
 				PackageOptionID: "pkg_case_12",
-				UnitCost:        common.Money{AmountMinor: 2400, Currency: "AUD"},
-				OrderedComposition: common.PackageCompositionSnapshot{
+				UnitCost:        money.Money{AmountMinor: 2400, Currency: "AUD"},
+				OrderedComposition: packaging.PackageCompositionSnapshot{
 					TotalBaseUnits: 24,
-					Components: []common.PackageComponentSnapshot{
-						{PackageOptionID: "pkg_case_12", HandlingUnit: common.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24},
+					Components: []packaging.PackageComponentSnapshot{
+						{PackageOptionID: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24},
 					},
 				},
-				ReceivedComposition: common.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []common.PackageComponentSnapshot{}},
-				RejectedComposition: common.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []common.PackageComponentSnapshot{}},
-				LineTotal:           common.Money{AmountMinor: 4800, Currency: "AUD"},
+				ReceivedComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}},
+				RejectedComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}},
+				LineTotal:           money.Money{AmountMinor: 4800, Currency: "AUD"},
 			},
 		},
 		History: []security.HistoryEntry{
@@ -67,8 +71,8 @@ func TestOrderJSONRoundTripWithHistory(t *testing.T) {
 		t.Fatalf("unmarshal purchase order: %v", err)
 	}
 
-	if decoded.Status != purchaseenum.PurchaseOrderStatusSubmitted {
-		t.Fatalf("status = %q, want %q", decoded.Status, purchaseenum.PurchaseOrderStatusSubmitted)
+	if decoded.Status != purchase_enums.PurchaseOrderStatusSubmitted {
+		t.Fatalf("status = %q, want %q", decoded.Status, purchase_enums.PurchaseOrderStatusSubmitted)
 	}
 	if decoded.SupplierCode != "sup_1" || decoded.SupplierName != "Supplier One" {
 		t.Fatalf("supplier did not round-trip: code=%q name=%q", decoded.SupplierCode, decoded.SupplierName)
@@ -96,7 +100,7 @@ func TestReceiptJSONUsesLotBucketAndPackageComposition(t *testing.T) {
 		ID:          "receipt_1",
 		OrderNumber: "PO-1001",
 		DepotCode:   "AU-VIC-MEL-DC-01",
-		Status:      purchaseenum.PurchaseOrderStatusReceived,
+		Status:      purchase_enums.PurchaseOrderStatusReceived,
 		ReceivedAt:  &receivedAt,
 		Items: []purchase.ReceiptItem{
 			{
@@ -107,13 +111,13 @@ func TestReceiptJSONUsesLotBucketAndPackageComposition(t *testing.T) {
 				DestinationBucketID: "bucket_1",
 				DestinationLocation: warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01-03"},
 				DateMark: &warehouse.InventoryDateMark{
-					Kind:       warehouseenum.InventoryDateMarkBestBefore,
+					Kind:       warehouse_enums.InventoryDateMarkBestBefore,
 					DateMarkAt: dateMarkAt,
 					Timezone:   "Australia/Melbourne",
 				},
-				OrderedComposition:  common.PackageCompositionSnapshot{TotalBaseUnits: 24, Components: []common.PackageComponentSnapshot{{PackageOptionID: "pkg_case_12", HandlingUnit: common.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24}}},
-				ReceivedComposition: common.PackageCompositionSnapshot{TotalBaseUnits: 24, Components: []common.PackageComponentSnapshot{{PackageOptionID: "pkg_case_12", HandlingUnit: common.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24}}},
-				RejectedComposition: common.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []common.PackageComponentSnapshot{}},
+				OrderedComposition:  packaging.PackageCompositionSnapshot{TotalBaseUnits: 24, Components: []packaging.PackageComponentSnapshot{{PackageOptionID: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24}}},
+				ReceivedComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 24, Components: []packaging.PackageComponentSnapshot{{PackageOptionID: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24}}},
+				RejectedComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}},
 			},
 		},
 	}

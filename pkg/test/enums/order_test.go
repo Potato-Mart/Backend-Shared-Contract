@@ -1,21 +1,21 @@
 package enums_test
 
 import (
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
 	"testing"
 
-	orderenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/order/order_enums"
 )
 
 func TestOrderEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
-		{name: "orderenum.LooseSubstitutionPolicySource", valid: []stringEnum{orderenum.LooseSubstitutionPolicySourceChannelDefault, orderenum.LooseSubstitutionPolicySourceBuyerSelected, orderenum.LooseSubstitutionPolicySourceGroupManager}, invalid: orderenum.LooseSubstitutionPolicySource("__invalid__")},
-		{name: "orderenum.GroupOrderRole", valid: []stringEnum{orderenum.GroupOrderRoleConsolidatedParent, orderenum.GroupOrderRoleParticipant}, invalid: orderenum.GroupOrderRole("__invalid__")},
-		{name: "orderenum.FulfillmentStatus", valid: []stringEnum{orderenum.FulfillmentStatusUnfulfilled, orderenum.FulfillmentStatusPickingPrinted, orderenum.FulfillmentStatusPacking, orderenum.FulfillmentStatusPacked, orderenum.FulfillmentStatusPartial, orderenum.FulfillmentStatusFulfilled}, invalid: orderenum.FulfillmentStatus("__invalid__")},
-		{name: "orderenum.OrderSourceDeviceType", valid: []stringEnum{orderenum.OrderSourceDeviceTypeIOS, orderenum.OrderSourceDeviceTypeAndroid, orderenum.OrderSourceDeviceTypePC, orderenum.OrderSourceDeviceTypeMobileWeb, orderenum.OrderSourceDeviceTypeTablet, orderenum.OrderSourceDeviceTypePos, orderenum.OrderSourceDeviceTypeManual, orderenum.OrderSourceDeviceTypePhone, orderenum.OrderSourceDeviceTypeVR}, invalid: orderenum.OrderSourceDeviceType("__invalid__")},
-		{name: "common.OrderType", valid: []stringEnum{common.OrderTypeOnline, common.OrderTypePOS, common.OrderTypeB2B, common.OrderTypeRelay, common.OrderTypeManual, common.OrderTypeImport}, invalid: common.OrderType("__invalid__")},
-		{name: "orderenum.PreorderAllocationStatus", valid: []stringEnum{orderenum.PreorderAllocationStatusWaitingForStock, orderenum.PreorderAllocationStatusPartiallyAllocated, orderenum.PreorderAllocationStatusStockAllocated}, invalid: orderenum.PreorderAllocationStatus("__invalid__")},
-		{name: "orderenum.FulfillmentReadiness", valid: []stringEnum{orderenum.FulfillmentReadinessReady, orderenum.FulfillmentReadinessWaitingForPreorderStock}, invalid: orderenum.FulfillmentReadiness("__invalid__")},
-		{name: "orderenum.SalesOrderStatus", valid: []stringEnum{orderenum.SalesOrderStatusPending, orderenum.SalesOrderStatusConfirmed, orderenum.SalesOrderStatusPaid, orderenum.SalesOrderStatusProcessing, orderenum.SalesOrderStatusPicking, orderenum.SalesOrderStatusPacked, orderenum.SalesOrderStatusShipped, orderenum.SalesOrderStatusDelivered, orderenum.SalesOrderStatusCompleted, orderenum.SalesOrderStatusCancelled, orderenum.SalesOrderStatusRefunded}, invalid: orderenum.SalesOrderStatus("__invalid__")},
+		{name: "orderenum.LooseSubstitutionPolicySource", valid: []stringEnum{order_enums.LooseSubstitutionPolicySourceChannelDefault, order_enums.LooseSubstitutionPolicySourceBuyerSelected, order_enums.LooseSubstitutionPolicySourceGroupManager}, invalid: order_enums.LooseSubstitutionPolicySource("__invalid__")},
+		{name: "orderenum.GroupOrderRole", valid: []stringEnum{order_enums.GroupOrderRoleConsolidatedParent, order_enums.GroupOrderRoleParticipant}, invalid: order_enums.GroupOrderRole("__invalid__")},
+		{name: "orderenum.FulfillmentStatus", valid: []stringEnum{order_enums.FulfillmentStatusUnfulfilled, order_enums.FulfillmentStatusPickingPrinted, order_enums.FulfillmentStatusPacking, order_enums.FulfillmentStatusPacked, order_enums.FulfillmentStatusPartial, order_enums.FulfillmentStatusFulfilled}, invalid: order_enums.FulfillmentStatus("__invalid__")},
+		{name: "orderenum.OrderSourceDeviceType", valid: []stringEnum{order_enums.OrderSourceDeviceTypeIOS, order_enums.OrderSourceDeviceTypeAndroid, order_enums.OrderSourceDeviceTypePC, order_enums.OrderSourceDeviceTypeMobileWeb, order_enums.OrderSourceDeviceTypeTablet, order_enums.OrderSourceDeviceTypePos, order_enums.OrderSourceDeviceTypeManual, order_enums.OrderSourceDeviceTypePhone, order_enums.OrderSourceDeviceTypeVR}, invalid: order_enums.OrderSourceDeviceType("__invalid__")},
+		{name: "commerce_enums.OrderType", valid: []stringEnum{commerce_enums.OrderTypeOnline, commerce_enums.OrderTypePOS, commerce_enums.OrderTypeB2B, commerce_enums.OrderTypeRelay, commerce_enums.OrderTypeManual, commerce_enums.OrderTypeImport}, invalid: commerce_enums.OrderType("__invalid__")},
+		{name: "orderenum.PreorderAllocationStatus", valid: []stringEnum{order_enums.PreorderAllocationStatusWaitingForStock, order_enums.PreorderAllocationStatusPartiallyAllocated, order_enums.PreorderAllocationStatusStockAllocated}, invalid: order_enums.PreorderAllocationStatus("__invalid__")},
+		{name: "orderenum.FulfillmentReadiness", valid: []stringEnum{order_enums.FulfillmentReadinessReady, order_enums.FulfillmentReadinessWaitingForPreorderStock}, invalid: order_enums.FulfillmentReadiness("__invalid__")},
+		{name: "orderenum.SalesOrderStatus", valid: []stringEnum{order_enums.SalesOrderStatusPending, order_enums.SalesOrderStatusConfirmed, order_enums.SalesOrderStatusPaid, order_enums.SalesOrderStatusProcessing, order_enums.SalesOrderStatusPicking, order_enums.SalesOrderStatusPacked, order_enums.SalesOrderStatusShipped, order_enums.SalesOrderStatusDelivered, order_enums.SalesOrderStatusCompleted, order_enums.SalesOrderStatusCancelled, order_enums.SalesOrderStatusRefunded}, invalid: order_enums.SalesOrderStatus("__invalid__")},
 	})
 }

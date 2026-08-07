@@ -5,15 +5,15 @@ import (
 	"testing"
 	"time"
 
-	warehousecontract "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
+	warehousecontract "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestOutboundShipmentDeliveredContractRoundTrips(t *testing.T) {
 	deliveredAt := time.Date(2026, time.July, 11, 9, 30, 0, 0, time.UTC)
 	want := warehousecontract.OutboundShipment{
 		ID:          "shipment-1",
-		Status:      warehouseenum.OutboundShipmentStatusDelivered,
+		Status:      warehouse_enums.OutboundShipmentStatusDelivered,
 		DeliveredAt: &deliveredAt,
 		CreatedAt:   deliveredAt.Add(-time.Hour),
 	}
@@ -33,13 +33,13 @@ func TestOutboundShipmentDeliveredContractRoundTrips(t *testing.T) {
 	if err := json.Unmarshal(raw, &got); err != nil {
 		t.Fatalf("unmarshal delivered shipment: %v", err)
 	}
-	if got.Status != warehouseenum.OutboundShipmentStatusDelivered || got.DeliveredAt == nil || !got.DeliveredAt.Equal(deliveredAt) {
+	if got.Status != warehouse_enums.OutboundShipmentStatusDelivered || got.DeliveredAt == nil || !got.DeliveredAt.Equal(deliveredAt) {
 		t.Fatalf("delivered shipment round trip = %+v", got)
 	}
 
 	raw, err = json.Marshal(warehousecontract.OutboundShipment{
 		ID:        "shipment-2",
-		Status:    warehouseenum.OutboundShipmentStatusDispatched,
+		Status:    warehouse_enums.OutboundShipmentStatusDispatched,
 		CreatedAt: deliveredAt.Add(-2 * time.Hour),
 	})
 	if err != nil {

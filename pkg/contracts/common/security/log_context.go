@@ -1,13 +1,16 @@
 package security
 
-import role "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/identity/role"
+import (
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/identity/role/role_enums"
+)
 
 // ActorRef identifies the authenticated principal that performed an
 // action. It is shared by audit, access, and security records.
 type ActorRef struct {
-	ActorID    string        `json:"actor_id,omitempty"`
-	ActorEmail string        `json:"actor_email,omitempty"`
-	ActorRole  role.UserRole `json:"actor_role,omitempty"`
+	ActorID    string              `json:"actor_id,omitempty"`
+	ActorEmail string              `json:"actor_email,omitempty"`
+	ActorRole  role_enums.UserRole `json:"actor_role,omitempty"`
 }
 
 // RequestContext carries the transport-level correlation fields captured
@@ -24,7 +27,7 @@ type RequestContext struct {
 
 // RecordOutcome is the result block shared by audit and access records.
 type RecordOutcome struct {
-	Outcome    AuditOutcome `json:"outcome"`
-	StatusCode int          `json:"status_code,omitempty"`
-	Reason     string       `json:"reason,omitempty"` // failure reason / human note
+	Outcome    security_enums.AuditOutcome `json:"outcome"`
+	StatusCode int                         `json:"status_code,omitempty"`
+	Reason     string                      `json:"reason,omitempty"` // failure reason / human note
 }

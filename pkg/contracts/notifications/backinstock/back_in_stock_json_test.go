@@ -5,8 +5,9 @@ import (
 	"testing"
 	"time"
 
-	identity "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/identity/account"
-	notification "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/notifications/backinstock"
+	identity "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/identity/account"
+	notification "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/notifications/backinstock"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/notifications/backinstock/backinstock_enums"
 )
 
 func TestBackInStockSubscriptionJSONRoundTrip(t *testing.T) {
@@ -15,10 +16,10 @@ func TestBackInStockSubscriptionJSONRoundTrip(t *testing.T) {
 		ID:             "bis_123",
 		ProductSKUCode: "SKU-001",
 		UserID:         "usr_123",
-		CustomerType:   notification.BackInStockCustomerTypeRetail,
-		Channel:        notification.BackInStockChannelSMS,
+		CustomerType:   backinstock_enums.BackInStockCustomerTypeRetail,
+		Channel:        backinstock_enums.BackInStockChannelSMS,
 		Locale:         "zh-Hant",
-		Status:         notification.BackInStockStatusPending,
+		Status:         backinstock_enums.BackInStockStatusPending,
 		ConsentSnapshot: notification.BackInStockConsentSnapshot{
 			AccountPreferences: &identity.UserNotificationPreferences{
 				Channels: identity.UserNotificationChannels{Email: true, SMS: true},

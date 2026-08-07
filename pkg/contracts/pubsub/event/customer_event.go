@@ -3,7 +3,7 @@ package event
 import (
 	"time"
 
-	retail "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/customers/retail"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/customers/retail/retail_enums"
 )
 
 // CustomerRegisteredEvent is emitted on the customer-events topic when a
@@ -11,13 +11,13 @@ import (
 // ensure-profile path). AggregateID is the customer number. Deliberately
 // carries no PII (no name/email/phone).
 type CustomerRegisteredEvent struct {
-	CustomerID        string                           `json:"customer_id"`
-	CustomerNumber    string                           `json:"customer_number"`
-	UserID            string                           `json:"user_id,omitempty"`
-	AccountID         string                           `json:"account_id,omitempty"`
-	AcquisitionSource retail.CustomerAcquisitionSource `json:"acquisition_source,omitempty"`
-	RegisteredAt      time.Time                        `json:"registered_at"`
-	RequestID         string                           `json:"request_id,omitempty"`
+	CustomerID        string                                 `json:"customer_id"`
+	CustomerNumber    string                                 `json:"customer_number"`
+	UserID            string                                 `json:"user_id,omitempty"`
+	AccountID         string                                 `json:"account_id,omitempty"`
+	AcquisitionSource retail_enums.CustomerAcquisitionSource `json:"acquisition_source,omitempty"`
+	RegisteredAt      time.Time                              `json:"registered_at"`
+	RequestID         string                                 `json:"request_id,omitempty"`
 }
 
 // CustomerProfileUpdatedEvent is emitted on the customer-events topic when a

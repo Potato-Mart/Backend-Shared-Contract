@@ -3,7 +3,8 @@ package security
 import (
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/security/security_enums"
 )
 
 // AuditLogEntry is one immutable record of an administrative action.
@@ -21,9 +22,9 @@ type AuditLogEntry struct {
 	ResourceID string `json:"resource_id,omitempty"`
 	RequestContext
 	RecordOutcome
-	RiskLevel     SecurityRiskLevel `json:"risk_level,omitempty"`
-	IntegrityHash string            `json:"integrity_hash,omitempty"`
-	Diff          common.Metadata   `json:"diff,omitempty"` // arbitrary before/after fragments
+	RiskLevel     security_enums.SecurityRiskLevel `json:"risk_level,omitempty"`
+	IntegrityHash string                           `json:"integrity_hash,omitempty"`
+	Diff          metadata.Metadata                `json:"diff,omitempty"` // arbitrary before/after fragments
 
 	DataProtectionFields
 }

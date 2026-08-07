@@ -3,13 +3,13 @@ package enums_test
 import (
 	"testing"
 
-	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/shipping/shipping_enums"
 )
 
 func TestShippingEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
-		{name: "shippingenum.DeliveryMethod", valid: []stringEnum{shippingenum.DeliveryMethodDelivery, shippingenum.DeliveryMethodPickup, shippingenum.DeliveryMethodOutsourced}, invalid: shippingenum.DeliveryMethod("__invalid__")},
-		{name: "shippingenum.FulfilmentIntent", valid: []stringEnum{shippingenum.FulfilmentIntentDelivery, shippingenum.FulfilmentIntentPickup, shippingenum.FulfilmentIntentInStoreCarry}, invalid: shippingenum.FulfilmentIntent("__invalid__")},
-		{name: "shippingenum.ShippingRateName", valid: []stringEnum{shippingenum.ShippingRateNameStandard, shippingenum.ShippingRateNameExpress, shippingenum.ShippingRateNamePickup}, invalid: shippingenum.ShippingRateName("__invalid__")},
+		{name: "shippingenum.DeliveryMethod", valid: []stringEnum{shipping_enums.DeliveryMethodDelivery, shipping_enums.DeliveryMethodPickup, shipping_enums.DeliveryMethodOutsourced}, invalid: shipping_enums.DeliveryMethod("__invalid__")},
+		{name: "shippingenum.FulfilmentIntent", valid: []stringEnum{shipping_enums.FulfilmentIntentDelivery, shipping_enums.FulfilmentIntentPickup, shipping_enums.FulfilmentIntentInStoreCarry}, invalid: shipping_enums.FulfilmentIntent("__invalid__")},
+		{name: "shippingenum.ShippingRateName", valid: []stringEnum{shipping_enums.ShippingRateNameStandard, shipping_enums.ShippingRateNameExpress, shipping_enums.ShippingRateNamePickup}, invalid: shipping_enums.ShippingRateName("__invalid__")},
 	})
 }

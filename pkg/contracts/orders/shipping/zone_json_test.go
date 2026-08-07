@@ -2,10 +2,11 @@ package shipping
 
 import (
 	"encoding/json"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
 	"strings"
 	"testing"
 	"time"
+
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
 )
 
 func TestZoneUsesTypedGeographicCoverage(t *testing.T) {

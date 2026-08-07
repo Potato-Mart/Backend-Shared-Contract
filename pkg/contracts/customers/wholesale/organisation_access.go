@@ -3,46 +3,50 @@ package wholesale
 import (
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/metadata"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/customers/wholesale/wholesale_enums"
 )
 
 // OrganisationAccess links a user account/persona to a wholesale organisation
 // and carries the organisation-scoped role key plus the person's team profile.
 // At most one active access per organisation should be marked primary.
 type OrganisationAccess struct {
-	ID                        string                   `json:"id"`
-	WholesaleOrganisationCode string                   `json:"wholesale_organisation_code"`
-	UserID                    string                   `json:"user_id"`
-	AccountID                 string                   `json:"account_id"`
-	RoleKey                   string                   `json:"role_key"`
-	Status                    OrganisationAccessStatus `json:"status"`
-	Name                      common.PersonName        `json:"name,omitempty"`
-	Contacts                  common.ContactChannels   `json:"contacts,omitempty"`
-	JobTitle                  string                   `json:"job_title,omitempty"`
-	Department                string                   `json:"department,omitempty"`
-	IsPrimary                 bool                     `json:"is_primary,omitempty"`
-	Invitation                *common.LifecycleAction  `json:"invitation,omitempty"`
-	JoinedAt                  *time.Time               `json:"joined_at,omitempty"`
-	Suspension                *common.LifecycleAction  `json:"suspension,omitempty"`
-	Revocation                *common.LifecycleAction  `json:"revocation,omitempty"`
-	ExpiresAt                 *time.Time               `json:"expires_at,omitempty"`
-	Metadata                  common.Metadata          `json:"metadata,omitempty"`
+	ID                        string                                   `json:"id"`
+	WholesaleOrganisationCode string                                   `json:"wholesale_organisation_code"`
+	UserID                    string                                   `json:"user_id"`
+	AccountID                 string                                   `json:"account_id"`
+	RoleKey                   string                                   `json:"role_key"`
+	Status                    wholesale_enums.OrganisationAccessStatus `json:"status"`
+	Name                      party.PersonName                         `json:"name,omitempty"`
+	Contacts                  party.ContactChannels                    `json:"contacts,omitempty"`
+	JobTitle                  string                                   `json:"job_title,omitempty"`
+	Department                string                                   `json:"department,omitempty"`
+	IsPrimary                 bool                                     `json:"is_primary,omitempty"`
+	Invitation                *audit.LifecycleAction                   `json:"invitation,omitempty"`
+	JoinedAt                  *time.Time                               `json:"joined_at,omitempty"`
+	Suspension                *audit.LifecycleAction                   `json:"suspension,omitempty"`
+	Revocation                *audit.LifecycleAction                   `json:"revocation,omitempty"`
+	ExpiresAt                 *time.Time                               `json:"expires_at,omitempty"`
+	Metadata                  metadata.Metadata                        `json:"metadata,omitempty"`
 
-	common.AuditFields
+	audit.AuditFields
 }
 
 // OrganisationAccessSummary is the compact access projection carried by
 // access/session and organisation contact responses.
 type OrganisationAccessSummary struct {
-	ID                        string                   `json:"id"`
-	WholesaleOrganisationCode string                   `json:"wholesale_organisation_code"`
-	UserID                    string                   `json:"user_id"`
-	AccountID                 string                   `json:"account_id,omitempty"`
-	RoleKey                   string                   `json:"role_key"`
-	Status                    OrganisationAccessStatus `json:"status"`
-	Name                      common.PersonName        `json:"name,omitempty"`
-	Contacts                  common.ContactChannels   `json:"contacts,omitempty"`
-	JobTitle                  string                   `json:"job_title,omitempty"`
-	Department                string                   `json:"department,omitempty"`
-	IsPrimary                 bool                     `json:"is_primary,omitempty"`
+	ID                        string                                   `json:"id"`
+	WholesaleOrganisationCode string                                   `json:"wholesale_organisation_code"`
+	UserID                    string                                   `json:"user_id"`
+	AccountID                 string                                   `json:"account_id,omitempty"`
+	RoleKey                   string                                   `json:"role_key"`
+	Status                    wholesale_enums.OrganisationAccessStatus `json:"status"`
+	Name                      party.PersonName                         `json:"name,omitempty"`
+	Contacts                  party.ContactChannels                    `json:"contacts,omitempty"`
+	JobTitle                  string                                   `json:"job_title,omitempty"`
+	Department                string                                   `json:"department,omitempty"`
+	IsPrimary                 bool                                     `json:"is_primary,omitempty"`
 }

@@ -2,13 +2,16 @@ package membership_test
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pricing/membership"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pricing/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/product"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/membership"
+
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product"
 )
 
 func TestMembershipAccountAndTierRoundTrip(t *testing.T) {
@@ -16,7 +19,7 @@ func TestMembershipAccountAndTierRoundTrip(t *testing.T) {
 	account := membership.MembershipAccount{
 		ID:      "RC-20260727-ABCDEF",
 		TierKey: "gold",
-		Status:  membershipenum.MembershipAccountStatusActive,
+		Status:  membership_enums.MembershipAccountStatusActive,
 		Wallet: membership.MembershipWalletSummary{
 			TotalPoints:     1200,
 			ReservedPoints:  200,
@@ -30,8 +33,8 @@ func TestMembershipAccountAndTierRoundTrip(t *testing.T) {
 	tier := membership.MembershipTier{
 		TierKey:             "gold",
 		Label:               "Gold",
-		QualificationMetric: membershipenum.MembershipTierMetricAnnualSpend,
-		MinQualifyingSpend:  common.Money{AmountMinor: 100000, Currency: "AUD"},
+		QualificationMetric: membership_enums.MembershipTierMetricAnnualSpend,
+		MinQualifyingSpend:  money.Money{AmountMinor: 100000, Currency: "AUD"},
 		PointMultiplier:     2,
 		IsActive:            true,
 		IsSystem:            true,
@@ -53,7 +56,7 @@ func TestMembershipAccountAndTierRoundTrip(t *testing.T) {
 		t.Fatalf("unmarshal membership account/tier: %v", err)
 	}
 	if decoded.Account.Wallet.AvailablePoints != 1000 || decoded.Account.Wallet.PointDebt != 25 ||
-		decoded.Tier.QualificationMetric != membershipenum.MembershipTierMetricAnnualSpend {
+		decoded.Tier.QualificationMetric != membership_enums.MembershipTierMetricAnnualSpend {
 		t.Fatalf("membership account/tier did not round-trip: %+v", decoded)
 	}
 }
@@ -68,7 +71,7 @@ func TestPointLedgerBucketsAndReservationRoundTrip(t *testing.T) {
 		ID:             "redeem_1",
 		CustomerNumber: "RC-20260727-ABCDEF",
 		Delta:          -40,
-		Reason:         membershipenum.MembershipPointReasonRedeem,
+		Reason:         membership_enums.MembershipPointReasonRedeem,
 		BalanceAfter:   60,
 		DebtDelta:      &debtDelta,
 		DebtAfter:      &debtAfter,
@@ -86,8 +89,8 @@ func TestPointLedgerBucketsAndReservationRoundTrip(t *testing.T) {
 		PointDebt:       20,
 		ExpiringPoints:  100,
 		Buckets: []membership.PointBucket{
-			{Points: 30, ExpiresAt: &expiresSoon, SourceLedgerEntryID: "earn_1", Reason: membershipenum.MembershipPointReasonOrder},
-			{Points: 70, ExpiresAt: &expiresLater, SourceLedgerEntryID: "earn_2", Reason: membershipenum.MembershipPointReasonSignupBonus},
+			{Points: 30, ExpiresAt: &expiresSoon, SourceLedgerEntryID: "earn_1", Reason: membership_enums.MembershipPointReasonOrder},
+			{Points: 70, ExpiresAt: &expiresLater, SourceLedgerEntryID: "earn_2", Reason: membership_enums.MembershipPointReasonSignupBonus},
 		},
 		CalculatedAt: now,
 	}
@@ -95,9 +98,9 @@ func TestPointLedgerBucketsAndReservationRoundTrip(t *testing.T) {
 		ID:             "res_1",
 		CustomerNumber: "RC-20260727-ABCDEF",
 		Points:         40,
-		Status:         membershipenum.PointReservationStatusReserved,
-		Reason:         membershipenum.MembershipPointReasonRedeem,
-		RedemptionType: membershipenum.MembershipRedemptionTypeCheckoutDiscount,
+		Status:         membership_enums.PointReservationStatusReserved,
+		Reason:         membership_enums.MembershipPointReasonRedeem,
+		RedemptionType: membership_enums.MembershipRedemptionTypeCheckoutDiscount,
 		Allocations:    entry.Allocations,
 		ExpiresAt:      now.Add(10 * time.Minute),
 		CreatedAt:      now,
@@ -130,7 +133,7 @@ func TestPointLedgerBucketsAndReservationRoundTrip(t *testing.T) {
 	repaymentDelta := -20
 	repaidPayload, err := json.Marshal(membership.PointLedgerEntry{
 		ID: "debt_repaid_1", CustomerNumber: "RC-20260727-ABCDEF",
-		Reason:    membershipenum.MembershipPointReasonDebtRepaid,
+		Reason:    membership_enums.MembershipPointReasonDebtRepaid,
 		DebtDelta: &repaymentDelta, DebtAfter: &zero, CreatedAt: now,
 	})
 	if err != nil {
@@ -143,12 +146,12 @@ func TestPointLedgerBucketsAndReservationRoundTrip(t *testing.T) {
 
 func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 	now := time.Date(2026, 6, 23, 0, 0, 0, 0, time.UTC)
-	discount := common.Money{AmountMinor: 500, Currency: "AUD"}
+	discount := money.Money{AmountMinor: 500, Currency: "AUD"}
 	reward := membership.Reward{
 		ID:             "reward_1",
 		Code:           "reward_1",
 		Name:           "Five dollar discount",
-		Type:           membershipenum.MembershipRewardTypeOrderDiscount,
+		Type:           membership_enums.MembershipRewardTypeOrderDiscount,
 		PointsCost:     500,
 		DiscountAmount: &discount,
 		IsActive:       true,
@@ -159,14 +162,14 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 		RewardCode:     "reward_1",
 		ReservationID:  "res_1",
 		PointsSpent:    500,
-		Status:         membershipenum.MembershipRewardRedemptionStatusRedeemed,
+		Status:         membership_enums.MembershipRewardRedemptionStatusRedeemed,
 		DiscountAmount: &discount,
 		CreatedAt:      now,
 	}
 	plan := membership.SubscriptionPlan{
 		ID:            "plan_1",
 		Product:       product.Snapshot{SKUCode: "A00001", Name: "Weekly Potatoes"},
-		UnitPrice:     common.Money{AmountMinor: 1200, Currency: "AUD"},
+		UnitPrice:     money.Money{AmountMinor: 1200, Currency: "AUD"},
 		FrequencyDays: 7,
 		IsActive:      true,
 	}
@@ -175,7 +178,7 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 		CustomerNumber: "RC-20260727-ABCDEF",
 		PlanID:         "plan_1",
 		Qty:            2,
-		Status:         membershipenum.MemberSubscriptionStatusActive,
+		Status:         membership_enums.MemberSubscriptionStatusActive,
 		StartedAt:      now,
 		NextOrderAt:    now.AddDate(0, 0, 7),
 	}
@@ -200,7 +203,7 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 		t.Fatalf("unmarshal reward/subscription contracts: %v", err)
 	}
 	if decoded.Reward.PointsCost != 500 || decoded.Redemption.PointsSpent != 500 ||
-		decoded.Plan.FrequencyDays != 7 || decoded.Subscription.Status != membershipenum.MemberSubscriptionStatusActive {
+		decoded.Plan.FrequencyDays != 7 || decoded.Subscription.Status != membership_enums.MemberSubscriptionStatusActive {
 		t.Fatalf("reward/subscription contracts did not round-trip: %+v", decoded)
 	}
 }

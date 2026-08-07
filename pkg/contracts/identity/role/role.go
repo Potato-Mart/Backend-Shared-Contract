@@ -1,8 +1,11 @@
 package role
 
 import (
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/identity/role/role_enums"
 )
 
 // Role is the projection of a role definition stored in mgmt_roles.
@@ -16,14 +19,14 @@ import (
 // System roles cannot be deleted but their permissions can
 // be tweaked by a superAdmin.
 type Role struct {
-	Key                         UserRole   `json:"key"`
-	Label                       string     `json:"label"`
-	Description                 string     `json:"description,omitempty"`
-	Permissions                 []string   `json:"permissions"`
-	IsSystem                    bool       `json:"is_system"`
-	OwnerID                     string     `json:"owner_id,omitempty"`
-	LeastPrivilegeJustification string     `json:"least_privilege_justification,omitempty"`
-	AccessReviewedAt            *time.Time `json:"access_reviewed_at,omitempty"`
+	Key                         role_enums.UserRole `json:"key"`
+	Label                       string              `json:"label"`
+	Description                 string              `json:"description,omitempty"`
+	Permissions                 []string            `json:"permissions"`
+	IsSystem                    bool                `json:"is_system"`
+	OwnerID                     string              `json:"owner_id,omitempty"`
+	LeastPrivilegeJustification string              `json:"least_privilege_justification,omitempty"`
+	AccessReviewedAt            *time.Time          `json:"access_reviewed_at,omitempty"`
 
-	common.AuditFields
+	audit.AuditFields
 }

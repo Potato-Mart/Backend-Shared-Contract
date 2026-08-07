@@ -2,24 +2,28 @@ package warehouse_test
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse"
+
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestStockLocationAndBalanceJSONShapes(t *testing.T) {
 	location := warehouse.StockLocation{
 		ID: "location_1", DepotCode: "AU-VIC-MEL-DC-01",
 		LocationCode:    warehouse.StockLocationCodeOnlineStageFrozen,
-		StorageType:     warehouseenum.StorageFrozen,
-		Purpose:         warehouseenum.StockLocationPurposeOnlineOrderStaging,
-		HandlingMode:    warehouseenum.StockLocationHandlingMixed,
-		Access:          warehouseenum.StockLocationAccessStaffOnly,
-		CollectionMode:  warehouseenum.StockLocationCollectionUnrestricted,
+		StorageType:     warehouse_enums.StorageFrozen,
+		Purpose:         warehouse_enums.StockLocationPurposeOnlineOrderStaging,
+		HandlingMode:    warehouse_enums.StockLocationHandlingMixed,
+		Access:          warehouse_enums.StockLocationAccessStaffOnly,
+		CollectionMode:  warehouse_enums.StockLocationCollectionUnrestricted,
 		IsSystemManaged: true, IsActive: true,
 	}
 	shape := marshalStockLocationObject(t, location)
@@ -38,7 +42,7 @@ func TestStockLocationAndBalanceJSONShapes(t *testing.T) {
 	balanceShape := marshalStockLocationObject(t, warehouse.StockLocationProductBalance{
 		AssignmentID: "assignment_1", DepotCode: location.DepotCode,
 		LocationCode: location.LocationCode, ProductSKUCode: "A00001",
-		PackageComposition: stockLocationComposition(common.PackageHandlingUnitEach, "pkg_each", zero, 1),
+		PackageComposition: stockLocationComposition(packaging_enums.PackageHandlingUnitEach, "pkg_each", zero, 1),
 		OnHandBaseUnits:    zero, ReservedBaseUnits: zero, AvailableBaseUnits: zero,
 		IsOutOfStock: true, Revision: 7,
 		DepotTimezone: "Australia/Melbourne", AsOf: time.Date(2026, 8, 4, 5, 0, 0, 0, time.UTC),
@@ -55,15 +59,15 @@ func TestRequiredSystemStockLocationCodesJSON(t *testing.T) {
 		name        string
 		code        string
 		wantCode    string
-		storageType warehouseenum.StorageType
-		purpose     warehouseenum.StockLocationPurpose
+		storageType warehouse_enums.StorageType
+		purpose     warehouse_enums.StockLocationPurpose
 	}{
-		{name: "quality hold dry", code: warehouse.StockLocationCodeQualityHoldDry, wantCode: "SYS-QH-DRY", storageType: warehouseenum.StorageDry, purpose: warehouseenum.StockLocationPurposeQualityHold},
-		{name: "quality hold chilled", code: warehouse.StockLocationCodeQualityHoldChilled, wantCode: "SYS-QH-CHILLED", storageType: warehouseenum.StorageChilled, purpose: warehouseenum.StockLocationPurposeQualityHold},
-		{name: "quality hold frozen", code: warehouse.StockLocationCodeQualityHoldFrozen, wantCode: "SYS-QH-FROZEN", storageType: warehouseenum.StorageFrozen, purpose: warehouseenum.StockLocationPurposeQualityHold},
-		{name: "online stage dry", code: warehouse.StockLocationCodeOnlineStageDry, wantCode: "SYS-ONLINE-STAGE-DRY", storageType: warehouseenum.StorageDry, purpose: warehouseenum.StockLocationPurposeOnlineOrderStaging},
-		{name: "online stage chilled", code: warehouse.StockLocationCodeOnlineStageChilled, wantCode: "SYS-ONLINE-STAGE-CHILLED", storageType: warehouseenum.StorageChilled, purpose: warehouseenum.StockLocationPurposeOnlineOrderStaging},
-		{name: "online stage frozen", code: warehouse.StockLocationCodeOnlineStageFrozen, wantCode: "SYS-ONLINE-STAGE-FROZEN", storageType: warehouseenum.StorageFrozen, purpose: warehouseenum.StockLocationPurposeOnlineOrderStaging},
+		{name: "quality hold dry", code: warehouse.StockLocationCodeQualityHoldDry, wantCode: "SYS-QH-DRY", storageType: warehouse_enums.StorageDry, purpose: warehouse_enums.StockLocationPurposeQualityHold},
+		{name: "quality hold chilled", code: warehouse.StockLocationCodeQualityHoldChilled, wantCode: "SYS-QH-CHILLED", storageType: warehouse_enums.StorageChilled, purpose: warehouse_enums.StockLocationPurposeQualityHold},
+		{name: "quality hold frozen", code: warehouse.StockLocationCodeQualityHoldFrozen, wantCode: "SYS-QH-FROZEN", storageType: warehouse_enums.StorageFrozen, purpose: warehouse_enums.StockLocationPurposeQualityHold},
+		{name: "online stage dry", code: warehouse.StockLocationCodeOnlineStageDry, wantCode: "SYS-ONLINE-STAGE-DRY", storageType: warehouse_enums.StorageDry, purpose: warehouse_enums.StockLocationPurposeOnlineOrderStaging},
+		{name: "online stage chilled", code: warehouse.StockLocationCodeOnlineStageChilled, wantCode: "SYS-ONLINE-STAGE-CHILLED", storageType: warehouse_enums.StorageChilled, purpose: warehouse_enums.StockLocationPurposeOnlineOrderStaging},
+		{name: "online stage frozen", code: warehouse.StockLocationCodeOnlineStageFrozen, wantCode: "SYS-ONLINE-STAGE-FROZEN", storageType: warehouse_enums.StorageFrozen, purpose: warehouse_enums.StockLocationPurposeOnlineOrderStaging},
 	}
 
 	seen := make(map[string]struct{}, len(tests))
@@ -83,9 +87,9 @@ func TestRequiredSystemStockLocationCodesJSON(t *testing.T) {
 				LocationCode:    tt.code,
 				StorageType:     tt.storageType,
 				Purpose:         tt.purpose,
-				HandlingMode:    warehouseenum.StockLocationHandlingMixed,
-				Access:          warehouseenum.StockLocationAccessStaffOnly,
-				CollectionMode:  warehouseenum.StockLocationCollectionUnrestricted,
+				HandlingMode:    warehouse_enums.StockLocationHandlingMixed,
+				Access:          warehouse_enums.StockLocationAccessStaffOnly,
+				CollectionMode:  warehouse_enums.StockLocationCollectionUnrestricted,
 				IsSystemManaged: true,
 				IsActive:        true,
 			})
@@ -122,11 +126,11 @@ func TestStockLocationAssignmentReplacesProductPlacement(t *testing.T) {
 	}
 }
 
-func stockLocationComposition(unit common.PackageHandlingUnit, optionID string, count, unitsPerPackage int64) common.PackageCompositionSnapshot {
+func stockLocationComposition(unit packaging_enums.PackageHandlingUnit, optionID string, count, unitsPerPackage int64) packaging.PackageCompositionSnapshot {
 	baseUnits := count * unitsPerPackage
-	return common.PackageCompositionSnapshot{
+	return packaging.PackageCompositionSnapshot{
 		TotalBaseUnits: baseUnits,
-		Components: []common.PackageComponentSnapshot{{
+		Components: []packaging.PackageComponentSnapshot{{
 			PackageOptionID: optionID,
 			HandlingUnit:    unit,
 			PackageCount:    count,

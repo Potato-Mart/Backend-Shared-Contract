@@ -1,18 +1,20 @@
 package promotion
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
 	"time"
+
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 // EffectivePromotion is the result of resolving the single promotion that
 // prices one product at one instant.
 type EffectivePromotion struct {
-	PromotionID   string         `json:"promotion_id"`
-	SeriesKey     string         `json:"series_key"`
-	PromotionName string         `json:"promotion_name,omitempty"`
-	Class         PromotionClass `json:"class"`
-	TargetScope   DiscountScope  `json:"target_scope"`
+	PromotionID   string                         `json:"promotion_id"`
+	SeriesKey     string                         `json:"series_key"`
+	PromotionName string                         `json:"promotion_name,omitempty"`
+	Class         promotion_enums.PromotionClass `json:"class"`
+	TargetScope   promotion_enums.DiscountScope  `json:"target_scope"`
 
 	OriginalPriceMinor   int64  `json:"original_price_minor"`
 	DiscountedPriceMinor int64  `json:"discounted_price_minor"`

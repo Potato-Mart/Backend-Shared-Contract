@@ -1,8 +1,9 @@
 package event
 
 import (
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
 )
 
 // GiftCardIssuedEvent requests delivery of the email for a captured gift-card
@@ -11,16 +12,16 @@ import (
 // have a verified retail customer account and must never be persisted outside
 // the protected notification delivery record.
 type GiftCardIssuedEvent struct {
-	IssuanceID                string       `json:"issuance_id"`
-	DenominationPolicyVersion int          `json:"denomination_policy_version,omitempty"`
-	RecipientEmail            string       `json:"recipient_email"`
-	RecipientName             string       `json:"recipient_name"`
-	SenderName                string       `json:"sender_name"`
-	Amount                    common.Money `json:"amount"`
-	Message                   string       `json:"message,omitempty"`
-	ClaimCode                 string       `json:"claim_code,omitempty"`
-	Locale                    string       `json:"locale,omitempty"`
-	IssuedAt                  time.Time    `json:"issued_at"`
+	IssuanceID                string      `json:"issuance_id"`
+	DenominationPolicyVersion int         `json:"denomination_policy_version,omitempty"`
+	RecipientEmail            string      `json:"recipient_email"`
+	RecipientName             string      `json:"recipient_name"`
+	SenderName                string      `json:"sender_name"`
+	Amount                    money.Money `json:"amount"`
+	Message                   string      `json:"message,omitempty"`
+	ClaimCode                 string      `json:"claim_code,omitempty"`
+	Locale                    string      `json:"locale,omitempty"`
+	IssuedAt                  time.Time   `json:"issued_at"`
 }
 
 // VoucherClaimIssuedEvent requests delivery of a claim invitation without

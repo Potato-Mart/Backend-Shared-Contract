@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	identity "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/identity/account"
+	identity "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/identity/account"
 )
 
 func TestUserNotificationTopicsJSONShape(t *testing.T) {

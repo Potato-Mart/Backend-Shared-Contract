@@ -2,11 +2,15 @@ package wholesale_test
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/customers/wholesale"
-	wholesaleenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/customers/wholesale"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/customers/wholesale"
+
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/customers/wholesale/wholesale_enums"
 )
 
 func TestOrganisationAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T) {
@@ -18,12 +22,12 @@ func TestOrganisationAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *test
 		UserID:                    "user_1",
 		AccountID:                 "acct_1",
 		RoleKey:                   "buyer",
-		Status:                    wholesaleenum.OrganisationAccessStatusActive,
-		Name:                      common.PersonName{DisplayName: "A Buyer"},
-		Contacts:                  common.ContactChannels{Email: "buyer@example.com"},
+		Status:                    wholesale_enums.OrganisationAccessStatusActive,
+		Name:                      party.PersonName{DisplayName: "A Buyer"},
+		Contacts:                  party.ContactChannels{Email: "buyer@example.com"},
 		Department:                "Procurement",
 		JobTitle:                  "Buyer",
-		Invitation:                &common.LifecycleAction{By: "admin_1", At: &invitedAt},
+		Invitation:                &audit.LifecycleAction{By: "admin_1", At: &invitedAt},
 		JoinedAt:                  &joinedAt,
 	}
 

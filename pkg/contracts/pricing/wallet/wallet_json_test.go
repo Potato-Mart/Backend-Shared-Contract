@@ -2,34 +2,38 @@ package wallet_test
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pricing/benefit"
-	benefitenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pricing/benefit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pricing/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pricing/wallet"
-	walletenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pricing/wallet"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/benefit"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/wallet"
+
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/benefit/benefit_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 func TestCustomerWalletRoundTrip(t *testing.T) {
 	now := time.Date(2026, 6, 30, 0, 0, 0, 0, time.UTC)
-	bal := common.Money{AmountMinor: 2500, Currency: "AUD"}
-	reserved := common.Money{AmountMinor: 500, Currency: "AUD"}
-	available := common.Money{AmountMinor: 2000, Currency: "AUD"}
+	bal := money.Money{AmountMinor: 2500, Currency: "AUD"}
+	reserved := money.Money{AmountMinor: 500, Currency: "AUD"}
+	available := money.Money{AmountMinor: 2000, Currency: "AUD"}
 	activatedAt := now.Add(time.Hour)
 	redeemedAt := now.Add(2 * time.Hour)
 	w := wallet.CustomerWallet{
 		CustomerNumber: "RC-20260727-ABCDEF",
 		Instruments: []wallet.WalletInstrument{
 			{
-				Type: walletenum.WalletInstrumentTypeGiftCard, Code: "GC-1", Status: "active",
+				Type: wallet_enums.WalletInstrumentTypeGiftCard, Code: "GC-1", Status: "active",
 				CommittedBalance: &bal, ReservedBalance: &reserved, AvailableBalance: &available,
 				IssuedAt: &now, ActivatedAt: &activatedAt,
 			},
-			{Type: walletenum.WalletInstrumentTypePoints, Code: "mem_1"},
-			{Type: walletenum.WalletInstrumentTypeVoucher, Code: "VOUCHER-1", IssuedAt: &now, RedeemedAt: &redeemedAt},
+			{Type: wallet_enums.WalletInstrumentTypePoints, Code: "mem_1"},
+			{Type: wallet_enums.WalletInstrumentTypeVoucher, Code: "VOUCHER-1", IssuedAt: &now, RedeemedAt: &redeemedAt},
 		},
 		Summary: wallet.CustomerWalletSummary{
 			AvailablePoints: 1000,
@@ -117,7 +121,7 @@ func TestMembershipPassContentRoundTrip(t *testing.T) {
 		TierKey:         "standard",
 		AvailablePoints: 125,
 		Barcode: wallet.MembershipPassBarcode{
-			Format:        walletenum.WalletPassBarcodeFormatCode128,
+			Format:        wallet_enums.WalletPassBarcodeFormatCode128,
 			Value:         "RC-20260717-ABCDEF",
 			AlternateText: "RC-20260717-ABCDEF",
 		},
@@ -152,14 +156,14 @@ func TestMembershipPassContentRoundTrip(t *testing.T) {
 		t.Fatalf("unmarshal membership pass content: %v", err)
 	}
 	if decoded.CustomerNumber != content.CustomerNumber || decoded.Barcode.Value != content.CustomerNumber ||
-		decoded.Barcode.Format != walletenum.WalletPassBarcodeFormatCode128 || !decoded.GeneratedAt.Equal(now) {
+		decoded.Barcode.Format != wallet_enums.WalletPassBarcodeFormatCode128 || !decoded.GeneratedAt.Equal(now) {
 		t.Fatalf("membership pass content did not round-trip: %+v", decoded)
 	}
 
 	optionalPayload, err := json.Marshal(wallet.MembershipPassContent{
 		CustomerNumber: "RC-1",
 		Barcode: wallet.MembershipPassBarcode{
-			Format: walletenum.WalletPassBarcodeFormatCode128,
+			Format: wallet_enums.WalletPassBarcodeFormatCode128,
 			Value:  "RC-1",
 		},
 		GeneratedAt: now,
@@ -176,17 +180,17 @@ func TestMembershipPassContentRoundTrip(t *testing.T) {
 
 func TestGiftCardRoundTrip(t *testing.T) {
 	now := time.Date(2026, 6, 30, 0, 0, 0, 0, time.UTC)
-	owner := benefit.OwnerRef{OwnerType: benefitenum.OwnerTypeRetailCustomer, OwnerID: "retail_1"}
+	owner := benefit.OwnerRef{OwnerType: benefit_enums.OwnerTypeRetailCustomer, OwnerID: "retail_1"}
 	gc := wallet.GiftCard{
 		ID:                   "gc_1",
 		Code:                 "GC-1",
 		Owner:                owner,
-		CommittedBalance:     common.Money{AmountMinor: 5000, Currency: "AUD"},
-		ReservedBalance:      common.Money{AmountMinor: 1000, Currency: "AUD"},
-		AvailableBalance:     common.Money{AmountMinor: 4000, Currency: "AUD"},
-		InitialValue:         common.Money{AmountMinor: 10000, Currency: "AUD"},
+		CommittedBalance:     money.Money{AmountMinor: 5000, Currency: "AUD"},
+		ReservedBalance:      money.Money{AmountMinor: 1000, Currency: "AUD"},
+		AvailableBalance:     money.Money{AmountMinor: 4000, Currency: "AUD"},
+		InitialValue:         money.Money{AmountMinor: 10000, Currency: "AUD"},
 		ReplacesGiftCardCode: "GC-ORIGINAL",
-		Status:               walletenum.GiftCardStatusPartiallyRedeemed,
+		Status:               wallet_enums.GiftCardStatusPartiallyRedeemed,
 		IssuedAt:             now,
 	}
 
@@ -201,7 +205,7 @@ func TestGiftCardRoundTrip(t *testing.T) {
 	if decoded.Code != "GC-1" || decoded.CommittedBalance.AmountMinor != 5000 ||
 		decoded.ReservedBalance.AmountMinor != 1000 || decoded.AvailableBalance.AmountMinor != 4000 ||
 		decoded.ReplacesGiftCardCode != "GC-ORIGINAL" ||
-		decoded.Status != walletenum.GiftCardStatusPartiallyRedeemed {
+		decoded.Status != wallet_enums.GiftCardStatusPartiallyRedeemed {
 		t.Fatalf("gift card did not round-trip: %+v", decoded)
 	}
 }
@@ -211,9 +215,9 @@ func TestGiftCardTransactionRoundTrip(t *testing.T) {
 	tx := wallet.GiftCardTransaction{
 		ID:                 "gctx_1",
 		GiftCardCode:       "GC-1",
-		Delta:              common.Money{AmountMinor: -5000, Currency: "AUD"},
-		BalanceAfter:       common.Money{AmountMinor: 5000, Currency: "AUD"},
-		Reason:             walletenum.GiftCardTransactionReasonRedeem,
+		Delta:              money.Money{AmountMinor: -5000, Currency: "AUD"},
+		BalanceAfter:       money.Money{AmountMinor: 5000, Currency: "AUD"},
+		Reason:             wallet_enums.GiftCardTransactionReasonRedeem,
 		ReservationID:      "benefit_res_1",
 		RelatedOrderNumber: "MAMA260703ABC123",
 		CreatedAt:          now,
@@ -227,7 +231,7 @@ func TestGiftCardTransactionRoundTrip(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal gift card tx: %v", err)
 	}
-	if decoded.Reason != walletenum.GiftCardTransactionReasonRedeem ||
+	if decoded.Reason != wallet_enums.GiftCardTransactionReasonRedeem ||
 		decoded.BalanceAfter.AmountMinor != 5000 || decoded.ReservationID != "benefit_res_1" ||
 		decoded.RelatedOrderNumber != "MAMA260703ABC123" {
 		t.Fatalf("gift card tx did not round-trip: %+v", decoded)
@@ -240,9 +244,9 @@ func TestVoucherReservationRoundTrip(t *testing.T) {
 	voucher := wallet.Voucher{
 		ID:                       "voucher_1",
 		Code:                     "VOUCHER-1",
-		Owner:                    benefit.OwnerRef{OwnerType: benefitenum.OwnerTypeRetailCustomer, OwnerID: "RC-1"},
-		Value:                    &common.Money{AmountMinor: 1500, Currency: "AUD"},
-		Status:                   walletenum.VoucherStatusReserved,
+		Owner:                    benefit.OwnerRef{OwnerType: benefit_enums.OwnerTypeRetailCustomer, OwnerID: "RC-1"},
+		Value:                    &money.Money{AmountMinor: 1500, Currency: "AUD"},
+		Status:                   wallet_enums.VoucherStatusReserved,
 		SourceRewardCode:         "REWARD-15",
 		SourceRewardRedemptionID: "reward_redemption_1",
 		IssuedAt:                 now,
@@ -265,7 +269,7 @@ func TestVoucherReservationRoundTrip(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal reserved voucher: %v", err)
 	}
-	if decoded.Status != walletenum.VoucherStatusReserved || decoded.ReservationExpiresAt == nil {
+	if decoded.Status != wallet_enums.VoucherStatusReserved || decoded.ReservationExpiresAt == nil {
 		t.Fatalf("reserved voucher did not round-trip: %+v", decoded)
 	}
 }
@@ -275,27 +279,27 @@ func TestCheckoutBenefitReservationRoundTrip(t *testing.T) {
 	record := wallet.CheckoutBenefitReservation{
 		ID:             "benefit_res_1",
 		IdempotencyKey: "checkout-key-1",
-		Owner:          benefit.OwnerRef{OwnerType: benefitenum.OwnerTypeRetailCustomer, OwnerID: "RC-1"},
+		Owner:          benefit.OwnerRef{OwnerType: benefit_enums.OwnerTypeRetailCustomer, OwnerID: "RC-1"},
 		Voucher: &wallet.VoucherBenefitReservation{
 			VoucherCode:   "VOUCHER-1",
-			AppliedAmount: common.Money{AmountMinor: 1500, Currency: "AUD"},
-			Status:        walletenum.CheckoutBenefitReservationStatusReserved,
+			AppliedAmount: money.Money{AmountMinor: 1500, Currency: "AUD"},
+			Status:        wallet_enums.CheckoutBenefitReservationStatusReserved,
 		},
 		GiftCards: []wallet.GiftCardBenefitReservation{
 			{
 				GiftCardCode:   "GC-FIRST",
-				AppliedAmount:  common.Money{AmountMinor: 2000, Currency: "AUD"},
-				RefundedAmount: common.Money{Currency: "AUD"},
-				Status:         walletenum.CheckoutBenefitReservationStatusReserved,
+				AppliedAmount:  money.Money{AmountMinor: 2000, Currency: "AUD"},
+				RefundedAmount: money.Money{Currency: "AUD"},
+				Status:         wallet_enums.CheckoutBenefitReservationStatusReserved,
 			},
 			{
 				GiftCardCode:   "GC-SECOND",
-				AppliedAmount:  common.Money{AmountMinor: 500, Currency: "AUD"},
-				RefundedAmount: common.Money{Currency: "AUD"},
-				Status:         walletenum.CheckoutBenefitReservationStatusReserved,
+				AppliedAmount:  money.Money{AmountMinor: 500, Currency: "AUD"},
+				RefundedAmount: money.Money{Currency: "AUD"},
+				Status:         wallet_enums.CheckoutBenefitReservationStatusReserved,
 			},
 		},
-		Status:    walletenum.CheckoutBenefitReservationStatusReserved,
+		Status:    wallet_enums.CheckoutBenefitReservationStatusReserved,
 		ExpiresAt: now.Add(30 * time.Minute),
 		CreatedAt: now,
 		UpdatedAt: now,

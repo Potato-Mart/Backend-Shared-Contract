@@ -2,16 +2,18 @@ package product
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+
 	"strings"
 	"testing"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
 )
 
-func TestBrandJSONUsesV23PublicShape(t *testing.T) {
+func TestBrandJSONUsesV24PublicShape(t *testing.T) {
 	want := Brand{
 		ID:      "64c13ab08edf48a008793ca1",
 		Slug:    "happy-potato",
-		Name:    []common.LocalizedName{{Language: "en", Name: "Happy Potato"}},
+		Name:    []localization.LocalizedName{{Language: "en", Name: "Happy Potato"}},
 		LogoURL: "https://cdn.example.com/brands/happy-potato.png",
 	}
 	body, err := json.Marshal(want)
@@ -37,11 +39,11 @@ func TestBrandJSONUsesV23PublicShape(t *testing.T) {
 	}
 }
 
-func TestBrandRefUsesV23IdentityAndDisplayShape(t *testing.T) {
+func TestBrandRefUsesV24IdentityAndDisplayShape(t *testing.T) {
 	body, err := json.Marshal(BrandRef{
 		ID:      "64c13ab08edf48a008793ca1",
 		Slug:    "happy-potato",
-		Name:    []common.LocalizedName{{Language: "en", Name: "Happy Potato"}},
+		Name:    []localization.LocalizedName{{Language: "en", Name: "Happy Potato"}},
 		LogoURL: "https://cdn.example.com/brands/happy-potato.png",
 	})
 	if err != nil {
@@ -60,7 +62,7 @@ func TestBrandRefUsesV23IdentityAndDisplayShape(t *testing.T) {
 }
 
 func TestCanonicalBrandReferenceAcrossProductShapes(t *testing.T) {
-	ref := &BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "happy-potato", Name: []common.LocalizedName{{Language: "en", Name: "Happy Potato"}}}
+	ref := &BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "happy-potato", Name: []localization.LocalizedName{{Language: "en", Name: "Happy Potato"}}}
 	for name, value := range map[string]any{
 		"product":    Product{SKUCode: "A0001", CategorySKUCode: "A1", Name: "Product", BrandRef: ref},
 		"snapshot":   Snapshot{SKUCode: "A0001", Name: "Product", BrandRef: ref},
@@ -85,8 +87,8 @@ func TestCanonicalBrandReferenceAcrossProductShapes(t *testing.T) {
 
 func TestBrandAndBrandRefOmitEmptyLogoURL(t *testing.T) {
 	for name, value := range map[string]any{
-		"brand": Brand{ID: "64c13ab08edf48a008793ca1", Slug: "happy-potato", Name: []common.LocalizedName{{Language: "en", Name: "Happy Potato"}}},
-		"ref":   BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "happy-potato", Name: []common.LocalizedName{{Language: "en", Name: "Happy Potato"}}},
+		"brand": Brand{ID: "64c13ab08edf48a008793ca1", Slug: "happy-potato", Name: []localization.LocalizedName{{Language: "en", Name: "Happy Potato"}}},
+		"ref":   BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "happy-potato", Name: []localization.LocalizedName{{Language: "en", Name: "Happy Potato"}}},
 	} {
 		t.Run(name, func(t *testing.T) {
 			body, err := json.Marshal(value)

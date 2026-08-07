@@ -2,11 +2,14 @@ package product
 
 import (
 	"encoding/json"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/security"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product/product_enums"
 )
 
 func TestProductStorefrontMerchandisingJSONShape(t *testing.T) {
@@ -24,13 +27,13 @@ func TestProductStorefrontMerchandisingJSONShape(t *testing.T) {
 				ScheduleTimezone:       "Australia/Melbourne",
 				MaxQuantityPerOrder:    3,
 				MaxQuantityPerCustomer: 6,
-				Labels:                 []common.LocalizedName{{Language: "en", Name: "Preorder"}},
+				Labels:                 []localization.LocalizedName{{Language: "en", Name: "Preorder"}},
 			},
 			SoonExpiry: &SoonExpiryMerchandisingPolicy{
 				Enabled:             true,
 				WindowDays:          30,
 				ShowExactExpiryDate: true,
-				Labels:              []common.LocalizedName{{Language: "en", Name: "Short dated"}},
+				Labels:              []localization.LocalizedName{{Language: "en", Name: "Short dated"}},
 			},
 		},
 	}
@@ -68,20 +71,20 @@ func TestStorefrontDisplayJSONShape(t *testing.T) {
 	display := StorefrontDisplay{
 		Preorder: &StorefrontPreorderDisplay{
 			Available:           true,
-			Status:              StorefrontPreorderStatusOpen,
+			Status:              product_enums.StorefrontPreorderStatusOpen,
 			ExpectedAvailableAt: &expectedAt,
 			ScheduleTimezone:    "Australia/Melbourne",
 			MaxQuantityPerOrder: 2,
-			Labels:              []common.LocalizedName{{Language: "en", Name: "Preorder now"}},
+			Labels:              []localization.LocalizedName{{Language: "en", Name: "Preorder now"}},
 		},
 		Expiry: &StorefrontExpiryDisplay{
 			SoonExpiry:          true,
-			Status:              StorefrontExpiryStatusSoonExpiry,
-			AlertLevel:          security.AlertLevelCritical,
+			Status:              product_enums.StorefrontExpiryStatusSoonExpiry,
+			AlertLevel:          security_enums.AlertLevelCritical,
 			DaysToExpiry:        intPtr(5),
 			WindowDays:          30,
 			ShowExactExpiryDate: true,
-			Labels:              []common.LocalizedName{{Language: "en", Name: "Use soon"}},
+			Labels:              []localization.LocalizedName{{Language: "en", Name: "Use soon"}},
 		},
 	}
 
@@ -102,7 +105,7 @@ func TestStorefrontDisplayJSONShape(t *testing.T) {
 		t.Fatalf("preorder display lost schedule timezone: %s", body)
 	}
 	expiry, ok := got["expiry"].(map[string]any)
-	if !ok || expiry["soon_expiry"] != true || expiry["alert_level"] != string(security.AlertLevelCritical) || expiry["days_to_expiry"] != float64(5) {
+	if !ok || expiry["soon_expiry"] != true || expiry["alert_level"] != string(security_enums.AlertLevelCritical) || expiry["days_to_expiry"] != float64(5) {
 		t.Fatalf("expiry display JSON mismatch: %s", body)
 	}
 }

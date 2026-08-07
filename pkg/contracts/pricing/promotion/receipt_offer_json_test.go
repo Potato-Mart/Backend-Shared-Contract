@@ -2,10 +2,14 @@ package promotion
 
 import (
 	"encoding/json"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
 )
 
 func TestReceiptOfferOmitsPromotionRuleInternals(t *testing.T) {
@@ -13,11 +17,11 @@ func TestReceiptOfferOmitsPromotionRuleInternals(t *testing.T) {
 	body, err := json.Marshal(ReceiptOffer{
 		ID:               "prm_1",
 		SeriesKey:        "series_weekend",
-		ReceiptMessages:  []common.LocalizedName{{Language: "en", Name: "Weekend special"}},
+		ReceiptMessages:  []localization.LocalizedName{{Language: "en", Name: "Weekend special"}},
 		StartsAt:         &now,
 		ScheduleTimezone: "Australia/Sydney",
 		GeographicContext: geography.GeographicContext{
-			Source:      geography.GeographicContextSourceRetailCustomerProfile,
+			Source:      geography_enums.GeographicContextSourceRetailCustomerProfile,
 			CountryCode: "AU", ScopeRevision: 4, RuleRevision: 9,
 			EvaluationTimezone: "Australia/Sydney",
 		},

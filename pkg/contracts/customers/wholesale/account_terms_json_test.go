@@ -2,9 +2,11 @@ package wholesale_test
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/customers/wholesale"
+
 	"testing"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/customers/wholesale"
 )
 
 func TestWholesaleTermsJSONShape(t *testing.T) {
@@ -13,7 +15,7 @@ func TestWholesaleTermsJSONShape(t *testing.T) {
 		DueDays:                14,
 		PurchaseOrderRequired:  true,
 		PaymentInstructions:    "Pay by due date.",
-		CreditLimit:            &common.Money{AmountMinor: 500000, Currency: "AUD"},
+		CreditLimit:            &money.Money{AmountMinor: 500000, Currency: "AUD"},
 	}
 	raw, err := json.Marshal(terms)
 	if err != nil {

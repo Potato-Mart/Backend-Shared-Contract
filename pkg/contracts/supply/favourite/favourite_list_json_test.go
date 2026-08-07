@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/favourite"
-	favouriteenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/favourite"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/favourite"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/favourite/favourite_enums"
 )
 
 func TestFavouriteListJSONShape(t *testing.T) {
@@ -15,7 +15,7 @@ func TestFavouriteListJSONShape(t *testing.T) {
 	list := favourite.FavouriteList{
 		ID: "list_1",
 		Owner: favourite.FavouriteListOwner{
-			Type:             favouriteenum.FavouriteListOwnerTypeWholesaleOrganisation,
+			Type:             favourite_enums.FavouriteListOwnerTypeWholesaleOrganisation,
 			OrganisationCode: "ORG-1",
 		},
 		Name:            "List-1",

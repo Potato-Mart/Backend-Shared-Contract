@@ -2,14 +2,20 @@ package order_test
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/customers/retail"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/orders/order"
-	shippingenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/orders/shipping"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/product"
+
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/order"
+
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/commerce/commerce_enums"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/shipping/shipping_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product/product_enums"
 )
 
 // TestOrderBuyerAndItemPricingRoundTrip checks the additive buyer/commercial
@@ -19,22 +25,22 @@ func TestOrderBuyerAndItemPricingRoundTrip(t *testing.T) {
 	order := sales.Order{
 		ID:          "ord_b2b_1",
 		OrderNumber: "B2B-1001",
-		Channel:     common.OrderTypeB2B,
+		Channel:     commerce_enums.OrderTypeB2B,
 		Buyer: &sales.BuyerContext{
-			Type:                      customerenum.BuyerTypeWholesaleOrganisation,
+			Type:                      retail_enums.BuyerTypeWholesaleOrganisation,
 			WholesaleOrganisationCode: "org_1",
 			OrganisationAccessID:      "oacc_1",
-			FulfilmentIntent:          shippingenum.FulfilmentIntentDelivery,
+			FulfilmentIntent:          shipping_enums.FulfilmentIntentDelivery,
 		},
 		Items: []sales.OrderItem{
 			{
-				Components:     []sales.PricedPackageComponent{{RequestedPackageCount: 10, RequestedBaseUnits: 10, PackagePrice: common.Money{AmountMinor: 8000, Currency: "AUD"}}},
+				Components:     []sales.PricedPackageComponent{{RequestedPackageCount: 10, RequestedBaseUnits: 10, PackagePrice: money.Money{AmountMinor: 8000, Currency: "AUD"}}},
 				TotalBaseUnits: 10,
 				Pricing: &sales.PricingContext{
-					Audience:   productenum.PriceAudienceWholesale,
-					Visibility: productenum.PriceVisibilityWholesaleApprovedOnly,
+					Audience:   product_enums.PriceAudienceWholesale,
+					Visibility: product_enums.PriceVisibilityWholesaleApprovedOnly,
 				},
-				SubstitutionPolicy: sales.LooseSubstitutionPolicySnapshot{Allowed: true, Source: sales.LooseSubstitutionPolicySourceChannelDefault, CapturedAt: capturedAt},
+				SubstitutionPolicy: sales.LooseSubstitutionPolicySnapshot{Allowed: true, Source: order_enums.LooseSubstitutionPolicySourceChannelDefault, CapturedAt: capturedAt},
 			},
 		},
 	}
@@ -49,22 +55,22 @@ func TestOrderBuyerAndItemPricingRoundTrip(t *testing.T) {
 		t.Fatalf("unmarshal order: %v", err)
 	}
 
-	if decoded.Channel != common.OrderTypeB2B {
+	if decoded.Channel != commerce_enums.OrderTypeB2B {
 		t.Fatalf("channel = %q, want b2b", decoded.Channel)
 	}
 	if decoded.Buyer == nil {
 		t.Fatalf("buyer did not round-trip: %s", payload)
 	}
-	if decoded.Buyer.Type != customerenum.BuyerTypeWholesaleOrganisation {
+	if decoded.Buyer.Type != retail_enums.BuyerTypeWholesaleOrganisation {
 		t.Fatalf("buyer.type = %q, want wholesale_organisation", decoded.Buyer.Type)
 	}
 	if decoded.Buyer.WholesaleOrganisationCode != "org_1" || decoded.Buyer.OrganisationAccessID != "oacc_1" {
 		t.Fatalf("buyer org references did not round-trip: %+v", decoded.Buyer)
 	}
-	if decoded.Buyer.FulfilmentIntent != shippingenum.FulfilmentIntentDelivery {
+	if decoded.Buyer.FulfilmentIntent != shipping_enums.FulfilmentIntentDelivery {
 		t.Fatalf("buyer.fulfilment_intent = %q, want delivery", decoded.Buyer.FulfilmentIntent)
 	}
-	if len(decoded.Items) != 1 || decoded.Items[0].Pricing == nil || decoded.Items[0].Pricing.Audience != productenum.PriceAudienceWholesale {
+	if len(decoded.Items) != 1 || decoded.Items[0].Pricing == nil || decoded.Items[0].Pricing.Audience != product_enums.PriceAudienceWholesale {
 		t.Fatalf("item pricing.audience did not round-trip: %+v", decoded.Items)
 	}
 }
@@ -75,14 +81,14 @@ func TestCartChannelAndBuyerRoundTrip(t *testing.T) {
 	cart := sales.Cart{
 		ID:        "cart_1",
 		SessionID: "sess_1",
-		Channel:   common.OrderTypePOS,
-		Buyer:     &sales.BuyerContext{Type: customerenum.BuyerTypeGuestRetail},
+		Channel:   commerce_enums.OrderTypePOS,
+		Buyer:     &sales.BuyerContext{Type: retail_enums.BuyerTypeGuestRetail},
 		Items: []sales.CartItem{
 			{
-				Components:         []sales.PricedPackageComponent{{RequestedPackageCount: 1, RequestedBaseUnits: 1, PackagePrice: common.Money{AmountMinor: 500, Currency: "AUD"}}},
+				Components:         []sales.PricedPackageComponent{{RequestedPackageCount: 1, RequestedBaseUnits: 1, PackagePrice: money.Money{AmountMinor: 500, Currency: "AUD"}}},
 				TotalBaseUnits:     1,
-				Pricing:            &sales.PricingContext{Audience: productenum.PriceAudienceRetail},
-				SubstitutionPolicy: sales.LooseSubstitutionPolicySnapshot{Allowed: false, Source: sales.LooseSubstitutionPolicySourceBuyerSelected, CapturedAt: capturedAt},
+				Pricing:            &sales.PricingContext{Audience: product_enums.PriceAudienceRetail},
+				SubstitutionPolicy: sales.LooseSubstitutionPolicySnapshot{Allowed: false, Source: order_enums.LooseSubstitutionPolicySourceBuyerSelected, CapturedAt: capturedAt},
 			},
 		},
 	}
@@ -96,13 +102,13 @@ func TestCartChannelAndBuyerRoundTrip(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal cart: %v", err)
 	}
-	if decoded.Channel != common.OrderTypePOS {
+	if decoded.Channel != commerce_enums.OrderTypePOS {
 		t.Fatalf("cart channel = %q, want pos", decoded.Channel)
 	}
-	if decoded.Buyer == nil || decoded.Buyer.Type != customerenum.BuyerTypeGuestRetail {
+	if decoded.Buyer == nil || decoded.Buyer.Type != retail_enums.BuyerTypeGuestRetail {
 		t.Fatalf("cart buyer.type did not round-trip: %+v", decoded.Buyer)
 	}
-	if len(decoded.Items) != 1 || decoded.Items[0].Pricing == nil || decoded.Items[0].Pricing.Audience != productenum.PriceAudienceRetail {
+	if len(decoded.Items) != 1 || decoded.Items[0].Pricing == nil || decoded.Items[0].Pricing.Audience != product_enums.PriceAudienceRetail {
 		t.Fatalf("cart item pricing.audience did not round-trip: %+v", decoded.Items)
 	}
 	if strings.Contains(string(payload), `"properties"`) || strings.Contains(string(payload), `"fulfilment_mode"`) {
@@ -135,16 +141,16 @@ func TestBuyerCommercialTargetMappings(t *testing.T) {
 	}{
 		{
 			name:        "wholesale portal order",
-			order:       sales.Order{Channel: common.OrderTypeB2B, Buyer: &sales.BuyerContext{Type: customerenum.BuyerTypeWholesaleOrganisation}},
+			order:       sales.Order{Channel: commerce_enums.OrderTypeB2B, Buyer: &sales.BuyerContext{Type: retail_enums.BuyerTypeWholesaleOrganisation}},
 			wantChannel: "b2b",
 			wantBuyer:   "wholesale_organisation",
 		},
 		{
 			name: "wholesale customer in physical shop",
 			order: sales.Order{
-				Channel: common.OrderTypePOS,
-				Buyer:   &sales.BuyerContext{Type: customerenum.BuyerTypeWholesaleOrganisation},
-				Items:   []sales.OrderItem{{Pricing: &sales.PricingContext{Audience: productenum.PriceAudienceWholesale}}},
+				Channel: commerce_enums.OrderTypePOS,
+				Buyer:   &sales.BuyerContext{Type: retail_enums.BuyerTypeWholesaleOrganisation},
+				Items:   []sales.OrderItem{{Pricing: &sales.PricingContext{Audience: product_enums.PriceAudienceWholesale}}},
 			},
 			wantChannel:  "pos",
 			wantBuyer:    "wholesale_organisation",
@@ -152,13 +158,13 @@ func TestBuyerCommercialTargetMappings(t *testing.T) {
 		},
 		{
 			name:        "walk-in normal customer",
-			order:       sales.Order{Channel: common.OrderTypePOS, Buyer: &sales.BuyerContext{Type: customerenum.BuyerTypeGuestRetail}},
+			order:       sales.Order{Channel: commerce_enums.OrderTypePOS, Buyer: &sales.BuyerContext{Type: retail_enums.BuyerTypeGuestRetail}},
 			wantChannel: "pos",
 			wantBuyer:   "guest_retail",
 		},
 		{
 			name:        "retail website member",
-			order:       sales.Order{Channel: common.OrderTypeOnline, Buyer: &sales.BuyerContext{Type: customerenum.BuyerTypeRetailCustomer}},
+			order:       sales.Order{Channel: commerce_enums.OrderTypeOnline, Buyer: &sales.BuyerContext{Type: retail_enums.BuyerTypeRetailCustomer}},
 			wantChannel: "online",
 			wantBuyer:   "retail_customer",
 		},

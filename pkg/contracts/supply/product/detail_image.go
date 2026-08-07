@@ -1,12 +1,12 @@
 package product
 
-import common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
 
 // DetailImage is one product-gallery image. Slice position defines display
 // order; AltText and Caption carry optional localized customer-facing copy.
 type DetailImage struct {
-	MediaID string                 `json:"media_id"`
-	URL     string                 `json:"url"`
-	AltText []common.LocalizedText `json:"alt_text,omitempty"`
-	Caption []common.LocalizedText `json:"caption,omitempty"`
+	MediaID string                       `json:"media_id"`
+	URL     string                       `json:"url"`
+	AltText []localization.LocalizedText `json:"alt_text,omitempty"`
+	Caption []localization.LocalizedText `json:"caption,omitempty"`
 }

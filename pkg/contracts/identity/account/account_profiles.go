@@ -1,6 +1,6 @@
 package account
 
-import common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
 
 // AdminAccountProfile contains optional workforce profile data for an
 // adminUser account.
@@ -15,7 +15,7 @@ type AdminAccountProfile struct {
 	SupportRegions []string `json:"support_regions,omitempty"`
 	ManagerUserID  string   `json:"manager_user_id,omitempty"`
 
-	common.AuditFields
+	audit.AuditFields
 }
 
 // RetailCustomerAccountProfile contains lightweight references for a retail
@@ -28,7 +28,7 @@ type RetailCustomerAccountProfile struct {
 	MarketingConsentRef string `json:"marketing_consent_ref,omitempty"`
 	ReferralCode        string `json:"referral_code,omitempty"`
 
-	common.AuditFields
+	audit.AuditFields
 }
 
 // WholesaleCustomerAccountProfile contains lightweight wholesale organisation
@@ -41,5 +41,5 @@ type WholesaleCustomerAccountProfile struct {
 	DefaultOrganisationAccessID      string `json:"default_organisation_access_id,omitempty"`
 	JobTitle                         string `json:"job_title,omitempty"`
 
-	common.AuditFields
+	audit.AuditFields
 }

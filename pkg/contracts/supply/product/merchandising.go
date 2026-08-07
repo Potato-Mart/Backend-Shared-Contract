@@ -1,10 +1,12 @@
 package product
 
 import (
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/security"
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/security/security_enums"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product/product_enums"
 )
 
 // StorefrontMerchandising groups admin-configurable product merchandising policy
@@ -21,27 +23,27 @@ type StorefrontMerchandising struct {
 // The actual lot eligibility and warning/critical thresholds remain backend
 // inventory rules; this policy only controls display copy and date visibility.
 type SoonExpiryMerchandisingPolicy struct {
-	Enabled             bool                          `json:"enabled"`
-	WindowDays          int                           `json:"window_days,omitempty"`
-	StartsAt            *time.Time                    `json:"starts_at,omitempty"`
-	EndsAt              *time.Time                    `json:"ends_at,omitempty"`
-	ShowExactExpiryDate bool                          `json:"show_exact_expiry_date,omitempty"`
-	Labels              []common.LocalizedName        `json:"labels,omitempty"`
-	Descriptions        []common.LocalizedDescription `json:"descriptions,omitempty"`
+	Enabled             bool                                `json:"enabled"`
+	WindowDays          int                                 `json:"window_days,omitempty"`
+	StartsAt            *time.Time                          `json:"starts_at,omitempty"`
+	EndsAt              *time.Time                          `json:"ends_at,omitempty"`
+	ShowExactExpiryDate bool                                `json:"show_exact_expiry_date,omitempty"`
+	Labels              []localization.LocalizedName        `json:"labels,omitempty"`
+	Descriptions        []localization.LocalizedDescription `json:"descriptions,omitempty"`
 }
 
 // PreorderPolicy describes whether a product can accept preorder interest and
 // what limits or dates storefronts may show after backend validation.
 type PreorderPolicy struct {
-	Enabled                bool                          `json:"enabled"`
-	StartsAt               *time.Time                    `json:"starts_at,omitempty"`
-	EndsAt                 *time.Time                    `json:"ends_at,omitempty"`
-	ExpectedAvailableAt    *time.Time                    `json:"expected_available_at,omitempty"`
-	ScheduleTimezone       string                        `json:"schedule_timezone"`
-	MaxQuantityPerOrder    int                           `json:"max_quantity_per_order,omitempty"`
-	MaxQuantityPerCustomer int                           `json:"max_quantity_per_customer,omitempty"`
-	Labels                 []common.LocalizedName        `json:"labels,omitempty"`
-	Descriptions           []common.LocalizedDescription `json:"descriptions,omitempty"`
+	Enabled                bool                                `json:"enabled"`
+	StartsAt               *time.Time                          `json:"starts_at,omitempty"`
+	EndsAt                 *time.Time                          `json:"ends_at,omitempty"`
+	ExpectedAvailableAt    *time.Time                          `json:"expected_available_at,omitempty"`
+	ScheduleTimezone       string                              `json:"schedule_timezone"`
+	MaxQuantityPerOrder    int                                 `json:"max_quantity_per_order,omitempty"`
+	MaxQuantityPerCustomer int                                 `json:"max_quantity_per_customer,omitempty"`
+	Labels                 []localization.LocalizedName        `json:"labels,omitempty"`
+	Descriptions           []localization.LocalizedDescription `json:"descriptions,omitempty"`
 }
 
 // StorefrontDisplay is the backend-computed, customer-safe merchandising state
@@ -51,42 +53,32 @@ type StorefrontDisplay struct {
 	Expiry   *StorefrontExpiryDisplay   `json:"expiry,omitempty"`
 }
 
-// StorefrontExpiryStatus is the broad customer-facing expiry state. AlertLevel
-// below carries the existing 30-day/7-day warning or critical classification.
-type StorefrontExpiryStatus string
-
-const (
-	StorefrontExpiryStatusNotApplicable StorefrontExpiryStatus = "not_applicable"
-	StorefrontExpiryStatusSoonExpiry    StorefrontExpiryStatus = "soon_expiry"
-	StorefrontExpiryStatusExpired       StorefrontExpiryStatus = "expired"
-)
-
 // StorefrontExpiryDisplay contains only backend-computed expiry information
 // safe for customer-facing product cards and detail pages. It never contains a
 // lot ID, depot, supplier lot, or raw inventory quantity.
 type StorefrontExpiryDisplay struct {
-	SoonExpiry          bool                          `json:"soon_expiry"`
-	Status              StorefrontExpiryStatus        `json:"status,omitempty"`
-	AlertLevel          security.AlertLevel           `json:"alert_level,omitempty"`
-	ExpiresAt           *time.Time                    `json:"expires_at,omitempty"`
-	DaysToExpiry        *int                          `json:"days_to_expiry,omitempty"`
-	WindowDays          int                           `json:"window_days,omitempty"`
-	ShowExactExpiryDate bool                          `json:"show_exact_expiry_date,omitempty"`
-	Labels              []common.LocalizedName        `json:"labels,omitempty"`
-	Descriptions        []common.LocalizedDescription `json:"descriptions,omitempty"`
+	SoonExpiry          bool                                 `json:"soon_expiry"`
+	Status              product_enums.StorefrontExpiryStatus `json:"status,omitempty"`
+	AlertLevel          security_enums.AlertLevel            `json:"alert_level,omitempty"`
+	ExpiresAt           *time.Time                           `json:"expires_at,omitempty"`
+	DaysToExpiry        *int                                 `json:"days_to_expiry,omitempty"`
+	WindowDays          int                                  `json:"window_days,omitempty"`
+	ShowExactExpiryDate bool                                 `json:"show_exact_expiry_date,omitempty"`
+	Labels              []localization.LocalizedName         `json:"labels,omitempty"`
+	Descriptions        []localization.LocalizedDescription  `json:"descriptions,omitempty"`
 }
 
 // StorefrontPreorderDisplay contains only fields safe for customer-facing
 // product cards and detail pages.
 type StorefrontPreorderDisplay struct {
-	Available              bool                          `json:"available"`
-	Status                 StorefrontPreorderStatus      `json:"status,omitempty"`
-	StartsAt               *time.Time                    `json:"starts_at,omitempty"`
-	EndsAt                 *time.Time                    `json:"ends_at,omitempty"`
-	ExpectedAvailableAt    *time.Time                    `json:"expected_available_at,omitempty"`
-	ScheduleTimezone       string                        `json:"schedule_timezone"`
-	MaxQuantityPerOrder    int                           `json:"max_quantity_per_order,omitempty"`
-	MaxQuantityPerCustomer int                           `json:"max_quantity_per_customer,omitempty"`
-	Labels                 []common.LocalizedName        `json:"labels,omitempty"`
-	Descriptions           []common.LocalizedDescription `json:"descriptions,omitempty"`
+	Available              bool                                   `json:"available"`
+	Status                 product_enums.StorefrontPreorderStatus `json:"status,omitempty"`
+	StartsAt               *time.Time                             `json:"starts_at,omitempty"`
+	EndsAt                 *time.Time                             `json:"ends_at,omitempty"`
+	ExpectedAvailableAt    *time.Time                             `json:"expected_available_at,omitempty"`
+	ScheduleTimezone       string                                 `json:"schedule_timezone"`
+	MaxQuantityPerOrder    int                                    `json:"max_quantity_per_order,omitempty"`
+	MaxQuantityPerCustomer int                                    `json:"max_quantity_per_customer,omitempty"`
+	Labels                 []localization.LocalizedName           `json:"labels,omitempty"`
+	Descriptions           []localization.LocalizedDescription    `json:"descriptions,omitempty"`
 }

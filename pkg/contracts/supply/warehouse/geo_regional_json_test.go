@@ -2,18 +2,22 @@ package warehouse_test
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pubsub/event"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
+
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pubsub/event"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse"
+
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestLotBucketReservationAndStagingJSONShapes(t *testing.T) {
 	dateMarkAt := time.Date(2026, 12, 1, 0, 0, 0, 0, time.UTC)
 	dateMark := warehouse.InventoryDateMark{
-		Kind:       warehouseenum.InventoryDateMarkExpiry,
+		Kind:       warehouse_enums.InventoryDateMarkExpiry,
 		DateMarkAt: dateMarkAt,
 		Timezone:   "Australia/Melbourne",
 	}
@@ -26,13 +30,13 @@ func TestLotBucketReservationAndStagingJSONShapes(t *testing.T) {
 		t.Fatalf("lot date mark lost UTC instant or timezone: %+v", nestedDateMark)
 	}
 
-	caseComposition := composition(common.PackageHandlingUnitCase, "pkg_case_12", 2, 12)
+	caseComposition := composition(packaging_enums.PackageHandlingUnitCase, "pkg_case_12", 2, 12)
 	bucketShape := marshalObject(t, warehouse.InventoryStockBucket{
 		ID: "bucket_1", Location: warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01"},
 		ProductSKUCode: "A00001", LotID: "lot_1", PackageOptionID: "pkg_case_12",
-		HandlingUnit:       common.PackageHandlingUnitCase,
-		Condition:          warehouseenum.InventoryConditionGood,
-		Disposition:        warehouseenum.InventoryDispositionStandardSellable,
+		HandlingUnit:       packaging_enums.PackageHandlingUnitCase,
+		Condition:          warehouse_enums.InventoryConditionGood,
+		Disposition:        warehouse_enums.InventoryDispositionStandardSellable,
 		PackageComposition: caseComposition,
 		OnHandBaseUnits:    24, ReservedBaseUnits: 12, AvailableBaseUnits: 12,
 		Revision: 3, DepotTimezone: "Australia/Melbourne", AsOf: dateMarkAt,
@@ -45,9 +49,9 @@ func TestLotBucketReservationAndStagingJSONShapes(t *testing.T) {
 	}
 	unitShape := marshalObject(t, warehouse.InventoryStockUnit{
 		ID: "unit_1", BucketID: "bucket_1", ProductSKUCode: "A00001", LotID: "lot_1",
-		PackageOptionID: "pkg_each", HandlingUnit: common.PackageHandlingUnitEach, BaseUnits: 1,
-		Condition:     warehouseenum.InventoryConditionPackagingDamagedMinor,
-		Disposition:   warehouseenum.InventoryDispositionReducedSellable,
+		PackageOptionID: "pkg_each", HandlingUnit: packaging_enums.PackageHandlingUnitEach, BaseUnits: 1,
+		Condition:     warehouse_enums.InventoryConditionPackagingDamagedMinor,
+		Disposition:   warehouse_enums.InventoryDispositionReducedSellable,
 		UnitLabelCode: "UNIT-1", ClearanceLabelCode: "CLEARANCE-1",
 	})
 	if unitShape["clearance_label_code"] != "CLEARANCE-1" {
@@ -61,7 +65,7 @@ func TestLotBucketReservationAndStagingJSONShapes(t *testing.T) {
 		ID: "reservation_1", ProductSKUCode: "A00001", DepotCode: "AU-VIC-MEL-DC-01",
 		OfferID: "offer_1", OfferRevision: 9,
 		RequestedComposition: caseComposition, ReservedComposition: caseComposition,
-		Status:   warehouseenum.StockReservationStatusReserved,
+		Status:   warehouse_enums.StockReservationStatusReserved,
 		Revision: 1, Timezone: "Australia/Melbourne",
 	})
 	if reservationShape["status"] != "RESERVED" || reservationShape["offer_revision"] != float64(9) {
@@ -85,8 +89,8 @@ func TestLotBucketReservationAndStagingJSONShapes(t *testing.T) {
 
 func TestPackageAwarePackingAndAvailabilityEventJSONShapes(t *testing.T) {
 	now := time.Date(2026, 8, 4, 6, 0, 0, 0, time.UTC)
-	requested := composition(common.PackageHandlingUnitCase, "pkg_case_12", 1, 12)
-	replacement := composition(common.PackageHandlingUnitEach, "pkg_each", 12, 1)
+	requested := composition(packaging_enums.PackageHandlingUnitCase, "pkg_case_12", 1, 12)
+	replacement := composition(packaging_enums.PackageHandlingUnitEach, "pkg_each", 12, 1)
 	substitution := warehouse.PackageSubstitutionSnapshot{
 		ID: "sub_1", RequestedCasePackageOptionID: "pkg_case_12", RequestedCaseCount: 1,
 		RequestedUnitsPerCase: 12, FulfilledSealedCaseCount: 0,
@@ -95,7 +99,7 @@ func TestPackageAwarePackingAndAvailabilityEventJSONShapes(t *testing.T) {
 		Operator: "operator_1", CapturedAt: now,
 	}
 	containerShape := marshalObject(t, warehouse.OutboundContainerPlan{
-		ID: "container_1", ContainerCode: "OUT-1", StorageType: warehouseenum.StorageDry,
+		ID: "container_1", ContainerCode: "OUT-1", StorageType: warehouse_enums.StorageDry,
 		Contents: []warehouse.OutboundContainerContent{{
 			OrderItemID: "item_1", ProductSKUCode: "A00001", AllocationID: "allocation_1",
 			BucketID: "bucket_each", LotID: "lot_1", PackageOptionID: "pkg_each",
@@ -114,8 +118,8 @@ func TestPackageAwarePackingAndAvailabilityEventJSONShapes(t *testing.T) {
 		ID: "packing_line_1", OrderItemID: "item_1", ProductSKUCode: "A00001",
 		RequestedComposition: requested, AllocatedComposition: replacement,
 		PickedComposition: replacement, PackedComposition: replacement,
-		SubstitutedComposition: replacement, ReturnedComposition: composition(common.PackageHandlingUnitEach, "pkg_each", 0, 1),
-		RefundedComposition: composition(common.PackageHandlingUnitEach, "pkg_each", 0, 1),
+		SubstitutedComposition: replacement, ReturnedComposition: composition(packaging_enums.PackageHandlingUnitEach, "pkg_each", 0, 1),
+		RefundedComposition: composition(packaging_enums.PackageHandlingUnitEach, "pkg_each", 0, 1),
 		Substitutions:       []warehouse.PackageSubstitutionSnapshot{substitution},
 	})
 	for _, key := range []string{"requested_composition", "allocated_composition", "picked_composition", "packed_composition", "substituted_composition", "returned_composition", "refunded_composition"} {
@@ -134,9 +138,9 @@ func TestPackageAwarePackingAndAvailabilityEventJSONShapes(t *testing.T) {
 		PickedComposition:      replacement,
 		PackedComposition:      replacement,
 		SubstitutedComposition: replacement,
-		ReturnedComposition:    composition(common.PackageHandlingUnitEach, "pkg_each", 0, 1),
-		RefundedComposition:    composition(common.PackageHandlingUnitEach, "pkg_each", 0, 1),
-		Status:                 warehouseenum.PickingItemStatusComplete,
+		ReturnedComposition:    composition(packaging_enums.PackageHandlingUnitEach, "pkg_each", 0, 1),
+		RefundedComposition:    composition(packaging_enums.PackageHandlingUnitEach, "pkg_each", 0, 1),
+		Status:                 warehouse_enums.PickingItemStatusComplete,
 		CreatedAt:              now,
 	})
 	for _, key := range []string{"requested_composition", "allocated_composition", "picked_composition", "packed_composition", "substituted_composition", "returned_composition", "refunded_composition"} {
@@ -152,7 +156,7 @@ func TestPackageAwarePackingAndAvailabilityEventJSONShapes(t *testing.T) {
 	eventShape := marshalObject(t, event.StockLocationAvailabilityChangedEvent{
 		AssignmentID: "assignment_1", DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01",
 		ProductSKUCode: "A00001", AvailableBeforeBaseUnits: 12, AvailableAfterBaseUnits: 0,
-		Direction: warehouseenum.StockAvailabilityOutOfStock,
+		Direction: warehouse_enums.StockAvailabilityOutOfStock,
 		Cause:     warehouse.InventoryCauseRef{Type: "SALE_COMMIT", ID: "movement_1"},
 		Revision:  8, OccurredAt: now, AsOf: now,
 	})
@@ -161,11 +165,11 @@ func TestPackageAwarePackingAndAvailabilityEventJSONShapes(t *testing.T) {
 	}
 }
 
-func composition(unit common.PackageHandlingUnit, optionID string, count, unitsPerPackage int64) common.PackageCompositionSnapshot {
+func composition(unit packaging_enums.PackageHandlingUnit, optionID string, count, unitsPerPackage int64) packaging.PackageCompositionSnapshot {
 	baseUnits := count * unitsPerPackage
-	return common.PackageCompositionSnapshot{
+	return packaging.PackageCompositionSnapshot{
 		TotalBaseUnits: baseUnits,
-		Components: []common.PackageComponentSnapshot{{
+		Components: []packaging.PackageComponentSnapshot{{
 			PackageOptionID: optionID,
 			HandlingUnit:    unit,
 			PackageCount:    count,

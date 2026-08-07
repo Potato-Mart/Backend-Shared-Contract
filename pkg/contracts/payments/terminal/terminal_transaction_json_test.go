@@ -5,11 +5,14 @@ import (
 	"testing"
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/security"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	payment "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/payments/payment"
-	settlement "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/payments/settlement"
-	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/payments/terminal"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/security"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/metadata"
+	payment "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/payments/payment"
+	settlement "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/payments/settlement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/payments/settlement/settlement_enums"
+	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/payments/terminal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/payments/terminal/terminal_enums"
 )
 
 func TestTerminalTransactionJSONRoundTripWithHistory(t *testing.T) {
@@ -31,13 +34,13 @@ func TestTerminalTransactionJSONRoundTripWithHistory(t *testing.T) {
 			MerchantReference: "merchant_ref_1",
 			IdempotencyKey:    "idem_1",
 		},
-		Type:            terminal.TerminalTxTypePurchase,
+		Type:            terminal_enums.TerminalTxTypePurchase,
 		Requested:       terminal.Amounts{Currency: "AUD", PurchaseMinor: 10000},
-		Status:          terminal.TerminalTxStatusFinalised,
-		FinancialStatus: terminal.TerminalTxFinancialStatusApproved,
+		Status:          terminal_enums.TerminalTxStatusFinalised,
+		FinancialStatus: terminal_enums.TerminalTxFinancialStatusApproved,
 		Result:          terminal.Amounts{Currency: "AUD", PurchaseMinor: 10000, AuthorizedMinor: 10000},
 		ProviderResult:  "approved",
-		ProviderData: common.Metadata{
+		ProviderData: metadata.Metadata{
 			"terminal_batch": "batch_1",
 		},
 		Payloads: &terminal.ProviderPayloads{
@@ -99,7 +102,7 @@ func TestTerminalTransactionJSONRoundTripWithHistory(t *testing.T) {
 	if decoded.Payloads == nil || len(decoded.Payloads.Request) == 0 || len(decoded.Payloads.DisplayNotification) == 0 {
 		t.Fatalf("provider payloads did not round-trip: %+v", decoded.Payloads)
 	}
-	if decoded.Result.AuthorizedMinor != 10000 || decoded.FinancialStatus != terminal.TerminalTxFinancialStatusApproved {
+	if decoded.Result.AuthorizedMinor != 10000 || decoded.FinancialStatus != terminal_enums.TerminalTxFinancialStatusApproved {
 		t.Fatalf("result/financial status did not round-trip: %+v", decoded)
 	}
 	if decoded.ProviderData["terminal_batch"] != "batch_1" {
@@ -114,8 +117,8 @@ func TestTerminalProviderDetailsJSONShapes(t *testing.T) {
 	terminal := terminal.Terminal{
 		ID:       "term_1",
 		TenantID: "tenant_1",
-		Provider: terminal.TerminalProviderMx51,
-		Status:   terminal.TerminalStatusActive,
+		Provider: terminal_enums.TerminalProviderMx51,
+		Status:   terminal_enums.TerminalStatusActive,
 		ProviderDetails: &terminal.TerminalProviderDetails{
 			MerchantID: "merchant_1",
 			StoreID:    "store_1",
@@ -158,9 +161,9 @@ func TestSettlementJSONGroupsProviderSupportFields(t *testing.T) {
 		ProviderSettlementID: "provider_settlement_1",
 		ProviderDetails:      &terminal.TerminalProviderDetails{MerchantID: "merchant_1", TerminalID: "provider_term_1"},
 		OperationContext:     &terminal.ProviderOperationContext{RequestID: "provider_req_1", IdempotencyKey: "idem_1"},
-		Type:                 settlement.SettlementTypeSettlement,
-		Status:               terminal.TerminalTxStatusFinalised,
-		FinancialStatus:      terminal.TerminalTxFinancialStatusApproved,
+		Type:                 settlement_enums.SettlementTypeSettlement,
+		Status:               terminal_enums.TerminalTxStatusFinalised,
+		FinancialStatus:      terminal_enums.TerminalTxFinancialStatusApproved,
 		Totals:               settlement.SettlementTotals{Currency: "AUD", TotalMinor: 10000},
 		Payloads:             &terminal.ProviderPayloads{Request: json.RawMessage(`{"settle":"request"}`)},
 	}

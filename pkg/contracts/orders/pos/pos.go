@@ -7,13 +7,17 @@ package pos
 import (
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/orders/order"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/payments/payment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/product"
-	productenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/product"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/order"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/pos/pos_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // CatalogProduct is the cashier-safe package, offer, and availability
@@ -23,8 +27,8 @@ type CatalogProduct struct {
 	CategorySKUCode    string                                     `json:"category_sku_code"`
 	Name               string                                     `json:"name"`
 	Taxed              bool                                       `json:"taxed"`
-	StorageType        warehouseenum.StorageType                  `json:"storage_type,omitempty"`
-	Status             productenum.ProductStatus                  `json:"status"`
+	StorageType        warehouse_enums.StorageType                `json:"storage_type,omitempty"`
+	Status             product_enums.ProductStatus                `json:"status"`
 	PackageOptions     []product.ProductPackageOptionSnapshot     `json:"package_options"`
 	BarcodeAssignments []product.ProductBarcodeAssignmentSnapshot `json:"barcode_assignments,omitempty"`
 	Offers             []product.SellableOfferSnapshot            `json:"offers"`
@@ -41,43 +45,43 @@ type Register struct {
 	Name    string `json:"name"`
 	Status  string `json:"status,omitempty"`
 
-	common.AuditFields
+	audit.AuditFields
 }
 
 // RegisterShift is one operator shift on a register, from open to close-out.
 type RegisterShift struct {
-	ID             string        `json:"id"`
-	RegisterID     string        `json:"register_id"`
-	OperatorUserID string        `json:"operator_user_id"`
-	OpenedAt       time.Time     `json:"opened_at"`
-	ClosedAt       *time.Time    `json:"closed_at,omitempty"`
-	OpeningFloat   common.Money  `json:"opening_float"`
-	ClosingCount   *common.Money `json:"closing_count,omitempty"`
-	ExpectedCash   *common.Money `json:"expected_cash,omitempty"`
-	CashVariance   *common.Money `json:"cash_variance,omitempty"`
-	Status         ShiftStatus   `json:"status"`
+	ID             string                `json:"id"`
+	RegisterID     string                `json:"register_id"`
+	OperatorUserID string                `json:"operator_user_id"`
+	OpenedAt       time.Time             `json:"opened_at"`
+	ClosedAt       *time.Time            `json:"closed_at,omitempty"`
+	OpeningFloat   money.Money           `json:"opening_float"`
+	ClosingCount   *money.Money          `json:"closing_count,omitempty"`
+	ExpectedCash   *money.Money          `json:"expected_cash,omitempty"`
+	CashVariance   *money.Money          `json:"cash_variance,omitempty"`
+	Status         pos_enums.ShiftStatus `json:"status"`
 
-	common.AuditFields
+	audit.AuditFields
 }
 
 // CashMovement is one cash-drawer movement recorded during a shift.
 type CashMovement struct {
-	ID         string           `json:"id"`
-	ShiftID    string           `json:"shift_id"`
-	RegisterID string           `json:"register_id"`
-	Kind       CashMovementKind `json:"kind"`
-	Amount     common.Money     `json:"amount"`
-	Reason     string           `json:"reason,omitempty"`
-	RecordedBy string           `json:"recorded_by,omitempty"`
-	OccurredAt time.Time        `json:"occurred_at"`
+	ID         string                     `json:"id"`
+	ShiftID    string                     `json:"shift_id"`
+	RegisterID string                     `json:"register_id"`
+	Kind       pos_enums.CashMovementKind `json:"kind"`
+	Amount     money.Money                `json:"amount"`
+	Reason     string                     `json:"reason,omitempty"`
+	RecordedBy string                     `json:"recorded_by,omitempty"`
+	OccurredAt time.Time                  `json:"occurred_at"`
 }
 
 // MethodTotal is one payment-method line of a shift totals snapshot.
 type MethodTotal struct {
-	Method   paymentenum.PaymentMethod `json:"method"`
-	Provider string                    `json:"provider,omitempty"`
-	Amount   common.Money              `json:"amount"`
-	Count    int                       `json:"count"`
+	Method   payment_enums.PaymentMethod `json:"method"`
+	Provider string                      `json:"provider,omitempty"`
+	Amount   money.Money                 `json:"amount"`
+	Count    int                         `json:"count"`
 }
 
 // ShiftTotalsSnapshot is the X/Z read model for one shift: per-method sale
@@ -85,8 +89,8 @@ type MethodTotal struct {
 type ShiftTotalsSnapshot struct {
 	ShiftID           string        `json:"shift_id"`
 	MethodTotals      []MethodTotal `json:"method_totals,omitempty"`
-	RefundTotal       common.Money  `json:"refund_total"`
-	CashMovementTotal common.Money  `json:"cash_movement_total"`
+	RefundTotal       money.Money   `json:"refund_total"`
+	CashMovementTotal money.Money   `json:"cash_movement_total"`
 	GeneratedAt       time.Time     `json:"generated_at"`
 }
 
@@ -99,9 +103,9 @@ type ReceiptSnapshot struct {
 	IssuedAt    time.Time                         `json:"issued_at"`
 	Attribution sales.POSAttribution              `json:"attribution"`
 	Lines       []sales.OrderItem                 `json:"lines"`
-	Subtotal    common.Money                      `json:"subtotal"`
-	Tax         common.Money                      `json:"tax"`
-	Total       common.Money                      `json:"total"`
+	Subtotal    money.Money                       `json:"subtotal"`
+	Tax         money.Money                       `json:"tax"`
+	Total       money.Money                       `json:"total"`
 	PaymentRows []sales.CustomerPaymentAllocation `json:"payment_rows,omitempty"`
 	Offers      []promotion.ReceiptOffer          `json:"offers,omitempty"`
 }

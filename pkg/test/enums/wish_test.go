@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	wishenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/wish"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/wish/wish_enums"
 )
 
 func TestWishEnumsValidateKnownValues(t *testing.T) {
@@ -11,58 +11,58 @@ func TestWishEnumsValidateKnownValues(t *testing.T) {
 		{
 			name: "wishenum.WishProposalState",
 			valid: []stringEnum{
-				wishenum.WishProposalStatePending,
-				wishenum.WishProposalStateConverted,
-				wishenum.WishProposalStateRejected,
+				wish_enums.WishProposalStatePending,
+				wish_enums.WishProposalStateConverted,
+				wish_enums.WishProposalStateRejected,
 			},
-			invalid: wishenum.WishProposalState("__invalid__"),
+			invalid: wish_enums.WishProposalState("__invalid__"),
 		},
 		{
 			name: "wishenum.WishCandidateState",
 			valid: []stringEnum{
-				wishenum.WishCandidateStateDraft,
-				wishenum.WishCandidateStatePublished,
-				wishenum.WishCandidateStateRetired,
-				wishenum.WishCandidateStateFulfilled,
+				wish_enums.WishCandidateStateDraft,
+				wish_enums.WishCandidateStatePublished,
+				wish_enums.WishCandidateStateRetired,
+				wish_enums.WishCandidateStateFulfilled,
 			},
-			invalid: wishenum.WishCandidateState("__invalid__"),
+			invalid: wish_enums.WishCandidateState("__invalid__"),
 		},
 		{
 			name: "wishenum.WishBallotState",
 			valid: []stringEnum{
-				wishenum.WishBallotStateScheduled,
-				wishenum.WishBallotStateOpen,
-				wishenum.WishBallotStateClosed,
+				wish_enums.WishBallotStateScheduled,
+				wish_enums.WishBallotStateOpen,
+				wish_enums.WishBallotStateClosed,
 			},
-			invalid: wishenum.WishBallotState("__invalid__"),
+			invalid: wish_enums.WishBallotState("__invalid__"),
 		},
 		{
 			name: "wishenum.WishErrorCode",
 			valid: []stringEnum{
-				wishenum.WishErrorCodeNoActiveBallot,
-				wishenum.WishErrorCodeBallotClosed,
-				wishenum.WishErrorCodeCandidateUnavailable,
+				wish_enums.WishErrorCodeNoActiveBallot,
+				wish_enums.WishErrorCodeBallotClosed,
+				wish_enums.WishErrorCodeCandidateUnavailable,
 			},
-			invalid: wishenum.WishErrorCode("__invalid__"),
+			invalid: wish_enums.WishErrorCode("__invalid__"),
 		},
 	})
 }
 
 func TestWishEnumWireValuesAreStable(t *testing.T) {
 	want := map[stringEnum]string{
-		wishenum.WishProposalStatePending:          "pending",
-		wishenum.WishProposalStateConverted:        "converted",
-		wishenum.WishProposalStateRejected:         "rejected",
-		wishenum.WishCandidateStateDraft:           "draft",
-		wishenum.WishCandidateStatePublished:       "published",
-		wishenum.WishCandidateStateRetired:         "retired",
-		wishenum.WishCandidateStateFulfilled:       "fulfilled",
-		wishenum.WishBallotStateScheduled:          "scheduled",
-		wishenum.WishBallotStateOpen:               "open",
-		wishenum.WishBallotStateClosed:             "closed",
-		wishenum.WishErrorCodeNoActiveBallot:       "WISH_NO_ACTIVE_BALLOT",
-		wishenum.WishErrorCodeBallotClosed:         "WISH_BALLOT_CLOSED",
-		wishenum.WishErrorCodeCandidateUnavailable: "WISH_CANDIDATE_UNAVAILABLE",
+		wish_enums.WishProposalStatePending:          "pending",
+		wish_enums.WishProposalStateConverted:        "converted",
+		wish_enums.WishProposalStateRejected:         "rejected",
+		wish_enums.WishCandidateStateDraft:           "draft",
+		wish_enums.WishCandidateStatePublished:       "published",
+		wish_enums.WishCandidateStateRetired:         "retired",
+		wish_enums.WishCandidateStateFulfilled:       "fulfilled",
+		wish_enums.WishBallotStateScheduled:          "scheduled",
+		wish_enums.WishBallotStateOpen:               "open",
+		wish_enums.WishBallotStateClosed:             "closed",
+		wish_enums.WishErrorCodeNoActiveBallot:       "WISH_NO_ACTIVE_BALLOT",
+		wish_enums.WishErrorCodeBallotClosed:         "WISH_BALLOT_CLOSED",
+		wish_enums.WishErrorCodeCandidateUnavailable: "WISH_CANDIDATE_UNAVAILABLE",
 	}
 	for value, wire := range want {
 		if got := value.String(); got != wire {

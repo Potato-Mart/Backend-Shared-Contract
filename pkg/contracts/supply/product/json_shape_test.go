@@ -2,11 +2,16 @@ package product
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	customerenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/customers/retail"
+
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product/product_enums"
 )
 
 func TestProductJSONIncludesTaxed(t *testing.T) {
@@ -15,16 +20,16 @@ func TestProductJSONIncludesTaxed(t *testing.T) {
 		SKUCode:         "A0001",
 		CategorySKUCode: "A",
 		Name:            "Taxed product",
-		Description: []common.LocalizedDescription{
+		Description: []localization.LocalizedDescription{
 			{Language: "en", Description: "Localized description"},
 		},
-		BrandRef:     &BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "localized-brand", Name: []common.LocalizedName{{Language: "en", Name: "Localized brand"}}},
+		BrandRef:     &BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "localized-brand", Name: []localization.LocalizedName{{Language: "en", Name: "Localized brand"}}},
 		Taxed:        true,
-		Collection:   &CollectionRef{ID: "col_frozen", Slug: "frozen", Name: []common.LocalizedName{{Language: "en", Name: "Frozen"}}},
-		CategoryTags: []CategoryTag{{ID: "tag_hotpot", Slug: "hotpot", Name: []common.LocalizedName{{Language: "en", Name: "Hotpot"}}, CollectionID: "col_frozen", CollectionName: []common.LocalizedName{{Language: "en", Name: "Frozen"}}}},
+		Collection:   &CollectionRef{ID: "col_frozen", Slug: "frozen", Name: []localization.LocalizedName{{Language: "en", Name: "Frozen"}}},
+		CategoryTags: []CategoryTag{{ID: "tag_hotpot", Slug: "hotpot", Name: []localization.LocalizedName{{Language: "en", Name: "Hotpot"}}, CollectionID: "col_frozen", CollectionName: []localization.LocalizedName{{Language: "en", Name: "Frozen"}}}},
 		Supply:       &ProductSupply{Supplier: &ProductSupplierRef{Code: "sup_1", Name: "Supplier"}},
 		PackageOptions: []ProductPackageOption{
-			{ID: "pkg_each", Code: "EACH", ProductSKUCode: "A0001", HandlingUnit: common.PackageHandlingUnitEach, UnitsPerPackage: 1, IsCanonical: true, IsActive: true, EffectiveFrom: effectiveFrom},
+			{ID: "pkg_each", Code: "EACH", ProductSKUCode: "A0001", HandlingUnit: packaging_enums.PackageHandlingUnitEach, UnitsPerPackage: 1, IsCanonical: true, IsActive: true, EffectiveFrom: effectiveFrom},
 		},
 	})
 	if err != nil {
@@ -95,7 +100,7 @@ func TestProductCollectionAndCategorySlugsAreOptional(t *testing.T) {
 	body, err := json.Marshal(Collection{
 		ID:   "col_frozen",
 		Slug: "frozen",
-		Name: []common.LocalizedName{{Language: "en", Name: "Frozen"}},
+		Name: []localization.LocalizedName{{Language: "en", Name: "Frozen"}},
 	})
 	if err != nil {
 		t.Fatalf("marshal collection with slug: %v", err)
@@ -106,9 +111,9 @@ func TestProductCollectionAndCategorySlugsAreOptional(t *testing.T) {
 
 	body, err = json.Marshal(Collection{
 		ID:   "col_frozen",
-		Name: []common.LocalizedName{{Language: "en", Name: "Frozen"}},
+		Name: []localization.LocalizedName{{Language: "en", Name: "Frozen"}},
 		CategoryTags: []CategoryTag{
-			{ID: "tag_hotpot", Name: []common.LocalizedName{{Language: "en", Name: "Hotpot"}}, CollectionID: "col_frozen"},
+			{ID: "tag_hotpot", Name: []localization.LocalizedName{{Language: "en", Name: "Hotpot"}}, CollectionID: "col_frozen"},
 		},
 	})
 	if err != nil {
@@ -120,7 +125,7 @@ func TestProductCollectionAndCategorySlugsAreOptional(t *testing.T) {
 
 	body, err = json.Marshal(CollectionRef{
 		ID:   "col_frozen",
-		Name: []common.LocalizedName{{Language: "en", Name: "Frozen"}},
+		Name: []localization.LocalizedName{{Language: "en", Name: "Frozen"}},
 	})
 	if err != nil {
 		t.Fatalf("marshal collection ref: %v", err)
@@ -134,10 +139,10 @@ func TestSnapshotJSONIncludesTaxed(t *testing.T) {
 	body, err := json.Marshal(Snapshot{
 		SKUCode: "A0001",
 		Name:    "Taxed snapshot",
-		Description: []common.LocalizedDescription{
+		Description: []localization.LocalizedDescription{
 			{Language: "en", Description: "Snapshot description"},
 		},
-		BrandRef: &BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "snapshot-brand", Name: []common.LocalizedName{{Language: "en", Name: "Snapshot brand"}}},
+		BrandRef: &BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "snapshot-brand", Name: []localization.LocalizedName{{Language: "en", Name: "Snapshot brand"}}},
 		Supply:   &ProductSupply{Supplier: &ProductSupplierRef{Code: "sup_1", Name: "Supplier"}},
 		Taxed:    true,
 	})
@@ -158,9 +163,9 @@ func TestProductSellingJSONGroup(t *testing.T) {
 		CategorySKUCode: "A",
 		Name:            "Wholesale-only product",
 		Selling: &Selling{
-			Channels:   []common.OrderType{common.OrderTypeB2B, common.OrderTypePOS},
-			BuyerTypes: []customerenum.BuyerType{customerenum.BuyerTypeWholesaleOrganisation},
-			Visibility: PriceVisibilityWholesaleApprovedOnly,
+			Channels:   []commerce_enums.OrderType{commerce_enums.OrderTypeB2B, commerce_enums.OrderTypePOS},
+			BuyerTypes: []retail_enums.BuyerType{retail_enums.BuyerTypeWholesaleOrganisation},
+			Visibility: product_enums.PriceVisibilityWholesaleApprovedOnly,
 		},
 	})
 	if err != nil {
@@ -183,7 +188,7 @@ func TestProductSellingJSONGroup(t *testing.T) {
 	if err := json.Unmarshal(body, &decoded); err != nil {
 		t.Fatalf("unmarshal product: %v", err)
 	}
-	if decoded.Selling == nil || len(decoded.Selling.Channels) != 2 || decoded.Selling.BuyerTypes[0] != customerenum.BuyerTypeWholesaleOrganisation {
+	if decoded.Selling == nil || len(decoded.Selling.Channels) != 2 || decoded.Selling.BuyerTypes[0] != retail_enums.BuyerTypeWholesaleOrganisation {
 		t.Fatalf("selling rules did not round-trip: %+v", decoded.Selling)
 	}
 }

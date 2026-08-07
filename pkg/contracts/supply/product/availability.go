@@ -3,7 +3,7 @@ package product
 import (
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/commerce/commerce_enums"
 )
 
 // ProductStockQuantitySnapshot is a base-unit stock projection for one
@@ -39,7 +39,7 @@ type PackageOptionProductStockSnapshot struct {
 
 // ChannelProductStockSnapshot qualifies product stock by sales channel.
 type ChannelProductStockSnapshot struct {
-	Channel    common.OrderType             `json:"channel"`
+	Channel    commerce_enums.OrderType     `json:"channel"`
 	Quantities ProductStockQuantitySnapshot `json:"quantities"`
 }
 

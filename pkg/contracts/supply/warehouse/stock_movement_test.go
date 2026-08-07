@@ -2,33 +2,37 @@ package warehouse_test
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse"
+
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestPackageConversionMovementRoundTrip(t *testing.T) {
 	occurredAt := time.Date(2026, 6, 17, 9, 30, 0, 0, time.UTC)
 	sourceBalance := int64(0)
 	destinationBalance := int64(25)
-	caseComposition := common.PackageCompositionSnapshot{
+	caseComposition := packaging.PackageCompositionSnapshot{
 		TotalBaseUnits: 12,
-		Components: []common.PackageComponentSnapshot{{
+		Components: []packaging.PackageComponentSnapshot{{
 			PackageOptionID: "pkg_case_12",
-			HandlingUnit:    common.PackageHandlingUnitCase,
+			HandlingUnit:    packaging_enums.PackageHandlingUnitCase,
 			PackageCount:    1,
 			UnitsPerPackage: 12,
 			BaseUnits:       12,
 		}},
 	}
-	eachComposition := common.PackageCompositionSnapshot{
+	eachComposition := packaging.PackageCompositionSnapshot{
 		TotalBaseUnits: 12,
-		Components: []common.PackageComponentSnapshot{{
+		Components: []packaging.PackageComponentSnapshot{{
 			PackageOptionID: "pkg_each",
-			HandlingUnit:    common.PackageHandlingUnitEach,
+			HandlingUnit:    packaging_enums.PackageHandlingUnitEach,
 			PackageCount:    12,
 			UnitsPerPackage: 1,
 			BaseUnits:       12,
@@ -37,7 +41,7 @@ func TestPackageConversionMovementRoundTrip(t *testing.T) {
 	movement := warehouse.StockMovement{
 		ID:                               "mov_1",
 		ProductSKUCode:                   "A00001",
-		Type:                             warehouseenum.StockMovementTypePackageConversion,
+		Type:                             warehouse_enums.StockMovementTypePackageConversion,
 		SourceBucketID:                   "bucket_case",
 		DestinationBucketID:              "bucket_each",
 		LotID:                            "lot_1",
@@ -75,7 +79,7 @@ func TestPackageConversionMovementRoundTrip(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal stock movement: %v", err)
 	}
-	if decoded.Type != warehouseenum.StockMovementTypePackageConversion || decoded.BaseUnits != 12 {
+	if decoded.Type != warehouse_enums.StockMovementTypePackageConversion || decoded.BaseUnits != 12 {
 		t.Fatalf("movement identity did not round-trip: %+v", decoded)
 	}
 	if decoded.SourcePackageComposition == nil || decoded.DestinationPackageComposition == nil {

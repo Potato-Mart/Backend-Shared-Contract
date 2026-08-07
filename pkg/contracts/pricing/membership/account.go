@@ -3,7 +3,10 @@ package membership
 import (
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/metadata"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/membership/membership_enums"
 )
 
 // MembershipWalletSummary is a projected wallet balance. PointLedgerEntry is
@@ -21,14 +24,14 @@ type MembershipWalletSummary struct {
 // MembershipAccount is the programme account for a retail customer. ID is the
 // retail customer's customer number.
 type MembershipAccount struct {
-	ID          string                  `json:"id"`
-	TierKey     string                  `json:"tier_key,omitempty"`
-	Status      MembershipAccountStatus `json:"status"`
-	Wallet      MembershipWalletSummary `json:"wallet"`
-	EnrolledAt  time.Time               `json:"enrolled_at"`
-	SuspendedAt *time.Time              `json:"suspended_at,omitempty"`
-	ClosedAt    *time.Time              `json:"closed_at,omitempty"`
-	Metadata    common.Metadata         `json:"metadata,omitempty"`
+	ID          string                                   `json:"id"`
+	TierKey     string                                   `json:"tier_key,omitempty"`
+	Status      membership_enums.MembershipAccountStatus `json:"status"`
+	Wallet      MembershipWalletSummary                  `json:"wallet"`
+	EnrolledAt  time.Time                                `json:"enrolled_at"`
+	SuspendedAt *time.Time                               `json:"suspended_at,omitempty"`
+	ClosedAt    *time.Time                               `json:"closed_at,omitempty"`
+	Metadata    metadata.Metadata                        `json:"metadata,omitempty"`
 
-	common.AuditFields
+	audit.AuditFields
 }

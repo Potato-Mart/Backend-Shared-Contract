@@ -3,7 +3,8 @@ package security
 import (
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/security/security_enums"
 )
 
 // AccessLogEntry records read/list/search/export access to protected data.
@@ -18,9 +19,9 @@ type AccessLogEntry struct {
 	RecordCount int    `json:"record_count,omitempty"`
 	RequestContext
 	RecordOutcome
-	RiskLevel     SecurityRiskLevel `json:"risk_level,omitempty"`
-	IntegrityHash string            `json:"integrity_hash,omitempty"`
-	Metadata      common.Metadata   `json:"metadata,omitempty"`
+	RiskLevel     security_enums.SecurityRiskLevel `json:"risk_level,omitempty"`
+	IntegrityHash string                           `json:"integrity_hash,omitempty"`
+	Metadata      metadata.Metadata                `json:"metadata,omitempty"`
 
 	DataProtectionFields
 }

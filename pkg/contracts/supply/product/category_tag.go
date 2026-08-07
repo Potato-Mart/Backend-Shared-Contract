@@ -1,15 +1,16 @@
 package product
 
 import (
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
 )
 
 type CategoryTag struct {
-	ID             string                 `json:"id"`
-	Slug           string                 `json:"slug,omitempty"`
-	Name           []common.LocalizedName `json:"name"`
-	CollectionID   string                 `json:"collection_id"`
-	CollectionName []common.LocalizedName `json:"collection_name"`
+	ID             string                       `json:"id"`
+	Slug           string                       `json:"slug,omitempty"`
+	Name           []localization.LocalizedName `json:"name"`
+	CollectionID   string                       `json:"collection_id"`
+	CollectionName []localization.LocalizedName `json:"collection_name"`
 
-	common.AuditFields
+	audit.AuditFields
 }

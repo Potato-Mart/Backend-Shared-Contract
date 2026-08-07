@@ -3,8 +3,8 @@ package enums_test
 import (
 	"testing"
 
-	backinstock "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/notifications/backinstock"
-	notificationenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/notifications/customer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/notifications/backinstock/backinstock_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/notifications/customer/customer_enums"
 )
 
 func TestNotificationEnums(t *testing.T) {
@@ -12,75 +12,75 @@ func TestNotificationEnums(t *testing.T) {
 		{
 			name: "notification.CustomerNotificationStatus",
 			valid: []stringEnum{
-				notificationenum.CustomerNotificationStatusUnread,
-				notificationenum.CustomerNotificationStatusRead,
-				notificationenum.CustomerNotificationStatusDismissed,
+				customer_enums.CustomerNotificationStatusUnread,
+				customer_enums.CustomerNotificationStatusRead,
+				customer_enums.CustomerNotificationStatusDismissed,
 			},
-			invalid: notificationenum.CustomerNotificationStatus("__invalid__"),
+			invalid: customer_enums.CustomerNotificationStatus("__invalid__"),
 		},
 		{
 			name: "notification.BackInStockChannel",
 			valid: []stringEnum{
-				backinstock.BackInStockChannelEmail,
-				backinstock.BackInStockChannelSMS,
+				backinstock_enums.BackInStockChannelEmail,
+				backinstock_enums.BackInStockChannelSMS,
 			},
-			invalid: backinstock.BackInStockChannel("__invalid__"),
+			invalid: backinstock_enums.BackInStockChannel("__invalid__"),
 		},
 		{
 			name: "notification.BackInStockStatus",
 			valid: []stringEnum{
-				backinstock.BackInStockStatusPending,
-				backinstock.BackInStockStatusNotified,
-				backinstock.BackInStockStatusCancelled,
+				backinstock_enums.BackInStockStatusPending,
+				backinstock_enums.BackInStockStatusNotified,
+				backinstock_enums.BackInStockStatusCancelled,
 			},
-			invalid: backinstock.BackInStockStatus("__invalid__"),
+			invalid: backinstock_enums.BackInStockStatus("__invalid__"),
 		},
 		{
 			name: "notification.BackInStockCustomerType",
 			valid: []stringEnum{
-				backinstock.BackInStockCustomerTypeRetail,
-				backinstock.BackInStockCustomerTypeWholesale,
+				backinstock_enums.BackInStockCustomerTypeRetail,
+				backinstock_enums.BackInStockCustomerTypeWholesale,
 			},
-			invalid: backinstock.BackInStockCustomerType("__invalid__"),
+			invalid: backinstock_enums.BackInStockCustomerType("__invalid__"),
 		},
 		{
 			name: "notification.CustomerNotificationTopic",
 			valid: []stringEnum{
-				notificationenum.CustomerNotificationTopicPreorderAvailable,
-				notificationenum.CustomerNotificationTopicBackInStock,
-				notificationenum.CustomerNotificationTopicOrderPlaced,
-				notificationenum.CustomerNotificationTopicOrderConfirmed,
-				notificationenum.CustomerNotificationTopicOrderCancelled,
-				notificationenum.CustomerNotificationTopicPaymentReceived,
-				notificationenum.CustomerNotificationTopicPaymentFailed,
-				notificationenum.CustomerNotificationTopicPaymentRefunded,
-				notificationenum.CustomerNotificationTopicPackingStarted,
-				notificationenum.CustomerNotificationTopicOrderPacked,
-				notificationenum.CustomerNotificationTopicOrderDispatched,
-				notificationenum.CustomerNotificationTopicOrderDelivered,
-				notificationenum.CustomerNotificationTopicInvoiceAvailable,
-				notificationenum.CustomerNotificationTopicPromotionAvailable,
-				notificationenum.CustomerNotificationTopicAnnouncement,
+				customer_enums.CustomerNotificationTopicPreorderAvailable,
+				customer_enums.CustomerNotificationTopicBackInStock,
+				customer_enums.CustomerNotificationTopicOrderPlaced,
+				customer_enums.CustomerNotificationTopicOrderConfirmed,
+				customer_enums.CustomerNotificationTopicOrderCancelled,
+				customer_enums.CustomerNotificationTopicPaymentReceived,
+				customer_enums.CustomerNotificationTopicPaymentFailed,
+				customer_enums.CustomerNotificationTopicPaymentRefunded,
+				customer_enums.CustomerNotificationTopicPackingStarted,
+				customer_enums.CustomerNotificationTopicOrderPacked,
+				customer_enums.CustomerNotificationTopicOrderDispatched,
+				customer_enums.CustomerNotificationTopicOrderDelivered,
+				customer_enums.CustomerNotificationTopicInvoiceAvailable,
+				customer_enums.CustomerNotificationTopicPromotionAvailable,
+				customer_enums.CustomerNotificationTopicAnnouncement,
 			},
-			invalid: notificationenum.CustomerNotificationTopic("__invalid__"),
+			invalid: customer_enums.CustomerNotificationTopic("__invalid__"),
 		},
 		{
 			name: "notification.CustomerNotificationChannel",
 			valid: []stringEnum{
-				notificationenum.CustomerNotificationChannelPortal,
-				notificationenum.CustomerNotificationChannelEmail,
-				notificationenum.CustomerNotificationChannelPush,
+				customer_enums.CustomerNotificationChannelPortal,
+				customer_enums.CustomerNotificationChannelEmail,
+				customer_enums.CustomerNotificationChannelPush,
 			},
-			invalid: notificationenum.CustomerNotificationChannel("__invalid__"),
+			invalid: customer_enums.CustomerNotificationChannel("__invalid__"),
 		},
 		{
 			name: "notification.CustomerNotificationDeliveryStatus",
 			valid: []stringEnum{
-				notificationenum.CustomerNotificationDeliveryStatusPending,
-				notificationenum.CustomerNotificationDeliveryStatusDelivered,
-				notificationenum.CustomerNotificationDeliveryStatusFailed,
+				customer_enums.CustomerNotificationDeliveryStatusPending,
+				customer_enums.CustomerNotificationDeliveryStatusDelivered,
+				customer_enums.CustomerNotificationDeliveryStatusFailed,
 			},
-			invalid: notificationenum.CustomerNotificationDeliveryStatus("__invalid__"),
+			invalid: customer_enums.CustomerNotificationDeliveryStatus("__invalid__"),
 		},
 	})
 }

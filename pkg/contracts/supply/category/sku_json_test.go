@@ -2,21 +2,23 @@ package category
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
+
 	"testing"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestSKUJSONIncludesPrimaryName(t *testing.T) {
 	body, err := json.Marshal(SKU{
 		ID:          "sku_f2",
 		Code:        "F2",
-		StorageType: warehouseenum.StorageFrozen,
-		PrimaryName: common.LocalizedName{
+		StorageType: warehouse_enums.StorageFrozen,
+		PrimaryName: localization.LocalizedName{
 			Language: "zh-Hant",
 			Name:     "冷凍 - 肉品",
 		},
-		OtherNames: []common.LocalizedName{{Language: "en", Name: "Frozen meat"}},
+		OtherNames: []localization.LocalizedName{{Language: "en", Name: "Frozen meat"}},
 	})
 	if err != nil {
 		t.Fatalf("marshal sku: %v", err)

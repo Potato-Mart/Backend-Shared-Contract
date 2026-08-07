@@ -2,12 +2,15 @@ package wish_test
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/wish"
-	wishenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/wish"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/wish"
+
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/wish/wish_enums"
 )
 
 func TestWishProposalJSONIsIdentityFree(t *testing.T) {
@@ -17,7 +20,7 @@ func TestWishProposalJSONIsIdentityFree(t *testing.T) {
 		ProductName:          "Taiwanese pineapple cake",
 		Description:          "A less-sweet option",
 		ReferenceURL:         "https://example.com/product",
-		State:                wishenum.WishProposalStateConverted,
+		State:                wish_enums.WishProposalStateConverted,
 		ConvertedCandidateID: "candidate_1",
 		CreatedAt:            now,
 		UpdatedAt:            now,
@@ -41,13 +44,13 @@ func TestWishCandidateJSONUsesApprovedLocalizedContent(t *testing.T) {
 	now := time.Date(2026, 7, 20, 1, 2, 3, 0, time.UTC)
 	candidate := wish.WishCandidate{
 		ID: "candidate_1",
-		Name: []common.LocalizedName{
+		Name: []localization.LocalizedName{
 			{Language: "en", Name: "Pineapple cake"},
 			{Language: "zh-TW", Name: "鳳梨酥"},
 		},
-		Description: []common.LocalizedDescription{{Language: "en", Description: "Less sweet"}},
+		Description: []localization.LocalizedDescription{{Language: "en", Description: "Less sweet"}},
 		ImageURLs:   []string{"https://cdn.example.com/wishes/candidate_1.jpg"},
-		State:       wishenum.WishCandidateStatePublished,
+		State:       wish_enums.WishCandidateStatePublished,
 		PublishedAt: &now,
 		CreatedAt:   now,
 		UpdatedAt:   now,
@@ -72,7 +75,7 @@ func TestWishBallotRankingAndSelectionRoundTrip(t *testing.T) {
 	closesAt := opensAt.Add(7 * 24 * time.Hour)
 	ballot := wish.WishBallot{
 		ID:           "ballot_1",
-		State:        wishenum.WishBallotStateOpen,
+		State:        wish_enums.WishBallotStateOpen,
 		CandidateIDs: []string{"candidate_1", "candidate_2"},
 		OpensAt:      opensAt,
 		ClosesAt:     closesAt,

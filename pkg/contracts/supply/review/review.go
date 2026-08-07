@@ -2,6 +2,8 @@ package review
 
 import (
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/review/review_enums"
 )
 
 // RatingDistributionBucket records the number of ratings for one score.
@@ -37,38 +39,38 @@ type ProductReview struct {
 // customer's original text and customer-safe moderation outcome without any
 // customer, account, or user identifier.
 type MyProductReview struct {
-	ID               string                 `json:"id"`
-	ProductSKUCode   string                 `json:"product_sku_code"`
-	Score            int                    `json:"score"`
-	Title            string                 `json:"title,omitempty"`
-	Body             string                 `json:"body,omitempty"`
-	OriginalTitle    string                 `json:"original_title,omitempty"`
-	OriginalBody     string                 `json:"original_body,omitempty"`
-	Locale           string                 `json:"locale,omitempty"`
-	VerifiedPurchase bool                   `json:"verified_purchase"`
-	ModerationStatus ReviewModerationStatus `json:"moderation_status"`
-	RejectionReason  ReviewRejectionReason  `json:"rejection_reason,omitempty"`
-	CreatedAt        time.Time              `json:"created_at"`
-	UpdatedAt        time.Time              `json:"updated_at"`
+	ID               string                              `json:"id"`
+	ProductSKUCode   string                              `json:"product_sku_code"`
+	Score            int                                 `json:"score"`
+	Title            string                              `json:"title,omitempty"`
+	Body             string                              `json:"body,omitempty"`
+	OriginalTitle    string                              `json:"original_title,omitempty"`
+	OriginalBody     string                              `json:"original_body,omitempty"`
+	Locale           string                              `json:"locale,omitempty"`
+	VerifiedPurchase bool                                `json:"verified_purchase"`
+	ModerationStatus review_enums.ReviewModerationStatus `json:"moderation_status"`
+	RejectionReason  review_enums.ReviewRejectionReason  `json:"rejection_reason,omitempty"`
+	CreatedAt        time.Time                           `json:"created_at"`
+	UpdatedAt        time.Time                           `json:"updated_at"`
 }
 
 // ProductReviewModeration is the PII-free admin moderation projection. Its
 // internal note and moderation timestamp are intentionally absent from both
 // ProductReview and MyProductReview.
 type ProductReviewModeration struct {
-	ID               string                 `json:"id"`
-	ProductSKUCode   string                 `json:"product_sku_code"`
-	Score            int                    `json:"score"`
-	Title            string                 `json:"title,omitempty"`
-	Body             string                 `json:"body,omitempty"`
-	OriginalTitle    string                 `json:"original_title,omitempty"`
-	OriginalBody     string                 `json:"original_body,omitempty"`
-	Locale           string                 `json:"locale,omitempty"`
-	VerifiedPurchase bool                   `json:"verified_purchase"`
-	ModerationStatus ReviewModerationStatus `json:"moderation_status"`
-	RejectionReason  ReviewRejectionReason  `json:"rejection_reason,omitempty"`
-	ModerationNote   string                 `json:"moderation_note,omitempty"`
-	CreatedAt        time.Time              `json:"created_at"`
-	UpdatedAt        time.Time              `json:"updated_at"`
-	ModeratedAt      *time.Time             `json:"moderated_at,omitempty"`
+	ID               string                              `json:"id"`
+	ProductSKUCode   string                              `json:"product_sku_code"`
+	Score            int                                 `json:"score"`
+	Title            string                              `json:"title,omitempty"`
+	Body             string                              `json:"body,omitempty"`
+	OriginalTitle    string                              `json:"original_title,omitempty"`
+	OriginalBody     string                              `json:"original_body,omitempty"`
+	Locale           string                              `json:"locale,omitempty"`
+	VerifiedPurchase bool                                `json:"verified_purchase"`
+	ModerationStatus review_enums.ReviewModerationStatus `json:"moderation_status"`
+	RejectionReason  review_enums.ReviewRejectionReason  `json:"rejection_reason,omitempty"`
+	ModerationNote   string                              `json:"moderation_note,omitempty"`
+	CreatedAt        time.Time                           `json:"created_at"`
+	UpdatedAt        time.Time                           `json:"updated_at"`
+	ModeratedAt      *time.Time                          `json:"moderated_at,omitempty"`
 }

@@ -2,15 +2,18 @@ package security_test
 
 import (
 	"encoding/json"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/security"
 	"strings"
 	"testing"
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	role "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/identity/role"
-	order "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/orders/order"
-	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/payments/terminal"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/security"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/identity/role/role_enums"
+	order "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/order"
+	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/payments/terminal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/payments/terminal/terminal_enums"
 )
 
 func TestHistoryOmittedWhenEmpty(t *testing.T) {
@@ -39,7 +42,7 @@ func TestHistoryEntryRoundTrip(t *testing.T) {
 		ActorRef: security.ActorRef{
 			ActorID:    "usr_1",
 			ActorEmail: "ops@example.com",
-			ActorRole:  role.UserRoleAdmin,
+			ActorRole:  role_enums.UserRoleAdmin,
 		},
 		RequestContext: security.RequestContext{
 			RequestID:     "req_1",
@@ -48,18 +51,18 @@ func TestHistoryEntryRoundTrip(t *testing.T) {
 		},
 		ReasonCode:        "terminal_timeout",
 		Note:              "Provider status check could not confirm the outcome.",
-		RiskLevel:         security.SecurityRiskLevelHigh,
+		RiskLevel:         security_enums.SecurityRiskLevelHigh,
 		RiskFlags:         []string{"payment_unknown", "manual_recovery_required"},
 		RelatedResource:   "terminal_transaction",
 		RelatedResourceID: "ttx_123",
-		Metadata: common.Metadata{
+		Metadata: metadata.Metadata{
 			"provider_result": "timeout",
 		},
 	}
 
 	tx := terminal.TerminalTransaction{
 		ID:      "ttx_123",
-		Status:  terminal.TerminalTxStatusOverridePending,
+		Status:  terminal_enums.TerminalTxStatusOverridePending,
 		History: []security.HistoryEntry{entry},
 	}
 
@@ -86,8 +89,8 @@ func TestHistoryEntryRoundTrip(t *testing.T) {
 	if got.ActorEmail != "ops@example.com" || got.RequestID != "req_1" {
 		t.Fatalf("actor/request context did not round-trip: %+v", got)
 	}
-	if got.RiskLevel != security.SecurityRiskLevelHigh {
-		t.Fatalf("risk_level = %q, want %q", got.RiskLevel, security.SecurityRiskLevelHigh)
+	if got.RiskLevel != security_enums.SecurityRiskLevelHigh {
+		t.Fatalf("risk_level = %q, want %q", got.RiskLevel, security_enums.SecurityRiskLevelHigh)
 	}
 	if got.Metadata["provider_result"] != "timeout" {
 		t.Fatalf("metadata provider_result = %v, want timeout", got.Metadata["provider_result"])

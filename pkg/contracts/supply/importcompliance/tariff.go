@@ -3,7 +3,10 @@ package importcompliance
 import (
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/temporal"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/importcompliance/importcompliance_enums"
 )
 
 // RateValue preserves official source text because tariff schedules may use
@@ -15,12 +18,12 @@ type RateValue struct {
 }
 
 type TariffClassification struct {
-	Jurisdiction Jurisdiction        `json:"jurisdiction"`
-	Code         string              `json:"code"`
-	DutyRate     RateValue           `json:"duty_rate"`
-	GSTRate      *RateValue          `json:"gst_rate,omitempty"`
-	Catalogue    CatalogueReference  `json:"catalogue"`
-	Evidence     []EvidenceReference `json:"evidence,omitempty"`
+	Jurisdiction importcompliance_enums.Jurisdiction `json:"jurisdiction"`
+	Code         string                              `json:"code"`
+	DutyRate     RateValue                           `json:"duty_rate"`
+	GSTRate      *RateValue                          `json:"gst_rate,omitempty"`
+	Catalogue    CatalogueReference                  `json:"catalogue"`
+	Evidence     []EvidenceReference                 `json:"evidence,omitempty"`
 }
 
 // TariffLineSnapshot preserves every purchase-order/product field displayed by
@@ -59,40 +62,40 @@ type TariffAssessment struct {
 	Evidence      []EvidenceReference   `json:"evidence,omitempty"`
 	Artifacts     []ArtifactReference   `json:"artifacts,omitempty"`
 
-	common.AuditFields
+	audit.AuditFields
 }
 
 // TariffProfile is an approved reusable classification for one SKU and
 // jurisdiction. Assessment records retain their own frozen classification.
 type TariffProfile struct {
-	ID                   string               `json:"id"`
-	Revision             RevisionMetadata     `json:"revision"`
-	SKUCode              string               `json:"sku_code"`
-	Jurisdiction         Jurisdiction         `json:"jurisdiction"`
-	Classification       TariffClassification `json:"classification"`
-	EffectiveFrom        common.Date          `json:"effective_from,omitempty"`
-	EffectiveTo          common.Date          `json:"effective_to,omitempty"`
-	TrademarkEvidenceIDs []string             `json:"trademark_evidence_ids,omitempty"`
-	Evidence             []EvidenceReference  `json:"evidence,omitempty"`
+	ID                   string                              `json:"id"`
+	Revision             RevisionMetadata                    `json:"revision"`
+	SKUCode              string                              `json:"sku_code"`
+	Jurisdiction         importcompliance_enums.Jurisdiction `json:"jurisdiction"`
+	Classification       TariffClassification                `json:"classification"`
+	EffectiveFrom        temporal.Date                       `json:"effective_from,omitempty"`
+	EffectiveTo          temporal.Date                       `json:"effective_to,omitempty"`
+	TrademarkEvidenceIDs []string                            `json:"trademark_evidence_ids,omitempty"`
+	Evidence             []EvidenceReference                 `json:"evidence,omitempty"`
 
-	common.AuditFields
+	audit.AuditFields
 }
 
 // TrademarkEvidence is a cited search result or manually verified record. It
 // does not itself make a legal-clearance claim.
 type TrademarkEvidence struct {
-	ID                 string              `json:"id"`
-	Revision           RevisionMetadata    `json:"revision"`
-	SKUCode            string              `json:"sku_code,omitempty"`
-	Jurisdiction       Jurisdiction        `json:"jurisdiction"`
-	Mark               string              `json:"mark"`
-	Status             string              `json:"status,omitempty"`
-	Owner              string              `json:"owner,omitempty"`
-	RegistrationNumber string              `json:"registration_number,omitempty"`
-	Classes            []string            `json:"classes,omitempty"`
-	Source             string              `json:"source"`
-	CheckedAt          *time.Time          `json:"checked_at,omitempty"`
-	Evidence           []EvidenceReference `json:"evidence,omitempty"`
+	ID                 string                              `json:"id"`
+	Revision           RevisionMetadata                    `json:"revision"`
+	SKUCode            string                              `json:"sku_code,omitempty"`
+	Jurisdiction       importcompliance_enums.Jurisdiction `json:"jurisdiction"`
+	Mark               string                              `json:"mark"`
+	Status             string                              `json:"status,omitempty"`
+	Owner              string                              `json:"owner,omitempty"`
+	RegistrationNumber string                              `json:"registration_number,omitempty"`
+	Classes            []string                            `json:"classes,omitempty"`
+	Source             string                              `json:"source"`
+	CheckedAt          *time.Time                          `json:"checked_at,omitempty"`
+	Evidence           []EvidenceReference                 `json:"evidence,omitempty"`
 
-	common.AuditFields
+	audit.AuditFields
 }

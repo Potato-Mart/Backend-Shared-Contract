@@ -2,11 +2,13 @@ package event_test
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	notification "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pubsub/event"
+
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	notification "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pubsub/event"
 )
 
 func TestGiftCardIssuedEventRoundTrip(t *testing.T) {
@@ -14,7 +16,7 @@ func TestGiftCardIssuedEventRoundTrip(t *testing.T) {
 	event := notification.GiftCardIssuedEvent{
 		IssuanceID: "gift-1", DenominationPolicyVersion: 2, RecipientEmail: "customer@example.com",
 		RecipientName: "Customer", SenderName: "Sender",
-		Amount:  common.Money{AmountMinor: 50_000, Currency: "AUD"},
+		Amount:  money.Money{AmountMinor: 50_000, Currency: "AUD"},
 		Message: "Enjoy", ClaimCode: strings.Repeat("a", 32), Locale: "en",
 		IssuedAt: issuedAt,
 	}

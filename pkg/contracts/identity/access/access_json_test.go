@@ -2,12 +2,17 @@ package access_test
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	identity "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/identity/access"
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/identity/account"
+
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/identity/identity_enums"
+	identity "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/identity/access"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/identity/access/access_enums"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/identity/account"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/identity/account/account_enums"
 )
 
 func TestPortalAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T) {
@@ -16,10 +21,10 @@ func TestPortalAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T)
 		ID:          "portal_access_1",
 		UserID:      "user_1",
 		AccountID:   "acct_1",
-		AccountType: accountenum.AccountTypeRetailCustomer,
-		Portal:      common.PortalRetail,
-		Status:      identity.PortalAccessStatusActive,
-		Grant:       &common.LifecycleAction{By: "admin_1", At: &grantedAt, Reason: "approved"},
+		AccountType: account_enums.AccountTypeRetailCustomer,
+		Portal:      identity_enums.PortalRetail,
+		Status:      access_enums.PortalAccessStatusActive,
+		Grant:       &audit.LifecycleAction{By: "admin_1", At: &grantedAt, Reason: "approved"},
 	}
 
 	payload, err := json.Marshal(access)
@@ -61,7 +66,7 @@ func TestIdentityWholesaleAccessJSONUsesOrganisationAccessID(t *testing.T) {
 		UserID:                    "user_1",
 		SessionID:                 "session_1",
 		AccountID:                 "acct_1",
-		Portal:                    common.PortalWholesale,
+		Portal:                    identity_enums.PortalWholesale,
 		WholesaleOrganisationCode: "org_1",
 		OrganisationAccessID:      "access_1",
 		RoleKey:                   "buyer",
@@ -69,7 +74,7 @@ func TestIdentityWholesaleAccessJSONUsesOrganisationAccessID(t *testing.T) {
 	session := identity.LoginSession{
 		ID:                        "session_1",
 		UserID:                    "user_1",
-		Portal:                    common.PortalWholesale,
+		Portal:                    identity_enums.PortalWholesale,
 		WholesaleOrganisationCode: "org_1",
 		OrganisationAccessID:      "access_1",
 		RoleKey:                   "buyer",

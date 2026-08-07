@@ -3,31 +3,34 @@
 package terminal
 
 import (
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/security"
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/metadata"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/security"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/payments/terminal/terminal_enums"
 )
 
 // Terminal is an EFTPOS device registered for POS use.
 type Terminal struct {
-	ID       string           `json:"id"`
-	TenantID string           `json:"tenant_id"`
-	StoreID  string           `json:"store_id,omitempty"`
-	Provider TerminalProvider `json:"provider"`
+	ID       string                          `json:"id"`
+	TenantID string                          `json:"tenant_id"`
+	StoreID  string                          `json:"store_id,omitempty"`
+	Provider terminal_enums.TerminalProvider `json:"provider"`
 
-	ConnectionMode TerminalConnectionMode `json:"connection_mode,omitempty"`
+	ConnectionMode terminal_enums.TerminalConnectionMode `json:"connection_mode,omitempty"`
 
 	ProviderDetails *TerminalProviderDetails `json:"provider_details,omitempty"`
 
-	Status TerminalStatus `json:"status"`
+	Status terminal_enums.TerminalStatus `json:"status"`
 
 	RegisteredAt   *time.Time `json:"registered_at,omitempty"`
 	DeregisteredAt *time.Time `json:"deregistered_at,omitempty"`
 	LastSeenAt     *time.Time `json:"last_seen_at,omitempty"`
 
-	Metadata common.Metadata         `json:"metadata,omitempty"`
+	Metadata metadata.Metadata       `json:"metadata,omitempty"`
 	History  []security.HistoryEntry `json:"history,omitempty"`
 
-	common.AuditFields
+	audit.AuditFields
 }

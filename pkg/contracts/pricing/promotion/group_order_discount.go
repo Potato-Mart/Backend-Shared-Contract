@@ -1,27 +1,28 @@
 package promotion
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/geography"
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 // A wholesale group-order manager applies for (or selects) a per-group discount
 // from the wholesale storefront; a staff approver issues it by publishing the
-// backing promotion. Money is always common.Money
+// backing promotion. Money is always money.Money
 // (minor units); the percentage case is carried as integer basis points so no
 // stringified major-unit value ever crosses the wire (unlike DiscountSpec).
 // GroupOrderDiscountProposal is a manager's requested discount when applying for
 // a brand-new benefit (rather than selecting an existing promotion).
 type GroupOrderDiscountProposal struct {
-	DiscountType DiscountType `json:"discount_type"`
+	DiscountType promotion_enums.DiscountType `json:"discount_type"`
 	// PercentBasisPoints is set when DiscountType is percentage: 1000 = 10.00%.
 	PercentBasisPoints int `json:"percent_basis_points,omitempty"`
 	// Amount is set when DiscountType is fixed_amount; minor units.
-	Amount *common.Money `json:"amount,omitempty"`
+	Amount *money.Money `json:"amount,omitempty"`
 	// MaxDiscount optionally caps a percentage discount; minor units.
-	MaxDiscount *common.Money `json:"max_discount,omitempty"`
+	MaxDiscount *money.Money `json:"max_discount,omitempty"`
 }
 
 // GroupOrderDiscountApplication is the shared application record owned by
@@ -30,13 +31,13 @@ type GroupOrderDiscountProposal struct {
 // existing eligible promotion) or Proposal (a newly requested benefit) is set.
 // The wire request/decision envelopes are owned by Pricing.
 type GroupOrderDiscountApplication struct {
-	ID                        string                      `json:"id"`
-	GroupOrderCode            string                      `json:"group_order_code"`
-	WholesaleOrganisationCode string                      `json:"wholesale_organisation_code"`
-	OrganisationAccessID      string                      `json:"organisation_access_id,omitempty"`
-	State                     GroupOrderDiscountState     `json:"state"`
-	SelectedPromotionID       string                      `json:"selected_promotion_id,omitempty"`
-	Proposal                  *GroupOrderDiscountProposal `json:"proposal,omitempty"`
+	ID                        string                                  `json:"id"`
+	GroupOrderCode            string                                  `json:"group_order_code"`
+	WholesaleOrganisationCode string                                  `json:"wholesale_organisation_code"`
+	OrganisationAccessID      string                                  `json:"organisation_access_id,omitempty"`
+	State                     promotion_enums.GroupOrderDiscountState `json:"state"`
+	SelectedPromotionID       string                                  `json:"selected_promotion_id,omitempty"`
+	Proposal                  *GroupOrderDiscountProposal             `json:"proposal,omitempty"`
 	// ApprovedPromotionID is the published promotion Orders applies at
 	// pricing/submit; set only when State is approved.
 	ApprovedPromotionID string     `json:"approved_promotion_id,omitempty"`
@@ -53,7 +54,7 @@ type GroupOrderDiscountDecision struct {
 	Applied             bool                             `json:"applied"`
 	ApplicationID       string                           `json:"application_id,omitempty"`
 	ApprovedPromotionID string                           `json:"approved_promotion_id,omitempty"`
-	DiscountAmount      common.Money                     `json:"discount_amount"`
+	DiscountAmount      money.Money                      `json:"discount_amount"`
 	GeographicContext   geography.GeographicContext      `json:"geographic_context"`
 	Lines               []GroupOrderDiscountDecisionLine `json:"lines,omitempty"`
 	RuleVersion         string                           `json:"rule_version,omitempty"`
@@ -62,7 +63,7 @@ type GroupOrderDiscountDecision struct {
 }
 
 type GroupOrderDiscountDecisionLine struct {
-	OrderItemID    string       `json:"order_item_id"`
-	ProductSKUCode string       `json:"product_sku_code"`
-	DiscountAmount common.Money `json:"discount_amount"`
+	OrderItemID    string      `json:"order_item_id"`
+	ProductSKUCode string      `json:"product_sku_code"`
+	DiscountAmount money.Money `json:"discount_amount"`
 }

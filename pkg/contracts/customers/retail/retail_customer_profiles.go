@@ -3,21 +3,22 @@ package retail
 import (
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/customers/retail/retail_enums"
 )
 
 // RetailCustomerCommerceProfile groups aggregated commerce statistics. Values
 // are computed by sync jobs and must never be manually edited.
 type RetailCustomerCommerceProfile struct {
-	TotalOrders       int          `json:"total_orders"`
-	TotalUnits        int          `json:"total_units,omitempty"`
-	TotalSpend        common.Money `json:"total_spend"`
-	AverageOrderValue common.Money `json:"average_order_value"`
-	FirstOrderAt      *time.Time   `json:"first_order_at,omitempty"`
-	LastOrderAt       *time.Time   `json:"last_order_at,omitempty"`
-	Provinces         []string     `json:"provinces,omitempty"`
-	Suburbs           []string     `json:"suburbs,omitempty"`
-	SyncedAt          *time.Time   `json:"synced_at,omitempty"`
+	TotalOrders       int         `json:"total_orders"`
+	TotalUnits        int         `json:"total_units,omitempty"`
+	TotalSpend        money.Money `json:"total_spend"`
+	AverageOrderValue money.Money `json:"average_order_value"`
+	FirstOrderAt      *time.Time  `json:"first_order_at,omitempty"`
+	LastOrderAt       *time.Time  `json:"last_order_at,omitempty"`
+	Provinces         []string    `json:"provinces,omitempty"`
+	Suburbs           []string    `json:"suburbs,omitempty"`
+	SyncedAt          *time.Time  `json:"synced_at,omitempty"`
 }
 
 // RetailCustomerMarketingProfile groups per-channel marketing opt-ins together
@@ -42,14 +43,14 @@ type RetailCustomerMarketingProfile struct {
 // RetailCustomerAnalyticsProfile groups the recency/frequency/monetary
 // analytics computed by the stats sync job.
 type RetailCustomerAnalyticsProfile struct {
-	RecencyDays   *int      `json:"recency_days,omitempty"`
-	R             *int      `json:"r,omitempty"`
-	F             *int      `json:"f,omitempty"`
-	M             *int      `json:"m,omitempty"`
-	Score         string    `json:"score,omitempty"`
-	Segment       string    `json:"segment,omitempty"`
-	ChurnRisk     ChurnRisk `json:"churn_risk,omitempty"`
-	AvgRepeatDays *float64  `json:"avg_repeat_days,omitempty"`
+	RecencyDays   *int                   `json:"recency_days,omitempty"`
+	R             *int                   `json:"r,omitempty"`
+	F             *int                   `json:"f,omitempty"`
+	M             *int                   `json:"m,omitempty"`
+	Score         string                 `json:"score,omitempty"`
+	Segment       string                 `json:"segment,omitempty"`
+	ChurnRisk     retail_enums.ChurnRisk `json:"churn_risk,omitempty"`
+	AvgRepeatDays *float64               `json:"avg_repeat_days,omitempty"`
 }
 
 // RetailCustomerProfileCompletion is a computed read projection describing how

@@ -2,17 +2,23 @@ package order_test
 
 import (
 	"encoding/json"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/security"
 	"strings"
 	"testing"
 	"time"
 
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/orders/order"
-	paymentenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/payments/payment"
-	membershipenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pricing/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
-	warehouseenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/supply/warehouse"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/security"
+
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/order"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestOrderJSONRoundTripWithHistory(t *testing.T) {
@@ -20,21 +26,21 @@ func TestOrderJSONRoundTripWithHistory(t *testing.T) {
 	order := sales.Order{
 		ID:                "ord_1",
 		OrderNumber:       "1001",
-		Channel:           common.OrderTypeOnline,
-		Status:            sales.SalesOrderStatusPaid,
-		PaymentStatus:     paymentenum.PaymentStatusPaid,
-		PaymentMethod:     paymentenum.PaymentMethodCard,
-		FulfillmentStatus: sales.FulfillmentStatusUnfulfilled,
-		Customer: common.PartyRef{
+		Channel:           commerce_enums.OrderTypeOnline,
+		Status:            order_enums.SalesOrderStatusPaid,
+		PaymentStatus:     payment_enums.PaymentStatusPaid,
+		PaymentMethod:     payment_enums.PaymentMethodCard,
+		FulfillmentStatus: order_enums.FulfillmentStatusUnfulfilled,
+		Customer: party.PartyRef{
 			ID:    "cust_1",
 			Name:  "Customer One",
 			Email: "customer@example.com",
 		},
-		Subtotal:       common.Money{AmountMinor: 10000, Currency: "AUD"},
-		DiscountAmount: common.Money{AmountMinor: 1000, Currency: "AUD"},
-		ShippingAmount: common.Money{AmountMinor: 500, Currency: "AUD"},
-		TaxAmount:      common.Money{AmountMinor: 864, Currency: "AUD"},
-		Total:          common.Money{AmountMinor: 9500, Currency: "AUD"},
+		Subtotal:       money.Money{AmountMinor: 10000, Currency: "AUD"},
+		DiscountAmount: money.Money{AmountMinor: 1000, Currency: "AUD"},
+		ShippingAmount: money.Money{AmountMinor: 500, Currency: "AUD"},
+		TaxAmount:      money.Money{AmountMinor: 864, Currency: "AUD"},
+		Total:          money.Money{AmountMinor: 9500, Currency: "AUD"},
 		History: []security.HistoryEntry{
 			{
 				OccurredAt: occurredAt,
@@ -56,7 +62,7 @@ func TestOrderJSONRoundTripWithHistory(t *testing.T) {
 		t.Fatalf("unmarshal order: %v", err)
 	}
 
-	if decoded.Status != sales.SalesOrderStatusPaid || decoded.PaymentStatus != paymentenum.PaymentStatusPaid {
+	if decoded.Status != order_enums.SalesOrderStatusPaid || decoded.PaymentStatus != payment_enums.PaymentStatusPaid {
 		t.Fatalf("status fields did not round-trip: %+v", decoded)
 	}
 	if decoded.Total.AmountMinor != 9500 || decoded.Total.Currency != "AUD" {
@@ -77,7 +83,7 @@ func TestOrderJSONOmitsEmptyHistory(t *testing.T) {
 	}
 }
 
-func TestV23LineItemsUsePackageComponentsAndRequireOrderItemID(t *testing.T) {
+func TestV24LineItemsUsePackageComponentsAndRequireOrderItemID(t *testing.T) {
 	cartPayload, err := json.Marshal(sales.CartItem{TotalBaseUnits: 1})
 	if err != nil {
 		t.Fatalf("marshal cart item: %v", err)
@@ -111,9 +117,9 @@ func TestOrderJSONRoundTripsPackingProgress(t *testing.T) {
 	order := sales.Order{
 		ID:                "ord_pack",
 		OrderNumber:       "MAMA260709ABC123",
-		FulfillmentStatus: sales.FulfillmentStatusPacking,
+		FulfillmentStatus: order_enums.FulfillmentStatusPacking,
 		Packing: &sales.OrderPackingProgress{
-			Status:    sales.FulfillmentStatusPacking,
+			Status:    order_enums.FulfillmentStatusPacking,
 			Operator:  "packer@example.test",
 			StartedAt: &startedAt,
 			UpdatedAt: &updatedAt,
@@ -123,21 +129,21 @@ func TestOrderJSONRoundTripsPackingProgress(t *testing.T) {
 					OrderItemID:          "item_1",
 					ProductSKUCode:       "A00001",
 					ProductName:          "Washed potatoes",
-					RequestedComposition: common.PackageCompositionSnapshot{TotalBaseUnits: 4},
-					AllocatedComposition: common.PackageCompositionSnapshot{TotalBaseUnits: 4},
-					PickedComposition:    common.PackageCompositionSnapshot{TotalBaseUnits: 4},
-					PackedComposition:    common.PackageCompositionSnapshot{TotalBaseUnits: 3},
+					RequestedComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 4},
+					AllocatedComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 4},
+					PickedComposition:    packaging.PackageCompositionSnapshot{TotalBaseUnits: 4},
+					PackedComposition:    packaging.PackageCompositionSnapshot{TotalBaseUnits: 3},
 				},
 			},
-			Containers: []warehouse.OutboundContainerPlan{{ID: "container_1", ContainerCode: "OUT-1", StorageType: warehouseenum.StorageDry, UpdatedAt: updatedAt}},
+			Containers: []warehouse.OutboundContainerPlan{{ID: "container_1", ContainerCode: "OUT-1", StorageType: warehouse_enums.StorageDry, UpdatedAt: updatedAt}},
 			Damages: []warehouse.PackingDamage{
 				{
 					ID:                  "damage_1",
 					ProductSKUCode:      "A00001",
 					SourceBucketID:      "bucket_1",
 					QualityAssessmentID: "qa_1",
-					AffectedComposition: common.PackageCompositionSnapshot{TotalBaseUnits: 1},
-					Handling:            warehouseenum.PackingDamageShortShipRefund,
+					AffectedComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 1},
+					Handling:            warehouse_enums.PackingDamageShortShipRefund,
 					CreatedAt:           updatedAt,
 				},
 			},
@@ -146,9 +152,9 @@ func TestOrderJSONRoundTripsPackingProgress(t *testing.T) {
 					ID:                   "disc_1",
 					OrderNumber:          "MAMA260709ABC123",
 					ProductSKUCode:       "A00001",
-					Kind:                 warehouseenum.PackingDiscrepancyKindShortage,
-					RequestedComposition: common.PackageCompositionSnapshot{TotalBaseUnits: 4},
-					ObservedComposition:  common.PackageCompositionSnapshot{TotalBaseUnits: 3},
+					Kind:                 warehouse_enums.PackingDiscrepancyKindShortage,
+					RequestedComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 4},
+					ObservedComposition:  packaging.PackageCompositionSnapshot{TotalBaseUnits: 3},
 					RecordedAt:           updatedAt,
 				},
 			},
@@ -178,7 +184,7 @@ func TestOrderJSONRoundTripsPackingProgress(t *testing.T) {
 }
 
 func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
-	discount := common.Money{AmountMinor: 500, Currency: "AUD"}
+	discount := money.Money{AmountMinor: 500, Currency: "AUD"}
 	pointOccurredAt := time.Date(2026, 7, 30, 1, 2, 3, 0, time.UTC)
 	rewardOccurredAt := pointOccurredAt.Add(time.Second)
 	voucherOccurredAt := pointOccurredAt.Add(2 * time.Second)
@@ -199,7 +205,7 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 				RewardRedemptionID: "reward_redemption_1",
 				RewardCode:         "reward_1",
 				CustomerNumber:     "RC-20260727-ABCDEF",
-				RewardType:         membershipenum.MembershipRewardTypeOrderDiscount,
+				RewardType:         membership_enums.MembershipRewardTypeOrderDiscount,
 				PointsSpent:        500,
 				DiscountAmount:     &discount,
 				OccurredAt:         &rewardOccurredAt,
@@ -214,7 +220,7 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 		GiftCardRedemptions: []sales.GiftCardRedemptionSnapshot{
 			{
 				GiftCardCode:        "GC-1",
-				AppliedAmount:       common.Money{AmountMinor: 2500, Currency: "AUD"},
+				AppliedAmount:       money.Money{AmountMinor: 2500, Currency: "AUD"},
 				ReservationID:       "benefit_res_1",
 				WalletTransactionID: "wallet_tx_1",
 				OccurredAt:          &giftCardOccurredAt,

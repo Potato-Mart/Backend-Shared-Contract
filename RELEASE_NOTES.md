@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v24.0.0` | 2026-08-07 | Major | Common-model and enum-package hard cutover: removes `common/shared`, moves common models into focused packages, puts finite enums in leaf `<domain>_enums` packages, changes the module path to `/v24`, and requires downstream consumers to migrate explicitly. JSON fields, tags, enum wire values, event versions, and runtime behavior remain unchanged. |
 | `v23.0.0` | 2026-08-07 | Major | Domain-oriented `pkg` layout hard cutover: moves contracts and enums into cohesive domain packages, centralizes routed Pub/Sub events, changes the module path to `/v23`, and requires downstream consumers to migrate explicitly. No JSON fields, tags, enum values, event versions, or runtime behavior change. |
 | `v22.2.0` | 2026-08-07 | Minor | Repository cleanup and requested warehouse date-mark cutover: removes `InventoryDateMarkUseBy` / `USE_BY`, reorganizes repository and enum tests, groups scripts by language, and adds filename and Git workflow rules. Keeps the `/v22` module path; consumers must complete the documented breaking migration. |
 | `v22.1.0` | 2026-08-06 | Minor | Adds the customer-safe public AU commercial projection and expiry display fields for price, canonical `EACH` package, aggregate stock state, market/freshness, soon-expiry thresholds, localized labels, and optional exact date. Keeps the `/v22` module path. |
@@ -111,6 +112,44 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v24.0.0 (2026-08-07) - Common And Enum Package Reorganization
+
+### Breaking Contract Changes / 破壞性契約變更
+
+- Changes the module path from `/v23` to `/v24`. All consumers must update
+  their `go.mod` requirement and import paths; compatibility aliases and the
+  legacy `pkg/contracts/common/shared` package are intentionally absent.
+- Replaces `common/shared` with focused common packages: `audit`, `device`,
+  `geography`, `geometry`, `identity`, `localization`, `measurement`,
+  `metadata`, `money`, `packaging`, `party`, and `temporal`. `Address` lives
+  with geography, party/contact types live with `party`, and packaging models
+  live with `packaging`.
+- Moves finite enum types into explicit leaf packages named
+  `<domain>_enums`, including common geography/security/API-response enums;
+  commerce, identity, and packaging enums; and the customer, identity,
+  insight, notification, order, payment, pricing, Pub/Sub, and supply domain
+  enum families.
+- Splits mixed model/enum files so `PackageHandlingUnit` is in
+  `common/packaging/packaging_enums` and `StorefrontExpiryStatus` is in
+  `supply/product/product_enums`. `StorefrontExpiryStatus` now has complete
+  `String` and `IsValid` behavior for its existing wire values.
+
+### Verification And Compatibility / 驗證與相容性
+
+- v23.0.0 golden JSON fixtures cover the moved common models. Their JSON
+  tags, `omitempty` behavior, serialized shapes, and enum wire values are
+  unchanged in v24.0.0.
+- The package manifest, hard-cutover gates, enum-layout checks, enum method
+  coverage, and dependency graph checks now validate the v24 package surface.
+
+### Consumer Action / 使用方動作
+
+- The seven backend services and the parent `go.work` deliberately remain
+  v22 consumers. Migrate each downstream repository to `/v24` in a separate,
+  coordinated change; this release does not edit or bridge those consumers.
+- Replace every former `common/shared` and parent-domain enum import with its
+  focused common package or leaf `<domain>_enums` package before upgrading.
 
 ## v23.0.0 (2026-08-07) - Contract Domain Layout Hard Cutover
 

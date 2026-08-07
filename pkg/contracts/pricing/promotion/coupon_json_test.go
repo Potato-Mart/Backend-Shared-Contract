@@ -2,14 +2,18 @@ package promotion_test
 
 import (
 	"encoding/json"
-	common "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/common/shared"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pricing/benefit"
-	benefitenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pricing/benefit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pricing/promotion"
-	promotionenum "github.com/Potato-Mart/Backend-Shared-Contract/v23/pkg/contracts/pricing/promotion"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/benefit"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/promotion"
+
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/benefit/benefit_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 func TestCouponAssignmentRoundTrip(t *testing.T) {
@@ -19,10 +23,10 @@ func TestCouponAssignmentRoundTrip(t *testing.T) {
 		CouponID:   "coupon_1",
 		CouponCode: "SAVE10",
 		Owner: benefit.OwnerRef{
-			OwnerType: benefitenum.OwnerTypeRetailCustomer,
+			OwnerType: benefit_enums.OwnerTypeRetailCustomer,
 			OwnerID:   "RC-1",
 		},
-		Source:              promotionenum.CouponSourceCampaign,
+		Source:              promotion_enums.CouponSourceCampaign,
 		Status:              "redeemed",
 		ExpiresAt:           &now,
 		RedeemedAt:          &now,
@@ -55,7 +59,7 @@ func TestCouponAssignmentRoundTrip(t *testing.T) {
 func TestCouponUsageRoundTripsWholesaleOwner(t *testing.T) {
 	now := time.Date(2026, 7, 15, 0, 0, 0, 0, time.UTC)
 	owner := benefit.OwnerRef{
-		OwnerType: benefitenum.OwnerTypeWholesaleOrganisation,
+		OwnerType: benefit_enums.OwnerTypeWholesaleOrganisation,
 		OwnerID:   "ORG-1",
 	}
 	record := promotion.CouponUsageRecord{
@@ -63,7 +67,7 @@ func TestCouponUsageRoundTripsWholesaleOwner(t *testing.T) {
 		CouponCode:          "WHOLESALE10",
 		Owner:               &owner,
 		RedeemedOrderNumber: "MAMA260715ABC123",
-		DiscountAmount:      common.Money{AmountMinor: 1000, Currency: "AUD"},
+		DiscountAmount:      money.Money{AmountMinor: 1000, Currency: "AUD"},
 		RedeemedAt:          now,
 		RefundID:            "refund_1",
 		RefundedAt:          &now,
