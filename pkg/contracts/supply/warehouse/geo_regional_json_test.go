@@ -3,15 +3,15 @@ package warehouse_test
 import (
 	"encoding/json"
 
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pubsub/event"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pubsub/event"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse"
 
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestLotBucketReservationAndStagingJSONShapes(t *testing.T) {
@@ -77,7 +77,7 @@ func TestLotBucketReservationAndStagingJSONShapes(t *testing.T) {
 		OrderNumber: "SO-1", ProductSKUCode: "A00001", PackageOptionID: "pkg_case_12",
 		SourceBucketID: "bucket_1", DestinationBucketID: "bucket_stage",
 		SourceLocation:      warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01"},
-		DestinationLocation: warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: warehouse.StockLocationCodeOnlineStageDry},
+		DestinationLocation: warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: warehouse.StockLocationCodeOnlineStageAmbient},
 		StagedComposition:   caseComposition, MovementID: "movement_1", StagedBy: "operator_1", StagedAt: dateMarkAt,
 	})
 	for _, key := range []string{"source_location", "destination_location", "staged_composition", "movement_id"} {
@@ -99,7 +99,7 @@ func TestPackageAwarePackingAndAvailabilityEventJSONShapes(t *testing.T) {
 		Operator: "operator_1", CapturedAt: now,
 	}
 	containerShape := marshalObject(t, warehouse.OutboundContainerPlan{
-		ID: "container_1", ContainerCode: "OUT-1", StorageType: warehouse_enums.StorageDry,
+		ID: "container_1", ContainerCode: "OUT-1", StorageType: warehouse_enums.StorageAmbient,
 		Contents: []warehouse.OutboundContainerContent{{
 			OrderItemID: "item_1", ProductSKUCode: "A00001", AllocationID: "allocation_1",
 			BucketID: "bucket_each", LotID: "lot_1", PackageOptionID: "pkg_each",
@@ -107,7 +107,7 @@ func TestPackageAwarePackingAndAvailabilityEventJSONShapes(t *testing.T) {
 		}},
 		UpdatedAt: now,
 	})
-	if containerShape["storage_type"] != "DRY" {
+	if containerShape["storage_type"] != "AMBIENT" {
 		t.Fatalf("outbound container omitted storage type: %+v", containerShape)
 	}
 	if _, ok := containerShape["contents"]; !ok {

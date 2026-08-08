@@ -1,6 +1,6 @@
 package party
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
 
 // ContactAddress pairs an optional contact with an optional postal address.
 // It is the shared shape for shipping/billing targets and saved address

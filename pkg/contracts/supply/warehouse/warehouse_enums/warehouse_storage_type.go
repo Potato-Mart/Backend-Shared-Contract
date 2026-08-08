@@ -5,7 +5,7 @@ package warehouse_enums
 type StorageType string
 
 const (
-	StorageDry     StorageType = "DRY"
+	StorageAmbient StorageType = "AMBIENT"
 	StorageChilled StorageType = "CHILLED"
 	StorageFrozen  StorageType = "FROZEN"
 )
@@ -13,7 +13,7 @@ const (
 // IsValid reports whether s is a known StorageType.
 func (s StorageType) IsValid() bool {
 	switch s {
-	case StorageDry, StorageChilled, StorageFrozen:
+	case StorageAmbient, StorageChilled, StorageFrozen:
 		return true
 	}
 	return false

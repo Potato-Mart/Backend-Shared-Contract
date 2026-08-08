@@ -3,25 +3,25 @@ package product
 import (
 	"encoding/json"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
 
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product/product_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestProductPackageOptionsAndBarcodeAssignmentsJSON(t *testing.T) {
 	effectiveFrom := time.Date(2026, 8, 4, 2, 3, 4, 0, time.UTC)
 	product := Product{
 		SKUCode: "A00001", CategorySKUCode: "CAT-1", Name: "Potatoes",
-		StorageType: warehouse_enums.StorageDry,
+		StorageType: warehouse_enums.StorageAmbient,
 		PackageOptions: []ProductPackageOption{
 			{ID: "pkg_each", Code: "EACH", ProductSKUCode: "A00001", HandlingUnit: packaging_enums.PackageHandlingUnitEach, UnitsPerPackage: 1, IsCanonical: true, IsActive: true, EffectiveFrom: effectiveFrom},
 			{ID: "pkg_case_6", Code: "CASE-6", ProductSKUCode: "A00001", HandlingUnit: packaging_enums.PackageHandlingUnitCase, UnitsPerPackage: 6, IsActive: true, EffectiveFrom: effectiveFrom},
@@ -37,7 +37,7 @@ func TestProductPackageOptionsAndBarcodeAssignmentsJSON(t *testing.T) {
 	if err != nil {
 		t.Fatalf("marshal product packages: %v", err)
 	}
-	for _, want := range []string{`"category_sku_code":"CAT-1"`, `"storage_type":"DRY"`, `"handling_unit":"EACH"`, `"handling_unit":"CASE"`, `"units_per_package":6`, `"units_per_package":12`, `"barcode_assignments"`, `"effective_from":"2026-08-04T02:03:04Z"`} {
+	for _, want := range []string{`"category_sku_code":"CAT-1"`, `"storage_type":"AMBIENT"`, `"handling_unit":"EACH"`, `"handling_unit":"CASE"`, `"units_per_package":6`, `"units_per_package":12`, `"barcode_assignments"`, `"effective_from":"2026-08-04T02:03:04Z"`} {
 		if !strings.Contains(string(body), want) {
 			t.Fatalf("product package JSON missing %s: %s", want, body)
 		}

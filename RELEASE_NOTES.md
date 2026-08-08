@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v25.0.0` | 2026-08-08 | Major | Replaces the product and warehouse storage value `DRY` with `AMBIENT`, renames derived system storage-location codes, changes the module path to `/v25`, and requires all consumers to migrate explicitly. |
 | `v24.0.0` | 2026-08-07 | Major | Common-model and enum-package hard cutover: removes `common/shared`, moves common models into focused packages, puts finite enums in leaf `<domain>_enums` packages, changes the module path to `/v24`, and requires downstream consumers to migrate explicitly. JSON fields, tags, enum wire values, event versions, and runtime behavior remain unchanged. |
 | `v23.0.0` | 2026-08-07 | Major | Domain-oriented `pkg` layout hard cutover: moves contracts and enums into cohesive domain packages, centralizes routed Pub/Sub events, changes the module path to `/v23`, and requires downstream consumers to migrate explicitly. No JSON fields, tags, enum values, event versions, or runtime behavior change. |
 | `v22.2.0` | 2026-08-07 | Minor | Repository cleanup and requested warehouse date-mark cutover: removes `InventoryDateMarkUseBy` / `USE_BY`, reorganizes repository and enum tests, groups scripts by language, and adds filename and Git workflow rules. Keeps the `/v22` module path; consumers must complete the documented breaking migration. |
@@ -112,6 +113,35 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v25.0.0 (2026-08-08) - Ambient Storage Cutover
+
+### Breaking Contract Changes / 破壞性契約變更
+
+- Changes the module path from `/v24` to `/v25`. Consumers must update their
+  `go.mod` requirement and all contract import paths.
+- Replaces `warehouse_enums.StorageDry` and the `DRY` wire value with
+  `warehouse_enums.StorageAmbient` and the `AMBIENT` wire value.
+- Renames the derived system location constants and codes from `DRY` to
+  `AMBIENT`, including quality-hold and online-stage locations.
+- No deprecated enum alias or fallback JSON value is retained.
+
+### Verification And Compatibility / 驗證與相容性
+
+- Contract JSON and enum tests require `AMBIENT` and reject `DRY`.
+- Downstream services must migrate persisted storage-bearing records,
+  including current projections and stored event/outbox/history payloads,
+  before enabling the v25 consumers.
+- Unrelated release and operational `dry-run` terminology is unchanged.
+
+### Consumer Action / 使用方動作
+
+- Upgrade the seven backend services from `/v22` to
+  `github.com/Potato-Mart/Backend-Shared-Contract/v25 v25.0.0`.
+- Migrate legacy v22 contract package paths to the v25 domain and focused
+  enum packages; compatibility aliases are not provided.
+- Convert persisted `storage_type: "DRY"` values to `"AMBIENT"` and rename
+  the derived system location codes before rollout.
 
 ## v24.0.0 (2026-08-07) - Common And Enum Package Reorganization
 

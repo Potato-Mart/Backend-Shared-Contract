@@ -3,8 +3,8 @@ package favourite
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/favourite/favourite_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/favourite/favourite_enums"
 )
 
 // FavouriteListOwner identifies either a retail user or a wholesale

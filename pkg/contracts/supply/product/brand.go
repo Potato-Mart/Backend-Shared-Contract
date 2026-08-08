@@ -1,6 +1,6 @@
 package product
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/localization"
 
 // Brand is the canonical localized brand master used by product catalogues.
 type Brand struct {

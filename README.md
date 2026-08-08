@@ -15,8 +15,8 @@ workflows.
 ## Latest Version
 
 ```text
-v24.0.0
-github.com/Potato-Mart/Backend-Shared-Contract/v24
+v25.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v25
 ```
 
 See [RELEASE_NOTES.md](RELEASE_NOTES.md) for the release history,
@@ -27,22 +27,22 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v24 v24.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v25 v25.0.0
 ```
 
-Import packages from the same `/v24` module path.
+Import packages from the same `/v25` module path.
 
 ## Package Layout
 
 - Common models are grouped by concern under `pkg/contracts/common`, such as
   `geography`, `party`, `packaging`, `security`, `temporal`, and `money`.
-  The legacy `common/shared` package does not exist in v24.
+  The legacy `common/shared` package does not exist in v25.
 - Finite enum types live in a leaf `<domain>_enums` package beside the models
   that use them. For example, product models import
   `supply/product/product_enums`, while common security models import
   `common/security/security_enums`.
 - This module is contract-only. The seven backend services and the parent
-  `go.work` remain v22 consumers until their separate migration to v24.
+  `go.work` must migrate to `/v25` before consuming this release.
 
 ## Boundary Governance
 

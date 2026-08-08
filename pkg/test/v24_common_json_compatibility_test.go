@@ -5,25 +5,25 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/device"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geometry"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/identity"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/device"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geometry"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/identity"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/temporal"
 )
 
-func TestV24MovedCommonModelsMatchV23GoldenJSON(t *testing.T) {
+func TestV25MovedCommonModelsMatchV23GoldenJSON(t *testing.T) {
 	// These byte-for-byte fixtures are the v23.0.0 wire baseline for every
-	// common model moved by the v24 package reorganization.
+	// common model moved by the v25 package reorganization.
 	createdAt := time.Date(2026, time.August, 7, 3, 4, 5, 0, time.UTC)
 	address := geography.Address{
 		Line1:      "1 Market Lane",

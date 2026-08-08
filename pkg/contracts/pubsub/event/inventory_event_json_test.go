@@ -3,18 +3,18 @@ package event_test
 import (
 	"encoding/json"
 
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pubsub/event"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pubsub/event"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse"
 
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
-func TestV24InventoryEventJSONShapes(t *testing.T) {
+func TestV25InventoryEventJSONShapes(t *testing.T) {
 	now := time.Date(2026, 8, 4, 7, 8, 9, 0, time.UTC)
 	caseComposition := composition(packaging_enums.PackageHandlingUnitCase, "pkg_case_12", 1, 12)
 	eachComposition := composition(packaging_enums.PackageHandlingUnitEach, "pkg_each", 12, 1)
@@ -83,7 +83,7 @@ func TestV24InventoryEventJSONShapes(t *testing.T) {
 			value: event.StockStagingChangedEvent{
 				StagingRecordID: "staging_1", ReservationID: "reservation_1", AllocationID: "allocation_1",
 				OrderNumber: "SO-1", ProductSKUCode: "A00001", SourceLocation: location,
-				DestinationLocation: warehouse.StockLocationRef{DepotCode: location.DepotCode, LocationCode: warehouse.StockLocationCodeOnlineStageDry},
+				DestinationLocation: warehouse.StockLocationRef{DepotCode: location.DepotCode, LocationCode: warehouse.StockLocationCodeOnlineStageAmbient},
 				StagedComposition:   caseComposition, MovementID: "movement_stage", Revision: 1, OccurredAt: now,
 			},
 			required: []string{"staging_record_id", "source_location", "destination_location", "revision"},

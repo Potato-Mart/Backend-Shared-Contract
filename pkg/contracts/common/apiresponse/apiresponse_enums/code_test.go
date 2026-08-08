@@ -42,6 +42,6 @@ func TestCodeIsValidAndString(t *testing.T) {
 	}
 	if CodeCartNotActive.String() != "CART_NOT_ACTIVE" ||
 		CodeEmailVerificationRequired.String() != "EMAIL_VERIFICATION_REQUIRED" {
-		t.Fatal("v24 mobile recovery error codes changed")
+		t.Fatal("v25 mobile recovery error codes changed")
 	}
 }

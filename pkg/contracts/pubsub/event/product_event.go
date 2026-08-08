@@ -3,7 +3,7 @@ package event
 import (
 	"time"
 
-	product "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product"
+	product "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/product"
 )
 
 // ProductSalesRollup is the product-stats topic payload: per-SKU sales

@@ -12,9 +12,9 @@ import (
 	"testing"
 )
 
-const v24ContractImportPrefix = "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/"
+const v25ContractImportPrefix = "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/"
 
-var v24ExpectedEnumPackages = []string{
+var v25ExpectedEnumPackages = []string{
 	"contracts/common/apiresponse/apiresponse_enums",
 	"contracts/common/commerce/commerce_enums",
 	"contracts/common/geography/geography_enums",
@@ -50,7 +50,7 @@ var v24ExpectedEnumPackages = []string{
 	"contracts/supply/wish/wish_enums",
 }
 
-func TestV24CommonAndEnumPackageLayout(t *testing.T) {
+func TestV25CommonAndEnumPackageLayout(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	contractsRoot := filepath.Join(pkgRoot, "contracts")
 	legacyShared := filepath.Join(contractsRoot, "common", "shared")
@@ -58,8 +58,8 @@ func TestV24CommonAndEnumPackageLayout(t *testing.T) {
 		t.Fatalf("legacy common/shared directory must not exist: %v", err)
 	}
 
-	expected := make(map[string]struct{}, len(v24ExpectedEnumPackages))
-	for _, packagePath := range v24ExpectedEnumPackages {
+	expected := make(map[string]struct{}, len(v25ExpectedEnumPackages))
+	for _, packagePath := range v25ExpectedEnumPackages {
 		expected[packagePath] = struct{}{}
 	}
 	found := make(map[string]struct{}, len(expected))
@@ -105,7 +105,7 @@ func TestV24CommonAndEnumPackageLayout(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v24 package layout: %v", err)
+		t.Fatalf("scan v25 package layout: %v", err)
 	}
 	for packagePath := range expected {
 		if _, ok := found[packagePath]; !ok {
@@ -114,11 +114,11 @@ func TestV24CommonAndEnumPackageLayout(t *testing.T) {
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)
-		t.Fatalf("v24 package layout violations:\n%s", strings.Join(violations, "\n"))
+		t.Fatalf("v25 package layout violations:\n%s", strings.Join(violations, "\n"))
 	}
 }
 
-func TestV24EnumTypesExposeIntrinsicValidation(t *testing.T) {
+func TestV25EnumTypesExposeIntrinsicValidation(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	contractsRoot := filepath.Join(pkgRoot, "contracts")
 	type methods map[string]map[string]struct{}
@@ -198,15 +198,15 @@ func TestV24EnumTypesExposeIntrinsicValidation(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v24 enum methods: %v", err)
+		t.Fatalf("scan v25 enum methods: %v", err)
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)
-		t.Fatalf("v24 enum validation violations:\n%s", strings.Join(violations, "\n"))
+		t.Fatalf("v25 enum validation violations:\n%s", strings.Join(violations, "\n"))
 	}
 }
 
-func TestV24CommonPackageDependencyGraph(t *testing.T) {
+func TestV25CommonPackageDependencyGraph(t *testing.T) {
 	expected := map[string][]string{
 		"contracts/common/apiresponse/apiresponse_enums": {},
 		"contracts/common/audit":                         {},
@@ -250,14 +250,14 @@ func TestV24CommonPackageDependencyGraph(t *testing.T) {
 		}
 		for _, imported := range file.Imports {
 			importPath := strings.Trim(imported.Path.Value, `"`)
-			if strings.HasPrefix(importPath, v24ContractImportPrefix) {
-				actual[packagePath][strings.TrimPrefix(importPath, v24ContractImportPrefix)] = struct{}{}
+			if strings.HasPrefix(importPath, v25ContractImportPrefix) {
+				actual[packagePath][strings.TrimPrefix(importPath, v25ContractImportPrefix)] = struct{}{}
 			}
 		}
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("read v24 common dependency graph: %v", err)
+		t.Fatalf("read v25 common dependency graph: %v", err)
 	}
 
 	var violations []string
@@ -274,12 +274,12 @@ func TestV24CommonPackageDependencyGraph(t *testing.T) {
 			violations = append(violations, "unclassified common package "+packagePath)
 		}
 	}
-	if cycle := v24DependencyCycle(actual); len(cycle) > 0 {
+	if cycle := v25DependencyCycle(actual); len(cycle) > 0 {
 		violations = append(violations, "common package dependency cycle: "+strings.Join(cycle, " -> "))
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)
-		t.Fatalf("v24 common dependency graph violations:\n%s", strings.Join(violations, "\n"))
+		t.Fatalf("v25 common dependency graph violations:\n%s", strings.Join(violations, "\n"))
 	}
 }
 
@@ -292,7 +292,7 @@ func stringSetKeys(values map[string]struct{}) []string {
 	return keys
 }
 
-func v24DependencyCycle(graph map[string]map[string]struct{}) []string {
+func v25DependencyCycle(graph map[string]map[string]struct{}) []string {
 	const (
 		unvisited = iota
 		visiting
@@ -325,7 +325,7 @@ func v24DependencyCycle(graph map[string]map[string]struct{}) []string {
 		states[node] = visited
 		return nil
 	}
-	for _, node := range v24GraphNodes(graph) {
+	for _, node := range v25GraphNodes(graph) {
 		if states[node] == unvisited {
 			if cycle := visit(node); len(cycle) > 0 {
 				return cycle
@@ -335,7 +335,7 @@ func v24DependencyCycle(graph map[string]map[string]struct{}) []string {
 	return nil
 }
 
-func v24GraphNodes(graph map[string]map[string]struct{}) []string {
+func v25GraphNodes(graph map[string]map[string]struct{}) []string {
 	nodes := make([]string, 0, len(graph))
 	for node := range graph {
 		nodes = append(nodes, node)
