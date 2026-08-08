@@ -3,12 +3,12 @@ package product
 import (
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product/product_enums"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/product/product_enums"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // StorefrontPromotionBadge is a customer-safe image-overlay promotion model.

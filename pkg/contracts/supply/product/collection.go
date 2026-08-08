@@ -1,8 +1,8 @@
 package product
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/localization"
 )
 
 type CollectionRef struct {

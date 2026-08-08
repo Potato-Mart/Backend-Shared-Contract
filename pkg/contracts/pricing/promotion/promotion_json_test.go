@@ -3,13 +3,13 @@ package promotion
 import (
 	"encoding/json"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
 
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 func TestPromotionCategoryTagTargetNameIsLocalized(t *testing.T) {

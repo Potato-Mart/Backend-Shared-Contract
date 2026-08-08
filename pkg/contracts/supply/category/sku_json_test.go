@@ -5,8 +5,8 @@ import (
 
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestSKUJSONIncludesPrimaryName(t *testing.T) {

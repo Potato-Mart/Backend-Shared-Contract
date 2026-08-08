@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestWarehouseEnumsValidateKnownValues(t *testing.T) {
@@ -31,7 +31,7 @@ func TestWarehouseEnumsValidateKnownValues(t *testing.T) {
 		{name: "warehouseenum.StockLocationAccess", valid: []stringEnum{warehouse_enums.StockLocationAccessCustomerAccessible, warehouse_enums.StockLocationAccessStaffOnly}, invalid: warehouse_enums.StockLocationAccess("__invalid__")},
 		{name: "warehouseenum.StockLocationCollectionMode", valid: []stringEnum{warehouse_enums.StockLocationCollectionAllowList, warehouse_enums.StockLocationCollectionUnrestricted}, invalid: warehouse_enums.StockLocationCollectionMode("__invalid__")},
 		{name: "warehouseenum.StockLocationCollectionRole", valid: []stringEnum{warehouse_enums.StockLocationCollectionPrimary, warehouse_enums.StockLocationCollectionOverflow}, invalid: warehouse_enums.StockLocationCollectionRole("__invalid__")},
-		{name: "warehouseenum.StorageType", valid: []stringEnum{warehouse_enums.StorageDry, warehouse_enums.StorageChilled, warehouse_enums.StorageFrozen}, invalid: warehouse_enums.StorageType("__invalid__")},
+		{name: "warehouseenum.StorageType", valid: []stringEnum{warehouse_enums.StorageAmbient, warehouse_enums.StorageChilled, warehouse_enums.StorageFrozen}, invalid: warehouse_enums.StorageType("DRY")},
 		{name: "warehouseenum.WMSDraftStatus", valid: []stringEnum{warehouse_enums.WMSDraftStatusDraft, warehouse_enums.WMSDraftStatusSubmitted, warehouse_enums.WMSDraftStatusCancelled}, invalid: warehouse_enums.WMSDraftStatus("__invalid__")},
 		{name: "warehouseenum.WMSDraftType", valid: []stringEnum{warehouse_enums.WMSDraftTypeInbound, warehouse_enums.WMSDraftTypeOutbound}, invalid: warehouse_enums.WMSDraftType("__invalid__")},
 	})

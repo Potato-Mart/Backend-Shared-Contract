@@ -3,9 +3,9 @@ package promotion
 import (
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/promotion/promotion_enums"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 // StorefrontPromotion is the customer-safe catalogue projection of one

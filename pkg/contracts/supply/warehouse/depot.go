@@ -1,8 +1,8 @@
 package warehouse
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
 )
 
 // Depot is a fulfilment site within a depot region. Code is its canonical

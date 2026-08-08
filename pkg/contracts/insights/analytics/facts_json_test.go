@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging"
 )
 
 func TestItemFactsUseBrandID(t *testing.T) {

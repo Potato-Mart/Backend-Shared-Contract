@@ -6,19 +6,19 @@ import (
 	"testing"
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/security"
 
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/order"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/orders/order"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/membership/membership_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestOrderJSONRoundTripWithHistory(t *testing.T) {
@@ -83,7 +83,7 @@ func TestOrderJSONOmitsEmptyHistory(t *testing.T) {
 	}
 }
 
-func TestV24LineItemsUsePackageComponentsAndRequireOrderItemID(t *testing.T) {
+func TestV25LineItemsUsePackageComponentsAndRequireOrderItemID(t *testing.T) {
 	cartPayload, err := json.Marshal(sales.CartItem{TotalBaseUnits: 1})
 	if err != nil {
 		t.Fatalf("marshal cart item: %v", err)
@@ -135,7 +135,7 @@ func TestOrderJSONRoundTripsPackingProgress(t *testing.T) {
 					PackedComposition:    packaging.PackageCompositionSnapshot{TotalBaseUnits: 3},
 				},
 			},
-			Containers: []warehouse.OutboundContainerPlan{{ID: "container_1", ContainerCode: "OUT-1", StorageType: warehouse_enums.StorageDry, UpdatedAt: updatedAt}},
+			Containers: []warehouse.OutboundContainerPlan{{ID: "container_1", ContainerCode: "OUT-1", StorageType: warehouse_enums.StorageAmbient, UpdatedAt: updatedAt}},
 			Damages: []warehouse.PackingDamage{
 				{
 					ID:                  "damage_1",

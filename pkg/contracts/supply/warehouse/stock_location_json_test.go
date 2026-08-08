@@ -3,16 +3,16 @@ package warehouse_test
 import (
 	"encoding/json"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse"
 
 	"reflect"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestStockLocationAndBalanceJSONShapes(t *testing.T) {
@@ -62,10 +62,10 @@ func TestRequiredSystemStockLocationCodesJSON(t *testing.T) {
 		storageType warehouse_enums.StorageType
 		purpose     warehouse_enums.StockLocationPurpose
 	}{
-		{name: "quality hold dry", code: warehouse.StockLocationCodeQualityHoldDry, wantCode: "SYS-QH-DRY", storageType: warehouse_enums.StorageDry, purpose: warehouse_enums.StockLocationPurposeQualityHold},
+		{name: "quality hold ambient", code: warehouse.StockLocationCodeQualityHoldAmbient, wantCode: "SYS-QH-AMBIENT", storageType: warehouse_enums.StorageAmbient, purpose: warehouse_enums.StockLocationPurposeQualityHold},
 		{name: "quality hold chilled", code: warehouse.StockLocationCodeQualityHoldChilled, wantCode: "SYS-QH-CHILLED", storageType: warehouse_enums.StorageChilled, purpose: warehouse_enums.StockLocationPurposeQualityHold},
 		{name: "quality hold frozen", code: warehouse.StockLocationCodeQualityHoldFrozen, wantCode: "SYS-QH-FROZEN", storageType: warehouse_enums.StorageFrozen, purpose: warehouse_enums.StockLocationPurposeQualityHold},
-		{name: "online stage dry", code: warehouse.StockLocationCodeOnlineStageDry, wantCode: "SYS-ONLINE-STAGE-DRY", storageType: warehouse_enums.StorageDry, purpose: warehouse_enums.StockLocationPurposeOnlineOrderStaging},
+		{name: "online stage ambient", code: warehouse.StockLocationCodeOnlineStageAmbient, wantCode: "SYS-ONLINE-STAGE-AMBIENT", storageType: warehouse_enums.StorageAmbient, purpose: warehouse_enums.StockLocationPurposeOnlineOrderStaging},
 		{name: "online stage chilled", code: warehouse.StockLocationCodeOnlineStageChilled, wantCode: "SYS-ONLINE-STAGE-CHILLED", storageType: warehouse_enums.StorageChilled, purpose: warehouse_enums.StockLocationPurposeOnlineOrderStaging},
 		{name: "online stage frozen", code: warehouse.StockLocationCodeOnlineStageFrozen, wantCode: "SYS-ONLINE-STAGE-FROZEN", storageType: warehouse_enums.StorageFrozen, purpose: warehouse_enums.StockLocationPurposeOnlineOrderStaging},
 	}

@@ -3,22 +3,22 @@ package pos_test
 import (
 	"encoding/json"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/pos"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/orders/pos"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/product"
 
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product/product_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestCatalogProductJSONUsesPackageOffersAndAvailability(t *testing.T) {
 	now := time.Date(2026, 8, 4, 0, 0, 0, 0, time.UTC)
 	record := pos.CatalogProduct{
 		SKUCode: "A00001", CategorySKUCode: "CAT-1", Name: "Potatoes",
-		StorageType:        warehouse_enums.StorageDry,
+		StorageType:        warehouse_enums.StorageAmbient,
 		PackageOptions:     []product.ProductPackageOptionSnapshot{{ID: "pkg_each", Code: "EACH", ProductSKUCode: "A00001", HandlingUnit: packaging_enums.PackageHandlingUnitEach, UnitsPerPackage: 1, EffectiveFrom: now, CapturedAt: now}},
 		BarcodeAssignments: []product.ProductBarcodeAssignmentSnapshot{{ID: "barcode_1", ProductSKUCode: "A00001", PackageOptionID: "pkg_each", Value: "930000000001", Format: product_enums.BarcodeFormatEAN13, EffectiveFrom: now, CapturedAt: now}},
 		Offers:             []product.SellableOfferSnapshot{},

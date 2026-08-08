@@ -3,7 +3,7 @@ package wallet
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 // MembershipPassContent is the provider-neutral snapshot used to issue a

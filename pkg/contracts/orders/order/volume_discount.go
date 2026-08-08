@@ -1,8 +1,8 @@
 package order
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 // VolumeDiscountTier defines a CASE-package threshold for a package option.

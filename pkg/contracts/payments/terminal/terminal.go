@@ -5,11 +5,11 @@ package terminal
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/metadata"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/metadata"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/payments/terminal/terminal_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/payments/terminal/terminal_enums"
 )
 
 // Terminal is an EFTPOS device registered for POS use.

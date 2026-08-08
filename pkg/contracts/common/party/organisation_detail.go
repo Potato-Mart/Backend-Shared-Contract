@@ -1,6 +1,6 @@
 package party
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/metadata"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/metadata"
 
 // OrganisationDetail contains the shared public and administrative details for
 // a company or organisation. It is intended for suppliers, wholesale

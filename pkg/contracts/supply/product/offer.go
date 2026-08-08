@@ -1,13 +1,13 @@
 package product
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
 
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/money"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // SellableOfferDateMarkSnapshot freezes the lot date mark exposed by an offer.

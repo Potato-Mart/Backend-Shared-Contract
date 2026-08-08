@@ -1,22 +1,22 @@
 package pkg_test
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
 
 	"reflect"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/apiresponse/apiresponse_enums"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/apiresponse/apiresponse_enums"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/product"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v24/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging/packaging_enums"
 )
 
-// TestV24BackendGateModelSurface locks the reusable model primitives needed by
-// the V24 stock, geography, offer, and availability gates. HTTP DTOs, stock
+// TestV25BackendGateModelSurface locks the reusable model primitives needed by
+// the V25 stock, geography, offer, and availability gates. HTTP DTOs, stock
 // commands, resolution rules, and error envelopes remain service-owned.
-func TestV24BackendGateModelSurface(t *testing.T) {
+func TestV25BackendGateModelSurface(t *testing.T) {
 	assertJSONFields(t, reflect.TypeOf(geography.Address{}), map[string]string{
 		"Locality":           "locality",
 		"AdministrativeArea": "administrative_area,omitempty",
