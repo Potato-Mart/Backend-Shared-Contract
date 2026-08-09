@@ -11,35 +11,11 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/pos/pos_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product/product_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
 )
-
-// CatalogProduct is the cashier-safe package, offer, and availability
-// projection returned by the POS catalogue.
-type CatalogProduct struct {
-	SKUCode            string                                     `json:"sku_code"`
-	CategorySKUCode    string                                     `json:"category_sku_code"`
-	Name               string                                     `json:"name"`
-	Taxed              bool                                       `json:"taxed"`
-	StorageType        warehouse_enums.StorageType                `json:"storage_type,omitempty"`
-	Status             product_enums.ProductStatus                `json:"status"`
-	PackageOptions     []product.ProductPackageOptionSnapshot     `json:"package_options"`
-	BarcodeAssignments []product.ProductBarcodeAssignmentSnapshot `json:"barcode_assignments,omitempty"`
-	Offers             []product.SellableOfferSnapshot            `json:"offers"`
-	Availability       *operations.ProductStockSummary            `json:"availability,omitempty"`
-	Image              *security.ObjectMedia                      `json:"image,omitempty"`
-	CategoryTags       []classification.CategoryTag               `json:"category_tags,omitempty"`
-	UpdatedAt          time.Time                                  `json:"updated_at"`
-}
 
 // Register is one physical or virtual point-of-sale register.
 type Register struct {

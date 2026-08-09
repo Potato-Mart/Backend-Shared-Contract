@@ -38,13 +38,17 @@ type Order struct {
 }
 
 type OrderItem struct {
-	ID                  string                               `json:"id,omitempty"`
-	Product             product.Snapshot                     `json:"product"`
-	PackageOptionID     string                               `json:"package_option_id"`
-	UnitCost            money.Money                          `json:"unit_cost"`
-	OrderedComposition  packaging.PackageCompositionSnapshot `json:"ordered_composition"`
-	ReceivedComposition packaging.PackageCompositionSnapshot `json:"received_composition"`
-	RejectedComposition packaging.PackageCompositionSnapshot `json:"rejected_composition"`
-	LineTotal           money.Money                          `json:"line_total"`
-	Note                string                               `json:"note,omitempty"`
+	ID                   string                               `json:"id,omitempty"`
+	ProductSKUCode       string                               `json:"product_sku_code"`
+	ProductName          string                               `json:"product_name"`
+	ProductImage         *security.ObjectMedia                `json:"product_image,omitempty"`
+	ProductPackageOption product.ProductPackageOption         `json:"product_package_option"`
+	CapturedAt           time.Time                            `json:"captured_at"`
+	PackageOptionID      string                               `json:"package_option_id"`
+	UnitCost             money.Money                          `json:"unit_cost"`
+	OrderedComposition   packaging.PackageCompositionSnapshot `json:"ordered_composition"`
+	ReceivedComposition  packaging.PackageCompositionSnapshot `json:"received_composition"`
+	RejectedComposition  packaging.PackageCompositionSnapshot `json:"rejected_composition"`
+	LineTotal            money.Money                          `json:"line_total"`
+	Note                 string                               `json:"note,omitempty"`
 }

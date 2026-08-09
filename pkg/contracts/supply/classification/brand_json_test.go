@@ -66,9 +66,7 @@ func TestBrandRefUsesV25IdentityAndDisplayShape(t *testing.T) {
 func TestCanonicalBrandReferenceAcrossProductShapes(t *testing.T) {
 	ref := &classification.BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "happy-potato", Name: []localization.LocalizedName{{Language: "en", Name: "Happy Potato"}}}
 	for name, value := range map[string]any{
-		"product":    product.Product{SKUCode: "A0001", CategorySKUCode: "A1", Name: "Product", BrandRef: ref},
-		"snapshot":   product.Snapshot{SKUCode: "A0001", Name: "Product", BrandRef: ref},
-		"storefront": product.StorefrontProduct{SKUCode: "A0001", CategorySKUCode: "A1", Name: "Product", BrandRef: ref},
+		"product": product.Product{SKUCode: "A0001", Classification: product.ProductClassification{CategorySKUCode: "A1", BrandRef: ref}},
 	} {
 		t.Run(name, func(t *testing.T) {
 			body, err := json.Marshal(value)
@@ -84,6 +82,27 @@ func TestCanonicalBrandReferenceAcrossProductShapes(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestCategoryTagRefUsesLightweightDisplayShape(t *testing.T) {
+	body, err := json.Marshal(classification.CategoryTagRef{
+		ID:   "tag_hotpot",
+		Slug: "hotpot",
+		Name: []localization.LocalizedName{{Language: "en", Name: "Hotpot"}},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, want := range []string{`"id":"tag_hotpot"`, `"slug":"hotpot"`, `"name":[`} {
+		if !strings.Contains(string(body), want) {
+			t.Fatalf("CategoryTagRef JSON = %s, want %s", body, want)
+		}
+	}
+	for _, forbidden := range []string{`"collection_id"`, `"collection_name"`, `"created_at"`, `"updated_at"`} {
+		if strings.Contains(string(body), forbidden) {
+			t.Fatalf("CategoryTagRef JSON = %s, must not include %s", body, forbidden)
+		}
 	}
 }
 

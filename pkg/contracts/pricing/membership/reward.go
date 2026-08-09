@@ -6,8 +6,6 @@ import (
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
-
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/metadata"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/membership/membership_enums"
@@ -23,7 +21,7 @@ type Reward struct {
 	PointsCost             int                                   `json:"points_cost"`
 	DiscountAmount         *money.Money                          `json:"discount_amount,omitempty"`
 	DiscountPercent        float64                               `json:"discount_percent,omitempty"`
-	Product                *product.Snapshot                     `json:"product,omitempty"`
+	ProductSKUCode         string                                `json:"product_sku_code,omitempty"`
 	VoucherCodePrefix      string                                `json:"voucher_code_prefix,omitempty"`
 	StartsAt               *time.Time                            `json:"starts_at,omitempty"`
 	ExpiresAt              *time.Time                            `json:"expires_at,omitempty"`

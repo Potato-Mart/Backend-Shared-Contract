@@ -6,8 +6,6 @@ import (
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
-
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/membership/membership_enums"
 )
@@ -15,14 +13,14 @@ import (
 // SubscriptionPlan defines a recurring purchase option available through the
 // membership domain. It remains separate from points accounting.
 type SubscriptionPlan struct {
-	ID              string           `json:"id"`
-	Product         product.Snapshot `json:"product"`
-	UnitPrice       money.Money      `json:"unit_price"`
-	FrequencyDays   int              `json:"frequency_days"`
-	FrequencyLabel  string           `json:"frequency_label"`
-	DiscountPercent float64          `json:"discount_percent"`
-	MinCycles       int              `json:"min_cycles"`
-	IsActive        bool             `json:"is_active"`
+	ID              string      `json:"id"`
+	ProductSKUCode  string      `json:"product_sku_code"`
+	UnitPrice       money.Money `json:"unit_price"`
+	FrequencyDays   int         `json:"frequency_days"`
+	FrequencyLabel  string      `json:"frequency_label"`
+	DiscountPercent float64     `json:"discount_percent"`
+	MinCycles       int         `json:"min_cycles"`
+	IsActive        bool        `json:"is_active"`
 	audit.AuditFields
 }
 

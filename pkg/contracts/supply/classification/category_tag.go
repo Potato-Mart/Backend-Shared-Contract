@@ -14,3 +14,12 @@ type CategoryTag struct {
 
 	audit.AuditFields
 }
+
+// CategoryTagRef identifies a category tag without embedding mutable
+// classification or audit details. It is used by canonical product records and
+// other membership-style models.
+type CategoryTagRef struct {
+	ID   string                       `json:"id"`
+	Slug string                       `json:"slug,omitempty"`
+	Name []localization.LocalizedName `json:"name,omitempty"`
+}

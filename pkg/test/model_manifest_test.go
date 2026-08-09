@@ -96,11 +96,10 @@ var v26ModelPackageManifest = map[string]string{
 	"versioning":                                                 "module-metadata",
 }
 
-// Reviewed for the v26.0.0 domain-layout cutover. The digest captures the
-// complete exported model manifest after classification, operations,
-// import-compliance, shipping, and wallet ownership moved to their final
-// package paths.
-const v26ExportedTypeManifestDigest = "ebaadec4af350251c4867d84914cc57d81e6799be6c597e3c562d37236e665bd"
+// Reviewed for the v26.0.0 canonical-product cutover. The digest captures the
+// complete exported model manifest after catalogue projections and duplicate
+// snapshots were replaced by the reusable Product component model.
+const v26ExportedTypeManifestDigest = "c6893056f862258e84fd063dc3e3696f89063ccdaf4e32a32750f02c16345da6"
 
 func TestV26ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

@@ -23,8 +23,8 @@ import (
 
 func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {
 	now := time.Date(2026, 8, 4, 4, 5, 6, 0, time.UTC)
-	caseOption := packageOptionSnapshot("pkg_case_12", "CASE-12", packaging_enums.PackageHandlingUnitCase, 12, now)
-	eachOption := packageOptionSnapshot("pkg_each", "EACH", packaging_enums.PackageHandlingUnitEach, 1, now)
+	caseOption := packageOption("pkg_case_12", "CASE-12", packaging_enums.PackageHandlingUnitCase, 12, now)
+	eachOption := packageOption("pkg_each", "EACH", packaging_enums.PackageHandlingUnitEach, 1, now)
 	caseOffer := offerSnapshot("offer_case", caseOption, money.Money{AmountMinor: 1800, Currency: "AUD"}, now)
 	eachOffer := offerSnapshot("offer_each", eachOption, money.Money{AmountMinor: 175, Currency: "AUD"}, now)
 
@@ -66,7 +66,7 @@ func TestGroupOrderFulfilmentJSONUsesOneParentAllocation(t *testing.T) {
 	composition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 24, Components: []packaging.PackageComponentSnapshot{{PackageOptionID: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24}}}
 	participantComposition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 12, Components: []packaging.PackageComponentSnapshot{{PackageOptionID: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 1, UnitsPerPackage: 12, BaseUnits: 12}}}
 	zeroComposition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}}
-	caseOption := packageOptionSnapshot("pkg_case_12", "CASE-12", packaging_enums.PackageHandlingUnitCase, 12, now)
+	caseOption := packageOption("pkg_case_12", "CASE-12", packaging_enums.PackageHandlingUnitCase, 12, now)
 	caseOffer := offerSnapshot("offer_case", caseOption, money.Money{AmountMinor: 1800, Currency: "AUD"}, now)
 	aggregateComponent := sales.PricedPackageComponent{
 		AcceptedOffer: caseOffer, RequestedPackageCount: 2, RequestedBaseUnits: 24,
@@ -142,11 +142,11 @@ func TestGroupOrderFulfilmentJSONUsesOneParentAllocation(t *testing.T) {
 	}
 }
 
-func packageOptionSnapshot(id string, code string, handling packaging_enums.PackageHandlingUnit, units int64, capturedAt time.Time) product.ProductPackageOptionSnapshot {
-	return product.ProductPackageOptionSnapshot{ID: id, Code: code, ProductSKUCode: "A00001", HandlingUnit: handling, UnitsPerPackage: units, EffectiveFrom: capturedAt, CapturedAt: capturedAt}
+func packageOption(id string, code string, handling packaging_enums.PackageHandlingUnit, units int64, capturedAt time.Time) product.ProductPackageOption {
+	return product.ProductPackageOption{ID: id, Code: code, ProductSKUCode: "A00001", HandlingUnit: handling, UnitsPerPackage: units, IsActive: true, EffectiveFrom: capturedAt}
 }
 
-func offerSnapshot(id string, option product.ProductPackageOptionSnapshot, price money.Money, capturedAt time.Time) product.SellableOfferSnapshot {
+func offerSnapshot(id string, option product.ProductPackageOption, price money.Money, capturedAt time.Time) product.SellableOfferSnapshot {
 	return product.SellableOfferSnapshot{
 		ID: id, ProductSKUCode: "A00001", DepotCode: "AU-VIC-MEL-DC-01", PackageOption: option,
 		AvailablePackageCount: 10, AvailableBaseUnits: 120,

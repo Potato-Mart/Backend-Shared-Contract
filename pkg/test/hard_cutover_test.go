@@ -166,6 +166,27 @@ func TestV25ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	)
 
 	removedTypes := v25StringSet(
+		// The v26 canonical-product cut-over removes all endpoint-specific
+		// product projections and product-owned snapshot duplicates.
+		"contracts/orders/pos.CatalogProduct",
+		"contracts/supply/product.DetailImage",
+		"contracts/supply/product.ProductBarcodeAssignmentSnapshot",
+		"contracts/supply/product.ProductPackageOptionSnapshot",
+		"contracts/supply/product.PreorderPolicy",
+		"contracts/supply/product.Snapshot",
+		"contracts/supply/product.SoonExpiryMerchandisingPolicy",
+		"contracts/supply/product.StorefrontCommercial",
+		"contracts/supply/product.StorefrontDisplay",
+		"contracts/supply/product.StorefrontExpiryDisplay",
+		"contracts/supply/product.StorefrontMerchandising",
+		"contracts/supply/product.StorefrontOrigin",
+		"contracts/supply/product.StorefrontPreorderDisplay",
+		"contracts/supply/product.StorefrontProduct",
+		"contracts/supply/product.StorefrontPromotionBadge",
+		"contracts/supply/product/product_enums.StorefrontExpiryStatus",
+		"contracts/supply/product/product_enums.StorefrontPreorderStatus",
+		"contracts/supply/product/product_enums.WholesalePriceMode",
+
 		"notifications/backinstock.BackInStockRestockEvent",
 		"common/packaging.Physical",
 		"supply/product.Pricing",

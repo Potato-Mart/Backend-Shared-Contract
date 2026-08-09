@@ -10,9 +10,11 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/commerce/commerce_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order/order_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
 )
 
 func TestOrderSummaryJSONShape(t *testing.T) {
@@ -29,9 +31,15 @@ func TestOrderSummaryJSONShape(t *testing.T) {
 		ItemCount:         1,
 		Items: []sales.OrderLineSummary{
 			{
-				SKUCode:        "A0001",
-				Name:           "Potato 1kg",
-				Image:          &security.ObjectMedia{ID: "media_1", URL: "https://cdn.example.test/products/A0001.png"},
+				ProductSKUCode: "A0001",
+				ProductName:    "Potato 1kg",
+				ProductImage:   &security.ObjectMedia{ID: "media_1", URL: "https://cdn.example.test/products/A0001.png"},
+				ProductPackageOption: product.ProductPackageOption{
+					ID: "pkg_each", Code: "EACH", ProductSKUCode: "A0001",
+					HandlingUnit: packaging_enums.PackageHandlingUnitEach, UnitsPerPackage: 1,
+					IsCanonical: true, IsActive: true, EffectiveFrom: now,
+				},
+				CapturedAt:     now,
 				Components:     []sales.PricedPackageComponent{{RequestedPackageCount: 2, RequestedBaseUnits: 2, PackagePrice: money.Money{AmountMinor: 2100, Currency: "AUD"}}},
 				TotalBaseUnits: 2,
 				Total:          money.Money{AmountMinor: 4200, Currency: "AUD"},
@@ -61,13 +69,21 @@ func TestOrderSummaryJSONShape(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal order summary: %v", err)
 	}
-	if len(decoded.Items) != 1 || decoded.Items[0].SKUCode != "A0001" ||
-		decoded.Items[0].Image == nil || decoded.Items[0].Image.ID != "media_1" || decoded.Items[0].Image.URL != "https://cdn.example.test/products/A0001.png" ||
+	if len(decoded.Items) != 1 || decoded.Items[0].ProductSKUCode != "A0001" || decoded.Items[0].ProductName != "Potato 1kg" ||
+		decoded.Items[0].ProductImage == nil || decoded.Items[0].ProductImage.ID != "media_1" || decoded.Items[0].ProductImage.URL != "https://cdn.example.test/products/A0001.png" ||
+		decoded.Items[0].ProductPackageOption.ID != "pkg_each" || !decoded.Items[0].CapturedAt.Equal(now) ||
 		len(decoded.Items[0].Components) != 1 || decoded.Items[0].Components[0].PackagePrice.AmountMinor != 2100 {
 		t.Fatalf("order summary did not round-trip: %+v", decoded)
 	}
 	line := got["items"].([]any)[0].(map[string]any)
-	if _, exists := line["image_url"]; exists {
-		t.Fatalf("order line retained image_url: %s", payload)
+	for _, key := range []string{"product_sku_code", "product_package_option", "captured_at"} {
+		if _, exists := line[key]; !exists {
+			t.Fatalf("order line missing %s: %s", key, payload)
+		}
+	}
+	for _, removed := range []string{"sku_code", "name", "image", "image_url"} {
+		if _, exists := line[removed]; exists {
+			t.Fatalf("order line retained %s: %s", removed, payload)
+		}
 	}
 }

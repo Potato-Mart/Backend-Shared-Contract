@@ -20,7 +20,6 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/membership/membership_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion/promotion_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pubsub/event/event_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product/product_enums"
 )
 
 func TestV25EnumCoverageIncludesEveryStringEnum(t *testing.T) {
@@ -59,7 +58,6 @@ func TestV25FormerlyUncoveredEnumValues(t *testing.T) {
 		{name: "event.EventTopic", valid: []stringEnum{event_enums.EventTopicOrderEvents, event_enums.EventTopicPaymentEvents, event_enums.EventTopicRefundEvents, event_enums.EventTopicStockEvents, event_enums.EventTopicFulfilmentEvents, event_enums.EventTopicCustomerEvents, event_enums.EventTopicProductStats, event_enums.EventTopicStorefrontEvents}, invalid: event_enums.EventTopic("__invalid__")},
 		{name: "security.MediaVisibility", valid: []stringEnum{security_enums.MediaVisibilityPublic, security_enums.MediaVisibilityPrivate}, invalid: security_enums.MediaVisibility("__invalid__")},
 		{name: "packaging.PackageHandlingUnit", valid: []stringEnum{packaging_enums.PackageHandlingUnitEach, packaging_enums.PackageHandlingUnitCase}, invalid: packaging_enums.PackageHandlingUnit("__invalid__")},
-		{name: "product.StorefrontExpiryStatus", valid: []stringEnum{product_enums.StorefrontExpiryStatusNotApplicable, product_enums.StorefrontExpiryStatusSoonExpiry, product_enums.StorefrontExpiryStatusExpired}, invalid: product_enums.StorefrontExpiryStatus("__invalid__")},
 	})
 }
 

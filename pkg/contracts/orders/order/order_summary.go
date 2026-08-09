@@ -11,6 +11,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/party"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order/order_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
 )
 
 // OrderSummary is a slim, customer-facing projection of an Order for "my orders"
@@ -35,15 +36,18 @@ type OrderSummary struct {
 	TrackingURL    string                `json:"tracking_url,omitempty"`
 }
 
-// OrderLineSummary is a customer-facing package-aware order-line snapshot.
+// OrderLineSummary is a customer-facing package-aware order-line snapshot with
+// direct frozen product facts, rather than an embedded catalogue projection.
 type OrderLineSummary struct {
-	SKUCode             string                               `json:"sku_code"`
-	Name                string                               `json:"name"`
-	Image               *security.ObjectMedia                `json:"image,omitempty"`
-	Components          []PricedPackageComponent             `json:"components"`
-	TotalBaseUnits      int64                                `json:"total_base_units"`
-	PackedComposition   packaging.PackageCompositionSnapshot `json:"packed_composition"`
-	ReturnedComposition packaging.PackageCompositionSnapshot `json:"returned_composition"`
-	RefundedComposition packaging.PackageCompositionSnapshot `json:"refunded_composition"`
-	Total               money.Money                          `json:"total"`
+	ProductSKUCode       string                               `json:"product_sku_code"`
+	ProductName          string                               `json:"product_name"`
+	ProductImage         *security.ObjectMedia                `json:"product_image,omitempty"`
+	ProductPackageOption product.ProductPackageOption         `json:"product_package_option"`
+	CapturedAt           time.Time                            `json:"captured_at"`
+	Components           []PricedPackageComponent             `json:"components"`
+	TotalBaseUnits       int64                                `json:"total_base_units"`
+	PackedComposition    packaging.PackageCompositionSnapshot `json:"packed_composition"`
+	ReturnedComposition  packaging.PackageCompositionSnapshot `json:"returned_composition"`
+	RefundedComposition  packaging.PackageCompositionSnapshot `json:"refunded_composition"`
+	Total                money.Money                          `json:"total"`
 }

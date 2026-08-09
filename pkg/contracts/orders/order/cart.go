@@ -7,6 +7,7 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/commerce/commerce_enums"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
@@ -34,10 +35,14 @@ type Cart struct {
 }
 
 type CartItem struct {
-	Product            product.Snapshot                `json:"product"`
-	Components         []PricedPackageComponent        `json:"components"`
-	TotalBaseUnits     int64                           `json:"total_base_units"`
-	Pricing            *PricingContext                 `json:"pricing,omitempty"`
-	SubstitutionPolicy LooseSubstitutionPolicySnapshot `json:"substitution_policy"`
-	Preorder           *PreorderItemSnapshot           `json:"preorder,omitempty"`
+	ProductSKUCode       string                          `json:"product_sku_code"`
+	ProductName          string                          `json:"product_name"`
+	ProductImage         *security.ObjectMedia           `json:"product_image,omitempty"`
+	ProductPackageOption product.ProductPackageOption    `json:"product_package_option"`
+	CapturedAt           time.Time                       `json:"captured_at"`
+	Components           []PricedPackageComponent        `json:"components"`
+	TotalBaseUnits       int64                           `json:"total_base_units"`
+	Pricing              *PricingContext                 `json:"pricing,omitempty"`
+	SubstitutionPolicy   LooseSubstitutionPolicySnapshot `json:"substitution_policy"`
+	Preorder             *PreorderItemSnapshot           `json:"preorder,omitempty"`
 }

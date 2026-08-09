@@ -35,8 +35,16 @@ func TestOrderJSONRoundTripWithHistory(t *testing.T) {
 		ExpectedAt:   &expectedAt,
 		Items: []purchase.OrderItem{
 			{
-				ID:              "po_line_1",
-				Product:         product.Snapshot{SKUCode: "A00001", Name: "Potato Crisps"},
+				ID:             "po_line_1",
+				ProductSKUCode: "A00001",
+				ProductName:    "Potato Crisps",
+				ProductImage:   &security.ObjectMedia{ID: "media_1", URL: "https://cdn.example.test/products/A00001.png"},
+				ProductPackageOption: product.ProductPackageOption{
+					ID: "pkg_case_12", Code: "CASE-12", ProductSKUCode: "A00001",
+					HandlingUnit: packaging_enums.PackageHandlingUnitCase, UnitsPerPackage: 12,
+					IsCanonical: true, IsActive: true, EffectiveFrom: occurredAt,
+				},
+				CapturedAt:      occurredAt,
 				PackageOptionID: "pkg_case_12",
 				UnitCost:        money.Money{AmountMinor: 2400, Currency: "AUD"},
 				OrderedComposition: packaging.PackageCompositionSnapshot{
@@ -85,6 +93,17 @@ func TestOrderJSONRoundTripWithHistory(t *testing.T) {
 	}
 	if len(decoded.Items) != 1 || decoded.Items[0].OrderedComposition.TotalBaseUnits != 24 || decoded.Items[0].ReceivedComposition.TotalBaseUnits != 0 {
 		t.Fatalf("package-aware order item did not round-trip: %+v", decoded.Items)
+	}
+	if decoded.Items[0].ProductSKUCode != "A00001" || decoded.Items[0].ProductName != "Potato Crisps" || decoded.Items[0].ProductImage == nil || decoded.Items[0].ProductImage.ID != "media_1" || decoded.Items[0].ProductPackageOption.ID != "pkg_case_12" || !decoded.Items[0].CapturedAt.Equal(occurredAt) {
+		t.Fatalf("purchase order item lost frozen product facts: %+v", decoded.Items[0])
+	}
+	for _, key := range []string{`"product_sku_code"`, `"product_name"`, `"product_image"`, `"product_package_option"`, `"captured_at"`} {
+		if !strings.Contains(string(payload), key) {
+			t.Fatalf("purchase order item missing %s: %s", key, payload)
+		}
+	}
+	if strings.Contains(string(payload), `"product":`) {
+		t.Fatalf("purchase order item retained product snapshot: %s", payload)
 	}
 	for _, removed := range []string{`"ordered_qty"`, `"received_qty"`, `"rejected_qty"`, `"location_code"`, `"expire_at"`} {
 		if strings.Contains(string(payload), removed) {

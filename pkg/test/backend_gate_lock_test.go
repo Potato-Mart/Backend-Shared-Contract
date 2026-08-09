@@ -48,12 +48,18 @@ func TestV25BackendGateModelSurface(t *testing.T) {
 		"IsOutOfStock":   "is_out_of_stock",
 		"AsOf":           "as_of",
 	})
-	assertJSONFields(t, reflect.TypeOf(product.StorefrontCommercial{}), map[string]string{
-		"Price":      "price,omitempty",
-		"Package":    "package_option",
-		"StockState": "stock_state",
-		"Market":     "market",
-		"AsOf":       "as_of",
+	assertJSONFields(t, reflect.TypeOf(product.ProductCommerce{}), map[string]string{
+		"Status":        "status,omitempty",
+		"Selling":       "selling,omitempty",
+		"FirstListedAt": "first_listed_at,omitempty",
+		"Packages":      "packages,omitempty",
+	})
+	assertJSONFields(t, reflect.TypeOf(product.ProductPackageCommerce{}), map[string]string{
+		"PackageOptionID": "package_option_id",
+		"PackagePrice":    "package_price",
+		"TaxAmount":       "tax_amount",
+		"StockState":      "stock_state,omitempty",
+		"AsOf":            "as_of",
 	})
 	assertJSONFields(t, reflect.TypeOf(sales.BuyerContext{}), map[string]string{
 		"Type":                 "type,omitempty",

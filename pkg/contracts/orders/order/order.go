@@ -127,7 +127,11 @@ type OrderPackingProgress struct {
 
 type OrderItem struct {
 	ID                   string                                   `json:"id"`
-	Product              product.Snapshot                         `json:"product"`
+	ProductSKUCode       string                                   `json:"product_sku_code"`
+	ProductName          string                                   `json:"product_name"`
+	ProductImage         *security.ObjectMedia                    `json:"product_image,omitempty"`
+	ProductPackageOption product.ProductPackageOption             `json:"product_package_option"`
+	CapturedAt           time.Time                                `json:"captured_at"`
 	VariantTitle         string                                   `json:"variant_title,omitempty"`
 	Components           []PricedPackageComponent                 `json:"components"`
 	TotalBaseUnits       int64                                    `json:"total_base_units"`

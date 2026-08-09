@@ -32,7 +32,7 @@ type SellableOffer struct {
 	DepotCode             string                               `json:"depot_code"`
 	SourceBucketID        string                               `json:"source_bucket_id,omitempty"`
 	SourceStockUnitID     string                               `json:"source_stock_unit_id,omitempty"`
-	PackageOption         ProductPackageOptionSnapshot         `json:"package_option"`
+	PackageOption         ProductPackageOption                 `json:"package_option"`
 	AvailablePackageCount int64                                `json:"available_package_count"`
 	AvailableBaseUnits    int64                                `json:"available_base_units"`
 	Condition             warehouse_enums.InventoryCondition   `json:"condition"`
@@ -57,7 +57,7 @@ type SellableOfferSnapshot struct {
 	DepotCode             string                               `json:"depot_code"`
 	SourceBucketID        string                               `json:"source_bucket_id,omitempty"`
 	SourceStockUnitID     string                               `json:"source_stock_unit_id,omitempty"`
-	PackageOption         ProductPackageOptionSnapshot         `json:"package_option"`
+	PackageOption         ProductPackageOption                 `json:"package_option"`
 	AvailablePackageCount int64                                `json:"available_package_count"`
 	AvailableBaseUnits    int64                                `json:"available_base_units"`
 	Condition             warehouse_enums.InventoryCondition   `json:"condition"`
