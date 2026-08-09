@@ -10,6 +10,7 @@ import (
 	"testing"
 )
 
+// TestV26DomainPackageLayout verifies the v26 contract's requested domain paths.
 func TestV26DomainPackageLayout(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	legacyImportCompliance := "import" + "compliance"
@@ -29,7 +30,15 @@ func TestV26DomainPackageLayout(t *testing.T) {
 		"contracts/supply/operations/reservation.go":                                      "operations",
 		"contracts/supply/operations/inbound.go":                                          "operations",
 		"contracts/supply/operations/stock_movement.go":                                   "operations",
+		"contracts/supply/operations/inventory_category_tag_evidence.go":                  "operations",
 		"contracts/orders/shipping/shipment.go":                                           "shipping",
+		"contracts/pricing/promotion/promotion.go":                                        "promotion",
+		"contracts/pricing/promotion/scope.go":                                            "promotion",
+		"contracts/pricing/promotion/relation.go":                                         "promotion",
+		"contracts/pricing/promotion/application.go":                                      "promotion",
+		"contracts/pricing/promotion/package_pricing.go":                                  "promotion",
+		"contracts/pricing/promotion/promotion_enums/promotion_status.go":                 "promotion_enums",
+		"contracts/pricing/promotion/promotion_enums/promotion_match_mode.go":             "promotion_enums",
 		"contracts/pricing/wallet/coupon.go":                                              "wallet",
 	}
 
@@ -62,6 +71,14 @@ func TestV26DomainPackageLayout(t *testing.T) {
 		"contracts/supply/warehouse/stock_movement.go",
 		"contracts/supply/warehouse/shipment.go",
 		"contracts/pricing/promotion/coupon.go",
+		"contracts/pricing/promotion/effective_promotion.go",
+		"contracts/pricing/promotion/group_order_discount.go",
+		"contracts/pricing/promotion/receipt_offer.go",
+		"contracts/pricing/promotion/shared.go",
+		"contracts/pricing/promotion/storefront_promotion.go",
+		"contracts/supply/product/detail_image.go",
+		"contracts/supply/product/offer.go",
+		"contracts/orders/order/volume_discount.go",
 		"test/enums/" + legacyImportCompliance + "_test.go",
 	} {
 		path := filepath.Join(pkgRoot, filepath.FromSlash(relativePath))

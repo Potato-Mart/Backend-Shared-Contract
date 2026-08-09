@@ -47,6 +47,14 @@ Import packages from the same `/v26` module path.
   `import_compliance`.
 - Promotion and package pricing live under `pricing/promotion`; wallet models
   live under `pricing/wallet`; shipment models live under `orders/shipping`.
+- `supply/product.Product` is the sole full catalogue product model and is
+  composed from reusable content, classification, packaging, commerce,
+  metrics, supply, and optional administration components. Cross-domain links
+  use `product_sku_code`; transaction lines own their frozen display facts.
+- Promotion mechanics use open string kinds with reusable scopes, ALL/ANY
+  groups, qualifier-to-target relations, typed terms, and frozen ordered
+  applications. Only promotion lifecycle status and match mode are closed
+  promotion enums.
 - This module is contract-only. The seven backend services and the parent
   `go.work` must migrate to `/v26` before consuming this release.
 

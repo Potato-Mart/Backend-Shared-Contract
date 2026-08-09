@@ -96,9 +96,9 @@ var v26ModelPackageManifest = map[string]string{
 	"versioning":                                                 "module-metadata",
 }
 
-// Reviewed for the v26.0.0 unified-promotion and package-pricing cutover. The
-// digest captures the complete exported model manifest after mechanic-specific
-// promotion and sellable-offer models were replaced by the reusable grammar.
+// Reviewed for the final v26.0.0 object-media, canonical-product, package-layout,
+// unified-promotion, and package-pricing release surface. The digest captures
+// the complete exported model manifest after the hard cutover.
 const v26ExportedTypeManifestDigest = "2297852cb0dfed81fd14c7a78b7becd170801e394666855ae5fdcad349e402ff"
 
 func TestV26ExportedTypesMatchModelManifest(t *testing.T) {

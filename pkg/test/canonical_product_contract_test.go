@@ -288,7 +288,7 @@ func TestV26CrossDomainProductSKUCodeLinksAreScalars(t *testing.T) {
 						if !stringScalar || identifier.Name != "string" {
 							t.Errorf("%s uses non-scalar ProductSKUCode on %s", fset.Position(field.Pos()), typeSpecification.Name.Name)
 						}
-						jsonKey, present := v25JSONFieldName(t, path, field)
+						jsonKey, present := v26JSONFieldName(t, path, field)
 						if !present || jsonKey != "product_sku_code" {
 							t.Errorf("%s ProductSKUCode on %s must use JSON key product_sku_code", fset.Position(field.Pos()), typeSpecification.Name.Name)
 						}

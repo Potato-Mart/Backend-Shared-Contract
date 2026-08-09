@@ -21,9 +21,9 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/temporal"
 )
 
-func TestV25MovedCommonModelsMatchV23GoldenJSON(t *testing.T) {
+func TestV26MovedCommonModelsMatchV23GoldenJSON(t *testing.T) {
 	// These byte-for-byte fixtures are the v23.0.0 wire baseline for every
-	// common model moved by the v25 package reorganization.
+	// common model moved by the v26 package reorganization.
 	createdAt := time.Date(2026, time.August, 7, 3, 4, 5, 0, time.UTC)
 	address := geography.Address{
 		Line1:      "1 Market Lane",

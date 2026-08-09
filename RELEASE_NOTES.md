@@ -124,6 +124,10 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 - Replaces `Media` and `MediaReference` with `ObjectMedia` and
   `ObjectMediaReference`. `ObjectMedia` is the safe `{id, url}` projection;
   the former full record is retained as `ObjectMediaAsset`.
+- Consolidates non-Supply image pairs into `ObjectMedia`: campaign `media`,
+  account `avatar`, organisation `logo`, order-line `product_image`, and POS
+  receipt-line `product_image`. Supply imagery remains unchanged except for
+  the canonical Product image block.
 - Replaces product media with `Images.Cover`, `Images.Gallery`, and
   `Images.Details`, each using `ObjectMedia`. The former `DetailImage` type
   and split media ID/URL fields are removed.
@@ -145,6 +149,24 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
   `supply/operations`. Shipment moves to `orders/shipping` and wallet models
   remain under `pricing/wallet`.
 
+### Final Package Ownership / 最終套件歸屬
+
+| Contract concern | v26 source of truth |
+| --- | --- |
+| Safe and managed object media | `common/security` (`ObjectMedia`, `ObjectMediaReference`, `ObjectMediaAsset`) |
+| Canonical product and package options | `supply/product` (`Product`, reusable components, `ProductPackageOption`) |
+| Brand, collection, category tag, supplier, favourite list | `supply/classification` |
+| Import-compliance evidence | `supply/import_compliance` with Go package `import_compliance` |
+| Packing, picking, reservations, inbound, stock movement, availability | `supply/operations` |
+| Shipment | `orders/shipping` |
+| Generic promotion grammar and package pricing | `pricing/promotion` |
+| Coupon and wallet records | `pricing/wallet` |
+
+`Product` is the only full catalogue product model. Other packages link by
+`product_sku_code`; transaction owners freeze only the product name,
+`ObjectMedia` image, canonical package option, capture time, and accepted
+commercial evidence they require.
+
 ### Verification And Compatibility / 驗證與相容性
 
 - The contract gate rejects the removed media, product-projection, offer,
@@ -155,6 +177,31 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
   ranges, and same-sale-order qualifier-to-target relationships.
 - Package-pricing tests cover ordinary pricing with no promotions and ordered
   stacked promotion applications without exposing internal inventory evidence.
+- Order and POS receipt tests require direct frozen display and monetary facts;
+  they reject embedded package-pricing inventory evidence. The accepted order
+  component remains the transaction-owned location for full `PackagePricing`.
+- The model manifest digest, model-only boundary, package dependency graph,
+  stale-path scan, enum coverage, and hard-cutover gates are reviewed against
+  the final v26 surface.
+
+### Consumer Migration Matrix / 使用方遷移對照
+
+| v25 usage | v26 replacement |
+| --- | --- |
+| `/v25` module and imports | `/v26` and `v26.0.0` |
+| `security.Media` public projection | `security.ObjectMedia`; use `ObjectMediaAsset` only for managed storage/audit records |
+| `MediaReference` | `ObjectMediaReference` |
+| campaign `media_id` + `media_url` | `media: ObjectMedia` |
+| account avatar ID/URL and organisation `logo_url` | `avatar: ObjectMedia` and `logo: ObjectMedia` |
+| product `media`/detail-image fields | `images.cover`, `images.gallery`, `images.details` |
+| `product.Snapshot`, storefront product/commercial models, POS catalogue product | canonical `product.Product`, scalar `product_sku_code`, or transaction-owned frozen facts |
+| `supply/category` | `supply/classification` |
+| `supply/importcompliance` | `supply/import_compliance` and identifier `import_compliance` |
+| warehouse operational files | `supply/operations`; shipment uses `orders/shipping` |
+| promotion coupon path | `pricing/wallet` |
+| sellable-offer and accepted-offer records | `promotion.PackagePricing` and `accepted_package_pricing` |
+| flat/effective/storefront/receipt promotion projections | `Promotion`, `PromotionRelation`, `PromotionTerm`, and frozen `PromotionApplication` |
+| `SellableOfferAvailabilityChangedEvent` and its wire values | `PackagePricingAvailabilityChangedEvent`, `inventory.package_pricing_available`, and `inventory.package_pricing_withdrawn` |
 
 ### Consumer Action / 使用方動作
 
@@ -169,6 +216,10 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 - Rename import-compliance imports and selectors to `import_compliance`, then
   migrate all moved Supply, shipping, and wallet package paths. No old package
   path or identifier alias is supplied.
+- Update provider persistence, OpenAPI, generated clients, backend mapping,
+  frontend campaign/avatar/logo/product rendering, and stored event payloads
+  in coordinated consumer releases. Those service and frontend changes are
+  intentionally outside this contract-only release.
 
 ## v25.0.0 (2026-08-08) - Ambient Storage Cutover
 
