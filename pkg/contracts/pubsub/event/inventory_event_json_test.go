@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	event "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pubsub/event"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse"
 
 	"testing"
@@ -18,7 +19,7 @@ func TestV25InventoryEventJSONShapes(t *testing.T) {
 	now := time.Date(2026, 8, 4, 7, 8, 9, 0, time.UTC)
 	caseComposition := composition(packaging_enums.PackageHandlingUnitCase, "pkg_case_12", 1, 12)
 	eachComposition := composition(packaging_enums.PackageHandlingUnitEach, "pkg_each", 12, 1)
-	cause := warehouse.InventoryCauseRef{Type: "SALE_COMMIT", ID: "movement_1"}
+	cause := operations.InventoryCauseRef{Type: "SALE_COMMIT", ID: "movement_1"}
 	location := warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01-03"}
 
 	cases := []struct {

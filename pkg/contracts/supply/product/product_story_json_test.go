@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/classification"
 )
 
 func TestProductSupplyAndImagesJSONShape(t *testing.T) {
@@ -15,12 +16,12 @@ func TestProductSupplyAndImagesJSONShape(t *testing.T) {
 		SKUCode:         "A0001",
 		CategorySKUCode: "A1",
 		Name:            "Golden potato",
-		Supply: &ProductSupply{
-			Supplier: &ProductSupplierRef{
+		Supply: &classification.ProductSupply{
+			Supplier: &classification.ProductSupplierRef{
 				Code: "SUP-1",
 				Name: "Taiwan Foods",
 			},
-			Manufacturing: &ProductManufacturing{
+			Manufacturing: &classification.ProductManufacturing{
 				CompanyName: "Taiwan Foods Factory",
 				Location:    "Taichung, Taiwan",
 			},
@@ -114,8 +115,8 @@ func TestStorefrontProductStoryJSONShape(t *testing.T) {
 		SKUCode:         "A0001",
 		CategorySKUCode: "A1",
 		Name:            "Golden potato",
-		Supply: &ProductSupply{
-			Manufacturing: &ProductManufacturing{Location: "Taiwan"},
+		Supply: &classification.ProductSupply{
+			Manufacturing: &classification.ProductManufacturing{Location: "Taiwan"},
 		},
 		DetailImages: []DetailImage{
 			{URL: "https://cdn.example.test/products/A0001/first.jpg"},
@@ -228,47 +229,12 @@ func int64Pointer(value int64) *int64 {
 	return &value
 }
 
-func TestProductSupplySectionsAreIndependent(t *testing.T) {
-	tests := []struct {
-		name string
-		want string
-		got  ProductSupply
-	}{
-		{
-			name: "supplier only",
-			want: `{"supplier":{"code":"SUP-1","name":"Taiwan Foods"}}`,
-			got: ProductSupply{
-				Supplier: &ProductSupplierRef{Code: "SUP-1", Name: "Taiwan Foods"},
-			},
-		},
-		{
-			name: "manufacturing only",
-			want: `{"manufacturing":{"location":"Taiwan"}}`,
-			got: ProductSupply{
-				Manufacturing: &ProductManufacturing{Location: "Taiwan"},
-			},
-		},
-	}
-
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			body, err := json.Marshal(tc.got)
-			if err != nil {
-				t.Fatalf("marshal product supply: %v", err)
-			}
-			if string(body) != tc.want {
-				t.Fatalf("ProductSupply JSON = %s, want %s", body, tc.want)
-			}
-		})
-	}
-}
-
 func TestSnapshotUsesCanonicalNestedSupply(t *testing.T) {
 	want := Snapshot{
 		SKUCode: "A0001",
 		Name:    "Golden potato",
-		Supply: &ProductSupply{
-			Supplier: &ProductSupplierRef{Code: "SUP-1", Name: "Taiwan Foods"},
+		Supply: &classification.ProductSupply{
+			Supplier: &classification.ProductSupplierRef{Code: "SUP-1", Name: "Taiwan Foods"},
 		},
 	}
 

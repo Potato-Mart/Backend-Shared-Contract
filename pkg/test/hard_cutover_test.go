@@ -209,7 +209,7 @@ func TestV25ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"customers/campaign.CampaignSupplierPrediction": v25StringSet(
 			"TotalUnits",
 		),
-		"supply/category.SKU": v25StringSet(
+		"supply/classification.SKU": v25StringSet(
 			"Storage",
 		),
 		"orders/pos.CatalogProduct": v25StringSet(
@@ -272,20 +272,20 @@ func TestV25ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"supply/warehouse.Depot": v25StringSet(
 			"PostcodeRules",
 		),
-		"supply/warehouse.InboundItem": v25StringSet(
+		"supply/operations.InboundItem": v25StringSet(
 			"Barcode", "Storage", "ExpectedQty", "ReceivedQty", "LocationCode",
 		),
-		"supply/warehouse.PackingDamage": v25StringSet(
+		"supply/operations.PackingDamage": v25StringSet(
 			"SKU", "DamagedQty", "DamageReportID", "StockMovementID",
 		),
-		"supply/warehouse.PackingDiscrepancy": v25StringSet(
+		"orders/shipping.PackingDiscrepancy": v25StringSet(
 			"OrderedQty", "ScannedQty", "DiffQty", "UnitPrice", "ReturnToStock",
 			"DamageReportID", "StockMovementID", "DamagedQty",
 		),
-		"supply/warehouse.PackingLine": v25StringSet(
+		"supply/operations.PackingLine": v25StringSet(
 			"SKU", "OrderedQty", "ScannedQty", "DamagedQty",
 		),
-		"supply/warehouse.PickingListItem": v25StringSet(
+		"supply/operations.PickingListItem": v25StringSet(
 			"Barcode", "Location", "QuantityRequired", "QuantityPicked",
 		),
 		"supply/warehouse.StockLocation": v25StringSet(
@@ -294,7 +294,7 @@ func TestV25ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"supply/warehouse.StockLocationProductBalance": v25StringSet(
 			"AvailabilityRevision",
 		),
-		"supply/warehouse.StockMovement": v25StringSet(
+		"supply/operations.StockMovement": v25StringSet(
 			"SKU", "ProductName", "DepotCode", "LocationCode", "QtyDelta", "BalanceAfter",
 			"CreatedBy", "SalesOrderNumber", "ReferenceType", "ReferenceID", "Metadata",
 		),
@@ -362,7 +362,7 @@ func TestV25ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"customers/campaign.CampaignSupplierPrediction": v25StringSet(
 			"total_units",
 		),
-		"supply/category.SKU": v25StringSet(
+		"supply/classification.SKU": v25StringSet(
 			"storage",
 		),
 		"orders/pos.CatalogProduct": v25StringSet(
@@ -425,20 +425,20 @@ func TestV25ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"supply/warehouse.Depot": v25StringSet(
 			"postcode_rules",
 		),
-		"supply/warehouse.InboundItem": v25StringSet(
+		"supply/operations.InboundItem": v25StringSet(
 			"barcode", "storage", "expected_qty", "received_qty", "location_code",
 		),
-		"supply/warehouse.PackingDamage": v25StringSet(
+		"supply/operations.PackingDamage": v25StringSet(
 			"sku", "damaged_qty", "damage_report_id", "stock_movement_id",
 		),
-		"supply/warehouse.PackingDiscrepancy": v25StringSet(
+		"orders/shipping.PackingDiscrepancy": v25StringSet(
 			"ordered_qty", "scanned_qty", "diff_qty", "unit_price", "return_to_stock",
 			"damage_report_id", "stock_movement_id", "damaged_qty",
 		),
-		"supply/warehouse.PackingLine": v25StringSet(
+		"supply/operations.PackingLine": v25StringSet(
 			"sku", "ordered_qty", "scanned_qty", "damaged_qty",
 		),
-		"supply/warehouse.PickingListItem": v25StringSet(
+		"supply/operations.PickingListItem": v25StringSet(
 			"barcode", "location", "quantity_required", "quantity_picked",
 		),
 		"supply/warehouse.StockLocation": v25StringSet(
@@ -447,7 +447,7 @@ func TestV25ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"supply/warehouse.StockLocationProductBalance": v25StringSet(
 			"availability_revision",
 		),
-		"supply/warehouse.StockMovement": v25StringSet(
+		"supply/operations.StockMovement": v25StringSet(
 			"sku", "product_name", "depot_code", "location_code", "qty_delta", "balance_after",
 			"created_by", "sales_order_number", "reference_type", "reference_id", "metadata",
 		),

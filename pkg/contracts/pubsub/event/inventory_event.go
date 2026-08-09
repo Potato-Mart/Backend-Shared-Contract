@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
 	warehouse "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
@@ -21,7 +22,7 @@ type StockLocationAvailabilityChangedEvent struct {
 	AvailableAfterBaseUnits  int64                                      `json:"available_after_base_units"`
 	Direction                warehouse_enums.StockAvailabilityDirection `json:"direction"`
 	ElectronicShelfLabelCode string                                     `json:"electronic_shelf_label_code,omitempty"`
-	Cause                    warehouse.InventoryCauseRef                `json:"cause"`
+	Cause                    operations.InventoryCauseRef               `json:"cause"`
 	Revision                 int64                                      `json:"revision"`
 	OccurredAt               time.Time                                  `json:"occurred_at"`
 	AsOf                     time.Time                                  `json:"as_of"`
@@ -54,7 +55,7 @@ type InventoryStockBucketChangedEvent struct {
 	ReservedAfterBaseUnits   int64                                `json:"reserved_after_base_units"`
 	AvailableBeforeBaseUnits int64                                `json:"available_before_base_units"`
 	AvailableAfterBaseUnits  int64                                `json:"available_after_base_units"`
-	Cause                    warehouse.InventoryCauseRef          `json:"cause"`
+	Cause                    operations.InventoryCauseRef         `json:"cause"`
 	Revision                 int64                                `json:"revision"`
 	OccurredAt               time.Time                            `json:"occurred_at"`
 }

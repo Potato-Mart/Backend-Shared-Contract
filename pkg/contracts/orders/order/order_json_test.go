@@ -15,9 +15,10 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/party"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/shipping"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/payment/payment_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/membership/membership_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
@@ -123,7 +124,7 @@ func TestOrderJSONRoundTripsPackingProgress(t *testing.T) {
 			Operator:  "packer@example.test",
 			StartedAt: &startedAt,
 			UpdatedAt: &updatedAt,
-			Lines: []warehouse.PackingLine{
+			Lines: []operations.PackingLine{
 				{
 					ID:                   "pack_line_1",
 					OrderItemID:          "item_1",
@@ -135,8 +136,8 @@ func TestOrderJSONRoundTripsPackingProgress(t *testing.T) {
 					PackedComposition:    packaging.PackageCompositionSnapshot{TotalBaseUnits: 3},
 				},
 			},
-			Containers: []warehouse.OutboundContainerPlan{{ID: "container_1", ContainerCode: "OUT-1", StorageType: warehouse_enums.StorageAmbient, UpdatedAt: updatedAt}},
-			Damages: []warehouse.PackingDamage{
+			Containers: []operations.OutboundContainerPlan{{ID: "container_1", ContainerCode: "OUT-1", StorageType: warehouse_enums.StorageAmbient, UpdatedAt: updatedAt}},
+			Damages: []operations.PackingDamage{
 				{
 					ID:                  "damage_1",
 					ProductSKUCode:      "A00001",
@@ -147,7 +148,7 @@ func TestOrderJSONRoundTripsPackingProgress(t *testing.T) {
 					CreatedAt:           updatedAt,
 				},
 			},
-			Discrepancies: []warehouse.PackingDiscrepancy{
+			Discrepancies: []shipping.PackingDiscrepancy{
 				{
 					ID:                   "disc_1",
 					OrderNumber:          "MAMA260709ABC123",

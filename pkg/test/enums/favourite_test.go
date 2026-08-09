@@ -3,27 +3,27 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/favourite/favourite_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/classification/classification_enums"
 )
 
 func TestFavouriteEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
 		{
-			name: "favouriteenum.FavouriteListOwnerType",
+			name: "classificationenum.FavouriteListOwnerType",
 			valid: []stringEnum{
-				favourite_enums.FavouriteListOwnerTypeRetailUser,
-				favourite_enums.FavouriteListOwnerTypeWholesaleOrganisation,
+				classification_enums.FavouriteListOwnerTypeRetailUser,
+				classification_enums.FavouriteListOwnerTypeWholesaleOrganisation,
 			},
-			invalid: favourite_enums.FavouriteListOwnerType("__invalid__"),
+			invalid: classification_enums.FavouriteListOwnerType("__invalid__"),
 		},
 		{
-			name: "favouriteenum.FavouriteListErrorCode",
+			name: "classificationenum.FavouriteListErrorCode",
 			valid: []stringEnum{
-				favourite_enums.FavouriteListErrorCodeLimitReached,
-				favourite_enums.FavouriteListErrorCodeNameConflict,
-				favourite_enums.FavouriteListErrorCodeProductLimitReached,
+				classification_enums.FavouriteListErrorCodeLimitReached,
+				classification_enums.FavouriteListErrorCodeNameConflict,
+				classification_enums.FavouriteListErrorCodeProductLimitReached,
 			},
-			invalid: favourite_enums.FavouriteListErrorCode("__invalid__"),
+			invalid: classification_enums.FavouriteListErrorCode("__invalid__"),
 		},
 	})
 }

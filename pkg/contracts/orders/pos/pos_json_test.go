@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/pos"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
 
 	"testing"
@@ -23,7 +24,7 @@ func TestCatalogProductJSONUsesPackageOffersAndAvailability(t *testing.T) {
 		PackageOptions:     []product.ProductPackageOptionSnapshot{{ID: "pkg_each", Code: "EACH", ProductSKUCode: "A00001", HandlingUnit: packaging_enums.PackageHandlingUnitEach, UnitsPerPackage: 1, EffectiveFrom: now, CapturedAt: now}},
 		BarcodeAssignments: []product.ProductBarcodeAssignmentSnapshot{{ID: "barcode_1", ProductSKUCode: "A00001", PackageOptionID: "pkg_each", Value: "930000000001", Format: product_enums.BarcodeFormatEAN13, EffectiveFrom: now, CapturedAt: now}},
 		Offers:             []product.SellableOfferSnapshot{},
-		Availability:       &product.ProductStockSummary{ProductSKUCode: "A00001", AllDepots: product.ProductStockQuantitySnapshot{AvailableBaseUnits: 5}, Revision: 2, Timezone: "Australia/Melbourne", AsOf: now},
+		Availability:       &operations.ProductStockSummary{ProductSKUCode: "A00001", AllDepots: operations.ProductStockQuantitySnapshot{AvailableBaseUnits: 5}, Revision: 2, Timezone: "Australia/Melbourne", AsOf: now},
 		Image:              &security.ObjectMedia{ID: "media_1", URL: "https://cdn.example.test/products/A00001.png"},
 		UpdatedAt:          now,
 	}

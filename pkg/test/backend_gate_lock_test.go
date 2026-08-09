@@ -8,6 +8,7 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/apiresponse/apiresponse_enums"
 	sales "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
@@ -40,7 +41,7 @@ func TestV25BackendGateModelSurface(t *testing.T) {
 		"GeographicContext":     "geographic_context",
 		"CapturedAt":            "captured_at",
 	})
-	assertJSONFields(t, reflect.TypeOf(product.ProductStockSummary{}), map[string]string{
+	assertJSONFields(t, reflect.TypeOf(operations.ProductStockSummary{}), map[string]string{
 		"ProductSKUCode": "product_sku_code",
 		"Depots":         "depots,omitempty",
 		"Revision":       "revision",

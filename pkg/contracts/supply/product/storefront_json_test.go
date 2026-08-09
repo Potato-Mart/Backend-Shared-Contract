@@ -15,6 +15,8 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/localization"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product/product_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
 )
@@ -29,7 +31,7 @@ func TestStorefrontProductJSONUsesPackageOffersAndAvailability(t *testing.T) {
 	}
 	projection := product.StorefrontProduct{
 		SKUCode: "A00001", CategorySKUCode: "CAT-A", Name: "Product",
-		BrandRef: &product.BrandRef{
+		BrandRef: &classification.BrandRef{
 			ID: "64c13ab08edf48a008793ca1", Slug: "happy-potato",
 			Name: []localization.LocalizedName{{Language: "en", Name: "Happy Potato"}},
 		},
@@ -48,9 +50,9 @@ func TestStorefrontProductJSONUsesPackageOffersAndAvailability(t *testing.T) {
 				GeographicContext: geography.GeographicContext{Source: geography_enums.GeographicContextSourceRetailCustomerProfile, CountryCode: "AU", ScopeRevision: 2, RuleRevision: 4, EvaluationTimezone: "Australia/Melbourne"},
 			},
 		},
-		Availability: &product.ProductStockSummary{
+		Availability: &operations.ProductStockSummary{
 			ProductSKUCode: "A00001",
-			AllDepots:      product.ProductStockQuantitySnapshot{AvailableBaseUnits: 24, SellableBaseUnits: 24},
+			AllDepots:      operations.ProductStockQuantitySnapshot{AvailableBaseUnits: 24, SellableBaseUnits: 24},
 			Revision:       9, Timezone: "Australia/Melbourne", AsOf: now,
 		},
 		Commercial: &product.StorefrontCommercial{

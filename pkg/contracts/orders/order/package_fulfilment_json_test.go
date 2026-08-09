@@ -6,8 +6,8 @@ import (
 	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
 
 	sales "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse"
 
 	"strings"
 	"testing"
@@ -40,7 +40,7 @@ func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {
 			{PackageOptionID: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24},
 			{PackageOptionID: "pkg_each", HandlingUnit: packaging_enums.PackageHandlingUnitEach, PackageCount: 3, UnitsPerPackage: 1, BaseUnits: 3},
 		}},
-		Substitutions:  []warehouse.PackageSubstitutionSnapshot{{ID: "sub_1", RequestedCasePackageOptionID: "pkg_case_12", RequestedCaseCount: 1, RequestedUnitsPerCase: 12, FulfilledSealedCaseCount: 0, ReplacementEachPackageOptionID: "pkg_each", ReplacementBaseUnits: 12, LotID: "lot_1", SourceBucketID: "bucket_each_1", ReasonCode: "NO_SEALED_CASE", Operator: "packer_1", CapturedAt: now}},
+		Substitutions:  []operations.PackageSubstitutionSnapshot{{ID: "sub_1", RequestedCasePackageOptionID: "pkg_case_12", RequestedCaseCount: 1, RequestedUnitsPerCase: 12, FulfilledSealedCaseCount: 0, ReplacementEachPackageOptionID: "pkg_each", ReplacementBaseUnits: 12, LotID: "lot_1", SourceBucketID: "bucket_each_1", ReasonCode: "NO_SEALED_CASE", Operator: "packer_1", CapturedAt: now}},
 		DiscountAmount: money.Money{Currency: "AUD"},
 		Total:          money.Money{AmountMinor: 4125, Currency: "AUD"},
 	}

@@ -11,6 +11,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/localization"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/classification"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product/product_enums"
 )
 
@@ -23,11 +24,11 @@ func TestProductJSONIncludesTaxed(t *testing.T) {
 		Description: []localization.LocalizedDescription{
 			{Language: "en", Description: "Localized description"},
 		},
-		BrandRef:     &BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "localized-brand", Name: []localization.LocalizedName{{Language: "en", Name: "Localized brand"}}},
+		BrandRef:     &classification.BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "localized-brand", Name: []localization.LocalizedName{{Language: "en", Name: "Localized brand"}}},
 		Taxed:        true,
-		Collection:   &CollectionRef{ID: "col_frozen", Slug: "frozen", Name: []localization.LocalizedName{{Language: "en", Name: "Frozen"}}},
-		CategoryTags: []CategoryTag{{ID: "tag_hotpot", Slug: "hotpot", Name: []localization.LocalizedName{{Language: "en", Name: "Hotpot"}}, CollectionID: "col_frozen", CollectionName: []localization.LocalizedName{{Language: "en", Name: "Frozen"}}}},
-		Supply:       &ProductSupply{Supplier: &ProductSupplierRef{Code: "sup_1", Name: "Supplier"}},
+		Collection:   &classification.CollectionRef{ID: "col_frozen", Slug: "frozen", Name: []localization.LocalizedName{{Language: "en", Name: "Frozen"}}},
+		CategoryTags: []classification.CategoryTag{{ID: "tag_hotpot", Slug: "hotpot", Name: []localization.LocalizedName{{Language: "en", Name: "Hotpot"}}, CollectionID: "col_frozen", CollectionName: []localization.LocalizedName{{Language: "en", Name: "Frozen"}}}},
+		Supply:       &classification.ProductSupply{Supplier: &classification.ProductSupplierRef{Code: "sup_1", Name: "Supplier"}},
 		PackageOptions: []ProductPackageOption{
 			{ID: "pkg_each", Code: "EACH", ProductSKUCode: "A0001", HandlingUnit: packaging_enums.PackageHandlingUnitEach, UnitsPerPackage: 1, IsCanonical: true, IsActive: true, EffectiveFrom: effectiveFrom},
 		},
@@ -96,45 +97,6 @@ func TestProductJSONIncludesTaxed(t *testing.T) {
 	}
 }
 
-func TestProductCollectionAndCategorySlugsAreOptional(t *testing.T) {
-	body, err := json.Marshal(Collection{
-		ID:   "col_frozen",
-		Slug: "frozen",
-		Name: []localization.LocalizedName{{Language: "en", Name: "Frozen"}},
-	})
-	if err != nil {
-		t.Fatalf("marshal collection with slug: %v", err)
-	}
-	if !strings.Contains(string(body), `"slug":"frozen"`) {
-		t.Fatalf("Collection JSON = %s, want slug when present", body)
-	}
-
-	body, err = json.Marshal(Collection{
-		ID:   "col_frozen",
-		Name: []localization.LocalizedName{{Language: "en", Name: "Frozen"}},
-		CategoryTags: []CategoryTag{
-			{ID: "tag_hotpot", Name: []localization.LocalizedName{{Language: "en", Name: "Hotpot"}}, CollectionID: "col_frozen"},
-		},
-	})
-	if err != nil {
-		t.Fatalf("marshal collection: %v", err)
-	}
-	if strings.Contains(string(body), `"slug"`) {
-		t.Fatalf("empty collection/category slugs should be omitted, got %s", body)
-	}
-
-	body, err = json.Marshal(CollectionRef{
-		ID:   "col_frozen",
-		Name: []localization.LocalizedName{{Language: "en", Name: "Frozen"}},
-	})
-	if err != nil {
-		t.Fatalf("marshal collection ref: %v", err)
-	}
-	if strings.Contains(string(body), `"slug"`) {
-		t.Fatalf("empty collection ref slug should be omitted, got %s", body)
-	}
-}
-
 func TestSnapshotJSONIncludesTaxed(t *testing.T) {
 	body, err := json.Marshal(Snapshot{
 		SKUCode: "A0001",
@@ -142,8 +104,8 @@ func TestSnapshotJSONIncludesTaxed(t *testing.T) {
 		Description: []localization.LocalizedDescription{
 			{Language: "en", Description: "Snapshot description"},
 		},
-		BrandRef: &BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "snapshot-brand", Name: []localization.LocalizedName{{Language: "en", Name: "Snapshot brand"}}},
-		Supply:   &ProductSupply{Supplier: &ProductSupplierRef{Code: "sup_1", Name: "Supplier"}},
+		BrandRef: &classification.BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "snapshot-brand", Name: []localization.LocalizedName{{Language: "en", Name: "Snapshot brand"}}},
+		Supply:   &classification.ProductSupply{Supplier: &classification.ProductSupplierRef{Code: "sup_1", Name: "Supplier"}},
 		Taxed:    true,
 	})
 	if err != nil {

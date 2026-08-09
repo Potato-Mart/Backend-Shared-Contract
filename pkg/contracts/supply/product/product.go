@@ -9,6 +9,7 @@ import (
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/customers/retail/retail_enums"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/classification"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product/product_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
 )
@@ -19,17 +20,17 @@ type Product struct {
 	CategorySKUCode    string                              `json:"category_sku_code"`
 	Name               string                              `json:"name"`
 	Description        []localization.LocalizedDescription `json:"description,omitempty"`
-	BrandRef           *BrandRef                           `json:"brand_ref,omitempty"`
+	BrandRef           *classification.BrandRef            `json:"brand_ref,omitempty"`
 	PackageOptions     []ProductPackageOption              `json:"package_options"`
 	BarcodeAssignments []ProductBarcodeAssignment          `json:"barcode_assignments,omitempty"`
 	Taxed              bool                                `json:"taxed"`
 
 	StorageType warehouse_enums.StorageType `json:"storage_type,omitempty"`
 	// Status is the admin-controlled product lifecycle state.
-	Status       product_enums.ProductStatus `json:"status,omitempty"`
-	Collection   *CollectionRef              `json:"collection,omitempty"`
-	CategoryTags []CategoryTag               `json:"category_tags,omitempty"`
-	Supply       *ProductSupply              `json:"supply,omitempty"`
+	Status       product_enums.ProductStatus   `json:"status,omitempty"`
+	Collection   *classification.CollectionRef `json:"collection,omitempty"`
+	CategoryTags []classification.CategoryTag  `json:"category_tags,omitempty"`
+	Supply       *classification.ProductSupply `json:"supply,omitempty"`
 
 	// SalesPerformance contains backend-computed historical sales statistics.
 	// It is never manually authored on product create/update operations.

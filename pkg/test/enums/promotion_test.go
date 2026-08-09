@@ -8,8 +8,6 @@ import (
 
 func TestPromotionEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
-		{name: "promotionenum.CouponAppliesTo", valid: []stringEnum{promotion_enums.CouponAppliesToAll, promotion_enums.CouponAppliesToSpecificProducts, promotion_enums.CouponAppliesToSpecificCategoryTags}, invalid: promotion_enums.CouponAppliesTo("__invalid__")},
-		{name: "promotionenum.CouponSource", valid: []stringEnum{promotion_enums.CouponSourceManual, promotion_enums.CouponSourceRFMComeback, promotion_enums.CouponSourceBirthday, promotion_enums.CouponSourceReferral, promotion_enums.CouponSourceSignupBonus, promotion_enums.CouponSourceCampaign}, invalid: promotion_enums.CouponSource("__invalid__")},
 		{name: "promotionenum.DiscountScope", valid: []stringEnum{promotion_enums.DiscountScopeAll, promotion_enums.DiscountScopeCategoryTag, promotion_enums.DiscountScopeProduct}, invalid: promotion_enums.DiscountScope("__invalid__")},
 		{name: "promotionenum.DiscountType", valid: []stringEnum{promotion_enums.DiscountTypePercentage, promotion_enums.DiscountTypeFixedAmount, promotion_enums.DiscountTypeFreeShipping, promotion_enums.DiscountTypeFixedPrice}, invalid: promotion_enums.DiscountType("__invalid__")},
 		{name: "promotionenum.PromotionAddonTrigger", valid: []stringEnum{promotion_enums.PromotionAddonTriggerAmount, promotion_enums.PromotionAddonTriggerRequiredProducts}, invalid: promotion_enums.PromotionAddonTrigger("__invalid__")},

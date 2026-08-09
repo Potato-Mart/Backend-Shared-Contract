@@ -14,8 +14,9 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/party"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order/order_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/shipping/shipping_enums"
@@ -112,36 +113,36 @@ type Order struct {
 // and customer order views. It replaces admin-facing dependence on a separate
 // packing-session aggregate for current packing progress.
 type OrderPackingProgress struct {
-	Status        order_enums.FulfillmentStatus     `json:"status,omitempty"`
-	Operator      string                            `json:"operator,omitempty"`
-	Lines         []warehouse.PackingLine           `json:"lines,omitempty"`
-	Containers    []warehouse.OutboundContainerPlan `json:"containers,omitempty"`
-	Damages       []warehouse.PackingDamage         `json:"damages,omitempty"`
-	Discrepancies []warehouse.PackingDiscrepancy    `json:"discrepancies,omitempty"`
-	StartedAt     *time.Time                        `json:"started_at,omitempty"`
-	UpdatedAt     *time.Time                        `json:"updated_at,omitempty"`
-	PackedAt      *time.Time                        `json:"packed_at,omitempty"`
-	FulfilledAt   *time.Time                        `json:"fulfilled_at,omitempty"`
+	Status        order_enums.FulfillmentStatus      `json:"status,omitempty"`
+	Operator      string                             `json:"operator,omitempty"`
+	Lines         []operations.PackingLine           `json:"lines,omitempty"`
+	Containers    []operations.OutboundContainerPlan `json:"containers,omitempty"`
+	Damages       []operations.PackingDamage         `json:"damages,omitempty"`
+	Discrepancies []shipping.PackingDiscrepancy      `json:"discrepancies,omitempty"`
+	StartedAt     *time.Time                         `json:"started_at,omitempty"`
+	UpdatedAt     *time.Time                         `json:"updated_at,omitempty"`
+	PackedAt      *time.Time                         `json:"packed_at,omitempty"`
+	FulfilledAt   *time.Time                         `json:"fulfilled_at,omitempty"`
 }
 
 type OrderItem struct {
-	ID                   string                                  `json:"id"`
-	Product              product.Snapshot                        `json:"product"`
-	VariantTitle         string                                  `json:"variant_title,omitempty"`
-	Components           []PricedPackageComponent                `json:"components"`
-	TotalBaseUnits       int64                                   `json:"total_base_units"`
-	Pricing              *PricingContext                         `json:"pricing,omitempty"`
-	SubstitutionPolicy   LooseSubstitutionPolicySnapshot         `json:"substitution_policy"`
-	RequestedComposition packaging.PackageCompositionSnapshot    `json:"requested_composition"`
-	AllocatedComposition packaging.PackageCompositionSnapshot    `json:"allocated_composition"`
-	PickedComposition    packaging.PackageCompositionSnapshot    `json:"picked_composition"`
-	PackedComposition    packaging.PackageCompositionSnapshot    `json:"packed_composition"`
-	ReturnedComposition  packaging.PackageCompositionSnapshot    `json:"returned_composition"`
-	RefundedComposition  packaging.PackageCompositionSnapshot    `json:"refunded_composition"`
-	Substitutions        []warehouse.PackageSubstitutionSnapshot `json:"substitutions,omitempty"`
-	DiscountAmount       money.Money                             `json:"discount_amount"`
-	Total                money.Money                             `json:"total"`
-	Preorder             *PreorderItemState                      `json:"preorder,omitempty"`
+	ID                   string                                   `json:"id"`
+	Product              product.Snapshot                         `json:"product"`
+	VariantTitle         string                                   `json:"variant_title,omitempty"`
+	Components           []PricedPackageComponent                 `json:"components"`
+	TotalBaseUnits       int64                                    `json:"total_base_units"`
+	Pricing              *PricingContext                          `json:"pricing,omitempty"`
+	SubstitutionPolicy   LooseSubstitutionPolicySnapshot          `json:"substitution_policy"`
+	RequestedComposition packaging.PackageCompositionSnapshot     `json:"requested_composition"`
+	AllocatedComposition packaging.PackageCompositionSnapshot     `json:"allocated_composition"`
+	PickedComposition    packaging.PackageCompositionSnapshot     `json:"picked_composition"`
+	PackedComposition    packaging.PackageCompositionSnapshot     `json:"packed_composition"`
+	ReturnedComposition  packaging.PackageCompositionSnapshot     `json:"returned_composition"`
+	RefundedComposition  packaging.PackageCompositionSnapshot     `json:"refunded_composition"`
+	Substitutions        []operations.PackageSubstitutionSnapshot `json:"substitutions,omitempty"`
+	DiscountAmount       money.Money                              `json:"discount_amount"`
+	Total                money.Money                              `json:"total"`
+	Preorder             *PreorderItemState                       `json:"preorder,omitempty"`
 }
 
 type AppliedPromotion struct {
