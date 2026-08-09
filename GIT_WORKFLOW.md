@@ -7,7 +7,7 @@ These rules apply to every commit and push in this repository.
 - Start from the latest protected `main`.
 - Use `feature/<description>` for feature branches unless a release task
   specifies another `refactor/<description>` branch.
-- For this release, use `feature/contract-v25-ambient-storage`.
+- For this release, use `feature/contract-v26-object-media-product-promotion`.
 - Do not push directly to `main`.
 
 ## Commits and Pull Requests

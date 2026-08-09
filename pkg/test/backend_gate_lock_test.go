@@ -1,22 +1,24 @@
 package pkg_test
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
 
 	"reflect"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/apiresponse/apiresponse_enums"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/apiresponse/apiresponse_enums"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
 )
 
-// TestV25BackendGateModelSurface locks the reusable model primitives needed by
-// the V25 stock, geography, offer, and availability gates. HTTP DTOs, stock
+// TestV26BackendGateModelSurface locks the reusable model primitives needed by
+// the v26 stock, geography, package-pricing, and availability gates. HTTP DTOs, stock
 // commands, resolution rules, and error envelopes remain service-owned.
-func TestV25BackendGateModelSurface(t *testing.T) {
+func TestV26BackendGateModelSurface(t *testing.T) {
 	assertJSONFields(t, reflect.TypeOf(geography.Address{}), map[string]string{
 		"Locality":           "locality",
 		"AdministrativeArea": "administrative_area,omitempty",
@@ -29,30 +31,39 @@ func TestV25BackendGateModelSurface(t *testing.T) {
 		"RuleRevision":       "rule_revision",
 		"EvaluationTimezone": "evaluation_timezone",
 	})
-	assertJSONFields(t, reflect.TypeOf(product.SellableOfferSnapshot{}), map[string]string{
+	assertJSONFields(t, reflect.TypeOf(promotion.PackagePricing{}), map[string]string{
 		"ID":                    "id",
 		"ProductSKUCode":        "product_sku_code",
-		"DepotCode":             "depot_code",
-		"PackageOption":         "package_option",
+		"PackageOptionID":       "package_option_id",
+		"PackagePrice":          "package_price",
+		"StockLocation":         "stock_location",
 		"AvailablePackageCount": "available_package_count",
 		"Revision":              "revision",
 		"InventoryRevision":     "inventory_revision",
 		"GeographicContext":     "geographic_context",
+		"PromotionApplications": "promotion_applications",
 		"CapturedAt":            "captured_at",
 	})
-	assertJSONFields(t, reflect.TypeOf(product.ProductStockSummary{}), map[string]string{
+	assertJSONFields(t, reflect.TypeOf(operations.ProductStockSummary{}), map[string]string{
 		"ProductSKUCode": "product_sku_code",
 		"Depots":         "depots,omitempty",
 		"Revision":       "revision",
 		"IsOutOfStock":   "is_out_of_stock",
 		"AsOf":           "as_of",
 	})
-	assertJSONFields(t, reflect.TypeOf(product.StorefrontCommercial{}), map[string]string{
-		"Price":      "price,omitempty",
-		"Package":    "package_option",
-		"StockState": "stock_state",
-		"Market":     "market",
-		"AsOf":       "as_of",
+	assertJSONFields(t, reflect.TypeOf(product.ProductCommerce{}), map[string]string{
+		"Status":        "status,omitempty",
+		"Selling":       "selling,omitempty",
+		"FirstListedAt": "first_listed_at,omitempty",
+		"Packages":      "packages,omitempty",
+	})
+	assertJSONFields(t, reflect.TypeOf(product.ProductPackageCommerce{}), map[string]string{
+		"PackageOptionID":       "package_option_id",
+		"PackagePrice":          "package_price",
+		"TaxAmount":             "tax_amount",
+		"StockState":            "stock_state,omitempty",
+		"PromotionApplications": "promotion_applications,omitempty",
+		"AsOf":                  "as_of",
 	})
 	assertJSONFields(t, reflect.TypeOf(sales.BuyerContext{}), map[string]string{
 		"Type":                 "type,omitempty",
@@ -61,7 +72,7 @@ func TestV25BackendGateModelSurface(t *testing.T) {
 	})
 
 	if !packaging_enums.PackageHandlingUnitEach.IsValid() || packaging_enums.PackageHandlingUnitEach.String() != "EACH" {
-		t.Fatal("retail offer resolution requires the canonical EACH handling unit")
+		t.Fatal("retail package pricing requires the canonical EACH handling unit")
 	}
 	for _, code := range []apiresponse_enums.Code{
 		apiresponse_enums.CodeInsufficientStock,

@@ -2,81 +2,88 @@ package promotion
 
 import (
 	"encoding/json"
-
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
-
+	"strings"
 	"testing"
+	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/commerce/commerce_enums"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
-func TestPromotionCategoryTagTargetNameIsLocalized(t *testing.T) {
-	body, err := json.Marshal(Promotion{
-		ID:                    "prm_1",
-		SeriesKey:             "series_hotpot",
-		Name:                  "Hotpot tag discount",
-		Type:                  promotion_enums.PromotionTypeAutoDiscount,
-		Class:                 promotion_enums.PromotionClassNormal,
-		TargetScope:           promotion_enums.DiscountScopeCategoryTag,
-		TargetCategoryTagID:   "tag_hotpot",
-		TargetCategoryTagName: []localization.LocalizedName{{Language: "en", Name: "Hotpot"}},
-		ActiveWindow:          ActiveWindow{ScheduleTimezone: "Australia/Sydney"},
-		GeographicScope:       geography.GeographicScope{Mode: geography_enums.GeographicScopeModeTargeted, Targets: []geography.GeographicTarget{{Kind: geography_enums.GeographicTargetCountry, Code: "AU"}}},
-	})
+func TestPromotionRoundTripsOpenPromotionAndRelationKinds(t *testing.T) {
+	startsAt := time.Date(2026, 8, 9, 10, 0, 0, 0, time.UTC)
+	maximumApplications := int64(20)
+	value := Promotion{
+		ID:        "prm_1",
+		SeriesKey: "seasonal-potatoes",
+		Kind:      "future_mechanic_without_contract_release",
+		Status:    promotion_enums.PromotionStatusActive,
+		Revision:  7,
+		Content: PromotionContent{
+			Names:           []localization.LocalizedName{{Language: "en", Name: "Weekend potato special"}},
+			Descriptions:    []localization.LocalizedDescription{{Language: "en", Description: "A future mechanic"}},
+			DisplayMessages: []localization.LocalizedText{{Language: "en", Text: "Special applied"}},
+			ReceiptMessages: []localization.LocalizedText{{Language: "en", Text: "Weekend special"}},
+		},
+		Period: PromotionPeriod{StartsAt: &startsAt, Timezone: "Australia/Sydney"},
+		Scope: PromotionScope{
+			MatchMode: promotion_enums.PromotionMatchModeAll,
+			Groups: []PromotionScopeGroup{{
+				MatchMode:        promotion_enums.PromotionMatchModeAny,
+				CategoryTagIDs:   []string{"tag_potato"},
+				MinimumBaseUnits: 1,
+			}},
+		},
+		Relations: []PromotionRelation{{
+			ID:             "rel_future",
+			Kind:           "future_qualifier_to_target",
+			QualifierScope: PromotionScope{MatchMode: promotion_enums.PromotionMatchModeAll, Groups: []PromotionScopeGroup{{MatchMode: promotion_enums.PromotionMatchModeAny, ProductSKUCodes: []string{"POTATO-001"}}}},
+			TargetScope:    PromotionScope{MatchMode: promotion_enums.PromotionMatchModeAll, Groups: []PromotionScopeGroup{{MatchMode: promotion_enums.PromotionMatchModeAny, ProductSKUCodes: []string{"POTATO-002"}}}},
+		}},
+		Controls: PromotionControls{
+			Priority:            10,
+			Stackable:           true,
+			MaximumApplications: &maximumApplications,
+			Channels:            []commerce_enums.OrderType{commerce_enums.OrderTypeOnline, commerce_enums.OrderTypePOS},
+			GeographicScope:     geography.GeographicScope{Mode: geography_enums.GeographicScopeModeGlobal},
+		},
+		Source: &PromotionSource{Kind: "campaign_import", Ref: "campaign_2026_08"},
+	}
+
+	body, err := json.Marshal(value)
 	if err != nil {
 		t.Fatalf("marshal promotion: %v", err)
 	}
+	for _, want := range []string{
+		`"kind":"future_mechanic_without_contract_release"`,
+		`"kind":"future_qualifier_to_target"`,
+		`"status":"active"`,
+		`"ends_at"`,
+		`"receipt_messages"`,
+		`"ref":"campaign_2026_08"`,
+	} {
+		if want == `"ends_at"` {
+			if strings.Contains(string(body), want) {
+				t.Fatalf("nil period end must mean no scheduled end: %s", body)
+			}
+			continue
+		}
+		if !strings.Contains(string(body), want) {
+			t.Fatalf("promotion JSON = %s, want %s", body, want)
+		}
+	}
 
-	var got map[string]any
+	var got Promotion
 	if err := json.Unmarshal(body, &got); err != nil {
-		t.Fatalf("unmarshal promotion JSON: %v", err)
+		t.Fatalf("unmarshal promotion: %v", err)
 	}
-	names, ok := got["target_category_tag_name"].([]any)
-	if !ok || len(names) != 1 {
-		t.Fatalf("target_category_tag_name = %#v, want localized name array (%s)", got["target_category_tag_name"], body)
+	if got.Kind != value.Kind || len(got.Relations) != 1 || got.Relations[0].Kind != value.Relations[0].Kind || got.Period.EndsAt != nil {
+		t.Fatalf("open promotion kinds or nil end did not round-trip: %+v", got)
 	}
-	name, ok := names[0].(map[string]any)
-	if !ok || name["language"] != "en" || name["name"] != "Hotpot" {
-		t.Fatalf("target_category_tag_name[0] = %#v, want en/Hotpot (%s)", names[0], body)
-	}
-}
-
-func TestPromotionReceiptMessagesUseExplicitCustomerFacingShape(t *testing.T) {
-	body, err := json.Marshal(Promotion{
-		ID:              "prm_receipt",
-		SeriesKey:       "series_receipt",
-		Name:            "Internal campaign name",
-		Type:            promotion_enums.PromotionTypeAutoDiscount,
-		Class:           promotion_enums.PromotionClassNormal,
-		TargetScope:     promotion_enums.DiscountScopeAll,
-		ReceiptEnabled:  true,
-		ReceiptMessages: []localization.LocalizedName{{Language: "en", Name: "Save 10% this weekend"}},
-		ActiveWindow:    ActiveWindow{ScheduleTimezone: "Etc/UTC"},
-		GeographicScope: geography.GeographicScope{Mode: geography_enums.GeographicScopeModeGlobal},
-	})
-	if err != nil {
-		t.Fatalf("marshal promotion: %v", err)
-	}
-
-	var got map[string]any
-	if err := json.Unmarshal(body, &got); err != nil {
-		t.Fatalf("unmarshal promotion JSON: %v", err)
-	}
-	if got["receipt_enabled"] != true {
-		t.Fatalf("receipt_enabled = %#v, want true (%s)", got["receipt_enabled"], body)
-	}
-	scope, ok := got["geographic_scope"].(map[string]any)
-	if !ok || scope["mode"] != "GLOBAL" || got["schedule_timezone"] != "Etc/UTC" {
-		t.Fatalf("promotion geographic schedule mismatch: %s", body)
-	}
-	messages, ok := got["receipt_messages"].([]any)
-	if !ok || len(messages) != 1 {
-		t.Fatalf("receipt_messages = %#v, want one localized message (%s)", got["receipt_messages"], body)
-	}
-	message, ok := messages[0].(map[string]any)
-	if !ok || message["language"] != "en" || message["name"] != "Save 10% this weekend" {
-		t.Fatalf("receipt_messages[0] = %#v, want en receipt copy (%s)", messages[0], body)
+	if got.Content.DisplayMessages[0].Text != "Special applied" || got.Content.ReceiptMessages[0].Text != "Weekend special" {
+		t.Fatalf("approved display/receipt content did not round-trip: %+v", got.Content)
 	}
 }

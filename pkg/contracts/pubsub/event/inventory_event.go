@@ -3,11 +3,12 @@ package event
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging"
-	warehouse "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
+	warehouse "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // StockLocationAvailabilityChangedEvent represents a customer-accessible
@@ -21,7 +22,7 @@ type StockLocationAvailabilityChangedEvent struct {
 	AvailableAfterBaseUnits  int64                                      `json:"available_after_base_units"`
 	Direction                warehouse_enums.StockAvailabilityDirection `json:"direction"`
 	ElectronicShelfLabelCode string                                     `json:"electronic_shelf_label_code,omitempty"`
-	Cause                    warehouse.InventoryCauseRef                `json:"cause"`
+	Cause                    operations.InventoryCauseRef               `json:"cause"`
 	Revision                 int64                                      `json:"revision"`
 	OccurredAt               time.Time                                  `json:"occurred_at"`
 	AsOf                     time.Time                                  `json:"as_of"`
@@ -54,7 +55,7 @@ type InventoryStockBucketChangedEvent struct {
 	ReservedAfterBaseUnits   int64                                `json:"reserved_after_base_units"`
 	AvailableBeforeBaseUnits int64                                `json:"available_before_base_units"`
 	AvailableAfterBaseUnits  int64                                `json:"available_after_base_units"`
-	Cause                    warehouse.InventoryCauseRef          `json:"cause"`
+	Cause                    operations.InventoryCauseRef         `json:"cause"`
 	Revision                 int64                                `json:"revision"`
 	OccurredAt               time.Time                            `json:"occurred_at"`
 }
@@ -144,8 +145,8 @@ type InventoryDateMarkThresholdEvent struct {
 	OccurredAt     time.Time                                  `json:"occurred_at"`
 }
 
-type SellableOfferAvailabilityChangedEvent struct {
-	OfferID                  string    `json:"offer_id"`
+type PackagePricingAvailabilityChangedEvent struct {
+	PackagePricingID         string    `json:"package_pricing_id"`
 	ProductSKUCode           string    `json:"product_sku_code"`
 	DepotCode                string    `json:"depot_code"`
 	SourceBucketID           string    `json:"source_bucket_id,omitempty"`
@@ -153,6 +154,6 @@ type SellableOfferAvailabilityChangedEvent struct {
 	AvailableBeforeBaseUnits int64     `json:"available_before_base_units"`
 	AvailableAfterBaseUnits  int64     `json:"available_after_base_units"`
 	InventoryRevision        int64     `json:"inventory_revision"`
-	OfferRevision            int64     `json:"offer_revision"`
+	PackagePricingRevision   int64     `json:"package_pricing_revision"`
 	OccurredAt               time.Time `json:"occurred_at"`
 }

@@ -3,22 +3,23 @@ package event_test
 import (
 	"encoding/json"
 
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pubsub/event"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pubsub/event"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse"
 
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
-func TestV25InventoryEventJSONShapes(t *testing.T) {
+func TestV26InventoryEventJSONShapes(t *testing.T) {
 	now := time.Date(2026, 8, 4, 7, 8, 9, 0, time.UTC)
 	caseComposition := composition(packaging_enums.PackageHandlingUnitCase, "pkg_case_12", 1, 12)
 	eachComposition := composition(packaging_enums.PackageHandlingUnitEach, "pkg_each", 12, 1)
-	cause := warehouse.InventoryCauseRef{Type: "SALE_COMMIT", ID: "movement_1"}
+	cause := operations.InventoryCauseRef{Type: "SALE_COMMIT", ID: "movement_1"}
 	location := warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01-03"}
 
 	cases := []struct {
@@ -108,13 +109,13 @@ func TestV25InventoryEventJSONShapes(t *testing.T) {
 			required: []string{"date_mark", "threshold", "threshold_at", "lot_revision"},
 		},
 		{
-			name: "offer availability changed",
-			value: event.SellableOfferAvailabilityChangedEvent{
-				OfferID: "offer_1", ProductSKUCode: "A00001", DepotCode: location.DepotCode,
+			name: "package pricing availability changed",
+			value: event.PackagePricingAvailabilityChangedEvent{
+				PackagePricingID: "pricing_1", ProductSKUCode: "A00001", DepotCode: location.DepotCode,
 				SourceBucketID: "bucket_case", AvailableBeforeBaseUnits: 12, AvailableAfterBaseUnits: 0,
-				InventoryRevision: 5, OfferRevision: 6, OccurredAt: now,
+				InventoryRevision: 5, PackagePricingRevision: 6, OccurredAt: now,
 			},
-			required: []string{"offer_id", "available_before_base_units", "available_after_base_units", "offer_revision"},
+			required: []string{"package_pricing_id", "available_before_base_units", "available_after_base_units", "package_pricing_revision"},
 		},
 	}
 

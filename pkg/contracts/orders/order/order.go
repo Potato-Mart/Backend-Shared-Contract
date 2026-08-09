@@ -3,25 +3,26 @@ package order
 import (
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/security"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/device"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/device"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/orders/shipping/shipping_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/membership/membership_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/shipping/shipping_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion"
 )
 
 // Buyer describes who is buying, independently of Channel. POS is a
@@ -78,20 +79,20 @@ type Order struct {
 	SurchargeAmount money.Money `json:"surcharge_amount,omitempty"`
 	Total           money.Money `json:"total"`
 
-	CouponCode           string                           `json:"coupon_code,omitempty"`
-	AppliedPromotions    []AppliedPromotion               `json:"applied_promotions,omitempty"`
-	PointRedemption      *PointRedemptionSnapshot         `json:"point_redemption,omitempty"`
-	RewardRedemptions    []RewardRedemptionSnapshot       `json:"reward_redemptions,omitempty"`
-	VoucherRedemption    *VoucherRedemptionSnapshot       `json:"voucher_redemption,omitempty"`
-	GiftCardRedemptions  []GiftCardRedemptionSnapshot     `json:"gift_card_redemptions,omitempty"`
-	TrackingNumber       string                           `json:"tracking_number,omitempty"`
-	TrackingURL          string                           `json:"tracking_url,omitempty"`
-	Packing              *OrderPackingProgress            `json:"packing,omitempty"`
-	PackingRevision      int64                            `json:"packing_revision,omitempty"`
-	FulfillmentReadiness order_enums.FulfillmentReadiness `json:"fulfillment_readiness"`
-	CustomerNote         string                           `json:"customer_note,omitempty"`
-	InternalNote         string                           `json:"internal_note,omitempty"`
-	Tags                 []string                         `json:"tags,omitempty"`
+	CouponCode            string                           `json:"coupon_code,omitempty"`
+	PromotionApplications []promotion.PromotionApplication `json:"promotion_applications"`
+	PointRedemption       *PointRedemptionSnapshot         `json:"point_redemption,omitempty"`
+	RewardRedemptions     []RewardRedemptionSnapshot       `json:"reward_redemptions,omitempty"`
+	VoucherRedemption     *VoucherRedemptionSnapshot       `json:"voucher_redemption,omitempty"`
+	GiftCardRedemptions   []GiftCardRedemptionSnapshot     `json:"gift_card_redemptions,omitempty"`
+	TrackingNumber        string                           `json:"tracking_number,omitempty"`
+	TrackingURL           string                           `json:"tracking_url,omitempty"`
+	Packing               *OrderPackingProgress            `json:"packing,omitempty"`
+	PackingRevision       int64                            `json:"packing_revision,omitempty"`
+	FulfillmentReadiness  order_enums.FulfillmentReadiness `json:"fulfillment_readiness"`
+	CustomerNote          string                           `json:"customer_note,omitempty"`
+	InternalNote          string                           `json:"internal_note,omitempty"`
+	Tags                  []string                         `json:"tags,omitempty"`
 
 	// ── Lifecycle timestamps ──────────────────────────────────────────
 	ConfirmedAt      *time.Time `json:"confirmed_at,omitempty"`
@@ -112,45 +113,40 @@ type Order struct {
 // and customer order views. It replaces admin-facing dependence on a separate
 // packing-session aggregate for current packing progress.
 type OrderPackingProgress struct {
-	Status        order_enums.FulfillmentStatus     `json:"status,omitempty"`
-	Operator      string                            `json:"operator,omitempty"`
-	Lines         []warehouse.PackingLine           `json:"lines,omitempty"`
-	Containers    []warehouse.OutboundContainerPlan `json:"containers,omitempty"`
-	Damages       []warehouse.PackingDamage         `json:"damages,omitempty"`
-	Discrepancies []warehouse.PackingDiscrepancy    `json:"discrepancies,omitempty"`
-	StartedAt     *time.Time                        `json:"started_at,omitempty"`
-	UpdatedAt     *time.Time                        `json:"updated_at,omitempty"`
-	PackedAt      *time.Time                        `json:"packed_at,omitempty"`
-	FulfilledAt   *time.Time                        `json:"fulfilled_at,omitempty"`
+	Status        order_enums.FulfillmentStatus      `json:"status,omitempty"`
+	Operator      string                             `json:"operator,omitempty"`
+	Lines         []operations.PackingLine           `json:"lines,omitempty"`
+	Containers    []operations.OutboundContainerPlan `json:"containers,omitempty"`
+	Damages       []operations.PackingDamage         `json:"damages,omitempty"`
+	Discrepancies []shipping.PackingDiscrepancy      `json:"discrepancies,omitempty"`
+	StartedAt     *time.Time                         `json:"started_at,omitempty"`
+	UpdatedAt     *time.Time                         `json:"updated_at,omitempty"`
+	PackedAt      *time.Time                         `json:"packed_at,omitempty"`
+	FulfilledAt   *time.Time                         `json:"fulfilled_at,omitempty"`
 }
 
 type OrderItem struct {
-	ID                   string                                  `json:"id"`
-	Product              product.Snapshot                        `json:"product"`
-	VariantTitle         string                                  `json:"variant_title,omitempty"`
-	Components           []PricedPackageComponent                `json:"components"`
-	TotalBaseUnits       int64                                   `json:"total_base_units"`
-	Pricing              *PricingContext                         `json:"pricing,omitempty"`
-	SubstitutionPolicy   LooseSubstitutionPolicySnapshot         `json:"substitution_policy"`
-	RequestedComposition packaging.PackageCompositionSnapshot    `json:"requested_composition"`
-	AllocatedComposition packaging.PackageCompositionSnapshot    `json:"allocated_composition"`
-	PickedComposition    packaging.PackageCompositionSnapshot    `json:"picked_composition"`
-	PackedComposition    packaging.PackageCompositionSnapshot    `json:"packed_composition"`
-	ReturnedComposition  packaging.PackageCompositionSnapshot    `json:"returned_composition"`
-	RefundedComposition  packaging.PackageCompositionSnapshot    `json:"refunded_composition"`
-	Substitutions        []warehouse.PackageSubstitutionSnapshot `json:"substitutions,omitempty"`
-	DiscountAmount       money.Money                             `json:"discount_amount"`
-	Total                money.Money                             `json:"total"`
-	Preorder             *PreorderItemState                      `json:"preorder,omitempty"`
-}
-
-type AppliedPromotion struct {
-	ID                string                       `json:"id,omitempty"`
-	Name              string                       `json:"name,omitempty"`
-	DiscountType      promotion_enums.DiscountType `json:"discount_type,omitempty"`
-	DiscountValue     string                       `json:"discount_value,omitempty"`
-	DiscountAmount    *money.Money                 `json:"discount_amount,omitempty"`
-	GeographicContext geography.GeographicContext  `json:"geographic_context"`
+	ID                   string                                   `json:"id"`
+	ProductSKUCode       string                                   `json:"product_sku_code"`
+	ProductName          string                                   `json:"product_name"`
+	ProductImage         *security.ObjectMedia                    `json:"product_image,omitempty"`
+	ProductPackageOption product.ProductPackageOption             `json:"product_package_option"`
+	CapturedAt           time.Time                                `json:"captured_at"`
+	VariantTitle         string                                   `json:"variant_title,omitempty"`
+	Components           []PricedPackageComponent                 `json:"components"`
+	TotalBaseUnits       int64                                    `json:"total_base_units"`
+	Pricing              *PricingContext                          `json:"pricing,omitempty"`
+	SubstitutionPolicy   LooseSubstitutionPolicySnapshot          `json:"substitution_policy"`
+	RequestedComposition packaging.PackageCompositionSnapshot     `json:"requested_composition"`
+	AllocatedComposition packaging.PackageCompositionSnapshot     `json:"allocated_composition"`
+	PickedComposition    packaging.PackageCompositionSnapshot     `json:"picked_composition"`
+	PackedComposition    packaging.PackageCompositionSnapshot     `json:"packed_composition"`
+	ReturnedComposition  packaging.PackageCompositionSnapshot     `json:"returned_composition"`
+	RefundedComposition  packaging.PackageCompositionSnapshot     `json:"refunded_composition"`
+	Substitutions        []operations.PackageSubstitutionSnapshot `json:"substitutions,omitempty"`
+	DiscountAmount       money.Money                              `json:"discount_amount"`
+	Total                money.Money                              `json:"total"`
+	Preorder             *PreorderItemState                       `json:"preorder,omitempty"`
 }
 
 // PointRedemptionSnapshot records a points discount applied to an order without

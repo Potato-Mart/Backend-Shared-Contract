@@ -9,9 +9,10 @@ package campaign
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/audit"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/customers/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/customers/campaign/campaign_enums"
 )
 
 // Audience narrows a campaign by customer type and client platform.
@@ -44,12 +45,11 @@ type Campaign struct {
 	CTAHref     string          `json:"cta_href,omitempty"`
 	CTA         *CTADestination `json:"cta,omitempty"`
 
-	// MediaID is the managed media identity. MediaURL is the stable backend
-	// content URL projected for storefronts (used by home_hero and modal).
-	// BackgroundToken is an optional theme token name for banner styling.
-	MediaID         string `json:"media_id,omitempty"`
-	MediaURL        string `json:"media_url,omitempty"`
-	BackgroundToken string `json:"background_token,omitempty"`
+	// Media is the managed image projected for storefronts (used by home_hero
+	// and modal). BackgroundToken is an optional theme token name for banner
+	// styling.
+	Media           *security.ObjectMedia `json:"media,omitempty"`
+	BackgroundToken string                `json:"background_token,omitempty"`
 
 	Placement campaign_enums.CampaignPlacement `json:"placement"`
 	Severity  campaign_enums.CampaignSeverity  `json:"severity"`

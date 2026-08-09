@@ -55,8 +55,8 @@ const (
 	EventTypeInventoryStaged                   EventType = "inventory.staged"
 	EventTypeInventorySold                     EventType = "inventory.sold"
 	EventTypeInventoryDateMarkThresholdReached EventType = "inventory.date_mark_threshold_reached"
-	EventTypeInventorySellableOfferAvailable   EventType = "inventory.sellable_offer_available"
-	EventTypeInventorySellableOfferWithdrawn   EventType = "inventory.sellable_offer_withdrawn"
+	EventTypeInventoryPackagePricingAvailable  EventType = "inventory.package_pricing_available"
+	EventTypeInventoryPackagePricingWithdrawn  EventType = "inventory.package_pricing_withdrawn"
 	EventTypeStockLocationAvailabilityChanged  EventType = "stock.location_availability_changed"
 
 	EventTypeFulfilmentPackingUpdated  EventType = "fulfilment.packing_updated"
@@ -90,7 +90,7 @@ func (t EventType) IsValid() bool {
 		EventTypeInventoryPackageConverted, EventTypeInventoryQualityAssessed,
 		EventTypeInventoryReservationChanged, EventTypeInventoryStaged,
 		EventTypeInventorySold, EventTypeInventoryDateMarkThresholdReached,
-		EventTypeInventorySellableOfferAvailable, EventTypeInventorySellableOfferWithdrawn,
+		EventTypeInventoryPackagePricingAvailable, EventTypeInventoryPackagePricingWithdrawn,
 		EventTypeStockLocationAvailabilityChanged,
 		EventTypeFulfilmentPackingUpdated, EventTypeFulfilmentShipped,
 		EventTypeFulfilmentDelivered, EventTypeFulfilmentCompleted,

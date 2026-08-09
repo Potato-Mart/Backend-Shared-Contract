@@ -3,10 +3,7 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/money"
-
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/membership/membership_enums"
 )
 
 // PointsPolicy is server-authored redemption metadata. PointsPerMinorUnit,
@@ -94,23 +91,6 @@ type PointReservation struct {
 	CancelReason              string                                    `json:"cancel_reason,omitempty"`
 	CreatedBy                 string                                    `json:"created_by,omitempty"`
 	CreatedAt                 time.Time                                 `json:"created_at"`
-}
-
-// PointPromotion is a time-limited points multiplier event. The effective earn
-// rate is tier multiplier times promotion multiplier.
-type PointPromotion struct {
-	ID             string                                     `json:"id"`
-	Name           string                                     `json:"name"`
-	Description    string                                     `json:"description,omitempty"`
-	Multiplier     float64                                    `json:"multiplier"`
-	StartAt        time.Time                                  `json:"start_at"`
-	EndAt          time.Time                                  `json:"end_at"`
-	AppliesTo      membership_enums.MembershipPromotionTarget `json:"applies_to"`
-	TargetTierKeys []string                                   `json:"target_tier_keys,omitempty"`
-	MinOrderAmount *money.Money                               `json:"min_order_amount,omitempty"`
-	IsActive       bool                                       `json:"is_active"`
-
-	audit.AuditFields
 }
 
 // MemberCheckIn records a daily check-in for streak-based point awards.

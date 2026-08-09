@@ -1,6 +1,6 @@
 package packaging
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging/packaging_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
 
 // PackageComponentSnapshot records one physical package component in base
 // units. PackageCount counts intact packages represented by the component.

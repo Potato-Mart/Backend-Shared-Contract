@@ -3,23 +3,23 @@ package order
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion"
 )
 
-// PricedPackageComponent freezes the accepted offer, package configuration,
-// requested quantity, and commercial totals for one CASE or EACH component.
+// PricedPackageComponent freezes the accepted package pricing, requested
+// quantity, and commercial totals for one CASE or EACH component.
 type PricedPackageComponent struct {
-	AcceptedOffer         product.SellableOfferSnapshot `json:"accepted_offer"`
-	RequestedPackageCount int64                         `json:"requested_package_count"`
-	RequestedBaseUnits    int64                         `json:"requested_base_units"`
-	PackagePrice          money.Money                   `json:"package_price"`
-	TaxAmount             money.Money                   `json:"tax_amount"`
-	DiscountAmount        money.Money                   `json:"discount_amount"`
-	ComponentTotal        money.Money                   `json:"component_total"`
+	AcceptedPackagePricing promotion.PackagePricing `json:"accepted_package_pricing"`
+	RequestedPackageCount  int64                    `json:"requested_package_count"`
+	RequestedBaseUnits     int64                    `json:"requested_base_units"`
+	PackagePrice           money.Money              `json:"package_price"`
+	TaxAmount              money.Money              `json:"tax_amount"`
+	DiscountAmount         money.Money              `json:"discount_amount"`
+	ComponentTotal         money.Money              `json:"component_total"`
 }
 
 // LooseSubstitutionPolicySnapshot records whether unavailable sealed cases may
@@ -43,23 +43,23 @@ type GroupOrderContext struct {
 // GroupOrderAggregateLine records one parent-owned aggregate package demand
 // and its reservation and allocation references.
 type GroupOrderAggregateLine struct {
-	ID                   string                               `json:"id"`
-	ProductSKUCode       string                               `json:"product_sku_code"`
-	OfferID              string                               `json:"offer_id"`
-	OfferRevision        int64                                `json:"offer_revision"`
-	PackageOptionID      string                               `json:"package_option_id"`
-	RequestedComposition packaging.PackageCompositionSnapshot `json:"requested_composition"`
-	AllocatedComposition packaging.PackageCompositionSnapshot `json:"allocated_composition"`
-	ShortageComposition  packaging.PackageCompositionSnapshot `json:"shortage_composition"`
-	ReturnedComposition  packaging.PackageCompositionSnapshot `json:"returned_composition"`
-	RefundedComposition  packaging.PackageCompositionSnapshot `json:"refunded_composition"`
-	Components           []PricedPackageComponent             `json:"components"`
-	DiscountAmount       money.Money                          `json:"discount_amount"`
-	TaxAmount            money.Money                          `json:"tax_amount"`
-	Total                money.Money                          `json:"total"`
-	RefundAmount         money.Money                          `json:"refund_amount"`
-	ReservationID        string                               `json:"reservation_id"`
-	AllocationLineID     string                               `json:"allocation_line_id"`
+	ID                     string                               `json:"id"`
+	ProductSKUCode         string                               `json:"product_sku_code"`
+	PackagePricingID       string                               `json:"package_pricing_id"`
+	PackagePricingRevision int64                                `json:"package_pricing_revision"`
+	PackageOptionID        string                               `json:"package_option_id"`
+	RequestedComposition   packaging.PackageCompositionSnapshot `json:"requested_composition"`
+	AllocatedComposition   packaging.PackageCompositionSnapshot `json:"allocated_composition"`
+	ShortageComposition    packaging.PackageCompositionSnapshot `json:"shortage_composition"`
+	ReturnedComposition    packaging.PackageCompositionSnapshot `json:"returned_composition"`
+	RefundedComposition    packaging.PackageCompositionSnapshot `json:"refunded_composition"`
+	Components             []PricedPackageComponent             `json:"components"`
+	DiscountAmount         money.Money                          `json:"discount_amount"`
+	TaxAmount              money.Money                          `json:"tax_amount"`
+	Total                  money.Money                          `json:"total"`
+	RefundAmount           money.Money                          `json:"refund_amount"`
+	ReservationID          string                               `json:"reservation_id"`
+	AllocationLineID       string                               `json:"allocation_line_id"`
 }
 
 // GroupOrderParticipantShare records one participant's commercial and

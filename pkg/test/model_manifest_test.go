@@ -13,95 +13,95 @@ import (
 	"testing"
 )
 
-// v25ModelPackageManifest classifies every production package. Adding an
+// v26ModelPackageManifest classifies every production package. Adding an
 // exported type changes the digest below and requires an explicit manifest
 // review instead of silently expanding the contract surface.
-var v25ModelPackageManifest = map[string]string{
-	"contracts/common/apiresponse/apiresponse_enums":           "enum",
-	"contracts/common/audit":                                   "record,value",
-	"contracts/common/commerce/commerce_enums":                 "enum",
-	"contracts/common/device":                                  "record",
-	"contracts/common/geography":                               "record,value",
-	"contracts/common/geography/geography_enums":               "enum",
-	"contracts/common/geometry":                                "value",
-	"contracts/common/identity":                                "record",
-	"contracts/common/identity/identity_enums":                 "enum",
-	"contracts/common/localization":                            "value",
-	"contracts/common/measurement":                             "value",
-	"contracts/common/metadata":                                "value",
-	"contracts/common/money":                                   "value",
-	"contracts/common/packaging":                               "record,value",
-	"contracts/common/packaging/packaging_enums":               "enum",
-	"contracts/common/party":                                   "record,value",
-	"contracts/common/security":                                "event,record,value",
-	"contracts/common/security/security_enums":                 "enum",
-	"contracts/common/temporal":                                "value",
-	"contracts/customers/campaign":                             "entity,event,record,snapshot",
-	"contracts/customers/campaign/campaign_enums":              "enum",
-	"contracts/customers/retail":                               "entity,event,record,snapshot",
-	"contracts/customers/retail/retail_enums":                  "enum",
-	"contracts/customers/wholesale":                            "entity,record,snapshot",
-	"contracts/customers/wholesale/wholesale_enums":            "enum",
-	"contracts/identity/access":                                "claims,event,record,session",
-	"contracts/identity/access/access_enums":                   "enum",
-	"contracts/identity/account":                               "entity,event,record",
-	"contracts/identity/account/account_enums":                 "enum",
-	"contracts/identity/role":                                  "entity,event,record",
-	"contracts/identity/role/role_enums":                       "enum",
-	"contracts/insights/analytics":                             "record",
-	"contracts/insights/marketing":                             "entity,record",
-	"contracts/insights/marketing/marketing_enums":             "enum",
-	"contracts/notifications/backinstock":                      "entity,event,record",
-	"contracts/notifications/backinstock/backinstock_enums":    "enum",
-	"contracts/notifications/customer":                         "entity,event,record",
-	"contracts/notifications/customer/customer_enums":          "enum",
-	"contracts/orders/order":                                   "entity,event,snapshot,record",
-	"contracts/orders/order/order_enums":                       "enum",
-	"contracts/orders/pos":                                     "entity,record,snapshot",
-	"contracts/orders/pos/pos_enums":                           "enum",
-	"contracts/orders/shipping":                                "record,value",
-	"contracts/orders/shipping/shipping_enums":                 "enum",
-	"contracts/payments/payment":                               "entity,event,snapshot,record,value",
-	"contracts/payments/payment/payment_enums":                 "enum",
-	"contracts/payments/settlement":                            "entity,event,snapshot,record,value",
-	"contracts/payments/settlement/settlement_enums":           "enum",
-	"contracts/payments/terminal":                              "entity,event,snapshot,record,value",
-	"contracts/payments/terminal/terminal_enums":               "enum",
-	"contracts/pricing/benefit":                                "value",
-	"contracts/pricing/benefit/benefit_enums":                  "enum",
-	"contracts/pricing/membership":                             "entity,record,value",
-	"contracts/pricing/membership/membership_enums":            "enum",
-	"contracts/pricing/promotion":                              "entity,event,record,value",
-	"contracts/pricing/promotion/promotion_enums":              "enum",
-	"contracts/pricing/wallet":                                 "entity,record,snapshot,value",
-	"contracts/pricing/wallet/wallet_enums":                    "enum",
-	"contracts/pubsub/envelop":                                 "record",
-	"contracts/pubsub/event":                                   "event,record",
-	"contracts/pubsub/event/event_enums":                       "enum",
-	"contracts/supply/category":                                "value,enum",
-	"contracts/supply/favourite":                               "entity,record,value",
-	"contracts/supply/favourite/favourite_enums":               "enum",
-	"contracts/supply/importcompliance":                        "entity,record,snapshot,value",
-	"contracts/supply/importcompliance/importcompliance_enums": "enum",
-	"contracts/supply/product":                                 "entity,event,snapshot,value",
-	"contracts/supply/product/product_enums":                   "enum",
-	"contracts/supply/purchase":                                "entity,record",
-	"contracts/supply/purchase/purchase_enums":                 "enum",
-	"contracts/supply/review":                                  "entity,record,value",
-	"contracts/supply/review/review_enums":                     "enum",
-	"contracts/supply/warehouse":                               "entity,event,record,snapshot,value",
-	"contracts/supply/warehouse/warehouse_enums":               "enum",
-	"contracts/supply/wish":                                    "entity,record,value",
-	"contracts/supply/wish/wish_enums":                         "enum",
-	"versioning":                                               "module-metadata",
+var v26ModelPackageManifest = map[string]string{
+	"contracts/common/apiresponse/apiresponse_enums":             "enum",
+	"contracts/common/audit":                                     "record,value",
+	"contracts/common/commerce/commerce_enums":                   "enum",
+	"contracts/common/device":                                    "record",
+	"contracts/common/geography":                                 "record,value",
+	"contracts/common/geography/geography_enums":                 "enum",
+	"contracts/common/geometry":                                  "value",
+	"contracts/common/identity":                                  "record",
+	"contracts/common/identity/identity_enums":                   "enum",
+	"contracts/common/localization":                              "value",
+	"contracts/common/measurement":                               "value",
+	"contracts/common/metadata":                                  "value",
+	"contracts/common/money":                                     "value",
+	"contracts/common/packaging":                                 "record,value",
+	"contracts/common/packaging/packaging_enums":                 "enum",
+	"contracts/common/party":                                     "record,value",
+	"contracts/common/security":                                  "event,record,value",
+	"contracts/common/security/security_enums":                   "enum",
+	"contracts/common/temporal":                                  "value",
+	"contracts/customers/campaign":                               "entity,event,record,snapshot",
+	"contracts/customers/campaign/campaign_enums":                "enum",
+	"contracts/customers/retail":                                 "entity,event,record,snapshot",
+	"contracts/customers/retail/retail_enums":                    "enum",
+	"contracts/customers/wholesale":                              "entity,record,snapshot",
+	"contracts/customers/wholesale/wholesale_enums":              "enum",
+	"contracts/identity/access":                                  "claims,event,record,session",
+	"contracts/identity/access/access_enums":                     "enum",
+	"contracts/identity/account":                                 "entity,event,record",
+	"contracts/identity/account/account_enums":                   "enum",
+	"contracts/identity/role":                                    "entity,event,record",
+	"contracts/identity/role/role_enums":                         "enum",
+	"contracts/insights/analytics":                               "record",
+	"contracts/insights/marketing":                               "entity,record",
+	"contracts/insights/marketing/marketing_enums":               "enum",
+	"contracts/notifications/backinstock":                        "entity,event,record",
+	"contracts/notifications/backinstock/backinstock_enums":      "enum",
+	"contracts/notifications/customer":                           "entity,event,record",
+	"contracts/notifications/customer/customer_enums":            "enum",
+	"contracts/orders/order":                                     "entity,event,snapshot,record",
+	"contracts/orders/order/order_enums":                         "enum",
+	"contracts/orders/pos":                                       "entity,record,snapshot",
+	"contracts/orders/pos/pos_enums":                             "enum",
+	"contracts/orders/shipping":                                  "record,value",
+	"contracts/orders/shipping/shipping_enums":                   "enum",
+	"contracts/payments/payment":                                 "entity,event,snapshot,record,value",
+	"contracts/payments/payment/payment_enums":                   "enum",
+	"contracts/payments/settlement":                              "entity,event,snapshot,record,value",
+	"contracts/payments/settlement/settlement_enums":             "enum",
+	"contracts/payments/terminal":                                "entity,event,snapshot,record,value",
+	"contracts/payments/terminal/terminal_enums":                 "enum",
+	"contracts/pricing/benefit":                                  "value",
+	"contracts/pricing/benefit/benefit_enums":                    "enum",
+	"contracts/pricing/membership":                               "entity,record,value",
+	"contracts/pricing/membership/membership_enums":              "enum",
+	"contracts/pricing/promotion":                                "entity,event,record,value",
+	"contracts/pricing/promotion/promotion_enums":                "enum",
+	"contracts/pricing/wallet":                                   "entity,record,snapshot,value",
+	"contracts/pricing/wallet/wallet_enums":                      "enum",
+	"contracts/pubsub/envelop":                                   "record",
+	"contracts/pubsub/event":                                     "event,record",
+	"contracts/pubsub/event/event_enums":                         "enum",
+	"contracts/supply/classification":                            "entity,record,value",
+	"contracts/supply/classification/classification_enums":       "enum",
+	"contracts/supply/import_compliance":                         "entity,record,snapshot,value",
+	"contracts/supply/import_compliance/import_compliance_enums": "enum",
+	"contracts/supply/operations":                                "entity,event,record,snapshot,value",
+	"contracts/supply/product":                                   "entity,event,snapshot,value",
+	"contracts/supply/product/product_enums":                     "enum",
+	"contracts/supply/purchase":                                  "entity,record",
+	"contracts/supply/purchase/purchase_enums":                   "enum",
+	"contracts/supply/review":                                    "entity,record,value",
+	"contracts/supply/review/review_enums":                       "enum",
+	"contracts/supply/warehouse":                                 "entity,event,record,snapshot,value",
+	"contracts/supply/warehouse/warehouse_enums":                 "enum",
+	"contracts/supply/wish":                                      "entity,record,value",
+	"contracts/supply/wish/wish_enums":                           "enum",
+	"versioning":                                                 "module-metadata",
 }
 
-// Reviewed for the v25.0.0 common and enum package hard cutover. The digest
-// captures the complete exported model manifest without changing serialized
-// model fields or enum wire values.
-const v25ExportedTypeManifestDigest = "80f8f14e14bf223fa4947a198f5a3945f3c784267ae5b38a1ef2a1cbbf48cb6f"
+// Reviewed for the final v26.0.0 object-media, canonical-product, package-layout,
+// unified-promotion, and package-pricing release surface. The digest captures
+// the complete exported model manifest after the hard cutover.
+const v26ExportedTypeManifestDigest = "5b73cad5e2abdfa5ff452ae6938b61cdbc7603d6caf2eadb322d8178c182cf7f"
 
-func TestV25ExportedTypesMatchModelManifest(t *testing.T) {
+func TestV26ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)
 	var entries []string
 	pkgRoot := sharedContractPkgRoot(t)
@@ -116,9 +116,9 @@ func TestV25ExportedTypesMatchModelManifest(t *testing.T) {
 		if packagePath == "." {
 			return nil
 		}
-		class, classified := v25ModelPackageManifest[packagePath]
+		class, classified := v26ModelPackageManifest[packagePath]
 		if !classified {
-			t.Errorf("%s is not classified in the v25 model manifest", packagePath)
+			t.Errorf("%s is not classified in the v26 model manifest", packagePath)
 			return nil
 		}
 		seenPackages[packagePath] = true
@@ -143,9 +143,9 @@ func TestV25ExportedTypesMatchModelManifest(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("read v25 model manifest: %v", err)
+		t.Fatalf("read v26 model manifest: %v", err)
 	}
-	for packagePath := range v25ModelPackageManifest {
+	for packagePath := range v26ModelPackageManifest {
 		if !seenPackages[packagePath] {
 			t.Errorf("manifest package %s has no production source", packagePath)
 		}
@@ -153,7 +153,7 @@ func TestV25ExportedTypesMatchModelManifest(t *testing.T) {
 	sort.Strings(entries)
 	sum := sha256.Sum256([]byte(strings.Join(entries, "\n")))
 	got := hex.EncodeToString(sum[:])
-	if got != v25ExportedTypeManifestDigest {
+	if got != v26ExportedTypeManifestDigest {
 		t.Fatalf("exported model manifest changed: got %s; classify the change and update the reviewed digest", got)
 	}
 }

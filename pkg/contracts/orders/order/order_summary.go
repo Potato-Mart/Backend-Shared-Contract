@@ -3,13 +3,16 @@ package order
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
 )
 
 // OrderSummary is a slim, customer-facing projection of an Order for "my orders"
@@ -34,15 +37,23 @@ type OrderSummary struct {
 	TrackingURL    string                `json:"tracking_url,omitempty"`
 }
 
-// OrderLineSummary is a customer-facing package-aware order-line snapshot.
+// OrderLineSummary is a customer-facing package-aware order-line snapshot with
+// direct frozen product facts, rather than an embedded catalogue projection.
 type OrderLineSummary struct {
-	SKUCode             string                               `json:"sku_code"`
-	Name                string                               `json:"name"`
-	ImageURL            string                               `json:"image_url,omitempty"`
-	Components          []PricedPackageComponent             `json:"components"`
-	TotalBaseUnits      int64                                `json:"total_base_units"`
-	PackedComposition   packaging.PackageCompositionSnapshot `json:"packed_composition"`
-	ReturnedComposition packaging.PackageCompositionSnapshot `json:"returned_composition"`
-	RefundedComposition packaging.PackageCompositionSnapshot `json:"refunded_composition"`
-	Total               money.Money                          `json:"total"`
+	ProductSKUCode        string                               `json:"product_sku_code"`
+	ProductName           string                               `json:"product_name"`
+	ProductImage          *security.ObjectMedia                `json:"product_image,omitempty"`
+	ProductPackageOption  product.ProductPackageOption         `json:"product_package_option"`
+	CapturedAt            time.Time                            `json:"captured_at"`
+	PackageCount          int64                                `json:"package_count"`
+	TotalBaseUnits        int64                                `json:"total_base_units"`
+	PackagePrice          money.Money                          `json:"package_price"`
+	Subtotal              money.Money                          `json:"subtotal"`
+	TaxAmount             money.Money                          `json:"tax_amount"`
+	DiscountAmount        money.Money                          `json:"discount_amount"`
+	PromotionApplications []promotion.PromotionApplication     `json:"promotion_applications"`
+	PackedComposition     packaging.PackageCompositionSnapshot `json:"packed_composition"`
+	ReturnedComposition   packaging.PackageCompositionSnapshot `json:"returned_composition"`
+	RefundedComposition   packaging.PackageCompositionSnapshot `json:"refunded_composition"`
+	Total                 money.Money                          `json:"total"`
 }

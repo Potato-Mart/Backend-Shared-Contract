@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v26.0.0` | 2026-08-09 | Major | Object-media, canonical-product, Supply layout, package-pricing, and unified-promotion hard cutover. Changes the module path to `/v26`; all consumers must migrate explicitly. |
 | `v25.0.0` | 2026-08-08 | Major | Replaces the product and warehouse storage value `DRY` with `AMBIENT`, renames derived system storage-location codes, changes the module path to `/v25`, and requires all consumers to migrate explicitly. |
 | `v24.0.0` | 2026-08-07 | Major | Common-model and enum-package hard cutover: removes `common/shared`, moves common models into focused packages, puts finite enums in leaf `<domain>_enums` packages, changes the module path to `/v24`, and requires downstream consumers to migrate explicitly. JSON fields, tags, enum wire values, event versions, and runtime behavior remain unchanged. |
 | `v23.0.0` | 2026-08-07 | Major | Domain-oriented `pkg` layout hard cutover: moves contracts and enums into cohesive domain packages, centralizes routed Pub/Sub events, changes the module path to `/v23`, and requires downstream consumers to migrate explicitly. No JSON fields, tags, enum values, event versions, or runtime behavior change. |
@@ -113,6 +114,116 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v26.0.0 (2026-08-09) - Object Media, Canonical Product, And Unified Promotion
+
+### Breaking Contract Changes / 破壞性契約變更
+
+- Changes the module path from `/v25` to `/v26`. Consumers must update their
+  `go.mod` requirement and every contract import path.
+- Replaces `Media` and `MediaReference` with `ObjectMedia` and
+  `ObjectMediaReference`. `ObjectMedia` is the safe `{id, url}` projection;
+  the former full record is retained as `ObjectMediaAsset`.
+- Consolidates non-Supply image pairs into `ObjectMedia`: campaign `media`,
+  account `avatar`, organisation `logo`, order-line `product_image`, and POS
+  receipt-line `product_image`. Supply imagery remains unchanged except for
+  the canonical Product image block.
+- Replaces product media with `Images.Cover`, `Images.Gallery`, and
+  `Images.Details`, each using `ObjectMedia`. The former `DetailImage` type
+  and split media ID/URL fields are removed.
+- Establishes one canonical `supply/product.Product`, composed from reusable
+  product components. Product snapshots, storefront/POS product projections,
+  and duplicate package/barcode snapshot models are removed; cross-domain
+  links use `product_sku_code`.
+- Replaces offer, storefront-promotion, effective-promotion, merchandising
+  policy, and mechanic-specific promotion shapes with generic promotion
+  scopes, scope groups, qualifier-to-target relations, and typed terms.
+  Promotion and relation kinds are open strings; lifecycle status and
+  ALL/ANY match modes remain the only closed promotion enums.
+- Removes membership-specific `PointPromotion` and
+  `MembershipPromotionTarget`; points multipliers use the same generic
+  promotion relation and typed-term grammar.
+- Replaces sellable offers with package pricing records and ordered promotion
+  applications. Legacy `offer`, `accepted_offer`, and sellable-offer event
+  fields are removed.
+- Renames and reorganizes Supply packages: `category` becomes
+  `classification`; `importcompliance` becomes `import_compliance`, including
+  its Go package name and enum package; and operational models move under
+  `supply/operations`. Shipment moves to `orders/shipping` and wallet models
+  remain under `pricing/wallet`.
+
+### Final Package Ownership / 最終套件歸屬
+
+| Contract concern | v26 source of truth |
+| --- | --- |
+| Safe and managed object media | `common/security` (`ObjectMedia`, `ObjectMediaReference`, `ObjectMediaAsset`) |
+| Canonical product and package options | `supply/product` (`Product`, reusable components, `ProductPackageOption`) |
+| Brand, collection, category tag, supplier, favourite list | `supply/classification` |
+| Import-compliance evidence | `supply/import_compliance` with Go package `import_compliance` |
+| Packing, picking, reservations, inbound, stock movement, availability | `supply/operations` |
+| Shipment | `orders/shipping` |
+| Generic promotion grammar and package pricing | `pricing/promotion` |
+| Coupon and wallet records | `pricing/wallet` |
+
+`Product` is the only full catalogue product model. Other packages link by
+`product_sku_code`; transaction owners freeze only the product name,
+`ObjectMedia` image, canonical package option, capture time, and accepted
+commercial evidence they require.
+
+### Verification And Compatibility / 驗證與相容性
+
+- The contract gate rejects the removed media, product-projection, offer,
+  policy, legacy path, and JSON symbols. Compatibility aliases and fallback
+  JSON shapes are not retained.
+- Promotion scope and relation tests cover unrestricted and grouped ALL/ANY
+  targeting, product/collection/category-tag/package selectors, quantity
+  ranges, and same-sale-order qualifier-to-target relationships.
+- Package-pricing tests cover ordinary pricing with no promotions and ordered
+  stacked promotion applications without exposing internal inventory evidence.
+- Order and POS receipt tests require direct frozen display and monetary facts;
+  they reject embedded package-pricing inventory evidence. The accepted order
+  component remains the transaction-owned location for full `PackagePricing`.
+- The model manifest digest, model-only boundary, package dependency graph,
+  stale-path scan, enum coverage, and hard-cutover gates are reviewed against
+  the final v26 surface.
+
+### Consumer Migration Matrix / 使用方遷移對照
+
+| v25 usage | v26 replacement |
+| --- | --- |
+| `/v25` module and imports | `/v26` and `v26.0.0` |
+| `security.Media` public projection | `security.ObjectMedia`; use `ObjectMediaAsset` only for managed storage/audit records |
+| `MediaReference` | `ObjectMediaReference` |
+| campaign `media_id` + `media_url` | `media: ObjectMedia` |
+| account avatar ID/URL and organisation `logo_url` | `avatar: ObjectMedia` and `logo: ObjectMedia` |
+| product `media`/detail-image fields | `images.cover`, `images.gallery`, `images.details` |
+| `product.Snapshot`, storefront product/commercial models, POS catalogue product | canonical `product.Product`, scalar `product_sku_code`, or transaction-owned frozen facts |
+| `supply/category` | `supply/classification` |
+| `supply/importcompliance` | `supply/import_compliance` and identifier `import_compliance` |
+| import-compliance `ProductSnapshot`, `source_product`, `product_reference`, and `sku`/`sku_code` links | compliance-owned `LabelProductEvidence`, `source_product_evidence`, and `product_sku_code` |
+| warehouse operational files | `supply/operations`; shipment uses `orders/shipping` |
+| promotion coupon path | `pricing/wallet` |
+| sellable-offer and accepted-offer records | `promotion.PackagePricing` and `accepted_package_pricing` |
+| flat/effective/storefront/receipt promotion projections | `Promotion`, `PromotionRelation`, `PromotionTerm`, and frozen `PromotionApplication` |
+| `SellableOfferAvailabilityChangedEvent` and its wire values | `PackagePricingAvailabilityChangedEvent`, `inventory.package_pricing_available`, and `inventory.package_pricing_withdrawn` |
+
+### Consumer Action / 使用方動作
+
+- Upgrade each consumer to
+  `github.com/Potato-Mart/Backend-Shared-Contract/v26 v26.0.0` and replace all
+  `/v25` imports.
+- Replace media ID/URL pairs with `ObjectMedia`; use the canonical Product or
+  a scalar `product_sku_code` link instead of removed product projections.
+- Migrate offer and promotion-specific payloads to package pricing and the
+  generic promotion scope/relation/term models. Persisted event, order, and
+  price evidence must be migrated before enabling v26 consumers.
+- Rename import-compliance imports and selectors to `import_compliance`, then
+  migrate all moved Supply, shipping, and wallet package paths. No old package
+  path or identifier alias is supplied.
+- Update provider persistence, OpenAPI, generated clients, backend mapping,
+  frontend campaign/avatar/logo/product rendering, and stored event payloads
+  in coordinated consumer releases. Those service and frontend changes are
+  intentionally outside this contract-only release.
 
 ## v25.0.0 (2026-08-08) - Ambient Storage Cutover
 

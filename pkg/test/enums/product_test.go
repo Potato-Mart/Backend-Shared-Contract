@@ -3,8 +3,8 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product/product_enums"
 )
 
 func TestProductEnumsValidateKnownValues(t *testing.T) {
@@ -13,15 +13,7 @@ func TestProductEnumsValidateKnownValues(t *testing.T) {
 		{name: "securityenum.MediaStatus", valid: []stringEnum{security_enums.MediaStatusPending, security_enums.MediaStatusActive, security_enums.MediaStatusDeleted}, invalid: security_enums.MediaStatus("__invalid__")},
 		{name: "productenum.PriceAudience", valid: []stringEnum{product_enums.PriceAudienceRetail, product_enums.PriceAudienceWholesale}, invalid: product_enums.PriceAudience("__invalid__")},
 		{name: "productenum.PriceVisibility", valid: []stringEnum{product_enums.PriceVisibilityPublic, product_enums.PriceVisibilityLoginRequired, product_enums.PriceVisibilityWholesaleApprovedOnly, product_enums.PriceVisibilityHidden}, invalid: product_enums.PriceVisibility("__invalid__")},
-		{name: "productenum.WholesalePriceMode", valid: []stringEnum{product_enums.WholesalePriceModeFixed, product_enums.WholesalePriceModeOnRequest}, invalid: product_enums.WholesalePriceMode("__invalid__")},
-		{name: "productenum.StorefrontPreorderStatus", valid: []stringEnum{product_enums.StorefrontPreorderStatusUnavailable, product_enums.StorefrontPreorderStatusUpcoming, product_enums.StorefrontPreorderStatusOpen, product_enums.StorefrontPreorderStatusClosed, product_enums.StorefrontPreorderStatusSoldOut}, invalid: product_enums.StorefrontPreorderStatus("__invalid__")},
 		{name: "productenum.StorefrontStockState", valid: []stringEnum{product_enums.StorefrontStockStateUnknown, product_enums.StorefrontStockStateInStock, product_enums.StorefrontStockStateOutOfStock}, invalid: product_enums.StorefrontStockState("__invalid__")},
 		{name: "productenum.ProductStatus", valid: []stringEnum{product_enums.ProductStatusDraft, product_enums.ProductStatusActive, product_enums.ProductStatusArchived, product_enums.ProductStatusDiscontinued}, invalid: product_enums.ProductStatus("__invalid__")},
 	})
-	if got := product_enums.WholesalePriceModeFixed.String(); got != "fixed" {
-		t.Fatalf("fixed wholesale price mode wire value = %q", got)
-	}
-	if got := product_enums.WholesalePriceModeOnRequest.String(); got != "on_request" {
-		t.Fatalf("on-request wholesale price mode wire value = %q", got)
-	}
 }

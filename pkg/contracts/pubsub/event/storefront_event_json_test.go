@@ -6,12 +6,13 @@ import (
 	"testing"
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/customers/campaign"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/customers/campaign/campaign_enums"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pubsub/event"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pubsub/event/event_enums"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography/geography_enums"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/customers/campaign"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/customers/campaign/campaign_enums"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pubsub/event"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pubsub/event/event_enums"
 )
 
 func TestCustomerSafeStorefrontEventsJSON(t *testing.T) {
@@ -63,7 +64,7 @@ func TestCampaignLinkRevisionCTAAndMediaJSON(t *testing.T) {
 		CTA: &campaign.CTADestination{
 			Type: campaign_enums.CampaignCTADestinationProduct, ProductSKUCode: "SKU-1",
 		},
-		MediaID: "media_1", MediaURL: "/v1/storefront/campaigns/campaign_1/media",
+		Media:            &security.ObjectMedia{ID: "media_1", URL: "/v1/storefront/campaigns/campaign_1/media"},
 		Placement:        campaign_enums.CampaignPlacementHomeHero,
 		Severity:         campaign_enums.CampaignSeverityInfo,
 		Status:           campaign_enums.CampaignStatusActive,
@@ -75,12 +76,17 @@ func TestCampaignLinkRevisionCTAAndMediaJSON(t *testing.T) {
 	if err != nil {
 		t.Fatalf("marshal campaign: %v", err)
 	}
-	for _, field := range []string{`"promotion_id":"promotion_1"`, `"cta_href":"potatomart://product/SKU-1"`, `"cta":{"type":"product","product_sku_code":"SKU-1"}`, `"media_id":"media_1"`, `"schedule_timezone":"Etc/UTC"`, `"geographic_scope":{"mode":"GLOBAL"}`, `"revision":5`, `"activation_revision":2`} {
+	for _, field := range []string{`"promotion_id":"promotion_1"`, `"cta_href":"potatomart://product/SKU-1"`, `"cta":{"type":"product","product_sku_code":"SKU-1"}`, `"media":{"id":"media_1","url":"/v1/storefront/campaigns/campaign_1/media"}`, `"schedule_timezone":"Etc/UTC"`, `"geographic_scope":{"mode":"GLOBAL"}`, `"revision":5`, `"activation_revision":2`} {
 		if !strings.Contains(string(payload), field) {
 			t.Fatalf("campaign missing %s: %s", field, payload)
 		}
 	}
 	if strings.Contains(string(payload), `"region"`) {
 		t.Fatalf("campaign retained removed audience region: %s", payload)
+	}
+	for _, legacy := range []string{`"media_id"`, `"media_url"`} {
+		if strings.Contains(string(payload), legacy) {
+			t.Fatalf("campaign retained legacy %s: %s", legacy, payload)
+		}
 	}
 }

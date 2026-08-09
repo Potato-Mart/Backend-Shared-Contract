@@ -3,11 +3,12 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 func TestWalletEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
+		{name: "walletenum.CouponSource", valid: []stringEnum{wallet_enums.CouponSourceManual, wallet_enums.CouponSourceRFMComeback, wallet_enums.CouponSourceBirthday, wallet_enums.CouponSourceReferral, wallet_enums.CouponSourceSignupBonus, wallet_enums.CouponSourceCampaign}, invalid: wallet_enums.CouponSource("__invalid__")},
 		{name: "walletenum.WalletPassPlatform", valid: []stringEnum{wallet_enums.WalletPassPlatformGoogle, wallet_enums.WalletPassPlatformApple}, invalid: wallet_enums.WalletPassPlatform("__invalid__")},
 		{name: "walletenum.WalletPassBarcodeFormat", valid: []stringEnum{wallet_enums.WalletPassBarcodeFormatCode128}, invalid: wallet_enums.WalletPassBarcodeFormat("__invalid__")},
 		{name: "walletenum.WalletInstrumentType", valid: []stringEnum{wallet_enums.WalletInstrumentTypePoints, wallet_enums.WalletInstrumentTypeGiftCard, wallet_enums.WalletInstrumentTypeVoucher, wallet_enums.WalletInstrumentTypeCoupon, wallet_enums.WalletInstrumentTypeReward}, invalid: wallet_enums.WalletInstrumentType("__invalid__")},
