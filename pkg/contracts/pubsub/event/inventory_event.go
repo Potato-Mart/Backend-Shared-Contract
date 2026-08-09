@@ -145,8 +145,8 @@ type InventoryDateMarkThresholdEvent struct {
 	OccurredAt     time.Time                                  `json:"occurred_at"`
 }
 
-type SellableOfferAvailabilityChangedEvent struct {
-	OfferID                  string    `json:"offer_id"`
+type PackagePricingAvailabilityChangedEvent struct {
+	PackagePricingID         string    `json:"package_pricing_id"`
 	ProductSKUCode           string    `json:"product_sku_code"`
 	DepotCode                string    `json:"depot_code"`
 	SourceBucketID           string    `json:"source_bucket_id,omitempty"`
@@ -154,6 +154,6 @@ type SellableOfferAvailabilityChangedEvent struct {
 	AvailableBeforeBaseUnits int64     `json:"available_before_base_units"`
 	AvailableAfterBaseUnits  int64     `json:"available_after_base_units"`
 	InventoryRevision        int64     `json:"inventory_revision"`
-	OfferRevision            int64     `json:"offer_revision"`
+	PackagePricingRevision   int64     `json:"package_pricing_revision"`
 	OccurredAt               time.Time `json:"occurred_at"`
 }

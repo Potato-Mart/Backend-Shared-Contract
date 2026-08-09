@@ -11,7 +11,6 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/benefit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/wallet/wallet_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/classification"
 )
 
 // Coupon is a code-based discount that customers enter at checkout.
@@ -20,18 +19,12 @@ type Coupon struct {
 	ID          string `json:"id"`
 	Code        string `json:"code"`
 	Description string `json:"description,omitempty"`
-	promotion.DiscountSpec
 
-	MinOrderAmount    *money.Money `json:"min_order_amount,omitempty"`
-	MaxDiscountAmount *money.Money `json:"max_discount_amount,omitempty"`
-	promotion.UsageLimits
-	promotion.ActiveWindow
-	GeographicScope geography.GeographicScope `json:"geographic_scope"`
-
-	AppliesTo       wallet_enums.CouponAppliesTo `json:"applies_to"`
-	ProductSKUCodes []string                     `json:"product_sku_codes,omitempty"`
-	CategoryTags    []classification.CategoryTag `json:"category_tags,omitempty"`
-	History         []security.HistoryEntry      `json:"history,omitempty"`
+	Scope    promotion.PromotionScope    `json:"scope"`
+	Period   promotion.PromotionPeriod   `json:"period"`
+	Terms    []promotion.PromotionTerm   `json:"terms,omitempty"`
+	Controls promotion.PromotionControls `json:"controls"`
+	History  []security.HistoryEntry     `json:"history,omitempty"`
 
 	audit.AuditFields
 }

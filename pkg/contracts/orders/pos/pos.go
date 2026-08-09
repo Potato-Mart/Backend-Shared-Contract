@@ -11,8 +11,10 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/pos/pos_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/payment/payment_enums"
 )
@@ -73,18 +75,37 @@ type ShiftTotalsSnapshot struct {
 	GeneratedAt       time.Time     `json:"generated_at"`
 }
 
+// ReceiptLine is the customer-safe, immutable product and monetary evidence
+// recorded for one receipt line. It never exposes the inventory evidence in
+// accepted package pricing.
+type ReceiptLine struct {
+	ProductSKUCode        string                           `json:"product_sku_code"`
+	ProductName           string                           `json:"product_name"`
+	ProductImage          *security.ObjectMedia            `json:"product_image,omitempty"`
+	ProductPackageOption  product.ProductPackageOption     `json:"product_package_option"`
+	CapturedAt            time.Time                        `json:"captured_at"`
+	PackageCount          int64                            `json:"package_count"`
+	TotalBaseUnits        int64                            `json:"total_base_units"`
+	PackagePrice          money.Money                      `json:"package_price"`
+	Subtotal              money.Money                      `json:"subtotal"`
+	TaxAmount             money.Money                      `json:"tax_amount"`
+	DiscountAmount        money.Money                      `json:"discount_amount"`
+	Total                 money.Money                      `json:"total"`
+	PromotionApplications []promotion.PromotionApplication `json:"promotion_applications"`
+}
+
 // ReceiptSnapshot is the immutable customer receipt captured at sale
 // completion. Lines and payment rows are frozen copies — later edits to the
 // order or its payments never mutate an issued receipt.
 type ReceiptSnapshot struct {
-	OrderNumber string                            `json:"order_number"`
-	Revision    int64                             `json:"revision"`
-	IssuedAt    time.Time                         `json:"issued_at"`
-	Attribution sales.POSAttribution              `json:"attribution"`
-	Lines       []sales.OrderItem                 `json:"lines"`
-	Subtotal    money.Money                       `json:"subtotal"`
-	Tax         money.Money                       `json:"tax"`
-	Total       money.Money                       `json:"total"`
-	PaymentRows []sales.CustomerPaymentAllocation `json:"payment_rows,omitempty"`
-	Offers      []promotion.ReceiptOffer          `json:"offers,omitempty"`
+	OrderNumber           string                            `json:"order_number"`
+	Revision              int64                             `json:"revision"`
+	IssuedAt              time.Time                         `json:"issued_at"`
+	Attribution           sales.POSAttribution              `json:"attribution"`
+	Lines                 []ReceiptLine                     `json:"lines"`
+	Subtotal              money.Money                       `json:"subtotal"`
+	Tax                   money.Money                       `json:"tax"`
+	Total                 money.Money                       `json:"total"`
+	PaymentRows           []sales.CustomerPaymentAllocation `json:"payment_rows,omitempty"`
+	PromotionApplications []promotion.PromotionApplication  `json:"promotion_applications"`
 }

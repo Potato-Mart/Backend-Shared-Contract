@@ -1,25 +1,6 @@
 package wallet_enums
 
-// CouponAppliesTo restricts which products or category tags a coupon covers.
-type CouponAppliesTo string
-
-const (
-	CouponAppliesToAll                  CouponAppliesTo = "all"
-	CouponAppliesToSpecificProducts     CouponAppliesTo = "specific_products"
-	CouponAppliesToSpecificCategoryTags CouponAppliesTo = "specific_category_tags"
-)
-
-func (c CouponAppliesTo) IsValid() bool {
-	switch c {
-	case CouponAppliesToAll, CouponAppliesToSpecificProducts, CouponAppliesToSpecificCategoryTags:
-		return true
-	}
-	return false
-}
-
-func (c CouponAppliesTo) String() string { return string(c) }
-
-// CouponSource records how a customer_coupon assignment was created.
+// CouponSource records how a CouponAssignment was created.
 type CouponSource string
 
 const (
@@ -31,6 +12,7 @@ const (
 	CouponSourceCampaign    CouponSource = "CAMPAIGN"
 )
 
+// IsValid reports whether c is a known CouponSource.
 func (c CouponSource) IsValid() bool {
 	switch c {
 	case CouponSourceManual, CouponSourceRFMComeback, CouponSourceBirthday,
@@ -40,4 +22,5 @@ func (c CouponSource) IsValid() bool {
 	return false
 }
 
+// String returns the wire value for c.
 func (c CouponSource) String() string { return string(c) }

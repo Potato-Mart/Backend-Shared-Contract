@@ -14,6 +14,7 @@ import (
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order/order_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
 )
 
@@ -39,10 +40,15 @@ func TestOrderSummaryJSONShape(t *testing.T) {
 					HandlingUnit: packaging_enums.PackageHandlingUnitEach, UnitsPerPackage: 1,
 					IsCanonical: true, IsActive: true, EffectiveFrom: now,
 				},
-				CapturedAt:     now,
-				Components:     []sales.PricedPackageComponent{{RequestedPackageCount: 2, RequestedBaseUnits: 2, PackagePrice: money.Money{AmountMinor: 2100, Currency: "AUD"}}},
-				TotalBaseUnits: 2,
-				Total:          money.Money{AmountMinor: 4200, Currency: "AUD"},
+				CapturedAt:            now,
+				PackageCount:          2,
+				TotalBaseUnits:        2,
+				PackagePrice:          money.Money{AmountMinor: 2100, Currency: "AUD"},
+				Subtotal:              money.Money{AmountMinor: 4200, Currency: "AUD"},
+				TaxAmount:             money.Money{AmountMinor: 382, Currency: "AUD"},
+				DiscountAmount:        money.Money{AmountMinor: 100, Currency: "AUD"},
+				PromotionApplications: []promotion.PromotionApplication{},
+				Total:                 money.Money{AmountMinor: 4482, Currency: "AUD"},
 			},
 		},
 	}
@@ -72,16 +78,18 @@ func TestOrderSummaryJSONShape(t *testing.T) {
 	if len(decoded.Items) != 1 || decoded.Items[0].ProductSKUCode != "A0001" || decoded.Items[0].ProductName != "Potato 1kg" ||
 		decoded.Items[0].ProductImage == nil || decoded.Items[0].ProductImage.ID != "media_1" || decoded.Items[0].ProductImage.URL != "https://cdn.example.test/products/A0001.png" ||
 		decoded.Items[0].ProductPackageOption.ID != "pkg_each" || !decoded.Items[0].CapturedAt.Equal(now) ||
-		len(decoded.Items[0].Components) != 1 || decoded.Items[0].Components[0].PackagePrice.AmountMinor != 2100 {
+		decoded.Items[0].PackageCount != 2 || decoded.Items[0].PackagePrice.AmountMinor != 2100 ||
+		decoded.Items[0].Subtotal.AmountMinor != 4200 || decoded.Items[0].TaxAmount.AmountMinor != 382 ||
+		decoded.Items[0].DiscountAmount.AmountMinor != 100 || len(decoded.Items[0].PromotionApplications) != 0 {
 		t.Fatalf("order summary did not round-trip: %+v", decoded)
 	}
 	line := got["items"].([]any)[0].(map[string]any)
-	for _, key := range []string{"product_sku_code", "product_package_option", "captured_at"} {
+	for _, key := range []string{"product_sku_code", "product_package_option", "captured_at", "package_count", "package_price", "subtotal", "tax_amount", "discount_amount", "promotion_applications"} {
 		if _, exists := line[key]; !exists {
 			t.Fatalf("order line missing %s: %s", key, payload)
 		}
 	}
-	for _, removed := range []string{"sku_code", "name", "image", "image_url"} {
+	for _, removed := range []string{"sku_code", "name", "image", "image_url", "components", "accepted_package_pricing", "offer"} {
 		if _, exists := line[removed]; exists {
 			t.Fatalf("order line retained %s: %s", removed, payload)
 		}

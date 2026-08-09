@@ -11,6 +11,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/classification"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product/product_enums"
 )
@@ -107,23 +108,33 @@ func TestProductCommerceOmitsEmptySelling(t *testing.T) {
 
 func TestProductPackageCommerceIsSafeProjection(t *testing.T) {
 	asOf := time.Date(2026, 8, 9, 0, 0, 0, 0, time.UTC)
+	promotionApplications := []promotion.PromotionApplication{
+		{PromotionID: "prm_first", PromotionKind: "discount", PromotionRevision: 1, RelationID: "rel_first", AppliedAt: asOf},
+		{PromotionID: "prm_second", PromotionKind: "bundle", PromotionRevision: 2, RelationID: "rel_second", AppliedAt: asOf},
+	}
 	body, err := json.Marshal(Product{
 		SKUCode: "A0001",
 		Commerce: ProductCommerce{Packages: []ProductPackageCommerce{{
-			PackageOptionID: "pkg_each",
-			PackagePrice:    money.Money{AmountMinor: 1200, Currency: "AUD"},
-			TaxAmount:       money.Money{AmountMinor: 109, Currency: "AUD"},
-			StockState:      product_enums.StorefrontStockStateInStock,
-			AsOf:            asOf,
+			PackageOptionID:       "pkg_each",
+			PackagePrice:          money.Money{AmountMinor: 1200, Currency: "AUD"},
+			TaxAmount:             money.Money{AmountMinor: 109, Currency: "AUD"},
+			StockState:            product_enums.StorefrontStockStateInStock,
+			PromotionApplications: promotionApplications,
+			AsOf:                  asOf,
 		}}},
 	})
 	if err != nil {
 		t.Fatalf("marshal product package commerce: %v", err)
 	}
-	for _, want := range []string{`"packages":[{`, `"package_option_id":"pkg_each"`, `"stock_state":"in_stock"`, `"as_of":"2026-08-09T00:00:00Z"`} {
+	for _, want := range []string{`"packages":[{`, `"package_option_id":"pkg_each"`, `"stock_state":"in_stock"`, `"promotion_applications":[{`, `"promotion_id":"prm_first"`, `"promotion_id":"prm_second"`, `"as_of":"2026-08-09T00:00:00Z"`} {
 		if !strings.Contains(string(body), want) {
 			t.Fatalf("Product package commerce JSON = %s, want %s", body, want)
 		}
+	}
+	firstIndex := strings.Index(string(body), `"promotion_id":"prm_first"`)
+	secondIndex := strings.Index(string(body), `"promotion_id":"prm_second"`)
+	if firstIndex < 0 || secondIndex < firstIndex {
+		t.Fatalf("promotion applications must preserve stacking order: %s", body)
 	}
 	for _, forbidden := range []string{`"depot_code"`, `"location_id"`, `"source_bucket_id"`, `"source_stock_unit_id"`, `"available_base_units"`, `"available_package_count"`, `"audit"`} {
 		if strings.Contains(string(body), forbidden) {

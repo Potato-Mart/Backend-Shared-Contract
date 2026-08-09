@@ -18,7 +18,6 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/payment/payment_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/benefit/benefit_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/membership/membership_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion/promotion_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pubsub/event/event_enums"
 )
 
@@ -54,7 +53,6 @@ func TestV25FormerlyUncoveredEnumValues(t *testing.T) {
 		{name: "membership.QualifyingSpendReason", valid: []stringEnum{membership_enums.QualifyingSpendReasonOrderPaid, membership_enums.QualifyingSpendReasonRefund}, invalid: membership_enums.QualifyingSpendReason("__invalid__")},
 		{name: "membership.TierProgressReason", valid: []stringEnum{membership_enums.TierProgressReasonNoActiveTiers, membership_enums.TierProgressReasonManualQualification, membership_enums.TierProgressReasonUnsupportedMetric, membership_enums.TierProgressReasonCurrencyMismatch, membership_enums.TierProgressReasonMembershipNotAssigned}, invalid: membership_enums.TierProgressReason("__invalid__")},
 		{name: "membership.TierBenefitKind", valid: []stringEnum{membership_enums.TierBenefitKindQualifyingSpend, membership_enums.TierBenefitKindPointsMultiplier, membership_enums.TierBenefitKindDiscountPercent, membership_enums.TierBenefitKindFreeShippingThreshold, membership_enums.TierBenefitKindBirthdayBonusPoints}, invalid: membership_enums.TierBenefitKind("__invalid__")},
-		{name: "promotion.GroupOrderDiscountState", valid: []stringEnum{promotion_enums.GroupOrderDiscountStatePending, promotion_enums.GroupOrderDiscountStateApproved, promotion_enums.GroupOrderDiscountStateRejected}, invalid: promotion_enums.GroupOrderDiscountState("__invalid__")},
 		{name: "event.EventTopic", valid: []stringEnum{event_enums.EventTopicOrderEvents, event_enums.EventTopicPaymentEvents, event_enums.EventTopicRefundEvents, event_enums.EventTopicStockEvents, event_enums.EventTopicFulfilmentEvents, event_enums.EventTopicCustomerEvents, event_enums.EventTopicProductStats, event_enums.EventTopicStorefrontEvents}, invalid: event_enums.EventTopic("__invalid__")},
 		{name: "security.MediaVisibility", valid: []stringEnum{security_enums.MediaVisibilityPublic, security_enums.MediaVisibilityPrivate}, invalid: security_enums.MediaVisibility("__invalid__")},
 		{name: "packaging.PackageHandlingUnit", valid: []stringEnum{packaging_enums.PackageHandlingUnitEach, packaging_enums.PackageHandlingUnitCase}, invalid: packaging_enums.PackageHandlingUnit("__invalid__")},

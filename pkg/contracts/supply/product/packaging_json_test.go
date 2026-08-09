@@ -6,10 +6,7 @@ import (
 	"testing"
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography/geography_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product/product_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
@@ -85,31 +82,5 @@ func TestBarcodeValueMayBeAssignedAcrossProducts(t *testing.T) {
 	}
 	if strings.Count(string(body), `"value":"930000000001"`) != 2 {
 		t.Fatalf("shared barcode assignments were not represented independently: %s", body)
-	}
-}
-
-func TestSellableOfferSnapshotTemporarilyUsesCanonicalPackageOption(t *testing.T) {
-	now := time.Date(2026, 8, 4, 5, 6, 7, 0, time.UTC)
-	offer := SellableOfferSnapshot{
-		ID: "offer_1", ProductSKUCode: "A00001", DepotCode: "AU-VIC-MEL-DC-01", SourceBucketID: "bucket_1",
-		PackageOption:         ProductPackageOption{ID: "pkg_case_6", Code: "CASE-6", ProductSKUCode: "A00001", HandlingUnit: packaging_enums.PackageHandlingUnitCase, UnitsPerPackage: 6, IsActive: true, EffectiveFrom: now},
-		AvailablePackageCount: 3, AvailableBaseUnits: 18,
-		Condition: warehouse_enums.InventoryConditionGood, Disposition: warehouse_enums.InventoryDispositionStandardSellable,
-		DateMark: &SellableOfferDateMarkSnapshot{Kind: warehouse_enums.InventoryDateMarkBestBefore, DateMarkAt: now.Add(30 * 24 * time.Hour), Timezone: "Australia/Melbourne"},
-		Revision: 7, InventoryRevision: 13,
-		PackagePrice: money.Money{AmountMinor: 1200, Currency: "AUD"}, TaxAmount: money.Money{AmountMinor: 109, Currency: "AUD"},
-		Discounts: []SellableOfferDiscountSnapshot{{ID: "promo_1", Amount: money.Money{AmountMinor: 200, Currency: "AUD"}}},
-		ValidFrom: now, Timezone: "Etc/UTC", CapturedAt: now,
-		GeographicContext: geography.GeographicContext{Source: geography_enums.GeographicContextSourceRetailCustomerProfile, CountryCode: "AU", SubdivisionCode: "AU-VIC", DepotCode: "AU-VIC-MEL-DC-01", ScopeRevision: 2, RuleRevision: 7, EvaluationTimezone: "Australia/Melbourne"},
-	}
-
-	body, err := json.Marshal(offer)
-	if err != nil {
-		t.Fatalf("marshal sellable offer snapshot: %v", err)
-	}
-	for _, want := range []string{`"package_option":{"id":"pkg_case_6"`, `"available_base_units":18`, `"inventory_revision":13`, `"captured_at":"2026-08-04T05:06:07Z"`} {
-		if !strings.Contains(string(body), want) {
-			t.Fatalf("sellable offer snapshot JSON missing %s: %s", want, body)
-		}
 	}
 }

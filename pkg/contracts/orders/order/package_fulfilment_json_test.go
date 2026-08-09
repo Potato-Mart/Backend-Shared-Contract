@@ -2,22 +2,21 @@ package order_test
 
 import (
 	"encoding/json"
-
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
-
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
-
 	"strings"
 	"testing"
 	"time"
 
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography/geography_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
@@ -25,14 +24,18 @@ func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {
 	now := time.Date(2026, 8, 4, 4, 5, 6, 0, time.UTC)
 	caseOption := packageOption("pkg_case_12", "CASE-12", packaging_enums.PackageHandlingUnitCase, 12, now)
 	eachOption := packageOption("pkg_each", "EACH", packaging_enums.PackageHandlingUnitEach, 1, now)
-	caseOffer := offerSnapshot("offer_case", caseOption, money.Money{AmountMinor: 1800, Currency: "AUD"}, now)
-	eachOffer := offerSnapshot("offer_each", eachOption, money.Money{AmountMinor: 175, Currency: "AUD"}, now)
+	casePricing := packagePricing("pricing_case", caseOption, money.Money{AmountMinor: 1800, Currency: "AUD"}, now)
+	eachPricing := packagePricing("pricing_each", eachOption, money.Money{AmountMinor: 175, Currency: "AUD"}, now)
 
 	item := sales.OrderItem{
-		ID: "item_1",
+		ID:                   "item_1",
+		ProductSKUCode:       "A00001",
+		ProductName:          "Potatoes",
+		ProductPackageOption: caseOption,
+		CapturedAt:           now,
 		Components: []sales.PricedPackageComponent{
-			{AcceptedOffer: caseOffer, RequestedPackageCount: 2, RequestedBaseUnits: 24, PackagePrice: caseOffer.PackagePrice, ComponentTotal: money.Money{AmountMinor: 3600, Currency: "AUD"}},
-			{AcceptedOffer: eachOffer, RequestedPackageCount: 3, RequestedBaseUnits: 3, PackagePrice: eachOffer.PackagePrice, ComponentTotal: money.Money{AmountMinor: 525, Currency: "AUD"}},
+			{AcceptedPackagePricing: casePricing, RequestedPackageCount: 2, RequestedBaseUnits: 24, PackagePrice: casePricing.PackagePrice, ComponentTotal: money.Money{AmountMinor: 3600, Currency: "AUD"}},
+			{AcceptedPackagePricing: eachPricing, RequestedPackageCount: 3, RequestedBaseUnits: 3, PackagePrice: eachPricing.PackagePrice, ComponentTotal: money.Money{AmountMinor: 525, Currency: "AUD"}},
 		},
 		TotalBaseUnits:     27,
 		SubstitutionPolicy: sales.LooseSubstitutionPolicySnapshot{Allowed: true, Source: order_enums.LooseSubstitutionPolicySourceBuyerSelected, CapturedAt: now},
@@ -49,12 +52,12 @@ func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {
 	if err != nil {
 		t.Fatalf("marshal mixed package order item: %v", err)
 	}
-	for _, want := range []string{`"handling_unit":"CASE"`, `"handling_unit":"EACH"`, `"requested_package_count":2`, `"requested_package_count":3`, `"total_base_units":27`, `"allowed":true`, `"source":"BUYER_SELECTED"`, `"requested_case_count":1`, `"replacement_base_units":12`} {
+	for _, want := range []string{`"accepted_package_pricing":{"id":"pricing_case"`, `"handling_unit":"CASE"`, `"handling_unit":"EACH"`, `"requested_package_count":2`, `"requested_package_count":3`, `"total_base_units":27`, `"allowed":true`, `"source":"BUYER_SELECTED"`, `"requested_case_count":1`, `"replacement_base_units":12`} {
 		if !strings.Contains(string(body), want) {
 			t.Fatalf("mixed package JSON missing %s: %s", want, body)
 		}
 	}
-	for _, removed := range []string{`"quantity":`, `"unit_price":`, `"carton_qty":`, `"carton_size":`} {
+	for _, removed := range []string{`"quantity":`, `"unit_price":`, `"carton_qty":`, `"carton_size":`, `"accepted_offer"`, `"offer_id"`} {
 		if strings.Contains(string(body), removed) {
 			t.Fatalf("mixed package JSON contains removed scalar field %s: %s", removed, body)
 		}
@@ -67,21 +70,21 @@ func TestGroupOrderFulfilmentJSONUsesOneParentAllocation(t *testing.T) {
 	participantComposition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 12, Components: []packaging.PackageComponentSnapshot{{PackageOptionID: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 1, UnitsPerPackage: 12, BaseUnits: 12}}}
 	zeroComposition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}}
 	caseOption := packageOption("pkg_case_12", "CASE-12", packaging_enums.PackageHandlingUnitCase, 12, now)
-	caseOffer := offerSnapshot("offer_case", caseOption, money.Money{AmountMinor: 1800, Currency: "AUD"}, now)
+	casePricing := packagePricing("pricing_case", caseOption, money.Money{AmountMinor: 1800, Currency: "AUD"}, now)
 	aggregateComponent := sales.PricedPackageComponent{
-		AcceptedOffer: caseOffer, RequestedPackageCount: 2, RequestedBaseUnits: 24,
+		AcceptedPackagePricing: casePricing, RequestedPackageCount: 2, RequestedBaseUnits: 24,
 		PackagePrice: money.Money{AmountMinor: 1800, Currency: "AUD"}, TaxAmount: money.Money{AmountMinor: 300, Currency: "AUD"},
 		DiscountAmount: money.Money{AmountMinor: 200, Currency: "AUD"}, ComponentTotal: money.Money{AmountMinor: 3700, Currency: "AUD"},
 	}
 	participantComponent := sales.PricedPackageComponent{
-		AcceptedOffer: caseOffer, RequestedPackageCount: 1, RequestedBaseUnits: 12,
+		AcceptedPackagePricing: casePricing, RequestedPackageCount: 1, RequestedBaseUnits: 12,
 		PackagePrice: money.Money{AmountMinor: 1800, Currency: "AUD"}, TaxAmount: money.Money{AmountMinor: 150, Currency: "AUD"},
 		DiscountAmount: money.Money{AmountMinor: 100, Currency: "AUD"}, ComponentTotal: money.Money{AmountMinor: 1850, Currency: "AUD"},
 	}
 	plan := sales.GroupOrderFulfilmentPlan{
 		ID: "group_fulfilment_1", GroupOrderCode: "GROUP-1", ParentOrderNumber: "PARENT-1", ParentFulfilmentID: "fulfilment_1",
 		AggregateLines: []sales.GroupOrderAggregateLine{{
-			ID: "aggregate_1", ProductSKUCode: "A00001", OfferID: "offer_case", OfferRevision: 3, PackageOptionID: "pkg_case_12",
+			ID: "aggregate_1", ProductSKUCode: "A00001", PackagePricingID: "pricing_case", PackagePricingRevision: 3, PackageOptionID: "pkg_case_12",
 			RequestedComposition: composition, AllocatedComposition: composition, ShortageComposition: zeroComposition,
 			ReturnedComposition: participantComposition, RefundedComposition: participantComposition,
 			Components: []sales.PricedPackageComponent{aggregateComponent}, DiscountAmount: money.Money{AmountMinor: 200, Currency: "AUD"},
@@ -106,7 +109,7 @@ func TestGroupOrderFulfilmentJSONUsesOneParentAllocation(t *testing.T) {
 	if strings.Count(string(body), `"parent_allocation_line_id":"allocation_parent_1"`) != 2 {
 		t.Fatalf("participant shares must reference the parent allocation: %s", body)
 	}
-	for _, want := range []string{`"role":"CONSOLIDATED_PARENT"`, `"aggregate_lines"`, `"participant_shares"`, `"captured_at":"2026-08-04T06:07:08Z"`} {
+	for _, want := range []string{`"package_pricing_id":"pricing_case"`, `"package_pricing_revision":3`, `"aggregate_lines"`, `"participant_shares"`, `"captured_at":"2026-08-04T06:07:08Z"`} {
 		if !strings.Contains(string(body), want) {
 			t.Fatalf("group fulfilment JSON missing %s: %s", want, body)
 		}
@@ -121,7 +124,7 @@ func TestGroupOrderFulfilmentJSONUsesOneParentAllocation(t *testing.T) {
 		t.Fatalf("unmarshal group order fulfilment plan: %v", err)
 	}
 	aggregateShape := planShape["aggregate_lines"].([]any)[0].(map[string]any)
-	for _, key := range []string{"components", "returned_composition", "refunded_composition", "discount_amount", "tax_amount", "total", "refund_amount"} {
+	for _, key := range []string{"package_pricing_id", "package_pricing_revision", "components", "returned_composition", "refunded_composition", "discount_amount", "tax_amount", "total", "refund_amount"} {
 		if _, ok := aggregateShape[key]; !ok {
 			t.Fatalf("group aggregate JSON missing %q: %+v", key, aggregateShape)
 		}
@@ -146,13 +149,17 @@ func packageOption(id string, code string, handling packaging_enums.PackageHandl
 	return product.ProductPackageOption{ID: id, Code: code, ProductSKUCode: "A00001", HandlingUnit: handling, UnitsPerPackage: units, IsActive: true, EffectiveFrom: capturedAt}
 }
 
-func offerSnapshot(id string, option product.ProductPackageOption, price money.Money, capturedAt time.Time) product.SellableOfferSnapshot {
-	return product.SellableOfferSnapshot{
-		ID: id, ProductSKUCode: "A00001", DepotCode: "AU-VIC-MEL-DC-01", PackageOption: option,
+func packagePricing(id string, option product.ProductPackageOption, price money.Money, capturedAt time.Time) promotion.PackagePricing {
+	return promotion.PackagePricing{
+		ID: id, Revision: 3, InventoryRevision: 9,
+		ProductSKUCode: "A00001", PackageOptionID: option.ID,
+		PackagePrice: price, TaxAmount: money.Money{Currency: "AUD"},
+		ValidFrom: capturedAt, Timezone: "Etc/UTC",
+		GeographicContext:     geography.GeographicContext{Source: geography_enums.GeographicContextSourceRetailCustomerProfile, CountryCode: "AU", ScopeRevision: 1, RuleRevision: 3, EvaluationTimezone: "Australia/Melbourne"},
+		StockLocation:         warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01-03"},
 		AvailablePackageCount: 10, AvailableBaseUnits: 120,
 		Condition: warehouse_enums.InventoryConditionGood, Disposition: warehouse_enums.InventoryDispositionStandardSellable,
-		Revision: 3, InventoryRevision: 9, PackagePrice: price, TaxAmount: money.Money{Currency: "AUD"},
-		ValidFrom: capturedAt, Timezone: "Etc/UTC", CapturedAt: capturedAt,
-		GeographicContext: geography.GeographicContext{Source: geography_enums.GeographicContextSourceRetailCustomerProfile, CountryCode: "AU", ScopeRevision: 1, RuleRevision: 3, EvaluationTimezone: "Australia/Melbourne"},
+		PromotionApplications: []promotion.PromotionApplication{},
+		CapturedAt:            capturedAt,
 	}
 }

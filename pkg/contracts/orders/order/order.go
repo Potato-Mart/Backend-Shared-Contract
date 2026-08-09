@@ -22,7 +22,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/shipping/shipping_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/payment/payment_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/membership/membership_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion"
 )
 
 // Buyer describes who is buying, independently of Channel. POS is a
@@ -79,20 +79,20 @@ type Order struct {
 	SurchargeAmount money.Money `json:"surcharge_amount,omitempty"`
 	Total           money.Money `json:"total"`
 
-	CouponCode           string                           `json:"coupon_code,omitempty"`
-	AppliedPromotions    []AppliedPromotion               `json:"applied_promotions,omitempty"`
-	PointRedemption      *PointRedemptionSnapshot         `json:"point_redemption,omitempty"`
-	RewardRedemptions    []RewardRedemptionSnapshot       `json:"reward_redemptions,omitempty"`
-	VoucherRedemption    *VoucherRedemptionSnapshot       `json:"voucher_redemption,omitempty"`
-	GiftCardRedemptions  []GiftCardRedemptionSnapshot     `json:"gift_card_redemptions,omitempty"`
-	TrackingNumber       string                           `json:"tracking_number,omitempty"`
-	TrackingURL          string                           `json:"tracking_url,omitempty"`
-	Packing              *OrderPackingProgress            `json:"packing,omitempty"`
-	PackingRevision      int64                            `json:"packing_revision,omitempty"`
-	FulfillmentReadiness order_enums.FulfillmentReadiness `json:"fulfillment_readiness"`
-	CustomerNote         string                           `json:"customer_note,omitempty"`
-	InternalNote         string                           `json:"internal_note,omitempty"`
-	Tags                 []string                         `json:"tags,omitempty"`
+	CouponCode            string                           `json:"coupon_code,omitempty"`
+	PromotionApplications []promotion.PromotionApplication `json:"promotion_applications"`
+	PointRedemption       *PointRedemptionSnapshot         `json:"point_redemption,omitempty"`
+	RewardRedemptions     []RewardRedemptionSnapshot       `json:"reward_redemptions,omitempty"`
+	VoucherRedemption     *VoucherRedemptionSnapshot       `json:"voucher_redemption,omitempty"`
+	GiftCardRedemptions   []GiftCardRedemptionSnapshot     `json:"gift_card_redemptions,omitempty"`
+	TrackingNumber        string                           `json:"tracking_number,omitempty"`
+	TrackingURL           string                           `json:"tracking_url,omitempty"`
+	Packing               *OrderPackingProgress            `json:"packing,omitempty"`
+	PackingRevision       int64                            `json:"packing_revision,omitempty"`
+	FulfillmentReadiness  order_enums.FulfillmentReadiness `json:"fulfillment_readiness"`
+	CustomerNote          string                           `json:"customer_note,omitempty"`
+	InternalNote          string                           `json:"internal_note,omitempty"`
+	Tags                  []string                         `json:"tags,omitempty"`
 
 	// ── Lifecycle timestamps ──────────────────────────────────────────
 	ConfirmedAt      *time.Time `json:"confirmed_at,omitempty"`
@@ -147,15 +147,6 @@ type OrderItem struct {
 	DiscountAmount       money.Money                              `json:"discount_amount"`
 	Total                money.Money                              `json:"total"`
 	Preorder             *PreorderItemState                       `json:"preorder,omitempty"`
-}
-
-type AppliedPromotion struct {
-	ID                string                       `json:"id,omitempty"`
-	Name              string                       `json:"name,omitempty"`
-	DiscountType      promotion_enums.DiscountType `json:"discount_type,omitempty"`
-	DiscountValue     string                       `json:"discount_value,omitempty"`
-	DiscountAmount    *money.Money                 `json:"discount_amount,omitempty"`
-	GeographicContext geography.GeographicContext  `json:"geographic_context"`
 }
 
 // PointRedemptionSnapshot records a points discount applied to an order without

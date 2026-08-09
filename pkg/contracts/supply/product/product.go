@@ -10,6 +10,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/classification"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product/product_enums"
@@ -79,13 +80,15 @@ type ProductCommerce struct {
 }
 
 // ProductPackageCommerce is a safe commercial projection of one package
-// option. Promotion applications are added in the later pricing phase.
+// option. PromotionApplications preserve the ordered customer-safe outcomes
+// applied to this package without disclosing operational inventory evidence.
 type ProductPackageCommerce struct {
-	PackageOptionID string                             `json:"package_option_id"`
-	PackagePrice    money.Money                        `json:"package_price"`
-	TaxAmount       money.Money                        `json:"tax_amount"`
-	StockState      product_enums.StorefrontStockState `json:"stock_state,omitempty"`
-	AsOf            time.Time                          `json:"as_of"`
+	PackageOptionID       string                             `json:"package_option_id"`
+	PackagePrice          money.Money                        `json:"package_price"`
+	TaxAmount             money.Money                        `json:"tax_amount"`
+	StockState            product_enums.StorefrontStockState `json:"stock_state,omitempty"`
+	PromotionApplications []promotion.PromotionApplication   `json:"promotion_applications,omitempty"`
+	AsOf                  time.Time                          `json:"as_of"`
 }
 
 // ProductMetrics contains backend-computed and curated selling measurements.

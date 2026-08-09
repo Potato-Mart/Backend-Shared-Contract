@@ -8,6 +8,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
 	event "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pubsub/event"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/classification"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
@@ -19,12 +20,12 @@ func TestReservationAndStagingJSONShapes(t *testing.T) {
 
 	reservationShape := marshalObject(t, operations.StockReservation{
 		ID: "reservation_1", ProductSKUCode: "A00001", DepotCode: "AU-VIC-MEL-DC-01",
-		OfferID: "offer_1", OfferRevision: 9,
+		PackagePricingID: "pricing_1", PackagePricingRevision: 9,
 		RequestedComposition: caseComposition, ReservedComposition: caseComposition,
 		Status:   warehouse_enums.StockReservationStatusReserved,
 		Revision: 1, Timezone: "Australia/Melbourne",
 	})
-	if reservationShape["status"] != "RESERVED" || reservationShape["offer_revision"] != float64(9) {
+	if reservationShape["status"] != "RESERVED" || reservationShape["package_pricing_revision"] != float64(9) {
 		t.Fatalf("reservation identity did not marshal: %+v", reservationShape)
 	}
 
@@ -39,6 +40,32 @@ func TestReservationAndStagingJSONShapes(t *testing.T) {
 	for _, key := range []string{"source_location", "destination_location", "staged_composition", "movement_id"} {
 		if _, ok := stagingShape[key]; !ok {
 			t.Fatalf("staging JSON missing %q: %+v", key, stagingShape)
+		}
+	}
+}
+
+func TestInventoryCategoryTagEvidenceJSONIsLocationQualified(t *testing.T) {
+	now := time.Date(2026, 8, 9, 7, 8, 9, 0, time.UTC)
+	evidence := operations.InventoryCategoryTagEvidence{
+		ProductSKUCode:  "A00001",
+		PackageOptionID: "pkg_each",
+		CategoryTag:     classification.CategoryTagRef{ID: "tag_soon_expiry", Slug: "soon-expiry"},
+		StockLocation:   warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01-03"},
+		Condition:       warehouse_enums.InventoryConditionGood,
+		Disposition:     warehouse_enums.InventoryDispositionReducedSellable,
+		DateMark:        &warehouse.InventoryDateMark{Kind: warehouse_enums.InventoryDateMarkBestBefore, DateMarkAt: now.Add(48 * time.Hour), Timezone: "Australia/Melbourne"},
+		AsOf:            now,
+	}
+
+	shape := marshalObject(t, evidence)
+	for _, key := range []string{"product_sku_code", "package_option_id", "category_tag", "stock_location", "condition", "disposition", "date_mark", "as_of"} {
+		if _, ok := shape[key]; !ok {
+			t.Fatalf("inventory category-tag evidence missing %q: %+v", key, shape)
+		}
+	}
+	for _, forbidden := range []string{"promotion", "promotion_kind", "offer"} {
+		if _, ok := shape[forbidden]; ok {
+			t.Fatalf("inventory category-tag evidence must remain operational: %+v", shape)
 		}
 	}
 }

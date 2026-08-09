@@ -12,19 +12,19 @@ import (
 
 // StockReservation is a logical hold for one product at one depot.
 type StockReservation struct {
-	ID                   string                                 `json:"id"`
-	ProductSKUCode       string                                 `json:"product_sku_code"`
-	DepotCode            string                                 `json:"depot_code"`
-	OrderNumber          string                                 `json:"order_number,omitempty"`
-	GroupOrderCode       string                                 `json:"group_order_code,omitempty"`
-	OfferID              string                                 `json:"offer_id"`
-	OfferRevision        int64                                  `json:"offer_revision"`
-	RequestedComposition packaging.PackageCompositionSnapshot   `json:"requested_composition"`
-	ReservedComposition  packaging.PackageCompositionSnapshot   `json:"reserved_composition"`
-	Status               warehouse_enums.StockReservationStatus `json:"status"`
-	Revision             int64                                  `json:"revision"`
-	Timezone             string                                 `json:"timezone"`
-	ExpiresAt            *time.Time                             `json:"expires_at,omitempty"`
+	ID                     string                                 `json:"id"`
+	ProductSKUCode         string                                 `json:"product_sku_code"`
+	DepotCode              string                                 `json:"depot_code"`
+	OrderNumber            string                                 `json:"order_number,omitempty"`
+	GroupOrderCode         string                                 `json:"group_order_code,omitempty"`
+	PackagePricingID       string                                 `json:"package_pricing_id"`
+	PackagePricingRevision int64                                  `json:"package_pricing_revision"`
+	RequestedComposition   packaging.PackageCompositionSnapshot   `json:"requested_composition"`
+	ReservedComposition    packaging.PackageCompositionSnapshot   `json:"reserved_composition"`
+	Status                 warehouse_enums.StockReservationStatus `json:"status"`
+	Revision               int64                                  `json:"revision"`
+	Timezone               string                                 `json:"timezone"`
+	ExpiresAt              *time.Time                             `json:"expires_at,omitempty"`
 
 	audit.AuditFields
 }
