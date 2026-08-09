@@ -67,12 +67,11 @@ type ArtifactReference struct {
 	GeneratedAt    time.Time                            `json:"generated_at"`
 }
 
-// ProductSnapshot captures the product identity and display fields used by an
-// import-compliance record at the time it was authored.
-type ProductSnapshot struct {
-	ID                   string                       `json:"id,omitempty"`
-	SKUCode              string                       `json:"sku_code"`
-	SKU                  string                       `json:"sku,omitempty"`
+// LabelProductEvidence freezes only the product facts used to author and
+// substantiate a compliance label. It is compliance-owned evidence, not a
+// second catalogue product model.
+type LabelProductEvidence struct {
+	ProductSKUCode       string                       `json:"product_sku_code"`
 	Barcode              string                       `json:"barcode,omitempty"`
 	EnglishName          string                       `json:"english_name,omitempty"`
 	ChineseName          string                       `json:"chinese_name,omitempty"`

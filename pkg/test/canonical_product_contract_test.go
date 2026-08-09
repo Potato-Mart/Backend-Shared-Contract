@@ -262,9 +262,7 @@ func TestV26OnlyProductPackageEmbedsFullProduct(t *testing.T) {
 
 func TestV26CrossDomainProductSKUCodeLinksAreScalars(t *testing.T) {
 	canonicalProductWalkProductionGoFiles(t, func(path string, relativePath string, fset *token.FileSet, file *ast.File) {
-		if filepath.ToSlash(filepath.Dir(relativePath)) == "contracts/supply/product" {
-			return
-		}
+		directory := filepath.ToSlash(filepath.Dir(relativePath))
 		for _, declaration := range file.Decls {
 			general, ok := declaration.(*ast.GenDecl)
 			if !ok || general.Tok != token.TYPE {
@@ -281,7 +279,17 @@ func TestV26CrossDomainProductSKUCodeLinksAreScalars(t *testing.T) {
 				}
 				for _, field := range structure.Fields.List {
 					for _, name := range field.Names {
+						if name.Name == "SKUCode" {
+							if directory != "contracts/supply/product" || typeSpecification.Name.Name != "Product" {
+								t.Errorf("%s uses legacy SKUCode on %s; cross-domain links must use ProductSKUCode", fset.Position(field.Pos()), typeSpecification.Name.Name)
+							}
+							continue
+						}
 						if name.Name != "ProductSKUCode" {
+							jsonKey, present := v26JSONFieldName(t, path, field)
+							if present && jsonKey == "sku_code" {
+								t.Errorf("%s uses legacy cross-domain JSON key sku_code on %s", fset.Position(field.Pos()), typeSpecification.Name.Name)
+							}
 							continue
 						}
 						identifier, stringScalar := field.Type.(*ast.Ident)

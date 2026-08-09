@@ -140,6 +140,9 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
   scopes, scope groups, qualifier-to-target relations, and typed terms.
   Promotion and relation kinds are open strings; lifecycle status and
   ALL/ANY match modes remain the only closed promotion enums.
+- Removes membership-specific `PointPromotion` and
+  `MembershipPromotionTarget`; points multipliers use the same generic
+  promotion relation and typed-term grammar.
 - Replaces sellable offers with package pricing records and ordered promotion
   applications. Legacy `offer`, `accepted_offer`, and sellable-offer event
   fields are removed.
@@ -197,6 +200,7 @@ commercial evidence they require.
 | `product.Snapshot`, storefront product/commercial models, POS catalogue product | canonical `product.Product`, scalar `product_sku_code`, or transaction-owned frozen facts |
 | `supply/category` | `supply/classification` |
 | `supply/importcompliance` | `supply/import_compliance` and identifier `import_compliance` |
+| import-compliance `ProductSnapshot`, `source_product`, `product_reference`, and `sku`/`sku_code` links | compliance-owned `LabelProductEvidence`, `source_product_evidence`, and `product_sku_code` |
 | warehouse operational files | `supply/operations`; shipment uses `orders/shipping` |
 | promotion coupon path | `pricing/wallet` |
 | sellable-offer and accepted-offer records | `promotion.PackagePricing` and `accepted_package_pricing` |

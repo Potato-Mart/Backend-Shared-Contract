@@ -95,27 +95,6 @@ func (s PointAwardStatus) IsValid() bool {
 
 func (s PointAwardStatus) String() string { return string(s) }
 
-// MembershipPromotionTarget restricts which membership segment a points
-// multiplier applies to.
-type MembershipPromotionTarget string
-
-const (
-	MembershipPromotionTargetAll          MembershipPromotionTarget = "ALL"
-	MembershipPromotionTargetRetail       MembershipPromotionTarget = "RETAIL"
-	MembershipPromotionTargetTierSpecific MembershipPromotionTarget = "TIER_SPECIFIC"
-)
-
-func (m MembershipPromotionTarget) IsValid() bool {
-	switch m {
-	case MembershipPromotionTargetAll, MembershipPromotionTargetRetail,
-		MembershipPromotionTargetTierSpecific:
-		return true
-	}
-	return false
-}
-
-func (m MembershipPromotionTarget) String() string { return string(m) }
-
 // PointReservationStatus describes a points reservation before it becomes a
 // committed ledger spend.
 type PointReservationStatus string

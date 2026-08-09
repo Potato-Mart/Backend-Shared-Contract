@@ -169,24 +169,26 @@ func TestV26ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	removedTypes := v26StringSet(
 		// The v26 canonical-product cut-over removes all endpoint-specific
 		// product projections and product-owned snapshot duplicates.
-		"contracts/orders/pos.CatalogProduct",
-		"contracts/supply/product.DetailImage",
-		"contracts/supply/product.ProductBarcodeAssignmentSnapshot",
-		"contracts/supply/product.ProductPackageOptionSnapshot",
-		"contracts/supply/product.PreorderPolicy",
-		"contracts/supply/product.Snapshot",
-		"contracts/supply/product.SoonExpiryMerchandisingPolicy",
-		"contracts/supply/product.StorefrontCommercial",
-		"contracts/supply/product.StorefrontDisplay",
-		"contracts/supply/product.StorefrontExpiryDisplay",
-		"contracts/supply/product.StorefrontMerchandising",
-		"contracts/supply/product.StorefrontOrigin",
-		"contracts/supply/product.StorefrontPreorderDisplay",
-		"contracts/supply/product.StorefrontProduct",
-		"contracts/supply/product.StorefrontPromotionBadge",
-		"contracts/supply/product/product_enums.StorefrontExpiryStatus",
-		"contracts/supply/product/product_enums.StorefrontPreorderStatus",
-		"contracts/supply/product/product_enums.WholesalePriceMode",
+		"orders/pos.CatalogProduct",
+		"orders/order.VolumeDiscountTier",
+		"supply/product.DetailImage",
+		"supply/product.ProductBarcodeAssignmentSnapshot",
+		"supply/product.ProductPackageOptionSnapshot",
+		"supply/product.PreorderPolicy",
+		"supply/product.Snapshot",
+		"supply/product.SoonExpiryMerchandisingPolicy",
+		"supply/product.StorefrontCommercial",
+		"supply/product.StorefrontDisplay",
+		"supply/product.StorefrontExpiryDisplay",
+		"supply/product.StorefrontMerchandising",
+		"supply/product.StorefrontOrigin",
+		"supply/product.StorefrontPreorderDisplay",
+		"supply/product.StorefrontProduct",
+		"supply/product.StorefrontPromotionBadge",
+		"supply/product/product_enums.StorefrontExpiryStatus",
+		"supply/product/product_enums.StorefrontPreorderStatus",
+		"supply/product/product_enums.WholesalePriceMode",
+		"supply/import_compliance.ProductSnapshot",
 
 		"notifications/backinstock.BackInStockRestockEvent",
 		"common/packaging.Physical",
@@ -248,6 +250,21 @@ func TestV26ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"supply/product.StorefrontMerchandising": v26StringSet(),
 		"supply/product.StorefrontProduct": v26StringSet(
 			"SKU", "Barcode", "Storage", "CurrentStock", "Pricing", "ExpiryDate", "DisplayStatus",
+		),
+		"supply/import_compliance.LabelMaster": v26StringSet(
+			"SourceProduct", "SKUCode", "SKU",
+		),
+		"supply/import_compliance.DeclarationLine": v26StringSet(
+			"ProductReference",
+		),
+		"supply/import_compliance.TariffLineSnapshot": v26StringSet(
+			"SKU",
+		),
+		"supply/import_compliance.TariffProfile": v26StringSet(
+			"SKUCode",
+		),
+		"supply/import_compliance.TrademarkEvidence": v26StringSet(
+			"SKUCode",
 		),
 		"supply/purchase.OrderItem": v26StringSet(
 			"OrderedQty", "ReceivedQty", "RejectedQty", "LocationCode", "ExpireAt",
@@ -402,6 +419,21 @@ func TestV26ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"supply/product.StorefrontProduct": v26StringSet(
 			"sku", "barcode", "storage", "current_stock", "pricing", "expiry_date", "display_status",
 		),
+		"supply/import_compliance.LabelMaster": v26StringSet(
+			"source_product", "sku_code", "sku",
+		),
+		"supply/import_compliance.DeclarationLine": v26StringSet(
+			"product_reference",
+		),
+		"supply/import_compliance.TariffLineSnapshot": v26StringSet(
+			"sku",
+		),
+		"supply/import_compliance.TariffProfile": v26StringSet(
+			"sku_code",
+		),
+		"supply/import_compliance.TrademarkEvidence": v26StringSet(
+			"sku_code",
+		),
 		"supply/purchase.OrderItem": v26StringSet(
 			"ordered_qty", "received_qty", "rejected_qty", "location_code", "expire_at",
 		),
@@ -482,6 +514,7 @@ func TestV26ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	}
 
 	pkgRoot := sharedContractPkgRoot(t)
+	seenTypes := make(map[string]struct{})
 	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
 			return walkErr
@@ -524,6 +557,7 @@ func TestV26ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 				}
 
 				typeKey := v26ProductionTypeKey(pkgRoot, path, typeSpecification.Name.Name)
+				seenTypes[typeKey] = struct{}{}
 				if _, removed := removedTypes[typeKey]; removed {
 					t.Errorf("%s declares removed v26 type %s", path, typeKey)
 				}
@@ -557,9 +591,25 @@ func TestV26ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	for mapName, typeMap := range map[string]map[string]map[string]struct{}{
+		"removedFields":         removedFields,
+		"removedJSONKeysByType": removedJSONKeysByType,
+	} {
+		for typeKey := range typeMap {
+			if _, exists := seenTypes[typeKey]; exists {
+				continue
+			}
+			if _, explicitlyRemoved := removedTypes[typeKey]; explicitlyRemoved {
+				continue
+			}
+			t.Errorf("%s contains unresolved type key %q", mapName, typeKey)
+		}
+	}
 }
 
 func TestV26GoSourcesContainNoOlderContractImports(t *testing.T) {
+	const contractImportRoot = "github.com/Potato-Mart/Backend-Shared-Contract/"
+	const currentContractImportPrefix = contractImportRoot + "v26/"
 	pkgRoot := sharedContractPkgRoot(t)
 	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
@@ -578,10 +628,8 @@ func TestV26GoSourcesContainNoOlderContractImports(t *testing.T) {
 			if unquoteErr != nil {
 				return unquoteErr
 			}
-			for _, oldMajor := range []string{"/v19/", "/v20/", "/v21/", "/v22/", "/v23/", "/v24/", "/v25/"} {
-				if strings.Contains(importPath, "Backend-Shared-Contract"+oldMajor) {
-					t.Errorf("%s imports older shared-contract major %s", path, importPath)
-				}
+			if strings.HasPrefix(importPath, contractImportRoot) && !strings.HasPrefix(importPath, currentContractImportPrefix) {
+				t.Errorf("%s imports non-v26 shared-contract path %s", path, importPath)
 			}
 		}
 		return nil
@@ -599,6 +647,7 @@ func TestV26ProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(
 		"AppliedPromotion",
 		"AppliedPromotions",
 		"CatalogProduct",
+		"CouponAppliesTo",
 		"DetailImage",
 		"DiscountScope",
 		"DiscountSpec",
@@ -618,6 +667,9 @@ func TestV26ProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(
 		"PreorderPolicy",
 		"ProductBarcodeAssignmentSnapshot",
 		"ProductPackageOptionSnapshot",
+		"ProductSnapshot",
+		"PointPromotion",
+		"MembershipPromotionTarget",
 		"PromotionAddonTrigger",
 		"PromotionClass",
 		"PromotionDiscountTarget",
@@ -648,42 +700,46 @@ func TestV26ProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(
 		legacyImportComplianceEnums,
 	)
 	retiredTypes := v26StringSet(
-		"contracts/common/security.Media",
-		"contracts/common/security.MediaReference",
-		"contracts/orders/pos.CatalogProduct",
-		"contracts/orders/order.VolumeDiscountTier",
-		"contracts/pricing/promotion.ActiveWindow",
-		"contracts/pricing/promotion.DiscountSpec",
-		"contracts/pricing/promotion.EffectivePromotion",
-		"contracts/pricing/promotion.GroupOrderDiscountApplication",
-		"contracts/pricing/promotion.GroupOrderDiscountDecision",
-		"contracts/pricing/promotion.GroupOrderDiscountDecisionLine",
-		"contracts/pricing/promotion.GroupOrderDiscountProposal",
-		"contracts/pricing/promotion.ReceiptOffer",
-		"contracts/pricing/promotion.StorefrontPromotion",
-		"contracts/pricing/promotion.UsageLimits",
-		"contracts/pricing/promotion/promotion_enums.DiscountScope",
-		"contracts/pricing/promotion/promotion_enums.DiscountType",
-		"contracts/pricing/promotion/promotion_enums.GroupOrderDiscountState",
-		"contracts/pricing/promotion/promotion_enums.PromotionAddonTrigger",
-		"contracts/pricing/promotion/promotion_enums.PromotionClass",
-		"contracts/pricing/promotion/promotion_enums.PromotionDiscountTarget",
-		"contracts/pricing/promotion/promotion_enums.PromotionQtyMode",
-		"contracts/pricing/promotion/promotion_enums.PromotionType",
-		"contracts/pricing/promotion/promotion_enums.VolumeDiscountAppliesTo",
-		"contracts/pubsub/event.SellableOfferAvailabilityChangedEvent",
-		"contracts/supply/product.DetailImage",
-		"contracts/supply/product.PreorderPolicy",
-		"contracts/supply/product.SellableOffer",
-		"contracts/supply/product.SellableOfferDateMarkSnapshot",
-		"contracts/supply/product.SellableOfferDiscountSnapshot",
-		"contracts/supply/product.SellableOfferSnapshot",
-		"contracts/supply/product.Snapshot",
-		"contracts/supply/product.SoonExpiryMerchandisingPolicy",
-		"contracts/supply/product.StorefrontCommercial",
-		"contracts/supply/product.StorefrontDisplay",
-		"contracts/supply/product.StorefrontMerchandising",
-		"contracts/supply/product.StorefrontProduct",
+		"common/security.Media",
+		"common/security.MediaReference",
+		"orders/pos.CatalogProduct",
+		"orders/order.VolumeDiscountTier",
+		"pricing/promotion.ActiveWindow",
+		"pricing/promotion.DiscountSpec",
+		"pricing/promotion.EffectivePromotion",
+		"pricing/promotion.GroupOrderDiscountApplication",
+		"pricing/promotion.GroupOrderDiscountDecision",
+		"pricing/promotion.GroupOrderDiscountDecisionLine",
+		"pricing/promotion.GroupOrderDiscountProposal",
+		"pricing/promotion.ReceiptOffer",
+		"pricing/promotion.StorefrontPromotion",
+		"pricing/promotion.UsageLimits",
+		"pricing/promotion/promotion_enums.DiscountScope",
+		"pricing/promotion/promotion_enums.CouponAppliesTo",
+		"pricing/promotion/promotion_enums.DiscountType",
+		"pricing/promotion/promotion_enums.GroupOrderDiscountState",
+		"pricing/promotion/promotion_enums.PromotionAddonTrigger",
+		"pricing/promotion/promotion_enums.PromotionClass",
+		"pricing/promotion/promotion_enums.PromotionDiscountTarget",
+		"pricing/promotion/promotion_enums.PromotionQtyMode",
+		"pricing/promotion/promotion_enums.PromotionType",
+		"pricing/promotion/promotion_enums.VolumeDiscountAppliesTo",
+		"pricing/membership.PointPromotion",
+		"pricing/membership/membership_enums.MembershipPromotionTarget",
+		"pubsub/event.SellableOfferAvailabilityChangedEvent",
+		"supply/product.DetailImage",
+		"supply/product.PreorderPolicy",
+		"supply/product.SellableOffer",
+		"supply/product.SellableOfferDateMarkSnapshot",
+		"supply/product.SellableOfferDiscountSnapshot",
+		"supply/product.SellableOfferSnapshot",
+		"supply/product.Snapshot",
+		"supply/product.SoonExpiryMerchandisingPolicy",
+		"supply/product.StorefrontCommercial",
+		"supply/product.StorefrontDisplay",
+		"supply/product.StorefrontMerchandising",
+		"supply/product.StorefrontProduct",
+		"supply/import_compliance.ProductSnapshot",
 	)
 	retiredWireFragments := []string{
 		"accepted_offer",
@@ -808,6 +864,7 @@ func v26StringSet(values ...string) map[string]struct{} {
 func v26ProductionTypeKey(pkgRoot string, path string, typeName string) string {
 	relativePath, _ := filepath.Rel(pkgRoot, path)
 	directory := filepath.ToSlash(filepath.Dir(relativePath))
+	directory = strings.TrimPrefix(directory, "contracts/")
 	if directory == "." || directory == "" {
 		return typeName
 	}

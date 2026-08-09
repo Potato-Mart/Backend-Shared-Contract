@@ -31,7 +31,7 @@ type TariffClassification struct {
 type TariffLineSnapshot struct {
 	ID                  string `json:"id"`
 	PurchaseOrderLineID string `json:"purchase_order_line_id,omitempty"`
-	SKU                 string `json:"sku,omitempty"`
+	ProductSKUCode      string `json:"product_sku_code,omitempty"`
 	Barcode             string `json:"barcode,omitempty"`
 	ProductName         string `json:"product_name,omitempty"`
 	AlternateNames      string `json:"alternate_names,omitempty"`
@@ -70,7 +70,7 @@ type TariffAssessment struct {
 type TariffProfile struct {
 	ID                   string                               `json:"id"`
 	Revision             RevisionMetadata                     `json:"revision"`
-	SKUCode              string                               `json:"sku_code"`
+	ProductSKUCode       string                               `json:"product_sku_code"`
 	Jurisdiction         import_compliance_enums.Jurisdiction `json:"jurisdiction"`
 	Classification       TariffClassification                 `json:"classification"`
 	EffectiveFrom        temporal.Date                        `json:"effective_from,omitempty"`
@@ -86,7 +86,7 @@ type TariffProfile struct {
 type TrademarkEvidence struct {
 	ID                 string                               `json:"id"`
 	Revision           RevisionMetadata                     `json:"revision"`
-	SKUCode            string                               `json:"sku_code,omitempty"`
+	ProductSKUCode     string                               `json:"product_sku_code,omitempty"`
 	Jurisdiction       import_compliance_enums.Jurisdiction `json:"jurisdiction"`
 	Mark               string                               `json:"mark"`
 	Status             string                               `json:"status,omitempty"`

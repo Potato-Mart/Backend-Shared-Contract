@@ -8,14 +8,13 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/import_compliance/import_compliance_enums"
 )
 
-// LabelMaster is one SKU/variant label revision. It remains independent of the
-// product catalogue and captures the product snapshot used to prefill it.
+// LabelMaster is one product/package label revision. It remains independent of
+// the product catalogue and retains only its compliance-owned source evidence.
 type LabelMaster struct {
 	ID                     string                 `json:"id"`
 	Revision               RevisionMetadata       `json:"revision"`
-	SourceProduct          ProductSnapshot        `json:"source_product"`
-	SKUCode                string                 `json:"sku_code"`
-	SKU                    string                 `json:"sku,omitempty"`
+	SourceProductEvidence  LabelProductEvidence   `json:"source_product_evidence"`
+	ProductSKUCode         string                 `json:"product_sku_code"`
 	VariantCode            string                 `json:"variant_code"`
 	Brand                  string                 `json:"brand,omitempty"`
 	EnglishName            string                 `json:"english_name"`

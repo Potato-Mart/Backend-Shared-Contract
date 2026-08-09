@@ -85,7 +85,7 @@ func TestDeclarationAndLabelRoundTripManagedMediaAndMeasurements(t *testing.T) {
 		Manufacturer: import_compliance.ManufacturerDetails{Name: "Maker", Address: &geography.Address{Label: "Manufacturer", Line1: "1 Zhongxiao Road", Locality: "Taipei", PostalCode: "100", Country: geography.CountryRef{Code: "TW", Name: "Taiwan"}, FormattedAddress: "1 Zhongxiao Road, Taipei 100, Taiwan", PlaceID: "place-2"}, Phone: "+886"},
 		Signatory:    import_compliance.DeclarationSignatory{Name: "Signer", Title: "Director", SignatureMediaID: "media_signature"},
 		Lines: []import_compliance.DeclarationLine{{
-			ID: "line_1", SourceLineID: "po_line_1", ProductReference: "SKU-1", EnglishName: "Product", ChineseName: "產品",
+			ID: "line_1", SourceLineID: "po_line_1", ProductSKUCode: "SKU-1", EnglishName: "Product", ChineseName: "產品",
 			OrderedQuantity: 10, CartonCount: 2, SingleNetWeightGrams: 500, TotalNetWeightGrams: 5000,
 			TotalGrossWeightGrams: 5500, ExpiryDate: temporal.Date("2027-01-01"), Ingredients: "Milk",
 			ManufacturingProcess: "Cooked", Note: "Keep dry",
@@ -106,8 +106,8 @@ func TestDeclarationAndLabelRoundTripManagedMediaAndMeasurements(t *testing.T) {
 
 	label := import_compliance.LabelMaster{
 		ID: "label_1", Revision: import_compliance.RevisionMetadata{Number: 1, State: import_compliance_enums.ReviewStateDraft},
-		SourceProduct: import_compliance.ProductSnapshot{SKUCode: "SKU-1", CapturedAt: now},
-		SKUCode:       "SKU-1", SKU: "retail-sku", VariantCode: "au-65x45", Brand: "Brand", EnglishName: "Product", ChineseName: "產品",
+		SourceProductEvidence: import_compliance.LabelProductEvidence{ProductSKUCode: "SKU-1", CapturedAt: now},
+		ProductSKUCode:        "SKU-1", VariantCode: "au-65x45", Brand: "Brand", EnglishName: "Product", ChineseName: "產品",
 		Barcode: "930000000001", NetWeightGrams: 500, PackageDimensions: measurement.Dimensions{WidthMM: 65, LengthMM: 45, HeightMM: 10},
 		Ingredients: "Milk", Allergens: "Milk", ManufacturingProcess: "Cooked", BestBefore: "Shown on package (YYYY/MM/DD)", ShelfLife: "12 months",
 		Importer: import_compliance.LabelImporter{Name: "Potato Mart", Address: &geography.Address{Label: "Importer", Line1: "1 Market Street", Locality: "Sydney", AdministrativeArea: &geography.AdministrativeAreaRef{Code: "AU-NSW"}, PostalCode: "2000", Country: geography.CountryRef{Code: "AU", Name: "Australia"}, FormattedAddress: "1 Market Street, Sydney NSW 2000, Australia", PlaceID: "place-1"}, Phone: "+61"}, CountryOfOrigin: "Taiwan",
@@ -128,8 +128,14 @@ func TestDeclarationAndLabelRoundTripManagedMediaAndMeasurements(t *testing.T) {
 		t.Fatalf("unmarshal label: %v", err)
 	}
 	if decoded.VariantCode != "au-65x45" || decoded.NetWeightGrams != 500 || decoded.PackageDimensions.WidthMM != 65 ||
+		decoded.ProductSKUCode != "SKU-1" || decoded.SourceProductEvidence.ProductSKUCode != "SKU-1" ||
 		decoded.PackagePhotoMediaID != "media_package" || len(decoded.NutritionPanels) != 2 || !decoded.Layout.IncludeBarcode {
 		t.Fatalf("label fields did not round-trip: %+v", decoded)
+	}
+	for _, removed := range []string{`"source_product":`, `"sku_code":`, `"sku":`} {
+		if strings.Contains(string(labelPayload), removed) {
+			t.Fatalf("label retained legacy product link %s: %s", removed, labelPayload)
+		}
 	}
 }
 

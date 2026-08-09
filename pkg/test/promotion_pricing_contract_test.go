@@ -162,6 +162,7 @@ func TestV26PromotionProductionSurfaceRejectsRetiredMechanicsAndDependencies(t *
 		"SellableOffer": {}, "SellableOfferSnapshot": {}, "AcceptedOffer": {},
 		"ReceiptOffer": {}, "AppliedPromotion": {}, "EffectivePromotion": {},
 		"StorefrontPromotion": {}, "PromotionProduct": {}, "VolumeDiscountTier": {},
+		"PointPromotion": {}, "MembershipPromotionTarget": {},
 	}
 	retiredWireFragments := []string{"same_sale_order", "accepted_offer", "offer_id", "offer_revision", "sellable_offer"}
 	offerWord := regexp.MustCompile(`(?i)\boffers?\b`)
@@ -215,17 +216,19 @@ func TestV26PromotionProductionSurfaceRejectsRetiredMechanicsAndDependencies(t *
 				t.Errorf("%s defines operational inventory evidence as a promotion mechanic", path)
 			}
 		}
-		if strings.Contains(relative, "contracts/pricing/promotion/promotion_enums/") {
-			for _, declaration := range file.Decls {
-				general, ok := declaration.(*ast.GenDecl)
-				if !ok || general.Tok != token.TYPE {
+		for _, declaration := range file.Decls {
+			general, ok := declaration.(*ast.GenDecl)
+			if !ok || general.Tok != token.TYPE {
+				continue
+			}
+			for _, specification := range general.Specs {
+				typeSpecification, ok := specification.(*ast.TypeSpec)
+				if !ok || !typeSpecification.Name.IsExported() || !strings.Contains(typeSpecification.Name.Name, "Promotion") {
 					continue
 				}
-				for _, specification := range general.Specs {
-					typeSpecification, ok := specification.(*ast.TypeSpec)
-					if ok && typeSpecification.Name.IsExported() {
-						closedPromotionEnums[typeSpecification.Name.Name] = struct{}{}
-					}
+				underlying, stringBacked := typeSpecification.Type.(*ast.Ident)
+				if stringBacked && underlying.Name == "string" {
+					closedPromotionEnums[typeSpecification.Name.Name] = struct{}{}
 				}
 			}
 		}
