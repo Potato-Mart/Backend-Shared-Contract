@@ -6,6 +6,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/commerce/commerce_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/party"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order/order_enums"
@@ -38,7 +39,7 @@ type OrderSummary struct {
 type OrderLineSummary struct {
 	SKUCode             string                               `json:"sku_code"`
 	Name                string                               `json:"name"`
-	ImageURL            string                               `json:"image_url,omitempty"`
+	Image               *security.ObjectMedia                `json:"image,omitempty"`
 	Components          []PricedPackageComponent             `json:"components"`
 	TotalBaseUnits      int64                                `json:"total_base_units"`
 	PackedComposition   packaging.PackageCompositionSnapshot `json:"packed_composition"`

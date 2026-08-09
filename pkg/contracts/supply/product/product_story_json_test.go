@@ -6,10 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/localization"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
 )
 
-func TestProductSupplyAndDetailImagesJSONShape(t *testing.T) {
+func TestProductSupplyAndImagesJSONShape(t *testing.T) {
 	zero := int64(0)
 	want := Product{
 		SKUCode:         "A0001",
@@ -26,21 +26,17 @@ func TestProductSupplyAndDetailImagesJSONShape(t *testing.T) {
 			},
 		},
 		DisplaySellingCount: &zero,
-		Media: Media{DetailImages: []DetailImage{
-			{
-				URL: "https://cdn.example.test/products/A0001/front.jpg",
-				AltText: []localization.LocalizedText{
-					{Language: "en", Text: "Front of package"},
-					{Language: "zh-TW", Text: "包裝正面"},
-				},
+		Images: &Images{
+			Cover: &security.ObjectMedia{ID: "media_cover", URL: "https://cdn.example.test/products/A0001/cover.jpg"},
+			Gallery: []security.ObjectMedia{
+				{ID: "media_gallery_1", URL: "https://cdn.example.test/products/A0001/gallery-1.jpg"},
+				{ID: "media_gallery_2", URL: "https://cdn.example.test/products/A0001/gallery-2.jpg"},
 			},
-			{
-				URL: "https://cdn.example.test/products/A0001/back.jpg",
-				Caption: []localization.LocalizedText{
-					{Language: "en", Text: "Cooking instructions"},
-				},
+			Details: []security.ObjectMedia{
+				{ID: "media_detail_1", URL: "https://cdn.example.test/products/A0001/detail-1.jpg"},
+				{ID: "media_detail_2", URL: "https://cdn.example.test/products/A0001/detail-2.jpg"},
 			},
-		}},
+		},
 	}
 
 	body, err := json.Marshal(want)
@@ -72,26 +68,29 @@ func TestProductSupplyAndDetailImagesJSONShape(t *testing.T) {
 		t.Fatalf("Product supply manufacturing = %#v, want company_name and location", supply["manufacturing"])
 	}
 
-	media, ok := shape["media"].(map[string]any)
+	images, ok := shape["images"].(map[string]any)
 	if !ok {
-		t.Fatalf("Product JSON = %s, want media object", body)
+		t.Fatalf("Product JSON = %s, want images object", body)
 	}
-	images, ok := media["detail_images"].([]any)
-	if !ok || len(images) != 2 {
-		t.Fatalf("Product detail_images = %#v, want two ordered images", media["detail_images"])
+	if len(images) != 3 {
+		t.Fatalf("Product images = %#v, want exactly cover, gallery, and details", images)
 	}
-	first := images[0].(map[string]any)
-	second := images[1].(map[string]any)
-	if first["url"] != "https://cdn.example.test/products/A0001/front.jpg" || second["url"] != "https://cdn.example.test/products/A0001/back.jpg" {
-		t.Fatalf("Product detail_images order changed: %#v", images)
+	cover, ok := images["cover"].(map[string]any)
+	if !ok || cover["id"] != "media_cover" || cover["url"] != "https://cdn.example.test/products/A0001/cover.jpg" {
+		t.Fatalf("Product images.cover = %#v", images["cover"])
 	}
-	altText := first["alt_text"].([]any)
-	if altText[1].(map[string]any)["text"] != "包裝正面" {
-		t.Fatalf("Product detail image alt_text = %#v, want localized text", first["alt_text"])
+	gallery, ok := images["gallery"].([]any)
+	if !ok || len(gallery) != 2 || gallery[0].(map[string]any)["id"] != "media_gallery_1" || gallery[1].(map[string]any)["id"] != "media_gallery_2" {
+		t.Fatalf("Product images.gallery = %#v, want ordered object media", images["gallery"])
 	}
-	caption := second["caption"].([]any)
-	if caption[0].(map[string]any)["text"] != "Cooking instructions" {
-		t.Fatalf("Product detail image caption = %#v, want localized text", second["caption"])
+	details, ok := images["details"].([]any)
+	if !ok || len(details) != 2 || details[0].(map[string]any)["id"] != "media_detail_1" || details[1].(map[string]any)["id"] != "media_detail_2" {
+		t.Fatalf("Product images.details = %#v, want ordered object media", images["details"])
+	}
+	for _, legacy := range []string{"media", "cover_media_id", "cover_url", "image_media_ids", "image_urls", "detail_images"} {
+		if _, exists := shape[legacy]; exists {
+			t.Fatalf("Product JSON retained legacy %s: %s", legacy, body)
+		}
 	}
 
 	var got Product
@@ -104,8 +103,8 @@ func TestProductSupplyAndDetailImagesJSONShape(t *testing.T) {
 	if got.Supply == nil || got.Supply.Supplier == nil || got.Supply.Manufacturing == nil {
 		t.Fatalf("supply did not round-trip: %+v", got.Supply)
 	}
-	if len(got.Media.DetailImages) != 2 || got.Media.DetailImages[0].URL != want.Media.DetailImages[0].URL || got.Media.DetailImages[1].URL != want.Media.DetailImages[1].URL {
-		t.Fatalf("ordered detail_images did not round-trip: %+v", got.Media.DetailImages)
+	if got.Images == nil || got.Images.Cover == nil || got.Images.Cover.ID != "media_cover" || len(got.Images.Gallery) != 2 || len(got.Images.Details) != 2 {
+		t.Fatalf("Product images did not round-trip: %+v", got.Images)
 	}
 }
 
@@ -186,7 +185,7 @@ func TestProductStoryFieldsAreOptional(t *testing.T) {
 			if err != nil {
 				t.Fatalf("marshal product shape: %v", err)
 			}
-			for _, optionalKey := range []string{`"supply"`, `"display_selling_count"`, `"detail_images"`} {
+			for _, optionalKey := range []string{`"supply"`, `"display_selling_count"`, `"images"`} {
 				if strings.Contains(string(body), optionalKey) {
 					t.Fatalf("optional JSON unexpectedly contains %s: %s", optionalKey, body)
 				}

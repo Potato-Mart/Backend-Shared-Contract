@@ -223,7 +223,7 @@ func TestV25CommonPackageDependencyGraph(t *testing.T) {
 		"contracts/common/money":                         {},
 		"contracts/common/packaging":                     {"contracts/common/measurement", "contracts/common/packaging/packaging_enums"},
 		"contracts/common/packaging/packaging_enums":     {},
-		"contracts/common/party":                         {"contracts/common/geography", "contracts/common/metadata"},
+		"contracts/common/party":                         {"contracts/common/geography", "contracts/common/metadata", "contracts/common/security"},
 		"contracts/common/security":                      {"contracts/common/audit", "contracts/common/metadata", "contracts/common/security/security_enums", "contracts/identity/role/role_enums"},
 		"contracts/common/security/security_enums":       {},
 		"contracts/common/temporal":                      {},

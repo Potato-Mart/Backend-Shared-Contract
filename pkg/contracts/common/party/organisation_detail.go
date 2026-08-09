@@ -1,6 +1,9 @@
 package party
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/metadata"
+import (
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/metadata"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
+)
 
 // OrganisationDetail contains the shared public and administrative details for
 // a company or organisation. It is intended for suppliers, wholesale
@@ -34,8 +37,8 @@ type OrganisationDetail struct {
 	ShippingAddress   *ContactAddress `json:"shipping_address,omitempty"`
 
 	// Branding and public references.
-	LogoURL   string `json:"logo_url,omitempty"`
-	BrandName string `json:"brand_name,omitempty"`
+	Logo      *security.ObjectMedia `json:"logo,omitempty"`
+	BrandName string                `json:"brand_name,omitempty"`
 
 	// Additional business metadata.
 	Industry     string            `json:"industry,omitempty"`

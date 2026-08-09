@@ -11,6 +11,7 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/pos/pos_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
@@ -33,7 +34,7 @@ type CatalogProduct struct {
 	BarcodeAssignments []product.ProductBarcodeAssignmentSnapshot `json:"barcode_assignments,omitempty"`
 	Offers             []product.SellableOfferSnapshot            `json:"offers"`
 	Availability       *product.ProductStockSummary               `json:"availability,omitempty"`
-	ImageURL           string                                     `json:"image_url,omitempty"`
+	Image              *security.ObjectMedia                      `json:"image,omitempty"`
 	CategoryTags       []product.CategoryTag                      `json:"category_tags,omitempty"`
 	UpdatedAt          time.Time                                  `json:"updated_at"`
 }

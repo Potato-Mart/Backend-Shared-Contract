@@ -12,6 +12,93 @@ import (
 	"testing"
 )
 
+func TestV26NonSupplyProductionModelsRejectLegacyMediaShapes(t *testing.T) {
+	legacyTypes := v25StringSet("Media", "MediaReference")
+	legacyFields := v25StringSet(
+		"MediaID", "MediaURL",
+		"AvatarMediaID", "AvatarURL",
+		"LogoURL",
+		"ImageID", "ImageURL",
+		"CoverMediaID", "CoverURL",
+		"ImageMediaIDs", "ImageURLs",
+	)
+	legacyJSONKeys := v25StringSet(
+		"media_id", "media_url",
+		"avatar_media_id", "avatar_url",
+		"logo_url",
+		"image_id", "image_url",
+		"cover_media_id", "cover_url",
+		"image_media_ids", "image_urls",
+	)
+
+	pkgRoot := sharedContractPkgRoot(t)
+	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if entry.IsDir() || !strings.HasSuffix(path, ".go") || strings.HasSuffix(path, "_test.go") {
+			return nil
+		}
+
+		relativePath, relativeErr := filepath.Rel(pkgRoot, path)
+		if relativeErr != nil {
+			return relativeErr
+		}
+		relativePath = filepath.ToSlash(relativePath)
+		// Supply-only image records are deliberately exempt from the v26
+		// ObjectMedia cutover, except for the canonical Product.Images contract
+		// covered by its package test.
+		if strings.HasPrefix(relativePath, "contracts/supply/") {
+			return nil
+		}
+		if relativePath == "contracts/common/security/media.go" {
+			t.Errorf("%s retains the retired common/security media.go path", path)
+		}
+
+		fset := token.NewFileSet()
+		file, parseErr := parser.ParseFile(fset, path, nil, 0)
+		if parseErr != nil {
+			return parseErr
+		}
+		for _, declaration := range file.Decls {
+			general, ok := declaration.(*ast.GenDecl)
+			if !ok || general.Tok != token.TYPE {
+				continue
+			}
+			for _, specification := range general.Specs {
+				typeSpecification, ok := specification.(*ast.TypeSpec)
+				if !ok {
+					continue
+				}
+				if _, legacy := legacyTypes[typeSpecification.Name.Name]; legacy {
+					t.Errorf("%s declares retired v26 media type %s", path, typeSpecification.Name.Name)
+				}
+				structure, ok := typeSpecification.Type.(*ast.StructType)
+				if !ok {
+					continue
+				}
+				for _, field := range structure.Fields.List {
+					for _, name := range field.Names {
+						if _, legacy := legacyFields[name.Name]; legacy {
+							t.Errorf("%s retains legacy media field %s.%s", path, typeSpecification.Name.Name, name.Name)
+						}
+					}
+					jsonKey, present := v25JSONFieldName(t, path, field)
+					if present {
+						if _, legacy := legacyJSONKeys[jsonKey]; legacy {
+							t.Errorf("%s retains legacy media JSON key %q on %s", path, jsonKey, typeSpecification.Name.Name)
+						}
+					}
+				}
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestV25ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	removedIdentifiers := v25StringSet(
 		// Earlier hard cut-overs that remain forbidden in v25.

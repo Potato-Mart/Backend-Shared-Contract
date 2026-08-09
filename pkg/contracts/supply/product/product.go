@@ -46,7 +46,7 @@ type Product struct {
 	// sellability rules omits it.
 	Selling      *Selling     `json:"selling,omitempty"`
 	Localization Localization `json:"localization,omitempty"`
-	Media        Media        `json:"media,omitempty"`
+	Images       *Images      `json:"images,omitempty"`
 	// CountryOfOrigin is the customer-facing origin display block projected
 	// onto the storefront product.
 	CountryOfOrigin *StorefrontOrigin `json:"country_of_origin,omitempty"`
@@ -78,11 +78,9 @@ type Localization struct {
 	OtherNames []localization.LocalizedName `json:"other_names,omitempty"`
 }
 
-// Media groups the product imagery.
-type Media struct {
-	CoverMediaID  string        `json:"cover_media_id,omitempty"`
-	CoverURL      string        `json:"cover_url,omitempty"`
-	ImageMediaIDs []string      `json:"image_media_ids,omitempty"`
-	ImageURLs     []string      `json:"image_urls,omitempty"`
-	DetailImages  []DetailImage `json:"detail_images,omitempty"`
+// Images groups the customer-facing product imagery.
+type Images struct {
+	Cover   *security.ObjectMedia  `json:"cover,omitempty"`
+	Gallery []security.ObjectMedia `json:"gallery,omitempty"`
+	Details []security.ObjectMedia `json:"details,omitempty"`
 }

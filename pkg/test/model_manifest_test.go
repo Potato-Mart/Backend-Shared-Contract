@@ -13,10 +13,10 @@ import (
 	"testing"
 )
 
-// v25ModelPackageManifest classifies every production package. Adding an
+// v26ModelPackageManifest classifies every production package. Adding an
 // exported type changes the digest below and requires an explicit manifest
 // review instead of silently expanding the contract surface.
-var v25ModelPackageManifest = map[string]string{
+var v26ModelPackageManifest = map[string]string{
 	"contracts/common/apiresponse/apiresponse_enums":           "enum",
 	"contracts/common/audit":                                   "record,value",
 	"contracts/common/commerce/commerce_enums":                 "enum",
@@ -96,12 +96,12 @@ var v25ModelPackageManifest = map[string]string{
 	"versioning":                                               "module-metadata",
 }
 
-// Reviewed for the v25.0.0 common and enum package hard cutover. The digest
-// captures the complete exported model manifest without changing serialized
-// model fields or enum wire values.
-const v25ExportedTypeManifestDigest = "80f8f14e14bf223fa4947a198f5a3945f3c784267ae5b38a1ef2a1cbbf48cb6f"
+// Reviewed for the v26.0.0 object-media cutover. The digest captures the
+// complete exported model manifest after ObjectMedia, ObjectMediaAsset, and
+// ObjectMediaReference replaced the previous media declarations.
+const v26ExportedTypeManifestDigest = "098062e51f37eba122f7dc20a01d8a1468338d3d5c7a0f8b11dde588252ba27f"
 
-func TestV25ExportedTypesMatchModelManifest(t *testing.T) {
+func TestV26ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)
 	var entries []string
 	pkgRoot := sharedContractPkgRoot(t)
@@ -116,9 +116,9 @@ func TestV25ExportedTypesMatchModelManifest(t *testing.T) {
 		if packagePath == "." {
 			return nil
 		}
-		class, classified := v25ModelPackageManifest[packagePath]
+		class, classified := v26ModelPackageManifest[packagePath]
 		if !classified {
-			t.Errorf("%s is not classified in the v25 model manifest", packagePath)
+			t.Errorf("%s is not classified in the v26 model manifest", packagePath)
 			return nil
 		}
 		seenPackages[packagePath] = true
@@ -143,9 +143,9 @@ func TestV25ExportedTypesMatchModelManifest(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("read v25 model manifest: %v", err)
+		t.Fatalf("read v26 model manifest: %v", err)
 	}
-	for packagePath := range v25ModelPackageManifest {
+	for packagePath := range v26ModelPackageManifest {
 		if !seenPackages[packagePath] {
 			t.Errorf("manifest package %s has no production source", packagePath)
 		}
@@ -153,7 +153,7 @@ func TestV25ExportedTypesMatchModelManifest(t *testing.T) {
 	sort.Strings(entries)
 	sum := sha256.Sum256([]byte(strings.Join(entries, "\n")))
 	got := hex.EncodeToString(sum[:])
-	if got != v25ExportedTypeManifestDigest {
+	if got != v26ExportedTypeManifestDigest {
 		t.Fatalf("exported model manifest changed: got %s; classify the change and update the reviewed digest", got)
 	}
 }
