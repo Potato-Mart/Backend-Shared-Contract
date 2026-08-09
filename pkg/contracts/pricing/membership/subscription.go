@@ -3,13 +3,13 @@ package membership
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/membership/membership_enums"
 )
 
 // SubscriptionPlan defines a recurring purchase option available through the

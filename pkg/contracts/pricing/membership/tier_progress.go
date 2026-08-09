@@ -3,10 +3,10 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/membership/membership_enums"
 )
 
 // CustomerTierProgress is the customer-safe projection of progress toward the

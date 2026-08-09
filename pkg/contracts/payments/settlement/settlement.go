@@ -3,15 +3,15 @@ package settlement
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/audit"
-	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/payments/terminal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
+	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/terminal"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/payments/settlement/settlement_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/payments/terminal/terminal_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/settlement/settlement_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/terminal/terminal_enums"
 )
 
 // Settlement is an end-of-day reconciliation/batch close

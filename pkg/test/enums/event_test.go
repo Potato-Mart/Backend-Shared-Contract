@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pubsub/event/event_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pubsub/event/event_enums"
 )
 
 func TestV25InventoryAndCommerceEventTypes(t *testing.T) {

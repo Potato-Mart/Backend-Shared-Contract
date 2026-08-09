@@ -3,10 +3,10 @@ package product
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product/product_enums"
 )
 
 // ProductPackageOption identifies one stable physical package configuration

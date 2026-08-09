@@ -3,9 +3,9 @@ package promotion
 import (
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/promotion/promotion_enums"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 // A wholesale group-order manager applies for (or selects) a per-group discount

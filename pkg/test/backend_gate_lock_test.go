@@ -1,16 +1,16 @@
 package pkg_test
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
 
 	"reflect"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/apiresponse/apiresponse_enums"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/apiresponse/apiresponse_enums"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
 )
 
 // TestV25BackendGateModelSurface locks the reusable model primitives needed by

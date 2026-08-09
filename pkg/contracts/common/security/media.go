@@ -3,8 +3,8 @@ package security
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security/security_enums"
 )
 
 // Media is the public projection of a stored asset (image, document,

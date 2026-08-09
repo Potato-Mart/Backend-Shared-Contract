@@ -3,17 +3,17 @@ package promotion_test
 import (
 	"encoding/json"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/benefit"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion"
 
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/benefit/benefit_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/benefit/benefit_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 func TestCouponAssignmentRoundTrip(t *testing.T) {

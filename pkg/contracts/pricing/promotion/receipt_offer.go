@@ -1,11 +1,11 @@
 package promotion
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
 
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/localization"
 )
 
 // ReceiptOffer is the buyer/POS-safe projection of one active promotion. It

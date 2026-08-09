@@ -1,8 +1,8 @@
 package purchase
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/party"
 )
 
 // Supplier is the full supplier record. A supplier is an organisation, so it

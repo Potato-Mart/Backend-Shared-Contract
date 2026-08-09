@@ -3,15 +3,15 @@ package promotion
 import (
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/security"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/benefit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 // Coupon is a code-based discount that customers enter at checkout.

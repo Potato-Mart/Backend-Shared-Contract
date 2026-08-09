@@ -15,8 +15,8 @@ workflows.
 ## Latest Version
 
 ```text
-v25.0.0
-github.com/Potato-Mart/Backend-Shared-Contract/v25
+v26.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v26
 ```
 
 See [RELEASE_NOTES.md](RELEASE_NOTES.md) for the release history,
@@ -27,22 +27,28 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v25 v25.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v26 v26.0.0
 ```
 
-Import packages from the same `/v25` module path.
+Import packages from the same `/v26` module path.
 
 ## Package Layout
 
 - Common models are grouped by concern under `pkg/contracts/common`, such as
   `geography`, `party`, `packaging`, `security`, `temporal`, and `money`.
-  The legacy `common/shared` package does not exist in v25.
+  The legacy `common/shared` package does not exist in v26.
 - Finite enum types live in a leaf `<domain>_enums` package beside the models
   that use them. For example, product models import
   `supply/product/product_enums`, while common security models import
   `common/security/security_enums`.
+- Supply classifications, import compliance, and operations use
+  `supply/classification`, `supply/import_compliance`, and
+  `supply/operations`. The Go package name for import compliance is
+  `import_compliance`.
+- Promotion and package pricing live under `pricing/promotion`; wallet models
+  live under `pricing/wallet`; shipment models live under `orders/shipping`.
 - This module is contract-only. The seven backend services and the parent
-  `go.work` must migrate to `/v25` before consuming this release.
+  `go.work` must migrate to `/v26` before consuming this release.
 
 ## Boundary Governance
 

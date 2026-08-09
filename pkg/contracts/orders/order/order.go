@@ -3,25 +3,25 @@ package order
 import (
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/security"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/device"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/device"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/orders/shipping/shipping_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/membership/membership_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/shipping/shipping_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 // Buyer describes who is buying, independently of Channel. POS is a

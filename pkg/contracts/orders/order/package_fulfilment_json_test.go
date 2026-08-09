@@ -3,22 +3,22 @@ package order_test
 import (
 	"encoding/json"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
 
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse"
 
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {

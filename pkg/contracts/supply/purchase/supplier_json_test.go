@@ -3,13 +3,13 @@ package purchase_test
 import (
 	"encoding/json"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
 
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/supply/purchase"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/purchase"
 )
 
 func TestSupplierOrganisationDetailJSONShape(t *testing.T) {

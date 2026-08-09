@@ -3,16 +3,16 @@ package marketing_test
 import (
 	"encoding/json"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/insights/marketing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/insights/marketing"
 
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/insights/marketing/marketing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/insights/marketing/marketing_enums"
 )
 
 func TestMarketingCampaignIncludesGeographicScopeAndScheduleTimezone(t *testing.T) {

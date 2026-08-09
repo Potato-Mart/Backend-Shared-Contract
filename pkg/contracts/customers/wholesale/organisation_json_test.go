@@ -3,17 +3,17 @@ package wholesale_test
 import (
 	"encoding/json"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/customers/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/customers/wholesale"
 
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v25/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/customers/wholesale/wholesale_enums"
 )
 
 func TestWholesaleOrganisationJSONShape(t *testing.T) {
