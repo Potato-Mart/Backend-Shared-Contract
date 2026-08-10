@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v26.2.0` | 2026-08-11 | Minor | Adds the customer-safe `operations.StorefrontPlaceAvailability` projection carrying per-depot place identity and public stock state. Additive only; keeps the `/v26` module path. |
 | `v26.1.0` | 2026-08-11 | Minor | Adds the optional `OutboundShipment.carrier` delivery-company code. Additive only; keeps the `/v26` module path. |
 | `v26.0.0` | 2026-08-09 | Major | Object-media, canonical-product, Supply layout, package-pricing, and unified-promotion hard cutover. Changes the module path to `/v26`; all consumers must migrate explicitly. |
 | `v25.0.0` | 2026-08-08 | Major | Replaces the product and warehouse storage value `DRY` with `AMBIENT`, renames derived system storage-location codes, changes the module path to `/v25`, and requires all consumers to migrate explicitly. |
@@ -115,6 +116,34 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v26.2.0 (2026-08-11) - Storefront Place Availability
+
+### Added / 新增
+
+- Adds `supply/operations.StorefrontPlaceAvailability`, the customer-safe stock
+  availability of one product at one publicly visible depot. It carries
+  real-world place identity for storefront display: `depot_code`, `depot_name`,
+  optional `region_code`, `region_name`, `country_code`,
+  `administrative_area_code`, and `locality`, alongside the public
+  `stock_state`, `available_base_units`, and `as_of` projection time.
+- The model is a derived projection. It deliberately exposes no stock
+  locations, lots, reservations, staging, or quality-hold quantities, so it can
+  be returned directly to storefront clients.
+- Place identity reuses the existing `common/geography` `CountryCode` and
+  `SubdivisionCode` types, and the public stock state reuses the existing
+  `supply/product/product_enums.StorefrontStockState` enum. No existing model,
+  JSON field, enum value, or event version changes.
+
+### Consumer Action / 使用方動作
+
+- Consumers remain on the `github.com/Potato-Mart/Backend-Shared-Contract/v26`
+  module path. Only Backend-Supply must upgrade its required version to
+  `v26.2.0`; the other services may stay on their current `/v26` versions, and
+  this version skew is tolerated.
+- Supply owns populating the projection and must filter it to public active
+  depots only. Consumers must treat the omitted optional place fields as
+  unknown rather than inferring a country, administrative area, or locality.
 
 ## v26.1.0 (2026-08-11) - Outbound Shipment Carrier
 

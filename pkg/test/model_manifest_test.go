@@ -99,7 +99,7 @@ var v26ModelPackageManifest = map[string]string{
 // Reviewed for the final v26.0.0 object-media, canonical-product, package-layout,
 // unified-promotion, and package-pricing release surface. The digest captures
 // the complete exported model manifest after the hard cutover.
-const v26ExportedTypeManifestDigest = "5b73cad5e2abdfa5ff452ae6938b61cdbc7603d6caf2eadb322d8178c182cf7f"
+const v26ExportedTypeManifestDigest = "cd8db873980ca014009903fb145e7f0dc57779551d9375a524cbcf7b4b5de020"
 
 func TestV26ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)
