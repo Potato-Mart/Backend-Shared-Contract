@@ -12,21 +12,24 @@ import (
 )
 
 type OutboundShipment struct {
-	ID             string                                 `json:"id"`
-	DepotCode      string                                 `json:"depot_code"`
-	PickingListID  string                                 `json:"picking_list_id,omitempty"`
-	OrderNumber    string                                 `json:"order_number"`
-	CustomerName   string                                 `json:"customer_name,omitempty"`
-	Address        *geography.Address                     `json:"address,omitempty"`
-	Operator       string                                 `json:"operator"`
-	Status         warehouse_enums.OutboundShipmentStatus `json:"status"`
-	Containers     []operations.OutboundContainerPlan     `json:"containers,omitempty"`
-	TrackingNumber string                                 `json:"tracking_number,omitempty"`
-	Note           string                                 `json:"note,omitempty"`
-	DispatchedAt   *time.Time                             `json:"dispatched_at,omitempty"`
-	DeliveredAt    *time.Time                             `json:"delivered_at,omitempty"`
-	History        []security.HistoryEntry                `json:"history,omitempty"`
-	CreatedAt      time.Time                              `json:"created_at"`
+	ID            string                                 `json:"id"`
+	DepotCode     string                                 `json:"depot_code"`
+	PickingListID string                                 `json:"picking_list_id,omitempty"`
+	OrderNumber   string                                 `json:"order_number"`
+	CustomerName  string                                 `json:"customer_name,omitempty"`
+	Address       *geography.Address                     `json:"address,omitempty"`
+	Operator      string                                 `json:"operator"`
+	Status        warehouse_enums.OutboundShipmentStatus `json:"status"`
+	Containers    []operations.OutboundContainerPlan     `json:"containers,omitempty"`
+	// Carrier is the optional delivery-company code recorded by Supply
+	// (for example detrack, bcrc, aupost).
+	Carrier        string                  `json:"carrier,omitempty"`
+	TrackingNumber string                  `json:"tracking_number,omitempty"`
+	Note           string                  `json:"note,omitempty"`
+	DispatchedAt   *time.Time              `json:"dispatched_at,omitempty"`
+	DeliveredAt    *time.Time              `json:"delivered_at,omitempty"`
+	History        []security.HistoryEntry `json:"history,omitempty"`
+	CreatedAt      time.Time               `json:"created_at"`
 }
 
 // PackingDiscrepancy compares requested and observed package compositions.

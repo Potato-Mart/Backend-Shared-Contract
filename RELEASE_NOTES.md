@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v26.1.0` | 2026-08-11 | Minor | Adds the optional `OutboundShipment.carrier` delivery-company code. Additive only; keeps the `/v26` module path. |
 | `v26.0.0` | 2026-08-09 | Major | Object-media, canonical-product, Supply layout, package-pricing, and unified-promotion hard cutover. Changes the module path to `/v26`; all consumers must migrate explicitly. |
 | `v25.0.0` | 2026-08-08 | Major | Replaces the product and warehouse storage value `DRY` with `AMBIENT`, renames derived system storage-location codes, changes the module path to `/v25`, and requires all consumers to migrate explicitly. |
 | `v24.0.0` | 2026-08-07 | Major | Common-model and enum-package hard cutover: removes `common/shared`, moves common models into focused packages, puts finite enums in leaf `<domain>_enums` packages, changes the module path to `/v24`, and requires downstream consumers to migrate explicitly. JSON fields, tags, enum wire values, event versions, and runtime behavior remain unchanged. |
@@ -114,6 +115,24 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v26.1.0 (2026-08-11) - Outbound Shipment Carrier
+
+### Added / 新增
+
+- Adds the optional `carrier` field to `orders/shipping.OutboundShipment`. It
+  carries the delivery-company code recorded by Supply (for example `detrack`,
+  `bcrc`, `aupost`) and is omitted when no carrier has been recorded.
+
+### Consumer Action / 使用方動作
+
+- Consumers remain on the `github.com/Potato-Mart/Backend-Shared-Contract/v26`
+  module path. Only services that need the new field must upgrade the required
+  version to `v26.1.0`; other consumers may stay on `v26.0.0`, and this version
+  skew is tolerated.
+- Supply owns recording the carrier code on outbound shipments. Consumers must
+  treat an absent `carrier` as unknown rather than defaulting to a specific
+  delivery company.
 
 ## v26.0.0 (2026-08-09) - Object Media, Canonical Product, And Unified Promotion
 

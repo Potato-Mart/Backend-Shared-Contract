@@ -15,7 +15,7 @@ workflows.
 ## Latest Version
 
 ```text
-v26.0.0
+v26.1.0
 github.com/Potato-Mart/Backend-Shared-Contract/v26
 ```
 
@@ -27,7 +27,7 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v26 v26.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v26 v26.1.0
 ```
 
 Import packages from the same `/v26` module path.
