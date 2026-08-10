@@ -5,11 +5,13 @@ import (
 	"testing"
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
 	event "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pubsub/event"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/classification"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product/product_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
 )
@@ -145,6 +147,71 @@ func TestPackingPickingAndAvailabilityEventJSONShapes(t *testing.T) {
 	})
 	if eventShape["direction"] != "OUT_OF_STOCK" || eventShape["revision"] != float64(8) {
 		t.Fatalf("availability event lost direction or revision: %+v", eventShape)
+	}
+}
+
+func TestStorefrontPlaceAvailabilityJSONIsCustomerSafe(t *testing.T) {
+	now := time.Date(2026, 8, 11, 3, 4, 5, 0, time.UTC)
+	availability := operations.StorefrontPlaceAvailability{
+		DepotCode:              "AU-VIC-MEL-DC-01",
+		DepotName:              "Melbourne Distribution Centre",
+		RegionCode:             "AU-VIC-MEL",
+		RegionName:             "Greater Melbourne",
+		CountryCode:            geography.CountryCode("AU"),
+		AdministrativeAreaCode: geography.SubdivisionCode("AU-VIC"),
+		Locality:               "Melbourne",
+		StockState:             product_enums.StorefrontStockStateInStock,
+		AvailableBaseUnits:     24,
+		AsOf:                   now,
+	}
+
+	shape := marshalObject(t, availability)
+	for _, key := range []string{"depot_code", "depot_name", "region_code", "region_name", "country_code", "administrative_area_code", "locality", "stock_state", "available_base_units", "as_of"} {
+		if _, ok := shape[key]; !ok {
+			t.Fatalf("storefront place availability missing %q: %+v", key, shape)
+		}
+	}
+	if shape["stock_state"] != "in_stock" || shape["available_base_units"] != float64(24) {
+		t.Fatalf("storefront place availability lost stock state or quantity: %+v", shape)
+	}
+	for _, forbidden := range []string{"location_code", "lot_id", "bucket_id", "reserved_base_units", "staged_base_units", "quality_hold_base_units", "on_hand_base_units"} {
+		if _, ok := shape[forbidden]; ok {
+			t.Fatalf("storefront place availability must stay customer-safe: %+v", shape)
+		}
+	}
+
+	raw, err := json.Marshal(availability)
+	if err != nil {
+		t.Fatalf("marshal storefront place availability: %v", err)
+	}
+	var decoded operations.StorefrontPlaceAvailability
+	if err := json.Unmarshal(raw, &decoded); err != nil {
+		t.Fatalf("unmarshal storefront place availability: %v", err)
+	}
+	if decoded.DepotCode != availability.DepotCode || decoded.DepotName != availability.DepotName ||
+		decoded.RegionCode != availability.RegionCode || decoded.RegionName != availability.RegionName ||
+		decoded.CountryCode != availability.CountryCode ||
+		decoded.AdministrativeAreaCode != availability.AdministrativeAreaCode ||
+		decoded.Locality != availability.Locality || decoded.StockState != availability.StockState ||
+		decoded.AvailableBaseUnits != availability.AvailableBaseUnits || !decoded.AsOf.Equal(now) {
+		t.Fatalf("storefront place availability did not round-trip: %+v", decoded)
+	}
+
+	minimalShape := marshalObject(t, operations.StorefrontPlaceAvailability{
+		DepotCode:  "AU-VIC-MEL-DC-01",
+		DepotName:  "Melbourne Distribution Centre",
+		StockState: product_enums.StorefrontStockStateOutOfStock,
+		AsOf:       now,
+	})
+	for _, optional := range []string{"region_code", "region_name", "country_code", "administrative_area_code", "locality"} {
+		if _, ok := minimalShape[optional]; ok {
+			t.Fatalf("zero-value optional field %q must be omitted: %+v", optional, minimalShape)
+		}
+	}
+	for _, required := range []string{"depot_code", "depot_name", "stock_state", "available_base_units", "as_of"} {
+		if _, ok := minimalShape[required]; !ok {
+			t.Fatalf("required field %q must always marshal: %+v", required, minimalShape)
+		}
 	}
 }
 

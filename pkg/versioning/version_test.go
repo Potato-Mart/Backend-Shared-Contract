@@ -7,7 +7,7 @@ import (
 )
 
 func TestV26ModuleMetadata(t *testing.T) {
-	if ModuleName != "Backend-Shared-Contract" || ModuleVersion != "v26.1.0" || MajorVersion != "v26" {
+	if ModuleName != "Backend-Shared-Contract" || ModuleVersion != "v26.2.0" || MajorVersion != "v26" {
 		t.Fatalf("unexpected module metadata: %q %q %q", ModuleName, ModuleVersion, MajorVersion)
 	}
 }
