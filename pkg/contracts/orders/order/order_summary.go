@@ -3,16 +3,16 @@ package order
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product"
 )
 
 // OrderSummary is a slim, customer-facing projection of an Order for "my orders"
@@ -40,7 +40,9 @@ type OrderSummary struct {
 // OrderLineSummary is a customer-facing package-aware order-line snapshot with
 // direct frozen product facts, rather than an embedded catalogue projection.
 type OrderLineSummary struct {
-	ProductSKUCode        string                               `json:"product_sku_code"`
+	SKUID string `json:"sku_id"`
+	// SKUCode is the frozen SKU code captured when the line was priced.
+	SKUCode               string                               `json:"sku_code"`
 	ProductName           string                               `json:"product_name"`
 	ProductImage          *security.ObjectMedia                `json:"product_image,omitempty"`
 	ProductPackageOption  product.ProductPackageOption         `json:"product_package_option"`

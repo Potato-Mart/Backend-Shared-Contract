@@ -6,13 +6,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
 )
 
 func TestItemFactsUseBrandID(t *testing.T) {
 	for name, value := range map[string]any{
-		"order":  OrderItemFact{ProductSKUCode: "A0001", BrandID: "64c13ab08edf48a008793ca1", PackageComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}}},
-		"refund": RefundItemFact{ProductSKUCode: "A0001", BrandID: "64c13ab08edf48a008793ca1", PackageComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}}},
+		"order":  OrderItemFact{SKUID: "A0001", BrandID: "64c13ab08edf48a008793ca1", PackageComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}}},
+		"refund": RefundItemFact{SKUID: "A0001", BrandID: "64c13ab08edf48a008793ca1", PackageComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}}},
 	} {
 		t.Run(name, func(t *testing.T) {
 			body, err := json.Marshal(value)

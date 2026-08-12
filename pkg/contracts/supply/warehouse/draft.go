@@ -3,12 +3,12 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // WMSDraft is an uncommitted package-aware warehouse operation.
@@ -32,7 +32,7 @@ type WMSDraft struct {
 // WMSDraftItem captures an observed package scan and canonical inventory refs.
 type WMSDraftItem struct {
 	ID               string                               `json:"id"`
-	ProductSKUCode   string                               `json:"product_sku_code"`
+	SKUID            string                               `json:"sku_id"`
 	ProductName      string                               `json:"product_name,omitempty"`
 	ScannedBarcode   string                               `json:"scanned_barcode,omitempty"`
 	PackageOptionID  string                               `json:"package_option_id"`

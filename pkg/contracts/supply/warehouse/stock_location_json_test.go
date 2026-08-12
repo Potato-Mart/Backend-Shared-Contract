@@ -3,16 +3,16 @@ package warehouse_test
 import (
 	"encoding/json"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse"
 
 	"reflect"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestStockLocationAndBalanceJSONShapes(t *testing.T) {
@@ -41,7 +41,7 @@ func TestStockLocationAndBalanceJSONShapes(t *testing.T) {
 	zero := int64(0)
 	balanceShape := marshalStockLocationObject(t, warehouse.StockLocationProductBalance{
 		AssignmentID: "assignment_1", DepotCode: location.DepotCode,
-		LocationCode: location.LocationCode, ProductSKUCode: "A00001",
+		LocationCode: location.LocationCode, SKUID: "A00001",
 		PackageComposition: stockLocationComposition(packaging_enums.PackageHandlingUnitEach, "pkg_each", zero, 1),
 		OnHandBaseUnits:    zero, ReservedBaseUnits: zero, AvailableBaseUnits: zero,
 		IsOutOfStock: true, Revision: 7,
@@ -115,11 +115,11 @@ func TestStockLocationAssignmentReplacesProductPlacement(t *testing.T) {
 		ID:                       "assignment_1",
 		DepotCode:                "AU-VIC-MEL-DC-01",
 		LocationCode:             "A-01-03",
-		ProductSKUCode:           "A00001",
+		SKUID:                    "A00001",
 		ElectronicShelfLabelCode: "ESL-001",
 		IsActive:                 true,
 	})
-	for _, key := range []string{"id", "depot_code", "location_code", "product_sku_code", "electronic_shelf_label_code", "is_active"} {
+	for _, key := range []string{"id", "depot_code", "location_code", "sku_id", "electronic_shelf_label_code", "is_active"} {
 		if _, ok := shape[key]; !ok {
 			t.Fatalf("stock location assignment JSON missing %q: %+v", key, shape)
 		}

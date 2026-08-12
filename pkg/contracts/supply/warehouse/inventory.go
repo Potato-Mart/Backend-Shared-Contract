@@ -3,11 +3,11 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // InventoryDateMark is a timezone-qualified date mark attached to a lot.
@@ -20,7 +20,7 @@ type InventoryDateMark struct {
 // InventoryLot identifies inventory received or manufactured together.
 type InventoryLot struct {
 	ID                  string             `json:"id"`
-	ProductSKUCode      string             `json:"product_sku_code"`
+	SKUID               string             `json:"sku_id"`
 	SupplierLotCode     string             `json:"supplier_lot_code,omitempty"`
 	ManufacturerLotCode string             `json:"manufacturer_lot_code,omitempty"`
 	ReceivedAt          time.Time          `json:"received_at"`
@@ -36,7 +36,7 @@ type InventoryLot struct {
 type InventoryStockBucket struct {
 	ID                 string                               `json:"id"`
 	Location           StockLocationRef                     `json:"location"`
-	ProductSKUCode     string                               `json:"product_sku_code"`
+	SKUID              string                               `json:"sku_id"`
 	LotID              string                               `json:"lot_id,omitempty"`
 	PackageOptionID    string                               `json:"package_option_id"`
 	HandlingUnit       packaging_enums.PackageHandlingUnit  `json:"handling_unit"`
@@ -59,7 +59,7 @@ type InventoryStockBucket struct {
 type InventoryStockUnit struct {
 	ID                 string                               `json:"id"`
 	BucketID           string                               `json:"bucket_id"`
-	ProductSKUCode     string                               `json:"product_sku_code"`
+	SKUID              string                               `json:"sku_id"`
 	LotID              string                               `json:"lot_id,omitempty"`
 	PackageOptionID    string                               `json:"package_option_id"`
 	HandlingUnit       packaging_enums.PackageHandlingUnit  `json:"handling_unit"`
@@ -77,7 +77,7 @@ type InventoryStockUnit struct {
 // the resulting physical inventory movements.
 type QualityAssessment struct {
 	ID                   string                               `json:"id"`
-	ProductSKUCode       string                               `json:"product_sku_code"`
+	SKUID                string                               `json:"sku_id"`
 	BucketID             string                               `json:"bucket_id"`
 	StockUnitID          string                               `json:"stock_unit_id,omitempty"`
 	AssessedComposition  packaging.PackageCompositionSnapshot `json:"assessed_composition"`

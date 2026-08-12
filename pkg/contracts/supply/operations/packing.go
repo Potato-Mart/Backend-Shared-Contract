@@ -3,8 +3,8 @@ package operations
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // PackageSubstitutionSnapshot records the exact loose-item replacement evidence
@@ -29,7 +29,7 @@ type PackageSubstitutionSnapshot struct {
 type PackingLine struct {
 	ID                     string                               `json:"id"`
 	OrderItemID            string                               `json:"order_item_id"`
-	ProductSKUCode         string                               `json:"product_sku_code"`
+	SKUID                  string                               `json:"sku_id"`
 	ProductName            string                               `json:"product_name,omitempty"`
 	RequestedComposition   packaging.PackageCompositionSnapshot `json:"requested_composition"`
 	AllocatedComposition   packaging.PackageCompositionSnapshot `json:"allocated_composition"`
@@ -45,7 +45,7 @@ type PackingLine struct {
 // movement identities.
 type PackingDamage struct {
 	ID                   string                                `json:"id"`
-	ProductSKUCode       string                                `json:"product_sku_code"`
+	SKUID                string                                `json:"sku_id"`
 	SourceBucketID       string                                `json:"source_bucket_id"`
 	StockUnitID          string                                `json:"stock_unit_id,omitempty"`
 	QualityAssessmentID  string                                `json:"quality_assessment_id"`
@@ -72,7 +72,7 @@ type OutboundContainerPlan struct {
 // container.
 type OutboundContainerContent struct {
 	OrderItemID       string                               `json:"order_item_id"`
-	ProductSKUCode    string                               `json:"product_sku_code"`
+	SKUID             string                               `json:"sku_id"`
 	AllocationID      string                               `json:"allocation_id"`
 	BucketID          string                               `json:"bucket_id"`
 	LotID             string                               `json:"lot_id,omitempty"`

@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestLotBucketJSONShapes(t *testing.T) {
@@ -19,7 +19,7 @@ func TestLotBucketJSONShapes(t *testing.T) {
 		Timezone:   "Australia/Melbourne",
 	}
 	lotShape := marshalObject(t, warehouse.InventoryLot{
-		ID: "lot_1", ProductSKUCode: "A00001", ReceivedAt: dateMarkAt.Add(-30 * 24 * time.Hour),
+		ID: "lot_1", SKUID: "A00001", ReceivedAt: dateMarkAt.Add(-30 * 24 * time.Hour),
 		DateMark: &dateMark,
 	})
 	nestedDateMark := lotShape["date_mark"].(map[string]any)
@@ -30,7 +30,7 @@ func TestLotBucketJSONShapes(t *testing.T) {
 	caseComposition := composition(packaging_enums.PackageHandlingUnitCase, "pkg_case_12", 2, 12)
 	bucketShape := marshalObject(t, warehouse.InventoryStockBucket{
 		ID: "bucket_1", Location: warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01"},
-		ProductSKUCode: "A00001", LotID: "lot_1", PackageOptionID: "pkg_case_12",
+		SKUID: "A00001", LotID: "lot_1", PackageOptionID: "pkg_case_12",
 		HandlingUnit:       packaging_enums.PackageHandlingUnitCase,
 		Condition:          warehouse_enums.InventoryConditionGood,
 		Disposition:        warehouse_enums.InventoryDispositionStandardSellable,
@@ -45,7 +45,7 @@ func TestLotBucketJSONShapes(t *testing.T) {
 		t.Fatalf("bucket omitted derived availability projection: %+v", bucketShape)
 	}
 	unitShape := marshalObject(t, warehouse.InventoryStockUnit{
-		ID: "unit_1", BucketID: "bucket_1", ProductSKUCode: "A00001", LotID: "lot_1",
+		ID: "unit_1", BucketID: "bucket_1", SKUID: "A00001", LotID: "lot_1",
 		PackageOptionID: "pkg_each", HandlingUnit: packaging_enums.PackageHandlingUnitEach, BaseUnits: 1,
 		Condition:     warehouse_enums.InventoryConditionPackagingDamagedMinor,
 		Disposition:   warehouse_enums.InventoryDispositionReducedSellable,

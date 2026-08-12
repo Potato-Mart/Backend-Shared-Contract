@@ -3,10 +3,10 @@ package import_compliance
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/temporal"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/import_compliance/import_compliance_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/import_compliance/import_compliance_enums"
 )
 
 // RateValue preserves official source text because tariff schedules may use
@@ -31,7 +31,7 @@ type TariffClassification struct {
 type TariffLineSnapshot struct {
 	ID                  string `json:"id"`
 	PurchaseOrderLineID string `json:"purchase_order_line_id,omitempty"`
-	ProductSKUCode      string `json:"product_sku_code,omitempty"`
+	SKUID               string `json:"sku_id,omitempty"`
 	Barcode             string `json:"barcode,omitempty"`
 	ProductName         string `json:"product_name,omitempty"`
 	AlternateNames      string `json:"alternate_names,omitempty"`
@@ -70,7 +70,7 @@ type TariffAssessment struct {
 type TariffProfile struct {
 	ID                   string                               `json:"id"`
 	Revision             RevisionMetadata                     `json:"revision"`
-	ProductSKUCode       string                               `json:"product_sku_code"`
+	SKUID                string                               `json:"sku_id"`
 	Jurisdiction         import_compliance_enums.Jurisdiction `json:"jurisdiction"`
 	Classification       TariffClassification                 `json:"classification"`
 	EffectiveFrom        temporal.Date                        `json:"effective_from,omitempty"`
@@ -86,7 +86,7 @@ type TariffProfile struct {
 type TrademarkEvidence struct {
 	ID                 string                               `json:"id"`
 	Revision           RevisionMetadata                     `json:"revision"`
-	ProductSKUCode     string                               `json:"product_sku_code,omitempty"`
+	SKUID              string                               `json:"sku_id,omitempty"`
 	Jurisdiction       import_compliance_enums.Jurisdiction `json:"jurisdiction"`
 	Mark               string                               `json:"mark"`
 	Status             string                               `json:"status,omitempty"`

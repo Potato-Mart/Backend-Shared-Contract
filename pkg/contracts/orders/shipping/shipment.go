@@ -3,12 +3,12 @@ package shipping
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 type OutboundShipment struct {
@@ -38,7 +38,7 @@ type PackingDiscrepancy struct {
 	OrderNumber          string                                 `json:"order_number"`
 	OrderDate            time.Time                              `json:"order_date"`
 	CustomerName         string                                 `json:"customer_name,omitempty"`
-	ProductSKUCode       string                                 `json:"product_sku_code"`
+	SKUID                string                                 `json:"sku_id"`
 	ProductName          string                                 `json:"product_name,omitempty"`
 	Kind                 warehouse_enums.PackingDiscrepancyKind `json:"kind"`
 	RequestedComposition packaging.PackageCompositionSnapshot   `json:"requested_composition"`

@@ -1,11 +1,11 @@
 package import_compliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/geography"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/import_compliance/import_compliance_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/import_compliance/import_compliance_enums"
 )
 
 // ManufacturerDeclaration is a revisioned declaration backed by an immutable
@@ -55,7 +55,7 @@ type DeclarationLine struct {
 	SourceLineID              string        `json:"source_line_id,omitempty"`
 	SourceLabelID             string        `json:"source_label_id,omitempty"`
 	SourceLabelRevisionNumber *int64        `json:"source_label_revision_number,omitempty"`
-	ProductSKUCode            string        `json:"product_sku_code,omitempty"`
+	SKUID                     string        `json:"sku_id,omitempty"`
 	EnglishName               string        `json:"english_name"`
 	ChineseName               string        `json:"chinese_name,omitempty"`
 	OrderedQuantity           int64         `json:"ordered_quantity"`

@@ -10,12 +10,12 @@ import (
 	"testing"
 )
 
-// TestV26DomainPackageLayout verifies the v26 contract's requested domain paths.
-func TestV26DomainPackageLayout(t *testing.T) {
+// TestV27DomainPackageLayout verifies the v27 contract's requested domain paths.
+func TestV27DomainPackageLayout(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	legacyImportCompliance := "import" + "compliance"
 	requiredFiles := map[string]string{
-		"contracts/supply/classification/sku.go":                                          "classification",
+		"contracts/supply/classification/product_category.go":                             "classification",
 		"contracts/supply/classification/category_tag.go":                                 "classification",
 		"contracts/supply/classification/collection.go":                                   "classification",
 		"contracts/supply/classification/brand.go":                                        "classification",
@@ -24,6 +24,17 @@ func TestV26DomainPackageLayout(t *testing.T) {
 		"contracts/supply/classification/classification_enums/favourite_list_types.go":    "classification_enums",
 		"contracts/supply/import_compliance/declaration.go":                               "import_compliance",
 		"contracts/supply/import_compliance/import_compliance_enums/import_compliance.go": "import_compliance_enums",
+		"contracts/supply/listing/market_listing.go":                                      "listing",
+		"contracts/supply/listing/listing_enums/market_listing.go":                        "listing_enums",
+		"contracts/supply/warehouse/depot_market.go":                                      "warehouse",
+		"contracts/pricing/market/market.go":                                              "market",
+		"contracts/pricing/market/market_enums/market_status.go":                          "market_enums",
+		"contracts/pricing/pricebook/price_book.go":                                       "pricebook",
+		"contracts/pricing/pricebook/pricebook_enums/pricebook.go":                        "pricebook_enums",
+		"contracts/supply/product/sku.go":                                                 "product",
+		"contracts/common/money/currency.go":                                              "money",
+		"contracts/common/measurement/net_content.go":                                     "measurement",
+		"contracts/customers/wholesale/wholesale_enums/organisation_category.go":          "wholesale_enums",
 		"contracts/supply/operations/availability.go":                                     "operations",
 		"contracts/supply/operations/packing.go":                                          "operations",
 		"contracts/supply/operations/picking.go":                                          "operations",
@@ -36,7 +47,16 @@ func TestV26DomainPackageLayout(t *testing.T) {
 		"contracts/pricing/promotion/scope.go":                                            "promotion",
 		"contracts/pricing/promotion/relation.go":                                         "promotion",
 		"contracts/pricing/promotion/application.go":                                      "promotion",
-		"contracts/pricing/promotion/package_pricing.go":                                  "promotion",
+		"contracts/pricing/quote/price_snapshot.go":                                       "quote",
+		"contracts/pricing/quote/quote_enums/quote.go":                                    "quote_enums",
+		"contracts/supply/cost/acquisition_cost.go":                                       "cost",
+		"contracts/supply/listing/sale_eligibility.go":                                    "listing",
+		"contracts/supply/purchase/supplier_invoice.go":                                   "purchase",
+		"contracts/supply/purchase/purchase_enums/supplier_tax.go":                        "purchase_enums",
+		"contracts/payments/payment/merchant_profile.go":                                  "payment",
+		"contracts/payments/payment/payment_enums/merchant_profile.go":                    "payment_enums",
+		"contracts/orders/pos/cash_rounding.go":                                           "pos",
+		"contracts/supply/warehouse/warehouse_enums/damage_sale_tier.go":                  "warehouse_enums",
 		"contracts/pricing/promotion/promotion_enums/promotion_status.go":                 "promotion_enums",
 		"contracts/pricing/promotion/promotion_enums/promotion_match_mode.go":             "promotion_enums",
 		"contracts/pricing/wallet/coupon.go":                                              "wallet",
@@ -47,7 +67,7 @@ func TestV26DomainPackageLayout(t *testing.T) {
 		fset := token.NewFileSet()
 		file, err := parser.ParseFile(fset, path, nil, parser.PackageClauseOnly)
 		if err != nil {
-			t.Errorf("required v26 model file %s is missing or invalid: %v", relativePath, err)
+			t.Errorf("required v27 model file %s is missing or invalid: %v", relativePath, err)
 			continue
 		}
 		if got := file.Name.Name; got != wantPackage {
@@ -77,6 +97,8 @@ func TestV26DomainPackageLayout(t *testing.T) {
 		"contracts/pricing/promotion/receipt_offer.go",
 		"contracts/pricing/promotion/shared.go",
 		"contracts/pricing/promotion/storefront_promotion.go",
+		"contracts/supply/classification/sku.go",
+		"contracts/pricing/promotion/package_pricing.go",
 		"contracts/supply/product/availability.go",
 		"contracts/supply/product/detail_image.go",
 		"contracts/supply/product/offer.go",
@@ -85,12 +107,12 @@ func TestV26DomainPackageLayout(t *testing.T) {
 	} {
 		path := filepath.Join(pkgRoot, filepath.FromSlash(relativePath))
 		if _, err := os.Stat(path); !os.IsNotExist(err) {
-			t.Errorf("retired v26 path must not exist: %s", relativePath)
+			t.Errorf("retired v27 path must not exist: %s", relativePath)
 		}
 	}
 }
 
-func TestV26SourcesRejectLegacyImportComplianceIdentifier(t *testing.T) {
+func TestV27SourcesRejectLegacyImportComplianceIdentifier(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	legacyIdentifier := "import" + "compliance"
 	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
@@ -110,6 +132,6 @@ func TestV26SourcesRejectLegacyImportComplianceIdentifier(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v26 source layout: %v", err)
+		t.Fatalf("scan v27 source layout: %v", err)
 	}
 }

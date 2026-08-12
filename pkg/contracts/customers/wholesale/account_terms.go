@@ -1,8 +1,8 @@
 package wholesale
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
 )
 
 // WholesaleTerms groups B2B checkout policy, credit,

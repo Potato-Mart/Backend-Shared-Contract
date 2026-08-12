@@ -1,6 +1,6 @@
 package classification
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/localization"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/localization"
 
 // Brand is the canonical localized brand master used by product catalogues.
 type Brand struct {

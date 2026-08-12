@@ -1,14 +1,14 @@
 package access
 
 import (
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
 
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/identity/identity_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/identity/identity_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security/security_enums"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/identity/account/account_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/identity/account/account_enums"
 )
 
 // LoginSession is a non-secret projection of an active login. A session is

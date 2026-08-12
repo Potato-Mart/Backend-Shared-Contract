@@ -3,28 +3,33 @@ package operations
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // StockReservation is a logical hold for one product at one depot.
 type StockReservation struct {
-	ID                     string                                 `json:"id"`
-	ProductSKUCode         string                                 `json:"product_sku_code"`
-	DepotCode              string                                 `json:"depot_code"`
-	OrderNumber            string                                 `json:"order_number,omitempty"`
-	GroupOrderCode         string                                 `json:"group_order_code,omitempty"`
-	PackagePricingID       string                                 `json:"package_pricing_id"`
-	PackagePricingRevision int64                                  `json:"package_pricing_revision"`
-	RequestedComposition   packaging.PackageCompositionSnapshot   `json:"requested_composition"`
-	ReservedComposition    packaging.PackageCompositionSnapshot   `json:"reserved_composition"`
-	Status                 warehouse_enums.StockReservationStatus `json:"status"`
-	Revision               int64                                  `json:"revision"`
-	Timezone               string                                 `json:"timezone"`
-	ExpiresAt              *time.Time                             `json:"expires_at,omitempty"`
+	ID             string `json:"id"`
+	SKUID          string `json:"sku_id"`
+	DepotCode      string `json:"depot_code"`
+	OrderNumber    string `json:"order_number,omitempty"`
+	GroupOrderCode string `json:"group_order_code,omitempty"`
+	MarketID       string `json:"market_id"`
+	// EligibilityToken is the validity token from the sale-eligibility
+	// snapshot the reservation was taken against, and ListingRevision pins
+	// the market listing that was in force. A stale token requires a
+	// re-quote rather than a silent re-price.
+	EligibilityToken     string                                 `json:"eligibility_token"`
+	ListingRevision      int64                                  `json:"listing_revision"`
+	RequestedComposition packaging.PackageCompositionSnapshot   `json:"requested_composition"`
+	ReservedComposition  packaging.PackageCompositionSnapshot   `json:"reserved_composition"`
+	Status               warehouse_enums.StockReservationStatus `json:"status"`
+	Revision             int64                                  `json:"revision"`
+	Timezone             string                                 `json:"timezone"`
+	ExpiresAt            *time.Time                             `json:"expires_at,omitempty"`
 
 	audit.AuditFields
 }
@@ -52,7 +57,7 @@ type StockStagingRecord struct {
 	ReservationID       string                               `json:"reservation_id"`
 	AllocationID        string                               `json:"allocation_id"`
 	OrderNumber         string                               `json:"order_number"`
-	ProductSKUCode      string                               `json:"product_sku_code"`
+	SKUID               string                               `json:"sku_id"`
 	LotID               string                               `json:"lot_id,omitempty"`
 	PackageOptionID     string                               `json:"package_option_id"`
 	SourceBucketID      string                               `json:"source_bucket_id"`

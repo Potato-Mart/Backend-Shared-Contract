@@ -3,8 +3,8 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product/product_enums"
 )
 
 func TestProductEnumsValidateKnownValues(t *testing.T) {
@@ -15,5 +15,6 @@ func TestProductEnumsValidateKnownValues(t *testing.T) {
 		{name: "productenum.PriceVisibility", valid: []stringEnum{product_enums.PriceVisibilityPublic, product_enums.PriceVisibilityLoginRequired, product_enums.PriceVisibilityWholesaleApprovedOnly, product_enums.PriceVisibilityHidden}, invalid: product_enums.PriceVisibility("__invalid__")},
 		{name: "productenum.StorefrontStockState", valid: []stringEnum{product_enums.StorefrontStockStateUnknown, product_enums.StorefrontStockStateInStock, product_enums.StorefrontStockStateOutOfStock}, invalid: product_enums.StorefrontStockState("__invalid__")},
 		{name: "productenum.ProductStatus", valid: []stringEnum{product_enums.ProductStatusDraft, product_enums.ProductStatusActive, product_enums.ProductStatusArchived, product_enums.ProductStatusDiscontinued}, invalid: product_enums.ProductStatus("__invalid__")},
+		{name: "productenum.SKUStatus", valid: []stringEnum{product_enums.SKUStatusDraft, product_enums.SKUStatusActive, product_enums.SKUStatusArchived, product_enums.SKUStatusDiscontinued}, invalid: product_enums.SKUStatus("__invalid__")},
 	})
 }

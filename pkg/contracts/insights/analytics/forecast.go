@@ -3,16 +3,17 @@ package analytics
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/commerce/commerce_enums"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/temporal"
 )
 
 // SKUDemandForecast is one depot- and channel-qualified demand prediction.
 type SKUDemandForecast struct {
-	ProductSKUCode       string                   `json:"product_sku_code"`
+	SKUID                string                   `json:"sku_id"`
+	MarketID             string                   `json:"market_id"`
 	DepotCode            string                   `json:"depot_code"`
 	Channel              commerce_enums.OrderType `json:"channel"`
 	Timezone             string                   `json:"timezone"`

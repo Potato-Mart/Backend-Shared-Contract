@@ -9,33 +9,33 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/customers/campaign/campaign_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/customers/wholesale/wholesale_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/pos/pos_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/benefit/benefit_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/membership/membership_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pubsub/event/event_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/customers/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/pos/pos_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/benefit/benefit_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pubsub/event/event_enums"
 )
 
-func TestV26EnumCoverageIncludesEveryStringEnum(t *testing.T) {
-	testSource := v26EnumTestSource(t)
-	for _, typeName := range v26StringEnumTypes(t) {
+func TestV27EnumCoverageIncludesEveryStringEnum(t *testing.T) {
+	testSource := v27EnumTestSource(t)
+	for _, typeName := range v27StringEnumTypes(t) {
 		if !regexp.MustCompile(`\b` + regexp.QuoteMeta(typeName) + `\b`).MatchString(testSource) {
 			t.Errorf("string enum %s is not represented in an enum behavior test", typeName)
 		}
 	}
-	for _, constantName := range v26StringEnumConstants(t) {
+	for _, constantName := range v27StringEnumConstants(t) {
 		if !regexp.MustCompile(`\b` + regexp.QuoteMeta(constantName) + `\b`).MatchString(testSource) {
 			t.Errorf("string enum constant %s is not represented in an enum behavior test", constantName)
 		}
 	}
 }
 
-func TestV26FormerlyUncoveredEnumValues(t *testing.T) {
+func TestV27FormerlyUncoveredEnumValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
 		{name: "campaign.CampaignStatus", valid: []stringEnum{campaign_enums.CampaignStatusDraft, campaign_enums.CampaignStatusScheduled, campaign_enums.CampaignStatusActive, campaign_enums.CampaignStatusCompleted, campaign_enums.CampaignStatusArchived}, invalid: campaign_enums.CampaignStatus("__invalid__")},
 		{name: "campaign.CampaignPredictionStatus", valid: []stringEnum{campaign_enums.CampaignPredictionStatusNotApplicable, campaign_enums.CampaignPredictionStatusReady, campaign_enums.CampaignPredictionStatusWarning}, invalid: campaign_enums.CampaignPredictionStatus("__invalid__")},
@@ -53,13 +53,13 @@ func TestV26FormerlyUncoveredEnumValues(t *testing.T) {
 		{name: "membership.QualifyingSpendReason", valid: []stringEnum{membership_enums.QualifyingSpendReasonOrderPaid, membership_enums.QualifyingSpendReasonRefund}, invalid: membership_enums.QualifyingSpendReason("__invalid__")},
 		{name: "membership.TierProgressReason", valid: []stringEnum{membership_enums.TierProgressReasonNoActiveTiers, membership_enums.TierProgressReasonManualQualification, membership_enums.TierProgressReasonUnsupportedMetric, membership_enums.TierProgressReasonCurrencyMismatch, membership_enums.TierProgressReasonMembershipNotAssigned}, invalid: membership_enums.TierProgressReason("__invalid__")},
 		{name: "membership.TierBenefitKind", valid: []stringEnum{membership_enums.TierBenefitKindQualifyingSpend, membership_enums.TierBenefitKindPointsMultiplier, membership_enums.TierBenefitKindDiscountPercent, membership_enums.TierBenefitKindFreeShippingThreshold, membership_enums.TierBenefitKindBirthdayBonusPoints}, invalid: membership_enums.TierBenefitKind("__invalid__")},
-		{name: "event.EventTopic", valid: []stringEnum{event_enums.EventTopicOrderEvents, event_enums.EventTopicPaymentEvents, event_enums.EventTopicRefundEvents, event_enums.EventTopicStockEvents, event_enums.EventTopicFulfilmentEvents, event_enums.EventTopicCustomerEvents, event_enums.EventTopicProductStats, event_enums.EventTopicStorefrontEvents}, invalid: event_enums.EventTopic("__invalid__")},
+		{name: "event.EventTopic", valid: []stringEnum{event_enums.EventTopicOrderEvents, event_enums.EventTopicPaymentEvents, event_enums.EventTopicRefundEvents, event_enums.EventTopicStockEvents, event_enums.EventTopicFulfilmentEvents, event_enums.EventTopicCustomerEvents, event_enums.EventTopicProductStats, event_enums.EventTopicStorefrontEvents, event_enums.EventTopicCatalogEvents}, invalid: event_enums.EventTopic("__invalid__")},
 		{name: "security.MediaVisibility", valid: []stringEnum{security_enums.MediaVisibilityPublic, security_enums.MediaVisibilityPrivate}, invalid: security_enums.MediaVisibility("__invalid__")},
 		{name: "packaging.PackageHandlingUnit", valid: []stringEnum{packaging_enums.PackageHandlingUnitEach, packaging_enums.PackageHandlingUnitCase}, invalid: packaging_enums.PackageHandlingUnit("__invalid__")},
 	})
 }
 
-func v26EnumTestSource(t *testing.T) string {
+func v27EnumTestSource(t *testing.T) string {
 	t.Helper()
 	pkgRoot, err := filepath.Abs(filepath.Join("..", ".."))
 	if err != nil {
@@ -86,7 +86,7 @@ func v26EnumTestSource(t *testing.T) string {
 	return strings.Join(source, "\n")
 }
 
-func v26StringEnumTypes(t *testing.T) []string {
+func v27StringEnumTypes(t *testing.T) []string {
 	t.Helper()
 	contractsRoot, err := filepath.Abs(filepath.Join("..", "..", "contracts"))
 	if err != nil {
@@ -116,7 +116,7 @@ func v26StringEnumTypes(t *testing.T) []string {
 	return types
 }
 
-func v26StringEnumConstants(t *testing.T) []string {
+func v27StringEnumConstants(t *testing.T) []string {
 	t.Helper()
 	contractsRoot, err := filepath.Abs(filepath.Join("..", "..", "contracts"))
 	if err != nil {

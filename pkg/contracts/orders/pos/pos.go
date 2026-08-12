@@ -7,16 +7,17 @@ package pos
 import (
 	"time"
 
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/order"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/pos/pos_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/pos/pos_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/payments/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/payments/payment/payment_enums"
 )
 
 // Register is one physical or virtual point-of-sale register.
@@ -79,7 +80,9 @@ type ShiftTotalsSnapshot struct {
 // recorded for one receipt line. It never exposes the inventory evidence in
 // accepted package pricing.
 type ReceiptLine struct {
-	ProductSKUCode        string                           `json:"product_sku_code"`
+	SKUID string `json:"sku_id"`
+	// SKUCode is the frozen SKU code captured when the receipt was issued.
+	SKUCode               string                           `json:"sku_code"`
 	ProductName           string                           `json:"product_name"`
 	ProductImage          *security.ObjectMedia            `json:"product_image,omitempty"`
 	ProductPackageOption  product.ProductPackageOption     `json:"product_package_option"`
@@ -95,12 +98,23 @@ type ReceiptLine struct {
 }
 
 // ReceiptSnapshot is the immutable customer receipt captured at sale
-// completion. Lines and payment rows are frozen copies — later edits to the
-// order or its payments never mutate an issued receipt.
+// completion. Lines, payment rows, and the issuer identity are frozen copies —
+// later edits to the order, its payments, or the merchant profile never mutate
+// an issued receipt.
+//
+// DocumentKind records what the document qualifies as. A digital receipt is
+// always issued for a completed sale; "tax_invoice" is rendered only when the
+// document qualifies, and Buyer is required when the market's tax-invoice
+// threshold applies.
 type ReceiptSnapshot struct {
-	OrderNumber           string                            `json:"order_number"`
-	Revision              int64                             `json:"revision"`
-	IssuedAt              time.Time                         `json:"issued_at"`
+	OrderNumber string    `json:"order_number"`
+	MarketID    string    `json:"market_id"`
+	Revision    int64     `json:"revision"`
+	IssuedAt    time.Time `json:"issued_at"`
+
+	DocumentKind          payment_enums.DocumentKind        `json:"document_kind"`
+	Issuer                payment.MerchantLegalSnapshot     `json:"issuer"`
+	Buyer                 *payment.BuyerLegalSnapshot       `json:"buyer,omitempty"`
 	Attribution           sales.POSAttribution              `json:"attribution"`
 	Lines                 []ReceiptLine                     `json:"lines"`
 	Subtotal              money.Money                       `json:"subtotal"`
@@ -108,4 +122,8 @@ type ReceiptSnapshot struct {
 	Total                 money.Money                       `json:"total"`
 	PaymentRows           []sales.CustomerPaymentAllocation `json:"payment_rows,omitempty"`
 	PromotionApplications []promotion.PromotionApplication  `json:"promotion_applications"`
+	// CashRounding is present only when the sale was tendered entirely in
+	// cash. Lines, Subtotal, Tax, and Total always stay at exact minor
+	// units.
+	CashRounding *CashRoundingSnapshot `json:"cash_rounding,omitempty"`
 }

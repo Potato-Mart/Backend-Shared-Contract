@@ -3,20 +3,20 @@ package purchase
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/purchase/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/purchase/purchase_enums"
 )
 
 type Order struct {
 	ID           string                             `json:"id"`
 	OrderNumber  string                             `json:"order_number"`
 	Status       purchase_enums.PurchaseOrderStatus `json:"status"`
-	Currency     string                             `json:"currency"`
+	Currency     money.CurrencyCode                 `json:"currency"`
 	Items        []OrderItem                        `json:"items"`
 	Subtotal     money.Money                        `json:"subtotal"`
 	TaxAmount    money.Money                        `json:"tax_amount"`
@@ -38,8 +38,10 @@ type Order struct {
 }
 
 type OrderItem struct {
-	ID                   string                               `json:"id,omitempty"`
-	ProductSKUCode       string                               `json:"product_sku_code"`
+	ID    string `json:"id,omitempty"`
+	SKUID string `json:"sku_id"`
+	// SKUCode is the frozen SKU code captured when the purchase line was raised.
+	SKUCode              string                               `json:"sku_code"`
 	ProductName          string                               `json:"product_name"`
 	ProductImage         *security.ObjectMedia                `json:"product_image,omitempty"`
 	ProductPackageOption product.ProductPackageOption         `json:"product_package_option"`

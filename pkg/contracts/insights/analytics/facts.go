@@ -3,17 +3,20 @@ package analytics
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // OrderItemFact is the immutable product and merchandising snapshot used by
 // sales rollups. Dimension values are canonical identifiers captured at purchase
 // time, so later catalogue edits cannot rewrite historical analytics.
 type OrderItemFact struct {
-	ProductSKUCode     string                               `json:"product_sku_code"`
+	SKUID string `json:"sku_id"`
+	// MarketID qualifies the fact; Insights never infers a market from
+	// country or currency.
+	MarketID           string                               `json:"market_id"`
 	ProductName        string                               `json:"product_name,omitempty"`
 	BrandID            string                               `json:"brand_id,omitempty"`
 	StorageType        warehouse_enums.StorageType          `json:"storage_type,omitempty"`
@@ -27,7 +30,8 @@ type OrderItemFact struct {
 // RefundItemFact identifies quantities and value reversed by a completed
 // line-level refund. Amount-only refunds intentionally carry no item rows.
 type RefundItemFact struct {
-	ProductSKUCode     string                               `json:"product_sku_code"`
+	SKUID              string                               `json:"sku_id"`
+	MarketID           string                               `json:"market_id"`
 	BrandID            string                               `json:"brand_id,omitempty"`
 	StorageType        warehouse_enums.StorageType          `json:"storage_type,omitempty"`
 	CollectionSlug     string                               `json:"collection_slug,omitempty"`

@@ -3,14 +3,14 @@ package order
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/order/order_enums"
 )
 
 // PreorderItemSnapshot is server-stamped from Supply's active SKU policy.
 // Clients cannot choose or alter preorder state.
 type PreorderItemSnapshot struct {
-	ProductSKUCode         string     `json:"product_sku_code"`
+	SKUID                  string     `json:"sku_id"`
 	PolicyVersion          string     `json:"policy_version"`
 	ExpectedAvailableAt    *time.Time `json:"expected_available_at,omitempty"`
 	ScheduleTimezone       string     `json:"schedule_timezone"`

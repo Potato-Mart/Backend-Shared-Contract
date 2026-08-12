@@ -13,10 +13,10 @@ import (
 	"testing"
 )
 
-// v26ModelPackageManifest classifies every production package. Adding an
+// v27ModelPackageManifest classifies every production package. Adding an
 // exported type changes the digest below and requires an explicit manifest
 // review instead of silently expanding the contract surface.
-var v26ModelPackageManifest = map[string]string{
+var v27ModelPackageManifest = map[string]string{
 	"contracts/common/apiresponse/apiresponse_enums":             "enum",
 	"contracts/common/audit":                                     "record,value",
 	"contracts/common/commerce/commerce_enums":                   "enum",
@@ -69,19 +69,28 @@ var v26ModelPackageManifest = map[string]string{
 	"contracts/payments/terminal/terminal_enums":                 "enum",
 	"contracts/pricing/benefit":                                  "value",
 	"contracts/pricing/benefit/benefit_enums":                    "enum",
+	"contracts/pricing/market":                                   "entity",
+	"contracts/pricing/market/market_enums":                      "enum",
 	"contracts/pricing/membership":                               "entity,record,value",
 	"contracts/pricing/membership/membership_enums":              "enum",
+	"contracts/pricing/pricebook":                                "entity,record",
+	"contracts/pricing/pricebook/pricebook_enums":                "enum",
 	"contracts/pricing/promotion":                                "entity,event,record,value",
 	"contracts/pricing/promotion/promotion_enums":                "enum",
+	"contracts/pricing/quote":                                    "snapshot,value",
+	"contracts/pricing/quote/quote_enums":                        "enum",
 	"contracts/pricing/wallet":                                   "entity,record,snapshot,value",
 	"contracts/pricing/wallet/wallet_enums":                      "enum",
 	"contracts/pubsub/envelop":                                   "record",
 	"contracts/pubsub/event":                                     "event,record",
 	"contracts/pubsub/event/event_enums":                         "enum",
 	"contracts/supply/classification":                            "entity,record,value",
+	"contracts/supply/cost":                                      "entity,record",
 	"contracts/supply/classification/classification_enums":       "enum",
 	"contracts/supply/import_compliance":                         "entity,record,snapshot,value",
 	"contracts/supply/import_compliance/import_compliance_enums": "enum",
+	"contracts/supply/listing":                                   "entity,record,snapshot,value",
+	"contracts/supply/listing/listing_enums":                     "enum",
 	"contracts/supply/operations":                                "entity,event,record,snapshot,value",
 	"contracts/supply/product":                                   "entity,event,snapshot,value",
 	"contracts/supply/product/product_enums":                     "enum",
@@ -96,12 +105,13 @@ var v26ModelPackageManifest = map[string]string{
 	"versioning":                                                 "module-metadata",
 }
 
-// Reviewed for the final v26.0.0 object-media, canonical-product, package-layout,
-// unified-promotion, and package-pricing release surface. The digest captures
-// the complete exported model manifest after the hard cutover.
-const v26ExportedTypeManifestDigest = "cd8db873980ca014009903fb145e7f0dc57779551d9375a524cbcf7b4b5de020"
+// Reviewed for the final v27.0.0 global product/SKU split, market pricing,
+// transaction snapshot, purchase tax evidence, merchant profile, and catalog
+// event release surface. The digest captures the complete exported model
+// manifest after the hard cutover.
+const v27ExportedTypeManifestDigest = "5b0864253579c39f8544fc73e752f9aa00da46748e59a91b39f0cd5f8236c0d7"
 
-func TestV26ExportedTypesMatchModelManifest(t *testing.T) {
+func TestV27ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)
 	var entries []string
 	pkgRoot := sharedContractPkgRoot(t)
@@ -116,9 +126,9 @@ func TestV26ExportedTypesMatchModelManifest(t *testing.T) {
 		if packagePath == "." {
 			return nil
 		}
-		class, classified := v26ModelPackageManifest[packagePath]
+		class, classified := v27ModelPackageManifest[packagePath]
 		if !classified {
-			t.Errorf("%s is not classified in the v26 model manifest", packagePath)
+			t.Errorf("%s is not classified in the v27 model manifest", packagePath)
 			return nil
 		}
 		seenPackages[packagePath] = true
@@ -143,9 +153,9 @@ func TestV26ExportedTypesMatchModelManifest(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("read v26 model manifest: %v", err)
+		t.Fatalf("read v27 model manifest: %v", err)
 	}
-	for packagePath := range v26ModelPackageManifest {
+	for packagePath := range v27ModelPackageManifest {
 		if !seenPackages[packagePath] {
 			t.Errorf("manifest package %s has no production source", packagePath)
 		}
@@ -153,7 +163,7 @@ func TestV26ExportedTypesMatchModelManifest(t *testing.T) {
 	sort.Strings(entries)
 	sum := sha256.Sum256([]byte(strings.Join(entries, "\n")))
 	got := hex.EncodeToString(sum[:])
-	if got != v26ExportedTypeManifestDigest {
+	if got != v27ExportedTypeManifestDigest {
 		t.Fatalf("exported model manifest changed: got %s; classify the change and update the reviewed digest", got)
 	}
 }

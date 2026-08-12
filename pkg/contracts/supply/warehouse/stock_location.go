@@ -3,10 +3,10 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geometry"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/geometry"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 const (
@@ -59,7 +59,7 @@ type StockLocationAssignment struct {
 	ID                       string `json:"id"`
 	DepotCode                string `json:"depot_code"`
 	LocationCode             string `json:"location_code"`
-	ProductSKUCode           string `json:"product_sku_code"`
+	SKUID                    string `json:"sku_id"`
 	ElectronicShelfLabelCode string `json:"electronic_shelf_label_code,omitempty"`
 	IsActive                 bool   `json:"is_active"`
 
@@ -72,7 +72,7 @@ type StockLocationProductBalance struct {
 	AssignmentID       string                               `json:"assignment_id"`
 	DepotCode          string                               `json:"depot_code"`
 	LocationCode       string                               `json:"location_code"`
-	ProductSKUCode     string                               `json:"product_sku_code"`
+	SKUID              string                               `json:"sku_id"`
 	PackageComposition packaging.PackageCompositionSnapshot `json:"package_composition"`
 	OnHandBaseUnits    int64                                `json:"on_hand_base_units"`
 	ReservedBaseUnits  int64                                `json:"reserved_base_units"`

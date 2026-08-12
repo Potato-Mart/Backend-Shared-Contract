@@ -3,7 +3,7 @@ package operations
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/commerce/commerce_enums"
 )
 
 // ProductStockQuantitySnapshot is a base-unit stock projection for one
@@ -46,7 +46,7 @@ type ChannelProductStockSnapshot struct {
 // ProductStockSummary is a derived, revisioned availability projection. It is
 // operational data and is not part of immutable transaction product records.
 type ProductStockSummary struct {
-	ProductSKUCode string                              `json:"product_sku_code"`
+	SKUID          string                              `json:"sku_id"`
 	AllDepots      ProductStockQuantitySnapshot        `json:"all_depots"`
 	Depots         []DepotProductStockSnapshot         `json:"depots,omitempty"`
 	Locations      []LocationProductStockSnapshot      `json:"locations,omitempty"`

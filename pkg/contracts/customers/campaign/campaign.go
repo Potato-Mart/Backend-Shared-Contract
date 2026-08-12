@@ -9,10 +9,10 @@ package campaign
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/customers/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/geography"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/customers/campaign/campaign_enums"
 )
 
 // Audience narrows a campaign by customer type and client platform.
@@ -27,7 +27,7 @@ type Audience struct {
 // CTAHref remains the canonical authored href for existing storefront clients.
 type CTADestination struct {
 	Type           campaign_enums.CampaignCTADestinationType `json:"type"`
-	ProductSKUCode string                                    `json:"product_sku_code,omitempty"`
+	SKUID          string                                    `json:"sku_id,omitempty"`
 	CollectionSlug string                                    `json:"collection_slug,omitempty"`
 	CategorySlug   string                                    `json:"category_slug,omitempty"`
 	PromotionID    string                                    `json:"promotion_id,omitempty"`
@@ -35,8 +35,11 @@ type CTADestination struct {
 
 // Campaign is one piece of scheduled, targeted storefront content.
 type Campaign struct {
-	ID          string          `json:"id,omitempty"`
-	CampaignKey string          `json:"campaign_key"`
+	ID          string `json:"id,omitempty"`
+	CampaignKey string `json:"campaign_key"`
+	// MarketID scopes the campaign and every SKU reference it carries to
+	// one commercial market.
+	MarketID    string          `json:"market_id"`
 	SeriesKey   string          `json:"series_key,omitempty"`
 	PromotionID string          `json:"promotion_id,omitempty"`
 	Title       string          `json:"title"`
@@ -86,14 +89,14 @@ type CampaignCategoryTarget struct {
 }
 
 type CampaignTarget struct {
-	ProductSKUCodes []string                 `json:"product_sku_codes,omitempty"`
-	Categories      []CampaignCategoryTarget `json:"categories,omitempty"`
+	SKUIDs     []string                 `json:"sku_ids,omitempty"`
+	Categories []CampaignCategoryTarget `json:"categories,omitempty"`
 }
 
 type CampaignPlanning struct {
-	ResolvedProductSKUCodes []string   `json:"resolved_product_sku_codes,omitempty"`
-	PredictionKey           string     `json:"prediction_key,omitempty"`
-	PredictionRevision      int        `json:"prediction_revision,omitempty"`
-	AlgorithmVersion        string     `json:"algorithm_version,omitempty"`
-	PredictedAt             *time.Time `json:"predicted_at,omitempty"`
+	ResolvedSKUIDs     []string   `json:"resolved_sku_ids,omitempty"`
+	PredictionKey      string     `json:"prediction_key,omitempty"`
+	PredictionRevision int        `json:"prediction_revision,omitempty"`
+	AlgorithmVersion   string     `json:"algorithm_version,omitempty"`
+	PredictedAt        *time.Time `json:"predicted_at,omitempty"`
 }

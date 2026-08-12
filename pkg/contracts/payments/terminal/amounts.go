@@ -1,5 +1,7 @@
 package terminal
 
+import "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
+
 // Amounts is the per-component breakdown of a terminal transaction in
 // minor units (cents for AUD). The same shape is used both for what the
 // POS requested and for what the terminal/provider actually applied.
@@ -12,7 +14,7 @@ package terminal
 // included a tip, surcharge, or cashout, use the applied result fields
 // instead of the originally requested values.
 type Amounts struct {
-	Currency string `json:"currency"`
+	Currency money.CurrencyCode `json:"currency"`
 
 	PurchaseMinor   int64 `json:"purchase_minor,omitempty"`
 	TipMinor        int64 `json:"tip_minor,omitempty"`

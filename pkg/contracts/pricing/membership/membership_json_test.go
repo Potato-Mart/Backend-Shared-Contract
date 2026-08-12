@@ -3,14 +3,14 @@ package membership_test
 import (
 	"encoding/json"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/membership"
 
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/membership/membership_enums"
 )
 
 func TestMembershipAccountAndTierRoundTrip(t *testing.T) {
@@ -153,7 +153,7 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 		Type:           membership_enums.MembershipRewardTypeOrderDiscount,
 		PointsCost:     500,
 		DiscountAmount: &discount,
-		ProductSKUCode: "A00001",
+		SKUID:          "A00001",
 		IsActive:       true,
 	}
 	redemption := membership.RewardRedemption{
@@ -167,11 +167,11 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 		CreatedAt:      now,
 	}
 	plan := membership.SubscriptionPlan{
-		ID:             "plan_1",
-		ProductSKUCode: "A00001",
-		UnitPrice:      money.Money{AmountMinor: 1200, Currency: "AUD"},
-		FrequencyDays:  7,
-		IsActive:       true,
+		ID:            "plan_1",
+		SKUID:         "A00001",
+		UnitPrice:     money.Money{AmountMinor: 1200, Currency: "AUD"},
+		FrequencyDays: 7,
+		IsActive:      true,
 	}
 	subscription := membership.MemberSubscription{
 		ID:             "sub_1",
@@ -202,8 +202,8 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal reward/subscription contracts: %v", err)
 	}
-	if decoded.Reward.PointsCost != 500 || decoded.Reward.ProductSKUCode != "A00001" || decoded.Redemption.PointsSpent != 500 ||
-		decoded.Plan.ProductSKUCode != "A00001" || decoded.Plan.FrequencyDays != 7 || decoded.Subscription.Status != membership_enums.MemberSubscriptionStatusActive {
+	if decoded.Reward.PointsCost != 500 || decoded.Reward.SKUID != "A00001" || decoded.Redemption.PointsSpent != 500 ||
+		decoded.Plan.SKUID != "A00001" || decoded.Plan.FrequencyDays != 7 || decoded.Subscription.Status != membership_enums.MemberSubscriptionStatusActive {
 		t.Fatalf("reward/subscription contracts did not round-trip: %+v", decoded)
 	}
 	if strings.Contains(string(payload), `"product":`) {

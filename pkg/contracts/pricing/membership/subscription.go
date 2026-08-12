@@ -3,18 +3,18 @@ package membership
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/membership/membership_enums"
 )
 
 // SubscriptionPlan defines a recurring purchase option available through the
 // membership domain. It remains separate from points accounting.
 type SubscriptionPlan struct {
 	ID              string      `json:"id"`
-	ProductSKUCode  string      `json:"product_sku_code"`
+	SKUID           string      `json:"sku_id"`
 	UnitPrice       money.Money `json:"unit_price"`
 	FrequencyDays   int         `json:"frequency_days"`
 	FrequencyLabel  string      `json:"frequency_label"`

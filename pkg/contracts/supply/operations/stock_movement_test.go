@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestPackageConversionMovementRoundTrip(t *testing.T) {
@@ -38,7 +38,7 @@ func TestPackageConversionMovementRoundTrip(t *testing.T) {
 	}
 	movement := operations.StockMovement{
 		ID:                               "mov_1",
-		ProductSKUCode:                   "A00001",
+		SKUID:                            "A00001",
 		Type:                             warehouse_enums.StockMovementTypePackageConversion,
 		SourceBucketID:                   "bucket_case",
 		DestinationBucketID:              "bucket_each",

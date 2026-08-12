@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product"
 )
 
 func TestBrandJSONUsesV25PublicShape(t *testing.T) {
@@ -66,7 +66,7 @@ func TestBrandRefUsesV25IdentityAndDisplayShape(t *testing.T) {
 func TestCanonicalBrandReferenceAcrossProductShapes(t *testing.T) {
 	ref := &classification.BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "happy-potato", Name: []localization.LocalizedName{{Language: "en", Name: "Happy Potato"}}}
 	for name, value := range map[string]any{
-		"product": product.Product{SKUCode: "A0001", Classification: product.ProductClassification{CategorySKUCode: "A1", BrandRef: ref}},
+		"product": product.Product{ID: "product_a0001", Classification: product.ProductClassification{ProductCategoryCode: "A1", BrandRef: ref}},
 	} {
 		t.Run(name, func(t *testing.T) {
 			body, err := json.Marshal(value)

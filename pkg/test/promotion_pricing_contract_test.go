@@ -15,23 +15,28 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
-	order "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/pos"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion/promotion_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
+	order "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/pos"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/quote"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/listing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
-func TestV26PromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *testing.T) {
+func TestV27PromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *testing.T) {
 	maximum := int64(12)
 	scope := promotion.PromotionScope{
 		MatchMode: promotion_enums.PromotionMatchModeAll,
 		Groups: []promotion.PromotionScopeGroup{
 			{
 				MatchMode:        promotion_enums.PromotionMatchModeAny,
-				ProductSKUCodes:  []string{"POTATO-A", "POTATO-B"},
+				SKUIDs:           []string{"POTATO-A", "POTATO-B"},
 				MinimumBaseUnits: 3,
 				MaximumBaseUnits: &maximum,
 			},
@@ -45,13 +50,13 @@ func TestV26PromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *test
 		},
 	}
 
-	if !v26PromotionScopeStructurallyUsable(scope) {
+	if !v27PromotionScopeStructurallyUsable(scope) {
 		t.Fatal("populated restricted scope must be structurally usable")
 	}
-	if v26PromotionScopeStructurallyUsable(promotion.PromotionScope{MatchMode: promotion_enums.PromotionMatchModeAll}) {
+	if v27PromotionScopeStructurallyUsable(promotion.PromotionScope{MatchMode: promotion_enums.PromotionMatchModeAll}) {
 		t.Fatal("an empty restricted scope must not be structurally usable")
 	}
-	if !v26PromotionScopeStructurallyUsable(promotion.PromotionScope{Unrestricted: true, MatchMode: promotion_enums.PromotionMatchModeAny}) {
+	if !v27PromotionScopeStructurallyUsable(promotion.PromotionScope{Unrestricted: true, MatchMode: promotion_enums.PromotionMatchModeAny}) {
 		t.Fatal("an explicitly unrestricted scope must be structurally usable without groups")
 	}
 
@@ -66,7 +71,7 @@ func TestV26PromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *test
 	if got.MatchMode != promotion_enums.PromotionMatchModeAll || len(got.Groups) != 2 {
 		t.Fatalf("outer ALL scope changed: %+v", got)
 	}
-	if first := got.Groups[0]; first.MatchMode != promotion_enums.PromotionMatchModeAny || len(first.ProductSKUCodes) != 2 || first.MaximumBaseUnits == nil || *first.MaximumBaseUnits != 12 {
+	if first := got.Groups[0]; first.MatchMode != promotion_enums.PromotionMatchModeAny || len(first.SKUIDs) != 2 || first.MaximumBaseUnits == nil || *first.MaximumBaseUnits != 12 {
 		t.Fatalf("product quantity-pool group changed: %+v", first)
 	}
 	if second := got.Groups[1]; second.MatchMode != promotion_enums.PromotionMatchModeAll || len(second.CollectionIDs) != 2 || len(second.CategoryTagIDs) != 2 || len(second.PackageOptionIDs) != 2 || second.MaximumBaseUnits != nil {
@@ -74,42 +79,103 @@ func TestV26PromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *test
 	}
 }
 
-func TestV26PackagePricingPreservesOrderedPromotionApplications(t *testing.T) {
-	appliedAt := time.Date(2026, 8, 9, 9, 30, 0, 0, time.UTC)
-	value := promotion.PackagePricing{
-		ID: "pricing-1", Revision: 5, InventoryRevision: 8,
-		ProductSKUCode: "POTATO-A", PackageOptionID: "package-each",
-		PackagePrice: money.Money{AmountMinor: 800, Currency: "AUD"},
-		TaxAmount:    money.Money{AmountMinor: 73, Currency: "AUD"},
-		ValidFrom:    appliedAt, Timezone: "Australia/Sydney",
-		StockLocation: warehouse.StockLocationRef{DepotCode: "SYD-01", LocationCode: "A-1"},
-		PromotionApplications: []promotion.PromotionApplication{
-			{PromotionID: "promotion-membership", PromotionKind: "membership_discount", PromotionRevision: 2, RelationID: "relation-membership", ResolvedTargetProductSKUCodes: []string{"POTATO-A"}, AppliedAt: appliedAt},
-			{PromotionID: "promotion-bundle", PromotionKind: "future_bundle_kind", PromotionRevision: 7, RelationID: "relation-bundle", ResolvedQualifierProductSKUCodes: []string{"POTATO-A", "POTATO-B"}, ResolvedTargetProductSKUCodes: []string{"POTATO-A"}, AppliedAt: appliedAt},
+func TestV27PriceSnapshotFreezesRuleTaxAndEligibilityEvidence(t *testing.T) {
+	capturedAt := time.Date(2026, 8, 12, 9, 30, 0, 0, time.UTC)
+	value := quote.PriceSnapshot{
+		QuoteID: "quote-1", LineID: "line-1", SKUID: "sku-potato-a", MarketID: "market-au",
+		PriceBookID: "book-au-online", PriceBookRevision: 5,
+		PriceEntryID: "entry-1", PriceEntryRevision: 8,
+		Currency: "AUD", CurrencyExponent: money.CurrencyExponent{Currency: "AUD", Exponent: 2},
+		ListUnitPrice:  money.Money{AmountMinor: 800, Currency: "AUD"},
+		DiscountAmount: money.Money{AmountMinor: 120, Currency: "AUD"},
+		TaxableBase:    money.Money{AmountMinor: 680, Currency: "AUD"},
+		TaxAmount:      money.Money{AmountMinor: 62, Currency: "AUD"},
+		LineTotal:      money.Money{AmountMinor: 680, Currency: "AUD"},
+		Tax: quote.TaxSnapshot{
+			TaxCategoryID: "tax-au-gst", TaxRuleID: "rule-au-gst", TaxRuleRevision: 2,
+			InclusionBasis:    pricebook_enums.PriceTaxInclusionInclusive,
+			RateNumerator:     1,
+			RateDenominator:   11,
+			TaxableBase:       money.Money{AmountMinor: 680, Currency: "AUD"},
+			AllocatedTax:      money.Money{AmountMinor: 62, Currency: "AUD"},
+			CalculationSource: quote_enums.TaxCalculationSourceInclusiveExtraction,
+			RoundingMethod:    quote_enums.TaxRoundingMethodSumExactThenRound,
 		},
-		CapturedAt: appliedAt,
+		AppliedRules: []quote.AppliedPriceRule{
+			{Kind: "group_15", Exclusive: true, FactorNumerator: 85, FactorDenominator: 100, AmountBefore: money.Money{AmountMinor: 800, Currency: "AUD"}, AmountAfter: money.Money{AmountMinor: 680, Currency: "AUD"}, AppliedAt: capturedAt},
+		},
+		Rounding: quote.RoundingEvidence{
+			Mode: quote_enums.RoundingModeHalfUp, PriceEnding: pricebook_enums.PriceEndingPolicyNone,
+			Exponent: 2, ExactNumerator: 680, ExactDenominator: 1,
+			RoundedAmount: money.Money{AmountMinor: 680, Currency: "AUD"},
+		},
+		Eligibility: listing.SaleEligibilitySnapshot{
+			MarketID: "market-au", SKUID: "sku-potato-a", ListingID: "listing-1", ListingRevision: 3,
+			TaxCategoryID: "tax-au-gst", DepotCode: "SYD-01",
+			StockLocation:      warehouse.StockLocationRef{DepotCode: "SYD-01", LocationCode: "A-1"},
+			Condition:          warehouse_enums.InventoryConditionGood,
+			Disposition:        warehouse_enums.InventoryDispositionStandardSellable,
+			AvailableBaseUnits: 40,
+			InventoryRevision:  12,
+			ValidityToken:      "eligibility-token-1", ValidUntil: capturedAt, CapturedAt: capturedAt,
+		},
+		Fingerprint: "fingerprint-1", CapturedAt: capturedAt,
 	}
 
 	payload, err := json.Marshal(value)
 	if err != nil {
-		t.Fatalf("marshal package pricing: %v", err)
+		t.Fatalf("marshal price snapshot: %v", err)
 	}
-	var got promotion.PackagePricing
+	var got quote.PriceSnapshot
 	if err := json.Unmarshal(payload, &got); err != nil {
-		t.Fatalf("unmarshal package pricing: %v", err)
+		t.Fatalf("unmarshal price snapshot: %v", err)
 	}
-	if len(got.PromotionApplications) != 2 || got.PromotionApplications[0].PromotionID != "promotion-membership" || got.PromotionApplications[1].PromotionID != "promotion-bundle" {
-		t.Fatalf("promotion stacking order changed: %+v", got.PromotionApplications)
+	if got.Tax.RateNumerator != 1 || got.Tax.RateDenominator != 11 {
+		t.Fatalf("exact tax rate did not round-trip: %+v", got.Tax)
 	}
-	if got.PromotionApplications[1].RelationID != "relation-bundle" || len(got.PromotionApplications[1].ResolvedQualifierProductSKUCodes) != 2 || len(got.PromotionApplications[1].ResolvedTargetProductSKUCodes) != 1 {
-		t.Fatalf("resolved qualifier-to-target evidence changed: %+v", got.PromotionApplications[1])
+	if len(got.AppliedRules) != 1 || got.AppliedRules[0].Kind != "group_15" || !got.AppliedRules[0].Exclusive {
+		t.Fatalf("exclusive rule evidence changed: %+v", got.AppliedRules)
+	}
+	if got.Eligibility.ValidityToken != "eligibility-token-1" || got.Eligibility.ListingRevision != 3 {
+		t.Fatalf("eligibility evidence changed: %+v", got.Eligibility)
+	}
+	if got.CurrencyExponent.Exponent != 2 || got.Currency != "AUD" {
+		t.Fatalf("currency evidence changed: %+v", got.CurrencyExponent)
+	}
+	for _, retired := range []string{"accepted_package_pricing", "package_pricing_id", "package_pricing_revision"} {
+		if strings.Contains(string(payload), retired) {
+			t.Fatalf("price snapshot retains retired package-pricing wire fragment %q: %s", retired, payload)
+		}
+	}
+}
+
+func TestV27PromotionApplicationsPreserveOrderedResolvedSKUEvidence(t *testing.T) {
+	appliedAt := time.Date(2026, 8, 12, 9, 30, 0, 0, time.UTC)
+	applications := []promotion.PromotionApplication{
+		{PromotionID: "promotion-membership", PromotionKind: "membership_discount", PromotionRevision: 2, RelationID: "relation-membership", ResolvedTargetSKUIDs: []string{"sku-potato-a"}, AppliedAt: appliedAt},
+		{PromotionID: "promotion-bundle", PromotionKind: "future_bundle_kind", PromotionRevision: 7, RelationID: "relation-bundle", ResolvedQualifierSKUIDs: []string{"sku-potato-a", "sku-potato-b"}, ResolvedTargetSKUIDs: []string{"sku-potato-a"}, AppliedAt: appliedAt},
+	}
+
+	payload, err := json.Marshal(applications)
+	if err != nil {
+		t.Fatalf("marshal promotion applications: %v", err)
+	}
+	var got []promotion.PromotionApplication
+	if err := json.Unmarshal(payload, &got); err != nil {
+		t.Fatalf("unmarshal promotion applications: %v", err)
+	}
+	if len(got) != 2 || got[0].PromotionID != "promotion-membership" || got[1].PromotionID != "promotion-bundle" {
+		t.Fatalf("promotion stacking order changed: %+v", got)
+	}
+	if got[1].RelationID != "relation-bundle" || len(got[1].ResolvedQualifierSKUIDs) != 2 || len(got[1].ResolvedTargetSKUIDs) != 1 {
+		t.Fatalf("resolved qualifier-to-target evidence changed: %+v", got[1])
 	}
 
 	applicationType := reflect.TypeOf(promotion.PromotionApplication{})
 	for fieldName, wantTag := range map[string]string{
-		"RelationID":                       "relation_id",
-		"ResolvedQualifierProductSKUCodes": "resolved_qualifier_product_sku_codes,omitempty",
-		"ResolvedTargetProductSKUCodes":    "resolved_target_product_sku_codes,omitempty",
+		"RelationID":              "relation_id",
+		"ResolvedQualifierSKUIDs": "resolved_qualifier_sku_ids,omitempty",
+		"ResolvedTargetSKUIDs":    "resolved_target_sku_ids,omitempty",
 	} {
 		field, ok := applicationType.FieldByName(fieldName)
 		if !ok || field.Tag.Get("json") != wantTag {
@@ -118,30 +184,30 @@ func TestV26PackagePricingPreservesOrderedPromotionApplications(t *testing.T) {
 	}
 }
 
-func TestV26CustomerSummariesExposeOnlyFrozenSafePricingFacts(t *testing.T) {
+func TestV27CustomerSummariesExposeOnlyFrozenSafePricingFacts(t *testing.T) {
 	for _, model := range []reflect.Type{reflect.TypeOf(pos.ReceiptLine{}), reflect.TypeOf(order.OrderLineSummary{})} {
-		for _, required := range []string{"ProductSKUCode", "ProductName", "ProductImage", "ProductPackageOption", "CapturedAt", "PackagePrice", "TaxAmount", "DiscountAmount", "PromotionApplications", "Total"} {
+		for _, required := range []string{"SKUID", "ProductName", "ProductImage", "ProductPackageOption", "CapturedAt", "PackagePrice", "TaxAmount", "DiscountAmount", "PromotionApplications", "Total"} {
 			if _, ok := model.FieldByName(required); !ok {
 				t.Errorf("%s is missing frozen customer-safe field %s", model, required)
 			}
 		}
-		for _, forbidden := range []string{"AcceptedPackagePricing", "PackagePricing", "Components", "StockLocation", "SourceBucketID", "SourceStockUnitID", "AvailablePackageCount", "AvailableBaseUnits", "InventoryRevision"} {
+		for _, forbidden := range []string{"AcceptedPackagePricing", "PackagePricing", "PriceSnapshot", "Eligibility", "Components", "StockLocation", "SourceBucketID", "SourceStockUnitID", "AvailablePackageCount", "AvailableBaseUnits", "InventoryRevision"} {
 			if _, ok := model.FieldByName(forbidden); ok {
 				t.Errorf("%s exposes internal pricing/inventory field %s", model, forbidden)
 			}
 		}
 		for i := 0; i < model.NumField(); i++ {
-			if model.Field(i).Type == reflect.TypeOf(promotion.PackagePricing{}) {
-				t.Errorf("%s embeds raw PackagePricing through field %s", model, model.Field(i).Name)
+			if model.Field(i).Type == reflect.TypeOf(quote.PriceSnapshot{}) || model.Field(i).Type == reflect.TypeOf(listing.SaleEligibilitySnapshot{}) {
+				t.Errorf("%s embeds raw pricing or inventory evidence through field %s", model, model.Field(i).Name)
 			}
 		}
 	}
 }
 
-func TestV26OperationalCategoryTagEvidenceIsLocationQualified(t *testing.T) {
+func TestV27OperationalCategoryTagEvidenceIsLocationQualified(t *testing.T) {
 	model := reflect.TypeOf(operations.InventoryCategoryTagEvidence{})
 	assertJSONFields(t, model, map[string]string{
-		"ProductSKUCode":  "product_sku_code",
+		"SKUID":           "sku_id",
 		"PackageOptionID": "package_option_id",
 		"CategoryTag":     "category_tag",
 		"StockLocation":   "stock_location",
@@ -156,7 +222,7 @@ func TestV26OperationalCategoryTagEvidenceIsLocationQualified(t *testing.T) {
 	}
 }
 
-func TestV26PromotionProductionSurfaceRejectsRetiredMechanicsAndDependencies(t *testing.T) {
+func TestV27PromotionProductionSurfaceRejectsRetiredMechanicsAndDependencies(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	retiredIdentifiers := map[string]struct{}{
 		"SellableOffer": {}, "SellableOfferSnapshot": {}, "AcceptedOffer": {},
@@ -249,7 +315,7 @@ func TestV26PromotionProductionSurfaceRejectsRetiredMechanicsAndDependencies(t *
 	}
 }
 
-func v26PromotionScopeStructurallyUsable(scope promotion.PromotionScope) bool {
+func v27PromotionScopeStructurallyUsable(scope promotion.PromotionScope) bool {
 	if scope.Unrestricted {
 		return scope.MatchMode.IsValid()
 	}
@@ -260,7 +326,7 @@ func v26PromotionScopeStructurallyUsable(scope promotion.PromotionScope) bool {
 		if !group.MatchMode.IsValid() {
 			return false
 		}
-		selectorCount := len(group.ProductSKUCodes) + len(group.CollectionIDs) + len(group.CategoryTagIDs) + len(group.PackageOptionIDs)
+		selectorCount := len(group.SKUIDs) + len(group.CollectionIDs) + len(group.CategoryTagIDs) + len(group.PackageOptionIDs)
 		if selectorCount == 0 || group.MinimumBaseUnits < 0 {
 			return false
 		}

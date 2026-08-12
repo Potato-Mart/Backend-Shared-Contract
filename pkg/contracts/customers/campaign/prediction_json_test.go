@@ -6,15 +6,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging/packaging_enums"
 )
 
 func TestCampaignPredictionUsesPackageComposition(t *testing.T) {
 	payload, err := json.Marshal(CampaignSupplierPrediction{
 		SupplierCode: "SUP-1",
 		Products: []CampaignProductPrediction{{
-			ProductSKUCode: "SKU-1",
+			SKUID: "SKU-1",
 			Evidence: []CampaignPredictionEvidence{{
 				RawNetBaseUnits: 35, NormalizedBaseUnits: 30,
 			}},

@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestV26RemovesWalletExportProductionSymbols(t *testing.T) {
+func TestV27RemovesWalletExportProductionSymbols(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	for _, removedPath := range []string{
 		filepath.Join("contracts", "pricing", "wallet", "export.go"),

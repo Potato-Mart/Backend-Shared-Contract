@@ -3,15 +3,16 @@ package settlement
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
-	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/terminal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
+	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/payments/terminal"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/settlement/settlement_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/terminal/terminal_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/payments/settlement/settlement_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/payments/terminal/terminal_enums"
 )
 
 // Settlement is an end-of-day reconciliation/batch close
@@ -48,11 +49,11 @@ type Settlement struct {
 // or totals receipts. The fields are provider-neutral and stay in minor
 // units for invoice/report consistency.
 type SettlementTotals struct {
-	Currency        string `json:"currency"`
-	PurchasesMinor  int64  `json:"purchases_minor,omitempty"`
-	TipsMinor       int64  `json:"tips_minor,omitempty"`
-	SurchargesMinor int64  `json:"surcharges_minor,omitempty"`
-	RefundsMinor    int64  `json:"refunds_minor,omitempty"`
-	CashoutsMinor   int64  `json:"cashouts_minor,omitempty"`
-	TotalMinor      int64  `json:"total_minor"`
+	Currency        money.CurrencyCode `json:"currency"`
+	PurchasesMinor  int64              `json:"purchases_minor,omitempty"`
+	TipsMinor       int64              `json:"tips_minor,omitempty"`
+	SurchargesMinor int64              `json:"surcharges_minor,omitempty"`
+	RefundsMinor    int64              `json:"refunds_minor,omitempty"`
+	CashoutsMinor   int64              `json:"cashouts_minor,omitempty"`
+	TotalMinor      int64              `json:"total_minor"`
 }

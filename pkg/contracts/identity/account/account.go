@@ -3,10 +3,10 @@ package account
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/identity/identity_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/identity/identity_enums"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/identity/account/account_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/identity/account/account_enums"
 )
 
 // UserAccount is an account/persona record attached to one canonical user.

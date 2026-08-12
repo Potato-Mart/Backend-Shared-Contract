@@ -5,14 +5,13 @@ import (
 	"strings"
 	"testing"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/classification"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/classification"
 )
 
-func TestProductSupplyImagesAndMetricsJSONShape(t *testing.T) {
-	zero := int64(0)
+func TestProductSupplyAndImagesJSONShape(t *testing.T) {
 	want := Product{
-		SKUCode: "A0001",
+		ID: "product_a0001",
 		Content: ProductContent{
 			Name: "Golden potato",
 			Images: &Images{
@@ -27,7 +26,6 @@ func TestProductSupplyImagesAndMetricsJSONShape(t *testing.T) {
 				},
 			},
 		},
-		Metrics: ProductMetrics{DisplaySellingCount: &zero},
 		Supply: &classification.ProductSupply{
 			Supplier:      &classification.ProductSupplierRef{Code: "SUP-1", Name: "Taiwan Foods"},
 			Manufacturing: &classification.ProductManufacturing{CompanyName: "Taiwan Foods Factory", Location: "Taichung, Taiwan"},
@@ -41,10 +39,6 @@ func TestProductSupplyImagesAndMetricsJSONShape(t *testing.T) {
 	var shape map[string]any
 	if err := json.Unmarshal(body, &shape); err != nil {
 		t.Fatalf("unmarshal product JSON shape: %v", err)
-	}
-	metrics := shape["metrics"].(map[string]any)
-	if got, ok := metrics["display_selling_count"]; !ok || got != float64(0) {
-		t.Fatalf("Product JSON = %s, want explicit nested display_selling_count zero", body)
 	}
 	supply, ok := shape["supply"].(map[string]any)
 	if !ok || supply["supplier"].(map[string]any)["code"] != "SUP-1" {
@@ -68,7 +62,7 @@ func TestProductSupplyImagesAndMetricsJSONShape(t *testing.T) {
 	if details, ok := images["details"].([]any); !ok || len(details) != 2 || details[1].(map[string]any)["id"] != "media_detail_2" {
 		t.Fatalf("Product images.details = %#v, want ordered object media", images["details"])
 	}
-	for _, legacy := range []string{"media", "cover_media_id", "cover_url", "image_media_ids", "image_urls", "detail_images"} {
+	for _, legacy := range []string{"media", "cover_media_id", "cover_url", "image_media_ids", "image_urls", "detail_images", "metrics", "display_selling_count"} {
 		if _, exists := shape[legacy]; exists {
 			t.Fatalf("Product JSON retained legacy %s: %s", legacy, body)
 		}
@@ -77,9 +71,6 @@ func TestProductSupplyImagesAndMetricsJSONShape(t *testing.T) {
 	var got Product
 	if err := json.Unmarshal(body, &got); err != nil {
 		t.Fatalf("unmarshal product: %v", err)
-	}
-	if got.Metrics.DisplaySellingCount == nil || *got.Metrics.DisplaySellingCount != 0 {
-		t.Fatalf("display_selling_count did not round-trip: %#v", got.Metrics.DisplaySellingCount)
 	}
 	if got.Supply == nil || got.Supply.Supplier == nil || got.Supply.Manufacturing == nil {
 		t.Fatalf("supply did not round-trip: %+v", got.Supply)
@@ -90,47 +81,13 @@ func TestProductSupplyImagesAndMetricsJSONShape(t *testing.T) {
 }
 
 func TestProductNestedOptionalFields(t *testing.T) {
-	body, err := json.Marshal(Product{SKUCode: "A0001", Content: ProductContent{Name: "Product"}})
+	body, err := json.Marshal(Product{ID: "product_a0001", Content: ProductContent{Name: "Product"}})
 	if err != nil {
 		t.Fatalf("marshal product: %v", err)
 	}
-	for _, optionalKey := range []string{`"supply"`, `"display_selling_count"`, `"images"`, `"administration"`} {
+	for _, optionalKey := range []string{`"supply"`, `"images"`, `"administration"`} {
 		if strings.Contains(string(body), optionalKey) {
 			t.Fatalf("optional JSON unexpectedly contains %s: %s", optionalKey, body)
 		}
 	}
-}
-
-func TestProductMetricsDisplaySellingCountAcceptsAbsentNullAndZero(t *testing.T) {
-	tests := []struct {
-		name      string
-		payload   string
-		wantValue *int64
-	}{
-		{name: "absent", payload: `{"sku_code":"A0001","metrics":{}}`},
-		{name: "null", payload: `{"sku_code":"A0001","metrics":{"display_selling_count":null}}`},
-		{name: "zero", payload: `{"sku_code":"A0001","metrics":{"display_selling_count":0}}`, wantValue: int64Pointer(0)},
-	}
-
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			var got Product
-			if err := json.Unmarshal([]byte(tc.payload), &got); err != nil {
-				t.Fatalf("unmarshal display_selling_count %s: %v", tc.name, err)
-			}
-			if tc.wantValue == nil {
-				if got.Metrics.DisplaySellingCount != nil {
-					t.Fatalf("display_selling_count %s = %v, want nil", tc.name, *got.Metrics.DisplaySellingCount)
-				}
-				return
-			}
-			if got.Metrics.DisplaySellingCount == nil || *got.Metrics.DisplaySellingCount != *tc.wantValue {
-				t.Fatalf("display_selling_count %s = %v, want %d", tc.name, got.Metrics.DisplaySellingCount, *tc.wantValue)
-			}
-		})
-	}
-}
-
-func int64Pointer(value int64) *int64 {
-	return &value
 }

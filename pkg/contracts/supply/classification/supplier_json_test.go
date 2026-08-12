@@ -3,13 +3,13 @@ package classification_test
 import (
 	"encoding/json"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/geography"
 
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/classification"
 )
 
 func TestSupplierOrganisationDetailJSONShape(t *testing.T) {
