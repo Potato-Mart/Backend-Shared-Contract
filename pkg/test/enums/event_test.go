@@ -32,8 +32,6 @@ func TestV27InventoryAndCommerceEventTypes(t *testing.T) {
 				event_enums.EventTypeInventoryStaged,
 				event_enums.EventTypeInventorySold,
 				event_enums.EventTypeInventoryDateMarkThresholdReached,
-				event_enums.EventTypeInventoryPackagePricingAvailable,
-				event_enums.EventTypeInventoryPackagePricingWithdrawn,
 				event_enums.EventTypeStockLocationAvailabilityChanged,
 				event_enums.EventTypeFulfilmentPackingUpdated,
 				event_enums.EventTypeFulfilmentShipped,
@@ -44,6 +42,8 @@ func TestV27InventoryAndCommerceEventTypes(t *testing.T) {
 				event_enums.EventTypeCustomerProfileUpdated,
 				event_enums.EventTypeCustomerConsentChanged,
 				event_enums.EventTypeWalletGiftCardIssued,
+				event_enums.EventTypeCatalogBaseCostChanged,
+				event_enums.EventTypeCatalogListingChanged,
 				event_enums.EventTypeProductSalesPerformanceUpdated,
 				event_enums.EventTypePromotionChanged,
 				event_enums.EventTypeCampaignChanged,
@@ -56,5 +56,19 @@ func TestV27InventoryAndCommerceEventTypes(t *testing.T) {
 	})
 	if got := event_enums.EventTypeStockLocationAvailabilityChanged.String(); got != "stock.location_availability_changed" {
 		t.Fatalf("location availability event type = %q", got)
+	}
+	for _, retired := range []event_enums.EventType{"inventory.package_pricing_available", "inventory.package_pricing_withdrawn"} {
+		if retired.IsValid() {
+			t.Fatalf("retired v26 event type %q must not validate", retired)
+		}
+	}
+	if got := event_enums.EventTypeCatalogBaseCostChanged.String(); got != "catalog.base_cost_changed" {
+		t.Fatalf("catalog base cost event type = %q", got)
+	}
+	if got := event_enums.EventTypeCatalogListingChanged.String(); got != "catalog.listing_changed" {
+		t.Fatalf("catalog listing event type = %q", got)
+	}
+	if got := event_enums.EventTopicCatalogEvents.String(); got != "catalog-events" || !event_enums.EventTopicCatalogEvents.IsValid() {
+		t.Fatalf("catalog topic = %q", got)
 	}
 }

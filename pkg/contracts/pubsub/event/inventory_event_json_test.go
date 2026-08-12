@@ -108,15 +108,6 @@ func TestV27InventoryEventJSONShapes(t *testing.T) {
 			},
 			required: []string{"date_mark", "threshold", "threshold_at", "lot_revision"},
 		},
-		{
-			name: "package pricing availability changed",
-			value: event.PackagePricingAvailabilityChangedEvent{
-				PackagePricingID: "pricing_1", SKUID: "A00001", DepotCode: location.DepotCode,
-				SourceBucketID: "bucket_case", AvailableBeforeBaseUnits: 12, AvailableAfterBaseUnits: 0,
-				InventoryRevision: 5, PackagePricingRevision: 6, OccurredAt: now,
-			},
-			required: []string{"package_pricing_id", "available_before_base_units", "available_after_base_units", "package_pricing_revision"},
-		},
 	}
 
 	for _, testCase := range cases {

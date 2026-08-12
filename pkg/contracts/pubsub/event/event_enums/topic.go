@@ -14,13 +14,14 @@ const (
 	EventTopicCustomerEvents   EventTopic = "customer-events"
 	EventTopicProductStats     EventTopic = "product-stats"
 	EventTopicStorefrontEvents EventTopic = "storefront-events"
+	EventTopicCatalogEvents    EventTopic = "catalog-events"
 )
 
 func (t EventTopic) IsValid() bool {
 	switch t {
 	case EventTopicOrderEvents, EventTopicPaymentEvents, EventTopicRefundEvents,
 		EventTopicStockEvents, EventTopicFulfilmentEvents, EventTopicCustomerEvents,
-		EventTopicProductStats, EventTopicStorefrontEvents:
+		EventTopicProductStats, EventTopicStorefrontEvents, EventTopicCatalogEvents:
 		return true
 	default:
 		return false
@@ -55,8 +56,6 @@ const (
 	EventTypeInventoryStaged                   EventType = "inventory.staged"
 	EventTypeInventorySold                     EventType = "inventory.sold"
 	EventTypeInventoryDateMarkThresholdReached EventType = "inventory.date_mark_threshold_reached"
-	EventTypeInventoryPackagePricingAvailable  EventType = "inventory.package_pricing_available"
-	EventTypeInventoryPackagePricingWithdrawn  EventType = "inventory.package_pricing_withdrawn"
 	EventTypeStockLocationAvailabilityChanged  EventType = "stock.location_availability_changed"
 
 	EventTypeFulfilmentPackingUpdated  EventType = "fulfilment.packing_updated"
@@ -70,6 +69,9 @@ const (
 	EventTypeCustomerConsentChanged EventType = "customer.consent_changed"
 	EventTypeWalletGiftCardIssued   EventType = "wallet.gift_card_issued"
 	EventTypeVoucherClaimIssued     EventType = "voucher.claim_issued"
+
+	EventTypeCatalogBaseCostChanged EventType = "catalog.base_cost_changed"
+	EventTypeCatalogListingChanged  EventType = "catalog.listing_changed"
 
 	EventTypeProductSalesPerformanceUpdated EventType = "product.sales_performance_updated"
 	EventTypePromotionChanged               EventType = "promotion.changed"
@@ -90,7 +92,6 @@ func (t EventType) IsValid() bool {
 		EventTypeInventoryPackageConverted, EventTypeInventoryQualityAssessed,
 		EventTypeInventoryReservationChanged, EventTypeInventoryStaged,
 		EventTypeInventorySold, EventTypeInventoryDateMarkThresholdReached,
-		EventTypeInventoryPackagePricingAvailable, EventTypeInventoryPackagePricingWithdrawn,
 		EventTypeStockLocationAvailabilityChanged,
 		EventTypeFulfilmentPackingUpdated, EventTypeFulfilmentShipped,
 		EventTypeFulfilmentDelivered, EventTypeFulfilmentCompleted,
@@ -98,6 +99,7 @@ func (t EventType) IsValid() bool {
 		EventTypeCustomerRegistered, EventTypeCustomerProfileUpdated,
 		EventTypeCustomerConsentChanged, EventTypeWalletGiftCardIssued,
 		EventTypeVoucherClaimIssued,
+		EventTypeCatalogBaseCostChanged, EventTypeCatalogListingChanged,
 		EventTypeProductSalesPerformanceUpdated,
 		EventTypePromotionChanged, EventTypeCampaignChanged,
 		EventTypeAnalyticsOrderFact, EventTypeAnalyticsPaymentFact,
