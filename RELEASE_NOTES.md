@@ -256,6 +256,15 @@ Producers publish `event_version` `"2"` for exactly the payloads listed
 below; every other payload stays at `"1"`. This list is the declared source
 of truth for consumers.
 
+The set was derived by walking the transitive JSON key set of every routed
+payload type in `pubsub/event` against the v26 tree: of 39 payloads, 15
+changed wire shape, 2 are new, and the remaining 22 are byte-identical and
+stay at `"1"`. A payload counts as changed when a nested type reached
+through any depth of embedding, slice, or pointer changed a JSON key, which
+is why `OrderPackingProjection` is in this list even though its own fields
+did not change. The `pkg/test` release-notes gate re-asserts this table
+against the contract enums so the document and the code cannot drift apart.
+
 信封結構未變更，事件類型名稱亦未更名。以下承載一律以 `event_version`
 `"2"` 發布，其餘維持 `"1"`。此清單為使用方的權威依據。
 
@@ -277,6 +286,7 @@ of truth for consumers.
 | 14 | `ProductSalesRollup` | `product.sales_performance_updated` | `product-stats` | `sku_id` plus new `market_id`; rollups are market separated |
 | 15 | `CatalogBaseCostChangedEvent` | `catalog.base_cost_changed` | `catalog-events` | New payload, published at version `2` from the outset |
 | 16 | `CatalogListingChangedEvent` | `catalog.listing_changed` | `catalog-events` | New payload, published at version `2` from the outset |
+| 17 | `OrderPackingProjection` | `fulfilment.packing_updated` | `fulfilment-events` | `packing.lines[]`, `packing.damages[]`, `packing.discrepancies[]`, and `packing.containers[].contents[]` replace `product_sku_code` with `sku_id` |
 
 Removed event types and payload: `inventory.package_pricing_available`,
 `inventory.package_pricing_withdrawn`, and
