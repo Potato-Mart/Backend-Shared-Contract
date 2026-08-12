@@ -181,6 +181,10 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
   `payment.BuyerLegalSnapshot`, effective dated per market and frozen at
   issuance, plus `pos.CashRoundingSnapshot` so cash rounding never changes
   the priced amounts.
+- Extends `pos.ReceiptSnapshot` with `market_id`, `document_kind`, the frozen
+  `issuer` identity, an optional `buyer` identity for documents that meet the
+  market tax-invoice threshold, and optional `cash_rounding` evidence. Lines,
+  subtotal, tax, and total stay at exact minor units.
 - Adds typed `money.CurrencyCode` and immutable `money.CurrencyExponent`.
   `Money.Currency` and the settlement, terminal, gift-card policy, purchase
   order, and organisation currency scalars are retyped. The JSON is
@@ -325,6 +329,7 @@ revision.
 | untyped `currency` / `currency_code` scalars | `money.CurrencyCode`, with `money.CurrencyExponent` beside every snapshot |
 | assumed two-decimal currencies | `currency_exponent` carried on markets, price books, snapshots, and cost balances |
 | `import_compliance.LabelProductEvidence.taxed` | `market_id` plus `tax_category_id` |
+| receipts rendered from ambient merchant configuration | `pos.ReceiptSnapshot.issuer`, `.buyer`, `.document_kind`, and `.cash_rounding` |
 | `inventory.package_pricing_available` / `inventory.package_pricing_withdrawn` | `catalog.listing_changed` on `catalog-events` |
 | product-level cost or price assumptions | `cost.BaseAcquisitionCost` (private) and `pricebook.PriceEntry` (authoritative) |
 
