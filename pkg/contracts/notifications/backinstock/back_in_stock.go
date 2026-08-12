@@ -29,8 +29,10 @@ type BackInStockDeliveryError struct {
 // BackInStockSubscription is a one-shot request to notify an authenticated
 // account when a SKU becomes storefront-visible and sellable again.
 type BackInStockSubscription struct {
-	ID                  string                                    `json:"id"`
-	ProductSKUCode      string                                    `json:"product_sku_code"`
+	ID    string `json:"id"`
+	SKUID string `json:"sku_id"`
+	// MarketID is the market the subscriber expects to buy the SKU in.
+	MarketID            string                                    `json:"market_id"`
 	UserID              string                                    `json:"user_id"`
 	CustomerType        backinstock_enums.BackInStockCustomerType `json:"customer_type"`
 	Channel             backinstock_enums.BackInStockChannel      `json:"channel"`

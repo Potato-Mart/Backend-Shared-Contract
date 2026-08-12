@@ -12,15 +12,15 @@ func TestPromotionScopeRepresentsPerProductAndCombinedQuantityRequirements(t *te
 	perProduct := PromotionScope{
 		MatchMode: promotion_enums.PromotionMatchModeAll,
 		Groups: []PromotionScopeGroup{
-			{MatchMode: promotion_enums.PromotionMatchModeAny, ProductSKUCodes: []string{"POTATO-A"}, MinimumBaseUnits: 2},
-			{MatchMode: promotion_enums.PromotionMatchModeAny, ProductSKUCodes: []string{"POTATO-B"}, MinimumBaseUnits: 1, MaximumBaseUnits: &maximum},
+			{MatchMode: promotion_enums.PromotionMatchModeAny, SKUIDs: []string{"POTATO-A"}, MinimumBaseUnits: 2},
+			{MatchMode: promotion_enums.PromotionMatchModeAny, SKUIDs: []string{"POTATO-B"}, MinimumBaseUnits: 1, MaximumBaseUnits: &maximum},
 		},
 	}
 	combined := PromotionScope{
 		MatchMode: promotion_enums.PromotionMatchModeAll,
 		Groups: []PromotionScopeGroup{{
 			MatchMode:        promotion_enums.PromotionMatchModeAny,
-			ProductSKUCodes:  []string{"POTATO-A", "POTATO-B"},
+			SKUIDs:           []string{"POTATO-A", "POTATO-B"},
 			MinimumBaseUnits: 3,
 		}},
 	}
@@ -41,11 +41,11 @@ func TestPromotionScopeRepresentsPerProductAndCombinedQuantityRequirements(t *te
 		t.Fatalf("per-product ALL scope changed: %s", body)
 	}
 	first := perGroups[0].(map[string]any)
-	if first["minimum_base_units"] != float64(2) || first["product_sku_codes"].([]any)[0] != "POTATO-A" {
+	if first["minimum_base_units"] != float64(2) || first["sku_ids"].([]any)[0] != "POTATO-A" {
 		t.Fatalf("per-product scope group changed: %#v", first)
 	}
 	combinedGroups := got["combined"]["groups"].([]any)
-	if len(combinedGroups) != 1 || len(combinedGroups[0].(map[string]any)["product_sku_codes"].([]any)) != 2 {
+	if len(combinedGroups) != 1 || len(combinedGroups[0].(map[string]any)["sku_ids"].([]any)) != 2 {
 		t.Fatalf("combined quantity pool changed: %s", body)
 	}
 }

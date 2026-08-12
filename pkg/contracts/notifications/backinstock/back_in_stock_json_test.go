@@ -13,13 +13,13 @@ import (
 func TestBackInStockSubscriptionJSONRoundTrip(t *testing.T) {
 	now := time.Date(2026, 7, 8, 1, 2, 3, 0, time.UTC)
 	sub := notification.BackInStockSubscription{
-		ID:             "bis_123",
-		ProductSKUCode: "SKU-001",
-		UserID:         "usr_123",
-		CustomerType:   backinstock_enums.BackInStockCustomerTypeRetail,
-		Channel:        backinstock_enums.BackInStockChannelSMS,
-		Locale:         "zh-Hant",
-		Status:         backinstock_enums.BackInStockStatusPending,
+		ID:           "bis_123",
+		SKUID:        "SKU-001",
+		UserID:       "usr_123",
+		CustomerType: backinstock_enums.BackInStockCustomerTypeRetail,
+		Channel:      backinstock_enums.BackInStockChannelSMS,
+		Locale:       "zh-Hant",
+		Status:       backinstock_enums.BackInStockStatusPending,
 		ConsentSnapshot: notification.BackInStockConsentSnapshot{
 			AccountPreferences: &identity.UserNotificationPreferences{
 				Channels: identity.UserNotificationChannels{Email: true, SMS: true},
@@ -41,7 +41,7 @@ func TestBackInStockSubscriptionJSONRoundTrip(t *testing.T) {
 	if err := json.Unmarshal(body, &decoded); err != nil {
 		t.Fatalf("unmarshal subscription: %v", err)
 	}
-	if decoded.ProductSKUCode != sub.ProductSKUCode || decoded.Channel != sub.Channel || decoded.Status != sub.Status {
+	if decoded.SKUID != sub.SKUID || decoded.Channel != sub.Channel || decoded.Status != sub.Status {
 		t.Fatalf("decoded subscription = %#v", decoded)
 	}
 	if !decoded.ConsentSnapshot.SMSConsent || decoded.ConsentSnapshot.AccountPreferences == nil {

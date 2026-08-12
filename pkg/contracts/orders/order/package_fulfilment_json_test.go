@@ -29,7 +29,7 @@ func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {
 
 	item := sales.OrderItem{
 		ID:                   "item_1",
-		ProductSKUCode:       "A00001",
+		SKUID:                "A00001",
 		ProductName:          "Potatoes",
 		ProductPackageOption: caseOption,
 		CapturedAt:           now,
@@ -84,7 +84,7 @@ func TestGroupOrderFulfilmentJSONUsesOneParentAllocation(t *testing.T) {
 	plan := sales.GroupOrderFulfilmentPlan{
 		ID: "group_fulfilment_1", GroupOrderCode: "GROUP-1", ParentOrderNumber: "PARENT-1", ParentFulfilmentID: "fulfilment_1",
 		AggregateLines: []sales.GroupOrderAggregateLine{{
-			ID: "aggregate_1", ProductSKUCode: "A00001", PackagePricingID: "pricing_case", PackagePricingRevision: 3, PackageOptionID: "pkg_case_12",
+			ID: "aggregate_1", SKUID: "A00001", PackagePricingID: "pricing_case", PackagePricingRevision: 3, PackageOptionID: "pkg_case_12",
 			RequestedComposition: composition, AllocatedComposition: composition, ShortageComposition: zeroComposition,
 			ReturnedComposition: participantComposition, RefundedComposition: participantComposition,
 			Components: []sales.PricedPackageComponent{aggregateComponent}, DiscountAmount: money.Money{AmountMinor: 200, Currency: "AUD"},
@@ -146,13 +146,13 @@ func TestGroupOrderFulfilmentJSONUsesOneParentAllocation(t *testing.T) {
 }
 
 func packageOption(id string, code string, handling packaging_enums.PackageHandlingUnit, units int64, capturedAt time.Time) product.ProductPackageOption {
-	return product.ProductPackageOption{ID: id, Code: code, ProductSKUCode: "A00001", HandlingUnit: handling, UnitsPerPackage: units, IsActive: true, EffectiveFrom: capturedAt}
+	return product.ProductPackageOption{ID: id, Code: code, SKUID: "A00001", HandlingUnit: handling, UnitsPerPackage: units, IsActive: true, EffectiveFrom: capturedAt}
 }
 
 func packagePricing(id string, option product.ProductPackageOption, price money.Money, capturedAt time.Time) promotion.PackagePricing {
 	return promotion.PackagePricing{
 		ID: id, Revision: 3, InventoryRevision: 9,
-		ProductSKUCode: "A00001", PackageOptionID: option.ID,
+		SKUID: "A00001", PackageOptionID: option.ID,
 		PackagePrice: price, TaxAmount: money.Money{Currency: "AUD"},
 		ValidFrom: capturedAt, Timezone: "Etc/UTC",
 		GeographicContext:     geography.GeographicContext{Source: geography_enums.GeographicContextSourceRetailCustomerProfile, CountryCode: "AU", ScopeRevision: 1, RuleRevision: 3, EvaluationTimezone: "Australia/Melbourne"},

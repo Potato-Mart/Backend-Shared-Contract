@@ -13,7 +13,7 @@ import (
 // StockReservation is a logical hold for one product at one depot.
 type StockReservation struct {
 	ID                     string                                 `json:"id"`
-	ProductSKUCode         string                                 `json:"product_sku_code"`
+	SKUID                  string                                 `json:"sku_id"`
 	DepotCode              string                                 `json:"depot_code"`
 	OrderNumber            string                                 `json:"order_number,omitempty"`
 	GroupOrderCode         string                                 `json:"group_order_code,omitempty"`
@@ -52,7 +52,7 @@ type StockStagingRecord struct {
 	ReservationID       string                               `json:"reservation_id"`
 	AllocationID        string                               `json:"allocation_id"`
 	OrderNumber         string                               `json:"order_number"`
-	ProductSKUCode      string                               `json:"product_sku_code"`
+	SKUID               string                               `json:"sku_id"`
 	LotID               string                               `json:"lot_id,omitempty"`
 	PackageOptionID     string                               `json:"package_option_id"`
 	SourceBucketID      string                               `json:"source_bucket_id"`

@@ -55,7 +55,7 @@ type DeclarationLine struct {
 	SourceLineID              string        `json:"source_line_id,omitempty"`
 	SourceLabelID             string        `json:"source_label_id,omitempty"`
 	SourceLabelRevisionNumber *int64        `json:"source_label_revision_number,omitempty"`
-	ProductSKUCode            string        `json:"product_sku_code,omitempty"`
+	SKUID                     string        `json:"sku_id,omitempty"`
 	EnglishName               string        `json:"english_name"`
 	ChineseName               string        `json:"chinese_name,omitempty"`
 	OrderedQuantity           int64         `json:"ordered_quantity"`

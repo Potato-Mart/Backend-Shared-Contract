@@ -14,7 +14,7 @@ import (
 type ProductPackageOption struct {
 	ID              string                              `json:"id"`
 	Code            string                              `json:"code"`
-	ProductSKUCode  string                              `json:"product_sku_code"`
+	SKUID           string                              `json:"sku_id"`
 	HandlingUnit    packaging_enums.PackageHandlingUnit `json:"handling_unit"`
 	UnitsPerPackage int64                               `json:"units_per_package"`
 	Dimensions      *measurement.Dimensions             `json:"dimensions,omitempty"`
@@ -30,7 +30,7 @@ type ProductPackageOption struct {
 // across product SKUs.
 type ProductBarcodeAssignment struct {
 	ID              string                      `json:"id"`
-	ProductSKUCode  string                      `json:"product_sku_code"`
+	SKUID           string                      `json:"sku_id"`
 	PackageOptionID string                      `json:"package_option_id"`
 	Value           string                      `json:"value"`
 	Format          product_enums.BarcodeFormat `json:"format"`

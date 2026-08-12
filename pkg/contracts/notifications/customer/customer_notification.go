@@ -31,20 +31,20 @@ type CampaignReference struct {
 // CustomerNotification is the customer-safe portal projection. Recipient
 // addresses and provider details deliberately do not appear on this contract.
 type CustomerNotification struct {
-	ID             string                                    `json:"id"`
-	EventID        string                                    `json:"event_id"`
-	Topic          customer_enums.CustomerNotificationTopic  `json:"topic"`
-	Title          string                                    `json:"title"`
-	Message        string                                    `json:"message"`
-	ActionURL      string                                    `json:"action_url,omitempty"`
-	OrderNumber    string                                    `json:"order_number,omitempty"`
-	ProductSKUCode string                                    `json:"product_sku_code,omitempty"`
-	ProductName    string                                    `json:"product_name,omitempty"`
-	Campaign       *CampaignReference                        `json:"campaign,omitempty"`
-	Deliveries     []CustomerNotificationDelivery            `json:"deliveries,omitempty"`
-	CreatedAt      time.Time                                 `json:"created_at"`
-	Status         customer_enums.CustomerNotificationStatus `json:"status"`
-	ReadAt         *time.Time                                `json:"read_at,omitempty"`
-	DismissedAt    *time.Time                                `json:"dismissed_at,omitempty"`
-	ExpiresAt      time.Time                                 `json:"expires_at"`
+	ID          string                                    `json:"id"`
+	EventID     string                                    `json:"event_id"`
+	Topic       customer_enums.CustomerNotificationTopic  `json:"topic"`
+	Title       string                                    `json:"title"`
+	Message     string                                    `json:"message"`
+	ActionURL   string                                    `json:"action_url,omitempty"`
+	OrderNumber string                                    `json:"order_number,omitempty"`
+	SKUID       string                                    `json:"sku_id,omitempty"`
+	ProductName string                                    `json:"product_name,omitempty"`
+	Campaign    *CampaignReference                        `json:"campaign,omitempty"`
+	Deliveries  []CustomerNotificationDelivery            `json:"deliveries,omitempty"`
+	CreatedAt   time.Time                                 `json:"created_at"`
+	Status      customer_enums.CustomerNotificationStatus `json:"status"`
+	ReadAt      *time.Time                                `json:"read_at,omitempty"`
+	DismissedAt *time.Time                                `json:"dismissed_at,omitempty"`
+	ExpiresAt   time.Time                                 `json:"expires_at"`
 }

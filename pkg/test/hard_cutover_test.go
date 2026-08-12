@@ -233,15 +233,20 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"customers/campaign.CampaignSupplierPrediction": v27StringSet(
 			"TotalUnits",
 		),
-		"supply/classification.SKU": v27StringSet(
+		"supply/classification.ProductCategory": v27StringSet(
 			"Storage",
 		),
 		"orders/pos.CatalogProduct": v27StringSet(
 			"ID", "SKU", "Barcode", "Storage", "Price", "CurrentStock",
 		),
+		// v27 reinstates a stable Product.ID as the global product identity;
+		// the v26 removal of "ID"/"id" is deliberately retired here. Every
+		// other v26 removal on Product remains forbidden, and v27 adds the
+		// commerce/metrics/packaging projections it retired.
 		"supply/product.Product": v27StringSet(
-			"ID", "SKU", "Barcode", "Storage", "PlacingArea", "CurrentStock",
+			"SKU", "SKUCode", "Barcode", "Storage", "PlacingArea", "CurrentStock",
 			"RestockedAt", "ExpiredAt", "Pricing", "Physical",
+			"Packaging", "Commerce", "Metrics", "Selling", "Taxed",
 		),
 		"supply/product.Snapshot": v27StringSet(
 			"ID", "SKU", "Storage", "DisplayStatus", "Barcode",
@@ -401,15 +406,16 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"customers/campaign.CampaignSupplierPrediction": v27StringSet(
 			"total_units",
 		),
-		"supply/classification.SKU": v27StringSet(
+		"supply/classification.ProductCategory": v27StringSet(
 			"storage",
 		),
 		"orders/pos.CatalogProduct": v27StringSet(
 			"id", "sku", "barcode", "storage", "price", "current_stock",
 		),
 		"supply/product.Product": v27StringSet(
-			"id", "sku", "barcode", "storage", "placing_area", "current_stock",
+			"sku", "sku_code", "barcode", "storage", "placing_area", "current_stock",
 			"restocked_at", "expired_at", "pricing", "physical",
+			"packaging", "commerce", "metrics", "selling", "taxed",
 		),
 		"supply/product.Snapshot": v27StringSet(
 			"id", "sku", "storage", "display_status", "barcode",

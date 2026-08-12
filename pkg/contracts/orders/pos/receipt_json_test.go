@@ -23,11 +23,11 @@ func TestReceiptSnapshotJSONUsesCustomerSafeFrozenLines(t *testing.T) {
 		IssuedAt:    now,
 		Attribution: sales.POSAttribution{StoreID: "store_1", RegisterID: "register_1"},
 		Lines: []pos.ReceiptLine{{
-			ProductSKUCode: "A00001",
-			ProductName:    "Potatoes 1kg",
-			ProductImage:   &security.ObjectMedia{ID: "media_1", URL: "https://cdn.example.test/products/A00001.png"},
+			SKUID:        "A00001",
+			ProductName:  "Potatoes 1kg",
+			ProductImage: &security.ObjectMedia{ID: "media_1", URL: "https://cdn.example.test/products/A00001.png"},
 			ProductPackageOption: product.ProductPackageOption{
-				ID: "pkg_each", Code: "EACH", ProductSKUCode: "A00001",
+				ID: "pkg_each", Code: "EACH", SKUID: "A00001",
 				HandlingUnit: packaging_enums.PackageHandlingUnitEach, UnitsPerPackage: 1,
 				IsCanonical: true, IsActive: true, EffectiveFrom: now,
 			},
@@ -51,7 +51,7 @@ func TestReceiptSnapshotJSONUsesCustomerSafeFrozenLines(t *testing.T) {
 	if err != nil {
 		t.Fatalf("marshal receipt: %v", err)
 	}
-	for _, want := range []string{`"product_sku_code":"A00001"`, `"product_name":"Potatoes 1kg"`, `"product_image"`, `"product_package_option"`, `"captured_at":"2026-08-07T03:04:05Z"`, `"package_count":2`, `"package_price"`, `"subtotal"`, `"tax_amount"`, `"discount_amount"`, `"promotion_applications":[]`} {
+	for _, want := range []string{`"sku_id":"A00001"`, `"product_name":"Potatoes 1kg"`, `"product_image"`, `"product_package_option"`, `"captured_at":"2026-08-07T03:04:05Z"`, `"package_count":2`, `"package_price"`, `"subtotal"`, `"tax_amount"`, `"discount_amount"`, `"promotion_applications":[]`} {
 		if !strings.Contains(string(payload), want) {
 			t.Fatalf("receipt JSON missing %s: %s", want, payload)
 		}

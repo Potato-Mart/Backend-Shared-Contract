@@ -10,7 +10,7 @@ import (
 // PreorderItemSnapshot is server-stamped from Supply's active SKU policy.
 // Clients cannot choose or alter preorder state.
 type PreorderItemSnapshot struct {
-	ProductSKUCode         string     `json:"product_sku_code"`
+	SKUID                  string     `json:"sku_id"`
 	PolicyVersion          string     `json:"policy_version"`
 	ExpectedAvailableAt    *time.Time `json:"expected_available_at,omitempty"`
 	ScheduleTimezone       string     `json:"schedule_timezone"`

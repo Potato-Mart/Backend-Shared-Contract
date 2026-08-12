@@ -29,7 +29,7 @@ type InboundReceipt struct {
 
 type InboundItem struct {
 	ID                  string                               `json:"id"`
-	ProductSKUCode      string                               `json:"product_sku_code"`
+	SKUID               string                               `json:"sku_id"`
 	ProductName         string                               `json:"product_name,omitempty"`
 	ScannedBarcode      string                               `json:"scanned_barcode,omitempty"`
 	LotID               string                               `json:"lot_id,omitempty"`

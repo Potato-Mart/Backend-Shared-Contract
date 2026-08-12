@@ -21,7 +21,7 @@ type Reward struct {
 	PointsCost             int                                   `json:"points_cost"`
 	DiscountAmount         *money.Money                          `json:"discount_amount,omitempty"`
 	DiscountPercent        float64                               `json:"discount_percent,omitempty"`
-	ProductSKUCode         string                                `json:"product_sku_code,omitempty"`
+	SKUID                  string                                `json:"sku_id,omitempty"`
 	VoucherCodePrefix      string                                `json:"voucher_code_prefix,omitempty"`
 	StartsAt               *time.Time                            `json:"starts_at,omitempty"`
 	ExpiresAt              *time.Time                            `json:"expires_at,omitempty"`

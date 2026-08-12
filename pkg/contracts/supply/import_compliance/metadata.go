@@ -71,7 +71,7 @@ type ArtifactReference struct {
 // substantiate a compliance label. It is compliance-owned evidence, not a
 // second catalogue product model.
 type LabelProductEvidence struct {
-	ProductSKUCode       string                       `json:"product_sku_code"`
+	SKUID                string                       `json:"sku_id"`
 	Barcode              string                       `json:"barcode,omitempty"`
 	EnglishName          string                       `json:"english_name,omitempty"`
 	ChineseName          string                       `json:"chinese_name,omitempty"`

@@ -29,8 +29,10 @@ type Receipt struct {
 }
 
 type ReceiptItem struct {
-	ID                  string                               `json:"id,omitempty"`
-	ProductSKUCode      string                               `json:"product_sku_code"`
+	ID    string `json:"id,omitempty"`
+	SKUID string `json:"sku_id"`
+	// SKUCode is the frozen SKU code captured when the receipt line was recorded.
+	SKUCode             string                               `json:"sku_code"`
 	ProductName         string                               `json:"product_name,omitempty"`
 	PackageOptionID     string                               `json:"package_option_id"`
 	LotID               string                               `json:"lot_id"`

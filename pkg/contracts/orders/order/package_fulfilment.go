@@ -44,7 +44,7 @@ type GroupOrderContext struct {
 // and its reservation and allocation references.
 type GroupOrderAggregateLine struct {
 	ID                     string                               `json:"id"`
-	ProductSKUCode         string                               `json:"product_sku_code"`
+	SKUID                  string                               `json:"sku_id"`
 	PackagePricingID       string                               `json:"package_pricing_id"`
 	PackagePricingRevision int64                                `json:"package_pricing_revision"`
 	PackageOptionID        string                               `json:"package_option_id"`

@@ -38,7 +38,7 @@ func TestPackageConversionMovementRoundTrip(t *testing.T) {
 	}
 	movement := operations.StockMovement{
 		ID:                               "mov_1",
-		ProductSKUCode:                   "A00001",
+		SKUID:                            "A00001",
 		Type:                             warehouse_enums.StockMovementTypePackageConversion,
 		SourceBucketID:                   "bucket_case",
 		DestinationBucketID:              "bucket_each",

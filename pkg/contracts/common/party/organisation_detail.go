@@ -2,6 +2,7 @@ package party
 
 import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
 )
 
@@ -41,8 +42,8 @@ type OrganisationDetail struct {
 	BrandName string                `json:"brand_name,omitempty"`
 
 	// Additional business metadata.
-	Industry     string            `json:"industry,omitempty"`
-	Timezone     string            `json:"timezone,omitempty"`
-	CurrencyCode string            `json:"currency_code,omitempty"`
-	Metadata     metadata.Metadata `json:"metadata,omitempty"`
+	Industry     string             `json:"industry,omitempty"`
+	Timezone     string             `json:"timezone,omitempty"`
+	CurrencyCode money.CurrencyCode `json:"currency_code,omitempty"`
+	Metadata     metadata.Metadata  `json:"metadata,omitempty"`
 }

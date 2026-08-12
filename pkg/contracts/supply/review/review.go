@@ -25,7 +25,7 @@ type RatingSummary struct {
 // contain only approved text; customer and moderation identity never appear.
 type ProductReview struct {
 	ID               string    `json:"id"`
-	ProductSKUCode   string    `json:"product_sku_code"`
+	SKUID            string    `json:"sku_id"`
 	Score            int       `json:"score"`
 	Title            string    `json:"title,omitempty"`
 	Body             string    `json:"body,omitempty"`
@@ -40,7 +40,7 @@ type ProductReview struct {
 // customer, account, or user identifier.
 type MyProductReview struct {
 	ID               string                              `json:"id"`
-	ProductSKUCode   string                              `json:"product_sku_code"`
+	SKUID            string                              `json:"sku_id"`
 	Score            int                                 `json:"score"`
 	Title            string                              `json:"title,omitempty"`
 	Body             string                              `json:"body,omitempty"`
@@ -59,7 +59,7 @@ type MyProductReview struct {
 // ProductReview and MyProductReview.
 type ProductReviewModeration struct {
 	ID               string                              `json:"id"`
-	ProductSKUCode   string                              `json:"product_sku_code"`
+	SKUID            string                              `json:"sku_id"`
 	Score            int                                 `json:"score"`
 	Title            string                              `json:"title,omitempty"`
 	Body             string                              `json:"body,omitempty"`

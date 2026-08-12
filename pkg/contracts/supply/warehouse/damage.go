@@ -14,7 +14,7 @@ import (
 // damage observed during warehouse handling.
 type DamageReport struct {
 	ID                  string                               `json:"id"`
-	ProductSKUCode      string                               `json:"product_sku_code"`
+	SKUID               string                               `json:"sku_id"`
 	BucketID            string                               `json:"bucket_id"`
 	StockUnitID         string                               `json:"stock_unit_id,omitempty"`
 	QualityAssessmentID string                               `json:"quality_assessment_id"`

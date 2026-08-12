@@ -12,7 +12,7 @@ import (
 func TestSKUDemandForecastJSONUsesQualifiedAvailabilitySnapshot(t *testing.T) {
 	computedAt := time.Date(2026, 8, 4, 3, 2, 1, 0, time.UTC)
 	forecast := SKUDemandForecast{
-		ProductSKUCode:       "A00001",
+		SKUID:                "A00001",
 		DepotCode:            "AU-VIC-MEL-DC-01",
 		Channel:              commerce_enums.OrderTypeOnline,
 		Timezone:             "Australia/Melbourne",

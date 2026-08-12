@@ -31,7 +31,7 @@ func TestV27PromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *test
 		Groups: []promotion.PromotionScopeGroup{
 			{
 				MatchMode:        promotion_enums.PromotionMatchModeAny,
-				ProductSKUCodes:  []string{"POTATO-A", "POTATO-B"},
+				SKUIDs:           []string{"POTATO-A", "POTATO-B"},
 				MinimumBaseUnits: 3,
 				MaximumBaseUnits: &maximum,
 			},
@@ -66,7 +66,7 @@ func TestV27PromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *test
 	if got.MatchMode != promotion_enums.PromotionMatchModeAll || len(got.Groups) != 2 {
 		t.Fatalf("outer ALL scope changed: %+v", got)
 	}
-	if first := got.Groups[0]; first.MatchMode != promotion_enums.PromotionMatchModeAny || len(first.ProductSKUCodes) != 2 || first.MaximumBaseUnits == nil || *first.MaximumBaseUnits != 12 {
+	if first := got.Groups[0]; first.MatchMode != promotion_enums.PromotionMatchModeAny || len(first.SKUIDs) != 2 || first.MaximumBaseUnits == nil || *first.MaximumBaseUnits != 12 {
 		t.Fatalf("product quantity-pool group changed: %+v", first)
 	}
 	if second := got.Groups[1]; second.MatchMode != promotion_enums.PromotionMatchModeAll || len(second.CollectionIDs) != 2 || len(second.CategoryTagIDs) != 2 || len(second.PackageOptionIDs) != 2 || second.MaximumBaseUnits != nil {
@@ -78,14 +78,14 @@ func TestV27PackagePricingPreservesOrderedPromotionApplications(t *testing.T) {
 	appliedAt := time.Date(2026, 8, 9, 9, 30, 0, 0, time.UTC)
 	value := promotion.PackagePricing{
 		ID: "pricing-1", Revision: 5, InventoryRevision: 8,
-		ProductSKUCode: "POTATO-A", PackageOptionID: "package-each",
+		SKUID: "POTATO-A", PackageOptionID: "package-each",
 		PackagePrice: money.Money{AmountMinor: 800, Currency: "AUD"},
 		TaxAmount:    money.Money{AmountMinor: 73, Currency: "AUD"},
 		ValidFrom:    appliedAt, Timezone: "Australia/Sydney",
 		StockLocation: warehouse.StockLocationRef{DepotCode: "SYD-01", LocationCode: "A-1"},
 		PromotionApplications: []promotion.PromotionApplication{
-			{PromotionID: "promotion-membership", PromotionKind: "membership_discount", PromotionRevision: 2, RelationID: "relation-membership", ResolvedTargetProductSKUCodes: []string{"POTATO-A"}, AppliedAt: appliedAt},
-			{PromotionID: "promotion-bundle", PromotionKind: "future_bundle_kind", PromotionRevision: 7, RelationID: "relation-bundle", ResolvedQualifierProductSKUCodes: []string{"POTATO-A", "POTATO-B"}, ResolvedTargetProductSKUCodes: []string{"POTATO-A"}, AppliedAt: appliedAt},
+			{PromotionID: "promotion-membership", PromotionKind: "membership_discount", PromotionRevision: 2, RelationID: "relation-membership", ResolvedTargetSKUIDs: []string{"POTATO-A"}, AppliedAt: appliedAt},
+			{PromotionID: "promotion-bundle", PromotionKind: "future_bundle_kind", PromotionRevision: 7, RelationID: "relation-bundle", ResolvedQualifierSKUIDs: []string{"POTATO-A", "POTATO-B"}, ResolvedTargetSKUIDs: []string{"POTATO-A"}, AppliedAt: appliedAt},
 		},
 		CapturedAt: appliedAt,
 	}
@@ -101,15 +101,15 @@ func TestV27PackagePricingPreservesOrderedPromotionApplications(t *testing.T) {
 	if len(got.PromotionApplications) != 2 || got.PromotionApplications[0].PromotionID != "promotion-membership" || got.PromotionApplications[1].PromotionID != "promotion-bundle" {
 		t.Fatalf("promotion stacking order changed: %+v", got.PromotionApplications)
 	}
-	if got.PromotionApplications[1].RelationID != "relation-bundle" || len(got.PromotionApplications[1].ResolvedQualifierProductSKUCodes) != 2 || len(got.PromotionApplications[1].ResolvedTargetProductSKUCodes) != 1 {
+	if got.PromotionApplications[1].RelationID != "relation-bundle" || len(got.PromotionApplications[1].ResolvedQualifierSKUIDs) != 2 || len(got.PromotionApplications[1].ResolvedTargetSKUIDs) != 1 {
 		t.Fatalf("resolved qualifier-to-target evidence changed: %+v", got.PromotionApplications[1])
 	}
 
 	applicationType := reflect.TypeOf(promotion.PromotionApplication{})
 	for fieldName, wantTag := range map[string]string{
-		"RelationID":                       "relation_id",
-		"ResolvedQualifierProductSKUCodes": "resolved_qualifier_product_sku_codes,omitempty",
-		"ResolvedTargetProductSKUCodes":    "resolved_target_product_sku_codes,omitempty",
+		"RelationID":              "relation_id",
+		"ResolvedQualifierSKUIDs": "resolved_qualifier_sku_ids,omitempty",
+		"ResolvedTargetSKUIDs":    "resolved_target_sku_ids,omitempty",
 	} {
 		field, ok := applicationType.FieldByName(fieldName)
 		if !ok || field.Tag.Get("json") != wantTag {
@@ -120,7 +120,7 @@ func TestV27PackagePricingPreservesOrderedPromotionApplications(t *testing.T) {
 
 func TestV27CustomerSummariesExposeOnlyFrozenSafePricingFacts(t *testing.T) {
 	for _, model := range []reflect.Type{reflect.TypeOf(pos.ReceiptLine{}), reflect.TypeOf(order.OrderLineSummary{})} {
-		for _, required := range []string{"ProductSKUCode", "ProductName", "ProductImage", "ProductPackageOption", "CapturedAt", "PackagePrice", "TaxAmount", "DiscountAmount", "PromotionApplications", "Total"} {
+		for _, required := range []string{"SKUID", "ProductName", "ProductImage", "ProductPackageOption", "CapturedAt", "PackagePrice", "TaxAmount", "DiscountAmount", "PromotionApplications", "Total"} {
 			if _, ok := model.FieldByName(required); !ok {
 				t.Errorf("%s is missing frozen customer-safe field %s", model, required)
 			}
@@ -141,7 +141,7 @@ func TestV27CustomerSummariesExposeOnlyFrozenSafePricingFacts(t *testing.T) {
 func TestV27OperationalCategoryTagEvidenceIsLocationQualified(t *testing.T) {
 	model := reflect.TypeOf(operations.InventoryCategoryTagEvidence{})
 	assertJSONFields(t, model, map[string]string{
-		"ProductSKUCode":  "product_sku_code",
+		"SKUID":           "sku_id",
 		"PackageOptionID": "package_option_id",
 		"CategoryTag":     "category_tag",
 		"StockLocation":   "stock_location",
@@ -260,7 +260,7 @@ func v27PromotionScopeStructurallyUsable(scope promotion.PromotionScope) bool {
 		if !group.MatchMode.IsValid() {
 			return false
 		}
-		selectorCount := len(group.ProductSKUCodes) + len(group.CollectionIDs) + len(group.CategoryTagIDs) + len(group.PackageOptionIDs)
+		selectorCount := len(group.SKUIDs) + len(group.CollectionIDs) + len(group.CategoryTagIDs) + len(group.PackageOptionIDs)
 		if selectorCount == 0 || group.MinimumBaseUnits < 0 {
 			return false
 		}

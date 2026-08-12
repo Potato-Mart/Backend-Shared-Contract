@@ -14,7 +14,7 @@ type LabelMaster struct {
 	ID                     string                 `json:"id"`
 	Revision               RevisionMetadata       `json:"revision"`
 	SourceProductEvidence  LabelProductEvidence   `json:"source_product_evidence"`
-	ProductSKUCode         string                 `json:"product_sku_code"`
+	SKUID                  string                 `json:"sku_id"`
 	VariantCode            string                 `json:"variant_code"`
 	Brand                  string                 `json:"brand,omitempty"`
 	EnglishName            string                 `json:"english_name"`

@@ -21,15 +21,15 @@ func TestFavouriteListJSONShape(t *testing.T) {
 		Name:            "List-1",
 		DefaultNameSlot: 1,
 		Products: []classification.FavouriteListProduct{{
-			ProductSKUCode: "SKU-1",
-			AddedAt:        now,
+			SKUID:   "SKU-1",
+			AddedAt: now,
 		}},
 	}
 	payload, err := json.Marshal(list)
 	if err != nil {
 		t.Fatalf("marshal favourite list: %v", err)
 	}
-	for _, want := range []string{`"type":"wholesale_organisation"`, `"organisation_code":"ORG-1"`, `"default_name_slot":1`, `"product_sku_code":"SKU-1"`} {
+	for _, want := range []string{`"type":"wholesale_organisation"`, `"organisation_code":"ORG-1"`, `"default_name_slot":1`, `"sku_id":"SKU-1"`} {
 		if !strings.Contains(string(payload), want) {
 			t.Fatalf("favourite list JSON = %s, want %s", payload, want)
 		}

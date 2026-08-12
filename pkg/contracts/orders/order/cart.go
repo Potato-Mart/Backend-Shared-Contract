@@ -19,6 +19,9 @@ type Cart struct {
 	ID             string `json:"id"`
 	SessionID      string `json:"session_id"`
 	CustomerNumber string `json:"customer_number,omitempty"`
+	// MarketID is the immutable commercial market the cart is built for.
+	// It is mandatory at cart creation and cannot change afterwards.
+	MarketID string `json:"market_id"`
 
 	Channel commerce_enums.OrderType `json:"channel,omitempty"`
 	// Buyer describes who is buying, independently of Channel. POS is a
@@ -35,7 +38,9 @@ type Cart struct {
 }
 
 type CartItem struct {
-	ProductSKUCode       string                          `json:"product_sku_code"`
+	SKUID string `json:"sku_id"`
+	// SKUCode is the frozen SKU code captured when the line was priced.
+	SKUCode              string                          `json:"sku_code"`
 	ProductName          string                          `json:"product_name"`
 	ProductImage         *security.ObjectMedia           `json:"product_image,omitempty"`
 	ProductPackageOption product.ProductPackageOption    `json:"product_package_option"`

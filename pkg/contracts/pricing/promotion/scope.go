@@ -18,7 +18,7 @@ type PromotionScope struct {
 // nil MaximumBaseUnits means the selected quantity is unlimited.
 type PromotionScopeGroup struct {
 	MatchMode        promotion_enums.PromotionMatchMode `json:"match_mode"`
-	ProductSKUCodes  []string                           `json:"product_sku_codes,omitempty"`
+	SKUIDs           []string                           `json:"sku_ids,omitempty"`
 	CollectionIDs    []string                           `json:"collection_ids,omitempty"`
 	CategoryTagIDs   []string                           `json:"category_tag_ids,omitempty"`
 	PackageOptionIDs []string                           `json:"package_option_ids,omitempty"`

@@ -69,8 +69,12 @@ var v27ModelPackageManifest = map[string]string{
 	"contracts/payments/terminal/terminal_enums":                 "enum",
 	"contracts/pricing/benefit":                                  "value",
 	"contracts/pricing/benefit/benefit_enums":                    "enum",
+	"contracts/pricing/market":                                   "entity",
+	"contracts/pricing/market/market_enums":                      "enum",
 	"contracts/pricing/membership":                               "entity,record,value",
 	"contracts/pricing/membership/membership_enums":              "enum",
+	"contracts/pricing/pricebook":                                "entity,record",
+	"contracts/pricing/pricebook/pricebook_enums":                "enum",
 	"contracts/pricing/promotion":                                "entity,event,record,value",
 	"contracts/pricing/promotion/promotion_enums":                "enum",
 	"contracts/pricing/wallet":                                   "entity,record,snapshot,value",
@@ -82,6 +86,8 @@ var v27ModelPackageManifest = map[string]string{
 	"contracts/supply/classification/classification_enums":       "enum",
 	"contracts/supply/import_compliance":                         "entity,record,snapshot,value",
 	"contracts/supply/import_compliance/import_compliance_enums": "enum",
+	"contracts/supply/listing":                                   "entity,record,snapshot,value",
+	"contracts/supply/listing/listing_enums":                     "enum",
 	"contracts/supply/operations":                                "entity,event,record,snapshot,value",
 	"contracts/supply/product":                                   "entity,event,snapshot,value",
 	"contracts/supply/product/product_enums":                     "enum",
@@ -99,7 +105,7 @@ var v27ModelPackageManifest = map[string]string{
 // Reviewed for the final v27.0.0 object-media, canonical-product, package-layout,
 // unified-promotion, and package-pricing release surface. The digest captures
 // the complete exported model manifest after the hard cutover.
-const v27ExportedTypeManifestDigest = "cd8db873980ca014009903fb145e7f0dc57779551d9375a524cbcf7b4b5de020"
+const v27ExportedTypeManifestDigest = "df1b234b8bdf5628f63dadd54048600dd680238b3677730cab33bf88d93372d3"
 
 func TestV27ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

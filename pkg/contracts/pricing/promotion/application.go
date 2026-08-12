@@ -15,11 +15,11 @@ type PromotionApplication struct {
 	PromotionRevision int64  `json:"promotion_revision"`
 	RelationID        string `json:"relation_id"`
 
-	ResolvedQualifierProductSKUCodes []string                     `json:"resolved_qualifier_product_sku_codes,omitempty"`
-	ResolvedTargetProductSKUCodes    []string                     `json:"resolved_target_product_sku_codes,omitempty"`
-	ResolvedTerms                    []PromotionTerm              `json:"resolved_terms,omitempty"`
-	ResolvedAmounts                  []PromotionAmount            `json:"resolved_amounts,omitempty"`
-	DisplayMessages                  []localization.LocalizedText `json:"display_messages,omitempty"`
-	ReceiptMessages                  []localization.LocalizedText `json:"receipt_messages,omitempty"`
-	AppliedAt                        time.Time                    `json:"applied_at"`
+	ResolvedQualifierSKUIDs []string                     `json:"resolved_qualifier_sku_ids,omitempty"`
+	ResolvedTargetSKUIDs    []string                     `json:"resolved_target_sku_ids,omitempty"`
+	ResolvedTerms           []PromotionTerm              `json:"resolved_terms,omitempty"`
+	ResolvedAmounts         []PromotionAmount            `json:"resolved_amounts,omitempty"`
+	DisplayMessages         []localization.LocalizedText `json:"display_messages,omitempty"`
+	ReceiptMessages         []localization.LocalizedText `json:"receipt_messages,omitempty"`
+	AppliedAt               time.Time                    `json:"applied_at"`
 }

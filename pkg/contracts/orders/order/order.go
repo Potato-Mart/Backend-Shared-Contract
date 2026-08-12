@@ -29,8 +29,12 @@ import (
 // channel, not a buyer type — see sales.BuyerContext. Optional pointer
 // so it is omitted entirely when unset.
 type Order struct {
-	ID                string                        `json:"id"`
-	OrderNumber       string                        `json:"order_number"`
+	ID          string `json:"id"`
+	OrderNumber string `json:"order_number"`
+	// MarketID is the immutable commercial market the order was placed
+	// in. It is captured when the cart is created and never re-derived
+	// from country or currency.
+	MarketID          string                        `json:"market_id"`
 	Channel           commerce_enums.OrderType      `json:"channel"`
 	Status            order_enums.SalesOrderStatus  `json:"status"`
 	PaymentStatus     payment_enums.PaymentStatus   `json:"payment_status"`
@@ -126,8 +130,10 @@ type OrderPackingProgress struct {
 }
 
 type OrderItem struct {
-	ID                   string                                   `json:"id"`
-	ProductSKUCode       string                                   `json:"product_sku_code"`
+	ID    string `json:"id"`
+	SKUID string `json:"sku_id"`
+	// SKUCode is the frozen SKU code captured when the line was priced.
+	SKUCode              string                                   `json:"sku_code"`
 	ProductName          string                                   `json:"product_name"`
 	ProductImage         *security.ObjectMedia                    `json:"product_image,omitempty"`
 	ProductPackageOption product.ProductPackageOption             `json:"product_package_option"`
@@ -168,7 +174,7 @@ type RewardRedemptionSnapshot struct {
 	RewardType         membership_enums.MembershipRewardType `json:"reward_type"`
 	PointsSpent        int                                   `json:"points_spent"`
 	DiscountAmount     *money.Money                          `json:"discount_amount,omitempty"`
-	ProductSKUCode     string                                `json:"product_sku_code,omitempty"`
+	SKUID              string                                `json:"sku_id,omitempty"`
 	VoucherCode        string                                `json:"voucher_code,omitempty"`
 	OccurredAt         *time.Time                            `json:"occurred_at,omitempty"`
 }

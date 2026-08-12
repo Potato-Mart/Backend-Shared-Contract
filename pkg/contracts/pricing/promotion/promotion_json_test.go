@@ -40,8 +40,8 @@ func TestPromotionRoundTripsOpenPromotionAndRelationKinds(t *testing.T) {
 		Relations: []PromotionRelation{{
 			ID:             "rel_future",
 			Kind:           "future_qualifier_to_target",
-			QualifierScope: PromotionScope{MatchMode: promotion_enums.PromotionMatchModeAll, Groups: []PromotionScopeGroup{{MatchMode: promotion_enums.PromotionMatchModeAny, ProductSKUCodes: []string{"POTATO-001"}}}},
-			TargetScope:    PromotionScope{MatchMode: promotion_enums.PromotionMatchModeAll, Groups: []PromotionScopeGroup{{MatchMode: promotion_enums.PromotionMatchModeAny, ProductSKUCodes: []string{"POTATO-002"}}}},
+			QualifierScope: PromotionScope{MatchMode: promotion_enums.PromotionMatchModeAll, Groups: []PromotionScopeGroup{{MatchMode: promotion_enums.PromotionMatchModeAny, SKUIDs: []string{"POTATO-001"}}}},
+			TargetScope:    PromotionScope{MatchMode: promotion_enums.PromotionMatchModeAll, Groups: []PromotionScopeGroup{{MatchMode: promotion_enums.PromotionMatchModeAny, SKUIDs: []string{"POTATO-002"}}}},
 		}},
 		Controls: PromotionControls{
 			Priority:            10,

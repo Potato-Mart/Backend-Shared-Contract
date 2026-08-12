@@ -12,7 +12,8 @@ import (
 
 // SKUDemandForecast is one depot- and channel-qualified demand prediction.
 type SKUDemandForecast struct {
-	ProductSKUCode       string                   `json:"product_sku_code"`
+	SKUID                string                   `json:"sku_id"`
+	MarketID             string                   `json:"market_id"`
 	DepotCode            string                   `json:"depot_code"`
 	Channel              commerce_enums.OrderType `json:"channel"`
 	Timezone             string                   `json:"timezone"`

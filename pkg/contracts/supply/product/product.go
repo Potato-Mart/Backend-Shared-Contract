@@ -1,31 +1,27 @@
 package product
 
 import (
-	"time"
-
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/commerce/commerce_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/customers/retail/retail_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/promotion"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/classification"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product/product_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
-// Product is the canonical master record for one product SKU. Consumers that
-// do not require a complete product use SKUCode instead of embedding Product.
+// Product is the global conceptual product: what the item is, independently of
+// any market, currency, channel, or depot. It carries content, origin,
+// classification, provenance, lifecycle status, and administration only.
+//
+// A Product holds no price, no tax flag, no channel sellability, and no
+// market-dependent metric. Sellable identity lives on SKU, market availability
+// on listing.MarketListing, and authoritative prices in Pricing price books.
 type Product struct {
-	SKUCode        string                        `json:"sku_code"`
+	ID             string                        `json:"id"`
+	Status         product_enums.ProductStatus   `json:"status"`
 	Content        ProductContent                `json:"content"`
 	Classification ProductClassification         `json:"classification"`
-	Packaging      ProductPackaging              `json:"packaging"`
-	Commerce       ProductCommerce               `json:"commerce"`
-	Metrics        ProductMetrics                `json:"metrics"`
 	Supply         *classification.ProductSupply `json:"supply,omitempty"`
 	Administration *ProductAdministration        `json:"administration,omitempty"`
 }
@@ -54,47 +50,10 @@ type ProductOrigin struct {
 // ProductClassification contains references to the product's catalogue
 // classification. Category tags are deliberately lightweight references.
 type ProductClassification struct {
-	CategorySKUCode string                          `json:"category_sku_code"`
-	BrandRef        *classification.BrandRef        `json:"brand_ref,omitempty"`
-	CollectionRef   *classification.CollectionRef   `json:"collection_ref,omitempty"`
-	CategoryTags    []classification.CategoryTagRef `json:"category_tags,omitempty"`
-}
-
-// ProductPackaging contains the canonical package, barcode, tax, and storage
-// configuration for the product.
-type ProductPackaging struct {
-	PackageOptions     []ProductPackageOption      `json:"package_options"`
-	BarcodeAssignments []ProductBarcodeAssignment  `json:"barcode_assignments,omitempty"`
-	Taxed              bool                        `json:"taxed"`
-	StorageType        warehouse_enums.StorageType `json:"storage_type,omitempty"`
-}
-
-// ProductCommerce contains lifecycle and sellability information. Its package
-// entries are intentionally customer-safe and never disclose inventory source
-// or raw quantity details.
-type ProductCommerce struct {
-	Status        product_enums.ProductStatus `json:"status,omitempty"`
-	Selling       *Selling                    `json:"selling,omitempty"`
-	FirstListedAt *time.Time                  `json:"first_listed_at,omitempty"`
-	Packages      []ProductPackageCommerce    `json:"packages,omitempty"`
-}
-
-// ProductPackageCommerce is a safe commercial projection of one package
-// option. PromotionApplications preserve the ordered customer-safe outcomes
-// applied to this package without disclosing operational inventory evidence.
-type ProductPackageCommerce struct {
-	PackageOptionID       string                             `json:"package_option_id"`
-	PackagePrice          money.Money                        `json:"package_price"`
-	TaxAmount             money.Money                        `json:"tax_amount"`
-	StockState            product_enums.StorefrontStockState `json:"stock_state,omitempty"`
-	PromotionApplications []promotion.PromotionApplication   `json:"promotion_applications,omitempty"`
-	AsOf                  time.Time                          `json:"as_of"`
-}
-
-// ProductMetrics contains backend-computed and curated selling measurements.
-type ProductMetrics struct {
-	SalesPerformance    *SalesPerformanceStats `json:"sales_performance,omitempty"`
-	DisplaySellingCount *int64                 `json:"display_selling_count,omitempty"`
+	ProductCategoryCode string                          `json:"product_category_code"`
+	BrandRef            *classification.BrandRef        `json:"brand_ref,omitempty"`
+	CollectionRef       *classification.CollectionRef   `json:"collection_ref,omitempty"`
+	CategoryTags        []classification.CategoryTagRef `json:"category_tags,omitempty"`
 }
 
 // ProductAdministration retains master-data history and audit information.
@@ -103,16 +62,6 @@ type ProductAdministration struct {
 	History []security.HistoryEntry `json:"history,omitempty"`
 
 	audit.AuditFields
-}
-
-// Selling groups the channel/buyer sellability rules for a product: which
-// order channels it may be sold through, which buyer types may purchase it,
-// and how its price/listing is exposed. Empty Channels and BuyerTypes mean no
-// restriction; enforcement remains backend behavior.
-type Selling struct {
-	Channels   []commerce_enums.OrderType    `json:"channels,omitempty"`
-	BuyerTypes []retail_enums.BuyerType      `json:"buyer_types,omitempty"`
-	Visibility product_enums.PriceVisibility `json:"visibility,omitempty"`
 }
 
 // Images groups the customer-facing product imagery.

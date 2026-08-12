@@ -17,8 +17,8 @@ type FavouriteListOwner struct {
 
 // FavouriteListProduct records product membership without cart quantities.
 type FavouriteListProduct struct {
-	ProductSKUCode string    `json:"product_sku_code"`
-	AddedAt        time.Time `json:"added_at"`
+	SKUID   string    `json:"sku_id"`
+	AddedAt time.Time `json:"added_at"`
 }
 
 // FavouriteList is one named, persisted customer product collection.

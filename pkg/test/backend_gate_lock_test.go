@@ -8,16 +8,21 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/apiresponse/apiresponse_enums"
 	sales "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/market"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/pricebook"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/listing"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/operations"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging/packaging_enums"
 )
 
 // TestV27BackendGateModelSurface locks the reusable model primitives needed by
-// the v27 stock, geography, package-pricing, and availability gates. HTTP DTOs, stock
-// commands, resolution rules, and error envelopes remain service-owned.
+// the v27 stock, geography, market-pricing, listing, and availability gates.
+// HTTP DTOs, stock commands, resolution rules, and error envelopes remain
+// service-owned.
 func TestV27BackendGateModelSurface(t *testing.T) {
 	assertJSONFields(t, reflect.TypeOf(geography.Address{}), map[string]string{
 		"Locality":           "locality",
@@ -33,7 +38,7 @@ func TestV27BackendGateModelSurface(t *testing.T) {
 	})
 	assertJSONFields(t, reflect.TypeOf(promotion.PackagePricing{}), map[string]string{
 		"ID":                    "id",
-		"ProductSKUCode":        "product_sku_code",
+		"SKUID":                 "sku_id",
 		"PackageOptionID":       "package_option_id",
 		"PackagePrice":          "package_price",
 		"StockLocation":         "stock_location",
@@ -45,25 +50,70 @@ func TestV27BackendGateModelSurface(t *testing.T) {
 		"CapturedAt":            "captured_at",
 	})
 	assertJSONFields(t, reflect.TypeOf(operations.ProductStockSummary{}), map[string]string{
-		"ProductSKUCode": "product_sku_code",
-		"Depots":         "depots,omitempty",
-		"Revision":       "revision",
-		"IsOutOfStock":   "is_out_of_stock",
-		"AsOf":           "as_of",
+		"SKUID":        "sku_id",
+		"Depots":       "depots,omitempty",
+		"Revision":     "revision",
+		"IsOutOfStock": "is_out_of_stock",
+		"AsOf":         "as_of",
 	})
-	assertJSONFields(t, reflect.TypeOf(product.ProductCommerce{}), map[string]string{
-		"Status":        "status,omitempty",
-		"Selling":       "selling,omitempty",
-		"FirstListedAt": "first_listed_at,omitempty",
-		"Packages":      "packages,omitempty",
+	assertJSONFields(t, reflect.TypeOf(product.SKU{}), map[string]string{
+		"ID":                 "id",
+		"ProductID":          "product_id",
+		"Code":               "code",
+		"PackageOptions":     "package_options",
+		"BarcodeAssignments": "barcode_assignments,omitempty",
+		"NetContent":         "net_content,omitempty",
+		"StorageType":        "storage_type,omitempty",
+		"Status":             "status",
 	})
-	assertJSONFields(t, reflect.TypeOf(product.ProductPackageCommerce{}), map[string]string{
-		"PackageOptionID":       "package_option_id",
-		"PackagePrice":          "package_price",
-		"TaxAmount":             "tax_amount",
-		"StockState":            "stock_state,omitempty",
-		"PromotionApplications": "promotion_applications,omitempty",
-		"AsOf":                  "as_of",
+	assertJSONFields(t, reflect.TypeOf(market.Market{}), map[string]string{
+		"ID":               "id",
+		"Code":             "code",
+		"CountryCode":      "country_code",
+		"DefaultCurrency":  "default_currency",
+		"CurrencyExponent": "currency_exponent",
+		"Status":           "status",
+		"Revision":         "revision",
+	})
+	assertJSONFields(t, reflect.TypeOf(pricebook.PriceBook{}), map[string]string{
+		"MarketID":         "market_id",
+		"Currency":         "currency",
+		"CurrencyExponent": "currency_exponent",
+		"Channel":          "channel",
+		"Audience":         "audience",
+		"TaxInclusion":     "tax_inclusion",
+		"PriceEnding":      "price_ending",
+		"Status":           "status",
+	})
+	assertJSONFields(t, reflect.TypeOf(pricebook.PriceEntry{}), map[string]string{
+		"PriceBookID": "price_book_id",
+		"SKUID":       "sku_id",
+		"Amount":      "amount",
+		"Status":      "status",
+		"Derivation":  "derivation",
+		"Approval":    "approval,omitempty",
+		"Revision":    "revision",
+	})
+	assertJSONFields(t, reflect.TypeOf(pricebook.PriceBookAssignment{}), map[string]string{
+		"MarketID":             "market_id",
+		"PriceBookID":          "price_book_id",
+		"Kind":                 "kind",
+		"OrganisationCategory": "organisation_category,omitempty",
+		"OrganisationCode":     "organisation_code,omitempty",
+	})
+	assertJSONFields(t, reflect.TypeOf(listing.MarketListing{}), map[string]string{
+		"MarketID":               "market_id",
+		"SKUID":                  "sku_id",
+		"Status":                 "status",
+		"TaxCategoryID":          "tax_category_id",
+		"ExpiryLeadDaysOverride": "expiry_lead_days_override,omitempty",
+		"UnitPricingRequired":    "unit_pricing_required",
+		"Revision":               "revision",
+	})
+	assertJSONFields(t, reflect.TypeOf(warehouse.DepotMarket{}), map[string]string{
+		"DepotCode": "depot_code",
+		"MarketID":  "market_id",
+		"IsActive":  "is_active",
 	})
 	assertJSONFields(t, reflect.TypeOf(sales.BuyerContext{}), map[string]string{
 		"Type":                 "type,omitempty",

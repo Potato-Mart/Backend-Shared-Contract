@@ -13,16 +13,36 @@ import (
 	"testing"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/measurement"
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/classification"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
-func TestV27CanonicalProductUsesOnlyReusableComponents(t *testing.T) {
+// v27FrozenSKUCodeTypes is the frozen allowlist of transaction-evidence types
+// that may keep a frozen sku_code alongside their sku_id link. Every other
+// model links to a SKU by sku_id only.
+var v27FrozenSKUCodeTypes = map[string]struct{}{
+	"orders/order.CartItem":               {},
+	"orders/order.OrderItem":              {},
+	"orders/order.OrderLineSummary":       {},
+	"orders/pos.ReceiptLine":              {},
+	"supply/purchase.OrderItem":           {},
+	"supply/purchase.ReceiptItem":         {},
+	"supply/purchase.SupplierInvoiceLine": {},
+}
+
+func TestV27GlobalProductCarriesOnlyContentClassificationAndAdministration(t *testing.T) {
 	canonicalProductAssertExactFields(t, reflect.TypeOf(product.Product{}), map[string]canonicalProductField{
-		"SKUCode": {
-			json:   "sku_code",
+		"ID": {
+			json:   "id",
 			typeOf: reflect.TypeOf(""),
+		},
+		"Status": {
+			json:   "status",
+			typeOf: reflect.TypeOf(product_enums.ProductStatus("")),
 		},
 		"Content": {
 			json:   "content",
@@ -31,18 +51,6 @@ func TestV27CanonicalProductUsesOnlyReusableComponents(t *testing.T) {
 		"Classification": {
 			json:   "classification",
 			typeOf: reflect.TypeOf(product.ProductClassification{}),
-		},
-		"Packaging": {
-			json:   "packaging",
-			typeOf: reflect.TypeOf(product.ProductPackaging{}),
-		},
-		"Commerce": {
-			json:   "commerce",
-			typeOf: reflect.TypeOf(product.ProductCommerce{}),
-		},
-		"Metrics": {
-			json:   "metrics",
-			typeOf: reflect.TypeOf(product.ProductMetrics{}),
 		},
 		"Supply": {
 			json:   "supply,omitempty",
@@ -63,6 +71,69 @@ func TestV27CanonicalProductUsesOnlyReusableComponents(t *testing.T) {
 	}
 	if got, want := content.Tag.Get("json"), "images,omitempty"; got != want {
 		t.Errorf("product.ProductContent.Images JSON tag = %q, want %q", got, want)
+	}
+}
+
+func TestV27SKUIsTheSellableIdentityWithExactFields(t *testing.T) {
+	canonicalProductAssertExactFields(t, reflect.TypeOf(product.SKU{}), map[string]canonicalProductField{
+		"ID":        {json: "id", typeOf: reflect.TypeOf("")},
+		"ProductID": {json: "product_id", typeOf: reflect.TypeOf("")},
+		"Code":      {json: "code", typeOf: reflect.TypeOf("")},
+		"PackageOptions": {
+			json:   "package_options",
+			typeOf: reflect.TypeOf([]product.ProductPackageOption{}),
+		},
+		"BarcodeAssignments": {
+			json:   "barcode_assignments,omitempty",
+			typeOf: reflect.TypeOf([]product.ProductBarcodeAssignment{}),
+		},
+		"NetContent": {
+			json:   "net_content,omitempty",
+			typeOf: reflect.TypeOf((*measurement.NetContent)(nil)),
+		},
+		"StorageType": {
+			json:   "storage_type,omitempty",
+			typeOf: reflect.TypeOf(warehouse_enums.StorageType("")),
+		},
+		"Status": {
+			json:   "status",
+			typeOf: reflect.TypeOf(product_enums.SKUStatus("")),
+		},
+		"AuditFields": {
+			json:   "",
+			typeOf: reflect.TypeOf(audit.AuditFields{}),
+		},
+	})
+	auditField, ok := reflect.TypeOf(product.SKU{}).FieldByName("AuditFields")
+	if !ok || !auditField.Anonymous {
+		t.Error("product.SKU must embed audit.AuditFields")
+	}
+}
+
+func TestV27ProductAndSKUCarryNoPriceTaxOrMarketFacts(t *testing.T) {
+	forbiddenFragments := []string{
+		"price", "tax", "market", "currency", "amount_minor", "discount",
+		"selling", "commerce", "channel", "audience", "visibility",
+		"depot", "available", "reserved", "stock",
+	}
+	for _, model := range []reflect.Type{
+		reflect.TypeOf(product.Product{}),
+		reflect.TypeOf(product.ProductContent{}),
+		reflect.TypeOf(product.ProductClassification{}),
+		reflect.TypeOf(product.SKU{}),
+	} {
+		for index := 0; index < model.NumField(); index++ {
+			field := model.Field(index)
+			for _, value := range []string{field.Name, field.Tag.Get("json")} {
+				lowerValue := strings.ToLower(value)
+				for _, forbidden := range forbiddenFragments {
+					if strings.Contains(lowerValue, forbidden) {
+						t.Errorf("%s exposes forbidden market/commercial fact through %s", model, field.Name)
+						break
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -112,29 +183,6 @@ func TestV27ProductAdministrationIsOptionalAndOwnsHistoryAndAudit(t *testing.T) 
 	}
 }
 
-func TestV27ProductCommerceExcludesOperationalInventoryAndAuditEvidence(t *testing.T) {
-	canonicalProductRequireJSONFields(t, reflect.TypeOf(product.ProductCommerce{}), map[string]string{
-		"Status":        "status,omitempty",
-		"Selling":       "selling,omitempty",
-		"FirstListedAt": "first_listed_at,omitempty",
-		"Packages":      "packages,omitempty",
-	})
-	canonicalProductRequireJSONFields(t, reflect.TypeOf(product.ProductPackageCommerce{}), map[string]string{
-		"PackageOptionID": "package_option_id",
-		"PackagePrice":    "package_price",
-		"TaxAmount":       "tax_amount",
-		"StockState":      "stock_state,omitempty",
-		"AsOf":            "as_of",
-	})
-
-	for _, model := range []reflect.Type{
-		reflect.TypeOf(product.ProductCommerce{}),
-		reflect.TypeOf(product.ProductPackageCommerce{}),
-	} {
-		canonicalProductAssertNoOperationalCommerceEvidence(t, model)
-	}
-}
-
 func TestV27CanonicalProductRetiresLegacyCatalogueProjections(t *testing.T) {
 	retiredProductTypes := canonicalProductStringSet(
 		"Snapshot",
@@ -151,6 +199,11 @@ func TestV27CanonicalProductRetiresLegacyCatalogueProjections(t *testing.T) {
 		"SoonExpiryMerchandisingPolicy",
 		"StorefrontExpiryDisplay",
 		"StorefrontPreorderDisplay",
+		"ProductCommerce",
+		"ProductPackageCommerce",
+		"ProductMetrics",
+		"ProductPackaging",
+		"Selling",
 	)
 	retiredPOSETypes := canonicalProductStringSet("CatalogProduct")
 
@@ -185,6 +238,7 @@ func TestV27CanonicalProductRetiresLegacyCatalogueProjections(t *testing.T) {
 		"contracts/supply/product/merchandising.go",
 		"contracts/supply/product/snapshot.go",
 		"contracts/supply/product/storefront.go",
+		"contracts/supply/classification/sku.go",
 	} {
 		path := filepath.Join(sharedContractPkgRoot(t), filepath.FromSlash(retiredPath))
 		if _, err := os.Stat(path); err == nil {
@@ -195,7 +249,7 @@ func TestV27CanonicalProductRetiresLegacyCatalogueProjections(t *testing.T) {
 	}
 }
 
-func TestV27OnlyProductPackageEmbedsFullProduct(t *testing.T) {
+func TestV27OnlyProductPackageDeclaresGlobalCatalogueModels(t *testing.T) {
 	const productImportPath = "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product"
 
 	canonicalProductWalkProductionGoFiles(t, func(path string, relativePath string, fset *token.FileSet, file *ast.File) {
@@ -207,11 +261,14 @@ func TestV27OnlyProductPackageEmbedsFullProduct(t *testing.T) {
 			}
 			for _, specification := range general.Specs {
 				typeSpecification, ok := specification.(*ast.TypeSpec)
-				if !ok || typeSpecification.Name.Name != "Product" {
+				if !ok {
+					continue
+				}
+				if typeSpecification.Name.Name != "Product" && typeSpecification.Name.Name != "SKU" {
 					continue
 				}
 				if directory != "contracts/supply/product" {
-					t.Errorf("%s declares Product outside supply/product; product.Product is the only full product model", fset.Position(typeSpecification.Pos()))
+					t.Errorf("%s declares %s outside supply/product; product.Product and product.SKU are the only global catalogue models", fset.Position(typeSpecification.Pos()), typeSpecification.Name.Name)
 				}
 			}
 		}
@@ -240,7 +297,7 @@ func TestV27OnlyProductPackageEmbedsFullProduct(t *testing.T) {
 			}
 		}
 		if dotImported {
-			t.Errorf("%s dot-imports supply/product; cross-domain models must use ProductSKUCode", path)
+			t.Errorf("%s dot-imports supply/product; cross-domain models must use SKUID", path)
 			return
 		}
 		if len(aliases) == 0 {
@@ -252,17 +309,17 @@ func TestV27OnlyProductPackageEmbedsFullProduct(t *testing.T) {
 			if !ok {
 				return true
 			}
-			if canonicalProductTypeUsesFullProduct(field.Type, aliases) {
-				t.Errorf("%s embeds product.Product outside supply/product; use ProductSKUCode plus transaction-owned frozen facts", fset.Position(field.Pos()))
+			if canonicalProductTypeUsesGlobalCatalogueModel(field.Type, aliases) {
+				t.Errorf("%s embeds product.Product or product.SKU outside supply/product; use sku_id plus transaction-owned frozen facts", fset.Position(field.Pos()))
 			}
 			return true
 		})
 	})
 }
 
-func TestV27CrossDomainProductSKUCodeLinksAreScalars(t *testing.T) {
+func TestV27CrossDomainSKULinksUseScalarSKUID(t *testing.T) {
+	pkgRoot := sharedContractPkgRoot(t)
 	canonicalProductWalkProductionGoFiles(t, func(path string, relativePath string, fset *token.FileSet, file *ast.File) {
-		directory := filepath.ToSlash(filepath.Dir(relativePath))
 		for _, declaration := range file.Decls {
 			general, ok := declaration.(*ast.GenDecl)
 			if !ok || general.Tok != token.TYPE {
@@ -277,29 +334,34 @@ func TestV27CrossDomainProductSKUCodeLinksAreScalars(t *testing.T) {
 				if !ok {
 					continue
 				}
+				typeKey := v27ProductionTypeKey(pkgRoot, path, typeSpecification.Name.Name)
+				_, frozenAllowed := v27FrozenSKUCodeTypes[typeKey]
 				for _, field := range structure.Fields.List {
+					jsonKey, present := v27JSONFieldName(t, path, field)
 					for _, name := range field.Names {
-						if name.Name == "SKUCode" {
-							if directory != "contracts/supply/product" || typeSpecification.Name.Name != "Product" {
-								t.Errorf("%s uses legacy SKUCode on %s; cross-domain links must use ProductSKUCode", fset.Position(field.Pos()), typeSpecification.Name.Name)
+						switch name.Name {
+						case "SKUID":
+							identifier, stringScalar := field.Type.(*ast.Ident)
+							if !stringScalar || identifier.Name != "string" {
+								t.Errorf("%s uses non-scalar SKUID on %s", fset.Position(field.Pos()), typeSpecification.Name.Name)
 							}
-							continue
-						}
-						if name.Name != "ProductSKUCode" {
-							jsonKey, present := v27JSONFieldName(t, path, field)
-							if present && jsonKey == "sku_code" {
-								t.Errorf("%s uses legacy cross-domain JSON key sku_code on %s", fset.Position(field.Pos()), typeSpecification.Name.Name)
+							if !present || jsonKey != "sku_id" {
+								t.Errorf("%s SKUID on %s must use JSON key sku_id", fset.Position(field.Pos()), typeSpecification.Name.Name)
 							}
-							continue
+						case "SKUCode":
+							if !frozenAllowed {
+								t.Errorf("%s declares frozen SKUCode on unlisted type %s; only transaction evidence may freeze a sku_code", fset.Position(field.Pos()), typeKey)
+							}
 						}
-						identifier, stringScalar := field.Type.(*ast.Ident)
-						if !stringScalar || identifier.Name != "string" {
-							t.Errorf("%s uses non-scalar ProductSKUCode on %s", fset.Position(field.Pos()), typeSpecification.Name.Name)
-						}
-						jsonKey, present := v27JSONFieldName(t, path, field)
-						if !present || jsonKey != "product_sku_code" {
-							t.Errorf("%s ProductSKUCode on %s must use JSON key product_sku_code", fset.Position(field.Pos()), typeSpecification.Name.Name)
-						}
+					}
+					if !present {
+						continue
+					}
+					if jsonKey == "sku_code" && !frozenAllowed {
+						t.Errorf("%s uses frozen JSON key sku_code on unlisted type %s", fset.Position(field.Pos()), typeKey)
+					}
+					if jsonKey == "product_sku_code" || jsonKey == "product_sku_codes" {
+						t.Errorf("%s retains retired cross-domain JSON key %q on %s", fset.Position(field.Pos()), jsonKey, typeKey)
 					}
 				}
 			}
@@ -338,42 +400,6 @@ func canonicalProductAssertExactFields(t *testing.T, model reflect.Type, expecte
 	}
 }
 
-func canonicalProductRequireJSONFields(t *testing.T, model reflect.Type, expected map[string]string) {
-	t.Helper()
-	for name, wantTag := range expected {
-		field, ok := model.FieldByName(name)
-		if !ok {
-			t.Errorf("%s is missing required field %s", model, name)
-			continue
-		}
-		if got := field.Tag.Get("json"); got != wantTag {
-			t.Errorf("%s.%s JSON tag = %q, want %q", model, name, got, wantTag)
-		}
-	}
-}
-
-func canonicalProductAssertNoOperationalCommerceEvidence(t *testing.T, model reflect.Type) {
-	t.Helper()
-	forbiddenFragments := []string{
-		"depot", "location", "bucket", "lot", "unit_id", "unit_ids",
-		"available", "reserved", "quantity", "count", "balance", "inventory",
-		"audit", "history", "created", "updated", "deleted", "source",
-		"condition", "disposition", "date_mark",
-	}
-	for index := 0; index < model.NumField(); index++ {
-		field := model.Field(index)
-		for _, value := range []string{field.Name, field.Tag.Get("json")} {
-			lowerValue := strings.ToLower(value)
-			for _, forbidden := range forbiddenFragments {
-				if strings.Contains(lowerValue, forbidden) {
-					t.Errorf("%s exposes forbidden operational evidence through %s", model, field.Name)
-					break
-				}
-			}
-		}
-	}
-}
-
 func canonicalProductWalkProductionGoFiles(t *testing.T, inspect func(path string, relativePath string, fset *token.FileSet, file *ast.File)) {
 	t.Helper()
 	pkgRoot := sharedContractPkgRoot(t)
@@ -397,11 +423,11 @@ func canonicalProductWalkProductionGoFiles(t *testing.T, inspect func(path strin
 	}
 }
 
-func canonicalProductTypeUsesFullProduct(expression ast.Expr, aliases map[string]struct{}) bool {
-	usesFullProduct := false
+func canonicalProductTypeUsesGlobalCatalogueModel(expression ast.Expr, aliases map[string]struct{}) bool {
+	usesGlobalModel := false
 	ast.Inspect(expression, func(node ast.Node) bool {
 		selector, ok := node.(*ast.SelectorExpr)
-		if !ok || selector.Sel.Name != "Product" {
+		if !ok || (selector.Sel.Name != "Product" && selector.Sel.Name != "SKU") {
 			return true
 		}
 		qualifier, ok := selector.X.(*ast.Ident)
@@ -409,11 +435,11 @@ func canonicalProductTypeUsesFullProduct(expression ast.Expr, aliases map[string
 			return true
 		}
 		if _, imported := aliases[qualifier.Name]; imported {
-			usesFullProduct = true
+			usesGlobalModel = true
 		}
 		return true
 	})
-	return usesFullProduct
+	return usesGlobalModel
 }
 
 func canonicalProductStringSet(values ...string) map[string]struct{} {

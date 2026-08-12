@@ -38,7 +38,7 @@ type PackingDiscrepancy struct {
 	OrderNumber          string                                 `json:"order_number"`
 	OrderDate            time.Time                              `json:"order_date"`
 	CustomerName         string                                 `json:"customer_name,omitempty"`
-	ProductSKUCode       string                                 `json:"product_sku_code"`
+	SKUID                string                                 `json:"sku_id"`
 	ProductName          string                                 `json:"product_name,omitempty"`
 	Kind                 warehouse_enums.PackingDiscrepancyKind `json:"kind"`
 	RequestedComposition packaging.PackageCompositionSnapshot   `json:"requested_composition"`

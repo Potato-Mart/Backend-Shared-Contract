@@ -55,7 +55,7 @@ func TestProductReviewProjectionsKeepIdentityAndModerationSeparated(t *testing.T
 	now := time.Date(2026, 7, 20, 1, 2, 3, 0, time.UTC)
 	public := review.ProductReview{
 		ID:               "review_1",
-		ProductSKUCode:   "SKU-1",
+		SKUID:            "SKU-1",
 		Score:            5,
 		Title:            "Great",
 		Body:             "Approved public copy",
@@ -67,7 +67,7 @@ func TestProductReviewProjectionsKeepIdentityAndModerationSeparated(t *testing.T
 
 	publicJSON := marshalReviewJSON(t, public)
 	for _, want := range []string{
-		`"product_sku_code":"SKU-1"`,
+		`"sku_id":"SKU-1"`,
 		`"verified_purchase":true`,
 		`"created_at":"2026-07-20T01:02:03Z"`,
 	} {
@@ -81,7 +81,7 @@ func TestProductReviewProjectionsKeepIdentityAndModerationSeparated(t *testing.T
 
 	mine := review.MyProductReview{
 		ID:               public.ID,
-		ProductSKUCode:   public.ProductSKUCode,
+		SKUID:            public.SKUID,
 		Score:            public.Score,
 		Title:            public.Title,
 		Body:             public.Body,
@@ -110,7 +110,7 @@ func TestProductReviewProjectionsKeepIdentityAndModerationSeparated(t *testing.T
 
 	moderation := review.ProductReviewModeration{
 		ID:               mine.ID,
-		ProductSKUCode:   mine.ProductSKUCode,
+		SKUID:            mine.SKUID,
 		Score:            mine.Score,
 		Title:            mine.Title,
 		Body:             mine.Body,

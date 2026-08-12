@@ -12,7 +12,7 @@ import (
 // applied to inventory. Soon-expiry and damaged stock are represented by the
 // category tag and inventory evidence here, never by a promotion kind.
 type InventoryCategoryTagEvidence struct {
-	ProductSKUCode  string                               `json:"product_sku_code"`
+	SKUID           string                               `json:"sku_id"`
 	PackageOptionID string                               `json:"package_option_id"`
 	CategoryTag     classification.CategoryTagRef        `json:"category_tag"`
 	StockLocation   warehouse.StockLocationRef           `json:"stock_location"`

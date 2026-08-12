@@ -32,7 +32,7 @@ type WMSDraft struct {
 // WMSDraftItem captures an observed package scan and canonical inventory refs.
 type WMSDraftItem struct {
 	ID               string                               `json:"id"`
-	ProductSKUCode   string                               `json:"product_sku_code"`
+	SKUID            string                               `json:"sku_id"`
 	ProductName      string                               `json:"product_name,omitempty"`
 	ScannedBarcode   string                               `json:"scanned_barcode,omitempty"`
 	PackageOptionID  string                               `json:"package_option_id"`

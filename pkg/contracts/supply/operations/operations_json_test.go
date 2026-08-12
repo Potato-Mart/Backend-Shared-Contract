@@ -21,7 +21,7 @@ func TestReservationAndStagingJSONShapes(t *testing.T) {
 	caseComposition := composition(packaging_enums.PackageHandlingUnitCase, "pkg_case_12", 2, 12)
 
 	reservationShape := marshalObject(t, operations.StockReservation{
-		ID: "reservation_1", ProductSKUCode: "A00001", DepotCode: "AU-VIC-MEL-DC-01",
+		ID: "reservation_1", SKUID: "A00001", DepotCode: "AU-VIC-MEL-DC-01",
 		PackagePricingID: "pricing_1", PackagePricingRevision: 9,
 		RequestedComposition: caseComposition, ReservedComposition: caseComposition,
 		Status:   warehouse_enums.StockReservationStatusReserved,
@@ -33,7 +33,7 @@ func TestReservationAndStagingJSONShapes(t *testing.T) {
 
 	stagingShape := marshalObject(t, operations.StockStagingRecord{
 		ID: "staging_1", ReservationID: "reservation_1", AllocationID: "allocation_1",
-		OrderNumber: "SO-1", ProductSKUCode: "A00001", PackageOptionID: "pkg_case_12",
+		OrderNumber: "SO-1", SKUID: "A00001", PackageOptionID: "pkg_case_12",
 		SourceBucketID: "bucket_1", DestinationBucketID: "bucket_stage",
 		SourceLocation:      warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01"},
 		DestinationLocation: warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: warehouse.StockLocationCodeOnlineStageAmbient},
@@ -49,7 +49,7 @@ func TestReservationAndStagingJSONShapes(t *testing.T) {
 func TestInventoryCategoryTagEvidenceJSONIsLocationQualified(t *testing.T) {
 	now := time.Date(2026, 8, 9, 7, 8, 9, 0, time.UTC)
 	evidence := operations.InventoryCategoryTagEvidence{
-		ProductSKUCode:  "A00001",
+		SKUID:           "A00001",
 		PackageOptionID: "pkg_each",
 		CategoryTag:     classification.CategoryTagRef{ID: "tag_soon_expiry", Slug: "soon-expiry"},
 		StockLocation:   warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01-03"},
@@ -60,7 +60,7 @@ func TestInventoryCategoryTagEvidenceJSONIsLocationQualified(t *testing.T) {
 	}
 
 	shape := marshalObject(t, evidence)
-	for _, key := range []string{"product_sku_code", "package_option_id", "category_tag", "stock_location", "condition", "disposition", "date_mark", "as_of"} {
+	for _, key := range []string{"sku_id", "package_option_id", "category_tag", "stock_location", "condition", "disposition", "date_mark", "as_of"} {
 		if _, ok := shape[key]; !ok {
 			t.Fatalf("inventory category-tag evidence missing %q: %+v", key, shape)
 		}
@@ -86,7 +86,7 @@ func TestPackingPickingAndAvailabilityEventJSONShapes(t *testing.T) {
 	containerShape := marshalObject(t, operations.OutboundContainerPlan{
 		ID: "container_1", ContainerCode: "OUT-1", StorageType: warehouse_enums.StorageAmbient,
 		Contents: []operations.OutboundContainerContent{{
-			OrderItemID: "item_1", ProductSKUCode: "A00001", AllocationID: "allocation_1",
+			OrderItemID: "item_1", SKUID: "A00001", AllocationID: "allocation_1",
 			BucketID: "bucket_each", LotID: "lot_1", PackageOptionID: "pkg_each",
 			PackedComposition: replacement, Substitutions: []operations.PackageSubstitutionSnapshot{substitution},
 		}},
@@ -100,7 +100,7 @@ func TestPackingPickingAndAvailabilityEventJSONShapes(t *testing.T) {
 	}
 
 	lineShape := marshalObject(t, operations.PackingLine{
-		ID: "packing_line_1", OrderItemID: "item_1", ProductSKUCode: "A00001",
+		ID: "packing_line_1", OrderItemID: "item_1", SKUID: "A00001",
 		RequestedComposition: requested, AllocatedComposition: replacement,
 		PickedComposition: replacement, PackedComposition: replacement,
 		SubstitutedComposition: replacement, ReturnedComposition: composition(packaging_enums.PackageHandlingUnitEach, "pkg_each", 0, 1),
@@ -117,7 +117,7 @@ func TestPackingPickingAndAvailabilityEventJSONShapes(t *testing.T) {
 		ID:                     "picking_item_1",
 		PickingListID:          "picking_list_1",
 		OrderItemID:            "item_1",
-		ProductSKUCode:         "A00001",
+		SKUID:                  "A00001",
 		RequestedComposition:   requested,
 		AllocatedComposition:   replacement,
 		PickedComposition:      replacement,
@@ -140,7 +140,7 @@ func TestPackingPickingAndAvailabilityEventJSONShapes(t *testing.T) {
 
 	eventShape := marshalObject(t, event.StockLocationAvailabilityChangedEvent{
 		AssignmentID: "assignment_1", DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01",
-		ProductSKUCode: "A00001", AvailableBeforeBaseUnits: 12, AvailableAfterBaseUnits: 0,
+		SKUID: "A00001", AvailableBeforeBaseUnits: 12, AvailableAfterBaseUnits: 0,
 		Direction: warehouse_enums.StockAvailabilityOutOfStock,
 		Cause:     operations.InventoryCauseRef{Type: "SALE_COMMIT", ID: "movement_1"},
 		Revision:  8, OccurredAt: now, AsOf: now,

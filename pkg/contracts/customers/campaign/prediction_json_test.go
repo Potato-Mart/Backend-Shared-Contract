@@ -14,7 +14,7 @@ func TestCampaignPredictionUsesPackageComposition(t *testing.T) {
 	payload, err := json.Marshal(CampaignSupplierPrediction{
 		SupplierCode: "SUP-1",
 		Products: []CampaignProductPrediction{{
-			ProductSKUCode: "SKU-1",
+			SKUID: "SKU-1",
 			Evidence: []CampaignPredictionEvidence{{
 				RawNetBaseUnits: 35, NormalizedBaseUnits: 30,
 			}},

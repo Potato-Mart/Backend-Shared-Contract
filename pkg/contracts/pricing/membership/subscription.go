@@ -14,7 +14,7 @@ import (
 // membership domain. It remains separate from points accounting.
 type SubscriptionPlan struct {
 	ID              string      `json:"id"`
-	ProductSKUCode  string      `json:"product_sku_code"`
+	SKUID           string      `json:"sku_id"`
 	UnitPrice       money.Money `json:"unit_price"`
 	FrequencyDays   int         `json:"frequency_days"`
 	FrequencyLabel  string      `json:"frequency_label"`

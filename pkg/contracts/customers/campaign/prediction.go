@@ -9,16 +9,16 @@ import (
 )
 
 type CampaignComparableEvent struct {
-	CampaignKey             string                                  `json:"campaign_key"`
-	SeriesKey               string                                  `json:"series_key,omitempty"`
-	MatchSource             campaign_enums.CampaignPredictionSource `json:"match_source"`
-	ResolvedProductSKUCodes []string                                `json:"resolved_product_sku_codes"`
-	StartsAt                time.Time                               `json:"starts_at"`
-	EndsAt                  time.Time                               `json:"ends_at"`
-	ScheduleTimezone        string                                  `json:"schedule_timezone"`
-	Audience                *Audience                               `json:"audience,omitempty"`
-	GeographicScope         geography.GeographicScope               `json:"geographic_scope"`
-	Placement               campaign_enums.CampaignPlacement        `json:"placement"`
+	CampaignKey      string                                  `json:"campaign_key"`
+	SeriesKey        string                                  `json:"series_key,omitempty"`
+	MatchSource      campaign_enums.CampaignPredictionSource `json:"match_source"`
+	ResolvedSKUIDs   []string                                `json:"resolved_sku_ids"`
+	StartsAt         time.Time                               `json:"starts_at"`
+	EndsAt           time.Time                               `json:"ends_at"`
+	ScheduleTimezone string                                  `json:"schedule_timezone"`
+	Audience         *Audience                               `json:"audience,omitempty"`
+	GeographicScope  geography.GeographicScope               `json:"geographic_scope"`
+	Placement        campaign_enums.CampaignPlacement        `json:"placement"`
 }
 
 type CampaignPredictionEvidence struct {
@@ -32,7 +32,7 @@ type CampaignPredictionEvidence struct {
 }
 
 type CampaignProductPrediction struct {
-	ProductSKUCode             string                                  `json:"product_sku_code"`
+	SKUID                      string                                  `json:"sku_id"`
 	SupplierCode               string                                  `json:"supplier_code,omitempty"`
 	Source                     campaign_enums.CampaignPredictionSource `json:"source"`
 	Evidence                   []CampaignPredictionEvidence            `json:"evidence,omitempty"`
@@ -55,14 +55,14 @@ type CampaignSupplierPrediction struct {
 }
 
 type CampaignPrediction struct {
-	PredictionKey           string                                  `json:"prediction_key"`
-	CampaignKey             string                                  `json:"campaign_key,omitempty"`
-	Revision                int                                     `json:"revision"`
-	Status                  campaign_enums.CampaignPredictionStatus `json:"status"`
-	AlgorithmVersion        string                                  `json:"algorithm_version"`
-	ResolvedProductSKUCodes []string                                `json:"resolved_product_sku_codes,omitempty"`
-	Products                []CampaignProductPrediction             `json:"products,omitempty"`
-	Suppliers               []CampaignSupplierPrediction            `json:"suppliers,omitempty"`
-	Warnings                []string                                `json:"warnings,omitempty"`
-	PredictedAt             time.Time                               `json:"predicted_at"`
+	PredictionKey    string                                  `json:"prediction_key"`
+	CampaignKey      string                                  `json:"campaign_key,omitempty"`
+	Revision         int                                     `json:"revision"`
+	Status           campaign_enums.CampaignPredictionStatus `json:"status"`
+	AlgorithmVersion string                                  `json:"algorithm_version"`
+	ResolvedSKUIDs   []string                                `json:"resolved_sku_ids,omitempty"`
+	Products         []CampaignProductPrediction             `json:"products,omitempty"`
+	Suppliers        []CampaignSupplierPrediction            `json:"suppliers,omitempty"`
+	Warnings         []string                                `json:"warnings,omitempty"`
+	PredictedAt      time.Time                               `json:"predicted_at"`
 }

@@ -17,7 +17,7 @@ func TestPackagePricingJSONPreservesExplicitEmptyPromotionApplications(t *testin
 	now := time.Date(2026, 8, 7, 4, 5, 6, 0, time.UTC)
 	value := promotion.PackagePricing{
 		ID: "pricing_1", Revision: 4, InventoryRevision: 11,
-		ProductSKUCode: "A00001", PackageOptionID: "pkg_case_6",
+		SKUID: "A00001", PackageOptionID: "pkg_case_6",
 		PackagePrice: money.Money{AmountMinor: 1200, Currency: "AUD"}, TaxAmount: money.Money{AmountMinor: 109, Currency: "AUD"},
 		ValidFrom: now, Timezone: "Australia/Melbourne",
 		GeographicContext: geography.GeographicContext{Source: geography_enums.GeographicContextSourceRetailCustomerProfile, CountryCode: "AU", ScopeRevision: 3, RuleRevision: 4, EvaluationTimezone: "Australia/Melbourne"},
@@ -37,7 +37,7 @@ func TestPackagePricingJSONPreservesExplicitEmptyPromotionApplications(t *testin
 	if err := json.Unmarshal(payload, &shape); err != nil {
 		t.Fatalf("unmarshal package pricing: %v", err)
 	}
-	for _, key := range []string{"id", "revision", "inventory_revision", "product_sku_code", "package_option_id", "package_price", "tax_amount", "valid_from", "timezone", "geographic_context", "stock_location", "available_package_count", "available_base_units", "condition", "disposition", "promotion_applications", "captured_at"} {
+	for _, key := range []string{"id", "revision", "inventory_revision", "sku_id", "package_option_id", "package_price", "tax_amount", "valid_from", "timezone", "geographic_context", "stock_location", "available_package_count", "available_base_units", "condition", "disposition", "promotion_applications", "captured_at"} {
 		if _, ok := shape[key]; !ok {
 			t.Fatalf("package pricing JSON missing %q: %s", key, payload)
 		}

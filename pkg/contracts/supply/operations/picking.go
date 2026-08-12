@@ -27,7 +27,7 @@ type PickingListItem struct {
 	ID                     string                               `json:"id"`
 	PickingListID          string                               `json:"picking_list_id"`
 	OrderItemID            string                               `json:"order_item_id"`
-	ProductSKUCode         string                               `json:"product_sku_code"`
+	SKUID                  string                               `json:"sku_id"`
 	ProductName            string                               `json:"product_name,omitempty"`
 	RequestedComposition   packaging.PackageCompositionSnapshot `json:"requested_composition"`
 	AllocatedComposition   packaging.PackageCompositionSnapshot `json:"allocated_composition"`

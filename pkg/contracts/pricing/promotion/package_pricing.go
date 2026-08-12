@@ -17,7 +17,7 @@ type PackagePricing struct {
 	Revision          int64  `json:"revision"`
 	InventoryRevision int64  `json:"inventory_revision"`
 
-	ProductSKUCode  string      `json:"product_sku_code"`
+	SKUID           string      `json:"sku_id"`
 	PackageOptionID string      `json:"package_option_id"`
 	PackagePrice    money.Money `json:"package_price"`
 	TaxAmount       money.Money `json:"tax_amount"`

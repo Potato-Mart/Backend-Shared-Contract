@@ -79,7 +79,9 @@ type ShiftTotalsSnapshot struct {
 // recorded for one receipt line. It never exposes the inventory evidence in
 // accepted package pricing.
 type ReceiptLine struct {
-	ProductSKUCode        string                           `json:"product_sku_code"`
+	SKUID string `json:"sku_id"`
+	// SKUCode is the frozen SKU code captured when the receipt was issued.
+	SKUCode               string                           `json:"sku_code"`
 	ProductName           string                           `json:"product_name"`
 	ProductImage          *security.ObjectMedia            `json:"product_image,omitempty"`
 	ProductPackageOption  product.ProductPackageOption     `json:"product_package_option"`
