@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v27.0.0` | 2026-08-12 | Major | Global Product/SKU split, Pricing-owned Market/PriceBook/PriceEntry, Supply-owned MarketListing and sale-eligibility evidence, immutable price/tax/rounding snapshots, purchase GST evidence, merchant legal profiles, and event schema version 2 with a new `catalog-events` topic. Changes the module path to `/v27`; all consumers must migrate explicitly. |
 | `v26.2.0` | 2026-08-11 | Minor | Adds the customer-safe `operations.StorefrontPlaceAvailability` projection carrying per-depot place identity and public stock state. Additive only; keeps the `/v26` module path. |
 | `v26.1.0` | 2026-08-11 | Minor | Adds the optional `OutboundShipment.carrier` delivery-company code. Additive only; keeps the `/v26` module path. |
 | `v26.0.0` | 2026-08-09 | Major | Object-media, canonical-product, Supply layout, package-pricing, and unified-promotion hard cutover. Changes the module path to `/v26`; all consumers must migrate explicitly. |
@@ -116,6 +117,245 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v27.0.0 (2026-08-12) - Global Product/SKU, Market Pricing, Australian GST, And Event Schema V2
+
+### Breaking Contract Changes / 破壞性契約變更
+
+- Changes the module path from `/v26` to `/v27`. Consumers must update their
+  `go.mod` requirement and every contract import path.
+- Splits the catalogue in two. `supply/product.Product` becomes the global
+  conceptual product with a stable `id`, `status`, content, classification,
+  provenance, and optional administration only. The new
+  `supply/product.SKU` is the sellable and stockable identity and owns
+  `product_id`, `code`, package options, barcode assignments, net content,
+  storage type, and lifecycle status.
+- Removes every commercial and market-dependent projection from Product:
+  `sku_code`, `packaging` (including the `taxed` flag), `commerce`,
+  `metrics`, and `selling`. `ProductPackaging`, `ProductCommerce`,
+  `ProductPackageCommerce`, `ProductMetrics`, and `Selling` are removed.
+- Renames the category-shaped `classification.SKU` to
+  `classification.ProductCategory`. The product link becomes
+  `product_category_code`.
+- Replaces cross-domain `product_sku_code` foreign keys with the scalar
+  `sku_id` everywhere. A frozen `sku_code` is retained only on the seven
+  transaction-evidence types: `order.CartItem`, `order.OrderItem`,
+  `order.OrderLineSummary`, `pos.ReceiptLine`, `purchase.OrderItem`,
+  `purchase.ReceiptItem`, and `purchase.SupplierInvoiceLine`.
+- Adds `market_id` to `order.Order`, `order.Cart`,
+  `order.GroupOrderAggregateLine`, `operations.StockReservation`,
+  `analytics.OrderItemFact`, `analytics.RefundItemFact`,
+  `analytics.SKUDemandForecast`, `backinstock.BackInStockSubscription`,
+  `campaign.Campaign`, and the product-stats rollup.
+- Adds Pricing-owned commercial models: `pricing/market.Market`,
+  `pricing/pricebook.PriceBook`, `pricing/pricebook.PriceEntry`, and
+  `pricing/pricebook.PriceBookAssignment`. Authoritative prices live here
+  and never inside Product or SKU. `MarketID` is not `CountryCode`.
+- Adds Supply-owned availability models: `supply/listing.MarketListing`
+  with its tax-category reference, sale restrictions, optional expiry
+  lead-day override, and unit-pricing requirement; and
+  `supply/warehouse.DepotMarket`.
+- Retires `promotion.PackagePricing` as the combined inventory/price
+  authority and splits it in two: the commercial half becomes
+  `pricing/quote.PriceSnapshot` and the inventory half becomes
+  `listing.SaleEligibilitySnapshot`. `accepted_package_pricing`,
+  `package_pricing_id`, and `package_pricing_revision` are removed.
+  `order.PricedPackageComponent` now freezes a `price_snapshot`, and
+  `operations.StockReservation` references an `eligibility_token` plus a
+  `listing_revision`.
+- Adds the immutable transaction evidence set in `pricing/quote`:
+  `PriceSnapshot`, `TaxSnapshot` with an exact `rate_numerator` over
+  `rate_denominator`, `AppliedPriceRule` with open exclusive kinds,
+  `RoundingEvidence`, `UnitPriceEvidence`, and
+  `CustomPriceOverrideEvidence`.
+- Adds purchase tax evidence in `supply/purchase`: `SupplierInvoice`,
+  `SupplierInvoiceLine`, `SupplierTaxIdentity`, and
+  `SupplierInvoiceDocument`, with per-line tax treatment, price basis, tax
+  source, input-tax claim status, immutable document hash, and duplicate
+  protection.
+- Adds private operational cost models in `supply/cost`:
+  `BaseAcquisitionCost`, `DepotCarryingCost`, and `CarryingCostMovement`.
+  Carrying cost stores exact minor units and base-unit quantity and derives
+  the average without floats.
+- Adds `payment.MerchantLegalProfile`, `payment.MerchantLegalSnapshot`, and
+  `payment.BuyerLegalSnapshot`, effective dated per market and frozen at
+  issuance, plus `pos.CashRoundingSnapshot` so cash rounding never changes
+  the priced amounts.
+- Adds typed `money.CurrencyCode` and immutable `money.CurrencyExponent`.
+  `Money.Currency` and the settlement, terminal, gift-card policy, purchase
+  order, and organisation currency scalars are retyped. The JSON is
+  byte-identical; no service may assume every currency has two decimals.
+- Adds `measurement.NetContent` and `measurement.Measure` for unit pricing,
+  and the typed `wholesale_enums.WholesaleOrganisationCategory` with a
+  `category` field on the wholesale organisation models.
+- Bumps affected event payloads to schema version `2` and adds the
+  `catalog-events` topic with `catalog.base_cost_changed` and
+  `catalog.listing_changed`. Removes
+  `inventory.package_pricing_available`, `inventory.package_pricing_withdrawn`,
+  and `PackagePricingAvailabilityChangedEvent`.
+
+- 模組路徑由 `/v26` 改為 `/v27`，使用方必須更新 `go.mod` 與所有 import。
+- 商品拆分為全球 `Product`（內容／分類／來源／狀態／管理）與可販售的
+  `SKU`（包裝選項、條碼、淨含量、儲存類型、生命週期）。
+- Product 移除 `sku_code`、`packaging`（含 `taxed`）、`commerce`、`metrics`、
+  `selling` 等所有商業與市場相關投影。
+- `classification.SKU` 更名為 `classification.ProductCategory`，商品關聯欄位
+  改為 `product_category_code`。
+- 跨網域外鍵 `product_sku_code` 全面改為純量 `sku_id`；凍結的 `sku_code`
+  僅保留在七個交易憑證型別上。
+- 新增 Pricing 擁有的 `Market`、`PriceBook`、`PriceEntry`、
+  `PriceBookAssignment`；權威售價不再位於商品或 SKU 上。
+- 新增 Supply 擁有的 `MarketListing` 與 `DepotMarket`。
+- 廢止 `PackagePricing`，拆為商業面的 `quote.PriceSnapshot` 與存貨面的
+  `listing.SaleEligibilitySnapshot`。
+- 新增不可變交易憑證：`PriceSnapshot`、`TaxSnapshot`（分子／分母精確稅率）、
+  `AppliedPriceRule`、`RoundingEvidence`、`UnitPriceEvidence`、
+  `CustomPriceOverrideEvidence`。
+- 新增供應商發票與採購稅務憑證、`supply/cost` 私有成本模型、商家法定身分
+  快照與 POS 現金進位快照。
+- 新增具型別的 `money.CurrencyCode` 與 `money.CurrencyExponent`；JSON 位元
+  完全相同，但服務不得再假設所有幣別皆為兩位小數。
+- 受影響的事件承載升為 schema 版本 `2`，並新增 `catalog-events` 主題；移除
+  package pricing 可用／撤下事件。
+
+### Final Package Ownership / 最終套件歸屬
+
+| Contract concern | v27 source of truth |
+| --- | --- |
+| Global conceptual product | `supply/product` (`Product`) |
+| Sellable and stockable identity | `supply/product` (`SKU`, `ProductPackageOption`, `ProductBarcodeAssignment`) |
+| Catalogue category, brand, collection, tag, supplier, favourite list | `supply/classification` (`ProductCategory`, …) |
+| Commercial market | `pricing/market` (`Market`) |
+| Authoritative price container and entries | `pricing/pricebook` (`PriceBook`, `PriceEntry`, `PriceBookAssignment`) |
+| Immutable transaction price, tax, and rounding evidence | `pricing/quote` (`PriceSnapshot`, `TaxSnapshot`, `AppliedPriceRule`, `RoundingEvidence`, `UnitPriceEvidence`, `CustomPriceOverrideEvidence`) |
+| Market availability and sale eligibility evidence | `supply/listing` (`MarketListing`, `SaleEligibilitySnapshot`, `DamageSaleApproval`) |
+| Depot to market association | `supply/warehouse` (`DepotMarket`) |
+| Private acquisition and carrying cost | `supply/cost` (`BaseAcquisitionCost`, `DepotCarryingCost`, `CarryingCostMovement`) |
+| Supplier invoice and purchase tax evidence | `supply/purchase` (`SupplierInvoice`, `SupplierInvoiceLine`, `SupplierTaxIdentity`) |
+| Merchant and buyer legal identity for documents | `payments/payment` (`MerchantLegalProfile`, `MerchantLegalSnapshot`, `BuyerLegalSnapshot`) |
+| Cash settlement rounding evidence | `orders/pos` (`CashRoundingSnapshot`) |
+| Currency identity and minor-unit exponent | `common/money` (`CurrencyCode`, `CurrencyExponent`, `Money`) |
+| Net quantity and comparison measure | `common/measurement` (`NetContent`, `Measure`) |
+| Catalog eventing | `pubsub/event` (`CatalogBaseCostChangedEvent`, `CatalogListingChangedEvent`) |
+
+`Product` describes what the item is. `SKU` describes what is sold and
+stocked. `MarketListing` answers whether a SKU may be sold in a market.
+`PriceBook` plus `PriceEntry` answer what it costs there. `PriceSnapshot` is
+the authoritative historical value of a completed transaction: changing a
+price entry, tax rule, organisation, or merchant profile never changes an
+existing snapshot.
+
+### Event Schema Version 2 / 事件結構版本 2
+
+The `EventEnvelope` shape is unchanged and no `EventType` value is renamed.
+Producers publish `event_version` `"2"` for exactly the payloads listed
+below; every other payload stays at `"1"`. This list is the declared source
+of truth for consumers.
+
+信封結構未變更，事件類型名稱亦未更名。以下承載一律以 `event_version`
+`"2"` 發布，其餘維持 `"1"`。此清單為使用方的權威依據。
+
+| # | Payload | Event type | Topic | Change |
+| --- | --- | --- | --- | --- |
+| 1 | `StockLocationAvailabilityChangedEvent` | `stock.location_availability_changed` | `stock-events` | `product_sku_code` → `sku_id` |
+| 2 | `InventoryLotReceivedEvent` | `inventory.lot_received` | `stock-events` | `product_sku_code` → `sku_id` |
+| 3 | `InventoryStockBucketChangedEvent` | `inventory.stock_bucket_changed` | `stock-events` | `product_sku_code` → `sku_id` |
+| 4 | `InventoryPackageConvertedEvent` | `inventory.package_converted` | `stock-events` | `product_sku_code` → `sku_id` |
+| 5 | `InventoryQualityAssessedEvent` | `inventory.quality_assessed` | `stock-events` | `product_sku_code` → `sku_id` |
+| 6 | `InventoryReservationChangedEvent` | `inventory.reservation_changed` | `stock-events` | `product_sku_code` → `sku_id` |
+| 7 | `StockStagingChangedEvent` | `inventory.staged` | `stock-events` | `product_sku_code` → `sku_id` |
+| 8 | `InventorySaleCommittedEvent` | `inventory.sold` | `stock-events` | `product_sku_code` → `sku_id` |
+| 9 | `InventoryDateMarkThresholdEvent` | `inventory.date_mark_threshold_reached` | `stock-events` | `product_sku_code` → `sku_id` |
+| 10 | `OrderPaidEvent` | `order.paid` | `order-events` | `items[]` gain `sku_id` and `market_id` |
+| 11 | `RefundCompletedEvent` | `refund.completed` | `refund-events` | `items[]` gain `sku_id` and `market_id` |
+| 12 | `OrderFact` | `analytics.order_fact` | `order-events` | `items[]` gain `sku_id` and `market_id` |
+| 13 | `RefundFact` | `analytics.refund_fact` | `refund-events` | `items[]` gain `sku_id` and `market_id` |
+| 14 | `ProductSalesRollup` | `product.sales_performance_updated` | `product-stats` | `sku_id` plus new `market_id`; rollups are market separated |
+| 15 | `CatalogBaseCostChangedEvent` | `catalog.base_cost_changed` | `catalog-events` | New payload, published at version `2` from the outset |
+| 16 | `CatalogListingChangedEvent` | `catalog.listing_changed` | `catalog-events` | New payload, published at version `2` from the outset |
+
+Removed event types and payload: `inventory.package_pricing_available`,
+`inventory.package_pricing_withdrawn`, and
+`PackagePricingAvailabilityChangedEvent`. Consumers must reject an unknown
+or wrong `event_version` rather than decoding it leniently, and dedupe
+catalog events on the envelope `event_id` together with the payload
+revision.
+
+### Verification And Compatibility / 驗證與相容性
+
+- The contract gate rejects the removed product-commerce, package-pricing,
+  `product_sku_code`, `category_sku_code`, and `taxed` symbols and JSON
+  keys. Compatibility aliases and fallback JSON shapes are not retained.
+- The frozen `sku_code` allowlist is itself locked: exactly the seven
+  transaction-evidence types may carry it, and every one of them must also
+  carry a scalar `sku_id`.
+- Product and SKU shape tests reject any price, tax, market, currency,
+  channel, audience, or stock fact appearing on the global catalogue models.
+- A monetary-precision gate rejects any `float32` or `float64` in a field
+  whose JSON key mentions an amount, minor unit, price, cost, or tax.
+- The catalog event topology gate asserts nine canonical topics and the two
+  `catalog.` event types so the contract, the cloud topology, and the local
+  emulator script can be compared against one source of truth.
+- The model manifest digest, model-only boundary, package dependency graph,
+  enum coverage, domain layout, and hard-cutover gates are reviewed against
+  the final v27 surface. `common/party` gains a `common/money` dependency
+  edge for the typed organisation currency.
+- The v23 golden-JSON fixtures for moved common models remain byte-for-byte
+  identical after the currency retyping.
+
+### Consumer Migration Matrix / 使用方遷移對照
+
+| v26 usage | v27 replacement |
+| --- | --- |
+| `/v26` module and imports | `/v27` and `v27.0.0` |
+| `product.Product.sku_code` | `product.Product.id` plus `product.SKU.id` and `product.SKU.code` |
+| `product.Product.packaging` | `product.SKU.package_options` and `product.SKU.barcode_assignments` |
+| `product.Product.packaging.taxed` | `listing.MarketListing.tax_category_id` |
+| `product.Product.commerce` / `ProductPackageCommerce` | `pricebook.PriceEntry` plus a `quote.PriceSnapshot` at transaction time |
+| `product.Product.commerce.selling` | `listing.MarketListing` status and restrictions |
+| `product.Product.metrics` | `event.ProductSalesRollup` and Insights rollups |
+| `classification.SKU` | `classification.ProductCategory` |
+| `category_sku_code` | `product_category_code` |
+| `product_sku_code` (any domain) | `sku_id` |
+| `product_sku_codes`, `resolved_*_product_sku_codes`, `created_product_sku_code` | `sku_ids`, `resolved_*_sku_ids`, `created_sku_id` |
+| `promotion.PackagePricing` | `quote.PriceSnapshot` plus `listing.SaleEligibilitySnapshot` |
+| `accepted_package_pricing` on a priced component | `price_snapshot` |
+| `package_pricing_id` / `package_pricing_revision` on a reservation | `eligibility_token` / `listing_revision` |
+| `package_pricing_id` / `package_pricing_revision` on a group aggregate line | `market_id` plus the component `price_snapshot` |
+| untyped `currency` / `currency_code` scalars | `money.CurrencyCode`, with `money.CurrencyExponent` beside every snapshot |
+| assumed two-decimal currencies | `currency_exponent` carried on markets, price books, snapshots, and cost balances |
+| `import_compliance.LabelProductEvidence.taxed` | `market_id` plus `tax_category_id` |
+| `inventory.package_pricing_available` / `inventory.package_pricing_withdrawn` | `catalog.listing_changed` on `catalog-events` |
+| product-level cost or price assumptions | `cost.BaseAcquisitionCost` (private) and `pricebook.PriceEntry` (authoritative) |
+
+### Consumer Action / 使用方動作
+
+- Upgrade each consumer to
+  `github.com/Potato-Mart/Backend-Shared-Contract/v27 v27.0.0` and replace all
+  `/v26` imports.
+- Introduce SKU records beneath every product, then migrate every stored
+  `product_sku_code` to `sku_id` and every stored order, receipt, refund,
+  reservation, analytics fact, campaign target, and back-in-stock record to
+  carry `market_id`. There is no fallback JSON shape and no alias.
+- Move authoritative prices out of the catalogue into market price books.
+  A missing approved `PriceEntry` makes that channel unavailable: there is
+  no silent fallback to a draft, to acquisition cost, to a converted
+  currency, or to another market.
+- Persist the complete `PriceSnapshot` on every transaction line and
+  reconcile arithmetic against it. Historical orders, receipts, and refunds
+  must remain unchanged after any later price, tax, organisation, or
+  merchant-profile edit.
+- Update every event consumer before its producer is allowed to publish
+  version `2`. Consumers dedupe on the envelope `event_id`, reject unknown
+  versions, and dedupe catalog events on the payload revision as well.
+- Provision the `catalog-events` topic and its restricted Supply publisher
+  and Pricing subscriber before enabling the Supply outbox relay.
+- Supply the real merchant legal name, business number, address, and tax
+  registration through protected execution input. No real legal or tax value
+  belongs in this contract.
+- Update provider persistence, OpenAPI documents, generated clients, and
+  provider/consumer digests in coordinated consumer releases. Those service
+  changes are intentionally outside this contract-only release.
 
 ## v26.2.0 (2026-08-11) - Storefront Place Availability
 

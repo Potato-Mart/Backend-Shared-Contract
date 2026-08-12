@@ -15,8 +15,8 @@ workflows.
 ## Latest Version
 
 ```text
-v26.2.0
-github.com/Potato-Mart/Backend-Shared-Contract/v26
+v27.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v27
 ```
 
 See [RELEASE_NOTES.md](RELEASE_NOTES.md) for the release history,
@@ -27,36 +27,50 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v26 v26.2.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v27 v27.0.0
 ```
 
-Import packages from the same `/v26` module path.
+Import packages from the same `/v27` module path.
 
 ## Package Layout
 
 - Common models are grouped by concern under `pkg/contracts/common`, such as
-  `geography`, `party`, `packaging`, `security`, `temporal`, and `money`.
-  The legacy `common/shared` package does not exist in v26.
+  `geography`, `party`, `packaging`, `security`, `temporal`, `measurement`, and
+  `money`. The legacy `common/shared` package does not exist in v27.
 - Finite enum types live in a leaf `<domain>_enums` package beside the models
   that use them. For example, product models import
   `supply/product/product_enums`, while common security models import
   `common/security/security_enums`.
-- Supply classifications, import compliance, and operations use
-  `supply/classification`, `supply/import_compliance`, and
-  `supply/operations`. The Go package name for import compliance is
-  `import_compliance`.
-- Promotion and package pricing live under `pricing/promotion`; wallet models
-  live under `pricing/wallet`; shipment models live under `orders/shipping`.
-- `supply/product.Product` is the sole full catalogue product model and is
-  composed from reusable content, classification, packaging, commerce,
-  metrics, supply, and optional administration components. Cross-domain links
-  use `product_sku_code`; transaction lines own their frozen display facts.
+- Supply classifications, import compliance, operations, market listings, and
+  cost use `supply/classification`, `supply/import_compliance`,
+  `supply/operations`, `supply/listing`, and `supply/cost`. The Go package name
+  for import compliance is `import_compliance`.
+- Commercial markets, price books, and immutable quote evidence live under
+  `pricing/market`, `pricing/pricebook`, and `pricing/quote`. Promotion
+  mechanics live under `pricing/promotion`; wallet models under
+  `pricing/wallet`; shipment models under `orders/shipping`.
+- `supply/product.Product` is the global conceptual product — content,
+  classification, provenance, status, and optional administration only.
+  `supply/product.SKU` is the sellable and stockable identity that owns package
+  options, barcodes, net content, and storage type. Neither carries a price, a
+  tax flag, channel sellability, or a market-dependent metric.
+- Authoritative prices live in `pricing/pricebook.PriceEntry` inside a
+  market-scoped `PriceBook`; commercial availability lives in
+  `supply/listing.MarketListing`. `MarketID` and `CountryCode` are separate
+  concepts, and one country may carry several markets.
+- Cross-domain links use the scalar `sku_id`. A frozen `sku_code` survives only
+  on transaction evidence: cart items, order items, order line summaries, POS
+  receipt lines, purchase order items, receipt items, and supplier invoice
+  lines. Transaction lines own their frozen display facts.
+- Money is always `{amount_minor, currency}` in minor units with a typed
+  `money.CurrencyCode`. `money.CurrencyExponent` is carried alongside because
+  not every currency has two decimals.
 - Promotion mechanics use open string kinds with reusable scopes, ALL/ANY
   groups, qualifier-to-target relations, typed terms, and frozen ordered
   applications. Only promotion lifecycle status and match mode are closed
   promotion enums.
 - This module is contract-only. The seven backend services and the parent
-  `go.work` must migrate to `/v26` before consuming this release.
+  `go.work` must migrate to `/v27` before consuming this release.
 
 ## Boundary Governance
 
