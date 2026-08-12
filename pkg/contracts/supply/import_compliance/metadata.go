@@ -71,15 +71,19 @@ type ArtifactReference struct {
 // substantiate a compliance label. It is compliance-owned evidence, not a
 // second catalogue product model.
 type LabelProductEvidence struct {
-	SKUID                string                       `json:"sku_id"`
-	Barcode              string                       `json:"barcode,omitempty"`
-	EnglishName          string                       `json:"english_name,omitempty"`
-	ChineseName          string                       `json:"chinese_name,omitempty"`
-	AlternateNames       []localization.LocalizedName `json:"alternate_names,omitempty"`
-	Brand                string                       `json:"brand,omitempty"`
-	Taxed                *bool                        `json:"taxed,omitempty"`
-	CapturedAt           time.Time                    `json:"captured_at"`
-	SourceChecksumSHA256 string                       `json:"source_checksum_sha256,omitempty"`
+	SKUID          string                       `json:"sku_id"`
+	Barcode        string                       `json:"barcode,omitempty"`
+	EnglishName    string                       `json:"english_name,omitempty"`
+	ChineseName    string                       `json:"chinese_name,omitempty"`
+	AlternateNames []localization.LocalizedName `json:"alternate_names,omitempty"`
+	Brand          string                       `json:"brand,omitempty"`
+	// MarketID and TaxCategoryID replace the retired product-level Taxed
+	// flag: taxability is a market listing fact in v27, so compliance
+	// freezes the market and its Pricing-owned tax category instead.
+	MarketID             string    `json:"market_id,omitempty"`
+	TaxCategoryID        string    `json:"tax_category_id,omitempty"`
+	CapturedAt           time.Time `json:"captured_at"`
+	SourceChecksumSHA256 string    `json:"source_checksum_sha256,omitempty"`
 }
 
 // PurchaseOrderSnapshot freezes the purchase-order header used by a

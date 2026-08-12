@@ -141,6 +141,23 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"DeliveryRegionRegionalVIC",
 		"DeliveryRegionInterstate",
 
+		// v27 global product/SKU split and market pricing cutover.
+		"ProductSKUCode",
+		"ProductSKUCodes",
+		"CategorySKUCode",
+		"ProductPackaging",
+		"ProductCommerce",
+		"ProductPackageCommerce",
+		"ProductMetrics",
+		"Selling",
+		"PackagePricing",
+		"AcceptedPackagePricing",
+		"PackagePricingID",
+		"PackagePricingRevision",
+		"PackagePricingAvailabilityChangedEvent",
+		"EventTypeInventoryPackagePricingAvailable",
+		"EventTypeInventoryPackagePricingWithdrawn",
+
 		// Removed expiry-merchandising values.
 
 		// Removed packing-session values.
@@ -204,6 +221,17 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"pubsub/event.StockAdjustedEvent",
 		"orders/shipping.DeliveryRegion",
 		"supply/warehouse.PackingSessionStatus",
+
+		// v27 removes the catalogue commerce projections, the combined
+		// package-pricing record, and the category-shaped classification SKU.
+		"supply/product.ProductPackaging",
+		"supply/product.ProductCommerce",
+		"supply/product.ProductPackageCommerce",
+		"supply/product.ProductMetrics",
+		"supply/product.Selling",
+		"supply/classification.SKU",
+		"pricing/promotion.PackagePricing",
+		"pubsub/event.PackagePricingAvailabilityChangedEvent",
 	)
 
 	removedFields := map[string]map[string]struct{}{
@@ -377,6 +405,26 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"manual_ambient_count",
 		"manual_frozen_count",
 		"postcode_rules",
+
+		// v27 foreign-key and package-pricing cutover. The frozen
+		// "sku_code" key is deliberately NOT listed here: it survives on
+		// the seven transaction-evidence types and is policed by the
+		// canonical-product allowlist test instead.
+		"product_sku_code",
+		"product_sku_codes",
+		"resolved_product_sku_codes",
+		"resolved_qualifier_product_sku_codes",
+		"resolved_target_product_sku_codes",
+		"created_product_sku_code",
+		"category_sku_code",
+		"accepted_package_pricing",
+		"package_pricing_id",
+		"package_pricing_revision",
+		"available_package_count",
+		"taxed",
+		"selling",
+		"first_listed_at",
+		"display_selling_count",
 	)
 
 	removedJSONKeysByType := map[string]map[string]struct{}{
@@ -765,6 +813,8 @@ func TestV27ProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(
 		"contracts/supply/" + legacyImportCompliance,
 		"contracts/supply/" + legacyImportCompliance + "/" + legacyImportComplianceEnums,
 		"contracts/supply/product/offer.go",
+		"contracts/supply/classification/sku.go",
+		"contracts/pricing/promotion/package_pricing.go",
 	}
 
 	pkgRoot := sharedContractPkgRoot(t)
