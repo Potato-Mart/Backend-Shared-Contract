@@ -41,6 +41,7 @@ var v27ExpectedEnumPackages = []string{
 	"contracts/pricing/membership/membership_enums",
 	"contracts/pricing/pricebook/pricebook_enums",
 	"contracts/pricing/promotion/promotion_enums",
+	"contracts/pricing/quote/quote_enums",
 	"contracts/pricing/wallet/wallet_enums",
 	"contracts/pubsub/event/event_enums",
 	"contracts/supply/classification/classification_enums",

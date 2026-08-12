@@ -6,14 +6,15 @@ import (
 	"testing"
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/geography/geography_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging/packaging_enums"
 	sales "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/order"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/quote"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/listing"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/operations"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse"
@@ -23,9 +24,8 @@ import (
 func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {
 	now := time.Date(2026, 8, 4, 4, 5, 6, 0, time.UTC)
 	caseOption := packageOption("pkg_case_12", "CASE-12", packaging_enums.PackageHandlingUnitCase, 12, now)
-	eachOption := packageOption("pkg_each", "EACH", packaging_enums.PackageHandlingUnitEach, 1, now)
-	casePricing := packagePricing("pricing_case", caseOption, money.Money{AmountMinor: 1800, Currency: "AUD"}, now)
-	eachPricing := packagePricing("pricing_each", eachOption, money.Money{AmountMinor: 175, Currency: "AUD"}, now)
+	casePricing := priceSnapshot("line_case", money.Money{AmountMinor: 1800, Currency: "AUD"}, now)
+	eachPricing := priceSnapshot("line_each", money.Money{AmountMinor: 175, Currency: "AUD"}, now)
 
 	item := sales.OrderItem{
 		ID:                   "item_1",
@@ -34,8 +34,8 @@ func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {
 		ProductPackageOption: caseOption,
 		CapturedAt:           now,
 		Components: []sales.PricedPackageComponent{
-			{AcceptedPackagePricing: casePricing, RequestedPackageCount: 2, RequestedBaseUnits: 24, PackagePrice: casePricing.PackagePrice, ComponentTotal: money.Money{AmountMinor: 3600, Currency: "AUD"}},
-			{AcceptedPackagePricing: eachPricing, RequestedPackageCount: 3, RequestedBaseUnits: 3, PackagePrice: eachPricing.PackagePrice, ComponentTotal: money.Money{AmountMinor: 525, Currency: "AUD"}},
+			{PriceSnapshot: casePricing, RequestedPackageCount: 2, RequestedBaseUnits: 24, PackagePrice: casePricing.LineTotal, ComponentTotal: money.Money{AmountMinor: 3600, Currency: "AUD"}},
+			{PriceSnapshot: eachPricing, RequestedPackageCount: 3, RequestedBaseUnits: 3, PackagePrice: eachPricing.LineTotal, ComponentTotal: money.Money{AmountMinor: 525, Currency: "AUD"}},
 		},
 		TotalBaseUnits:     27,
 		SubstitutionPolicy: sales.LooseSubstitutionPolicySnapshot{Allowed: true, Source: order_enums.LooseSubstitutionPolicySourceBuyerSelected, CapturedAt: now},
@@ -52,12 +52,12 @@ func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {
 	if err != nil {
 		t.Fatalf("marshal mixed package order item: %v", err)
 	}
-	for _, want := range []string{`"accepted_package_pricing":{"id":"pricing_case"`, `"handling_unit":"CASE"`, `"handling_unit":"EACH"`, `"requested_package_count":2`, `"requested_package_count":3`, `"total_base_units":27`, `"allowed":true`, `"source":"BUYER_SELECTED"`, `"requested_case_count":1`, `"replacement_base_units":12`} {
+	for _, want := range []string{`"price_snapshot":{"quote_id":"quote_1","line_id":"line_case"`, `"handling_unit":"CASE"`, `"handling_unit":"EACH"`, `"requested_package_count":2`, `"requested_package_count":3`, `"total_base_units":27`, `"allowed":true`, `"source":"BUYER_SELECTED"`, `"requested_case_count":1`, `"replacement_base_units":12`} {
 		if !strings.Contains(string(body), want) {
 			t.Fatalf("mixed package JSON missing %s: %s", want, body)
 		}
 	}
-	for _, removed := range []string{`"quantity":`, `"unit_price":`, `"carton_qty":`, `"carton_size":`, `"accepted_offer"`, `"offer_id"`} {
+	for _, removed := range []string{`"quantity":`, `"unit_price":`, `"carton_qty":`, `"carton_size":`, `"accepted_offer"`, `"offer_id"`, `"accepted_package_pricing"`, `"package_pricing_id"`} {
 		if strings.Contains(string(body), removed) {
 			t.Fatalf("mixed package JSON contains removed scalar field %s: %s", removed, body)
 		}
@@ -69,22 +69,21 @@ func TestGroupOrderFulfilmentJSONUsesOneParentAllocation(t *testing.T) {
 	composition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 24, Components: []packaging.PackageComponentSnapshot{{PackageOptionID: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24}}}
 	participantComposition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 12, Components: []packaging.PackageComponentSnapshot{{PackageOptionID: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 1, UnitsPerPackage: 12, BaseUnits: 12}}}
 	zeroComposition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}}
-	caseOption := packageOption("pkg_case_12", "CASE-12", packaging_enums.PackageHandlingUnitCase, 12, now)
-	casePricing := packagePricing("pricing_case", caseOption, money.Money{AmountMinor: 1800, Currency: "AUD"}, now)
+	casePricing := priceSnapshot("line_case", money.Money{AmountMinor: 1800, Currency: "AUD"}, now)
 	aggregateComponent := sales.PricedPackageComponent{
-		AcceptedPackagePricing: casePricing, RequestedPackageCount: 2, RequestedBaseUnits: 24,
+		PriceSnapshot: casePricing, RequestedPackageCount: 2, RequestedBaseUnits: 24,
 		PackagePrice: money.Money{AmountMinor: 1800, Currency: "AUD"}, TaxAmount: money.Money{AmountMinor: 300, Currency: "AUD"},
 		DiscountAmount: money.Money{AmountMinor: 200, Currency: "AUD"}, ComponentTotal: money.Money{AmountMinor: 3700, Currency: "AUD"},
 	}
 	participantComponent := sales.PricedPackageComponent{
-		AcceptedPackagePricing: casePricing, RequestedPackageCount: 1, RequestedBaseUnits: 12,
+		PriceSnapshot: casePricing, RequestedPackageCount: 1, RequestedBaseUnits: 12,
 		PackagePrice: money.Money{AmountMinor: 1800, Currency: "AUD"}, TaxAmount: money.Money{AmountMinor: 150, Currency: "AUD"},
 		DiscountAmount: money.Money{AmountMinor: 100, Currency: "AUD"}, ComponentTotal: money.Money{AmountMinor: 1850, Currency: "AUD"},
 	}
 	plan := sales.GroupOrderFulfilmentPlan{
 		ID: "group_fulfilment_1", GroupOrderCode: "GROUP-1", ParentOrderNumber: "PARENT-1", ParentFulfilmentID: "fulfilment_1",
 		AggregateLines: []sales.GroupOrderAggregateLine{{
-			ID: "aggregate_1", SKUID: "A00001", PackagePricingID: "pricing_case", PackagePricingRevision: 3, PackageOptionID: "pkg_case_12",
+			ID: "aggregate_1", SKUID: "sku_a00001", MarketID: "market_au", PackageOptionID: "pkg_case_12",
 			RequestedComposition: composition, AllocatedComposition: composition, ShortageComposition: zeroComposition,
 			ReturnedComposition: participantComposition, RefundedComposition: participantComposition,
 			Components: []sales.PricedPackageComponent{aggregateComponent}, DiscountAmount: money.Money{AmountMinor: 200, Currency: "AUD"},
@@ -109,7 +108,7 @@ func TestGroupOrderFulfilmentJSONUsesOneParentAllocation(t *testing.T) {
 	if strings.Count(string(body), `"parent_allocation_line_id":"allocation_parent_1"`) != 2 {
 		t.Fatalf("participant shares must reference the parent allocation: %s", body)
 	}
-	for _, want := range []string{`"package_pricing_id":"pricing_case"`, `"package_pricing_revision":3`, `"aggregate_lines"`, `"participant_shares"`, `"captured_at":"2026-08-04T06:07:08Z"`} {
+	for _, want := range []string{`"market_id":"market_au"`, `"price_snapshot":{"quote_id":"quote_1"`, `"aggregate_lines"`, `"participant_shares"`, `"captured_at":"2026-08-04T06:07:08Z"`} {
 		if !strings.Contains(string(body), want) {
 			t.Fatalf("group fulfilment JSON missing %s: %s", want, body)
 		}
@@ -124,7 +123,7 @@ func TestGroupOrderFulfilmentJSONUsesOneParentAllocation(t *testing.T) {
 		t.Fatalf("unmarshal group order fulfilment plan: %v", err)
 	}
 	aggregateShape := planShape["aggregate_lines"].([]any)[0].(map[string]any)
-	for _, key := range []string{"package_pricing_id", "package_pricing_revision", "components", "returned_composition", "refunded_composition", "discount_amount", "tax_amount", "total", "refund_amount"} {
+	for _, key := range []string{"market_id", "components", "returned_composition", "refunded_composition", "discount_amount", "tax_amount", "total", "refund_amount"} {
 		if _, ok := aggregateShape[key]; !ok {
 			t.Fatalf("group aggregate JSON missing %q: %+v", key, aggregateShape)
 		}
@@ -149,17 +148,34 @@ func packageOption(id string, code string, handling packaging_enums.PackageHandl
 	return product.ProductPackageOption{ID: id, Code: code, SKUID: "A00001", HandlingUnit: handling, UnitsPerPackage: units, IsActive: true, EffectiveFrom: capturedAt}
 }
 
-func packagePricing(id string, option product.ProductPackageOption, price money.Money, capturedAt time.Time) promotion.PackagePricing {
-	return promotion.PackagePricing{
-		ID: id, Revision: 3, InventoryRevision: 9,
-		SKUID: "A00001", PackageOptionID: option.ID,
-		PackagePrice: price, TaxAmount: money.Money{Currency: "AUD"},
-		ValidFrom: capturedAt, Timezone: "Etc/UTC",
-		GeographicContext:     geography.GeographicContext{Source: geography_enums.GeographicContextSourceRetailCustomerProfile, CountryCode: "AU", ScopeRevision: 1, RuleRevision: 3, EvaluationTimezone: "Australia/Melbourne"},
-		StockLocation:         warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01-03"},
-		AvailablePackageCount: 10, AvailableBaseUnits: 120,
-		Condition: warehouse_enums.InventoryConditionGood, Disposition: warehouse_enums.InventoryDispositionStandardSellable,
-		PromotionApplications: []promotion.PromotionApplication{},
-		CapturedAt:            capturedAt,
+func priceSnapshot(lineID string, price money.Money, capturedAt time.Time) quote.PriceSnapshot {
+	return quote.PriceSnapshot{
+		QuoteID: "quote_1", LineID: lineID, SKUID: "sku_a00001", MarketID: "market_au",
+		PriceBookID: "book_au_online", PriceBookRevision: 2,
+		PriceEntryID: "entry_1", PriceEntryRevision: 3,
+		Currency: "AUD", CurrencyExponent: money.CurrencyExponent{Currency: "AUD", Exponent: 2},
+		ListUnitPrice: price, TaxableBase: price, TaxAmount: money.Money{Currency: "AUD"}, LineTotal: price,
+		Tax: quote.TaxSnapshot{
+			TaxCategoryID: "tax_au_gst", TaxRuleID: "rule_au_gst", TaxRuleRevision: 1,
+			InclusionBasis: pricebook_enums.PriceTaxInclusionInclusive,
+			RateNumerator:  1, RateDenominator: 11,
+			TaxableBase: price, AllocatedTax: money.Money{Currency: "AUD"},
+			CalculationSource: quote_enums.TaxCalculationSourceInclusiveExtraction,
+			RoundingMethod:    quote_enums.TaxRoundingMethodSumExactThenRound,
+		},
+		Rounding: quote.RoundingEvidence{
+			Mode: quote_enums.RoundingModeHalfUp, PriceEnding: pricebook_enums.PriceEndingPolicyNone,
+			Exponent: 2, ExactNumerator: price.AmountMinor, ExactDenominator: 1, RoundedAmount: price,
+		},
+		Eligibility: listing.SaleEligibilitySnapshot{
+			MarketID: "market_au", SKUID: "sku_a00001", ListingID: "listing_1", ListingRevision: 4,
+			TaxCategoryID: "tax_au_gst", DepotCode: "AU-VIC-MEL-DC-01",
+			StockLocation:      warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01-03"},
+			Condition:          warehouse_enums.InventoryConditionGood,
+			Disposition:        warehouse_enums.InventoryDispositionStandardSellable,
+			AvailableBaseUnits: 120, InventoryRevision: 9,
+			ValidityToken: "eligibility_token_1", ValidUntil: capturedAt, CapturedAt: capturedAt,
+		},
+		Fingerprint: "fingerprint_" + lineID, CapturedAt: capturedAt,
 	}
 }

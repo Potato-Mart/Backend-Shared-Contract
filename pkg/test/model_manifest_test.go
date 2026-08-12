@@ -77,12 +77,15 @@ var v27ModelPackageManifest = map[string]string{
 	"contracts/pricing/pricebook/pricebook_enums":                "enum",
 	"contracts/pricing/promotion":                                "entity,event,record,value",
 	"contracts/pricing/promotion/promotion_enums":                "enum",
+	"contracts/pricing/quote":                                    "snapshot,value",
+	"contracts/pricing/quote/quote_enums":                        "enum",
 	"contracts/pricing/wallet":                                   "entity,record,snapshot,value",
 	"contracts/pricing/wallet/wallet_enums":                      "enum",
 	"contracts/pubsub/envelop":                                   "record",
 	"contracts/pubsub/event":                                     "event,record",
 	"contracts/pubsub/event/event_enums":                         "enum",
 	"contracts/supply/classification":                            "entity,record,value",
+	"contracts/supply/cost":                                      "entity,record",
 	"contracts/supply/classification/classification_enums":       "enum",
 	"contracts/supply/import_compliance":                         "entity,record,snapshot,value",
 	"contracts/supply/import_compliance/import_compliance_enums": "enum",
@@ -105,7 +108,7 @@ var v27ModelPackageManifest = map[string]string{
 // Reviewed for the final v27.0.0 object-media, canonical-product, package-layout,
 // unified-promotion, and package-pricing release surface. The digest captures
 // the complete exported model manifest after the hard cutover.
-const v27ExportedTypeManifestDigest = "df1b234b8bdf5628f63dadd54048600dd680238b3677730cab33bf88d93372d3"
+const v27ExportedTypeManifestDigest = "ccc39b4d37c9754e2e9d895b68f060c47dcd38135f0c84f31df110afbc81fea3"
 
 func TestV27ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

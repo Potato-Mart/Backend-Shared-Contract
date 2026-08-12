@@ -8,6 +8,7 @@ import (
 
 func TestWarehouseEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
+		{name: "warehouseenum.DamageSaleTier", valid: []stringEnum{warehouse_enums.DamageSaleTier30, warehouse_enums.DamageSaleTier50, warehouse_enums.DamageSaleTier80}, invalid: warehouse_enums.DamageSaleTier("__invalid__")},
 		{name: "warehouseenum.PackingDamageHandling", valid: []stringEnum{warehouse_enums.PackingDamageReplaceFromStock, warehouse_enums.PackingDamageShortShipRefund}, invalid: warehouse_enums.PackingDamageHandling("__invalid__")},
 		{name: "warehouseenum.CameraProjection", valid: []stringEnum{warehouse_enums.CameraPerspective, warehouse_enums.CameraOrthographic}, invalid: warehouse_enums.CameraProjection("__invalid__")},
 		{name: "warehouseenum.DamageStage", valid: []stringEnum{warehouse_enums.DamageStageInbound, warehouse_enums.DamageStagePicking, warehouse_enums.DamageStagePacking, warehouse_enums.DamageStageStorage}, invalid: warehouse_enums.DamageStage("__invalid__")},

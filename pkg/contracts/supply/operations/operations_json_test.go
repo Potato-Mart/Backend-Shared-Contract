@@ -22,12 +22,12 @@ func TestReservationAndStagingJSONShapes(t *testing.T) {
 
 	reservationShape := marshalObject(t, operations.StockReservation{
 		ID: "reservation_1", SKUID: "A00001", DepotCode: "AU-VIC-MEL-DC-01",
-		PackagePricingID: "pricing_1", PackagePricingRevision: 9,
+		MarketID: "market_au", EligibilityToken: "eligibility_token_1", ListingRevision: 9,
 		RequestedComposition: caseComposition, ReservedComposition: caseComposition,
 		Status:   warehouse_enums.StockReservationStatusReserved,
 		Revision: 1, Timezone: "Australia/Melbourne",
 	})
-	if reservationShape["status"] != "RESERVED" || reservationShape["package_pricing_revision"] != float64(9) {
+	if reservationShape["status"] != "RESERVED" || reservationShape["listing_revision"] != float64(9) || reservationShape["eligibility_token"] != "eligibility_token_1" {
 		t.Fatalf("reservation identity did not marshal: %+v", reservationShape)
 	}
 
