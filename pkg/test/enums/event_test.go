@@ -3,10 +3,10 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pubsub/event/event_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pubsub/event/event_enums"
 )
 
-func TestV26InventoryAndCommerceEventTypes(t *testing.T) {
+func TestV27InventoryAndCommerceEventTypes(t *testing.T) {
 	assertStringEnums(t, []enumCase{
 		{
 			name: "events.EventType",

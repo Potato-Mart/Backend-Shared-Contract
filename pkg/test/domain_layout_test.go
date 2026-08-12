@@ -10,8 +10,8 @@ import (
 	"testing"
 )
 
-// TestV26DomainPackageLayout verifies the v26 contract's requested domain paths.
-func TestV26DomainPackageLayout(t *testing.T) {
+// TestV27DomainPackageLayout verifies the v27 contract's requested domain paths.
+func TestV27DomainPackageLayout(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	legacyImportCompliance := "import" + "compliance"
 	requiredFiles := map[string]string{
@@ -47,7 +47,7 @@ func TestV26DomainPackageLayout(t *testing.T) {
 		fset := token.NewFileSet()
 		file, err := parser.ParseFile(fset, path, nil, parser.PackageClauseOnly)
 		if err != nil {
-			t.Errorf("required v26 model file %s is missing or invalid: %v", relativePath, err)
+			t.Errorf("required v27 model file %s is missing or invalid: %v", relativePath, err)
 			continue
 		}
 		if got := file.Name.Name; got != wantPackage {
@@ -85,12 +85,12 @@ func TestV26DomainPackageLayout(t *testing.T) {
 	} {
 		path := filepath.Join(pkgRoot, filepath.FromSlash(relativePath))
 		if _, err := os.Stat(path); !os.IsNotExist(err) {
-			t.Errorf("retired v26 path must not exist: %s", relativePath)
+			t.Errorf("retired v27 path must not exist: %s", relativePath)
 		}
 	}
 }
 
-func TestV26SourcesRejectLegacyImportComplianceIdentifier(t *testing.T) {
+func TestV27SourcesRejectLegacyImportComplianceIdentifier(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	legacyIdentifier := "import" + "compliance"
 	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
@@ -110,6 +110,6 @@ func TestV26SourcesRejectLegacyImportComplianceIdentifier(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v26 source layout: %v", err)
+		t.Fatalf("scan v27 source layout: %v", err)
 	}
 }

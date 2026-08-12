@@ -3,17 +3,17 @@ package retail_test
 import (
 	"encoding/json"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/geography"
 
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/party"
-	customers "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/customers/retail"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/customers/retail/retail_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/shipping"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pubsub/event"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/party"
+	customers "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/customers/retail"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/shipping"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pubsub/event"
 )
 
 func TestRetailCustomerJSONShape(t *testing.T) {

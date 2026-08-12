@@ -3,7 +3,7 @@ package customer
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/notifications/customer/customer_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/notifications/customer/customer_enums"
 )
 
 // CustomerNotificationDelivery records one channel's durable delivery state.

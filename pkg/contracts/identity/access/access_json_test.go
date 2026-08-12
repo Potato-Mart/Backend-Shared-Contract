@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/identity/identity_enums"
-	identity "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/identity/access"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/identity/access/access_enums"
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/identity/account"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/identity/account/account_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/identity/identity_enums"
+	identity "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/identity/access"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/identity/access/access_enums"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/identity/account"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/identity/account/account_enums"
 )
 
 func TestPortalAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T) {

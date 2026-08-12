@@ -12,13 +12,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/audit"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product"
 )
 
-func TestV26CanonicalProductUsesOnlyReusableComponents(t *testing.T) {
+func TestV27CanonicalProductUsesOnlyReusableComponents(t *testing.T) {
 	canonicalProductAssertExactFields(t, reflect.TypeOf(product.Product{}), map[string]canonicalProductField{
 		"SKUCode": {
 			json:   "sku_code",
@@ -66,7 +66,7 @@ func TestV26CanonicalProductUsesOnlyReusableComponents(t *testing.T) {
 	}
 }
 
-func TestV26ProductImagesHaveOnlyObjectMediaCoverGalleryAndDetails(t *testing.T) {
+func TestV27ProductImagesHaveOnlyObjectMediaCoverGalleryAndDetails(t *testing.T) {
 	canonicalProductAssertExactFields(t, reflect.TypeOf(product.Images{}), map[string]canonicalProductField{
 		"Cover": {
 			json:   "cover,omitempty",
@@ -83,7 +83,7 @@ func TestV26ProductImagesHaveOnlyObjectMediaCoverGalleryAndDetails(t *testing.T)
 	})
 }
 
-func TestV26ProductAdministrationIsOptionalAndOwnsHistoryAndAudit(t *testing.T) {
+func TestV27ProductAdministrationIsOptionalAndOwnsHistoryAndAudit(t *testing.T) {
 	administrationField, ok := reflect.TypeOf(product.Product{}).FieldByName("Administration")
 	if !ok {
 		t.Fatal("product.Product must expose optional Administration")
@@ -112,7 +112,7 @@ func TestV26ProductAdministrationIsOptionalAndOwnsHistoryAndAudit(t *testing.T) 
 	}
 }
 
-func TestV26ProductCommerceExcludesOperationalInventoryAndAuditEvidence(t *testing.T) {
+func TestV27ProductCommerceExcludesOperationalInventoryAndAuditEvidence(t *testing.T) {
 	canonicalProductRequireJSONFields(t, reflect.TypeOf(product.ProductCommerce{}), map[string]string{
 		"Status":        "status,omitempty",
 		"Selling":       "selling,omitempty",
@@ -135,7 +135,7 @@ func TestV26ProductCommerceExcludesOperationalInventoryAndAuditEvidence(t *testi
 	}
 }
 
-func TestV26CanonicalProductRetiresLegacyCatalogueProjections(t *testing.T) {
+func TestV27CanonicalProductRetiresLegacyCatalogueProjections(t *testing.T) {
 	retiredProductTypes := canonicalProductStringSet(
 		"Snapshot",
 		"StorefrontProduct",
@@ -195,8 +195,8 @@ func TestV26CanonicalProductRetiresLegacyCatalogueProjections(t *testing.T) {
 	}
 }
 
-func TestV26OnlyProductPackageEmbedsFullProduct(t *testing.T) {
-	const productImportPath = "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/product"
+func TestV27OnlyProductPackageEmbedsFullProduct(t *testing.T) {
+	const productImportPath = "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product"
 
 	canonicalProductWalkProductionGoFiles(t, func(path string, relativePath string, fset *token.FileSet, file *ast.File) {
 		directory := filepath.ToSlash(filepath.Dir(relativePath))
@@ -260,7 +260,7 @@ func TestV26OnlyProductPackageEmbedsFullProduct(t *testing.T) {
 	})
 }
 
-func TestV26CrossDomainProductSKUCodeLinksAreScalars(t *testing.T) {
+func TestV27CrossDomainProductSKUCodeLinksAreScalars(t *testing.T) {
 	canonicalProductWalkProductionGoFiles(t, func(path string, relativePath string, fset *token.FileSet, file *ast.File) {
 		directory := filepath.ToSlash(filepath.Dir(relativePath))
 		for _, declaration := range file.Decls {
@@ -286,7 +286,7 @@ func TestV26CrossDomainProductSKUCodeLinksAreScalars(t *testing.T) {
 							continue
 						}
 						if name.Name != "ProductSKUCode" {
-							jsonKey, present := v26JSONFieldName(t, path, field)
+							jsonKey, present := v27JSONFieldName(t, path, field)
 							if present && jsonKey == "sku_code" {
 								t.Errorf("%s uses legacy cross-domain JSON key sku_code on %s", fset.Position(field.Pos()), typeSpecification.Name.Name)
 							}
@@ -296,7 +296,7 @@ func TestV26CrossDomainProductSKUCodeLinksAreScalars(t *testing.T) {
 						if !stringScalar || identifier.Name != "string" {
 							t.Errorf("%s uses non-scalar ProductSKUCode on %s", fset.Position(field.Pos()), typeSpecification.Name.Name)
 						}
-						jsonKey, present := v26JSONFieldName(t, path, field)
+						jsonKey, present := v27JSONFieldName(t, path, field)
 						if !present || jsonKey != "product_sku_code" {
 							t.Errorf("%s ProductSKUCode on %s must use JSON key product_sku_code", fset.Position(field.Pos()), typeSpecification.Name.Name)
 						}

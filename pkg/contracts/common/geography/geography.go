@@ -1,6 +1,6 @@
 package geography
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/geography/geography_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/geography/geography_enums"
 
 // CountryCode is an ISO 3166-1 alpha-2 country code such as AU, TW, JP, or US.
 type CountryCode string

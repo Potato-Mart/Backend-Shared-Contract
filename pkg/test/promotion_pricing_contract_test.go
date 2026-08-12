@@ -15,16 +15,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/money"
-	order "github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/pos"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/promotion/promotion_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
+	order "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/pos"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse"
 )
 
-func TestV26PromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *testing.T) {
+func TestV27PromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *testing.T) {
 	maximum := int64(12)
 	scope := promotion.PromotionScope{
 		MatchMode: promotion_enums.PromotionMatchModeAll,
@@ -45,13 +45,13 @@ func TestV26PromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *test
 		},
 	}
 
-	if !v26PromotionScopeStructurallyUsable(scope) {
+	if !v27PromotionScopeStructurallyUsable(scope) {
 		t.Fatal("populated restricted scope must be structurally usable")
 	}
-	if v26PromotionScopeStructurallyUsable(promotion.PromotionScope{MatchMode: promotion_enums.PromotionMatchModeAll}) {
+	if v27PromotionScopeStructurallyUsable(promotion.PromotionScope{MatchMode: promotion_enums.PromotionMatchModeAll}) {
 		t.Fatal("an empty restricted scope must not be structurally usable")
 	}
-	if !v26PromotionScopeStructurallyUsable(promotion.PromotionScope{Unrestricted: true, MatchMode: promotion_enums.PromotionMatchModeAny}) {
+	if !v27PromotionScopeStructurallyUsable(promotion.PromotionScope{Unrestricted: true, MatchMode: promotion_enums.PromotionMatchModeAny}) {
 		t.Fatal("an explicitly unrestricted scope must be structurally usable without groups")
 	}
 
@@ -74,7 +74,7 @@ func TestV26PromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *test
 	}
 }
 
-func TestV26PackagePricingPreservesOrderedPromotionApplications(t *testing.T) {
+func TestV27PackagePricingPreservesOrderedPromotionApplications(t *testing.T) {
 	appliedAt := time.Date(2026, 8, 9, 9, 30, 0, 0, time.UTC)
 	value := promotion.PackagePricing{
 		ID: "pricing-1", Revision: 5, InventoryRevision: 8,
@@ -118,7 +118,7 @@ func TestV26PackagePricingPreservesOrderedPromotionApplications(t *testing.T) {
 	}
 }
 
-func TestV26CustomerSummariesExposeOnlyFrozenSafePricingFacts(t *testing.T) {
+func TestV27CustomerSummariesExposeOnlyFrozenSafePricingFacts(t *testing.T) {
 	for _, model := range []reflect.Type{reflect.TypeOf(pos.ReceiptLine{}), reflect.TypeOf(order.OrderLineSummary{})} {
 		for _, required := range []string{"ProductSKUCode", "ProductName", "ProductImage", "ProductPackageOption", "CapturedAt", "PackagePrice", "TaxAmount", "DiscountAmount", "PromotionApplications", "Total"} {
 			if _, ok := model.FieldByName(required); !ok {
@@ -138,7 +138,7 @@ func TestV26CustomerSummariesExposeOnlyFrozenSafePricingFacts(t *testing.T) {
 	}
 }
 
-func TestV26OperationalCategoryTagEvidenceIsLocationQualified(t *testing.T) {
+func TestV27OperationalCategoryTagEvidenceIsLocationQualified(t *testing.T) {
 	model := reflect.TypeOf(operations.InventoryCategoryTagEvidence{})
 	assertJSONFields(t, model, map[string]string{
 		"ProductSKUCode":  "product_sku_code",
@@ -156,7 +156,7 @@ func TestV26OperationalCategoryTagEvidenceIsLocationQualified(t *testing.T) {
 	}
 }
 
-func TestV26PromotionProductionSurfaceRejectsRetiredMechanicsAndDependencies(t *testing.T) {
+func TestV27PromotionProductionSurfaceRejectsRetiredMechanicsAndDependencies(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	retiredIdentifiers := map[string]struct{}{
 		"SellableOffer": {}, "SellableOfferSnapshot": {}, "AcceptedOffer": {},
@@ -249,7 +249,7 @@ func TestV26PromotionProductionSurfaceRejectsRetiredMechanicsAndDependencies(t *
 	}
 }
 
-func v26PromotionScopeStructurallyUsable(scope promotion.PromotionScope) bool {
+func v27PromotionScopeStructurallyUsable(scope promotion.PromotionScope) bool {
 	if scope.Unrestricted {
 		return scope.MatchMode.IsValid()
 	}

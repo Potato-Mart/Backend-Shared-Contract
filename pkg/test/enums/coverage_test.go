@@ -9,33 +9,33 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/customers/campaign/campaign_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/customers/wholesale/wholesale_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/orders/pos/pos_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/benefit/benefit_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pricing/membership/membership_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v26/pkg/contracts/pubsub/event/event_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/customers/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/pos/pos_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/benefit/benefit_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pubsub/event/event_enums"
 )
 
-func TestV26EnumCoverageIncludesEveryStringEnum(t *testing.T) {
-	testSource := v26EnumTestSource(t)
-	for _, typeName := range v26StringEnumTypes(t) {
+func TestV27EnumCoverageIncludesEveryStringEnum(t *testing.T) {
+	testSource := v27EnumTestSource(t)
+	for _, typeName := range v27StringEnumTypes(t) {
 		if !regexp.MustCompile(`\b` + regexp.QuoteMeta(typeName) + `\b`).MatchString(testSource) {
 			t.Errorf("string enum %s is not represented in an enum behavior test", typeName)
 		}
 	}
-	for _, constantName := range v26StringEnumConstants(t) {
+	for _, constantName := range v27StringEnumConstants(t) {
 		if !regexp.MustCompile(`\b` + regexp.QuoteMeta(constantName) + `\b`).MatchString(testSource) {
 			t.Errorf("string enum constant %s is not represented in an enum behavior test", constantName)
 		}
 	}
 }
 
-func TestV26FormerlyUncoveredEnumValues(t *testing.T) {
+func TestV27FormerlyUncoveredEnumValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
 		{name: "campaign.CampaignStatus", valid: []stringEnum{campaign_enums.CampaignStatusDraft, campaign_enums.CampaignStatusScheduled, campaign_enums.CampaignStatusActive, campaign_enums.CampaignStatusCompleted, campaign_enums.CampaignStatusArchived}, invalid: campaign_enums.CampaignStatus("__invalid__")},
 		{name: "campaign.CampaignPredictionStatus", valid: []stringEnum{campaign_enums.CampaignPredictionStatusNotApplicable, campaign_enums.CampaignPredictionStatusReady, campaign_enums.CampaignPredictionStatusWarning}, invalid: campaign_enums.CampaignPredictionStatus("__invalid__")},
@@ -59,7 +59,7 @@ func TestV26FormerlyUncoveredEnumValues(t *testing.T) {
 	})
 }
 
-func v26EnumTestSource(t *testing.T) string {
+func v27EnumTestSource(t *testing.T) string {
 	t.Helper()
 	pkgRoot, err := filepath.Abs(filepath.Join("..", ".."))
 	if err != nil {
@@ -86,7 +86,7 @@ func v26EnumTestSource(t *testing.T) string {
 	return strings.Join(source, "\n")
 }
 
-func v26StringEnumTypes(t *testing.T) []string {
+func v27StringEnumTypes(t *testing.T) []string {
 	t.Helper()
 	contractsRoot, err := filepath.Abs(filepath.Join("..", "..", "contracts"))
 	if err != nil {
@@ -116,7 +116,7 @@ func v26StringEnumTypes(t *testing.T) []string {
 	return types
 }
 
-func v26StringEnumConstants(t *testing.T) []string {
+func v27StringEnumConstants(t *testing.T) []string {
 	t.Helper()
 	contractsRoot, err := filepath.Abs(filepath.Join("..", "..", "contracts"))
 	if err != nil {
