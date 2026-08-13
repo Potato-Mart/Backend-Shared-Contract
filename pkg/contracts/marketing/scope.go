@@ -27,6 +27,6 @@ type ScopeDetail struct {
 	DiscountType          marketing_enums.DiscountType `json:"discount_type"`
 	DiscountValue         DiscountValue                `json:"discount_value"`
 	MinimumOrderAmount    *money.Money                 `json:"minimum_order_amount,omitempty"`
-	MinimumBaseUnits      *int64                       `json:"minimum_base_units,omitempty"`
+	MinimumUnits          *int64                       `json:"minimum_units,omitempty"`
 	MaximumDiscountAmount *money.Money                 `json:"maximum_discount_amount,omitempty"`
 }

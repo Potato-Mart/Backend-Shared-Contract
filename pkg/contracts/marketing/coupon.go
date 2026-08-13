@@ -42,9 +42,10 @@ type CouponScope struct {
 
 // CouponStatus combines the coupon lifecycle state with its active window.
 type CouponStatus struct {
-	Status   marketing_enums.CouponStatus `json:"status"`
-	StartsAt *time.Time                   `json:"starts_at,omitempty"`
-	EndsAt   *time.Time                   `json:"ends_at,omitempty"`
+	Status      marketing_enums.CouponStatus `json:"status"`
+	Dismissible bool                         `json:"dismissible"`
+	StartsAt    *time.Time                   `json:"starts_at,omitempty"`
+	EndsAt      *time.Time                   `json:"ends_at,omitempty"`
 }
 
 // CouponPosition carries the commercial geography and authored schedule zone.

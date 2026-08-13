@@ -112,7 +112,7 @@ var v27ModelPackageManifest = map[string]string{
 // MarketingMessage, versioned templates, benefit references, and PII-free
 // aggregate invalidation events. Legacy domains remain until their consumers
 // migrate. The digest captures the complete exported model manifest.
-const v27ExportedTypeManifestDigest = "08e45abbab7cb322cb430add8bdbdc9faaf4bd1533406630d01cad6fb952caa7"
+const v27ExportedTypeManifestDigest = "f0f3bfa44c4a17136da5abf1796ad02978bd10dc680247700f94c4b9db7ee04f"
 
 func TestV27ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

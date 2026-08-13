@@ -17,7 +17,7 @@ import (
 type Promotion struct {
 	PromotionCode       string                       `json:"promotion_code"`
 	PromotionName       []localization.LocalizedName `json:"promotion_name"`
-	PromotionCover      *security.ObjectMedia        `json:"promotion_cover,omitempty"`
+	Cover               *security.ObjectMedia        `json:"cover,omitempty"`
 	PromotionDetail     PromotionDetail              `json:"promotion_detail"`
 	PromotionScope      PromotionScope               `json:"promotion_scope"`
 	PromotionStatus     PromotionStatus              `json:"promotion_status"`
@@ -45,9 +45,10 @@ type PromotionScope struct {
 // PromotionStatus combines the promotion lifecycle state with its active
 // window.
 type PromotionStatus struct {
-	Status   marketing_enums.PromotionStatus `json:"status"`
-	StartsAt *time.Time                      `json:"starts_at,omitempty"`
-	EndsAt   *time.Time                      `json:"ends_at,omitempty"`
+	Status      marketing_enums.PromotionStatus `json:"status"`
+	Dismissible bool                            `json:"dismissible"`
+	StartsAt    *time.Time                      `json:"starts_at,omitempty"`
+	EndsAt      *time.Time                      `json:"ends_at,omitempty"`
 }
 
 // PromotionPosition carries the commercial geography and authored schedule
@@ -70,11 +71,29 @@ type PromotionConditions struct {
 // promotion mechanics. It intentionally contains no resolved cart, customer,
 // or provider state.
 type ScopeRelations struct {
-	Targets                     []ScopeTarget `json:"targets,omitempty"`
-	RequiredProducts            []ScopeTarget `json:"required_products,omitempty"`
-	Tiers                       []ScopeDetail `json:"tiers,omitempty"`
-	MixTargets                  []ScopeTarget `json:"mix_targets,omitempty"`
-	BOGOGetQuantity             *int          `json:"bogo_get_quantity,omitempty"`
-	AddOnMaxQuantity            *int          `json:"add_on_max_quantity,omitempty"`
-	PointsMultiplierBasisPoints *int64        `json:"points_multiplier_basis_points,omitempty"`
+	Targets                     []ScopeTarget     `json:"targets,omitempty"`
+	RequiredProducts            []RequiredProduct `json:"required_products,omitempty"`
+	Tiers                       []PromotionTier   `json:"tiers,omitempty"`
+	MixTargets                  *bool             `json:"mix_targets,omitempty"`
+	BOGOGetQuantity             *int              `json:"bogo_get_quantity,omitempty"`
+	AddOnMaxQuantity            *int              `json:"add_on_max_quantity,omitempty"`
+	PointsMultiplierBasisPoints *int64            `json:"points_multiplier_basis_points,omitempty"`
+}
+
+// RequiredProduct identifies a product that must be present for a promotion
+// mechanic and the integer selling-unit quantity required. It is separate from
+// ScopeTarget because required products have a quantity while simple targets
+// do not.
+type RequiredProduct struct {
+	Code     string                       `json:"code"`
+	Name     []localization.LocalizedName `json:"name"`
+	Quantity int64                        `json:"quantity"`
+}
+
+// PromotionTier is one strictly increasing selling-unit threshold and the
+// discount applied at that threshold. Pricing validates ordering and the
+// 1–20 tier limit; the public contract carries no compiled rule state.
+type PromotionTier struct {
+	MinimumUnits int64       `json:"minimum_units"`
+	ScopeDetail  ScopeDetail `json:"scope_detail"`
 }

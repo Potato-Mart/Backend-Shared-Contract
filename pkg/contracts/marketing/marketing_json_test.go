@@ -95,7 +95,7 @@ func TestCouponPromotionMessageAndTemplatesRoundTrip(t *testing.T) {
 		DiscountType:       marketing_enums.DiscountTypePercentage,
 		DiscountValue:      marketing.DiscountValue{BasisPoints: &basisPoints},
 		MinimumOrderAmount: &amount,
-		MinimumBaseUnits:   &minimumUnits,
+		MinimumUnits:       &minimumUnits,
 	}
 	coupon := marketing.Coupon{
 		CouponCode:  "WELCOME10",
@@ -116,9 +116,9 @@ func TestCouponPromotionMessageAndTemplatesRoundTrip(t *testing.T) {
 		AuditFields:      audit.AuditFields{CreatedAt: now, UpdatedAt: now},
 	}
 	promotion := marketing.Promotion{
-		PromotionCode:  "SPRING-BUNDLE",
-		PromotionName:  []localization.LocalizedName{{Language: "en", Name: "Spring bundle"}},
-		PromotionCover: &security.ObjectMedia{ID: "media_promotion_1"},
+		PromotionCode: "SPRING-BUNDLE",
+		PromotionName: []localization.LocalizedName{{Language: "en", Name: "Spring bundle"}},
+		Cover:         &security.ObjectMedia{ID: "media_promotion_1"},
 		PromotionDetail: marketing.PromotionDetail{
 			Description:   []localization.LocalizedDescription{{Language: "en", Description: "Buy one, get one"}},
 			PromotionType: marketing_enums.PromotionTypeBOGO,
@@ -135,9 +135,9 @@ func TestCouponPromotionMessageAndTemplatesRoundTrip(t *testing.T) {
 		},
 		ScopeRelations: marketing.ScopeRelations{
 			Targets:          []marketing.ScopeTarget{{Code: "SKU-2", Name: []localization.LocalizedName{{Language: "en", Name: "Free potatoes"}}}},
-			RequiredProducts: []marketing.ScopeTarget{{Code: "SKU-1", Name: []localization.LocalizedName{{Language: "en", Name: "Potatoes"}}}},
-			Tiers:            []marketing.ScopeDetail{detail},
-			MixTargets:       []marketing.ScopeTarget{{Code: "SKU-3", Name: []localization.LocalizedName{{Language: "en", Name: "Sweet potatoes"}}}},
+			RequiredProducts: []marketing.RequiredProduct{{Code: "SKU-1", Name: []localization.LocalizedName{{Language: "en", Name: "Potatoes"}}, Quantity: 1}},
+			Tiers:            []marketing.PromotionTier{{MinimumUnits: 3, ScopeDetail: detail}},
+			MixTargets:       boolPointer(true),
 			BOGOGetQuantity:  &bogoQuantity,
 		},
 		AuditFields: audit.AuditFields{CreatedAt: now, UpdatedAt: now},
@@ -184,6 +184,8 @@ func TestCouponPromotionMessageAndTemplatesRoundTrip(t *testing.T) {
 		}
 	}
 }
+
+func boolPointer(value bool) *bool { return &value }
 
 func TestMarketingAggregateEventsArePIIFree(t *testing.T) {
 	now := time.Date(2026, 8, 13, 10, 0, 0, 0, time.UTC)
