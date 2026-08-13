@@ -27,10 +27,10 @@ func TestCampaignUsesPublicBenefitReferencesAndSafeMedia(t *testing.T) {
 			Message:      []localization.LocalizedText{{Language: "en", Text: "Fresh offers are here"}},
 			CampaignType: marketing_enums.CampaignTypeMixed,
 			CouponDetails: []marketing.BenefitRef{{
-				Code: "WELCOME10", Name: []localization.LocalizedName{{Language: "en", Name: "Welcome 10"}}, Path: "/v1/coupons/WELCOME10",
+				Code: "WELCOME10", Name: []localization.LocalizedName{{Language: "en", Name: "Welcome 10"}}, Path: "/promotions/spring-launch",
 			}},
 			PromotionDetails: []marketing.BenefitRef{{
-				Code: "SPRING-BUNDLE", Name: []localization.LocalizedName{{Language: "en", Name: "Spring bundle"}}, Path: "/v1/promotions/SPRING-BUNDLE",
+				Code: "SPRING-BUNDLE", Name: []localization.LocalizedName{{Language: "en", Name: "Spring bundle"}}, Path: "/promotions/spring-launch",
 			}},
 		},
 		CampaignPosition: marketing.CampaignPosition{
@@ -59,6 +59,7 @@ func TestCampaignUsesPublicBenefitReferencesAndSafeMedia(t *testing.T) {
 		`"campaign_type":"mixed"`,
 		`"coupon_details":[{"code":"WELCOME10"`,
 		`"promotion_details":[{"code":"SPRING-BUNDLE"`,
+		`"path":"/promotions/spring-launch"`,
 		`"cover":{"id":"media_campaign_1","url":"https://cdn.example.test/campaign.png"}`,
 		`"customer_type":"all"`,
 		`"platform":"all"`,
@@ -67,7 +68,10 @@ func TestCampaignUsesPublicBenefitReferencesAndSafeMedia(t *testing.T) {
 			t.Fatalf("campaign JSON missing %s: %s", expected, payload)
 		}
 	}
-	for _, forbidden := range []string{"bucket", "storage_path", "coupon_id", "promotion_id", "discount_value"} {
+	if got := strings.Count(string(payload), `"path":"/promotions/spring-launch"`); got != 2 {
+		t.Fatalf("campaign benefit paths = %d, want 2 Campaign landing paths: %s", got, payload)
+	}
+	for _, forbidden := range []string{"bucket", "storage_path", "coupon_id", "promotion_id", "discount_value", "/v1/coupons/", "/v1/promotions/"} {
 		if strings.Contains(string(payload), forbidden) {
 			t.Fatalf("campaign JSON leaked %q: %s", forbidden, payload)
 		}
