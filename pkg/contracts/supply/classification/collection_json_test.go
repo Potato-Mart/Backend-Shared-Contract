@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/localization"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/classification"
 )
 
@@ -45,5 +46,26 @@ func TestCollectionAndCategorySlugsAreOptional(t *testing.T) {
 	}
 	if strings.Contains(string(body), `"slug"`) {
 		t.Fatalf("empty collection ref slug should be omitted, got %s", body)
+	}
+}
+
+func TestCollectionIconUsesSafeObjectMedia(t *testing.T) {
+	body, err := json.Marshal(classification.Collection{
+		ID:   "col_frozen",
+		Name: []localization.LocalizedName{{Language: "en", Name: "Frozen"}},
+		Icon: &security.ObjectMedia{ID: "media_collection_1", URL: "https://cdn.example.test/collections/frozen.png"},
+	})
+	if err != nil {
+		t.Fatalf("marshal collection icon: %v", err)
+	}
+	for _, expected := range []string{`"icon":{"id":"media_collection_1","url":"https://cdn.example.test/collections/frozen.png"}`} {
+		if !strings.Contains(string(body), expected) {
+			t.Fatalf("Collection JSON missing %s: %s", expected, body)
+		}
+	}
+	for _, forbidden := range []string{"bucket", "storage_path", "mime_type"} {
+		if strings.Contains(string(body), forbidden) {
+			t.Fatalf("Collection icon leaked %q: %s", forbidden, body)
+		}
 	}
 }

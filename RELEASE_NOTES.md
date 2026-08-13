@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v27.2.0` | 2026-08-14 | Minor | Adds public marketing foundations, privacy-minimized account-deletion coordination records, PayTo and Link payment methods, and optional collection icons. Additive only; keeps the `/v27` module path. |
 | `v27.1.0` | 2026-08-13 | Minor | Adds the customer preference-centre topic-group matrix and `NotificationTopicGroup` enum, the `sms` customer notification channel and `order_completed`/`new_product`/`receipt_available` topics, retail receipt preferences (`ReceiptFormat`, `RetailCustomerReceiptPreferences`) and `PreferredContactMethod`, `CampaignMessagingCategory` with `Campaign.messaging_category`, the `facebook` auth identity provider, and the `receipt.generated` payment event. Additive only; keeps the `/v27` module path. |
 | `v27.0.0` | 2026-08-12 | Major | Global Product/SKU split, Pricing-owned Market/PriceBook/PriceEntry, Supply-owned MarketListing and sale-eligibility evidence, immutable price/tax/rounding snapshots, purchase GST evidence, merchant legal profiles, and event schema version 2 with a new `catalog-events` topic. Changes the module path to `/v27`; all consumers must migrate explicitly. |
 | `v26.2.0` | 2026-08-11 | Minor | Adds the customer-safe `operations.StorefrontPlaceAvailability` projection carrying per-depot place identity and public stock state. Additive only; keeps the `/v26` module path. |
@@ -118,6 +119,32 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v27.2.0 (2026-08-14) - Marketing Foundations And Account-Deletion Coordination
+
+### Added / 新增
+
+- Adds the model-only `marketing` domain: public campaign, coupon, promotion,
+  benefit, template, and marketing-message aggregates with finite marketing
+  enums and minimal PII-free change events. Pricing remains authoritative for
+  calculation, reservation, and settlement decisions.
+- Adds privacy-minimized `identity/deletion` coordination records and enums
+  for the seven participating backend services. These are transport-neutral
+  contracts; each service remains responsible for its own private command
+  route, authorization, persistence, retention policy, and idempotency.
+- Adds the additive `payto` and `link` payment-method wire values, and the
+  optional `Collection.icon` object-media reference.
+
+### Consumer Action / 使用方動作
+
+- Consumers remain on the `github.com/Potato-Mart/Backend-Shared-Contract/v27`
+  module path. Services using the deletion coordination contracts or the
+  PayTo/Link payment methods must update their requirement to `v27.2.0` after
+  the release tag is published; consumers not using the additions may remain
+  on an earlier compatible v27 minor release.
+- The marketing aggregates intentionally contain no HTTP DTOs, API paths,
+  authorization rules, or pricing logic. Owning services must define and
+  validate those behaviors locally before exposing any routes.
 
 ## v27.1.0 (2026-08-13) - Preference Centre, Receipt Preferences, And Federated Facebook
 

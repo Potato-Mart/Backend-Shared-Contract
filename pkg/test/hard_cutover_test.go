@@ -840,6 +840,11 @@ func TestV27ProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(
 			return relativeErr
 		}
 		relativePath = filepath.ToSlash(relativePath)
+		// The additive v28 marketing foundation deliberately reintroduces its
+		// own closed promotion and discount vocabulary under the separate
+		// canonical marketing namespace. The v27 removal still applies to the
+		// legacy Pricing-owned promotion grammar and every other namespace.
+		marketingFoundation := strings.HasPrefix(relativePath, "contracts/marketing/")
 		if strings.Contains(relativePath, "/"+legacyImportCompliance+"/") || strings.HasSuffix(relativePath, "/"+legacyImportCompliance) {
 			t.Errorf("%s retains retired import-compliance package path", path)
 		}
@@ -882,7 +887,7 @@ func TestV27ProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(
 		ast.Inspect(file, func(node ast.Node) bool {
 			switch value := node.(type) {
 			case *ast.Ident:
-				if _, retired := retiredIdentifiers[value.Name]; retired {
+				if _, retired := retiredIdentifiers[value.Name]; retired && !marketingFoundation {
 					t.Errorf("%s retains retired v27 identifier %s", path, value.Name)
 				}
 			case *ast.BasicLit:

@@ -46,11 +46,15 @@ var v27ModelPackageManifest = map[string]string{
 	"contracts/identity/access/access_enums":                     "enum",
 	"contracts/identity/account":                                 "entity,event,record",
 	"contracts/identity/account/account_enums":                   "enum",
+	"contracts/identity/deletion":                                "record,snapshot",
+	"contracts/identity/deletion/deletion_enums":                 "enum",
 	"contracts/identity/role":                                    "entity,event,record",
 	"contracts/identity/role/role_enums":                         "enum",
 	"contracts/insights/analytics":                               "record",
 	"contracts/insights/marketing":                               "entity,record",
 	"contracts/insights/marketing/marketing_enums":               "enum",
+	"contracts/marketing":                                        "entity,event,record,value",
+	"contracts/marketing/marketing_enums":                        "enum",
 	"contracts/notifications/backinstock":                        "entity,event,record",
 	"contracts/notifications/backinstock/backinstock_enums":      "enum",
 	"contracts/notifications/customer":                           "entity,event,record",
@@ -105,12 +109,12 @@ var v27ModelPackageManifest = map[string]string{
 	"versioning":                                                 "module-metadata",
 }
 
-// Reviewed for the v27.1.0 additive preference-centre, receipt-preference,
-// campaign messaging-category, and receipt.generated event surface on top of
-// the v27.0.0 global product/SKU split, market pricing, transaction snapshot,
-// purchase tax evidence, merchant profile, and catalog event release surface.
-// The digest captures the complete exported model manifest.
-const v27ExportedTypeManifestDigest = "412513e94a5b556b1fb73df076e7336ffe5ecfeb6624d2f08f29f8e705f8f993"
+// Reviewed for the additive v28 foundations staged on the current v27 module
+// line: canonical public marketing models plus the internal, privacy-minimized
+// account-deletion coordination records and enums. Legacy domains remain
+// until their consumers migrate. The digest captures the complete exported
+// model manifest.
+const v27ExportedTypeManifestDigest = "a3a5be4767cf4539d811e1a83cd0b62cdb89b18d6d1b5f0362ecd40ef4f8760d"
 
 func TestV27ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)
