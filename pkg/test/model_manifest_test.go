@@ -46,6 +46,8 @@ var v27ModelPackageManifest = map[string]string{
 	"contracts/identity/access/access_enums":                     "enum",
 	"contracts/identity/account":                                 "entity,event,record",
 	"contracts/identity/account/account_enums":                   "enum",
+	"contracts/identity/deletion":                                "record,snapshot",
+	"contracts/identity/deletion/deletion_enums":                 "enum",
 	"contracts/identity/role":                                    "entity,event,record",
 	"contracts/identity/role/role_enums":                         "enum",
 	"contracts/insights/analytics":                               "record",
@@ -107,12 +109,12 @@ var v27ModelPackageManifest = map[string]string{
 	"versioning":                                                 "module-metadata",
 }
 
-// Reviewed for the additive v28 marketing foundation staged on the current
-// v27 module line: canonical public Campaign, Coupon, Promotion,
-// MarketingMessage, versioned templates, benefit references, and PII-free
-// aggregate invalidation events. Legacy domains remain until their consumers
-// migrate. The digest captures the complete exported model manifest.
-const v27ExportedTypeManifestDigest = "f0f3bfa44c4a17136da5abf1796ad02978bd10dc680247700f94c4b9db7ee04f"
+// Reviewed for the additive v28 foundations staged on the current v27 module
+// line: canonical public marketing models plus the internal, privacy-minimized
+// account-deletion coordination records and enums. Legacy domains remain
+// until their consumers migrate. The digest captures the complete exported
+// model manifest.
+const v27ExportedTypeManifestDigest = "a3a5be4767cf4539d811e1a83cd0b62cdb89b18d6d1b5f0362ecd40ef4f8760d"
 
 func TestV27ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

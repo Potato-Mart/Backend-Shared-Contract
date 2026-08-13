@@ -26,6 +26,7 @@ var v27ExpectedEnumPackages = []string{
 	"contracts/customers/wholesale/wholesale_enums",
 	"contracts/identity/access/access_enums",
 	"contracts/identity/account/account_enums",
+	"contracts/identity/deletion/deletion_enums",
 	"contracts/identity/role/role_enums",
 	"contracts/insights/marketing/marketing_enums",
 	"contracts/marketing/marketing_enums",
