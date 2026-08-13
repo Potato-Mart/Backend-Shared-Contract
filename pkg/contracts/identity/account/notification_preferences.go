@@ -5,9 +5,10 @@ import "time"
 // UserNotificationPreferences captures the account-level notification choices
 // for a user. Services may treat a missing preference bundle as "use defaults".
 type UserNotificationPreferences struct {
-	Channels  UserNotificationChannels `json:"channels"`
-	Topics    UserNotificationTopics   `json:"topics"`
-	UpdatedAt *time.Time               `json:"updated_at,omitempty"`
+	Channels    UserNotificationChannels               `json:"channels"`
+	Topics      UserNotificationTopics                 `json:"topics"`
+	TopicGroups *UserNotificationTopicGroupPreferences `json:"topic_groups,omitempty"`
+	UpdatedAt   *time.Time                             `json:"updated_at,omitempty"`
 }
 
 // UserNotificationChannels controls which delivery routes the user allows.

@@ -18,6 +18,7 @@ const (
 	// needs — the backend implements each provider's flow. azureAD remains
 	// the enterprise Entra value; microsoft is the consumer MSA login.
 	AuthIdentityProviderLine      AuthIdentityProvider = "line"
+	AuthIdentityProviderFacebook  AuthIdentityProvider = "facebook"
 	AuthIdentityProviderDiscord   AuthIdentityProvider = "discord"
 	AuthIdentityProviderMicrosoft AuthIdentityProvider = "microsoft"
 	// AuthIdentityProviderOIDC is a generic catch-all so a brand-new OIDC
@@ -32,8 +33,8 @@ func (p AuthIdentityProvider) IsValid() bool {
 		AuthIdentityProviderApple, AuthIdentityProviderAzureAD,
 		AuthIdentityProviderOkta, AuthIdentityProviderPasskey,
 		AuthIdentityProviderServiceToken, AuthIdentityProviderLine,
-		AuthIdentityProviderDiscord, AuthIdentityProviderMicrosoft,
-		AuthIdentityProviderOIDC:
+		AuthIdentityProviderFacebook, AuthIdentityProviderDiscord,
+		AuthIdentityProviderMicrosoft, AuthIdentityProviderOIDC:
 		return true
 	}
 	return false
