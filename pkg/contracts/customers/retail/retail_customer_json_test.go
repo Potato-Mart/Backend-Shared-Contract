@@ -186,6 +186,79 @@ func TestRetailCustomerMarketingConsentProvenanceRoundTrip(t *testing.T) {
 	}
 }
 
+func TestRetailCustomerReceiptPreferencesJSONShape(t *testing.T) {
+	electedAt := time.Date(2026, 8, 13, 1, 2, 3, 0, time.UTC)
+	customer := customers.RetailCustomer{
+		ID: "retail_123",
+		BasicInfo: customers.RetailCustomerBasicInfo{
+			Name:                   party.PersonName{DisplayName: "Retail Customer"},
+			Contacts:               party.ContactChannels{Email: "retail@example.com"},
+			PreferredContactMethod: retail_enums.PreferredContactMethodPhone,
+		},
+		ReceiptPreferences: &customers.RetailCustomerReceiptPreferences{
+			Formats:   []retail_enums.ReceiptFormat{retail_enums.ReceiptFormatElectronic, retail_enums.ReceiptFormatPaper},
+			UpdatedAt: &electedAt,
+			Source:    "account_preferences",
+		},
+	}
+
+	payload, err := json.Marshal(customer)
+	if err != nil {
+		t.Fatalf("marshal retail customer receipt preferences: %v", err)
+	}
+	for _, field := range []string{
+		`"preferred_contact_method":"phone"`,
+		`"receipt_preferences"`,
+		`"formats":["electronic","paper"]`,
+		`"updated_at":"2026-08-13T01:02:03Z"`,
+		`"source":"account_preferences"`,
+	} {
+		if !strings.Contains(string(payload), field) {
+			t.Fatalf("retail customer receipt preferences missing %s: %s", field, payload)
+		}
+	}
+
+	var decoded customers.RetailCustomer
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal retail customer receipt preferences: %v", err)
+	}
+	if decoded.BasicInfo.PreferredContactMethod != retail_enums.PreferredContactMethodPhone ||
+		decoded.ReceiptPreferences == nil || len(decoded.ReceiptPreferences.Formats) != 2 ||
+		decoded.ReceiptPreferences.Formats[1] != retail_enums.ReceiptFormatPaper ||
+		decoded.ReceiptPreferences.UpdatedAt == nil || !decoded.ReceiptPreferences.UpdatedAt.Equal(electedAt) {
+		t.Fatalf("receipt preferences did not round-trip: %+v", decoded.ReceiptPreferences)
+	}
+
+	summary := customers.RetailCustomerSummary{
+		ID:     "retail_123",
+		Status: retail_enums.CustomerStatusActive,
+		ReceiptPreferences: &customers.RetailCustomerReceiptPreferences{
+			Formats: []retail_enums.ReceiptFormat{retail_enums.ReceiptFormatElectronic},
+		},
+	}
+	summaryPayload, err := json.Marshal(summary)
+	if err != nil {
+		t.Fatalf("marshal retail customer summary: %v", err)
+	}
+	if !strings.Contains(string(summaryPayload), `"receipt_preferences":{"formats":["electronic"]}`) {
+		t.Fatalf("summary receipt preferences missing: %s", summaryPayload)
+	}
+}
+
+func TestRetailCustomerReceiptPreferencesOmittedWhenAbsent(t *testing.T) {
+	customer := customers.RetailCustomer{ID: "retail_123"}
+
+	payload, err := json.Marshal(customer)
+	if err != nil {
+		t.Fatalf("marshal retail customer: %v", err)
+	}
+	for _, absent := range []string{"receipt_preferences", "preferred_contact_method"} {
+		if strings.Contains(string(payload), absent) {
+			t.Fatalf("absent %s must be omitted: %s", absent, payload)
+		}
+	}
+}
+
 func TestCustomerConsentChangedEventIncludesPushOptIn(t *testing.T) {
 	changedAt := time.Date(2026, 7, 30, 2, 3, 4, 0, time.UTC)
 	consentEvent := event.CustomerConsentChangedEvent{

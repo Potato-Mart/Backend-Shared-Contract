@@ -57,6 +57,10 @@ type Campaign struct {
 	Placement campaign_enums.CampaignPlacement `json:"placement"`
 	Severity  campaign_enums.CampaignSeverity  `json:"severity"`
 
+	// MessagingCategory classifies what the campaign announces for
+	// notification preference routing; absent means unclassified.
+	MessagingCategory campaign_enums.CampaignMessagingCategory `json:"messaging_category,omitempty"`
+
 	// Priority orders competing campaigns for the same placement (higher first).
 	Priority int `json:"priority"`
 
