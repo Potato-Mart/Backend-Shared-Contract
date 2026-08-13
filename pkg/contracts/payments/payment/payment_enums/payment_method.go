@@ -8,12 +8,19 @@ const (
 	PaymentMethodCash         PaymentMethod = "cash"
 	PaymentMethodQR           PaymentMethod = "qr"
 	PaymentMethodBankTransfer PaymentMethod = "bank_transfer"
-	PaymentMethodLinePay      PaymentMethod = "line_pay"
-	PaymentMethodApplePay     PaymentMethod = "apple_pay"
-	PaymentMethodGooglePay    PaymentMethod = "google_pay"
-	PaymentMethodECPay        PaymentMethod = "ecpay"
-	PaymentMethodManual       PaymentMethod = "manual"
-	PaymentMethodGiftCard     PaymentMethod = "gift_card"
+	// PaymentMethodPayTo is the v27-compatible canonical method for the
+	// Stripe-hosted Australian PayTo flow. BankTransfer remains valid for
+	// existing bank-transfer records and consumers.
+	PaymentMethodPayTo PaymentMethod = "payto"
+	// PaymentMethodLink preserves Stripe Link as a distinct customer-selected
+	// payment method for receipts, refunds, reporting, and event consumers.
+	PaymentMethodLink      PaymentMethod = "link"
+	PaymentMethodLinePay   PaymentMethod = "line_pay"
+	PaymentMethodApplePay  PaymentMethod = "apple_pay"
+	PaymentMethodGooglePay PaymentMethod = "google_pay"
+	PaymentMethodECPay     PaymentMethod = "ecpay"
+	PaymentMethodManual    PaymentMethod = "manual"
+	PaymentMethodGiftCard  PaymentMethod = "gift_card"
 
 	// EFTPOS-terminal-backed methods. These are distinct from the
 	// generic Card method so settlement reports and refund flows can
@@ -26,7 +33,7 @@ const (
 // IsValid reports whether p is a known PaymentMethod.
 func (p PaymentMethod) IsValid() bool {
 	switch p {
-	case PaymentMethodCard, PaymentMethodCash, PaymentMethodQR, PaymentMethodBankTransfer,
+	case PaymentMethodCard, PaymentMethodCash, PaymentMethodQR, PaymentMethodBankTransfer, PaymentMethodPayTo, PaymentMethodLink,
 		PaymentMethodLinePay, PaymentMethodApplePay, PaymentMethodGooglePay, PaymentMethodECPay,
 		PaymentMethodManual, PaymentMethodGiftCard, PaymentMethodEFTPOS, PaymentMethodMOTO, PaymentMethodCashout:
 		return true
