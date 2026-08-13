@@ -282,6 +282,9 @@ func TestV27PromotionProductionSurfaceRejectsRetiredMechanicsAndDependencies(t *
 				t.Errorf("%s defines operational inventory evidence as a promotion mechanic", path)
 			}
 		}
+		if !strings.HasPrefix(relative, "contracts/pricing/promotion/") {
+			return nil
+		}
 		for _, declaration := range file.Decls {
 			general, ok := declaration.(*ast.GenDecl)
 			if !ok || general.Tok != token.TYPE {

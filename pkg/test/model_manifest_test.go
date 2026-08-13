@@ -51,6 +51,8 @@ var v27ModelPackageManifest = map[string]string{
 	"contracts/insights/analytics":                               "record",
 	"contracts/insights/marketing":                               "entity,record",
 	"contracts/insights/marketing/marketing_enums":               "enum",
+	"contracts/marketing":                                        "entity,event,record,value",
+	"contracts/marketing/marketing_enums":                        "enum",
 	"contracts/notifications/backinstock":                        "entity,event,record",
 	"contracts/notifications/backinstock/backinstock_enums":      "enum",
 	"contracts/notifications/customer":                           "entity,event,record",
@@ -105,12 +107,12 @@ var v27ModelPackageManifest = map[string]string{
 	"versioning":                                                 "module-metadata",
 }
 
-// Reviewed for the v27.1.0 additive preference-centre, receipt-preference,
-// campaign messaging-category, and receipt.generated event surface on top of
-// the v27.0.0 global product/SKU split, market pricing, transaction snapshot,
-// purchase tax evidence, merchant profile, and catalog event release surface.
-// The digest captures the complete exported model manifest.
-const v27ExportedTypeManifestDigest = "412513e94a5b556b1fb73df076e7336ffe5ecfeb6624d2f08f29f8e705f8f993"
+// Reviewed for the additive v28 marketing foundation staged on the current
+// v27 module line: canonical public Campaign, Coupon, Promotion,
+// MarketingMessage, versioned templates, benefit references, and PII-free
+// aggregate invalidation events. Legacy domains remain until their consumers
+// migrate. The digest captures the complete exported model manifest.
+const v27ExportedTypeManifestDigest = "08e45abbab7cb322cb430add8bdbdc9faaf4bd1533406630d01cad6fb952caa7"
 
 func TestV27ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

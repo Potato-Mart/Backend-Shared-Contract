@@ -28,6 +28,7 @@ var v27ExpectedEnumPackages = []string{
 	"contracts/identity/account/account_enums",
 	"contracts/identity/role/role_enums",
 	"contracts/insights/marketing/marketing_enums",
+	"contracts/marketing/marketing_enums",
 	"contracts/notifications/backinstock/backinstock_enums",
 	"contracts/notifications/customer/customer_enums",
 	"contracts/orders/order/order_enums",
