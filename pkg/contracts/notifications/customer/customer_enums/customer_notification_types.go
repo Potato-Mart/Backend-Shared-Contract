@@ -40,8 +40,11 @@ const (
 	CustomerNotificationTopicOrderPacked        CustomerNotificationTopic = "order_packed"
 	CustomerNotificationTopicOrderDispatched    CustomerNotificationTopic = "order_dispatched"
 	CustomerNotificationTopicOrderDelivered     CustomerNotificationTopic = "order_delivered"
+	CustomerNotificationTopicOrderCompleted     CustomerNotificationTopic = "order_completed"
 	CustomerNotificationTopicInvoiceAvailable   CustomerNotificationTopic = "invoice_available"
+	CustomerNotificationTopicReceiptAvailable   CustomerNotificationTopic = "receipt_available"
 	CustomerNotificationTopicPromotionAvailable CustomerNotificationTopic = "promotion_available"
+	CustomerNotificationTopicNewProduct         CustomerNotificationTopic = "new_product"
 	CustomerNotificationTopicAnnouncement       CustomerNotificationTopic = "announcement"
 )
 
@@ -61,8 +64,11 @@ func (t CustomerNotificationTopic) IsValid() bool {
 		CustomerNotificationTopicOrderPacked,
 		CustomerNotificationTopicOrderDispatched,
 		CustomerNotificationTopicOrderDelivered,
+		CustomerNotificationTopicOrderCompleted,
 		CustomerNotificationTopicInvoiceAvailable,
+		CustomerNotificationTopicReceiptAvailable,
 		CustomerNotificationTopicPromotionAvailable,
+		CustomerNotificationTopicNewProduct,
 		CustomerNotificationTopicAnnouncement:
 		return true
 	default:
@@ -77,6 +83,7 @@ const (
 	CustomerNotificationChannelPortal CustomerNotificationChannel = "portal"
 	CustomerNotificationChannelEmail  CustomerNotificationChannel = "email"
 	CustomerNotificationChannelPush   CustomerNotificationChannel = "push"
+	CustomerNotificationChannelSMS    CustomerNotificationChannel = "sms"
 )
 
 func (c CustomerNotificationChannel) String() string { return string(c) }
@@ -84,7 +91,7 @@ func (c CustomerNotificationChannel) String() string { return string(c) }
 func (c CustomerNotificationChannel) IsValid() bool {
 	switch c {
 	case CustomerNotificationChannelPortal, CustomerNotificationChannelEmail,
-		CustomerNotificationChannelPush:
+		CustomerNotificationChannelPush, CustomerNotificationChannelSMS:
 		return true
 	default:
 		return false

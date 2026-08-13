@@ -44,6 +44,7 @@ const (
 	EventTypePaymentFailed                 EventType = "payment.failed"
 	EventTypeInvoiceIssued                 EventType = "invoice.issued"
 	EventTypeInvoiceDeliveryRequested      EventType = "invoice.delivery_requested"
+	EventTypeReceiptGenerated              EventType = "receipt.generated"
 	EventTypeRefundRequested               EventType = "refund.requested"
 	EventTypeRefundCompleted               EventType = "refund.completed"
 	EventTypeRefundFailed                  EventType = "refund.failed"
@@ -87,6 +88,7 @@ func (t EventType) IsValid() bool {
 	case EventTypeOrderCreated, EventTypeOrderPaid, EventTypeOrderStatusChanged,
 		EventTypeOrderCancelled, EventTypeCheckoutCompensationRequested,
 		EventTypePaymentCaptured, EventTypePaymentFailed, EventTypeInvoiceIssued, EventTypeInvoiceDeliveryRequested,
+		EventTypeReceiptGenerated,
 		EventTypeRefundRequested, EventTypeRefundCompleted, EventTypeRefundFailed,
 		EventTypeInventoryLotReceived, EventTypeInventoryStockBucketChanged,
 		EventTypeInventoryPackageConverted, EventTypeInventoryQualityAssessed,

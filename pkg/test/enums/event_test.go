@@ -20,6 +20,7 @@ func TestV27InventoryAndCommerceEventTypes(t *testing.T) {
 				event_enums.EventTypePaymentFailed,
 				event_enums.EventTypeInvoiceIssued,
 				event_enums.EventTypeInvoiceDeliveryRequested,
+				event_enums.EventTypeReceiptGenerated,
 				event_enums.EventTypeRefundRequested,
 				event_enums.EventTypeRefundCompleted,
 				event_enums.EventTypeRefundFailed,

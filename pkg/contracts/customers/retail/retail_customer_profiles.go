@@ -40,6 +40,15 @@ type RetailCustomerMarketingProfile struct {
 	Source                string     `json:"source,omitempty"`
 }
 
+// RetailCustomerReceiptPreferences groups the customer's receipt format
+// election with provenance. An absent group means electronic-only (the
+// default election); Formats never persists empty.
+type RetailCustomerReceiptPreferences struct {
+	Formats   []retail_enums.ReceiptFormat `json:"formats"`
+	UpdatedAt *time.Time                   `json:"updated_at,omitempty"`
+	Source    string                       `json:"source,omitempty"`
+}
+
 // RetailCustomerAnalyticsProfile groups the recency/frequency/monetary
 // analytics computed by the stats sync job.
 type RetailCustomerAnalyticsProfile struct {

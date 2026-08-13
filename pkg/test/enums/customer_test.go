@@ -14,5 +14,7 @@ func TestCustomerEnumsValidateKnownValues(t *testing.T) {
 		{name: "customerenum.CustomerIdentityKind", valid: []stringEnum{retail_enums.CustomerIdentityKindPhone, retail_enums.CustomerIdentityKindEmail, retail_enums.CustomerIdentityKindLine, retail_enums.CustomerIdentityKindMemberCard, retail_enums.CustomerIdentityKindPOSID, retail_enums.CustomerIdentityKindExternal}, invalid: retail_enums.CustomerIdentityKind("__invalid__")},
 		{name: "customerenum.CustomerStatus", valid: []stringEnum{retail_enums.CustomerStatusActive, retail_enums.CustomerStatusInactive, retail_enums.CustomerStatusBlocked, retail_enums.CustomerStatusClosed}, invalid: retail_enums.CustomerStatus("__invalid__")},
 		{name: "customerenum.BuyerType", valid: []stringEnum{retail_enums.BuyerTypeGuestRetail, retail_enums.BuyerTypeRetailCustomer, retail_enums.BuyerTypeWholesaleOrganisation}, invalid: retail_enums.BuyerType("__invalid__")},
+		{name: "customerenum.ReceiptFormat", valid: []stringEnum{retail_enums.ReceiptFormatElectronic, retail_enums.ReceiptFormatPaper}, invalid: retail_enums.ReceiptFormat("__invalid__")},
+		{name: "customerenum.PreferredContactMethod", valid: []stringEnum{retail_enums.PreferredContactMethodEmail, retail_enums.PreferredContactMethodPhone}, invalid: retail_enums.PreferredContactMethod("__invalid__")},
 	})
 }

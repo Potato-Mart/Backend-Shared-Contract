@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v27.1.0` | 2026-08-13 | Minor | Adds the customer preference-centre topic-group matrix and `NotificationTopicGroup` enum, the `sms` customer notification channel and `order_completed`/`new_product`/`receipt_available` topics, retail receipt preferences (`ReceiptFormat`, `RetailCustomerReceiptPreferences`) and `PreferredContactMethod`, `CampaignMessagingCategory` with `Campaign.messaging_category`, the `facebook` auth identity provider, and the `receipt.generated` payment event. Additive only; keeps the `/v27` module path. |
 | `v27.0.0` | 2026-08-12 | Major | Global Product/SKU split, Pricing-owned Market/PriceBook/PriceEntry, Supply-owned MarketListing and sale-eligibility evidence, immutable price/tax/rounding snapshots, purchase GST evidence, merchant legal profiles, and event schema version 2 with a new `catalog-events` topic. Changes the module path to `/v27`; all consumers must migrate explicitly. |
 | `v26.2.0` | 2026-08-11 | Minor | Adds the customer-safe `operations.StorefrontPlaceAvailability` projection carrying per-depot place identity and public stock state. Additive only; keeps the `/v26` module path. |
 | `v26.1.0` | 2026-08-11 | Minor | Adds the optional `OutboundShipment.carrier` delivery-company code. Additive only; keeps the `/v26` module path. |
@@ -117,6 +118,62 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v27.1.0 (2026-08-13) - Preference Centre, Receipt Preferences, And Federated Facebook
+
+### Added / 新增
+
+- Adds `identity/account.UserNotificationTopicGroupPreferences` and
+  `identity/account.NotificationTopicGroupChannels`, the customer
+  preference-centre matrix of five fixed topic groups (`payment`, `order`,
+  `receipt`, `product_updates`, `promotions`) by three channels (`email`,
+  `push`, `sms`), plus the optional `topic_groups` field on
+  `UserNotificationPreferences`. The matching
+  `account_enums.NotificationTopicGroup` enum names the groups. Transactional
+  email (the payment, order, and receipt groups) is normalized true
+  server-side and rendered as a locked toggle.
+- Adds the `sms` value to
+  `notifications/customer/customer_enums.CustomerNotificationChannel` and the
+  `order_completed`, `new_product`, and `receipt_available` values to
+  `CustomerNotificationTopic`.
+- Adds `customers/retail/retail_enums.ReceiptFormat` (`electronic` | `paper`)
+  and `customers/retail.RetailCustomerReceiptPreferences` (formats election
+  with provenance), carried as the optional `receipt_preferences` field on
+  both `RetailCustomer` and the `RetailCustomerSummary` POS facade
+  projection. An absent group means electronic-only; `formats` never persists
+  empty.
+- Adds `customers/retail/retail_enums.PreferredContactMethod` (`email` |
+  `phone`) as the optional `preferred_contact_method` field on
+  `RetailCustomerBasicInfo`.
+- Adds `customers/campaign/campaign_enums.CampaignMessagingCategory`
+  (`promotion` | `announcement` | `new_product` | `preorder`) as the optional
+  `messaging_category` field on `customers/campaign.Campaign`, so campaign
+  notification fan-out can map onto the preference-centre topic groups.
+- Adds the `facebook` value to
+  `identity/account/account_enums.AuthIdentityProvider` for federated
+  Facebook login.
+- Adds `pubsub/event.ReceiptGeneratedEvent` and the `receipt.generated`
+  `EventType`. The event is published on the existing `payment-events` topic
+  with envelope `event_version` `1`; the envelope `AggregateID` carries the
+  order number. It announces that a POS receipt snapshot was written or its
+  revision advanced, and carries the order number, optional buyer identity,
+  `payment_enums.DocumentKind`, `revision`, and `issued_at`.
+
+### Consumer Action / 使用方動作
+
+- Consumers remain on the `github.com/Potato-Mart/Backend-Shared-Contract/v27`
+  module path. Only services that need the new models must upgrade the
+  required version to `v27.1.0`; other consumers may stay on `v27.0.0`, and
+  this version skew is tolerated.
+- Backend-Identity must switch its Facebook login mapping from the generic
+  `oidc` provider value to the dedicated `facebook` value when it adopts this
+  release.
+- Backend-Payments owns emitting `receipt.generated` on `payment-events`;
+  Backend-Customers consumes it to drive receipt notifications. Existing
+  subscribers of `payment-events` must ignore unknown event types rather than
+  dead-lettering them.
+- The v27.0.0 event schema version 2 table below is unchanged;
+  `receipt.generated` publishes envelope version `1`.
 
 ## v27.0.0 (2026-08-12) - Global Product/SKU, Market Pricing, Australian GST, And Event Schema V2
 

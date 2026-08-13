@@ -105,11 +105,12 @@ var v27ModelPackageManifest = map[string]string{
 	"versioning":                                                 "module-metadata",
 }
 
-// Reviewed for the final v27.0.0 global product/SKU split, market pricing,
-// transaction snapshot, purchase tax evidence, merchant profile, and catalog
-// event release surface. The digest captures the complete exported model
-// manifest after the hard cutover.
-const v27ExportedTypeManifestDigest = "5b0864253579c39f8544fc73e752f9aa00da46748e59a91b39f0cd5f8236c0d7"
+// Reviewed for the v27.1.0 additive preference-centre, receipt-preference,
+// campaign messaging-category, and receipt.generated event surface on top of
+// the v27.0.0 global product/SKU split, market pricing, transaction snapshot,
+// purchase tax evidence, merchant profile, and catalog event release surface.
+// The digest captures the complete exported model manifest.
+const v27ExportedTypeManifestDigest = "412513e94a5b556b1fb73df076e7336ffe5ecfeb6624d2f08f29f8e705f8f993"
 
 func TestV27ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)
