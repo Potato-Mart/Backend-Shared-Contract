@@ -38,6 +38,19 @@ type PaymentFailedEvent struct {
 	RequestID            string                      `json:"request_id,omitempty"`
 }
 
+// ReceiptGeneratedEvent is emitted on the payment-events topic when a POS
+// receipt snapshot is written or its revision advances. AggregateID carries
+// the order number.
+type ReceiptGeneratedEvent struct {
+	OrderNumber          string                     `json:"order_number"`
+	RetailCustomerNumber string                     `json:"retail_customer_number,omitempty"`
+	OrganisationAccessID string                     `json:"organisation_access_id,omitempty"`
+	DocumentKind         payment_enums.DocumentKind `json:"document_kind"`
+	Revision             int64                      `json:"revision"`
+	IssuedAt             time.Time                  `json:"issued_at"`
+	RequestID            string                     `json:"request_id,omitempty"`
+}
+
 // InvoiceIssuedEvent is emitted on the payment-events topic when an invoice
 // is issued for an order. AggregateID is the order number.
 type InvoiceIssuedEvent struct {
