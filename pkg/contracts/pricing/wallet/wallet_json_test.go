@@ -114,6 +114,50 @@ func TestGiftCardDenominationPolicyRoundTrip(t *testing.T) {
 	}
 }
 
+func TestGiftCardDenominationBonusRoundTrip(t *testing.T) {
+	// Byte-exact wire form. Bonuses are an ordered slice of pairs, never a map,
+	// so consumers may compare two policy revisions byte for byte.
+	const wire = `{"version":3,"currency":"AUD","allowed_amounts_minor":[50000,100000,200000],` +
+		`"bonus_amounts_minor":[{"amount_minor":50000,"bonus_minor":0},` +
+		`{"amount_minor":100000,"bonus_minor":5000},` +
+		`{"amount_minor":200000,"bonus_minor":15000}]}`
+
+	var decoded wallet.GiftCardDenominationPolicy
+	if err := json.Unmarshal([]byte(wire), &decoded); err != nil {
+		t.Fatalf("unmarshal gift-card denomination policy: %v", err)
+	}
+
+	payload, err := json.Marshal(decoded)
+	if err != nil {
+		t.Fatalf("marshal gift-card denomination policy: %v", err)
+	}
+	if string(payload) != wire {
+		t.Fatalf("gift-card denomination bonus JSON = %s, want %s", payload, wire)
+	}
+	if len(decoded.BonusAmountsMinor) != 3 ||
+		decoded.BonusAmountsMinor[1] != (wallet.GiftCardDenominationBonus{AmountMinor: 100_000, BonusMinor: 5_000}) ||
+		decoded.BonusAmountsMinor[2].BonusMinor != 15_000 {
+		t.Fatalf("gift-card denomination bonuses did not round-trip: %+v", decoded.BonusAmountsMinor)
+	}
+
+	// The buyer is charged AmountMinor; the issued card carries the sum.
+	bonus := decoded.BonusAmountsMinor[2]
+	if bonus.AmountMinor+bonus.BonusMinor != 215_000 {
+		t.Fatalf("issued balance = %d, want 215000", bonus.AmountMinor+bonus.BonusMinor)
+	}
+
+	// A policy with no bonuses keeps the pre-v27.3.0 wire form byte for byte.
+	legacy, err := json.Marshal(wallet.GiftCardDenominationPolicy{
+		Version: 3, Currency: "AUD", AllowedAmountsMinor: []int64{50_000},
+	})
+	if err != nil {
+		t.Fatalf("marshal bonus-free gift-card denomination policy: %v", err)
+	}
+	if string(legacy) != `{"version":3,"currency":"AUD","allowed_amounts_minor":[50000]}` {
+		t.Fatalf("bonus-free denomination policy JSON = %s", legacy)
+	}
+}
+
 func TestMembershipPassContentRoundTrip(t *testing.T) {
 	now := time.Date(2026, 7, 17, 1, 2, 3, 0, time.UTC)
 	content := wallet.MembershipPassContent{

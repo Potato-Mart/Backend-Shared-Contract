@@ -28,18 +28,33 @@ type OrderCreatedEvent struct {
 
 // OrderPaidEvent is emitted on the order-events topic when an order reaches
 // the paid state.
+//
+// Subtotal, DiscountAmount, and Tags are qualification evidence added in
+// v27.3.0. Every event published before that release carries none of them, so a
+// consumer that qualifies on them must fail closed: an empty Subtotal or
+// DiscountAmount currency and a nil Tags slice mean "no evidence", never a zero
+// subtotal, a zero discount, or an untagged order. Consumers must skip
+// qualification for such an event rather than infer a value from AmountPaid.
 type OrderPaidEvent struct {
-	OrderID              string                      `json:"order_id"`
-	OrderNumber          string                      `json:"order_number"`
-	PaymentID            string                      `json:"payment_id,omitempty"`
-	Method               payment_enums.PaymentMethod `json:"method,omitempty"`
-	Channel              commerce_enums.OrderType    `json:"channel,omitempty"`
-	AmountPaid           money.Money                 `json:"amount_paid"`
-	Items                []analytics.OrderItemFact   `json:"items,omitempty"`
-	RetailCustomerNumber string                      `json:"retail_customer_number,omitempty"`
-	OrganisationAccessID string                      `json:"organisation_access_id,omitempty"`
-	PaidAt               time.Time                   `json:"paid_at"`
-	RequestID            string                      `json:"request_id,omitempty"`
+	OrderID     string                      `json:"order_id"`
+	OrderNumber string                      `json:"order_number"`
+	PaymentID   string                      `json:"payment_id,omitempty"`
+	Method      payment_enums.PaymentMethod `json:"method,omitempty"`
+	Channel     commerce_enums.OrderType    `json:"channel,omitempty"`
+	AmountPaid  money.Money                 `json:"amount_paid"`
+
+	// Subtotal is the merchandise subtotal before any discount is applied.
+	Subtotal money.Money `json:"subtotal"`
+	// DiscountAmount is the order-level discount applied to that subtotal.
+	DiscountAmount money.Money `json:"discount_amount"`
+	// Tags are the order tags carried at the time of payment.
+	Tags []string `json:"tags,omitempty"`
+
+	Items                []analytics.OrderItemFact `json:"items,omitempty"`
+	RetailCustomerNumber string                    `json:"retail_customer_number,omitempty"`
+	OrganisationAccessID string                    `json:"organisation_access_id,omitempty"`
+	PaidAt               time.Time                 `json:"paid_at"`
+	RequestID            string                    `json:"request_id,omitempty"`
 }
 
 // CheckoutCompensationRequestedEvent restores Pricing-owned value after a
