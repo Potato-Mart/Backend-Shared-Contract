@@ -114,7 +114,13 @@ var v27ModelPackageManifest = map[string]string{
 // account-deletion coordination records and enums. Legacy domains remain
 // until their consumers migrate. The digest captures the complete exported
 // model manifest.
-const v27ExportedTypeManifestDigest = "a3a5be4767cf4539d811e1a83cd0b62cdb89b18d6d1b5f0362ecd40ef4f8760d"
+//
+// v27.3.0 adds exactly one exported type, wallet.GiftCardDenominationBonus, a
+// value pair carried by the existing GiftCardDenominationPolicy. It is
+// classified under the wallet package's existing "value" class, so the manifest
+// classification is unchanged and only the digest moves. The release's other
+// additions are fields on existing types and do not enter this digest.
+const v27ExportedTypeManifestDigest = "9af0fb426afd4eb1385c0c90c6955b9e53aa4508a9a1132c328593c6e4c7841e"
 
 func TestV27ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

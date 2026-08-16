@@ -11,6 +11,12 @@ import (
 // the idempotency key. ClaimCode is present only when the recipient did not yet
 // have a verified retail customer account and must never be persisted outside
 // the protected notification delivery record.
+//
+// Amount stays the face and purchase evidence: it is what the buyer was
+// charged. BonusAmountMinor reports any promotional bonus granted on top of it
+// in the same currency, so the charged amount and the issued balance remain
+// independently auditable. It is absent when the denomination carries no bonus,
+// and absent on every event published before v27.3.0.
 type GiftCardIssuedEvent struct {
 	IssuanceID                string      `json:"issuance_id"`
 	DenominationPolicyVersion int         `json:"denomination_policy_version,omitempty"`
@@ -18,6 +24,7 @@ type GiftCardIssuedEvent struct {
 	RecipientName             string      `json:"recipient_name"`
 	SenderName                string      `json:"sender_name"`
 	Amount                    money.Money `json:"amount"`
+	BonusAmountMinor          int64       `json:"bonus_amount_minor,omitempty"`
 	Message                   string      `json:"message,omitempty"`
 	ClaimCode                 string      `json:"claim_code,omitempty"`
 	Locale                    string      `json:"locale,omitempty"`

@@ -53,3 +53,30 @@ func TestMarketJSONSeparatesCommerceFromGeography(t *testing.T) {
 		t.Fatalf("currency exponent did not round-trip: %+v", decoded.CurrencyExponent)
 	}
 }
+
+// TestMarketJSONDeclaresExpiryLeadDays pins the market default soon-expiry lead
+// time that Pricing already stores and reads. The declared JSON key must equal
+// the persisted key so a stored market decodes into the contract model without
+// a translation layer.
+func TestMarketJSONDeclaresExpiryLeadDays(t *testing.T) {
+	const wire = `{"id":"market_au","code":"AU","name":"Australia","country_code":"AU",` +
+		`"default_currency":"AUD","currency_exponent":{"currency":"AUD","exponent":2},` +
+		`"default_locale":"en-AU","default_timezone":"Australia/Melbourne",` +
+		`"status":"active","expiry_lead_days":30,"revision":1}`
+
+	var decoded Market
+	if err := json.Unmarshal([]byte(wire), &decoded); err != nil {
+		t.Fatalf("unmarshal market: %v", err)
+	}
+
+	payload, err := json.Marshal(decoded)
+	if err != nil {
+		t.Fatalf("marshal market: %v", err)
+	}
+	if !strings.Contains(string(payload), `"expiry_lead_days":30`) {
+		t.Fatalf("Market JSON = %s, want expiry_lead_days preserved", payload)
+	}
+	if decoded.ExpiryLeadDays != 30 {
+		t.Fatalf("expiry lead days did not round-trip: %+v", decoded)
+	}
+}

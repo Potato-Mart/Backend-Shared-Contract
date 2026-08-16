@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v27.3.0` | 2026-08-16 | Minor | Adds gift-card denomination bonuses (`GiftCardDenominationBonus`, `GiftCardDenominationPolicy.bonus_amounts_minor`), `OrderPaidEvent` qualification evidence (`subtotal`, `discount_amount`, `tags`), the `Market.expiry_lead_days` default soon-expiry lead time, and `GiftCardIssuedEvent.bonus_amount_minor`. Additive only; keeps the `/v27` module path. |
 | `v27.2.0` | 2026-08-14 | Minor | Adds public marketing foundations, privacy-minimized account-deletion coordination records, PayTo and Link payment methods, and optional collection icons. Additive only; keeps the `/v27` module path. |
 | `v27.1.0` | 2026-08-13 | Minor | Adds the customer preference-centre topic-group matrix and `NotificationTopicGroup` enum, the `sms` customer notification channel and `order_completed`/`new_product`/`receipt_available` topics, retail receipt preferences (`ReceiptFormat`, `RetailCustomerReceiptPreferences`) and `PreferredContactMethod`, `CampaignMessagingCategory` with `Campaign.messaging_category`, the `facebook` auth identity provider, and the `receipt.generated` payment event. Additive only; keeps the `/v27` module path. |
 | `v27.0.0` | 2026-08-12 | Major | Global Product/SKU split, Pricing-owned Market/PriceBook/PriceEntry, Supply-owned MarketListing and sale-eligibility evidence, immutable price/tax/rounding snapshots, purchase GST evidence, merchant legal profiles, and event schema version 2 with a new `catalog-events` topic. Changes the module path to `/v27`; all consumers must migrate explicitly. |
@@ -119,6 +120,53 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v27.3.0 (2026-08-16) - Gift-Card Bonuses, Order Paid Qualification Evidence, And Market Expiry Lead Days
+
+### Added / 新增
+
+- Adds `wallet.GiftCardDenominationBonus` and the optional
+  `GiftCardDenominationPolicy.bonus_amounts_minor` slice. Each pair states the
+  amount the buyer is charged and the bonus balance granted on top of it; the
+  issued card carries `amount_minor + bonus_minor`. It is an ordered slice of
+  pairs rather than a map because JSON stringifies integer map keys and
+  reorders them, and consumers compare policy revisions byte for byte. A
+  denomination absent from the slice carries no bonus.
+- Adds `OrderPaidEvent.subtotal`, `OrderPaidEvent.discount_amount`, and
+  `OrderPaidEvent.tags`: the merchandise subtotal before discounts, the
+  order-level discount applied to it, and the order tags carried at payment
+  time.
+- Adds `market.Market.expiry_lead_days`, the market default soon-expiry lead
+  time: the number of days before a lot's date mark at which the soon-expiry
+  window opens. Pricing already persisted and read this value under the same
+  key; the contract previously failed to declare it. A market listing may still
+  override it, and frozen sale-eligibility evidence still records the lead time
+  that was actually in force.
+- Adds the optional `GiftCardIssuedEvent.bonus_amount_minor`. `amount` remains
+  the face and purchase evidence — what the buyer was charged — so the charged
+  amount and the issued balance stay independently auditable.
+
+### Consumer Action / 使用方動作
+
+- Consumers remain on the `github.com/Potato-Mart/Backend-Shared-Contract/v27`
+  module path. Services using gift-card bonuses, the `OrderPaidEvent`
+  qualification evidence, or `Market.expiry_lead_days` must update their
+  requirement to `v27.3.0` after the release tag is published; consumers not
+  using the additions may remain on an earlier compatible v27 minor release.
+- **`OrderPaidEvent` consumers must fail closed.** Every event published before
+  v27.3.0 carries no `subtotal`, no `discount_amount`, and no `tags`. Those
+  decode to an empty currency and a nil slice, which mean "no evidence" — never
+  a zero subtotal, a zero discount, or an untagged order. A consumer that
+  qualifies on these fields must skip qualification for such an event rather
+  than infer a value from `amount_paid`.
+- `bonus_amounts_minor` and `bonus_amount_minor` are omitted when empty, so the
+  pre-v27.3.0 wire form of a bonus-free policy and a bonus-free issuance is
+  unchanged byte for byte.
+- The additions carry no HTTP DTOs, API paths, authorization rules, or pricing
+  logic. Owning services remain responsible for validating denominations and
+  bonuses, for populating the order qualification evidence, and for the
+  soon-expiry precedence between market default, listing override, and frozen
+  eligibility evidence.
 
 ## v27.2.0 (2026-08-14) - Marketing Foundations And Account-Deletion Coordination
 

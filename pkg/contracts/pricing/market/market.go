@@ -28,7 +28,14 @@ type Market struct {
 	DefaultLocale    string                    `json:"default_locale"`
 	DefaultTimezone  string                    `json:"default_timezone"`
 	Status           market_enums.MarketStatus `json:"status"`
-	Revision         int64                     `json:"revision"`
+
+	// ExpiryLeadDays is the market default soon-expiry lead time: the number of
+	// days before a lot's date mark at which the soon-expiry window opens. A
+	// market listing may override it, and frozen sale-eligibility evidence
+	// records the lead time that was actually in force.
+	ExpiryLeadDays int32 `json:"expiry_lead_days"`
+
+	Revision int64 `json:"revision"`
 
 	audit.AuditFields
 }

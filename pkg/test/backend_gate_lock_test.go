@@ -157,6 +157,7 @@ func TestV27BackendGateModelSurface(t *testing.T) {
 		"DefaultCurrency":  "default_currency",
 		"CurrencyExponent": "currency_exponent",
 		"Status":           "status",
+		"ExpiryLeadDays":   "expiry_lead_days",
 		"Revision":         "revision",
 	})
 	assertJSONFields(t, reflect.TypeOf(pricebook.PriceBook{}), map[string]string{
