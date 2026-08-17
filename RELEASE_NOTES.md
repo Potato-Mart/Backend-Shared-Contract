@@ -23,7 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
-| `v28.0.0` | 2026-08-17 | Major | Workforce RBAC and geographic-scoping hard cutover: replaces the seven built-in roles (`countryAdmin`, `depotManager`, and `warehouseManager` in; `admin`, `warehouse`, and `cashier` out), adds `Role.rank`, the flat `scope_level`/`country_code`/`market_ids`/`depot_codes` access-token claims, `access.StaffGeoScope` and `access_enums.ScopeLevel`, `UserProfile.geo_scope`, per-market gift-card denomination policies, and per-register daily POS sessions replacing operator shifts; denormalizes `market_id`/`country_code`/`depot_code` across staff-visible models and the event payloads their consumers persist. Changes the module path to `/v28`; all consumers must migrate explicitly. |
+| `v28.0.0` | 2026-08-17 | Major | Workforce RBAC and geographic-scoping hard cutover: replaces the built-in role set with six ranked roles (`countryAdmin`, `depotManager`, and `warehouseManager` in; `admin`, `warehouse`, `cashier`, and `sales` out), adds `Role.rank`, the flat `scope_level`/`country_code`/`market_ids`/`depot_codes` access-token claims, `access.StaffGeoScope` and `access_enums.ScopeLevel`, `UserProfile.geo_scope`, per-market gift-card denomination policies, and per-register daily POS sessions replacing operator shifts; denormalizes `market_id`/`country_code`/`depot_code` across staff-visible models and the event payloads their consumers persist, including `MemberSubscription` and the Insights analytics facts. Changes the module path to `/v28`; all consumers must migrate explicitly. |
 | `v27.3.0` | 2026-08-16 | Minor | Adds gift-card denomination bonuses (`GiftCardDenominationBonus`, `GiftCardDenominationPolicy.bonus_amounts_minor`), `OrderPaidEvent` qualification evidence (`subtotal`, `discount_amount`, `tags`), the `Market.expiry_lead_days` default soon-expiry lead time, and `GiftCardIssuedEvent.bonus_amount_minor`. Additive only; keeps the `/v27` module path. |
 | `v27.2.0` | 2026-08-14 | Minor | Adds public marketing foundations, privacy-minimized account-deletion coordination records, PayTo and Link payment methods, and optional collection icons. Additive only; keeps the `/v27` module path. |
 | `v27.1.0` | 2026-08-13 | Minor | Adds the customer preference-centre topic-group matrix and `NotificationTopicGroup` enum, the `sms` customer notification channel and `order_completed`/`new_product`/`receipt_available` topics, retail receipt preferences (`ReceiptFormat`, `RetailCustomerReceiptPreferences`) and `PreferredContactMethod`, `CampaignMessagingCategory` with `Campaign.messaging_category`, the `facebook` auth identity provider, and the `receipt.generated` payment event. Additive only; keeps the `/v27` module path. |
@@ -132,23 +132,32 @@ compatibility alias and no fallback JSON shape.
 ### Changed / 變更
 
 - **The built-in workforce role set is replaced.** `role_enums.UserRole` now
-  holds exactly seven keys, ranked widest to narrowest:
+  holds exactly six keys, ranked widest to narrowest:
 
   | Rank | Wire value | Scope | Note |
   | --- | --- | --- | --- |
   | 1 | `superAdmin` | global | unchanged |
   | 2 | `countryAdmin` | country | new |
   | 3 | `depotManager` | depot | replaces `admin` |
-  | 4 | `sales` | depot | unchanged |
-  | 5 | `marketing` | market | unchanged |
-  | 6 | `warehouseManager` | depot | replaces `warehouse` |
-  | 7 | `warehouseOperator` | depot | unchanged |
+  | 4 | `marketing` | market | unchanged |
+  | 5 | `warehouseManager` | depot | replaces `warehouse` |
+  | 6 | `warehouseOperator` | depot | unchanged |
 
-  `admin`, `warehouse`, and `cashier` are removed and no longer validate.
-  `cashier` has no replacement: POS sign-in becomes a permission granted to
-  every staff role rather than a role of its own.
-- `role.Role` gains `rank` (1-7 on the built-in roles, omitted on custom
-  roles). The role's doc comment now describes seven system roles, not six.
+  `admin`, `warehouse`, `cashier`, and `sales` are removed and no longer
+  validate. Neither `cashier` nor `sales` has a replacement: **POS and till
+  duty is now decided by geographic scope rather than by a dedicated selling
+  role.** Every remaining rank can work a register within the depots or
+  markets it holds, so a separate `sales` rank carried no distinct authority —
+  it granted nothing the other five ranks did not already carry, while adding
+  a second, conflicting answer to "who may sell here". POS sign-in is a
+  permission granted to every staff role instead.
+- `role.Role` gains `rank` (1-6 on the built-in roles, omitted on custom
+  roles). The role's doc comment describes six system roles.
+
+  Note that rank orders authority, not geographic breadth: rank 3
+  `depotManager` is depot-scoped while rank 4 `marketing` is market-scoped, so
+  a consumer must resolve visibility from `scope_level` and its grant fields
+  and never from the rank number.
 - **`wallet.GiftCardDenominationPolicy` becomes per market.** It gains a
   required `market_id`, a denormalized `country_code`, and embedded
   `audit.AuditFields` so an administrative edit records its editor and time.
@@ -243,8 +252,14 @@ compatibility alias and no fallback JSON shape.
   `github.com/Potato-Mart/Backend-Shared-Contract/v28 v28.0.0`. Services that
   pin the contract version in CI must move that pin in the same commit.
 - **Re-seed roles and re-issue workforce tokens.** A stored role document or a
-  live token carrying `admin`, `warehouse`, or `cashier` no longer validates.
-  Grant the POS permission to every staff role in place of the `cashier` role.
+  live token carrying `admin`, `warehouse`, `cashier`, or `sales` no longer
+  validates. Grant the POS permission to every staff role in place of the
+  `cashier` and `sales` roles, and re-grant every principal that held `sales`
+  one of the six remaining ranks with the depot or market scope that principal
+  actually needs. Ranks 4-6 renumber (`marketing` 5→4, `warehouseManager`
+  6→5, `warehouseOperator` 7→6), so any persisted `rank` value must be
+  rewritten; a stored rank is not a stable key and must never be compared
+  across versions.
 - **Fail closed on scope.** A workforce token with no valid `scope_level` must
   be rejected, never treated as global. `superAdmin` and service-to-service
   callers resolve to global scope; customer tokens are unaffected and carry

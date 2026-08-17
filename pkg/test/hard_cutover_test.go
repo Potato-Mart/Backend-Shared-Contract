@@ -105,9 +105,13 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		// v28 workforce-role cut-over: admin, warehouse, and cashier are
 		// replaced by countryAdmin, depotManager, and warehouseManager, and
 		// POS sign-in moves to every staff role instead of a cashier role.
+		// sales goes the same way: till duty follows the geographic scope a
+		// principal holds, so a dedicated selling rank granted no authority
+		// the remaining six ranks did not already carry.
 		"UserRoleAdmin",
 		"UserRoleWarehouse",
 		"UserRoleCashier",
+		"UserRoleSales",
 
 		// v28 POS cut-over: per-operator shifts are replaced by one daily
 		// session per register, shared by every operator on it.

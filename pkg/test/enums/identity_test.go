@@ -17,7 +17,7 @@ func TestIdentityEnumsValidateKnownValues(t *testing.T) {
 		{name: "identityenum.DeviceType", valid: []stringEnum{account_enums.DeviceTypeDesktop, account_enums.DeviceTypeMobile, account_enums.DeviceTypeTablet, account_enums.DeviceTypeAPI}, invalid: account_enums.DeviceType("__invalid__")},
 		{name: "securityenum.IdentityDomain", valid: []stringEnum{security_enums.IdentityDomainCustomer, security_enums.IdentityDomainWorkforce, security_enums.IdentityDomainService}, invalid: security_enums.IdentityDomain("__invalid__")},
 		{name: "identityenum.UserPreferredLanguage", valid: []stringEnum{account_enums.PreferredLanguageEnglish, account_enums.PreferredLanguageTraditionalChinese, account_enums.PreferredLanguageSimplifiedChinese}, invalid: account_enums.UserPreferredLanguage("__invalid__")},
-		{name: "roleenum.UserRole", valid: []stringEnum{role_enums.UserRoleSuperAdmin, role_enums.UserRoleCountryAdmin, role_enums.UserRoleDepotManager, role_enums.UserRoleSales, role_enums.UserRoleMarketing, role_enums.UserRoleWarehouseManager, role_enums.UserRoleWarehouseOperator}, invalid: role_enums.UserRole("__invalid__")},
+		{name: "roleenum.UserRole", valid: []stringEnum{role_enums.UserRoleSuperAdmin, role_enums.UserRoleCountryAdmin, role_enums.UserRoleDepotManager, role_enums.UserRoleMarketing, role_enums.UserRoleWarehouseManager, role_enums.UserRoleWarehouseOperator}, invalid: role_enums.UserRole("__invalid__")},
 		{name: "accessenum.ScopeLevel", valid: []stringEnum{access_enums.ScopeLevelGlobal, access_enums.ScopeLevelCountry, access_enums.ScopeLevelMarket, access_enums.ScopeLevelDepot}, invalid: access_enums.ScopeLevel("__invalid__")},
 	})
 }
@@ -40,14 +40,16 @@ func TestWorkforceRoleAndScopeWireValuesAreLocked(t *testing.T) {
 		{1, role_enums.UserRoleSuperAdmin, "superAdmin"},
 		{2, role_enums.UserRoleCountryAdmin, "countryAdmin"},
 		{3, role_enums.UserRoleDepotManager, "depotManager"},
-		{4, role_enums.UserRoleSales, "sales"},
-		{5, role_enums.UserRoleMarketing, "marketing"},
-		{6, role_enums.UserRoleWarehouseManager, "warehouseManager"},
-		{7, role_enums.UserRoleWarehouseOperator, "warehouseOperator"},
+		{4, role_enums.UserRoleMarketing, "marketing"},
+		{5, role_enums.UserRoleWarehouseManager, "warehouseManager"},
+		{6, role_enums.UserRoleWarehouseOperator, "warehouseOperator"},
+	}
+	if len(roles) != 6 {
+		t.Fatalf("the built-in workforce set holds %d roles; v28 locks exactly six", len(roles))
 	}
 	for index, entry := range roles {
 		if entry.rank != index+1 {
-			t.Errorf("role %q is listed at rank %d; the built-in hierarchy runs 1..7 in order", entry.wire, entry.rank)
+			t.Errorf("role %q is listed at rank %d; the built-in hierarchy runs 1..6 in order", entry.wire, entry.rank)
 		}
 		if got := entry.role.String(); got != entry.wire {
 			t.Errorf("rank %d role wire value = %q, want %q", entry.rank, got, entry.wire)
@@ -57,11 +59,14 @@ func TestWorkforceRoleAndScopeWireValuesAreLocked(t *testing.T) {
 		}
 	}
 
-	// The v28 cut-over retires these three keys. They must never validate
+	// The v28 cut-over retires these four keys. They must never validate
 	// again: a stale token or seeded document carrying one is not a role.
-	for _, retired := range []string{"admin", "warehouse", "cashier"} {
+	// `sales` joins the list because POS/till duty is decided by geographic
+	// scope rather than by a dedicated selling rank — every remaining rank
+	// can work a register, so a `sales` rank carried no distinct authority.
+	for _, retired := range []string{"admin", "warehouse", "cashier", "sales"} {
 		if role_enums.UserRole(retired).IsValid() {
-			t.Errorf("retired v27 role %q still validates", retired)
+			t.Errorf("retired role %q still validates", retired)
 		}
 	}
 
