@@ -1,9 +1,9 @@
 package classification
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // ProductCategory corresponds to one of the top-level catalogue category

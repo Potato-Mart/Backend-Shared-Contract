@@ -3,11 +3,11 @@ package purchase
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/purchase/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/purchase/purchase_enums"
 )
 
 // SupplierTaxIdentity is the supplier's own registration evidence recorded on

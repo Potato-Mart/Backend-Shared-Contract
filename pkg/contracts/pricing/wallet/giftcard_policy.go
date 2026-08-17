@@ -1,6 +1,6 @@
 package wallet
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
 
 // GiftCardDenominationPolicy is the versioned, server-authored set of purchase
 // denominations for one currency. Owning services remain responsible for

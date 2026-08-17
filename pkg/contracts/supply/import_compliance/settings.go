@@ -1,8 +1,8 @@
 package import_compliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
 )
 
 // ImportSettings is one revision of the shared import-cost and declaration

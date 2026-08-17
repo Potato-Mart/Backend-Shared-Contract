@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pubsub/event/event_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pubsub/event/event_enums"
 )
 
 // v27EventSchemaVersion2Payloads is the reviewed set of routed Pub/Sub payloads

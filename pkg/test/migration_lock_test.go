@@ -11,10 +11,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/pos"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pubsub/event/event_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/purchase"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/pos"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pubsub/event/event_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/purchase"
 )
 
 // TestV27FrozenSKUCodeAllowlistIsExactlyTheTransactionEvidenceTypes freezes the

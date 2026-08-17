@@ -1,6 +1,6 @@
 package shipping
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/measurement"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/measurement"
 
 // PackageLimits describes the physical package constraints for a shipping
 // option. All units use the shared measurement primitives to avoid carrier-

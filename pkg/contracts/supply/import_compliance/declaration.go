@@ -1,11 +1,11 @@
 package import_compliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/import_compliance/import_compliance_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/import_compliance/import_compliance_enums"
 )
 
 // ManufacturerDeclaration is a revisioned declaration backed by an immutable

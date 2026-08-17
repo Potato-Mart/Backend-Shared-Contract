@@ -3,11 +3,11 @@ package analytics
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/commerce/commerce_enums"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/temporal"
 )
 
 // SKUDemandForecast is one depot- and channel-qualified demand prediction.

@@ -3,7 +3,7 @@ package deletion
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/identity/deletion/deletion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/identity/deletion/deletion_enums"
 )
 
 // CommandEnvelope is the immutable correlation and idempotency envelope

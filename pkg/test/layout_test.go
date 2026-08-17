@@ -12,7 +12,7 @@ import (
 	"testing"
 )
 
-const v27ContractImportPrefix = "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/"
+const v27ContractImportPrefix = "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/"
 
 var v27ExpectedEnumPackages = []string{
 	"contracts/common/apiresponse/apiresponse_enums",

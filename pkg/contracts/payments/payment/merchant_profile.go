@@ -3,11 +3,11 @@ package payment
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/payment/payment_enums"
 )
 
 // MerchantLegalProfile is the Payments-owned issuer identity for one market,

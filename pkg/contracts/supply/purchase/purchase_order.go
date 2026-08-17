@@ -3,13 +3,13 @@ package purchase
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/purchase/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/purchase/purchase_enums"
 )
 
 type Order struct {

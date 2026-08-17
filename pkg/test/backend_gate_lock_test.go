@@ -1,26 +1,26 @@
 package pkg_test
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
 
 	"reflect"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/apiresponse/apiresponse_enums"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/pos"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/payments/payment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/market"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/pricebook"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/quote"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/cost"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/listing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/purchase"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/apiresponse/apiresponse_enums"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/pos"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/market"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/pricebook"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/quote"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/cost"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/listing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/purchase"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging/packaging_enums"
 )
 
 // TestV27BackendGateModelSurface locks the reusable model primitives needed by

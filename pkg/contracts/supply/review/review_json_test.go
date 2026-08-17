@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/review"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/review/review_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/review"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/review/review_enums"
 )
 
 func TestRatingSummaryJSONHasFiveOrderedBuckets(t *testing.T) {

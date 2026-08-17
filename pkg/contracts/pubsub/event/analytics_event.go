@@ -3,8 +3,8 @@ package event
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
-	analytics "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/insights/analytics"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
+	analytics "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/insights/analytics"
 )
 
 // OrderFact is the immutable analytical projection of an order event.
