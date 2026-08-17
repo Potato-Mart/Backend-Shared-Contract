@@ -24,6 +24,11 @@ type Promotion struct {
 	PromotionPosition   PromotionPosition            `json:"promotion_position"`
 	PromotionConditions PromotionConditions          `json:"promotion_conditions"`
 	ScopeRelations      ScopeRelations               `json:"scope_relations"`
+	// MarketID and CountryCode are the denormalized owning market and its
+	// country, carried so a geographically scoped staff query is a plain
+	// indexed match.
+	MarketID    string                `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 
 	audit.AuditFields
 }

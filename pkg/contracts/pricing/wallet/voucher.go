@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/benefit"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
@@ -30,6 +31,11 @@ type Voucher struct {
 	RedeemedAt               *time.Time                 `json:"redeemed_at,omitempty"`
 	RedeemedOrderNumber      string                     `json:"redeemed_order_number,omitempty"`
 	Note                     string                     `json:"note,omitempty"`
+	// MarketID and CountryCode are the denormalized owning market and its
+	// country, carried so a geographically scoped staff query is a plain
+	// indexed match.
+	MarketID    string                `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 
 	audit.AuditFields
 }

@@ -39,8 +39,11 @@ type Campaign struct {
 	CampaignKey string `json:"campaign_key"`
 	// MarketID scopes the campaign and every SKU reference it carries to
 	// one commercial market.
-	MarketID    string          `json:"market_id"`
-	SeriesKey   string          `json:"series_key,omitempty"`
+	MarketID string `json:"market_id"`
+	// CountryCode is the denormalized country of MarketID, carried so a
+	// country-scoped staff query is a plain indexed match.
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
+	SeriesKey   string                `json:"series_key,omitempty"`
 	PromotionID string          `json:"promotion_id,omitempty"`
 	Title       string          `json:"title"`
 	Message     string          `json:"message,omitempty"`

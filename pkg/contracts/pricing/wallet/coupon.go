@@ -25,6 +25,11 @@ type Coupon struct {
 	Terms    []promotion.PromotionTerm   `json:"terms,omitempty"`
 	Controls promotion.PromotionControls `json:"controls"`
 	History  []security.HistoryEntry     `json:"history,omitempty"`
+	// MarketID and CountryCode are the denormalized owning market and its
+	// country, carried so a geographically scoped staff query is a plain
+	// indexed match.
+	MarketID    string                `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 
 	audit.AuditFields
 }

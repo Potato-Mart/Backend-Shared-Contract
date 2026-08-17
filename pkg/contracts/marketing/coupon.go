@@ -23,6 +23,11 @@ type Coupon struct {
 	CouponStatus     CouponStatus                 `json:"coupon_status"`
 	CouponPosition   CouponPosition               `json:"coupon_position"`
 	CouponConditions CouponConditions             `json:"coupon_conditions"`
+	// MarketID and CountryCode are the denormalized owning market and its
+	// country, carried so a geographically scoped staff query is a plain
+	// indexed match.
+	MarketID    string                `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 
 	audit.AuditFields
 }

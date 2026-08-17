@@ -7,6 +7,7 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/commerce/commerce_enums"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/order/order_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/payment/payment_enums"
@@ -21,9 +22,16 @@ type OrderCreatedEvent struct {
 	BuyerUserID               string                   `json:"buyer_user_id,omitempty"`
 	RetailCustomerNumber      string                   `json:"retail_customer_number,omitempty"`
 	WholesaleOrganisationCode string                   `json:"wholesale_organisation_code,omitempty"`
-	Total                     money.Money              `json:"total"`
-	CreatedAt                 time.Time                `json:"created_at"`
-	RequestID                 string                   `json:"request_id,omitempty"`
+	// MarketID, DepotCode, and CountryCode are the denormalized geography the event
+	// belongs to. They are absent on every event published before v28.0.0;
+	// a consumer that persists a geographically scoped record treats an
+	// absent value as "no evidence" and fails closed rather than defaulting.
+	MarketID    string                `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
+	DepotCode   string                `json:"depot_code,omitempty"`
+	Total       money.Money           `json:"total"`
+	CreatedAt   time.Time             `json:"created_at"`
+	RequestID   string                `json:"request_id,omitempty"`
 }
 
 // OrderPaidEvent is emitted on the order-events topic when an order reaches
@@ -53,8 +61,15 @@ type OrderPaidEvent struct {
 	Items                []analytics.OrderItemFact `json:"items,omitempty"`
 	RetailCustomerNumber string                    `json:"retail_customer_number,omitempty"`
 	OrganisationAccessID string                    `json:"organisation_access_id,omitempty"`
-	PaidAt               time.Time                 `json:"paid_at"`
-	RequestID            string                    `json:"request_id,omitempty"`
+	// MarketID, DepotCode, and CountryCode are the denormalized geography the event
+	// belongs to. They are absent on every event published before v28.0.0;
+	// a consumer that persists a geographically scoped record treats an
+	// absent value as "no evidence" and fails closed rather than defaulting.
+	MarketID    string                `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
+	DepotCode   string                `json:"depot_code,omitempty"`
+	PaidAt      time.Time             `json:"paid_at"`
+	RequestID   string                `json:"request_id,omitempty"`
 }
 
 // CheckoutCompensationRequestedEvent restores Pricing-owned value after a
@@ -86,20 +101,32 @@ type OrderStatusChangedEvent struct {
 	TrackingNumber       string                       `json:"tracking_number,omitempty"`
 	InvoiceNumber        string                       `json:"invoice_number,omitempty"`
 	ChangedBy            string                       `json:"changed_by,omitempty"`
-	ChangedAt            time.Time                    `json:"changed_at"`
-	Reason               string                       `json:"reason,omitempty"`
-	RequestID            string                       `json:"request_id,omitempty"`
+	// MarketID and CountryCode are the denormalized geography the event
+	// belongs to. They are absent on every event published before v28.0.0;
+	// a consumer that persists a geographically scoped record treats an
+	// absent value as "no evidence" and fails closed rather than defaulting.
+	MarketID    string                `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
+	ChangedAt   time.Time             `json:"changed_at"`
+	Reason      string                `json:"reason,omitempty"`
+	RequestID   string                `json:"request_id,omitempty"`
 }
 
 // OrderCancelledEvent is emitted on the order-events topic when an order is
 // cancelled before fulfilment completes.
 type OrderCancelledEvent struct {
-	OrderID              string    `json:"order_id"`
-	OrderNumber          string    `json:"order_number"`
-	RetailCustomerNumber string    `json:"retail_customer_number,omitempty"`
-	OrganisationAccessID string    `json:"organisation_access_id,omitempty"`
-	CancelledBy          string    `json:"cancelled_by,omitempty"`
-	CancelledAt          time.Time `json:"cancelled_at"`
-	Reason               string    `json:"reason,omitempty"`
-	RequestID            string    `json:"request_id,omitempty"`
+	OrderID              string `json:"order_id"`
+	OrderNumber          string `json:"order_number"`
+	RetailCustomerNumber string `json:"retail_customer_number,omitempty"`
+	OrganisationAccessID string `json:"organisation_access_id,omitempty"`
+	CancelledBy          string `json:"cancelled_by,omitempty"`
+	// MarketID and CountryCode are the denormalized geography the event
+	// belongs to. They are absent on every event published before v28.0.0;
+	// a consumer that persists a geographically scoped record treats an
+	// absent value as "no evidence" and fails closed rather than defaulting.
+	MarketID    string                `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
+	CancelledAt time.Time             `json:"cancelled_at"`
+	Reason      string                `json:"reason,omitempty"`
+	RequestID   string                `json:"request_id,omitempty"`
 }

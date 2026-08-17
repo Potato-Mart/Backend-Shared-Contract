@@ -6,6 +6,7 @@ import (
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/benefit"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
@@ -34,6 +35,11 @@ type GiftCard struct {
 	ExpiresAt            *time.Time                  `json:"expires_at,omitempty"`
 	Note                 string                      `json:"note,omitempty"`
 	History              []security.HistoryEntry     `json:"history,omitempty"`
+	// MarketID and CountryCode are the denormalized owning market and its
+	// country, carried so a geographically scoped staff query is a plain
+	// indexed match.
+	MarketID    string                `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 
 	audit.AuditFields
 }

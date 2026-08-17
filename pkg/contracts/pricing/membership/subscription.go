@@ -6,6 +6,7 @@ import (
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/membership/membership_enums"
 )
@@ -21,6 +22,11 @@ type SubscriptionPlan struct {
 	DiscountPercent float64     `json:"discount_percent"`
 	MinCycles       int         `json:"min_cycles"`
 	IsActive        bool        `json:"is_active"`
+	// MarketID and CountryCode are the denormalized owning market and its
+	// country, carried so a geographically scoped staff query is a plain
+	// indexed match.
+	MarketID    string                `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	audit.AuditFields
 }
 

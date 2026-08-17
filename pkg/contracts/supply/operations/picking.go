@@ -13,6 +13,7 @@ import (
 type PickingList struct {
 	ID          string                            `json:"id"`
 	DepotCode   string                            `json:"depot_code"`
+	MarketID    string                            `json:"market_id,omitempty"`
 	OrderNumber string                            `json:"order_number"`
 	Status      warehouse_enums.PickingListStatus `json:"status"`
 	AssignedTo  string                            `json:"assigned_to,omitempty"`

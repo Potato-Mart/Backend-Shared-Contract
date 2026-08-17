@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/metadata"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/membership/membership_enums"
@@ -32,6 +33,11 @@ type MembershipAccount struct {
 	SuspendedAt *time.Time                               `json:"suspended_at,omitempty"`
 	ClosedAt    *time.Time                               `json:"closed_at,omitempty"`
 	Metadata    metadata.Metadata                        `json:"metadata,omitempty"`
+	// MarketID and CountryCode are the denormalized owning market and its
+	// country, carried so a geographically scoped staff query is a plain
+	// indexed match.
+	MarketID    string                `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 
 	audit.AuditFields
 }

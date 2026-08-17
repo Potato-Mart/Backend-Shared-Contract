@@ -14,6 +14,7 @@ import (
 type InboundReceipt struct {
 	ID           string                               `json:"id"`
 	DepotCode    string                               `json:"depot_code"`
+	MarketID     string                               `json:"market_id,omitempty"`
 	Reference    string                               `json:"reference,omitempty"`
 	SupplierCode string                               `json:"supplier_code,omitempty"`
 	ETA          *time.Time                           `json:"eta,omitempty"`

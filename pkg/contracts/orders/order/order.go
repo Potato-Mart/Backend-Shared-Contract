@@ -34,7 +34,10 @@ type Order struct {
 	// MarketID is the immutable commercial market the order was placed
 	// in. It is captured when the cart is created and never re-derived
 	// from country or currency.
-	MarketID          string                        `json:"market_id"`
+	MarketID string `json:"market_id"`
+	// CountryCode is the denormalized country of MarketID, carried so a
+	// country-scoped staff query is a plain indexed match.
+	CountryCode       geography.CountryCode         `json:"country_code,omitempty"`
 	Channel           commerce_enums.OrderType      `json:"channel"`
 	Status            order_enums.SalesOrderStatus  `json:"status"`
 	PaymentStatus     payment_enums.PaymentStatus   `json:"payment_status"`

@@ -6,6 +6,7 @@ import (
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/purchase/purchase_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse"
@@ -15,6 +16,8 @@ type Receipt struct {
 	ID           string                             `json:"id"`
 	OrderNumber  string                             `json:"order_number"`
 	DepotCode    string                             `json:"depot_code,omitempty"`
+	MarketID     string                             `json:"market_id,omitempty"`
+	CountryCode  geography.CountryCode              `json:"country_code,omitempty"`
 	Reference    string                             `json:"reference,omitempty"`
 	SupplierCode string                             `json:"supplier_code,omitempty"`
 	Operator     string                             `json:"operator,omitempty"`

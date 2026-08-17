@@ -11,8 +11,13 @@ import (
 // LabelMaster is one product/package label revision. It remains independent of
 // the product catalogue and retains only its compliance-owned source evidence.
 type LabelMaster struct {
-	ID                     string                 `json:"id"`
-	Revision               RevisionMetadata       `json:"revision"`
+	ID       string           `json:"id"`
+	Revision RevisionMetadata `json:"revision"`
+	// MarketID and CountryCode are the denormalized market and country the
+	// record belongs to, carried so a geographically scoped staff query is
+	// a plain indexed match.
+	MarketID               string                 `json:"market_id,omitempty"`
+	CountryCode            geography.CountryCode  `json:"country_code,omitempty"`
 	SourceProductEvidence  LabelProductEvidence   `json:"source_product_evidence"`
 	SKUID                  string                 `json:"sku_id"`
 	VariantCode            string                 `json:"variant_code"`

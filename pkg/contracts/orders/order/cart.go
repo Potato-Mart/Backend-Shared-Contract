@@ -22,6 +22,9 @@ type Cart struct {
 	// MarketID is the immutable commercial market the cart is built for.
 	// It is mandatory at cart creation and cannot change afterwards.
 	MarketID string `json:"market_id"`
+	// CountryCode is the denormalized country of MarketID, carried so a
+	// country-scoped staff query is a plain indexed match.
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 
 	Channel commerce_enums.OrderType `json:"channel,omitempty"`
 	// Buyer describes who is buying, independently of Channel. POS is a

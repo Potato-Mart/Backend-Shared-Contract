@@ -25,6 +25,11 @@ type MarketingMessage struct {
 	GeographicScope  geography.GeographicScope              `json:"geographic_scope"`
 	ScheduleTimezone string                                 `json:"schedule_timezone"`
 	ScheduledSendAt  *time.Time                             `json:"scheduled_send_at,omitempty"`
+	// MarketID and CountryCode are the denormalized owning market and its
+	// country, carried so a geographically scoped staff query is a plain
+	// indexed match.
+	MarketID    string                `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 
 	audit.AuditFields
 }

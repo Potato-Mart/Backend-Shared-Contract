@@ -9,6 +9,7 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/localization"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/listing/listing_enums"
 )
@@ -32,10 +33,13 @@ type SaleRestriction struct {
 // listing, and Pricing validates the SKU and an active listing before
 // approving a price entry or quoting.
 type MarketListing struct {
-	ID       string                            `json:"id"`
-	MarketID string                            `json:"market_id"`
-	SKUID    string                            `json:"sku_id"`
-	Status   listing_enums.MarketListingStatus `json:"status"`
+	ID       string `json:"id"`
+	MarketID string `json:"market_id"`
+	// CountryCode is the denormalized country of MarketID, carried so a
+	// country-scoped staff query is a plain indexed match.
+	CountryCode geography.CountryCode             `json:"country_code,omitempty"`
+	SKUID       string                            `json:"sku_id"`
+	Status      listing_enums.MarketListingStatus `json:"status"`
 
 	TaxCategoryID string                       `json:"tax_category_id"`
 	DisplayName   []localization.LocalizedName `json:"display_name,omitempty"`

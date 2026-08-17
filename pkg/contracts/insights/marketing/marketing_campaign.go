@@ -26,9 +26,14 @@ type MarketingCampaign struct {
 	Status           marketing_enums.MarketingCampaignStatus `json:"status"`
 	GeographicScope  geography.GeographicScope               `json:"geographic_scope"`
 	ScheduleTimezone string                                  `json:"schedule_timezone"`
-	SentAt           *time.Time                              `json:"sent_at,omitempty"`
-	Metadata         metadata.Metadata                       `json:"metadata,omitempty"`
-	History          []security.HistoryEntry                 `json:"history,omitempty"`
+	// MarketID and CountryCode are the denormalized owning market and its
+	// country, carried so a geographically scoped staff query is a plain
+	// indexed match.
+	MarketID    string                  `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode   `json:"country_code,omitempty"`
+	SentAt      *time.Time              `json:"sent_at,omitempty"`
+	Metadata    metadata.Metadata       `json:"metadata,omitempty"`
+	History     []security.HistoryEntry `json:"history,omitempty"`
 
 	audit.AuditFields
 }
