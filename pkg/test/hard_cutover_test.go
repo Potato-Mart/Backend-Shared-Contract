@@ -102,6 +102,22 @@ func TestV27NonSupplyProductionModelsRejectLegacyMediaShapes(t *testing.T) {
 
 func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	removedIdentifiers := v27StringSet(
+		// v28 workforce-role cut-over: admin, warehouse, and cashier are
+		// replaced by countryAdmin, depotManager, and warehouseManager, and
+		// POS sign-in moves to every staff role instead of a cashier role.
+		"UserRoleAdmin",
+		"UserRoleWarehouse",
+		"UserRoleCashier",
+
+		// v28 POS cut-over: per-operator shifts are replaced by one daily
+		// session per register, shared by every operator on it.
+		"RegisterShift",
+		"ShiftTotalsSnapshot",
+		"ShiftStatus",
+		"ShiftStatusOpen",
+		"ShiftStatusClosed",
+		"ShiftID",
+
 		// Earlier hard cut-overs that remain forbidden in v27.
 		"MembershipOwnerRef",
 		"MembershipOwnerType",
@@ -184,6 +200,11 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	)
 
 	removedTypes := v27StringSet(
+		// v28 replaces the per-operator POS shift with a per-register daily
+		// session.
+		"orders/pos.RegisterShift",
+		"orders/pos.ShiftTotalsSnapshot",
+
 		// The v27 canonical-product cut-over removes all endpoint-specific
 		// product projections and product-owned snapshot duplicates.
 		"orders/pos.CatalogProduct",
@@ -533,6 +554,20 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"supply/warehouse.Depot": v27StringSet(
 			"postcode_rules",
 		),
+		// v28: depots are the only site identity, so no record carries a
+		// store code, and POS records key on the register's daily session.
+		"orders/pos.Register": v27StringSet(
+			"store_id",
+		),
+		"orders/pos.CashMovement": v27StringSet(
+			"shift_id",
+		),
+		"orders/order.POSAttribution": v27StringSet(
+			"store_id", "shift_id",
+		),
+		"payments/terminal.Terminal": v27StringSet(
+			"store_id",
+		),
 		"supply/operations.InboundItem": v27StringSet(
 			"barcode", "storage", "expected_qty", "received_qty", "location_code",
 		),
@@ -661,9 +696,9 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	}
 }
 
-func TestV27GoSourcesContainNoOlderContractImports(t *testing.T) {
+func TestV28GoSourcesContainNoOlderContractImports(t *testing.T) {
 	const contractImportRoot = "github.com/Potato-Mart/Backend-Shared-Contract/"
-	const currentContractImportPrefix = contractImportRoot + "v27/"
+	const currentContractImportPrefix = contractImportRoot + "v28/"
 	pkgRoot := sharedContractPkgRoot(t)
 	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
@@ -683,7 +718,7 @@ func TestV27GoSourcesContainNoOlderContractImports(t *testing.T) {
 				return unquoteErr
 			}
 			if strings.HasPrefix(importPath, contractImportRoot) && !strings.HasPrefix(importPath, currentContractImportPrefix) {
-				t.Errorf("%s imports non-v27 shared-contract path %s", path, importPath)
+				t.Errorf("%s imports non-v28 shared-contract path %s", path, importPath)
 			}
 		}
 		return nil
