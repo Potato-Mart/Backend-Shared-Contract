@@ -5,6 +5,7 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/commerce/commerce_enums"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/metadata"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security/security_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/temporal"
@@ -12,9 +13,14 @@ import (
 
 // SKUDemandForecast is one depot- and channel-qualified demand prediction.
 type SKUDemandForecast struct {
-	SKUID                string                   `json:"sku_id"`
-	MarketID             string                   `json:"market_id"`
-	DepotCode            string                   `json:"depot_code"`
+	SKUID     string `json:"sku_id"`
+	MarketID  string `json:"market_id"`
+	DepotCode string `json:"depot_code"`
+	// CountryCode is the denormalized country the forecast is attributed to,
+	// so a country-scoped principal is filtered by a plain indexed match. It
+	// is absent on forecasts computed before v28.0.0; an absent value means
+	// "unattributed" and is handled fail-closed by the consumer.
+	CountryCode          geography.CountryCode    `json:"country_code,omitempty"`
 	Channel              commerce_enums.OrderType `json:"channel"`
 	Timezone             string                   `json:"timezone"`
 	ProductName          string                   `json:"product_name,omitempty"`

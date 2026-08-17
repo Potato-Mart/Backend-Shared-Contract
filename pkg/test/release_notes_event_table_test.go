@@ -35,6 +35,14 @@ import (
 // and the v27.0.0 section that publishes it stay authoritative. Publishers
 // must not bump event_version for them; a bump would break every consumer
 // that rejects a version it does not recognize, for no decode benefit.
+//
+// That holds for the nested additions too. OrderFact and RefundFact are listed
+// here and now embed analytics item facts that gained an optional country_code,
+// which is exactly the "nested type reached through a slice" case the
+// derivation above describes — but the rule that put OrderPackingProjection on
+// this list is a CHANGED JSON key, and an added omitempty key is not one. No
+// version-2 consumer decodes these payloads differently, so the set is
+// unchanged and event_version stays "2".
 var v27EventSchemaVersion2Payloads = []string{
 	"CatalogBaseCostChangedEvent",
 	"CatalogListingChangedEvent",

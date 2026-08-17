@@ -46,6 +46,14 @@ type MemberSubscription struct {
 	CyclesCompleted int                                       `json:"cycles_completed"`
 	Note            string                                    `json:"note,omitempty"`
 	History         []security.HistoryEntry                   `json:"history,omitempty"`
+	// MarketID and CountryCode are the denormalized owning market and its
+	// country, carried so a geographically scoped staff query is a plain
+	// indexed match. They mirror the plan the subscription was taken out
+	// against; without them a staff-facing subscription list cannot be
+	// scoped at all, because the subscription reaches its geography only
+	// through PlanID.
+	MarketID    string                `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 
 	audit.AuditFields
 }

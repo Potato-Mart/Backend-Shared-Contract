@@ -215,11 +215,26 @@ compatibility alias and no fallback JSON shape.
   - Insights — `marketing.MarketingCampaign.market_id`/`country_code`.
   - Pricing — `market_id`/`country_code` on `promotion.Promotion`,
     `membership.MembershipTier`, `membership.Reward`,
-    `membership.SubscriptionPlan`, `membership.MembershipAccount`,
-    `wallet.GiftCard`, `wallet.Voucher`, and `wallet.Coupon`.
+    `membership.SubscriptionPlan`, `membership.MemberSubscription`,
+    `membership.MembershipAccount`, `wallet.GiftCard`, `wallet.Voucher`, and
+    `wallet.Coupon`.
   - Public marketing — `market_id`/`country_code` on `marketing.Campaign`,
     `marketing.Coupon`, `marketing.Promotion`, and
     `marketing.MarketingMessage`.
+- **Country attribution on the Insights analytics facts.** The rollup facts
+  carried `market_id` only, so a rank-2 `countryAdmin` could not be filtered
+  at all — Insights had to refuse the read with 403 rather than widen it,
+  which meant country admins could read no analytics whatsoever, contradicting
+  the requirement that rank 2 sees its own country's data. Optional
+  `country_code` is added to `analytics.OrderItemFact`,
+  `analytics.RefundItemFact`, `analytics.MetricRollup`, and
+  `analytics.SKUDemandForecast`. `analytics.MetricRollup` additionally gains
+  optional `market_id`, which it carried no equivalent of, so a market-scoped
+  `marketing` principal can be filtered on the same record.
+
+  The event-borne facts `OrderFact`, `PaymentFact`, and `RefundFact` already
+  carried `market_id`/`country_code` and are unchanged; the nested item facts
+  they embed are what gained the field.
 - Optional `market_id`, `country_code`, and (where a site applies) `depot_code`
   on the routed Pub/Sub payloads whose consumers persist a geographically
   scoped record: `OrderCreatedEvent`, `OrderPaidEvent`,
@@ -268,6 +283,22 @@ compatibility alias and no fallback JSON shape.
   v28.0.0 carries no `market_id`, `country_code`, or `depot_code`. An absent
   value means "no evidence" and must not be defaulted to the consumer's own
   market or country.
+- **Populate the analytics country, and fail closed when it is absent.**
+  Every producer of an analytics fact or rollup must write `country_code`
+  (and, on `MetricRollup`, `market_id`) at the time the fact is recorded, from
+  the same evidence that supplies `market_id` — never inferred later from
+  currency, locale, or the reader's own scope. A fact that carries no country
+  is **unattributed**, not global: the consumer excludes it from a
+  geographically scoped read rather than returning it. Insights must stop
+  refusing the whole read for a `countryAdmin`; it now filters on
+  `country_code` instead, and a rank-2 principal sees its own country's facts.
+  Backfilling historical rollups is a service-owned migration, not a contract
+  concern.
+- **`MemberSubscription` is scopeable on its own.** The staff-facing
+  membership-subscription list now filters on the subscription's own
+  `market_id`/`country_code`; it must not reach geography by joining through
+  `plan_id`. Populate both on write from the plan the subscription was taken
+  out against, and index them.
 - Gift-card issuance must select the denomination policy by market and pin the
   policy `version` it quoted, so an administrative edit forces a re-quote
   instead of silently repricing an in-flight purchase.

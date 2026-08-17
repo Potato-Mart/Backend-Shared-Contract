@@ -172,6 +172,8 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 		UnitPrice:     money.Money{AmountMinor: 1200, Currency: "AUD"},
 		FrequencyDays: 7,
 		IsActive:      true,
+		MarketID:      "mkt_au_vic",
+		CountryCode:   "AU",
 	}
 	subscription := membership.MemberSubscription{
 		ID:             "sub_1",
@@ -181,6 +183,8 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 		Status:         membership_enums.MemberSubscriptionStatusActive,
 		StartedAt:      now,
 		NextOrderAt:    now.AddDate(0, 0, 7),
+		MarketID:       "mkt_au_vic",
+		CountryCode:    "AU",
 	}
 
 	payload, err := json.Marshal(struct {
@@ -208,5 +212,25 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 	}
 	if strings.Contains(string(payload), `"product":`) {
 		t.Fatalf("membership product links must be scalar SKU codes: %s", payload)
+	}
+	// A staff-facing subscription list is geo-scoped off the subscription
+	// itself, never by joining through PlanID, so the subscription must carry
+	// its own market and country.
+	if decoded.Subscription.MarketID != "mkt_au_vic" || decoded.Subscription.CountryCode != "AU" {
+		t.Fatalf("member subscription geography did not round-trip: %+v", decoded.Subscription)
+	}
+	if !strings.Contains(string(payload), `"subscription":{`) ||
+		!strings.Contains(string(payload), `"market_id":"mkt_au_vic","country_code":"AU"`) {
+		t.Fatalf("member subscription JSON is missing its denormalized geography: %s", payload)
+	}
+
+	// Both fields are omitempty so a pre-v28 record decodes unchanged and an
+	// unscoped writer emits no key at all.
+	bare, err := json.Marshal(membership.MemberSubscription{ID: "sub_2"})
+	if err != nil {
+		t.Fatalf("marshal bare member subscription: %v", err)
+	}
+	if strings.Contains(string(bare), "market_id") || strings.Contains(string(bare), "country_code") {
+		t.Fatalf("member subscription geography must be omitempty: %s", bare)
 	}
 }

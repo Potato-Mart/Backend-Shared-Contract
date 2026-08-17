@@ -130,6 +130,22 @@ var v28ModelPackageManifest = map[string]string{
 // claims, Role.rank, the gift-card policy's market/country/audit fields, and
 // the denormalized market_id/country_code/depot_code geography — and fields do
 // not enter this digest.
+//
+// Re-reviewed for the pre-tag v28.0.0 correction pass, which deliberately
+// leaves this digest UNCHANGED. The digest hashes package|class|TypeName
+// triples only, so none of that pass's changes can reach it:
+//
+//   - Dropping the `sales` workforce rank removes a constant, not a type;
+//     role_enums.UserRole itself is untouched.
+//   - membership.MemberSubscription.market_id/country_code,
+//     analytics.OrderItemFact/RefundItemFact/MetricRollup/SKUDemandForecast
+//     .country_code, and MetricRollup.market_id are all fields on types that
+//     already exist and already carry their manifest class.
+//
+// An unmoved digest is therefore the correct, reviewed outcome here rather
+// than a skipped gate: this comment is the review record, and the guards that
+// actually police the change are the workforce wire lock in pkg/test/enums
+// and the removed-identifier set in hard_cutover_test.go.
 const v28ExportedTypeManifestDigest = "c7b0fcd2675b8105671949545d977462561942de288dcc943e87230cb251cec0"
 
 func TestV28ExportedTypesMatchModelManifest(t *testing.T) {
