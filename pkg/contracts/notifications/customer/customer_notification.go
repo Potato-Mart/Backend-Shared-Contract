@@ -3,7 +3,8 @@ package customer
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/notifications/customer/customer_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/notifications/customer/customer_enums"
 )
 
 // CustomerNotificationDelivery records one channel's durable delivery state.
@@ -31,8 +32,13 @@ type CampaignReference struct {
 // CustomerNotification is the customer-safe portal projection. Recipient
 // addresses and provider details deliberately do not appear on this contract.
 type CustomerNotification struct {
-	ID          string                                    `json:"id"`
-	EventID     string                                    `json:"event_id"`
+	ID      string `json:"id"`
+	EventID string `json:"event_id"`
+	// MarketID and CountryCode are the denormalized market and country the
+	// notification was raised for, carried so a geographically scoped staff
+	// query is a plain indexed match.
+	MarketID    string                                    `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode                     `json:"country_code,omitempty"`
 	Topic       customer_enums.CustomerNotificationTopic  `json:"topic"`
 	Title       string                                    `json:"title"`
 	Message     string                                    `json:"message"`

@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/product"
 )
 
 func TestBrandJSONUsesV25PublicShape(t *testing.T) {

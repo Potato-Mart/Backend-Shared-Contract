@@ -5,19 +5,27 @@ package terminal
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/metadata"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/metadata"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/payments/terminal/terminal_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/terminal/terminal_enums"
 )
 
-// Terminal is an EFTPOS device registered for POS use.
+// Terminal is an EFTPOS device registered for POS use at one depot.
+//
+// DepotCode is the trading site: depots are the only site identity in the
+// platform, so a terminal is never keyed by a store code. MarketID and
+// CountryCode are the denormalized market and country of that depot, carried
+// so a geographically scoped staff query is a plain indexed match.
 type Terminal struct {
-	ID       string                          `json:"id"`
-	TenantID string                          `json:"tenant_id"`
-	StoreID  string                          `json:"store_id,omitempty"`
-	Provider terminal_enums.TerminalProvider `json:"provider"`
+	ID          string                          `json:"id"`
+	TenantID    string                          `json:"tenant_id"`
+	DepotCode   string                          `json:"depot_code,omitempty"`
+	MarketID    string                          `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode           `json:"country_code,omitempty"`
+	Provider    terminal_enums.TerminalProvider `json:"provider"`
 
 	ConnectionMode terminal_enums.TerminalConnectionMode `json:"connection_mode,omitempty"`
 

@@ -9,33 +9,33 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/customers/campaign/campaign_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/customers/wholesale/wholesale_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/pos/pos_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/benefit/benefit_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/membership/membership_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pubsub/event/event_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/customers/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/pos/pos_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/benefit/benefit_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pubsub/event/event_enums"
 )
 
-func TestV27EnumCoverageIncludesEveryStringEnum(t *testing.T) {
-	testSource := v27EnumTestSource(t)
-	for _, typeName := range v27StringEnumTypes(t) {
+func TestV28EnumCoverageIncludesEveryStringEnum(t *testing.T) {
+	testSource := v28EnumTestSource(t)
+	for _, typeName := range v28StringEnumTypes(t) {
 		if !regexp.MustCompile(`\b` + regexp.QuoteMeta(typeName) + `\b`).MatchString(testSource) {
 			t.Errorf("string enum %s is not represented in an enum behavior test", typeName)
 		}
 	}
-	for _, constantName := range v27StringEnumConstants(t) {
+	for _, constantName := range v28StringEnumConstants(t) {
 		if !regexp.MustCompile(`\b` + regexp.QuoteMeta(constantName) + `\b`).MatchString(testSource) {
 			t.Errorf("string enum constant %s is not represented in an enum behavior test", constantName)
 		}
 	}
 }
 
-func TestV27FormerlyUncoveredEnumValues(t *testing.T) {
+func TestV28FormerlyUncoveredEnumValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
 		{name: "campaign.CampaignStatus", valid: []stringEnum{campaign_enums.CampaignStatusDraft, campaign_enums.CampaignStatusScheduled, campaign_enums.CampaignStatusActive, campaign_enums.CampaignStatusCompleted, campaign_enums.CampaignStatusArchived}, invalid: campaign_enums.CampaignStatus("__invalid__")},
 		{name: "campaign.CampaignPredictionStatus", valid: []stringEnum{campaign_enums.CampaignPredictionStatusNotApplicable, campaign_enums.CampaignPredictionStatusReady, campaign_enums.CampaignPredictionStatusWarning}, invalid: campaign_enums.CampaignPredictionStatus("__invalid__")},
@@ -43,7 +43,7 @@ func TestV27FormerlyUncoveredEnumValues(t *testing.T) {
 		{name: "wholesale.WholesaleApplicationStatus", valid: []stringEnum{wholesale_enums.WholesaleApplicationStatusPending, wholesale_enums.WholesaleApplicationStatusApproved, wholesale_enums.WholesaleApplicationStatusRejected}, invalid: wholesale_enums.WholesaleApplicationStatus("__invalid__")},
 		{name: "wholesale.GroupOrderManagerApplicationStatus", valid: []stringEnum{wholesale_enums.GroupOrderManagerApplicationStatusPending, wholesale_enums.GroupOrderManagerApplicationStatusApproved, wholesale_enums.GroupOrderManagerApplicationStatusRejected, wholesale_enums.GroupOrderManagerApplicationStatusCancelled}, invalid: wholesale_enums.GroupOrderManagerApplicationStatus("__invalid__")},
 		{name: "order.CustomerOrderBucket", valid: []stringEnum{order_enums.CustomerOrderBucketCurrent, order_enums.CustomerOrderBucketCompleted, order_enums.CustomerOrderBucketCancelled, order_enums.CustomerOrderBucketRefunded}, invalid: order_enums.CustomerOrderBucket("__invalid__")},
-		{name: "pos.ShiftStatus", valid: []stringEnum{pos_enums.ShiftStatusOpen, pos_enums.ShiftStatusClosed}, invalid: pos_enums.ShiftStatus("__invalid__")},
+		{name: "pos.SessionStatus", valid: []stringEnum{pos_enums.SessionStatusOpen, pos_enums.SessionStatusClosed}, invalid: pos_enums.SessionStatus("__invalid__")},
 		{name: "pos.CashMovementKind", valid: []stringEnum{pos_enums.CashMovementKindCashIn, pos_enums.CashMovementKindCashOut, pos_enums.CashMovementKindFloatAdjustment, pos_enums.CashMovementKindDrop}, invalid: pos_enums.CashMovementKind("__invalid__")},
 		{name: "payment.CustomerPaymentAllocationKind", valid: []stringEnum{payment_enums.CustomerPaymentAllocationKindExternalPayment, payment_enums.CustomerPaymentAllocationKindWalletBalance, payment_enums.CustomerPaymentAllocationKindWalletPoints, payment_enums.CustomerPaymentAllocationKindGiftCard, payment_enums.CustomerPaymentAllocationKindVoucher, payment_enums.CustomerPaymentAllocationKindOther}, invalid: payment_enums.CustomerPaymentAllocationKind("__invalid__")},
 		{name: "payment.PaymentCompleteness", valid: []stringEnum{payment_enums.PaymentCompletenessComplete, payment_enums.PaymentCompletenessPartial, payment_enums.PaymentCompletenessUnavailable}, invalid: payment_enums.PaymentCompleteness("__invalid__")},
@@ -59,7 +59,7 @@ func TestV27FormerlyUncoveredEnumValues(t *testing.T) {
 	})
 }
 
-func v27EnumTestSource(t *testing.T) string {
+func v28EnumTestSource(t *testing.T) string {
 	t.Helper()
 	pkgRoot, err := filepath.Abs(filepath.Join("..", ".."))
 	if err != nil {
@@ -86,7 +86,7 @@ func v27EnumTestSource(t *testing.T) string {
 	return strings.Join(source, "\n")
 }
 
-func v27StringEnumTypes(t *testing.T) []string {
+func v28StringEnumTypes(t *testing.T) []string {
 	t.Helper()
 	contractsRoot, err := filepath.Abs(filepath.Join("..", "..", "contracts"))
 	if err != nil {
@@ -116,7 +116,7 @@ func v27StringEnumTypes(t *testing.T) []string {
 	return types
 }
 
-func v27StringEnumConstants(t *testing.T) []string {
+func v28StringEnumConstants(t *testing.T) []string {
 	t.Helper()
 	contractsRoot, err := filepath.Abs(filepath.Join("..", "..", "contracts"))
 	if err != nil {

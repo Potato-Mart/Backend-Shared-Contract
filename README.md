@@ -15,8 +15,8 @@ workflows.
 ## Latest Version
 
 ```text
-v27.3.0
-github.com/Potato-Mart/Backend-Shared-Contract/v27
+v28.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v28
 ```
 
 See [RELEASE_NOTES.md](RELEASE_NOTES.md) for the release history,
@@ -27,16 +27,16 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v27 v27.3.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v28 v28.0.0
 ```
 
-Import packages from the same `/v27` module path.
+Import packages from the same `/v28` module path.
 
 ## Package Layout
 
 - Common models are grouped by concern under `pkg/contracts/common`, such as
   `geography`, `party`, `packaging`, `security`, `temporal`, `measurement`, and
-  `money`. The legacy `common/shared` package does not exist in v27.
+  `money`. The legacy `common/shared` package does not exist in v28.
 - Finite enum types live in a leaf `<domain>_enums` package beside the models
   that use them. For example, product models import
   `supply/product/product_enums`, while common security models import
@@ -70,7 +70,7 @@ Import packages from the same `/v27` module path.
   applications. Only promotion lifecycle status and match mode are closed
   promotion enums.
 - This module is contract-only. The seven backend services and the parent
-  `go.work` must migrate to `/v27` before consuming this release.
+  `go.work` must migrate to `/v28` before consuming this release.
 
 ## Boundary Governance
 

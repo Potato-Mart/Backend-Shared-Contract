@@ -3,8 +3,9 @@ package backinstock
 import (
 	"time"
 
-	identity "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/identity/account"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/notifications/backinstock/backinstock_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
+	identity "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/identity/account"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/notifications/backinstock/backinstock_enums"
 )
 
 // BackInStockConsentSnapshot records the account and customer-level consent
@@ -32,7 +33,10 @@ type BackInStockSubscription struct {
 	ID    string `json:"id"`
 	SKUID string `json:"sku_id"`
 	// MarketID is the market the subscriber expects to buy the SKU in.
-	MarketID            string                                    `json:"market_id"`
+	MarketID string `json:"market_id"`
+	// CountryCode is the denormalized country of MarketID, carried so a
+	// country-scoped staff query is a plain indexed match.
+	CountryCode         geography.CountryCode                     `json:"country_code,omitempty"`
 	UserID              string                                    `json:"user_id"`
 	CustomerType        backinstock_enums.BackInStockCustomerType `json:"customer_type"`
 	Channel             backinstock_enums.BackInStockChannel      `json:"channel"`

@@ -9,10 +9,10 @@ package campaign
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/geography"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/customers/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/customers/campaign/campaign_enums"
 )
 
 // Audience narrows a campaign by customer type and client platform.
@@ -39,14 +39,17 @@ type Campaign struct {
 	CampaignKey string `json:"campaign_key"`
 	// MarketID scopes the campaign and every SKU reference it carries to
 	// one commercial market.
-	MarketID    string          `json:"market_id"`
-	SeriesKey   string          `json:"series_key,omitempty"`
-	PromotionID string          `json:"promotion_id,omitempty"`
-	Title       string          `json:"title"`
-	Message     string          `json:"message,omitempty"`
-	CTAText     string          `json:"cta_text,omitempty"`
-	CTAHref     string          `json:"cta_href,omitempty"`
-	CTA         *CTADestination `json:"cta,omitempty"`
+	MarketID string `json:"market_id"`
+	// CountryCode is the denormalized country of MarketID, carried so a
+	// country-scoped staff query is a plain indexed match.
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
+	SeriesKey   string                `json:"series_key,omitempty"`
+	PromotionID string                `json:"promotion_id,omitempty"`
+	Title       string                `json:"title"`
+	Message     string                `json:"message,omitempty"`
+	CTAText     string                `json:"cta_text,omitempty"`
+	CTAHref     string                `json:"cta_href,omitempty"`
+	CTA         *CTADestination       `json:"cta,omitempty"`
 
 	// Media is the managed image projected for storefronts (used by home_hero
 	// and modal). BackgroundToken is an optional theme token name for banner

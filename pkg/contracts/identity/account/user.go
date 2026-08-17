@@ -3,9 +3,10 @@ package account
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/identity/account/account_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/identity/access"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/identity/account/account_enums"
 )
 
 // UserProfile is the public projection of a canonical user. Secret fields such
@@ -23,6 +24,12 @@ type UserProfile struct {
 	MFAEnabled              bool                         `json:"mfa_enabled,omitempty"`
 	EmailVerified           bool                         `json:"email_verified"`
 	NotificationPreferences *UserNotificationPreferences `json:"notification_preferences,omitempty"`
+
+	// GeoScope is the workforce principal's geographic grant. It is absent
+	// on customer profiles and on workforce profiles whose scope has not
+	// been assigned yet; consumers fail closed on an absent scope rather
+	// than widening it.
+	GeoScope *access.StaffGeoScope `json:"geo_scope,omitempty"`
 
 	// User Operations
 	UserDevice        UserDevice `json:"user_device,omitempty"`

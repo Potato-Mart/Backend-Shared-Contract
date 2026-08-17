@@ -13,10 +13,10 @@ import (
 	"testing"
 )
 
-// v27ModelPackageManifest classifies every production package. Adding an
+// v28ModelPackageManifest classifies every production package. Adding an
 // exported type changes the digest below and requires an explicit manifest
 // review instead of silently expanding the contract surface.
-var v27ModelPackageManifest = map[string]string{
+var v28ModelPackageManifest = map[string]string{
 	"contracts/common/apiresponse/apiresponse_enums":             "enum",
 	"contracts/common/audit":                                     "record,value",
 	"contracts/common/commerce/commerce_enums":                   "enum",
@@ -109,20 +109,46 @@ var v27ModelPackageManifest = map[string]string{
 	"versioning":                                                 "module-metadata",
 }
 
-// Reviewed for the additive v28 foundations staged on the current v27 module
-// line: canonical public marketing models plus the internal, privacy-minimized
-// account-deletion coordination records and enums. Legacy domains remain
-// until their consumers migrate. The digest captures the complete exported
-// model manifest.
+// Reviewed for the v28.0.0 RBAC and geographic-scoping cut-over. The digest
+// captures the complete exported model manifest, so the change below was
+// classified explicitly before the digest was moved.
 //
-// v27.3.0 adds exactly one exported type, wallet.GiftCardDenominationBonus, a
-// value pair carried by the existing GiftCardDenominationPolicy. It is
-// classified under the wallet package's existing "value" class, so the manifest
-// classification is unchanged and only the digest moves. The release's other
-// additions are fields on existing types and do not enter this digest.
-const v27ExportedTypeManifestDigest = "9af0fb426afd4eb1385c0c90c6955b9e53aa4508a9a1132c328593c6e4c7841e"
+// v28.0.0 adds three exported types and removes two, with no manifest
+// classification change:
+//
+//   - access.StaffGeoScope — the persisted workforce geographic grant, a
+//     record under contracts/identity/access's existing "record" class.
+//   - access_enums.ScopeLevel — global/country/market/depot, an enum under
+//     contracts/identity/access/access_enums' existing "enum" class.
+//   - pos.RegisterSession and pos.SessionTotalsSnapshot replace
+//     pos.RegisterShift and pos.ShiftTotalsSnapshot, keeping the
+//     contracts/orders/pos "entity" and "snapshot" classes. pos_enums
+//     .SessionStatus likewise replaces ShiftStatus inside the existing "enum"
+//     class.
+//
+// Every other v28 change is a field on an existing type — the flat scope
+// claims, Role.rank, the gift-card policy's market/country/audit fields, and
+// the denormalized market_id/country_code/depot_code geography — and fields do
+// not enter this digest.
+//
+// Re-reviewed for the pre-tag v28.0.0 correction pass, which deliberately
+// leaves this digest UNCHANGED. The digest hashes package|class|TypeName
+// triples only, so none of that pass's changes can reach it:
+//
+//   - Dropping the `sales` workforce rank removes a constant, not a type;
+//     role_enums.UserRole itself is untouched.
+//   - membership.MemberSubscription.market_id/country_code,
+//     analytics.OrderItemFact/RefundItemFact/MetricRollup/SKUDemandForecast
+//     .country_code, and MetricRollup.market_id are all fields on types that
+//     already exist and already carry their manifest class.
+//
+// An unmoved digest is therefore the correct, reviewed outcome here rather
+// than a skipped gate: this comment is the review record, and the guards that
+// actually police the change are the workforce wire lock in pkg/test/enums
+// and the removed-identifier set in hard_cutover_test.go.
+const v28ExportedTypeManifestDigest = "c7b0fcd2675b8105671949545d977462561942de288dcc943e87230cb251cec0"
 
-func TestV27ExportedTypesMatchModelManifest(t *testing.T) {
+func TestV28ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)
 	var entries []string
 	pkgRoot := sharedContractPkgRoot(t)
@@ -137,9 +163,9 @@ func TestV27ExportedTypesMatchModelManifest(t *testing.T) {
 		if packagePath == "." {
 			return nil
 		}
-		class, classified := v27ModelPackageManifest[packagePath]
+		class, classified := v28ModelPackageManifest[packagePath]
 		if !classified {
-			t.Errorf("%s is not classified in the v27 model manifest", packagePath)
+			t.Errorf("%s is not classified in the v28 model manifest", packagePath)
 			return nil
 		}
 		seenPackages[packagePath] = true
@@ -164,9 +190,9 @@ func TestV27ExportedTypesMatchModelManifest(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("read v27 model manifest: %v", err)
+		t.Fatalf("read v28 model manifest: %v", err)
 	}
-	for packagePath := range v27ModelPackageManifest {
+	for packagePath := range v28ModelPackageManifest {
 		if !seenPackages[packagePath] {
 			t.Errorf("manifest package %s has no production source", packagePath)
 		}
@@ -174,7 +200,7 @@ func TestV27ExportedTypesMatchModelManifest(t *testing.T) {
 	sort.Strings(entries)
 	sum := sha256.Sum256([]byte(strings.Join(entries, "\n")))
 	got := hex.EncodeToString(sum[:])
-	if got != v27ExportedTypeManifestDigest {
+	if got != v28ExportedTypeManifestDigest {
 		t.Fatalf("exported model manifest changed: got %s; classify the change and update the reviewed digest", got)
 	}
 }

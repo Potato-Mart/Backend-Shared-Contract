@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging/packaging_enums"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/order"
-	pos "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/pos"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging/packaging_enums"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/order"
+	pos "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/pos"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/product"
 )
 
 func TestReceiptSnapshotJSONUsesCustomerSafeFrozenLines(t *testing.T) {
@@ -21,7 +21,7 @@ func TestReceiptSnapshotJSONUsesCustomerSafeFrozenLines(t *testing.T) {
 		OrderNumber: "SO-1",
 		Revision:    2,
 		IssuedAt:    now,
-		Attribution: sales.POSAttribution{StoreID: "store_1", RegisterID: "register_1"},
+		Attribution: sales.POSAttribution{DepotCode: "DEP-AU-01", RegisterID: "register_1", SessionID: "session_1"},
 		Lines: []pos.ReceiptLine{{
 			SKUID:        "A00001",
 			ProductName:  "Potatoes 1kg",

@@ -1,16 +1,22 @@
 package import_compliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
 )
 
 // ImportSettings is one revision of the shared import-cost and declaration
 // configuration. TWDPerAUDMicros stores the TWD-per-AUD exchange rate scaled by
 // 1,000,000. Margin and tax values use basis points (100 = one percent).
 type ImportSettings struct {
-	ID                      string                      `json:"id"`
-	Revision                RevisionMetadata            `json:"revision"`
+	ID       string           `json:"id"`
+	Revision RevisionMetadata `json:"revision"`
+	// MarketID and CountryCode are the denormalized market and country the
+	// record belongs to, carried so a geographically scoped staff query is
+	// a plain indexed match.
+	MarketID                string                      `json:"market_id,omitempty"`
+	CountryCode             geography.CountryCode       `json:"country_code,omitempty"`
 	TWDPerAUDMicros         int64                       `json:"twd_per_aud_micros"`
 	NextInvoiceNumber       int64                       `json:"next_invoice_number"`
 	ExportMarginBasisPoints int64                       `json:"export_margin_basis_points"`

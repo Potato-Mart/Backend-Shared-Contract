@@ -1,56 +1,83 @@
 // Package pos holds the in-store point-of-sale operational models: registers,
-// shifts, cash movements, shift totals, and immutable receipt snapshots.
-// POS sale/cart/customer/payment flows reuse the existing sales, customers,
-// payments, wallet, and promotion models — nothing here duplicates them.
+// daily register sessions, cash movements, session totals, and immutable
+// receipt snapshots. POS sale/cart/customer/payment flows reuse the existing
+// sales, customers, payments, wallet, and promotion models — nothing here
+// duplicates them.
+//
+// A register trades from a depot: depots are the only site identity in the
+// platform, so POS records carry depot_code and never a store code.
 package pos
 
 import (
 	"time"
 
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/order"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/order"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/pos/pos_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/pos/pos_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/product"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/payments/payment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/payment/payment_enums"
 )
 
-// Register is one physical or virtual point-of-sale register.
+// Register is one physical or virtual point-of-sale register standing in a
+// depot. TerminalID links the register to its paired payment terminal when
+// one is bound.
 type Register struct {
-	ID      string `json:"id"`
-	StoreID string `json:"store_id"`
-	Name    string `json:"name"`
-	Status  string `json:"status,omitempty"`
+	ID          string                `json:"id"`
+	DepotCode   string                `json:"depot_code"`
+	MarketID    string                `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
+	TerminalID  string                `json:"terminal_id,omitempty"`
+	Name        string                `json:"name"`
+	Status      string                `json:"status,omitempty"`
 
 	audit.AuditFields
 }
 
-// RegisterShift is one operator shift on a register, from open to close-out.
-type RegisterShift struct {
-	ID             string                `json:"id"`
-	RegisterID     string                `json:"register_id"`
-	OperatorUserID string                `json:"operator_user_id"`
-	OpenedAt       time.Time             `json:"opened_at"`
-	ClosedAt       *time.Time            `json:"closed_at,omitempty"`
-	OpeningFloat   money.Money           `json:"opening_float"`
-	ClosingCount   *money.Money          `json:"closing_count,omitempty"`
-	ExpectedCash   *money.Money          `json:"expected_cash,omitempty"`
-	CashVariance   *money.Money          `json:"cash_variance,omitempty"`
-	Status         pos_enums.ShiftStatus `json:"status"`
+// RegisterSession is the single trading session one register runs for one
+// business day, from open to close-out.
+//
+// A session belongs to the register, not to an operator: every operator
+// working that register on that business date shares the same session, and
+// every workforce rank with POS access may open, manage, and close it. One
+// register therefore has at most one session per business date, and
+// (register_id, business_date) is the record's natural key.
+type RegisterSession struct {
+	ID           string                  `json:"id"`
+	RegisterID   string                  `json:"register_id"`
+	TerminalID   string                  `json:"terminal_id,omitempty"`
+	DepotCode    string                  `json:"depot_code"`
+	MarketID     string                  `json:"market_id,omitempty"`
+	CountryCode  geography.CountryCode   `json:"country_code,omitempty"`
+	BusinessDate temporal.Date           `json:"business_date"`
+	Status       pos_enums.SessionStatus `json:"status"`
+
+	OpenedAt       time.Time  `json:"opened_at"`
+	OpenedByUserID string     `json:"opened_by_user_id"`
+	ClosedAt       *time.Time `json:"closed_at,omitempty"`
+	ClosedByUserID string     `json:"closed_by_user_id,omitempty"`
+
+	OpeningFloat money.Money  `json:"opening_float"`
+	ClosingCount *money.Money `json:"closing_count,omitempty"`
+	ExpectedCash *money.Money `json:"expected_cash,omitempty"`
+	CashVariance *money.Money `json:"cash_variance,omitempty"`
 
 	audit.AuditFields
 }
 
-// CashMovement is one cash-drawer movement recorded during a shift.
+// CashMovement is one cash-drawer movement recorded during a session.
 type CashMovement struct {
 	ID         string                     `json:"id"`
-	ShiftID    string                     `json:"shift_id"`
+	SessionID  string                     `json:"session_id"`
 	RegisterID string                     `json:"register_id"`
+	DepotCode  string                     `json:"depot_code,omitempty"`
 	Kind       pos_enums.CashMovementKind `json:"kind"`
 	Amount     money.Money                `json:"amount"`
 	Reason     string                     `json:"reason,omitempty"`
@@ -58,7 +85,7 @@ type CashMovement struct {
 	OccurredAt time.Time                  `json:"occurred_at"`
 }
 
-// MethodTotal is one payment-method line of a shift totals snapshot.
+// MethodTotal is one payment-method line of a session totals snapshot.
 type MethodTotal struct {
 	Method   payment_enums.PaymentMethod `json:"method"`
 	Provider string                      `json:"provider,omitempty"`
@@ -66,10 +93,13 @@ type MethodTotal struct {
 	Count    int                         `json:"count"`
 }
 
-// ShiftTotalsSnapshot is the X/Z read model for one shift: per-method sale
-// totals, refunds, and cash movements at generation time.
-type ShiftTotalsSnapshot struct {
-	ShiftID           string        `json:"shift_id"`
+// SessionTotalsSnapshot is the X/Z read model for one register session:
+// per-method sale totals, refunds, and cash movements at generation time.
+type SessionTotalsSnapshot struct {
+	SessionID         string        `json:"session_id"`
+	RegisterID        string        `json:"register_id,omitempty"`
+	DepotCode         string        `json:"depot_code,omitempty"`
+	BusinessDate      temporal.Date `json:"business_date,omitempty"`
 	MethodTotals      []MethodTotal `json:"method_totals,omitempty"`
 	RefundTotal       money.Money   `json:"refund_total"`
 	CashMovementTotal money.Money   `json:"cash_movement_total"`

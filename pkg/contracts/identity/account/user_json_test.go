@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
 )
 
 func TestUserProfileJSONIncludesObjectMediaAvatarWhenPresent(t *testing.T) {

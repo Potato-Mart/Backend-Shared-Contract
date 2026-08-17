@@ -3,26 +3,26 @@ package order
 import (
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/geography"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/device"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/shipping"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/device"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/product"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/shipping/shipping_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/membership/membership_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/shipping/shipping_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/promotion"
 )
 
 // Buyer describes who is buying, independently of Channel. POS is a
@@ -34,7 +34,10 @@ type Order struct {
 	// MarketID is the immutable commercial market the order was placed
 	// in. It is captured when the cart is created and never re-derived
 	// from country or currency.
-	MarketID          string                        `json:"market_id"`
+	MarketID string `json:"market_id"`
+	// CountryCode is the denormalized country of MarketID, carried so a
+	// country-scoped staff query is a plain indexed match.
+	CountryCode       geography.CountryCode         `json:"country_code,omitempty"`
 	Channel           commerce_enums.OrderType      `json:"channel"`
 	Status            order_enums.SalesOrderStatus  `json:"status"`
 	PaymentStatus     payment_enums.PaymentStatus   `json:"payment_status"`
@@ -198,14 +201,19 @@ type GiftCardRedemptionSnapshot struct {
 	OccurredAt          *time.Time  `json:"occurred_at,omitempty"`
 }
 
-// POSAttribution carries first-class in-store sale attribution (store, event,
-// register, device, operator, shift, platform, form factor) on the order's
-// source device.
+// POSAttribution carries first-class in-store sale attribution (depot, event,
+// register, terminal, daily session, operator, platform, form factor) on the
+// order's source device.
+//
+// DepotCode is the trading site: depots are the only site identity in the
+// platform. SessionID names the register's shared daily session, while
+// OperatorUserID records who rang this particular sale inside it.
 type POSAttribution struct {
-	StoreID        string `json:"store_id,omitempty"`
+	DepotCode      string `json:"depot_code,omitempty"`
 	EventID        string `json:"event_id,omitempty"`
 	RegisterID     string `json:"register_id,omitempty"`
-	ShiftID        string `json:"shift_id,omitempty"`
+	TerminalID     string `json:"terminal_id,omitempty"`
+	SessionID      string `json:"session_id,omitempty"`
 	OperatorUserID string `json:"operator_user_id,omitempty"`
 	Platform       string `json:"platform,omitempty"`
 	FormFactor     string `json:"form_factor,omitempty"`
@@ -221,8 +229,8 @@ type SourceDevice struct {
 	POS *POSAttribution `json:"pos,omitempty"`
 
 	// Metadata stores source-specific details that should not become first-class
-	// contract fields yet, for example app_version, terminal_id, store_id,
-	// operator_id, forwarded_for, device_model, or network_interface.
+	// contract fields yet, for example app_version, operator_id,
+	// forwarded_for, device_model, or network_interface.
 	Metadata metadata.Metadata `json:"metadata,omitempty"`
 
 	// DeviceRecord carries shared fingerprint/request attributes such as

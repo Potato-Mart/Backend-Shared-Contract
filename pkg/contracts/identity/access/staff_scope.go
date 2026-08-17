@@ -1,0 +1,25 @@
+package access
+
+import (
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/identity/access/access_enums"
+)
+
+// StaffGeoScope is the persisted geographic grant held by one workforce
+// principal. It is the stored form of the flat scope claims minted into an
+// access token, and it is never carried by customer principals.
+//
+// Level decides which of the remaining fields are meaningful: global carries
+// none, country carries CountryCode, market carries MarketIDs (and the
+// country they belong to), and depot carries DepotCodes. Depots are the only
+// site identity in the platform, so there is no store code.
+//
+// Each backend resolves and enforces the scope independently; this module
+// only records it.
+type StaffGeoScope struct {
+	Level       access_enums.ScopeLevel `json:"level"`
+	CountryCode geography.CountryCode   `json:"country_code,omitempty"`
+	MarketIDs   []string                `json:"market_ids,omitempty"`
+	DepotCodes  []string                `json:"depot_codes,omitempty"`
+}

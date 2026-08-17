@@ -29,7 +29,7 @@ var modelBoundaryApprovedMethods = map[string]struct{}{
 
 var modelBoundaryJSONTag = regexp.MustCompile(`^json:"[^"]*"$`)
 
-func TestV27ContractIsJSONModelOnly(t *testing.T) {
+func TestV28ContractIsJSONModelOnly(t *testing.T) {
 	var violations []string
 	pkgRoot := sharedContractPkgRoot(t)
 	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
@@ -82,7 +82,7 @@ func TestV27ContractIsJSONModelOnly(t *testing.T) {
 				}
 				modelBoundaryValidateIntrinsicMethod(fset, typed, stringEnumTypes, &violations)
 			case *ast.GenDecl:
-				modelBoundaryInspectDeclaration(fset, typed, &violations)
+				modelBoundaryInspectDeclaration(fset, typed, stringEnumTypes, &violations)
 			}
 		}
 
@@ -114,7 +114,7 @@ func TestV27ContractIsJSONModelOnly(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v27 contract: %v", err)
+		t.Fatalf("scan v28 contract: %v", err)
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)
@@ -163,7 +163,7 @@ func modelBoundaryStringEnumTypes(file *ast.File) map[string]struct{} {
 	return enumTypes
 }
 
-func modelBoundaryInspectDeclaration(fset *token.FileSet, decl *ast.GenDecl, violations *[]string) {
+func modelBoundaryInspectDeclaration(fset *token.FileSet, decl *ast.GenDecl, stringEnumTypes map[string]struct{}, violations *[]string) {
 	for _, spec := range decl.Specs {
 		switch typed := spec.(type) {
 		case *ast.TypeSpec:
@@ -192,23 +192,51 @@ func modelBoundaryInspectDeclaration(fset *token.FileSet, decl *ast.GenDecl, vio
 				if strings.HasPrefix(name.Name, "Path") || strings.HasPrefix(name.Name, "Route") || strings.Contains(name.Name, "Endpoint") {
 					*violations = append(*violations, modelBoundaryPosition(fset, name.Pos())+": exported path/route constant "+name.Name)
 				}
-				if strings.HasPrefix(name.Name, "Scope") || strings.Contains(name.Name, "ServiceScope") {
+				// A service-auth scope catalogue is forbidden. A member of a
+				// string-backed enum declared in this file is a model value,
+				// not a catalogue entry, so a name such as ScopeLevelDepot is
+				// allowed — unless it carries the "domain:action" shape a
+				// service scope uses, which is forbidden however it is typed.
+				scopeNamed := strings.HasPrefix(name.Name, "Scope") || strings.Contains(name.Name, "ServiceScope")
+				enumMember := modelBoundaryTypedEnumMember(typed, stringEnumTypes)
+				value, isStringLiteral := modelBoundaryStringConstantValue(typed, index)
+				if scopeNamed && (!enumMember || strings.Contains(value, ":")) {
 					*violations = append(*violations, modelBoundaryPosition(fset, name.Pos())+": exported service-scope constant "+name.Name)
 				}
-				if index >= len(typed.Values) {
-					continue
-				}
-				literal, ok := typed.Values[index].(*ast.BasicLit)
-				if !ok || literal.Kind != token.STRING {
-					continue
-				}
-				value, unquoteErr := strconv.Unquote(literal.Value)
-				if unquoteErr == nil && strings.HasPrefix(value, "/") {
+				if isStringLiteral && strings.HasPrefix(value, "/") {
 					*violations = append(*violations, modelBoundaryPosition(fset, name.Pos())+": exported route string "+name.Name)
 				}
 			}
 		}
 	}
+}
+
+// modelBoundaryTypedEnumMember reports whether spec declares constants of a
+// string-backed enum type declared in the same file.
+func modelBoundaryTypedEnumMember(spec *ast.ValueSpec, stringEnumTypes map[string]struct{}) bool {
+	declaredType, ok := spec.Type.(*ast.Ident)
+	if !ok {
+		return false
+	}
+	_, enum := stringEnumTypes[declaredType.Name]
+	return enum
+}
+
+// modelBoundaryStringConstantValue returns the unquoted string value assigned
+// at index, and whether that value is a plain string literal.
+func modelBoundaryStringConstantValue(spec *ast.ValueSpec, index int) (string, bool) {
+	if index >= len(spec.Values) {
+		return "", false
+	}
+	literal, ok := spec.Values[index].(*ast.BasicLit)
+	if !ok || literal.Kind != token.STRING {
+		return "", false
+	}
+	value, err := strconv.Unquote(literal.Value)
+	if err != nil {
+		return "", false
+	}
+	return value, true
 }
 
 func modelBoundaryValidateIntrinsicMethod(fset *token.FileSet, method *ast.FuncDecl, stringEnumTypes map[string]struct{}, violations *[]string) {

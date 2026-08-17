@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pubsub/event/event_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pubsub/event/event_enums"
 )
 
 // v27EventSchemaVersion2Payloads is the reviewed set of routed Pub/Sub payloads
@@ -28,6 +28,21 @@ import (
 // payload missing here would be silently decoded with an empty sku_id or
 // dead-lettered in production, so the document and this slice are pinned to
 // each other.
+//
+// v28.0.0 does not move the schema version. Its payload additions — the
+// optional market_id, country_code, and depot_code geography — are all
+// omitempty fields that a version-2 consumer decodes unchanged, so this table
+// and the v27.0.0 section that publishes it stay authoritative. Publishers
+// must not bump event_version for them; a bump would break every consumer
+// that rejects a version it does not recognize, for no decode benefit.
+//
+// That holds for the nested additions too. OrderFact and RefundFact are listed
+// here and now embed analytics item facts that gained an optional country_code,
+// which is exactly the "nested type reached through a slice" case the
+// derivation above describes — but the rule that put OrderPackingProjection on
+// this list is a CHANGED JSON key, and an added omitempty key is not one. No
+// version-2 consumer decodes these payloads differently, so the set is
+// unchanged and event_version stays "2".
 var v27EventSchemaVersion2Payloads = []string{
 	"CatalogBaseCostChangedEvent",
 	"CatalogListingChangedEvent",

@@ -6,14 +6,14 @@ import (
 	"testing"
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/identity/role/role_enums"
-	order "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/orders/order"
-	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/payments/terminal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/payments/terminal/terminal_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/identity/role/role_enums"
+	order "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/order"
+	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/terminal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/terminal/terminal_enums"
 )
 
 func TestHistoryOmittedWhenEmpty(t *testing.T) {
@@ -42,7 +42,7 @@ func TestHistoryEntryRoundTrip(t *testing.T) {
 		ActorRef: security.ActorRef{
 			ActorID:    "usr_1",
 			ActorEmail: "ops@example.com",
-			ActorRole:  role_enums.UserRoleAdmin,
+			ActorRole:  role_enums.UserRoleDepotManager,
 		},
 		RequestContext: security.RequestContext{
 			RequestID:     "req_1",

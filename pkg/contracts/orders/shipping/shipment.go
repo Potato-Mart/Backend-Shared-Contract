@@ -3,17 +3,22 @@ package shipping
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/packaging"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 type OutboundShipment struct {
-	ID            string                                 `json:"id"`
-	DepotCode     string                                 `json:"depot_code"`
+	ID        string `json:"id"`
+	DepotCode string `json:"depot_code"`
+	// MarketID and CountryCode are the denormalized market and country of
+	// the dispatching depot, carried so a geographically scoped staff query
+	// is a plain indexed match.
+	MarketID      string                                 `json:"market_id,omitempty"`
+	CountryCode   geography.CountryCode                  `json:"country_code,omitempty"`
 	PickingListID string                                 `json:"picking_list_id,omitempty"`
 	OrderNumber   string                                 `json:"order_number"`
 	CustomerName  string                                 `json:"customer_name,omitempty"`

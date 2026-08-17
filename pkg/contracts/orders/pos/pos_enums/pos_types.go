@@ -1,26 +1,26 @@
 // Package pos_enums holds typed enums for in-store point-of-sale operations.
 package pos_enums
 
-// ShiftStatus is the lifecycle state of a register shift.
-type ShiftStatus string
+// SessionStatus is the lifecycle state of a register's daily trading session.
+type SessionStatus string
 
 const (
-	ShiftStatusOpen   ShiftStatus = "open"
-	ShiftStatusClosed ShiftStatus = "closed"
+	SessionStatusOpen   SessionStatus = "open"
+	SessionStatusClosed SessionStatus = "closed"
 )
 
-func (s ShiftStatus) IsValid() bool {
+func (s SessionStatus) IsValid() bool {
 	switch s {
-	case ShiftStatusOpen, ShiftStatusClosed:
+	case SessionStatusOpen, SessionStatusClosed:
 		return true
 	default:
 		return false
 	}
 }
 
-func (s ShiftStatus) String() string { return string(s) }
+func (s SessionStatus) String() string { return string(s) }
 
-// CashMovementKind classifies a cash-drawer movement within a shift.
+// CashMovementKind classifies a cash-drawer movement within a session.
 type CashMovementKind string
 
 const (

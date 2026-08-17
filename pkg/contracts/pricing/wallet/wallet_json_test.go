@@ -3,18 +3,19 @@ package wallet_test
 import (
 	"encoding/json"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/benefit"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/wallet"
 
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/benefit/benefit_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/benefit/benefit_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 func TestCustomerWalletRoundTrip(t *testing.T) {
@@ -91,36 +92,58 @@ func TestCustomerWalletRoundTrip(t *testing.T) {
 }
 
 func TestGiftCardDenominationPolicyRoundTrip(t *testing.T) {
+	editedAt := time.Date(2026, 8, 17, 4, 5, 6, 0, time.UTC)
 	policy := wallet.GiftCardDenominationPolicy{
+		MarketID:            "mkt-au",
+		CountryCode:         "AU",
 		Version:             2,
 		Currency:            "AUD",
 		AllowedAmountsMinor: []int64{50_000, 80_000, 100_000, 150_000, 200_000},
+		AuditFields: audit.AuditFields{
+			CreatedAt: editedAt,
+			CreatedBy: "usr_seed",
+			UpdatedAt: editedAt,
+			UpdatedBy: "usr_country_admin",
+		},
 	}
 
 	payload, err := json.Marshal(policy)
 	if err != nil {
 		t.Fatalf("marshal gift-card denomination policy: %v", err)
 	}
-	if string(payload) != `{"version":2,"currency":"AUD","allowed_amounts_minor":[50000,80000,100000,150000,200000]}` {
-		t.Fatalf("gift-card denomination policy JSON = %s", payload)
+	const wire = `{"market_id":"mkt-au","country_code":"AU","version":2,"currency":"AUD",` +
+		`"allowed_amounts_minor":[50000,80000,100000,150000,200000],` +
+		`"created_at":"2026-08-17T04:05:06Z","created_by":"usr_seed",` +
+		`"updated_at":"2026-08-17T04:05:06Z","updated_by":"usr_country_admin"}`
+	if string(payload) != wire {
+		t.Fatalf("gift-card denomination policy JSON = %s, want %s", payload, wire)
 	}
 
 	var decoded wallet.GiftCardDenominationPolicy
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal gift-card denomination policy: %v", err)
 	}
-	if decoded.Version != 2 || decoded.Currency != "AUD" || len(decoded.AllowedAmountsMinor) != 5 || decoded.AllowedAmountsMinor[1] != 80_000 {
+	if decoded.MarketID != "mkt-au" || decoded.CountryCode != "AU" ||
+		decoded.Version != 2 || decoded.Currency != "AUD" ||
+		len(decoded.AllowedAmountsMinor) != 5 || decoded.AllowedAmountsMinor[1] != 80_000 {
 		t.Fatalf("gift-card denomination policy did not round-trip: %+v", decoded)
+	}
+	// The editor identity survives the round trip: a country-scoped admin
+	// edit is attributable without a separate audit lookup.
+	if decoded.UpdatedBy != "usr_country_admin" || !decoded.UpdatedAt.Equal(editedAt) {
+		t.Fatalf("gift-card denomination policy editor did not round-trip: %+v", decoded.AuditFields)
 	}
 }
 
 func TestGiftCardDenominationBonusRoundTrip(t *testing.T) {
 	// Byte-exact wire form. Bonuses are an ordered slice of pairs, never a map,
 	// so consumers may compare two policy revisions byte for byte.
-	const wire = `{"version":3,"currency":"AUD","allowed_amounts_minor":[50000,100000,200000],` +
+	const wire = `{"market_id":"mkt-au","country_code":"AU","version":3,"currency":"AUD",` +
+		`"allowed_amounts_minor":[50000,100000,200000],` +
 		`"bonus_amounts_minor":[{"amount_minor":50000,"bonus_minor":0},` +
 		`{"amount_minor":100000,"bonus_minor":5000},` +
-		`{"amount_minor":200000,"bonus_minor":15000}]}`
+		`{"amount_minor":200000,"bonus_minor":15000}],` +
+		`"created_at":"0001-01-01T00:00:00Z","updated_at":"0001-01-01T00:00:00Z"}`
 
 	var decoded wallet.GiftCardDenominationPolicy
 	if err := json.Unmarshal([]byte(wire), &decoded); err != nil {
@@ -146,15 +169,19 @@ func TestGiftCardDenominationBonusRoundTrip(t *testing.T) {
 		t.Fatalf("issued balance = %d, want 215000", bonus.AmountMinor+bonus.BonusMinor)
 	}
 
-	// A policy with no bonuses keeps the pre-v27.3.0 wire form byte for byte.
-	legacy, err := json.Marshal(wallet.GiftCardDenominationPolicy{
+	// A policy with no bonuses simply omits the slice; every other key stays.
+	bonusFree, err := json.Marshal(wallet.GiftCardDenominationPolicy{
+		MarketID: "mkt-au", CountryCode: "AU",
 		Version: 3, Currency: "AUD", AllowedAmountsMinor: []int64{50_000},
 	})
 	if err != nil {
 		t.Fatalf("marshal bonus-free gift-card denomination policy: %v", err)
 	}
-	if string(legacy) != `{"version":3,"currency":"AUD","allowed_amounts_minor":[50000]}` {
-		t.Fatalf("bonus-free denomination policy JSON = %s", legacy)
+	const bonusFreeWire = `{"market_id":"mkt-au","country_code":"AU","version":3,` +
+		`"currency":"AUD","allowed_amounts_minor":[50000],` +
+		`"created_at":"0001-01-01T00:00:00Z","updated_at":"0001-01-01T00:00:00Z"}`
+	if string(bonusFree) != bonusFreeWire {
+		t.Fatalf("bonus-free denomination policy JSON = %s, want %s", bonusFree, bonusFreeWire)
 	}
 }
 

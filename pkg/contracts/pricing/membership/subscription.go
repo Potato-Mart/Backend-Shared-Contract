@@ -3,11 +3,12 @@ package membership
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v27/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/membership/membership_enums"
 )
 
 // SubscriptionPlan defines a recurring purchase option available through the
@@ -21,6 +22,11 @@ type SubscriptionPlan struct {
 	DiscountPercent float64     `json:"discount_percent"`
 	MinCycles       int         `json:"min_cycles"`
 	IsActive        bool        `json:"is_active"`
+	// MarketID and CountryCode are the denormalized owning market and its
+	// country, carried so a geographically scoped staff query is a plain
+	// indexed match.
+	MarketID    string                `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	audit.AuditFields
 }
 
@@ -40,6 +46,14 @@ type MemberSubscription struct {
 	CyclesCompleted int                                       `json:"cycles_completed"`
 	Note            string                                    `json:"note,omitempty"`
 	History         []security.HistoryEntry                   `json:"history,omitempty"`
+	// MarketID and CountryCode are the denormalized owning market and its
+	// country, carried so a geographically scoped staff query is a plain
+	// indexed match. They mirror the plan the subscription was taken out
+	// against; without them a staff-facing subscription list cannot be
+	// scoped at all, because the subscription reaches its geography only
+	// through PlanID.
+	MarketID    string                `json:"market_id,omitempty"`
+	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 
 	audit.AuditFields
 }
