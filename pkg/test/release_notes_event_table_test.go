@@ -28,6 +28,13 @@ import (
 // payload missing here would be silently decoded with an empty sku_id or
 // dead-lettered in production, so the document and this slice are pinned to
 // each other.
+//
+// v28.0.0 does not move the schema version. Its payload additions — the
+// optional market_id, country_code, and depot_code geography — are all
+// omitempty fields that a version-2 consumer decodes unchanged, so this table
+// and the v27.0.0 section that publishes it stay authoritative. Publishers
+// must not bump event_version for them; a bump would break every consumer
+// that rejects a version it does not recognize, for no decode benefit.
 var v27EventSchemaVersion2Payloads = []string{
 	"CatalogBaseCostChangedEvent",
 	"CatalogListingChangedEvent",

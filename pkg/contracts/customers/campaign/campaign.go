@@ -44,12 +44,12 @@ type Campaign struct {
 	// country-scoped staff query is a plain indexed match.
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	SeriesKey   string                `json:"series_key,omitempty"`
-	PromotionID string          `json:"promotion_id,omitempty"`
-	Title       string          `json:"title"`
-	Message     string          `json:"message,omitempty"`
-	CTAText     string          `json:"cta_text,omitempty"`
-	CTAHref     string          `json:"cta_href,omitempty"`
-	CTA         *CTADestination `json:"cta,omitempty"`
+	PromotionID string                `json:"promotion_id,omitempty"`
+	Title       string                `json:"title"`
+	Message     string                `json:"message,omitempty"`
+	CTAText     string                `json:"cta_text,omitempty"`
+	CTAHref     string                `json:"cta_href,omitempty"`
+	CTA         *CTADestination       `json:"cta,omitempty"`
 
 	// Media is the managed image projected for storefronts (used by home_hero
 	// and modal). BackgroundToken is an optional theme token name for banner

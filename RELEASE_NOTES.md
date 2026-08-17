@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v28.0.0` | 2026-08-17 | Major | Workforce RBAC and geographic-scoping hard cutover: replaces the seven built-in roles (`countryAdmin`, `depotManager`, and `warehouseManager` in; `admin`, `warehouse`, and `cashier` out), adds `Role.rank`, the flat `scope_level`/`country_code`/`market_ids`/`depot_codes` access-token claims, `access.StaffGeoScope` and `access_enums.ScopeLevel`, `UserProfile.geo_scope`, per-market gift-card denomination policies, and per-register daily POS sessions replacing operator shifts; denormalizes `market_id`/`country_code`/`depot_code` across staff-visible models and the event payloads their consumers persist. Changes the module path to `/v28`; all consumers must migrate explicitly. |
 | `v27.3.0` | 2026-08-16 | Minor | Adds gift-card denomination bonuses (`GiftCardDenominationBonus`, `GiftCardDenominationPolicy.bonus_amounts_minor`), `OrderPaidEvent` qualification evidence (`subtotal`, `discount_amount`, `tags`), the `Market.expiry_lead_days` default soon-expiry lead time, and `GiftCardIssuedEvent.bonus_amount_minor`. Additive only; keeps the `/v27` module path. |
 | `v27.2.0` | 2026-08-14 | Minor | Adds public marketing foundations, privacy-minimized account-deletion coordination records, PayTo and Link payment methods, and optional collection icons. Additive only; keeps the `/v27` module path. |
 | `v27.1.0` | 2026-08-13 | Minor | Adds the customer preference-centre topic-group matrix and `NotificationTopicGroup` enum, the `sms` customer notification channel and `order_completed`/`new_product`/`receipt_available` topics, retail receipt preferences (`ReceiptFormat`, `RetailCustomerReceiptPreferences`) and `PreferredContactMethod`, `CampaignMessagingCategory` with `Campaign.messaging_category`, the `facebook` auth identity provider, and the `receipt.generated` payment event. Additive only; keeps the `/v27` module path. |
@@ -120,6 +121,148 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v28.0.0 (2026-08-17) - Workforce RBAC Hierarchy, Geographic Scoping, Per-Market Gift-Card Policies, And POS Register Sessions
+
+Breaking. The module path changes to
+`github.com/Potato-Mart/Backend-Shared-Contract/v28` and every consumer must
+migrate its imports and `go.mod` requirement explicitly. There is no
+compatibility alias and no fallback JSON shape.
+
+### Changed / 變更
+
+- **The built-in workforce role set is replaced.** `role_enums.UserRole` now
+  holds exactly seven keys, ranked widest to narrowest:
+
+  | Rank | Wire value | Scope | Note |
+  | --- | --- | --- | --- |
+  | 1 | `superAdmin` | global | unchanged |
+  | 2 | `countryAdmin` | country | new |
+  | 3 | `depotManager` | depot | replaces `admin` |
+  | 4 | `sales` | depot | unchanged |
+  | 5 | `marketing` | market | unchanged |
+  | 6 | `warehouseManager` | depot | replaces `warehouse` |
+  | 7 | `warehouseOperator` | depot | unchanged |
+
+  `admin`, `warehouse`, and `cashier` are removed and no longer validate.
+  `cashier` has no replacement: POS sign-in becomes a permission granted to
+  every staff role rather than a role of its own.
+- `role.Role` gains `rank` (1-7 on the built-in roles, omitted on custom
+  roles). The role's doc comment now describes seven system roles, not six.
+- **`wallet.GiftCardDenominationPolicy` becomes per market.** It gains a
+  required `market_id`, a denormalized `country_code`, and embedded
+  `audit.AuditFields` so an administrative edit records its editor and time.
+  `version`, `currency`, `allowed_amounts_minor`, and `bonus_amounts_minor`
+  are unchanged. One active record per market replaces one policy per
+  currency.
+- **POS operator shifts become per-register daily sessions.**
+  `pos.RegisterShift` and `pos.ShiftTotalsSnapshot` are removed and replaced by
+  `pos.RegisterSession` and `pos.SessionTotalsSnapshot`;
+  `pos_enums.ShiftStatus` becomes `pos_enums.SessionStatus` with the same
+  `open`/`closed` values. A session belongs to the register and its business
+  date, not to an operator: `(register_id, business_date)` is the natural key,
+  every operator working that register on that date shares one session, and
+  every staff rank with POS access may open, manage, and close it. Session
+  records carry `opened_by_user_id` and `closed_by_user_id`;
+  `order.POSAttribution.operator_user_id` still records who rang each sale.
+  `pos.CashMovement.shift_id` becomes `session_id`.
+- **Depots are the only site identity.** There is no store entity and no store
+  code anywhere in the contract. `pos.Register.store_id`,
+  `terminal.Terminal.store_id`, and `order.POSAttribution.store_id` all become
+  `depot_code`. `terminal.TerminalProviderDetails.store_id` is untouched: it is
+  the payment provider's own identifier, not a Potato Mart site.
+- `order.POSAttribution.shift_id` becomes `session_id`, and the record gains
+  `terminal_id`.
+
+### Added / 新增
+
+- `access_enums.ScopeLevel` — `global`, `country`, `market`, `depot`.
+- `access.StaffGeoScope` — the persisted workforce grant
+  `{level, country_code, market_ids, depot_codes}`.
+- `account.UserProfile.geo_scope` — the optional `StaffGeoScope` held by a
+  workforce profile. It is absent on customer profiles.
+- `access.AccessTokenClaims` gains four flat, optional claims:
+  `scope_level`, `country_code`, `market_ids`, and `depot_codes`. They are
+  absent on customer and service-to-service tokens.
+- Denormalized geography on staff-visible records, so a geographically scoped
+  query is a plain indexed match rather than a join. All fields are optional
+  and omitted when empty:
+  - Supply — `listing.MarketListing.country_code`,
+    `warehouse.Depot.country_code`, `purchase.Order.depot_code`/`market_id`/
+    `country_code`, `purchase.Receipt.market_id`/`country_code`,
+    `operations.InboundReceipt.market_id`, `operations.PickingList.market_id`,
+    and `market_id`/`country_code` on the import-compliance entities
+    (`ImportSettings`, `ManufacturerDeclaration`, `LabelMaster`,
+    `TariffProfile`, `RFIRecord`).
+  - Orders — `order.Order.country_code`, `order.Cart.country_code`,
+    `shipping.OutboundShipment.market_id`/`country_code`, and
+    `market_id`/`country_code` on `pos.Register` and `pos.RegisterSession`.
+  - Payments — `terminal.Terminal.market_id`/`country_code`.
+  - Customers — `retail.RetailCustomer.market_id`/`country_code`,
+    `wholesale.WholesaleOrganisation.market_id`/`country_code`,
+    `campaign.Campaign.country_code`,
+    `customer.CustomerNotification.market_id`/`country_code`, and
+    `backinstock.BackInStockSubscription.country_code`.
+  - Insights — `marketing.MarketingCampaign.market_id`/`country_code`.
+  - Pricing — `market_id`/`country_code` on `promotion.Promotion`,
+    `membership.MembershipTier`, `membership.Reward`,
+    `membership.SubscriptionPlan`, `membership.MembershipAccount`,
+    `wallet.GiftCard`, `wallet.Voucher`, and `wallet.Coupon`.
+  - Public marketing — `market_id`/`country_code` on `marketing.Campaign`,
+    `marketing.Coupon`, `marketing.Promotion`, and
+    `marketing.MarketingMessage`.
+- Optional `market_id`, `country_code`, and (where a site applies) `depot_code`
+  on the routed Pub/Sub payloads whose consumers persist a geographically
+  scoped record: `OrderCreatedEvent`, `OrderPaidEvent`,
+  `OrderStatusChangedEvent`, `OrderCancelledEvent`, `RefundRequestedEvent`,
+  `RefundCompletedEvent`, `RefundFailedEvent`, `PaymentCapturedEvent`,
+  `PaymentFailedEvent`, `ReceiptGeneratedEvent`, `InvoiceIssuedEvent`,
+  `OrderFact`, `PaymentFact`, `RefundFact`, `GiftCardIssuedEvent`,
+  `FulfilmentShippedEvent`, `FulfilmentDeliveredEvent`, and
+  `FulfilmentCompletedEvent`.
+
+### Not Changed / 未變更
+
+- **The event schema version stays at 2.** Every v28 payload addition is an
+  optional field, so a version-2 consumer decodes a v28 payload unchanged and
+  the version-2 table published under v28.0.0 remains the source of truth.
+  Publishers must not bump `event_version` for these fields.
+- **`product.Product` and `product.SKU` remain global.** They carry no
+  `market_ids` and no `country_codes`: a product is what the item is,
+  independently of any market, and market availability stays in
+  `listing.MarketListing`. A service that needs a market allow-list for
+  catalogue filtering denormalizes it onto its own persisted record from
+  listings; it does not enter the shared contract.
+- `pos.ReceiptSnapshot` already carried `market_id` and reaches its depot
+  through `attribution.depot_code`, so its shape is unchanged apart from that
+  attribution rename.
+
+### Consumer Action / 使用方動作
+
+- Migrate every import and the `go.mod` requirement to
+  `github.com/Potato-Mart/Backend-Shared-Contract/v28 v28.0.0`. Services that
+  pin the contract version in CI must move that pin in the same commit.
+- **Re-seed roles and re-issue workforce tokens.** A stored role document or a
+  live token carrying `admin`, `warehouse`, or `cashier` no longer validates.
+  Grant the POS permission to every staff role in place of the `cashier` role.
+- **Fail closed on scope.** A workforce token with no valid `scope_level` must
+  be rejected, never treated as global. `superAdmin` and service-to-service
+  callers resolve to global scope; customer tokens are unaffected and carry
+  none of the four claims.
+- **Fail closed on absent event geography.** Every event published before
+  v28.0.0 carries no `market_id`, `country_code`, or `depot_code`. An absent
+  value means "no evidence" and must not be defaulted to the consumer's own
+  market or country.
+- Gift-card issuance must select the denomination policy by market and pin the
+  policy `version` it quoted, so an administrative edit forces a re-quote
+  instead of silently repricing an in-flight purchase.
+- POS clients must open and close one session per register per business date
+  instead of one shift per operator, and must not assume the caller who opened
+  a session is the caller who closes it.
+- Records that gained geography must be populated on write and indexed on the
+  new fields. The contract declares the fields only; owning services remain
+  responsible for routes, DTOs, validation, authorization, index creation, and
+  every scope-enforcement decision.
 
 ## v27.3.0 (2026-08-16) - Gift-Card Bonuses, Order Paid Qualification Evidence, And Market Expiry Lead Days
 
