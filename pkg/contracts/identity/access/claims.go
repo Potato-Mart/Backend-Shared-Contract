@@ -3,14 +3,21 @@ package access
 import (
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/identity/identity_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security/security_enums"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/identity/access/access_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/identity/account/account_enums"
 )
 
 // AccessTokenClaims is a framework-agnostic token-claim shape. This contract
 // intentionally does not import JWT libraries or implement token validation.
+//
+// ScopeLevel, CountryCode, MarketIDs, and DepotCodes are the flat geographic
+// scope of a workforce principal. They are absent on customer and
+// service-to-service tokens. Consumers fail closed: a workforce token with no
+// valid scope_level is rejected rather than treated as global.
 type AccessTokenClaims struct {
 	Subject                   string                            `json:"sub"`
 	UserID                    string                            `json:"user_id"`
@@ -31,4 +38,8 @@ type AccessTokenClaims struct {
 	MFAVerifiedAt             *time.Time                        `json:"mfa_verified_at,omitempty"`
 	IssuedAt                  int64                             `json:"iat,omitempty"`
 	ExpiresAt                 int64                             `json:"exp,omitempty"`
+	ScopeLevel                access_enums.ScopeLevel           `json:"scope_level,omitempty"`
+	CountryCode               geography.CountryCode             `json:"country_code,omitempty"`
+	MarketIDs                 []string                          `json:"market_ids,omitempty"`
+	DepotCodes                []string                          `json:"depot_codes,omitempty"`
 }

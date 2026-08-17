@@ -14,15 +14,19 @@ import (
 // claims and middleware checks; Permissions is the list of permission
 // strings granted to anyone holding this role.
 //
-// IsSystem marks the six built-in workforce roles that the platform ships
-// with (superAdmin, admin, sales, warehouse, warehouseOperator, marketing).
-// System roles cannot be deleted but their permissions can
-// be tweaked by a superAdmin.
+// IsSystem marks the seven built-in workforce roles that the platform ships
+// with (superAdmin, countryAdmin, depotManager, sales, marketing,
+// warehouseManager, warehouseOperator). System roles cannot be deleted but
+// their permissions can be tweaked by a superAdmin.
+//
+// Rank is the built-in hierarchy position, 1 (superAdmin) through 7
+// (warehouseOperator). It is omitted on custom roles, which carry no rank.
 type Role struct {
 	Key                         role_enums.UserRole `json:"key"`
 	Label                       string              `json:"label"`
 	Description                 string              `json:"description,omitempty"`
 	Permissions                 []string            `json:"permissions"`
+	Rank                        int                 `json:"rank,omitempty"`
 	IsSystem                    bool                `json:"is_system"`
 	OwnerID                     string              `json:"owner_id,omitempty"`
 	LeastPrivilegeJustification string              `json:"least_privilege_justification,omitempty"`

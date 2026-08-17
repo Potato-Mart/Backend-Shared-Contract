@@ -42,7 +42,7 @@ func TestHistoryEntryRoundTrip(t *testing.T) {
 		ActorRef: security.ActorRef{
 			ActorID:    "usr_1",
 			ActorEmail: "ops@example.com",
-			ActorRole:  role_enums.UserRoleAdmin,
+			ActorRole:  role_enums.UserRoleDepotManager,
 		},
 		RequestContext: security.RequestContext{
 			RequestID:     "req_1",
