@@ -21,7 +21,7 @@ func TestReceiptSnapshotJSONUsesCustomerSafeFrozenLines(t *testing.T) {
 		OrderNumber: "SO-1",
 		Revision:    2,
 		IssuedAt:    now,
-		Attribution: sales.POSAttribution{StoreID: "store_1", RegisterID: "register_1"},
+		Attribution: sales.POSAttribution{DepotCode: "DEP-AU-01", RegisterID: "register_1", SessionID: "session_1"},
 		Lines: []pos.ReceiptLine{{
 			SKUID:        "A00001",
 			ProductName:  "Potatoes 1kg",

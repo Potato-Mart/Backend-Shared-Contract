@@ -198,14 +198,19 @@ type GiftCardRedemptionSnapshot struct {
 	OccurredAt          *time.Time  `json:"occurred_at,omitempty"`
 }
 
-// POSAttribution carries first-class in-store sale attribution (store, event,
-// register, device, operator, shift, platform, form factor) on the order's
-// source device.
+// POSAttribution carries first-class in-store sale attribution (depot, event,
+// register, terminal, daily session, operator, platform, form factor) on the
+// order's source device.
+//
+// DepotCode is the trading site: depots are the only site identity in the
+// platform. SessionID names the register's shared daily session, while
+// OperatorUserID records who rang this particular sale inside it.
 type POSAttribution struct {
-	StoreID        string `json:"store_id,omitempty"`
+	DepotCode      string `json:"depot_code,omitempty"`
 	EventID        string `json:"event_id,omitempty"`
 	RegisterID     string `json:"register_id,omitempty"`
-	ShiftID        string `json:"shift_id,omitempty"`
+	TerminalID     string `json:"terminal_id,omitempty"`
+	SessionID      string `json:"session_id,omitempty"`
 	OperatorUserID string `json:"operator_user_id,omitempty"`
 	Platform       string `json:"platform,omitempty"`
 	FormFactor     string `json:"form_factor,omitempty"`
@@ -221,8 +226,8 @@ type SourceDevice struct {
 	POS *POSAttribution `json:"pos,omitempty"`
 
 	// Metadata stores source-specific details that should not become first-class
-	// contract fields yet, for example app_version, terminal_id, store_id,
-	// operator_id, forwarded_for, device_model, or network_interface.
+	// contract fields yet, for example app_version, operator_id,
+	// forwarded_for, device_model, or network_interface.
 	Metadata metadata.Metadata `json:"metadata,omitempty"`
 
 	// DeviceRecord carries shared fingerprint/request attributes such as
