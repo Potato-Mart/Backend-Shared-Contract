@@ -28,7 +28,6 @@ type DamageSaleApproval struct {
 type SaleEligibilitySnapshot struct {
 	MarketCode      string `json:"market_code"`
 	SKUCode         string `json:"sku_code"`
-	ListingID       string `json:"listing_id"`
 	ListingRevision int64  `json:"listing_revision"`
 	TaxCategoryCode string `json:"tax_category_code"`
 

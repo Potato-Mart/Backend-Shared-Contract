@@ -39,19 +39,18 @@ type SupplierAvailablePromotion struct {
 	Descriptions []localization.LocalizedDescription `json:"descriptions,omitempty"`
 }
 
-// ProductSupplierRef is the customer-safe supplier identity exposed with a
-// product. Supplier contacts, addresses, legal identifiers, and operational
-// fields remain outside this reference.
+// ProductSupplierRef is the code-only supplier relationship persisted with a
+// product. Display names, contacts, addresses, legal identifiers, and
+// operational fields are resolved from the supplier master.
 type ProductSupplierRef struct {
 	Code string `json:"code"`
-	Name string `json:"name"`
 }
 
 // ProductManufacturing contains customer-safe product manufacturing details.
 // Its fields are optional so partially known declarations remain representable.
 type ProductManufacturing struct {
-	CompanyName string                `json:"company_name,omitempty"`
-	CountryRef  *geography.CountryRef `json:"country_ref,omitempty"`
+	CompanyName string          `json:"company_name,omitempty"`
+	CountryRef  *CountryCodeRef `json:"country_ref,omitempty"`
 }
 
 // ProductSupply groups customer-safe supplier and manufacturing information.

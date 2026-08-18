@@ -146,7 +146,7 @@ var v28ModelPackageManifest = map[string]string{
 // than a skipped gate: this comment is the review record, and the guards that
 // actually police the change are the workforce wire lock in pkg/test/enums
 // and the removed-identifier set in hard_cutover_test.go.
-const v28ExportedTypeManifestDigest = "bea3ad8d5f4da90a6125c0f767f275354a399c16ccd5bec50a552826dea2b817"
+const v28ExportedTypeManifestDigest = "58dd547a85311715f70021f0ecd3eb354f2fbcb4cc2ebf07ba590388b7193236"
 
 func TestV28ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

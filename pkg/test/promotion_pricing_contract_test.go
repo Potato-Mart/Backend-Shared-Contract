@@ -110,7 +110,7 @@ func TestV27PriceSnapshotFreezesRuleTaxAndEligibilityEvidence(t *testing.T) {
 			RoundedAmount: money.Money{AmountMinor: 680, Currency: "AUD"},
 		},
 		Eligibility: listing.SaleEligibilitySnapshot{
-			MarketCode: "market-au", SKUCode: "sku-potato-a", ListingID: "listing-1", ListingRevision: 3,
+			MarketCode: "market-au", SKUCode: "sku-potato-a", ListingRevision: 3,
 			TaxCategoryCode: "tax-au-gst", DepotCode: "SYD-01",
 			StockLocation:      warehouse.StockLocationRef{DepotCode: "SYD-01", LocationCode: "A-1"},
 			Condition:          warehouse_enums.InventoryConditionGood,

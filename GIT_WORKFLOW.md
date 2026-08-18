@@ -7,7 +7,7 @@ These rules apply to every commit and push in this repository.
 - Start from the latest protected `main`.
 - Use `feature/<description>` for feature branches unless a release task
   specifies another branch.
-- For this release, use `feat/v29-catalog-contract`.
+- For this release, use `feat/v29.0.1-code-only-refs`.
 - Do not push directly to `main`.
 
 ## Commits and Pull Requests

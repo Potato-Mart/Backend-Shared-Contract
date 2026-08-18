@@ -3,12 +3,12 @@ package classification
 import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
 )
 
+// CollectionRef identifies a collection by its immutable business code.
+// Display names and presentation slugs are resolved from the root master.
 type CollectionRef struct {
-	Code string                       `json:"code"`
-	Name []localization.LocalizedName `json:"name"`
+	Code string `json:"code"`
 }
 
 type Collection struct {
@@ -16,7 +16,7 @@ type Collection struct {
 	Code         string                       `json:"code"`
 	Slug         string                       `json:"slug"`
 	Name         []localization.LocalizedName `json:"name"`
-	Icon         *security.ObjectMedia        `json:"icon,omitempty"`
+	Icon         *ObjectMediaRef              `json:"icon,omitempty"`
 	CategoryTags []CategoryTag                `json:"category_tags"`
 
 	audit.AuditFields

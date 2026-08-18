@@ -67,9 +67,10 @@ type ProductAdministration struct {
 	audit.AuditFields
 }
 
-// Images groups the customer-facing product imagery.
+// Images groups code-only relationships to managed product media. Render URLs
+// are resolved from the media masters by the owning backend.
 type Images struct {
-	Cover   *security.ObjectMedia  `json:"cover,omitempty"`
-	Gallery []security.ObjectMedia `json:"gallery,omitempty"`
-	Details []security.ObjectMedia `json:"details,omitempty"`
+	Cover   *classification.ObjectMediaRef  `json:"cover,omitempty"`
+	Gallery []classification.ObjectMediaRef `json:"gallery,omitempty"`
+	Details []classification.ObjectMediaRef `json:"details,omitempty"`
 }

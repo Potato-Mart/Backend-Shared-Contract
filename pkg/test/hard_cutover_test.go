@@ -260,6 +260,27 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	)
 
 	removedFields := map[string]map[string]struct{}{
+		// v29.0.1 catalog relationships and listing evidence persist immutable
+		// business codes only. Mutable display projections and listing database
+		// identifiers are resolved by their owning service.
+		"supply/classification.CollectionRef": v27StringSet(
+			"Name",
+		),
+		"supply/classification.CategoryTagRef": v27StringSet(
+			"Name",
+		),
+		"supply/classification.BrandRef": v27StringSet(
+			"Name", "Logo",
+		),
+		"supply/classification.ProductSupplierRef": v27StringSet(
+			"Name",
+		),
+		"pubsub/event.CatalogListingChangedEvent": v27StringSet(
+			"ListingID",
+		),
+		"supply/listing.SaleEligibilitySnapshot": v27StringSet(
+			"ListingID",
+		),
 		"common/geography.Address": v27StringSet(
 			"City", "State", "Postcode",
 		),
@@ -449,6 +470,24 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	)
 
 	removedJSONKeysByType := map[string]map[string]struct{}{
+		"supply/classification.CollectionRef": v27StringSet(
+			"name",
+		),
+		"supply/classification.CategoryTagRef": v27StringSet(
+			"name",
+		),
+		"supply/classification.BrandRef": v27StringSet(
+			"name", "logo",
+		),
+		"supply/classification.ProductSupplierRef": v27StringSet(
+			"name",
+		),
+		"pubsub/event.CatalogListingChangedEvent": v27StringSet(
+			"listing_id",
+		),
+		"supply/listing.SaleEligibilitySnapshot": v27StringSet(
+			"listing_id",
+		),
 		"common/geography.Address": v27StringSet(
 			"city", "state", "postcode",
 		),

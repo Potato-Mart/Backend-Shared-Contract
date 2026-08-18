@@ -2,7 +2,6 @@ package classification
 
 import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
 )
 
 // Brand is the canonical localized brand master used by product catalogues.
@@ -11,14 +10,12 @@ type Brand struct {
 	Code string                       `json:"code"`
 	Slug string                       `json:"slug"`
 	Name []localization.LocalizedName `json:"name"`
-	Logo *security.ObjectMedia        `json:"logo,omitempty"`
+	Logo *ObjectMediaRef              `json:"logo,omitempty"`
 }
 
-// BrandRef is the stable display identity embedded in product records and
-// snapshots. Code is the immutable canonical brand business key; mutable
-// slugs and database identifiers are deliberately excluded.
+// BrandRef is the stable relationship embedded in product records and
+// snapshots. Display data is resolved from the brand master by its immutable
+// code; mutable names, logos, slugs, and database identifiers are excluded.
 type BrandRef struct {
-	Code string                       `json:"code"`
-	Name []localization.LocalizedName `json:"name,omitempty"`
-	Logo *security.ObjectMedia        `json:"logo,omitempty"`
+	Code string `json:"code"`
 }

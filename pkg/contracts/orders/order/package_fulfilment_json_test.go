@@ -168,7 +168,7 @@ func priceSnapshot(lineID string, price money.Money, capturedAt time.Time) quote
 			Exponent: 2, ExactNumerator: price.AmountMinor, ExactDenominator: 1, RoundedAmount: price,
 		},
 		Eligibility: listing.SaleEligibilitySnapshot{
-			MarketCode: "market_au", SKUCode: "sku_a00001", ListingID: "listing_1", ListingRevision: 4,
+			MarketCode: "market_au", SKUCode: "sku_a00001", ListingRevision: 4,
 			TaxCategoryCode: "tax_au_gst", DepotCode: "AU-VIC-MEL-DC-01",
 			StockLocation:      warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01-03"},
 			Condition:          warehouse_enums.InventoryConditionGood,

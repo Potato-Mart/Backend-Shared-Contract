@@ -30,15 +30,15 @@ type CatalogBaseCostChangedEvent struct {
 }
 
 // CatalogListingChangedEvent is emitted on the catalog-events topic for every
-// MarketListing lifecycle or configuration change. AggregateID is the listing
-// ID, which keeps a listing's changes ordered.
+// MarketListing lifecycle or configuration change. AggregateID is the
+// immutable market-code/SKU-code composite, which keeps a listing's changes
+// ordered without persisting a catalog-semantic database identifier.
 //
 // It carries the listing identity plus the revision that produced it so
 // Pricing can invalidate drafts and cached quotes idempotently: a consumer
 // applies the event only when Revision is newer than the revision it already
 // holds. The event never carries a commercial price.
 type CatalogListingChangedEvent struct {
-	ListingID  string `json:"listing_id"`
 	MarketCode string `json:"market_code"`
 	SKUCode    string `json:"sku_code"`
 

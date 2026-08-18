@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification/classification_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/product/product_enums"
@@ -21,7 +20,7 @@ func TestV29CanonicalProductJSONShape(t *testing.T) {
 		Content: ProductContent{
 			Name:         localization.LocalizedName{Language: "en", Name: "Product"},
 			Localization: &ProductLocalization{OtherNames: []localization.LocalizedName{{Language: "zh-TW", Name: "產品"}, {Language: "zh-CN", Name: "产品"}}},
-			Images:       &Images{Cover: &security.ObjectMedia{Code: "MED-SHA256"}},
+			Images:       &Images{Cover: &classification.ObjectMediaRef{Code: "MED-SHA256"}},
 		},
 		Classification: ProductClassification{
 			SKUSeriesCode: "A0", Brands: []classification.BrandRef{{Code: "BRD000001"}},
@@ -39,7 +38,7 @@ func TestV29CanonicalProductJSONShape(t *testing.T) {
 			t.Fatalf("Product JSON = %s, want %s", body, want)
 		}
 	}
-	for _, legacy := range []string{`"product_category_code"`, `"brand_ref"`, `"supplier"`, `"media_id"`} {
+	for _, legacy := range []string{`"product_category_code"`, `"brand_ref"`, `"supplier"`, `"media_id"`, `"url"`, `"slug"`} {
 		if strings.Contains(string(body), legacy) {
 			t.Fatalf("Product retained legacy %s: %s", legacy, body)
 		}
