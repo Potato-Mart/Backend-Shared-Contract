@@ -1,11 +1,11 @@
 package import_compliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/import_compliance/import_compliance_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/import_compliance/import_compliance_enums"
 )
 
 // LabelMaster is one product/package label revision. It remains independent of
@@ -13,13 +13,13 @@ import (
 type LabelMaster struct {
 	ID       string           `json:"id"`
 	Revision RevisionMetadata `json:"revision"`
-	// MarketID and CountryCode are the denormalized market and country the
+	// MarketCode and CountryCode are the denormalized market and country the
 	// record belongs to, carried so a geographically scoped staff query is
 	// a plain indexed match.
-	MarketID               string                 `json:"market_id,omitempty"`
+	MarketCode             string                 `json:"market_code,omitempty"`
 	CountryCode            geography.CountryCode  `json:"country_code,omitempty"`
 	SourceProductEvidence  LabelProductEvidence   `json:"source_product_evidence"`
-	SKUID                  string                 `json:"sku_id"`
+	SKUCode                string                 `json:"sku_code"`
 	VariantCode            string                 `json:"variant_code"`
 	Brand                  string                 `json:"brand,omitempty"`
 	EnglishName            string                 `json:"english_name"`
@@ -36,7 +36,7 @@ type LabelMaster struct {
 	CountryOfOrigin        string                 `json:"country_of_origin,omitempty"`
 	SecondNutritionEnabled bool                   `json:"second_nutrition_enabled"`
 	NutritionPanels        []NutritionPanel       `json:"nutrition_panels"`
-	PackagePhotoMediaID    string                 `json:"package_photo_media_id,omitempty"`
+	PackagePhotoMediaCode  string                 `json:"package_photo_media_code,omitempty"`
 	PackagePhotoName       string                 `json:"package_photo_name,omitempty"`
 	Layout                 LabelLayout            `json:"layout"`
 	Evidence               []EvidenceReference    `json:"evidence,omitempty"`

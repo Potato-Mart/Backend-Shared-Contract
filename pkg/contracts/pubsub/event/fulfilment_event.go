@@ -3,8 +3,8 @@ package event
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	order "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	order "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/orders/order"
 )
 
 // OrderPackingProjection is the durable packing snapshot shared between
@@ -25,12 +25,12 @@ type FulfilmentShippedEvent struct {
 	TrackingNumber string `json:"tracking_number,omitempty"`
 	TrackingURL    string `json:"tracking_url,omitempty"`
 	Note           string `json:"note,omitempty"`
-	// MarketID, DepotCode, and CountryCode are the denormalized geography
+	// MarketCode, DepotCode, and CountryCode are the denormalized geography
 	// the event belongs to. They are absent on every event published before
 	// v28.0.0; a consumer that persists a geographically scoped record
 	// treats an absent value as "no evidence" and fails closed rather than
 	// defaulting it.
-	MarketID    string                `json:"market_id,omitempty"`
+	MarketCode  string                `json:"market_code,omitempty"`
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	DepotCode   string                `json:"depot_code,omitempty"`
 	OccurredAt  time.Time             `json:"occurred_at"`
@@ -43,12 +43,12 @@ type FulfilmentDeliveredEvent struct {
 	OrderNumber string `json:"order_number"`
 	ShipmentID  string `json:"shipment_id,omitempty"`
 	Note        string `json:"note,omitempty"`
-	// MarketID, DepotCode, and CountryCode are the denormalized geography
+	// MarketCode, DepotCode, and CountryCode are the denormalized geography
 	// the event belongs to. They are absent on every event published before
 	// v28.0.0; a consumer that persists a geographically scoped record
 	// treats an absent value as "no evidence" and fails closed rather than
 	// defaulting it.
-	MarketID    string                `json:"market_id,omitempty"`
+	MarketCode  string                `json:"market_code,omitempty"`
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	DepotCode   string                `json:"depot_code,omitempty"`
 	OccurredAt  time.Time             `json:"occurred_at"`
@@ -60,12 +60,12 @@ type FulfilmentDeliveredEvent struct {
 type FulfilmentCompletedEvent struct {
 	OrderNumber string `json:"order_number"`
 	Note        string `json:"note,omitempty"`
-	// MarketID, DepotCode, and CountryCode are the denormalized geography
+	// MarketCode, DepotCode, and CountryCode are the denormalized geography
 	// the event belongs to. They are absent on every event published before
 	// v28.0.0; a consumer that persists a geographically scoped record
 	// treats an absent value as "no evidence" and fails closed rather than
 	// defaulting it.
-	MarketID    string                `json:"market_id,omitempty"`
+	MarketCode  string                `json:"market_code,omitempty"`
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	DepotCode   string                `json:"depot_code,omitempty"`
 	OccurredAt  time.Time             `json:"occurred_at"`

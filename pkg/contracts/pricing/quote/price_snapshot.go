@@ -7,21 +7,21 @@ package quote
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/quote/quote_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/listing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/listing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/product/product_enums"
 )
 
 // TaxSnapshot is the frozen tax evidence for one line. The rate is kept as an
 // exact numerator over denominator so an inclusive extraction and an exclusive
 // addition are both reproducible without floats.
 type TaxSnapshot struct {
-	TaxCategoryID   string `json:"tax_category_id"`
+	TaxCategoryCode string `json:"tax_category_code"`
 	TaxRuleID       string `json:"tax_rule_id"`
 	TaxRuleRevision int64  `json:"tax_rule_revision"`
 
@@ -114,11 +114,11 @@ type CustomPriceOverrideEvidence struct {
 // PriceSnapshot is the immutable commercial evidence for one priced line. It
 // is the authoritative historical value for the transaction that captured it.
 type PriceSnapshot struct {
-	QuoteID     string `json:"quote_id"`
-	LineID      string `json:"line_id"`
-	SKUID       string `json:"sku_id"`
-	MarketID    string `json:"market_id"`
-	PriceBookID string `json:"price_book_id"`
+	QuoteID       string `json:"quote_id"`
+	LineID        string `json:"line_id"`
+	SKUCode       string `json:"sku_code"`
+	MarketCode    string `json:"market_code"`
+	PriceBookCode string `json:"price_book_code"`
 	// PriceBookRevision and PriceEntryRevision pin the exact price
 	// definitions that resolved. A newer revision requires a re-quote.
 	PriceBookRevision  int64                       `json:"price_book_revision"`

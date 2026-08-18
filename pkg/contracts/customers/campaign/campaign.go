@@ -9,10 +9,10 @@ package campaign
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/customers/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/customers/campaign/campaign_enums"
 )
 
 // Audience narrows a campaign by customer type and client platform.
@@ -26,21 +26,21 @@ type Audience struct {
 // action. Services validate that only fields relevant to Type are populated.
 // CTAHref remains the canonical authored href for existing storefront clients.
 type CTADestination struct {
-	Type           campaign_enums.CampaignCTADestinationType `json:"type"`
-	SKUID          string                                    `json:"sku_id,omitempty"`
-	CollectionSlug string                                    `json:"collection_slug,omitempty"`
-	CategorySlug   string                                    `json:"category_slug,omitempty"`
-	PromotionID    string                                    `json:"promotion_id,omitempty"`
+	Type            campaign_enums.CampaignCTADestinationType `json:"type"`
+	SKUCode         string                                    `json:"sku_code,omitempty"`
+	CollectionCode  string                                    `json:"collection_code,omitempty"`
+	CategoryTagCode string                                    `json:"category_tag_code,omitempty"`
+	PromotionID     string                                    `json:"promotion_id,omitempty"`
 }
 
 // Campaign is one piece of scheduled, targeted storefront content.
 type Campaign struct {
 	ID          string `json:"id,omitempty"`
 	CampaignKey string `json:"campaign_key"`
-	// MarketID scopes the campaign and every SKU reference it carries to
+	// MarketCode scopes the campaign and every SKU reference it carries to
 	// one commercial market.
-	MarketID string `json:"market_id"`
-	// CountryCode is the denormalized country of MarketID, carried so a
+	MarketCode string `json:"market_code"`
+	// CountryCode is the denormalized country of MarketCode, carried so a
 	// country-scoped staff query is a plain indexed match.
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	SeriesKey   string                `json:"series_key,omitempty"`
@@ -91,17 +91,17 @@ type Campaign struct {
 }
 
 type CampaignCategoryTarget struct {
-	CollectionSlug string `json:"collection_slug"`
-	CategorySlug   string `json:"category_slug"`
+	CollectionCode  string `json:"collection_code"`
+	CategoryTagCode string `json:"category_tag_code"`
 }
 
 type CampaignTarget struct {
-	SKUIDs     []string                 `json:"sku_ids,omitempty"`
+	SKUCodes   []string                 `json:"sku_codes,omitempty"`
 	Categories []CampaignCategoryTarget `json:"categories,omitempty"`
 }
 
 type CampaignPlanning struct {
-	ResolvedSKUIDs     []string   `json:"resolved_sku_ids,omitempty"`
+	ResolvedSKUCodes   []string   `json:"resolved_sku_codes,omitempty"`
 	PredictionKey      string     `json:"prediction_key,omitempty"`
 	PredictionRevision int        `json:"prediction_revision,omitempty"`
 	AlgorithmVersion   string     `json:"algorithm_version,omitempty"`

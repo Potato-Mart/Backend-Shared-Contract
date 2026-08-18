@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/identity/deletion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/identity/deletion/deletion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/identity/deletion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/identity/deletion/deletion_enums"
 )
 
 func TestServiceOperationAndReceiptUseAStableIdempotentEnvelope(t *testing.T) {

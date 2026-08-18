@@ -3,11 +3,11 @@ package payment
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/payments/payment/payment_enums"
 )
 
 // MerchantLegalProfile is the Payments-owned issuer identity for one market,
@@ -18,8 +18,8 @@ import (
 // registration values are supplied through protected execution input and never
 // live in the contract.
 type MerchantLegalProfile struct {
-	ID       string `json:"id"`
-	MarketID string `json:"market_id"`
+	ID         string `json:"id"`
+	MarketCode string `json:"market_code"`
 
 	LegalName   string `json:"legal_name"`
 	TradingName string `json:"trading_name,omitempty"`
@@ -51,7 +51,7 @@ type MerchantLegalProfile struct {
 type MerchantLegalSnapshot struct {
 	ProfileID       string `json:"profile_id"`
 	ProfileRevision int64  `json:"profile_revision"`
-	MarketID        string `json:"market_id"`
+	MarketCode      string `json:"market_code"`
 
 	LegalName                 string                             `json:"legal_name"`
 	TradingName               string                             `json:"trading_name,omitempty"`

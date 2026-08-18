@@ -7,11 +7,11 @@ package listing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/listing/listing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/listing/listing_enums"
 )
 
 // SaleRestriction is one market-specific restriction recorded against a
@@ -24,26 +24,26 @@ type SaleRestriction struct {
 	Note     string                            `json:"note,omitempty"`
 }
 
-// MarketListing links one MarketID and one SKUID with a lifecycle, the
+// MarketListing links one MarketCode and one SKUCode with a lifecycle, the
 // Pricing-owned tax category that applies in that market, market restrictions,
 // and an optional soon-expiry lead-time override.
 //
-// TaxCategoryID is a scalar reference to a Pricing-owned tax category; Supply
+// TaxCategoryCode is a scalar reference to a Pricing-owned tax category; Supply
 // validates that the market and tax category exist before activating a
 // listing, and Pricing validates the SKU and an active listing before
 // approving a price entry or quoting.
 type MarketListing struct {
-	ID       string `json:"id"`
-	MarketID string `json:"market_id"`
-	// CountryCode is the denormalized country of MarketID, carried so a
+	ID         string `json:"id"`
+	MarketCode string `json:"market_code"`
+	// CountryCode is the denormalized country of MarketCode, carried so a
 	// country-scoped staff query is a plain indexed match.
 	CountryCode geography.CountryCode             `json:"country_code,omitempty"`
-	SKUID       string                            `json:"sku_id"`
+	SKUCode     string                            `json:"sku_code"`
 	Status      listing_enums.MarketListingStatus `json:"status"`
 
-	TaxCategoryID string                       `json:"tax_category_id"`
-	DisplayName   []localization.LocalizedName `json:"display_name,omitempty"`
-	Restrictions  []SaleRestriction            `json:"restrictions,omitempty"`
+	TaxCategoryCode string                       `json:"tax_category_code"`
+	DisplayName     []localization.LocalizedName `json:"display_name,omitempty"`
+	Restrictions    []SaleRestriction            `json:"restrictions,omitempty"`
 
 	// ExpiryLeadDaysOverride replaces the market's default soon-expiry lead
 	// time for this listing. Nil keeps the market default.

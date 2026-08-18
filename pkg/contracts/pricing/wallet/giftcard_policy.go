@@ -1,23 +1,23 @@
 package wallet
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
 )
 
 // GiftCardDenominationPolicy is the versioned, server-authored set of purchase
 // denominations for one market. Owning services remain responsible for
 // validation, caching, cutover, and authorization behavior.
 //
-// The policy is stored per market, one active record per MarketID, and
+// The policy is stored per market, one active record per MarketCode, and
 // CountryCode is the denormalized country of that market so a country-scoped
 // editor can be authorized with a plain indexed match. Version is bumped on
 // every accepted administrative write, and quotes pin the version they were
 // computed from so a policy edit forces a re-quote instead of silently
 // repricing an in-flight purchase.
 type GiftCardDenominationPolicy struct {
-	MarketID            string                `json:"market_id"`
+	MarketCode          string                `json:"market_code"`
 	CountryCode         geography.CountryCode `json:"country_code,omitempty"`
 	Version             int                   `json:"version"`
 	Currency            money.CurrencyCode    `json:"currency"`

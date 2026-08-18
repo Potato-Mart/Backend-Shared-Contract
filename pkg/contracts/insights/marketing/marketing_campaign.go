@@ -3,13 +3,13 @@ package marketing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/metadata"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/metadata"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/insights/marketing/marketing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/insights/marketing/marketing_enums"
 )
 
 // MarketingCampaign records a single EDM / SMS / LINE push broadcast.
@@ -26,10 +26,10 @@ type MarketingCampaign struct {
 	Status           marketing_enums.MarketingCampaignStatus `json:"status"`
 	GeographicScope  geography.GeographicScope               `json:"geographic_scope"`
 	ScheduleTimezone string                                  `json:"schedule_timezone"`
-	// MarketID and CountryCode are the denormalized owning market and its
+	// MarketCode and CountryCode are the denormalized owning market and its
 	// country, carried so a geographically scoped staff query is a plain
 	// indexed match.
-	MarketID    string                  `json:"market_id,omitempty"`
+	MarketCode  string                  `json:"market_code,omitempty"`
 	CountryCode geography.CountryCode   `json:"country_code,omitempty"`
 	SentAt      *time.Time              `json:"sent_at,omitempty"`
 	Metadata    metadata.Metadata       `json:"metadata,omitempty"`

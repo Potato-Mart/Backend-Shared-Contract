@@ -3,19 +3,19 @@ package analytics
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/commerce/commerce_enums"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/temporal"
 )
 
 // SKUDemandForecast is one depot- and channel-qualified demand prediction.
 type SKUDemandForecast struct {
-	SKUID     string `json:"sku_id"`
-	MarketID  string `json:"market_id"`
-	DepotCode string `json:"depot_code"`
+	SKUCode    string `json:"sku_code"`
+	MarketCode string `json:"market_code"`
+	DepotCode  string `json:"depot_code"`
 	// CountryCode is the denormalized country the forecast is attributed to,
 	// so a country-scoped principal is filtered by a plain indexed match. It
 	// is absent on forecasts computed before v28.0.0; an absent value means

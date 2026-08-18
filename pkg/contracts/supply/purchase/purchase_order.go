@@ -3,25 +3,25 @@ package purchase
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/purchase/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/purchase/purchase_enums"
 )
 
 type Order struct {
 	ID          string                             `json:"id"`
 	OrderNumber string                             `json:"order_number"`
 	Status      purchase_enums.PurchaseOrderStatus `json:"status"`
-	// DepotCode, MarketID, and CountryCode are the denormalized receiving
+	// DepotCode, MarketCode, and CountryCode are the denormalized receiving
 	// site, market, and country, carried so a geographically scoped staff
 	// query is a plain indexed match.
 	DepotCode    string                  `json:"depot_code,omitempty"`
-	MarketID     string                  `json:"market_id,omitempty"`
+	MarketCode   string                  `json:"market_code,omitempty"`
 	CountryCode  geography.CountryCode   `json:"country_code,omitempty"`
 	Currency     money.CurrencyCode      `json:"currency"`
 	Items        []OrderItem             `json:"items"`
@@ -45,15 +45,14 @@ type Order struct {
 }
 
 type OrderItem struct {
-	ID    string `json:"id,omitempty"`
-	SKUID string `json:"sku_id"`
+	ID string `json:"id,omitempty"`
 	// SKUCode is the frozen SKU code captured when the purchase line was raised.
 	SKUCode              string                               `json:"sku_code"`
 	ProductName          string                               `json:"product_name"`
 	ProductImage         *security.ObjectMedia                `json:"product_image,omitempty"`
 	ProductPackageOption product.ProductPackageOption         `json:"product_package_option"`
 	CapturedAt           time.Time                            `json:"captured_at"`
-	PackageOptionID      string                               `json:"package_option_id"`
+	PackageOptionCode    string                               `json:"package_option_code"`
 	UnitCost             money.Money                          `json:"unit_cost"`
 	OrderedComposition   packaging.PackageCompositionSnapshot `json:"ordered_composition"`
 	ReceivedComposition  packaging.PackageCompositionSnapshot `json:"received_composition"`

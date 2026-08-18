@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
 )
 
 func TestImagesHasExactlyCanonicalObjectMediaFields(t *testing.T) {

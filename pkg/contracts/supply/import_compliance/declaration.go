@@ -1,11 +1,11 @@
 package import_compliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/import_compliance/import_compliance_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/import_compliance/import_compliance_enums"
 )
 
 // ManufacturerDeclaration is a revisioned declaration backed by an immutable
@@ -13,10 +13,10 @@ import (
 type ManufacturerDeclaration struct {
 	ID       string           `json:"id"`
 	Revision RevisionMetadata `json:"revision"`
-	// MarketID and CountryCode are the denormalized market and country the
+	// MarketCode and CountryCode are the denormalized market and country the
 	// record belongs to, carried so a geographically scoped staff query is
 	// a plain indexed match.
-	MarketID               string                `json:"market_id,omitempty"`
+	MarketCode             string                `json:"market_code,omitempty"`
 	CountryCode            geography.CountryCode `json:"country_code,omitempty"`
 	PurchaseOrder          PurchaseOrderSnapshot `json:"purchase_order"`
 	SettingsRevisionNumber *int64                `json:"settings_revision_number,omitempty"`
@@ -50,9 +50,9 @@ type ManufacturerDetails struct {
 // DeclarationSignatory references a managed image rather than embedding a
 // base64 payload in the declaration record.
 type DeclarationSignatory struct {
-	Name             string `json:"name"`
-	Title            string `json:"title,omitempty"`
-	SignatureMediaID string `json:"signature_media_id,omitempty"`
+	Name               string `json:"name"`
+	Title              string `json:"title,omitempty"`
+	SignatureMediaCode string `json:"signature_media_code,omitempty"`
 }
 
 type DeclarationLine struct {
@@ -60,7 +60,7 @@ type DeclarationLine struct {
 	SourceLineID              string        `json:"source_line_id,omitempty"`
 	SourceLabelID             string        `json:"source_label_id,omitempty"`
 	SourceLabelRevisionNumber *int64        `json:"source_label_revision_number,omitempty"`
-	SKUID                     string        `json:"sku_id,omitempty"`
+	SKUCode                   string        `json:"sku_code,omitempty"`
 	EnglishName               string        `json:"english_name"`
 	ChineseName               string        `json:"chinese_name,omitempty"`
 	OrderedQuantity           int64         `json:"ordered_quantity"`

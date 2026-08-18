@@ -3,21 +3,21 @@ package analytics
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification/classification_enums"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
 )
 
 // OrderItemFact is the immutable product and merchandising snapshot used by
 // sales rollups. Dimension values are canonical identifiers captured at purchase
 // time, so later catalogue edits cannot rewrite historical analytics.
 type OrderItemFact struct {
-	SKUID string `json:"sku_id"`
-	// MarketID qualifies the fact; Insights never infers a market from
+	SKUCode string `json:"sku_code"`
+	// MarketCode qualifies the fact; Insights never infers a market from
 	// country or currency.
-	MarketID string `json:"market_id"`
+	MarketCode string `json:"market_code"`
 	// CountryCode is the denormalized country the fact is attributed to,
 	// carried so a country-scoped principal can be filtered by a plain
 	// indexed match instead of joining every market back to its country.
@@ -26,10 +26,10 @@ type OrderItemFact struct {
 	// widening the reader's visibility.
 	CountryCode        geography.CountryCode                `json:"country_code,omitempty"`
 	ProductName        string                               `json:"product_name,omitempty"`
-	BrandID            string                               `json:"brand_id,omitempty"`
-	StorageType        warehouse_enums.StorageType          `json:"storage_type,omitempty"`
-	CollectionSlug     string                               `json:"collection_slug,omitempty"`
-	CategorySlugs      []string                             `json:"category_slugs,omitempty"`
+	BrandCode          string                               `json:"brand_code,omitempty"`
+	StorageType        classification_enums.StorageType     `json:"storage_type,omitempty"`
+	CollectionCode     string                               `json:"collection_code,omitempty"`
+	CategoryTagCodes   []string                             `json:"category_tag_codes,omitempty"`
 	Production         string                               `json:"production,omitempty"`
 	PackageComposition packaging.PackageCompositionSnapshot `json:"package_composition"`
 	Gross              money.Money                          `json:"gross"`
@@ -38,15 +38,15 @@ type OrderItemFact struct {
 // RefundItemFact identifies quantities and value reversed by a completed
 // line-level refund. Amount-only refunds intentionally carry no item rows.
 type RefundItemFact struct {
-	SKUID    string `json:"sku_id"`
-	MarketID string `json:"market_id"`
+	SKUCode    string `json:"sku_code"`
+	MarketCode string `json:"market_code"`
 	// CountryCode carries the same denormalized attribution, and the same
 	// fail-closed handling of an absent value, as OrderItemFact.CountryCode.
 	CountryCode        geography.CountryCode                `json:"country_code,omitempty"`
-	BrandID            string                               `json:"brand_id,omitempty"`
-	StorageType        warehouse_enums.StorageType          `json:"storage_type,omitempty"`
-	CollectionSlug     string                               `json:"collection_slug,omitempty"`
-	CategorySlugs      []string                             `json:"category_slugs,omitempty"`
+	BrandCode          string                               `json:"brand_code,omitempty"`
+	StorageType        classification_enums.StorageType     `json:"storage_type,omitempty"`
+	CollectionCode     string                               `json:"collection_code,omitempty"`
+	CategoryTagCodes   []string                             `json:"category_tag_codes,omitempty"`
 	Production         string                               `json:"production,omitempty"`
 	PackageComposition packaging.PackageCompositionSnapshot `json:"package_composition"`
 	Amount             money.Money                          `json:"amount"`
@@ -54,7 +54,7 @@ type RefundItemFact struct {
 
 // MetricRollup is one hourly or daily aggregate consumed by Admin reports.
 //
-// MarketID and CountryCode are the denormalized geography the aggregate is
+// MarketCode and CountryCode are the denormalized geography the aggregate is
 // attributed to. A rollup carrying neither is platform-wide and is readable
 // only at global scope; a geographically scoped principal filters on these
 // two fields and a rollup that does not match is not returned. Both are
@@ -66,7 +66,7 @@ type MetricRollup struct {
 	WindowStart  time.Time             `json:"window_start"`
 	WindowEnd    time.Time             `json:"window_end"`
 	Dimension    string                `json:"dimension,omitempty"`
-	MarketID     string                `json:"market_id,omitempty"`
+	MarketCode   string                `json:"market_code,omitempty"`
 	CountryCode  geography.CountryCode `json:"country_code,omitempty"`
 	Count        int64                 `json:"count"`
 	Amount       money.Money           `json:"amount"`

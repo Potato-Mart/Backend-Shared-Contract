@@ -3,12 +3,12 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification/classification_enums"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/customers/wholesale/wholesale_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/customers/wholesale/wholesale_enums"
 )
 
 // WholesaleApplicantSnapshot freezes the applicant identity reviewed by an
@@ -31,7 +31,7 @@ type WholesaleApplication struct {
 	Organisation              party.OrganisationDetail                   `json:"organisation"`
 	ExpectedMonthlyOrders     int                                        `json:"expected_monthly_orders,omitempty"`
 	ExpectedMonthlySpend      *money.Money                               `json:"expected_monthly_spend,omitempty"`
-	StorageRequirements       []warehouse_enums.StorageType              `json:"storage_requirements,omitempty"`
+	StorageRequirements       []classification_enums.StorageType         `json:"storage_requirements,omitempty"`
 	PaymentPreference         string                                     `json:"payment_preference,omitempty"`
 	PreferredDeliveryDays     []int                                      `json:"preferred_delivery_days,omitempty"`
 	Notes                     string                                     `json:"notes,omitempty"`

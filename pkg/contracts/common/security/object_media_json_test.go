@@ -7,7 +7,7 @@ import (
 )
 
 func TestObjectMediaJSONIsSafeRenderProjection(t *testing.T) {
-	media := ObjectMedia{ID: "media_1", URL: "https://cdn.example.test/products/potato.png"}
+	media := ObjectMedia{Code: "media_1", URL: "https://cdn.example.test/products/potato.png"}
 	payload, err := json.Marshal(media)
 	if err != nil {
 		t.Fatalf("marshal object media: %v", err)
@@ -17,8 +17,8 @@ func TestObjectMediaJSONIsSafeRenderProjection(t *testing.T) {
 	if err := json.Unmarshal(payload, &shape); err != nil {
 		t.Fatalf("unmarshal object media: %v", err)
 	}
-	if len(shape) != 2 || shape["id"] != "media_1" || shape["url"] != "https://cdn.example.test/products/potato.png" {
-		t.Fatalf("ObjectMedia JSON = %s, want only id and url", payload)
+	if len(shape) != 2 || shape["code"] != "media_1" || shape["url"] != "https://cdn.example.test/products/potato.png" {
+		t.Fatalf("ObjectMedia JSON = %s, want only code and url", payload)
 	}
 	for _, forbidden := range []string{"filename", "bucket", "storage_path", "visibility", "mime_type", "size_bytes", "references"} {
 		if _, exists := shape[forbidden]; exists {
@@ -27,24 +27,25 @@ func TestObjectMediaJSONIsSafeRenderProjection(t *testing.T) {
 	}
 
 	typ := reflect.TypeOf(ObjectMedia{})
-	if typ.NumField() != 2 || typ.Field(0).Name != "ID" || typ.Field(1).Name != "URL" {
-		t.Fatalf("ObjectMedia fields = %v, want exactly ID and URL", typ)
+	if typ.NumField() != 2 || typ.Field(0).Name != "Code" || typ.Field(1).Name != "URL" {
+		t.Fatalf("ObjectMedia fields = %v, want exactly Code and URL", typ)
 	}
 }
 
 func TestObjectMediaOmitsEmptyURL(t *testing.T) {
-	payload, err := json.Marshal(ObjectMedia{ID: "media_1"})
+	payload, err := json.Marshal(ObjectMedia{Code: "media_1"})
 	if err != nil {
 		t.Fatalf("marshal object media without URL: %v", err)
 	}
-	if string(payload) != `{"id":"media_1"}` {
-		t.Fatalf("ObjectMedia JSON = %s, want id only", payload)
+	if string(payload) != `{"code":"media_1"}` {
+		t.Fatalf("ObjectMedia JSON = %s, want code only", payload)
 	}
 }
 
 func TestObjectMediaAssetUsesObjectMediaReferences(t *testing.T) {
 	asset := ObjectMediaAsset{
 		ID:          "media_1",
+		Code:        "MED-SHA256",
 		Filename:    "potato.png",
 		Bucket:      "catalogue-public",
 		StoragePath: "products/A0001/potato.png",

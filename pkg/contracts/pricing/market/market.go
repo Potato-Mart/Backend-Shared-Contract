@@ -1,15 +1,15 @@
 // Package market holds the Pricing-owned commercial market model. A Market is
 // where and under which commercial configuration something is sold; it is not
-// physical geography. MarketID and CountryCode are separate concepts, and one
+// physical geography. MarketCode and CountryCode are separate concepts, and one
 // country may carry several markets without any change to Product, SKU, or
 // price models.
 package market
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/market/market_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/market/market_enums"
 )
 
 // Market is a commercial selling region owned by Pricing. ID is the stable

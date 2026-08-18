@@ -3,11 +3,11 @@ package marketing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/localization"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/marketing/marketing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/marketing/marketing_enums"
 )
 
 // Campaign is the public, campaign-owned composition of storefront copy and
@@ -21,10 +21,10 @@ type Campaign struct {
 	CampaignPosition CampaignPosition             `json:"campaign_position"`
 	CampaignStatus   CampaignStatus               `json:"campaign_status"`
 	Audience         Audience                     `json:"audience"`
-	// MarketID and CountryCode are the denormalized owning market and its
+	// MarketCode and CountryCode are the denormalized owning market and its
 	// country, carried so a geographically scoped staff query is a plain
 	// indexed match.
-	MarketID    string                `json:"market_id,omitempty"`
+	MarketCode  string                `json:"market_code,omitempty"`
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 
 	audit.AuditFields

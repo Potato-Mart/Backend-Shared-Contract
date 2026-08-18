@@ -6,12 +6,12 @@ package import_compliance
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/temporal"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/import_compliance/import_compliance_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/purchase/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/import_compliance/import_compliance_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/purchase/purchase_enums"
 )
 
 // RevisionMetadata identifies one immutable-or-editable revision and records
@@ -32,7 +32,7 @@ type RevisionMetadata struct {
 type EvidenceReference struct {
 	ID                   string                               `json:"id"`
 	Kind                 import_compliance_enums.EvidenceKind `json:"kind"`
-	MediaID              string                               `json:"media_id,omitempty"`
+	MediaCode            string                               `json:"media_code,omitempty"`
 	SourceURL            string                               `json:"source_url,omitempty"`
 	SourceTitle          string                               `json:"source_title,omitempty"`
 	SourceVersion        string                               `json:"source_version,omitempty"`
@@ -59,7 +59,7 @@ type CatalogueReference struct {
 type ArtifactReference struct {
 	ID             string                               `json:"id"`
 	Kind           import_compliance_enums.ArtifactKind `json:"kind"`
-	MediaID        string                               `json:"media_id"`
+	MediaCode      string                               `json:"media_code"`
 	Filename       string                               `json:"filename"`
 	MIMEType       string                               `json:"mime_type"`
 	ChecksumSHA256 string                               `json:"checksum_sha256"`
@@ -71,17 +71,17 @@ type ArtifactReference struct {
 // substantiate a compliance label. It is compliance-owned evidence, not a
 // second catalogue product model.
 type LabelProductEvidence struct {
-	SKUID          string                       `json:"sku_id"`
+	SKUCode        string                       `json:"sku_code"`
 	Barcode        string                       `json:"barcode,omitempty"`
 	EnglishName    string                       `json:"english_name,omitempty"`
 	ChineseName    string                       `json:"chinese_name,omitempty"`
 	AlternateNames []localization.LocalizedName `json:"alternate_names,omitempty"`
 	Brand          string                       `json:"brand,omitempty"`
-	// MarketID and TaxCategoryID replace the retired product-level Taxed
+	// MarketCode and TaxCategoryCode replace the retired product-level Taxed
 	// flag: taxability is a market listing fact in v27, so compliance
 	// freezes the market and its Pricing-owned tax category instead.
-	MarketID             string    `json:"market_id,omitempty"`
-	TaxCategoryID        string    `json:"tax_category_id,omitempty"`
+	MarketCode           string    `json:"market_code,omitempty"`
+	TaxCategoryCode      string    `json:"tax_category_code,omitempty"`
 	CapturedAt           time.Time `json:"captured_at"`
 	SourceChecksumSHA256 string    `json:"source_checksum_sha256,omitempty"`
 }

@@ -1,6 +1,6 @@
 package marketing
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/localization"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
 
 // BenefitRef is the customer-safe, code-only reference to a coupon or
 // promotion. It deliberately carries no pricing rule, eligibility, or usage

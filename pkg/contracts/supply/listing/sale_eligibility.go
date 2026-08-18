@@ -3,8 +3,8 @@ package listing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // DamageSaleApproval is the explicit quality decision that allows damaged
@@ -26,11 +26,11 @@ type DamageSaleApproval struct {
 // re-quoting. A stale listing, inventory, or eligibility revision requires a
 // fresh quote rather than a silent recalculation.
 type SaleEligibilitySnapshot struct {
-	MarketID        string `json:"market_id"`
-	SKUID           string `json:"sku_id"`
+	MarketCode      string `json:"market_code"`
+	SKUCode         string `json:"sku_code"`
 	ListingID       string `json:"listing_id"`
 	ListingRevision int64  `json:"listing_revision"`
-	TaxCategoryID   string `json:"tax_category_id"`
+	TaxCategoryCode string `json:"tax_category_code"`
 
 	DepotCode     string                     `json:"depot_code"`
 	StockLocation warehouse.StockLocationRef `json:"stock_location"`

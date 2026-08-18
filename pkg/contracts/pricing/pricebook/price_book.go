@@ -8,12 +8,12 @@ package pricebook
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/customers/wholesale/wholesale_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/product/product_enums"
 )
 
 // PriceBook is one pricing context inside exactly one market. It owns the
@@ -24,7 +24,7 @@ type PriceBook struct {
 	ID               string                            `json:"id"`
 	Code             string                            `json:"code"`
 	Name             string                            `json:"name"`
-	MarketID         string                            `json:"market_id"`
+	MarketCode       string                            `json:"market_code"`
 	Currency         money.CurrencyCode                `json:"currency"`
 	CurrencyExponent money.CurrencyExponent            `json:"currency_exponent"`
 	Channel          commerce_enums.OrderType          `json:"channel"`
@@ -43,17 +43,17 @@ type PriceBook struct {
 // approved entry inside its validity window is resolvable. Changing an entry
 // never changes an already captured transaction snapshot.
 type PriceEntry struct {
-	ID          string                           `json:"id"`
-	PriceBookID string                           `json:"price_book_id"`
-	SKUID       string                           `json:"sku_id"`
-	Amount      money.Money                      `json:"amount"`
-	Status      pricebook_enums.PriceEntryStatus `json:"status"`
-	Derivation  pricebook_enums.PriceDerivation  `json:"derivation"`
-	ValidFrom   time.Time                        `json:"valid_from"`
-	ValidUntil  *time.Time                       `json:"valid_until,omitempty"`
-	Approval    *audit.LifecycleAction           `json:"approval,omitempty"`
-	Rejection   *audit.LifecycleAction           `json:"rejection,omitempty"`
-	Withdrawal  *audit.LifecycleAction           `json:"withdrawal,omitempty"`
+	ID            string                           `json:"id"`
+	PriceBookCode string                           `json:"price_book_code"`
+	SKUCode       string                           `json:"sku_code"`
+	Amount        money.Money                      `json:"amount"`
+	Status        pricebook_enums.PriceEntryStatus `json:"status"`
+	Derivation    pricebook_enums.PriceDerivation  `json:"derivation"`
+	ValidFrom     time.Time                        `json:"valid_from"`
+	ValidUntil    *time.Time                       `json:"valid_until,omitempty"`
+	Approval      *audit.LifecycleAction           `json:"approval,omitempty"`
+	Rejection     *audit.LifecycleAction           `json:"rejection,omitempty"`
+	Withdrawal    *audit.LifecycleAction           `json:"withdrawal,omitempty"`
 	// SourceBaseCostRevision is the base acquisition cost revision a
 	// generated suggestion was derived from. It is absent on manually
 	// entered and imported amounts.
@@ -67,11 +67,11 @@ type PriceEntry struct {
 // selects which resolution level the assignment participates in, and only the
 // fields relevant to that level are populated.
 type PriceBookAssignment struct {
-	ID          string                                  `json:"id"`
-	MarketID    string                                  `json:"market_id"`
-	PriceBookID string                                  `json:"price_book_id"`
-	Kind        pricebook_enums.PriceBookAssignmentKind `json:"kind"`
-	Channel     commerce_enums.OrderType                `json:"channel,omitempty"`
+	ID            string                                  `json:"id"`
+	MarketCode    string                                  `json:"market_code"`
+	PriceBookCode string                                  `json:"price_book_code"`
+	Kind          pricebook_enums.PriceBookAssignmentKind `json:"kind"`
+	Channel       commerce_enums.OrderType                `json:"channel,omitempty"`
 	// OrganisationCategory is set only for organisation-category
 	// assignments.
 	OrganisationCategory wholesale_enums.WholesaleOrganisationCategory `json:"organisation_category,omitempty"`

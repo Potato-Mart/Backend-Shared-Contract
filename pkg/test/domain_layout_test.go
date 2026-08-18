@@ -15,7 +15,7 @@ func TestV27DomainPackageLayout(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	legacyImportCompliance := "import" + "compliance"
 	requiredFiles := map[string]string{
-		"contracts/supply/classification/product_category.go":                             "classification",
+		"contracts/supply/classification/sku_series.go":                                   "classification",
 		"contracts/supply/classification/category_tag.go":                                 "classification",
 		"contracts/supply/classification/collection.go":                                   "classification",
 		"contracts/supply/classification/brand.go":                                        "classification",

@@ -1,11 +1,11 @@
 package product
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/measurement"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/product/product_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/product/product_enums"
 )
 
 // SKU is the globally identifiable sellable and stockable inventory identity
@@ -18,15 +18,13 @@ import (
 // Damaged, expiring, or clearance units are inventory conditions on stock, not
 // separate SKUs.
 type SKU struct {
-	ID        string `json:"id"`
-	ProductID string `json:"product_id"`
-	Code      string `json:"code"`
+	SKUCode string `json:"sku_code"`
 
-	PackageOptions     []ProductPackageOption      `json:"package_options"`
-	BarcodeAssignments []ProductBarcodeAssignment  `json:"barcode_assignments,omitempty"`
-	NetContent         *measurement.NetContent     `json:"net_content,omitempty"`
-	StorageType        warehouse_enums.StorageType `json:"storage_type,omitempty"`
-	Status             product_enums.SKUStatus     `json:"status"`
+	PackageOptions     []ProductPackageOption           `json:"package_options"`
+	BarcodeAssignments []ProductBarcodeAssignment       `json:"barcode_assignments,omitempty"`
+	NetContent         *measurement.NetContent          `json:"net_content,omitempty"`
+	StorageType        classification_enums.StorageType `json:"storage_type"`
+	Status             product_enums.SKUStatus          `json:"status"`
 
 	audit.AuditFields
 }

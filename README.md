@@ -15,8 +15,8 @@ workflows.
 ## Latest Version
 
 ```text
-v28.0.0
-github.com/Potato-Mart/Backend-Shared-Contract/v28
+v29.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v29
 ```
 
 See [RELEASE_NOTES.md](RELEASE_NOTES.md) for the release history,
@@ -27,16 +27,16 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v28 v28.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v29 v29.0.0
 ```
 
-Import packages from the same `/v28` module path.
+Import packages from the same `/v29` module path.
 
 ## Package Layout
 
 - Common models are grouped by concern under `pkg/contracts/common`, such as
   `geography`, `party`, `packaging`, `security`, `temporal`, `measurement`, and
-  `money`. The legacy `common/shared` package does not exist in v28.
+  `money`. The legacy `common/shared` package does not exist in v29.
 - Finite enum types live in a leaf `<domain>_enums` package beside the models
   that use them. For example, product models import
   `supply/product/product_enums`, while common security models import
@@ -49,19 +49,20 @@ Import packages from the same `/v28` module path.
   `pricing/market`, `pricing/pricebook`, and `pricing/quote`. Promotion
   mechanics live under `pricing/promotion`; wallet models under
   `pricing/wallet`; shipment models under `orders/shipping`.
-- `supply/product.Product` is the global conceptual product — content,
-  classification, provenance, status, and optional administration only.
-  `supply/product.SKU` is the sellable and stockable identity that owns package
-  options, barcodes, net content, and storage type. Neither carries a price, a
-  tax flag, channel sellability, or a market-dependent metric.
+- `supply/product.Product` is keyed by the immutable `sku_code`, owns the
+  authoritative storage requirement, localized content, classification,
+  provenance, status, and optional administration. `supply/product.SKU` is the
+  code-only sellable and stockable shape that owns package options, barcodes,
+  net content, and the enforced storage copy. Neither carries price, tax,
+  channel sellability, or a market-dependent metric.
 - Authoritative prices live in `pricing/pricebook.PriceEntry` inside a
   market-scoped `PriceBook`; commercial availability lives in
-  `supply/listing.MarketListing`. `MarketID` and `CountryCode` are separate
+  `supply/listing.MarketListing`. `MarketCode` and `CountryCode` are separate
   concepts, and one country may carry several markets.
-- Cross-domain links use the scalar `sku_id`. A frozen `sku_code` survives only
-  on transaction evidence: cart items, order items, order line summaries, POS
-  receipt lines, purchase order items, receipt items, and supplier invoice
-  lines. Transaction lines own their frozen display facts.
+- Cross-domain catalogue and commercial links use immutable business codes:
+  `sku_code`, `market_code`, `price_book_code`, `tax_category_code`, brand,
+  collection, category-tag, supplier, package-option, and media codes. Root
+  masters retain API `id`; references never use IDs or slugs.
 - Money is always `{amount_minor, currency}` in minor units with a typed
   `money.CurrencyCode`. `money.CurrencyExponent` is carried alongside because
   not every currency has two decimals.
@@ -70,7 +71,7 @@ Import packages from the same `/v28` module path.
   applications. Only promotion lifecycle status and match mode are closed
   promotion enums.
 - This module is contract-only. The seven backend services and the parent
-  `go.work` must migrate to `/v28` before consuming this release.
+  `go.work` must migrate to `/v29` before consuming this release.
 
 ## Boundary Governance
 

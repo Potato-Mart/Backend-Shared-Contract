@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/market/market_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/market/market_enums"
 )
 
 func TestMarketJSONSeparatesCommerceFromGeography(t *testing.T) {
@@ -36,7 +36,7 @@ func TestMarketJSONSeparatesCommerceFromGeography(t *testing.T) {
 			t.Fatalf("Market JSON = %s, want %s", payload, want)
 		}
 	}
-	for _, forbidden := range []string{`"sku_id"`, `"price"`, `"amount_minor"`, `"depot_code"`} {
+	for _, forbidden := range []string{`"sku_code"`, `"price"`, `"amount_minor"`, `"depot_code"`} {
 		if strings.Contains(string(payload), forbidden) {
 			t.Fatalf("Market JSON leaked %s: %s", forbidden, payload)
 		}
@@ -47,7 +47,7 @@ func TestMarketJSONSeparatesCommerceFromGeography(t *testing.T) {
 		t.Fatalf("unmarshal market: %v", err)
 	}
 	if decoded.ID == string(decoded.CountryCode) {
-		t.Fatal("MarketID and CountryCode must remain separate concepts")
+		t.Fatal("MarketCode and CountryCode must remain separate concepts")
 	}
 	if decoded.CurrencyExponent.Exponent != 2 {
 		t.Fatalf("currency exponent did not round-trip: %+v", decoded.CurrencyExponent)

@@ -2,123 +2,57 @@ package classification_test
 
 import (
 	"encoding/json"
-
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/product"
 )
 
-func TestBrandJSONUsesV25PublicShape(t *testing.T) {
-	want := classification.Brand{
-		ID:      "64c13ab08edf48a008793ca1",
-		Slug:    "happy-potato",
-		Name:    []localization.LocalizedName{{Language: "en", Name: "Happy Potato"}},
-		LogoURL: "https://cdn.example.com/brands/happy-potato.png",
+func TestV29BrandRootRetainsIDAndSlugWhileReferenceUsesCode(t *testing.T) {
+	brand := classification.Brand{
+		ID: "64c13ab08edf48a008793ca1", Code: "BRD000001", Slug: "happy-potato",
+		Name: []localization.LocalizedName{{Language: "en", Name: "Happy Potato"}},
 	}
-	body, err := json.Marshal(want)
+	body, err := json.Marshal(brand)
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, field := range []string{`"id":"64c13ab08edf48a008793ca1"`, `"slug":"happy-potato"`, `"name":[`, `"logo_url":"https://cdn.example.com/brands/happy-potato.png"`} {
-		if !strings.Contains(string(body), field) {
-			t.Fatalf("Brand JSON = %s, want %s", body, field)
-		}
-	}
-	for _, removed := range []string{`"brand_key"`, `"audience"`, `"featured"`, `"active_product_count"`, `"wholesale_product_count"`, `"created_at"`, `"updated_at"`, `"names"`} {
-		if strings.Contains(string(body), removed) {
-			t.Fatalf("Brand JSON = %s, contains removed %s", body, removed)
-		}
-	}
-	var got classification.Brand
-	if err := json.Unmarshal(body, &got); err != nil {
-		t.Fatal(err)
-	}
-	if got.ID != want.ID || got.Slug != want.Slug || got.LogoURL != want.LogoURL || len(got.Name) != 1 {
-		t.Fatalf("brand did not round-trip: %+v", got)
-	}
-}
-
-func TestBrandRefUsesV25IdentityAndDisplayShape(t *testing.T) {
-	body, err := json.Marshal(classification.BrandRef{
-		ID:      "64c13ab08edf48a008793ca1",
-		Slug:    "happy-potato",
-		Name:    []localization.LocalizedName{{Language: "en", Name: "Happy Potato"}},
-		LogoURL: "https://cdn.example.com/brands/happy-potato.png",
-	})
-	if err != nil {
-		t.Fatal(err)
-	}
-	for _, field := range []string{`"id":"64c13ab08edf48a008793ca1"`, `"slug":"happy-potato"`, `"name":[`, `"logo_url":"https://cdn.example.com/brands/happy-potato.png"`} {
-		if !strings.Contains(string(body), field) {
-			t.Fatalf("BrandRef JSON = %s, want %s", body, field)
-		}
-	}
-	for _, removed := range []string{`"brand_key"`, `"brand"`, `"sort_order"`, `"audience"`, `"active_product_count"`} {
-		if strings.Contains(string(body), removed) {
-			t.Fatalf("BrandRef JSON = %s, contains removed %s", body, removed)
-		}
-	}
-}
-
-func TestCanonicalBrandReferenceAcrossProductShapes(t *testing.T) {
-	ref := &classification.BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "happy-potato", Name: []localization.LocalizedName{{Language: "en", Name: "Happy Potato"}}}
-	for name, value := range map[string]any{
-		"product": product.Product{ID: "product_a0001", Classification: product.ProductClassification{ProductCategoryCode: "A1", BrandRef: ref}},
-	} {
-		t.Run(name, func(t *testing.T) {
-			body, err := json.Marshal(value)
-			if err != nil {
-				t.Fatal(err)
-			}
-			if !strings.Contains(string(body), `"brand_ref":{"id":"64c13ab08edf48a008793ca1"`) {
-				t.Fatalf("canonical brand missing: %s", body)
-			}
-			for _, removed := range []string{`"brand_key"`, `"brand":[`} {
-				if strings.Contains(string(body), removed) {
-					t.Fatalf("removed brand representation returned: %s", body)
-				}
-			}
-		})
-	}
-}
-
-func TestCategoryTagRefUsesLightweightDisplayShape(t *testing.T) {
-	body, err := json.Marshal(classification.CategoryTagRef{
-		ID:   "tag_hotpot",
-		Slug: "hotpot",
-		Name: []localization.LocalizedName{{Language: "en", Name: "Hotpot"}},
-	})
-	if err != nil {
-		t.Fatal(err)
-	}
-	for _, want := range []string{`"id":"tag_hotpot"`, `"slug":"hotpot"`, `"name":[`} {
+	for _, want := range []string{`"id":"64c13ab08edf48a008793ca1"`, `"code":"BRD000001"`, `"slug":"happy-potato"`} {
 		if !strings.Contains(string(body), want) {
-			t.Fatalf("CategoryTagRef JSON = %s, want %s", body, want)
+			t.Fatalf("Brand JSON = %s, want %s", body, want)
 		}
 	}
-	for _, forbidden := range []string{`"collection_id"`, `"collection_name"`, `"created_at"`, `"updated_at"`} {
-		if strings.Contains(string(body), forbidden) {
-			t.Fatalf("CategoryTagRef JSON = %s, must not include %s", body, forbidden)
-		}
+
+	refBody, err := json.Marshal(classification.BrandRef{Code: brand.Code, Name: brand.Name})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(refBody), `"id"`) || strings.Contains(string(refBody), `"slug"`) || !strings.Contains(string(refBody), `"code":"BRD000001"`) {
+		t.Fatalf("BrandRef must be code-only identity: %s", refBody)
 	}
 }
 
-func TestBrandAndBrandRefOmitEmptyLogoURL(t *testing.T) {
-	for name, value := range map[string]any{
-		"brand": classification.Brand{ID: "64c13ab08edf48a008793ca1", Slug: "happy-potato", Name: []localization.LocalizedName{{Language: "en", Name: "Happy Potato"}}},
-		"ref":   classification.BrandRef{ID: "64c13ab08edf48a008793ca1", Slug: "happy-potato", Name: []localization.LocalizedName{{Language: "en", Name: "Happy Potato"}}},
-	} {
-		t.Run(name, func(t *testing.T) {
-			body, err := json.Marshal(value)
-			if err != nil {
-				t.Fatal(err)
-			}
-			if strings.Contains(string(body), `"logo_url"`) {
-				t.Fatalf("empty logo_url should be omitted: %s", body)
-			}
-		})
+func TestV29ProductCarriesOrderedBrandReferences(t *testing.T) {
+	body, err := json.Marshal(product.Product{Classification: product.ProductClassification{
+		SKUSeriesCode: "A0",
+		Brands:        []classification.BrandRef{{Code: "BRD000001"}, {Code: "BRD000002"}},
+	}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(body), `"brands":[{"code":"BRD000001"},{"code":"BRD000002"}]`) {
+		t.Fatalf("ordered brands missing: %s", body)
+	}
+}
+
+func TestV29CategoryTagRefUsesCodeWithoutSlugOrID(t *testing.T) {
+	body, err := json.Marshal(classification.CategoryTagRef{Code: "TAG0001"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(body) != `{"code":"TAG0001"}` {
+		t.Fatalf("CategoryTagRef JSON = %s", body)
 	}
 }

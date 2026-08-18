@@ -3,21 +3,21 @@ package operations
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // StockReservation is a logical hold for one product at one depot.
 type StockReservation struct {
 	ID             string `json:"id"`
-	SKUID          string `json:"sku_id"`
+	SKUCode        string `json:"sku_code"`
 	DepotCode      string `json:"depot_code"`
 	OrderNumber    string `json:"order_number,omitempty"`
 	GroupOrderCode string `json:"group_order_code,omitempty"`
-	MarketID       string `json:"market_id"`
+	MarketCode     string `json:"market_code"`
 	// EligibilityToken is the validity token from the sale-eligibility
 	// snapshot the reservation was taken against, and ListingRevision pins
 	// the market listing that was in force. A stale token requires a
@@ -42,7 +42,7 @@ type StockReservationAllocation struct {
 	BucketID             string                               `json:"bucket_id"`
 	StockUnitIDs         []string                             `json:"stock_unit_ids,omitempty"`
 	LotID                string                               `json:"lot_id,omitempty"`
-	PackageOptionID      string                               `json:"package_option_id"`
+	PackageOptionCode    string                               `json:"package_option_code"`
 	HandlingUnit         packaging_enums.PackageHandlingUnit  `json:"handling_unit"`
 	AllocatedComposition packaging.PackageCompositionSnapshot `json:"allocated_composition"`
 	Revision             int64                                `json:"revision"`
@@ -57,9 +57,9 @@ type StockStagingRecord struct {
 	ReservationID       string                               `json:"reservation_id"`
 	AllocationID        string                               `json:"allocation_id"`
 	OrderNumber         string                               `json:"order_number"`
-	SKUID               string                               `json:"sku_id"`
+	SKUCode             string                               `json:"sku_code"`
 	LotID               string                               `json:"lot_id,omitempty"`
-	PackageOptionID     string                               `json:"package_option_id"`
+	PackageOptionCode   string                               `json:"package_option_code"`
 	SourceBucketID      string                               `json:"source_bucket_id"`
 	DestinationBucketID string                               `json:"destination_bucket_id"`
 	SourceLocation      warehouse.StockLocationRef           `json:"source_location"`

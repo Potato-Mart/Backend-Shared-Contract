@@ -16,20 +16,20 @@ import (
 func TestV27NonSupplyProductionModelsRejectLegacyMediaShapes(t *testing.T) {
 	legacyTypes := v27StringSet("Media", "MediaReference")
 	legacyFields := v27StringSet(
-		"MediaID", "MediaURL",
-		"AvatarMediaID", "AvatarURL",
+		"MediaCode", "MediaURL",
+		"AvatarMediaCode", "AvatarURL",
 		"LogoURL",
 		"ImageID", "ImageURL",
-		"CoverMediaID", "CoverURL",
-		"ImageMediaIDs", "ImageURLs",
+		"CoverMediaCode", "CoverURL",
+		"ImageMediaCodes", "ImageURLs",
 	)
 	legacyJSONKeys := v27StringSet(
-		"media_id", "media_url",
-		"avatar_media_id", "avatar_url",
+		"media_code", "media_url",
+		"avatar_media_code", "avatar_url",
 		"logo_url",
 		"image_id", "image_url",
-		"cover_media_id", "cover_url",
-		"image_media_ids", "image_urls",
+		"cover_media_code", "cover_url",
+		"image_media_codes", "image_urls",
 	)
 
 	pkgRoot := sharedContractPkgRoot(t)
@@ -270,7 +270,7 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 			"Quantity",
 		),
 		"insights/analytics.SKUDemandForecast": v27StringSet(
-			"SKUCode", "CurrentStockAtRun",
+			"CurrentStockAtRun",
 		),
 		"customers/campaign.Audience": v27StringSet(
 			"Region",
@@ -286,7 +286,7 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"customers/campaign.CampaignSupplierPrediction": v27StringSet(
 			"TotalUnits",
 		),
-		"supply/classification.ProductCategory": v27StringSet(
+		"supply/classification.SKUSeries": v27StringSet(
 			"Storage",
 		),
 		"orders/pos.CatalogProduct": v27StringSet(
@@ -297,7 +297,7 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		// other v26 removal on Product remains forbidden, and v27 adds the
 		// commerce/metrics/packaging projections it retired.
 		"supply/product.Product": v27StringSet(
-			"SKU", "SKUCode", "Barcode", "Storage", "PlacingArea", "CurrentStock",
+			"SKU", "Barcode", "Storage", "PlacingArea", "CurrentStock",
 			"RestockedAt", "ExpiredAt", "Pricing", "Physical",
 			"Packaging", "Commerce", "Metrics", "Selling", "Taxed",
 		),
@@ -310,7 +310,7 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 			"SKU", "Barcode", "Storage", "CurrentStock", "Pricing", "ExpiryDate", "DisplayStatus",
 		),
 		"supply/import_compliance.LabelMaster": v27StringSet(
-			"SourceProduct", "SKUCode", "SKU",
+			"SourceProduct", "SKU",
 		),
 		"supply/import_compliance.DeclarationLine": v27StringSet(
 			"ProductReference",
@@ -318,12 +318,8 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"supply/import_compliance.TariffLineSnapshot": v27StringSet(
 			"SKU",
 		),
-		"supply/import_compliance.TariffProfile": v27StringSet(
-			"SKUCode",
-		),
-		"supply/import_compliance.TrademarkEvidence": v27StringSet(
-			"SKUCode",
-		),
+		"supply/import_compliance.TariffProfile":     v27StringSet(),
+		"supply/import_compliance.TrademarkEvidence": v27StringSet(),
 		"supply/purchase.OrderItem": v27StringSet(
 			"OrderedQty", "ReceivedQty", "RejectedQty", "LocationCode", "ExpireAt",
 		),
@@ -463,7 +459,7 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 			"quantity",
 		),
 		"insights/analytics.SKUDemandForecast": v27StringSet(
-			"sku_code", "current_stock_at_run",
+			"current_stock_at_run",
 		),
 		"customers/campaign.Audience": v27StringSet(
 			"region",
@@ -479,14 +475,14 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"customers/campaign.CampaignSupplierPrediction": v27StringSet(
 			"total_units",
 		),
-		"supply/classification.ProductCategory": v27StringSet(
+		"supply/classification.SKUSeries": v27StringSet(
 			"storage",
 		),
 		"orders/pos.CatalogProduct": v27StringSet(
 			"id", "sku", "barcode", "storage", "price", "current_stock",
 		),
 		"supply/product.Product": v27StringSet(
-			"sku", "sku_code", "barcode", "storage", "placing_area", "current_stock",
+			"sku", "barcode", "storage", "placing_area", "current_stock",
 			"restocked_at", "expired_at", "pricing", "physical",
 			"packaging", "commerce", "metrics", "selling", "taxed",
 		),
@@ -499,7 +495,7 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 			"sku", "barcode", "storage", "current_stock", "pricing", "expiry_date", "display_status",
 		),
 		"supply/import_compliance.LabelMaster": v27StringSet(
-			"source_product", "sku_code", "sku",
+			"source_product", "sku",
 		),
 		"supply/import_compliance.DeclarationLine": v27StringSet(
 			"product_reference",
@@ -507,12 +503,8 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"supply/import_compliance.TariffLineSnapshot": v27StringSet(
 			"sku",
 		),
-		"supply/import_compliance.TariffProfile": v27StringSet(
-			"sku_code",
-		),
-		"supply/import_compliance.TrademarkEvidence": v27StringSet(
-			"sku_code",
-		),
+		"supply/import_compliance.TariffProfile":     v27StringSet(),
+		"supply/import_compliance.TrademarkEvidence": v27StringSet(),
 		"supply/purchase.OrderItem": v27StringSet(
 			"ordered_qty", "received_qty", "rejected_qty", "location_code", "expire_at",
 		),
@@ -700,9 +692,9 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	}
 }
 
-func TestV28GoSourcesContainNoOlderContractImports(t *testing.T) {
+func TestV29GoSourcesContainNoOlderContractImports(t *testing.T) {
 	const contractImportRoot = "github.com/Potato-Mart/Backend-Shared-Contract/"
-	const currentContractImportPrefix = contractImportRoot + "v28/"
+	const currentContractImportPrefix = contractImportRoot + "v29/"
 	pkgRoot := sharedContractPkgRoot(t)
 	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
@@ -722,7 +714,7 @@ func TestV28GoSourcesContainNoOlderContractImports(t *testing.T) {
 				return unquoteErr
 			}
 			if strings.HasPrefix(importPath, contractImportRoot) && !strings.HasPrefix(importPath, currentContractImportPrefix) {
-				t.Errorf("%s imports non-v28 shared-contract path %s", path, importPath)
+				t.Errorf("%s imports non-v29 shared-contract path %s", path, importPath)
 			}
 		}
 		return nil

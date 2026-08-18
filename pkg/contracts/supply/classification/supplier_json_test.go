@@ -2,100 +2,49 @@ package classification_test
 
 import (
 	"encoding/json"
-
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification"
 )
 
-func TestSupplierOrganisationDetailJSONShape(t *testing.T) {
+func TestV29SupplierExpansionAndCodeOnlyManufacturing(t *testing.T) {
 	supplier := classification.Supplier{
-		OrganisationDetail: party.OrganisationDetail{
-			PartyRef: party.PartyRef{
-				ID:   "supplier_123",
-				Name: "Supplier Co",
-			},
-			LegalName: "Supplier Legal Pty Ltd",
-			ABN:       "10987654321",
-			Website:   "https://supplier.example.com",
-			RegisteredAddress: &party.ContactAddress{
-				Address: &geography.Address{
-					Label:              "HQ",
-					Line1:              "2 Supply Road",
-					Locality:           "Melbourne",
-					AdministrativeArea: &geography.AdministrativeAreaRef{Code: "AU-VIC"},
-					PostalCode:         "3000",
-					Country:            geography.CountryRef{Code: "AU"},
-				},
-			},
-		},
+		OrganisationDetail:   party.OrganisationDetail{PartyRef: party.PartyRef{ID: "64c13ab08edf48a008793ca4", Code: "SUP0001", Name: "Supplier"}},
+		GeographicLocation:   &geography.Address{Line1: "1 Supply Rd", Locality: "Sydney", PostalCode: "2000", Country: geography.CountryRef{Code: "AU"}},
+		AvailableMarketCodes: []string{"AU"},
+		AvailableProducts: []classification.SupplierAvailableProduct{{
+			SKUCode: "A00001", SupplierSKUCode: "THEIR-1",
+			ProductNames: []localization.LocalizedName{{Language: "en", Name: "Product"}},
+			OfferedPrice: &money.Money{AmountMinor: 100, Currency: "AUD"}, MinimumPurchaseQuantity: 2,
+			Manufacturing: &classification.ProductManufacturing{CountryRef: &geography.CountryRef{Code: "TW"}},
+		}},
+		AvailablePromotions: []classification.SupplierAvailablePromotion{{Names: []localization.LocalizedName{{Language: "en", Name: "Launch"}}}},
 	}
-
-	payload, err := json.Marshal(supplier)
+	body, err := json.Marshal(supplier)
 	if err != nil {
-		t.Fatalf("Marshal Supplier: %v", err)
+		t.Fatal(err)
 	}
-
-	var got map[string]any
-	if err := json.Unmarshal(payload, &got); err != nil {
-		t.Fatalf("Unmarshal Supplier JSON: %v", err)
-	}
-
-	for _, key := range []string{
-		"id",
-		"name",
-		"legal_name",
-		"abn",
-		"website",
-		"registered_address",
-	} {
-		if _, ok := got[key]; !ok {
-			t.Fatalf("Supplier JSON missing %q: %s", key, payload)
+	for _, want := range []string{`"available_market_codes":["AU"]`, `"sku_code":"A00001"`, `"country_ref":{"code":"TW"}`, `"available_promotions"`} {
+		if !strings.Contains(string(body), want) {
+			t.Fatalf("Supplier JSON = %s, want %s", body, want)
 		}
 	}
-
-	for key := range got {
-		if strings.HasPrefix(key, "company_") {
-			t.Fatalf("Supplier JSON should not include company-prefixed key %q: %s", key, payload)
-		}
+	if strings.Contains(string(body), `"location"`) || strings.Contains(string(body), `"supplier_id"`) {
+		t.Fatalf("Supplier retained legacy reference: %s", body)
 	}
 }
 
-func TestProductSupplySectionsAreIndependent(t *testing.T) {
-	tests := []struct {
-		name string
-		want string
-		got  classification.ProductSupply
-	}{
-		{
-			name: "supplier only",
-			want: `{"supplier":{"code":"SUP-1","name":"Taiwan Foods"}}`,
-			got: classification.ProductSupply{
-				Supplier: &classification.ProductSupplierRef{Code: "SUP-1", Name: "Taiwan Foods"},
-			},
-		},
-		{
-			name: "manufacturing only",
-			want: `{"manufacturing":{"location":"Taiwan"}}`,
-			got: classification.ProductSupply{
-				Manufacturing: &classification.ProductManufacturing{Location: "Taiwan"},
-			},
-		},
+func TestV29ProductSupplyUsesMultipleSupplierCodes(t *testing.T) {
+	body, err := json.Marshal(classification.ProductSupply{Suppliers: []classification.ProductSupplierRef{{Code: "SUP0001", Name: "One"}, {Code: "SUP0002", Name: "Two"}}})
+	if err != nil {
+		t.Fatal(err)
 	}
-
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			body, err := json.Marshal(tc.got)
-			if err != nil {
-				t.Fatalf("marshal product supply: %v", err)
-			}
-			if string(body) != tc.want {
-				t.Fatalf("ProductSupply JSON = %s, want %s", body, tc.want)
-			}
-		})
+	if !strings.Contains(string(body), `"suppliers":[`) || strings.Contains(string(body), `"supplier":`) {
+		t.Fatalf("ProductSupply JSON = %s", body)
 	}
 }

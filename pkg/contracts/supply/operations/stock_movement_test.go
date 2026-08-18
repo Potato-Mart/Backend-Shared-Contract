@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestPackageConversionMovementRoundTrip(t *testing.T) {
@@ -19,32 +19,32 @@ func TestPackageConversionMovementRoundTrip(t *testing.T) {
 	caseComposition := packaging.PackageCompositionSnapshot{
 		TotalBaseUnits: 12,
 		Components: []packaging.PackageComponentSnapshot{{
-			PackageOptionID: "pkg_case_12",
-			HandlingUnit:    packaging_enums.PackageHandlingUnitCase,
-			PackageCount:    1,
-			UnitsPerPackage: 12,
-			BaseUnits:       12,
+			PackageOptionCode: "pkg_case_12",
+			HandlingUnit:      packaging_enums.PackageHandlingUnitCase,
+			PackageCount:      1,
+			UnitsPerPackage:   12,
+			BaseUnits:         12,
 		}},
 	}
 	eachComposition := packaging.PackageCompositionSnapshot{
 		TotalBaseUnits: 12,
 		Components: []packaging.PackageComponentSnapshot{{
-			PackageOptionID: "pkg_each",
-			HandlingUnit:    packaging_enums.PackageHandlingUnitEach,
-			PackageCount:    12,
-			UnitsPerPackage: 1,
-			BaseUnits:       12,
+			PackageOptionCode: "pkg_each",
+			HandlingUnit:      packaging_enums.PackageHandlingUnitEach,
+			PackageCount:      12,
+			UnitsPerPackage:   1,
+			BaseUnits:         12,
 		}},
 	}
 	movement := operations.StockMovement{
 		ID:                               "mov_1",
-		SKUID:                            "A00001",
+		SKUCode:                          "A00001",
 		Type:                             warehouse_enums.StockMovementTypePackageConversion,
 		SourceBucketID:                   "bucket_case",
 		DestinationBucketID:              "bucket_each",
 		LotID:                            "lot_1",
-		SourcePackageOptionID:            "pkg_case_12",
-		DestinationPackageOptionID:       "pkg_each",
+		SourcePackageOptionCode:          "pkg_case_12",
+		DestinationPackageOptionCode:     "pkg_each",
 		BaseUnits:                        12,
 		SourcePackageComposition:         &caseComposition,
 		DestinationPackageComposition:    &eachComposition,

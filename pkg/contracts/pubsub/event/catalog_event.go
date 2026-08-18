@@ -3,8 +3,8 @@ package event
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/listing/listing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/listing/listing_enums"
 )
 
 // CatalogBaseCostChangedEvent is emitted on the catalog-events topic when a
@@ -15,7 +15,7 @@ import (
 // a stale suggestion. Receiving it regenerates or replaces Pricing draft
 // suggestions and never activates a draft or disturbs an approved price.
 type CatalogBaseCostChangedEvent struct {
-	SKUID    string             `json:"sku_id"`
+	SKUCode  string             `json:"sku_code"`
 	Currency money.CurrencyCode `json:"currency"`
 	// PreviousAmount is absent the first time a cost is recorded.
 	PreviousAmount *money.Money `json:"previous_amount,omitempty"`
@@ -38,14 +38,14 @@ type CatalogBaseCostChangedEvent struct {
 // applies the event only when Revision is newer than the revision it already
 // holds. The event never carries a commercial price.
 type CatalogListingChangedEvent struct {
-	ListingID string `json:"listing_id"`
-	MarketID  string `json:"market_id"`
-	SKUID     string `json:"sku_id"`
+	ListingID  string `json:"listing_id"`
+	MarketCode string `json:"market_code"`
+	SKUCode    string `json:"sku_code"`
 
 	PreviousStatus listing_enums.MarketListingStatus `json:"previous_status,omitempty"`
 	Status         listing_enums.MarketListingStatus `json:"status"`
 
-	TaxCategoryID          string `json:"tax_category_id"`
+	TaxCategoryCode        string `json:"tax_category_code"`
 	UnitPricingRequired    bool   `json:"unit_pricing_required"`
 	ExpiryLeadDaysOverride *int32 `json:"expiry_lead_days_override,omitempty"`
 

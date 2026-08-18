@@ -3,7 +3,7 @@ package role
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/identity/identity_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/identity/identity_enums"
 )
 
 // RoleAssignmentGrantedEvent is emitted when a role key is granted in an

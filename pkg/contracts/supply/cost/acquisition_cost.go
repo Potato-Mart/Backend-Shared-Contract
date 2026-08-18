@@ -6,8 +6,8 @@ package cost
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
 )
 
 // BaseAcquisitionCost is the current tax-exclusive acquisition cost for one
@@ -16,7 +16,7 @@ import (
 // without disturbing approved sale prices.
 type BaseAcquisitionCost struct {
 	ID       string             `json:"id"`
-	SKUID    string             `json:"sku_id"`
+	SKUCode  string             `json:"sku_code"`
 	Currency money.CurrencyCode `json:"currency"`
 	// Amount is tax exclusive. Recoverable input tax is never included.
 	Amount        money.Money `json:"amount"`
@@ -37,7 +37,7 @@ type BaseAcquisitionCost struct {
 // recorded separately on the supplier invoice and are never blended in.
 type DepotCarryingCost struct {
 	ID        string `json:"id"`
-	SKUID     string `json:"sku_id"`
+	SKUCode   string `json:"sku_code"`
 	DepotCode string `json:"depot_code"`
 
 	Currency         money.CurrencyCode     `json:"currency"`
@@ -62,7 +62,7 @@ type DepotCarryingCost struct {
 // reversal and makes retries idempotent.
 type CarryingCostMovement struct {
 	ID        string `json:"id"`
-	SKUID     string `json:"sku_id"`
+	SKUCode   string `json:"sku_code"`
 	DepotCode string `json:"depot_code"`
 
 	ReferenceType string `json:"reference_type"`

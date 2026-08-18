@@ -3,10 +3,11 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geometry"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geometry"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 const (
@@ -30,7 +31,7 @@ type StockLocation struct {
 	DepotCode             string                                      `json:"depot_code"`
 	LocationCode          string                                      `json:"location_code"`
 	Name                  string                                      `json:"name,omitempty"`
-	StorageType           warehouse_enums.StorageType                 `json:"storage_type"`
+	StorageType           classification_enums.StorageType            `json:"storage_type"`
 	Purpose               warehouse_enums.StockLocationPurpose        `json:"purpose"`
 	HandlingMode          warehouse_enums.StockLocationHandlingMode   `json:"handling_mode"`
 	Access                warehouse_enums.StockLocationAccess         `json:"access"`
@@ -48,9 +49,9 @@ type StockLocation struct {
 // StockLocationCollectionEligibility identifies a collection's primary or
 // ordered overflow placement at a location.
 type StockLocationCollectionEligibility struct {
-	CollectionID string                                      `json:"collection_id"`
-	Role         warehouse_enums.StockLocationCollectionRole `json:"role"`
-	Priority     int                                         `json:"priority"`
+	CollectionCode string                                      `json:"collection_code"`
+	Role           warehouse_enums.StockLocationCollectionRole `json:"role"`
+	Priority       int                                         `json:"priority"`
 }
 
 // StockLocationAssignment links one product SKU to one depot-qualified
@@ -59,7 +60,7 @@ type StockLocationAssignment struct {
 	ID                       string `json:"id"`
 	DepotCode                string `json:"depot_code"`
 	LocationCode             string `json:"location_code"`
-	SKUID                    string `json:"sku_id"`
+	SKUCode                  string `json:"sku_code"`
 	ElectronicShelfLabelCode string `json:"electronic_shelf_label_code,omitempty"`
 	IsActive                 bool   `json:"is_active"`
 
@@ -72,7 +73,7 @@ type StockLocationProductBalance struct {
 	AssignmentID       string                               `json:"assignment_id"`
 	DepotCode          string                               `json:"depot_code"`
 	LocationCode       string                               `json:"location_code"`
-	SKUID              string                               `json:"sku_id"`
+	SKUCode            string                               `json:"sku_code"`
 	PackageComposition packaging.PackageCompositionSnapshot `json:"package_composition"`
 	OnHandBaseUnits    int64                                `json:"on_hand_base_units"`
 	ReservedBaseUnits  int64                                `json:"reserved_base_units"`

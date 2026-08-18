@@ -1,9 +1,9 @@
 package import_compliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
 )
 
 // ImportSettings is one revision of the shared import-cost and declaration
@@ -12,10 +12,10 @@ import (
 type ImportSettings struct {
 	ID       string           `json:"id"`
 	Revision RevisionMetadata `json:"revision"`
-	// MarketID and CountryCode are the denormalized market and country the
+	// MarketCode and CountryCode are the denormalized market and country the
 	// record belongs to, carried so a geographically scoped staff query is
 	// a plain indexed match.
-	MarketID                string                      `json:"market_id,omitempty"`
+	MarketCode              string                      `json:"market_code,omitempty"`
 	CountryCode             geography.CountryCode       `json:"country_code,omitempty"`
 	TWDPerAUDMicros         int64                       `json:"twd_per_aud_micros"`
 	NextInvoiceNumber       int64                       `json:"next_invoice_number"`

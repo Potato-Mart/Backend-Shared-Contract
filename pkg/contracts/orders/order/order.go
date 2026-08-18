@@ -3,26 +3,26 @@ package order
 import (
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/device"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/shipping"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/device"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/product"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/shipping/shipping_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/membership/membership_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/orders/shipping/shipping_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/promotion"
 )
 
 // Buyer describes who is buying, independently of Channel. POS is a
@@ -31,11 +31,11 @@ import (
 type Order struct {
 	ID          string `json:"id"`
 	OrderNumber string `json:"order_number"`
-	// MarketID is the immutable commercial market the order was placed
+	// MarketCode is the immutable commercial market the order was placed
 	// in. It is captured when the cart is created and never re-derived
 	// from country or currency.
-	MarketID string `json:"market_id"`
-	// CountryCode is the denormalized country of MarketID, carried so a
+	MarketCode string `json:"market_code"`
+	// CountryCode is the denormalized country of MarketCode, carried so a
 	// country-scoped staff query is a plain indexed match.
 	CountryCode       geography.CountryCode         `json:"country_code,omitempty"`
 	Channel           commerce_enums.OrderType      `json:"channel"`
@@ -133,8 +133,7 @@ type OrderPackingProgress struct {
 }
 
 type OrderItem struct {
-	ID    string `json:"id"`
-	SKUID string `json:"sku_id"`
+	ID string `json:"id"`
 	// SKUCode is the frozen SKU code captured when the line was priced.
 	SKUCode              string                                   `json:"sku_code"`
 	ProductName          string                                   `json:"product_name"`
@@ -177,7 +176,7 @@ type RewardRedemptionSnapshot struct {
 	RewardType         membership_enums.MembershipRewardType `json:"reward_type"`
 	PointsSpent        int                                   `json:"points_spent"`
 	DiscountAmount     *money.Money                          `json:"discount_amount,omitempty"`
-	SKUID              string                                `json:"sku_id,omitempty"`
+	SKUCode            string                                `json:"sku_code,omitempty"`
 	VoucherCode        string                                `json:"voucher_code,omitempty"`
 	OccurredAt         *time.Time                            `json:"occurred_at,omitempty"`
 }
