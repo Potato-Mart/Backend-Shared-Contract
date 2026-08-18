@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification"
 )
 
 func TestImagesHasExactlyCanonicalObjectMediaFields(t *testing.T) {
@@ -17,9 +17,9 @@ func TestImagesHasExactlyCanonicalObjectMediaFields(t *testing.T) {
 		name string
 		typ  reflect.Type
 	}{
-		{name: "Cover", typ: reflect.TypeOf((*security.ObjectMedia)(nil))},
-		{name: "Gallery", typ: reflect.TypeOf([]security.ObjectMedia{})},
-		{name: "Details", typ: reflect.TypeOf([]security.ObjectMedia{})},
+		{name: "Cover", typ: reflect.TypeOf((*classification.ObjectMediaRef)(nil))},
+		{name: "Gallery", typ: reflect.TypeOf([]classification.ObjectMediaRef{})},
+		{name: "Details", typ: reflect.TypeOf([]classification.ObjectMediaRef{})},
 	}
 	for index, want := range expected {
 		field := typ.Field(index)

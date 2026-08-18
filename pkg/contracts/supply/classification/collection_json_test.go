@@ -28,11 +28,21 @@ func TestV29CollectionAndTagsHaveRootSlugsAndCodeOnlyReferences(t *testing.T) {
 		}
 	}
 
-	refBody, err := json.Marshal(classification.CollectionRef{Code: "COL0001", Name: collection.Name})
+	refBody, err := json.Marshal(classification.CollectionRef{Code: "COL0001"})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if strings.Contains(string(refBody), `"id"`) || strings.Contains(string(refBody), `"slug"`) {
+	if string(refBody) != `{"code":"COL0001"}` {
 		t.Fatalf("CollectionRef leaked non-business identity: %s", refBody)
+	}
+}
+
+func TestV2901CollectionIconUsesCodeOnlyCatalogMediaRef(t *testing.T) {
+	body, err := json.Marshal(classification.Collection{Icon: &classification.ObjectMediaRef{Code: "MED-COLLECTION"}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(body), `"icon":{"code":"MED-COLLECTION"}`) || strings.Contains(string(body), `"url"`) {
+		t.Fatalf("Collection icon must persist only the media code: %s", body)
 	}
 }

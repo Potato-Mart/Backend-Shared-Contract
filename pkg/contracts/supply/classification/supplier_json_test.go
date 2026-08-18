@@ -21,7 +21,7 @@ func TestV29SupplierExpansionAndCodeOnlyManufacturing(t *testing.T) {
 			SKUCode: "A00001", SupplierSKUCode: "THEIR-1",
 			ProductNames: []localization.LocalizedName{{Language: "en", Name: "Product"}},
 			OfferedPrice: &money.Money{AmountMinor: 100, Currency: "AUD"}, MinimumPurchaseQuantity: 2,
-			Manufacturing: &classification.ProductManufacturing{CountryRef: &geography.CountryRef{Code: "TW"}},
+			Manufacturing: &classification.ProductManufacturing{CountryRef: &classification.CountryCodeRef{Code: "TW"}},
 		}},
 		AvailablePromotions: []classification.SupplierAvailablePromotion{{Names: []localization.LocalizedName{{Language: "en", Name: "Launch"}}}},
 	}
@@ -40,11 +40,24 @@ func TestV29SupplierExpansionAndCodeOnlyManufacturing(t *testing.T) {
 }
 
 func TestV29ProductSupplyUsesMultipleSupplierCodes(t *testing.T) {
-	body, err := json.Marshal(classification.ProductSupply{Suppliers: []classification.ProductSupplierRef{{Code: "SUP0001", Name: "One"}, {Code: "SUP0002", Name: "Two"}}})
+	body, err := json.Marshal(classification.ProductSupply{Suppliers: []classification.ProductSupplierRef{{Code: "SUP0001"}, {Code: "SUP0002"}}})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !strings.Contains(string(body), `"suppliers":[`) || strings.Contains(string(body), `"supplier":`) {
+	if string(body) != `{"suppliers":[{"code":"SUP0001"},{"code":"SUP0002"}]}` {
 		t.Fatalf("ProductSupply JSON = %s", body)
+	}
+}
+
+func TestV2901ManufacturingCountryReferenceIsCodeOnly(t *testing.T) {
+	body, err := json.Marshal(classification.ProductManufacturing{
+		CompanyName: "Maker",
+		CountryRef:  &classification.CountryCodeRef{Code: "TW"},
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(body) != `{"company_name":"Maker","country_ref":{"code":"TW"}}` {
+		t.Fatalf("ProductManufacturing JSON = %s", body)
 	}
 }

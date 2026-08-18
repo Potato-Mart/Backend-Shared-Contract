@@ -36,11 +36,10 @@ func TestCatalogBaseCostChangedEventJSONShape(t *testing.T) {
 	}
 }
 
-func TestCatalogListingChangedEventCarriesListingIdentityAndRevision(t *testing.T) {
+func TestCatalogListingChangedEventCarriesCodeIdentityAndRevision(t *testing.T) {
 	now := time.Date(2026, 8, 12, 7, 8, 9, 0, time.UTC)
 	leadDays := int32(21)
 	value := event.CatalogListingChangedEvent{
-		ListingID:              "listing_1",
 		MarketCode:             "market_au",
 		SKUCode:                "sku_a00001",
 		PreviousStatus:         listing_enums.MarketListingStatusDraft,
@@ -59,7 +58,7 @@ func TestCatalogListingChangedEventCarriesListingIdentityAndRevision(t *testing.
 		t.Fatalf("marshal listing changed event: %v", err)
 	}
 	for _, want := range []string{
-		`"listing_id":"listing_1"`, `"market_code":"market_au"`, `"sku_code":"sku_a00001"`,
+		`"market_code":"market_au"`, `"sku_code":"sku_a00001"`,
 		`"previous_status":"draft"`, `"status":"active"`, `"tax_category_code":"tax_au_gst"`,
 		`"unit_pricing_required":true`, `"expiry_lead_days_override":21`,
 		`"previous_revision":6`, `"revision":7`,
@@ -68,7 +67,7 @@ func TestCatalogListingChangedEventCarriesListingIdentityAndRevision(t *testing.
 			t.Fatalf("listing changed JSON missing %s: %s", want, payload)
 		}
 	}
-	for _, forbidden := range []string{`"price"`, `"amount_minor"`, `"package_pricing_id"`} {
+	for _, forbidden := range []string{`"listing_id"`, `"price"`, `"amount_minor"`, `"package_pricing_id"`} {
 		if strings.Contains(string(payload), forbidden) {
 			t.Fatalf("listing changed JSON leaked %s: %s", forbidden, payload)
 		}

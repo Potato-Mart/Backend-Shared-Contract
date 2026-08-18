@@ -46,7 +46,7 @@ func TestMarketListingCarriesAvailabilityWithoutPrice(t *testing.T) {
 func TestSaleEligibilitySnapshotIsEvidenceOnly(t *testing.T) {
 	capturedAt := time.Date(2026, 8, 12, 3, 4, 5, 0, time.UTC)
 	value := SaleEligibilitySnapshot{
-		MarketCode: "market_au", SKUCode: "sku_a00001", ListingID: "listing_1", ListingRevision: 4,
+		MarketCode: "market_au", SKUCode: "sku_a00001", ListingRevision: 4,
 		TaxCategoryCode: "tax_au_gst", DepotCode: "AU-VIC-MEL-DC-01",
 		StockLocation: warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01"},
 		BucketID:      "bucket_1", LotID: "lot_1",
@@ -78,7 +78,7 @@ func TestSaleEligibilitySnapshotIsEvidenceOnly(t *testing.T) {
 			t.Fatalf("SaleEligibilitySnapshot JSON = %s, want %s", payload, want)
 		}
 	}
-	for _, forbidden := range []string{`"amount_minor"`, `"price"`, `"discount"`, `"currency"`} {
+	for _, forbidden := range []string{`"listing_id"`, `"amount_minor"`, `"price"`, `"discount"`, `"currency"`} {
 		if strings.Contains(string(payload), forbidden) {
 			t.Fatalf("Supply must return evidence and never a price, leaked %s: %s", forbidden, payload)
 		}

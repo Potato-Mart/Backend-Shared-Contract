@@ -79,7 +79,6 @@ func TestV27BackendGateModelSurface(t *testing.T) {
 	assertJSONFields(t, reflect.TypeOf(listing.SaleEligibilitySnapshot{}), map[string]string{
 		"MarketCode":         "market_code",
 		"SKUCode":            "sku_code",
-		"ListingID":          "listing_id",
 		"ListingRevision":    "listing_revision",
 		"TaxCategoryCode":    "tax_category_code",
 		"StockLocation":      "stock_location",

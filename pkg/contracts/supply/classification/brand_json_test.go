@@ -25,12 +25,22 @@ func TestV29BrandRootRetainsIDAndSlugWhileReferenceUsesCode(t *testing.T) {
 		}
 	}
 
-	refBody, err := json.Marshal(classification.BrandRef{Code: brand.Code, Name: brand.Name})
+	refBody, err := json.Marshal(classification.BrandRef{Code: brand.Code})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if strings.Contains(string(refBody), `"id"`) || strings.Contains(string(refBody), `"slug"`) || !strings.Contains(string(refBody), `"code":"BRD000001"`) {
+	if string(refBody) != `{"code":"BRD000001"}` {
 		t.Fatalf("BrandRef must be code-only identity: %s", refBody)
+	}
+}
+
+func TestV2901BrandLogoUsesCodeOnlyCatalogMediaRef(t *testing.T) {
+	body, err := json.Marshal(classification.Brand{Logo: &classification.ObjectMediaRef{Code: "MED-BRAND"}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(body), `"logo":{"code":"MED-BRAND"}`) || strings.Contains(string(body), `"url"`) {
+		t.Fatalf("Brand logo must persist only the media code: %s", body)
 	}
 }
 
