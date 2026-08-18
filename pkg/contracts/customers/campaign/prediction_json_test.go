@@ -6,15 +6,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging/packaging_enums"
 )
 
 func TestCampaignPredictionUsesPackageComposition(t *testing.T) {
 	payload, err := json.Marshal(CampaignSupplierPrediction{
 		SupplierCode: "SUP-1",
 		Products: []CampaignProductPrediction{{
-			SKUID: "SKU-1",
+			SKUCode: "SKU-1",
 			Evidence: []CampaignPredictionEvidence{{
 				RawNetBaseUnits: 35, NormalizedBaseUnits: 30,
 			}},
@@ -26,8 +26,8 @@ func TestCampaignPredictionUsesPackageComposition(t *testing.T) {
 			SuggestedComposition: packaging.PackageCompositionSnapshot{
 				TotalBaseUnits: 27,
 				Components: []packaging.PackageComponentSnapshot{
-					{PackageOptionID: "case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24},
-					{PackageOptionID: "each_1", HandlingUnit: packaging_enums.PackageHandlingUnitEach, PackageCount: 3, UnitsPerPackage: 1, BaseUnits: 3},
+					{PackageOptionCode: "case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24},
+					{PackageOptionCode: "each_1", HandlingUnit: packaging_enums.PackageHandlingUnitEach, PackageCount: 3, UnitsPerPackage: 1, BaseUnits: 3},
 				},
 			},
 			MinimumOrderBaseUnits: 12,

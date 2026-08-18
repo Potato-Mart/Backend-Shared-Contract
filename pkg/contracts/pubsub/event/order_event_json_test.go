@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	notification "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pubsub/event"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	notification "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pubsub/event"
 )
 
 func TestOrderPaidEventQualificationFieldsRoundTrip(t *testing.T) {

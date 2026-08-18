@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v29.0.0` | 2026-08-19 | Major | Catalogue business-key hard cut: replaces ProductCategory with SKUSeries, centralizes StorageType under classification, makes SKU code the canonical product and cross-domain identity, makes Product names localized, adds multi-brand/multi-supplier products and supplier availability, moves manufacturing to CountryRef, replaces catalog/commercial/media reference IDs and slugs with immutable codes, and bumps SKU-bearing events to schema version 3. Changes the module path to `/v29`; all consumers must migrate explicitly. |
 | `v28.0.0` | 2026-08-17 | Major | Workforce RBAC and geographic-scoping hard cutover: replaces the built-in role set with six ranked roles (`countryAdmin`, `depotManager`, and `warehouseManager` in; `admin`, `warehouse`, `cashier`, and `sales` out), adds `Role.rank`, the flat `scope_level`/`country_code`/`market_ids`/`depot_codes` access-token claims, `access.StaffGeoScope` and `access_enums.ScopeLevel`, `UserProfile.geo_scope`, per-market gift-card denomination policies, and per-register daily POS sessions replacing operator shifts; denormalizes `market_id`/`country_code`/`depot_code` across staff-visible models and the event payloads their consumers persist, including `MemberSubscription` and the Insights analytics facts. Changes the module path to `/v28`; all consumers must migrate explicitly. |
 | `v27.3.0` | 2026-08-16 | Minor | Adds gift-card denomination bonuses (`GiftCardDenominationBonus`, `GiftCardDenominationPolicy.bonus_amounts_minor`), `OrderPaidEvent` qualification evidence (`subtotal`, `discount_amount`, `tags`), the `Market.expiry_lead_days` default soon-expiry lead time, and `GiftCardIssuedEvent.bonus_amount_minor`. Additive only; keeps the `/v27` module path. |
 | `v27.2.0` | 2026-08-14 | Minor | Adds public marketing foundations, privacy-minimized account-deletion coordination records, PayTo and Link payment methods, and optional collection icons. Additive only; keeps the `/v27` module path. |
@@ -121,6 +122,28 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v29.0.0 (2026-08-19) - Catalogue Business Keys, SKU Series, Localized Products, And Supplier Availability
+
+### Breaking contract
+
+- Module path and release metadata move to `github.com/Potato-Mart/Backend-Shared-Contract/v29` and `v29.0.0`.
+- `classification.ProductCategory` and `product_category_code` are removed. Use `classification.SKUSeries` from `sku_series.go` and `sku_series_code`.
+- The only `StorageType` is `classification/classification_enums.StorageType` with `AMBIENT`, `CHILLED`, and `FROZEN`. The warehouse enum is removed.
+- Product owns `sku_code` and authoritative `storage_type`; Product content uses a primary `LocalizedName`; classification uses ordered `brands`, one code-only collection reference, and code-only category-tag references.
+- SKU, package options, barcode assignments, brands, collections, tags, suppliers, markets, price books, tax categories, and safe media projections use immutable business codes for embedded and cross-domain relationships. Root master records retain their API `id`; root brand/collection/tag records retain presentation slugs.
+- Product supply uses `suppliers[]`. Manufacturing uses optional `country_ref`. Supplier adds optional geographic location, available market codes, locale-aware available products, and locale-aware promotions.
+
+### Event schema version 3
+
+Every payload that carries SKU identity now uses `sku_code`/`sku_codes` and envelope `event_version` `"3"` (`event.SKUCodeEventVersion`). This includes inventory and stock events, catalog cost/listing events, order/refund analytics item facts, product sales rollups, fulfilment packing projections, and storefront SKU targets. Version-2 outboxes must be drained or purged before V29 consumers start; there is no dual-read or dual-write alias.
+
+### Consumer action
+
+1. Upgrade imports and CI pins to `/v29 v29.0.0`.
+2. Migrate persistence, indexes, hashes, dedupe keys, DTOs, OpenAPI, generated clients, and Pub/Sub payloads from catalog IDs/slugs to the documented codes.
+3. Regenerate provider specifications before consumer clients and reject any active `/v28`, `sku_id`, `ProductCategory`, `product_category_code`, or warehouse StorageType reference.
+4. Apply database markers only after the V29 schema and data verification gates pass.
 
 ## v28.0.0 (2026-08-17) - Workforce RBAC Hierarchy, Geographic Scoping, Per-Market Gift-Card Policies, And POS Register Sessions
 

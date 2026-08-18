@@ -11,34 +11,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/pos"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pubsub/event/event_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/purchase"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/orders/pos"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pubsub/event/event_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/purchase"
 )
 
-// TestV27FrozenSKUCodeAllowlistIsExactlyTheTransactionEvidenceTypes freezes the
-// allowlist itself. Widening it is a contract decision, not an implementation
-// detail: every other model links to a SKU by sku_id only.
-func TestV27FrozenSKUCodeAllowlistIsExactlyTheTransactionEvidenceTypes(t *testing.T) {
-	want := []string{
-		"orders/order.CartItem",
-		"orders/order.OrderItem",
-		"orders/order.OrderLineSummary",
-		"orders/pos.ReceiptLine",
-		"supply/purchase.OrderItem",
-		"supply/purchase.ReceiptItem",
-		"supply/purchase.SupplierInvoiceLine",
-	}
-	got := make([]string, 0, len(v27FrozenSKUCodeTypes))
-	for typeKey := range v27FrozenSKUCodeTypes {
-		got = append(got, typeKey)
-	}
-	sort.Strings(got)
-	if strings.Join(got, ",") != strings.Join(want, ",") {
-		t.Fatalf("frozen sku_code allowlist = %v, want %v", got, want)
-	}
-
+// TestV29TransactionEvidenceUsesOneImmutableSKUCode freezes the hard cut from
+// the former ID-plus-frozen-code pair to one business key.
+func TestV29TransactionEvidenceUsesOneImmutableSKUCode(t *testing.T) {
 	for _, model := range []reflect.Type{
 		reflect.TypeOf(order.CartItem{}),
 		reflect.TypeOf(order.OrderItem{}),
@@ -48,18 +29,9 @@ func TestV27FrozenSKUCodeAllowlistIsExactlyTheTransactionEvidenceTypes(t *testin
 		reflect.TypeOf(purchase.ReceiptItem{}),
 		reflect.TypeOf(purchase.SupplierInvoiceLine{}),
 	} {
-		for name, wantTag := range map[string]string{"SKUID": "sku_id", "SKUCode": "sku_code"} {
-			field, ok := model.FieldByName(name)
-			if !ok {
-				t.Errorf("%s must carry %s", model, name)
-				continue
-			}
-			if field.Type.Kind() != reflect.String {
-				t.Errorf("%s.%s must be a string scalar, got %s", model, name, field.Type)
-			}
-			if got := field.Tag.Get("json"); got != wantTag {
-				t.Errorf("%s.%s JSON tag = %q, want %q", model, name, got, wantTag)
-			}
+		field, ok := model.FieldByName("SKUCode")
+		if !ok || field.Type.Kind() != reflect.String || field.Tag.Get("json") != "sku_code" {
+			t.Errorf("%s must carry exactly one scalar sku_code", model)
 		}
 	}
 }

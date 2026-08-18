@@ -3,8 +3,8 @@ package event
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
 )
 
 // GiftCardIssuedEvent requests delivery of the email for a captured gift-card
@@ -29,11 +29,11 @@ type GiftCardIssuedEvent struct {
 	Message                   string      `json:"message,omitempty"`
 	ClaimCode                 string      `json:"claim_code,omitempty"`
 	Locale                    string      `json:"locale,omitempty"`
-	// MarketID and CountryCode are the denormalized geography the event
+	// MarketCode and CountryCode are the denormalized geography the event
 	// belongs to. They are absent on every event published before v28.0.0;
 	// a consumer that persists a geographically scoped record treats an
 	// absent value as "no evidence" and fails closed rather than defaulting.
-	MarketID    string                `json:"market_id,omitempty"`
+	MarketCode  string                `json:"market_code,omitempty"`
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	IssuedAt    time.Time             `json:"issued_at"`
 }

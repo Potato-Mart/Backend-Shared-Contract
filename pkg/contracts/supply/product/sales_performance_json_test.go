@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/product"
 )
 
 func TestSalesPerformanceJSONShape(t *testing.T) {
@@ -17,7 +17,7 @@ func TestSalesPerformanceJSONShape(t *testing.T) {
 		Last90Days: product.SalesWindowStats{WindowDays: 90},
 		Lifetime:   product.SalesTotals{PaidOrderCount: 10, GrossUnits: 40, RefundedUnits: 2, NetUnits: 38},
 		CategoryRanks: []product.CategorySalesRank{{
-			CategoryTagID: "tag_1", Rank: 1, Population: 25, WindowDays: 30, NetUnits: 18,
+			CategoryTagCode: "tag_1", Rank: 1, Population: 25, WindowDays: 30, NetUnits: 18,
 		}},
 		AsOf: asOf, Timezone: "Australia/Melbourne",
 	}

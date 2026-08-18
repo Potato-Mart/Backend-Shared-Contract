@@ -3,14 +3,14 @@ package terminal
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	payment "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	payment "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/payments/payment"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/terminal/terminal_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/payments/terminal/terminal_enums"
 )
 
 // TerminalTransaction is one card-terminal interaction.

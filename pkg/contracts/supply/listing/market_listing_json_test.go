@@ -6,18 +6,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/listing/listing_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/listing/listing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestMarketListingCarriesAvailabilityWithoutPrice(t *testing.T) {
 	availableFrom := time.Date(2026, 8, 12, 0, 0, 0, 0, time.UTC)
 	leadDays := int32(21)
 	payload, err := json.Marshal(MarketListing{
-		ID: "listing_1", MarketID: "market_au", SKUID: "sku_a00001",
-		Status: listing_enums.MarketListingStatusActive, TaxCategoryID: "tax_au_gst",
+		ID: "listing_1", MarketCode: "market_au", SKUCode: "sku_a00001",
+		Status: listing_enums.MarketListingStatusActive, TaxCategoryCode: "tax_au_gst",
 		Restrictions: []SaleRestriction{
 			{Kind: listing_enums.SaleRestrictionKindAgeVerification, Channels: []commerce_enums.OrderType{commerce_enums.OrderTypeOnline}},
 		},
@@ -28,15 +28,15 @@ func TestMarketListingCarriesAvailabilityWithoutPrice(t *testing.T) {
 		t.Fatalf("marshal market listing: %v", err)
 	}
 	for _, want := range []string{
-		`"market_id":"market_au"`, `"sku_id":"sku_a00001"`, `"status":"active"`,
-		`"tax_category_id":"tax_au_gst"`, `"kind":"age_verification"`,
+		`"market_code":"market_au"`, `"sku_code":"sku_a00001"`, `"status":"active"`,
+		`"tax_category_code":"tax_au_gst"`, `"kind":"age_verification"`,
 		`"expiry_lead_days_override":21`, `"unit_pricing_required":true`, `"revision":4`,
 	} {
 		if !strings.Contains(string(payload), want) {
 			t.Fatalf("MarketListing JSON = %s, want %s", payload, want)
 		}
 	}
-	for _, forbidden := range []string{`"amount_minor"`, `"price"`, `"currency"`, `"price_book_id"`} {
+	for _, forbidden := range []string{`"amount_minor"`, `"price"`, `"currency"`, `"price_book_code"`} {
 		if strings.Contains(string(payload), forbidden) {
 			t.Fatalf("MarketListing must never carry a commercial price, leaked %s: %s", forbidden, payload)
 		}
@@ -46,8 +46,8 @@ func TestMarketListingCarriesAvailabilityWithoutPrice(t *testing.T) {
 func TestSaleEligibilitySnapshotIsEvidenceOnly(t *testing.T) {
 	capturedAt := time.Date(2026, 8, 12, 3, 4, 5, 0, time.UTC)
 	value := SaleEligibilitySnapshot{
-		MarketID: "market_au", SKUID: "sku_a00001", ListingID: "listing_1", ListingRevision: 4,
-		TaxCategoryID: "tax_au_gst", DepotCode: "AU-VIC-MEL-DC-01",
+		MarketCode: "market_au", SKUCode: "sku_a00001", ListingID: "listing_1", ListingRevision: 4,
+		TaxCategoryCode: "tax_au_gst", DepotCode: "AU-VIC-MEL-DC-01",
 		StockLocation: warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01"},
 		BucketID:      "bucket_1", LotID: "lot_1",
 		Condition:   warehouse_enums.InventoryConditionProductDamaged,

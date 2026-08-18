@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 func TestPromotionScopeRepresentsPerProductAndCombinedQuantityRequirements(t *testing.T) {
@@ -12,15 +12,15 @@ func TestPromotionScopeRepresentsPerProductAndCombinedQuantityRequirements(t *te
 	perProduct := PromotionScope{
 		MatchMode: promotion_enums.PromotionMatchModeAll,
 		Groups: []PromotionScopeGroup{
-			{MatchMode: promotion_enums.PromotionMatchModeAny, SKUIDs: []string{"POTATO-A"}, MinimumBaseUnits: 2},
-			{MatchMode: promotion_enums.PromotionMatchModeAny, SKUIDs: []string{"POTATO-B"}, MinimumBaseUnits: 1, MaximumBaseUnits: &maximum},
+			{MatchMode: promotion_enums.PromotionMatchModeAny, SKUCodes: []string{"POTATO-A"}, MinimumBaseUnits: 2},
+			{MatchMode: promotion_enums.PromotionMatchModeAny, SKUCodes: []string{"POTATO-B"}, MinimumBaseUnits: 1, MaximumBaseUnits: &maximum},
 		},
 	}
 	combined := PromotionScope{
 		MatchMode: promotion_enums.PromotionMatchModeAll,
 		Groups: []PromotionScopeGroup{{
 			MatchMode:        promotion_enums.PromotionMatchModeAny,
-			SKUIDs:           []string{"POTATO-A", "POTATO-B"},
+			SKUCodes:         []string{"POTATO-A", "POTATO-B"},
 			MinimumBaseUnits: 3,
 		}},
 	}
@@ -41,11 +41,11 @@ func TestPromotionScopeRepresentsPerProductAndCombinedQuantityRequirements(t *te
 		t.Fatalf("per-product ALL scope changed: %s", body)
 	}
 	first := perGroups[0].(map[string]any)
-	if first["minimum_base_units"] != float64(2) || first["sku_ids"].([]any)[0] != "POTATO-A" {
+	if first["minimum_base_units"] != float64(2) || first["sku_codes"].([]any)[0] != "POTATO-A" {
 		t.Fatalf("per-product scope group changed: %#v", first)
 	}
 	combinedGroups := got["combined"]["groups"].([]any)
-	if len(combinedGroups) != 1 || len(combinedGroups[0].(map[string]any)["sku_ids"].([]any)) != 2 {
+	if len(combinedGroups) != 1 || len(combinedGroups[0].(map[string]any)["sku_codes"].([]any)) != 2 {
 		t.Fatalf("combined quantity pool changed: %s", body)
 	}
 }
@@ -71,10 +71,10 @@ func TestPromotionScopeRoundTripsCollectionTagAndPackageSelectors(t *testing.T) 
 	value := PromotionScope{
 		MatchMode: promotion_enums.PromotionMatchModeAny,
 		Groups: []PromotionScopeGroup{{
-			MatchMode:        promotion_enums.PromotionMatchModeAll,
-			CollectionIDs:    []string{"collection_root", "collection_seasonal"},
-			CategoryTagIDs:   []string{"tag_potato", "tag_local"},
-			PackageOptionIDs: []string{"pkg_each", "pkg_case"},
+			MatchMode:          promotion_enums.PromotionMatchModeAll,
+			CollectionCodes:    []string{"collection_root", "collection_seasonal"},
+			CategoryTagCodes:   []string{"tag_potato", "tag_local"},
+			PackageOptionCodes: []string{"pkg_each", "pkg_case"},
 		}},
 	}
 	body, err := json.Marshal(value)
@@ -86,7 +86,7 @@ func TestPromotionScopeRoundTripsCollectionTagAndPackageSelectors(t *testing.T) 
 		t.Fatalf("unmarshal selector scope: %v", err)
 	}
 	group := got.Groups[0]
-	if len(group.CollectionIDs) != 2 || group.CollectionIDs[1] != "collection_seasonal" || len(group.CategoryTagIDs) != 2 || group.CategoryTagIDs[0] != "tag_potato" || len(group.PackageOptionIDs) != 2 || group.PackageOptionIDs[1] != "pkg_case" {
+	if len(group.CollectionCodes) != 2 || group.CollectionCodes[1] != "collection_seasonal" || len(group.CategoryTagCodes) != 2 || group.CategoryTagCodes[0] != "tag_potato" || len(group.PackageOptionCodes) != 2 || group.PackageOptionCodes[1] != "pkg_case" {
 		t.Fatalf("collection/tag/package selectors changed: %+v", group)
 	}
 }

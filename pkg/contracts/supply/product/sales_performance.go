@@ -3,7 +3,7 @@ package product
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
 )
 
 // SalesTotals records paid-order unit activity for one measurement period.
@@ -25,8 +25,7 @@ type SalesWindowStats struct {
 // Rankings use the embedded window and are computed across the complete result
 // set, never from one paginated storefront response.
 type CategorySalesRank struct {
-	CategoryTagID   string                       `json:"category_tag_id"`
-	CategoryTagSlug string                       `json:"category_tag_slug,omitempty"`
+	CategoryTagCode string                       `json:"category_tag_code"`
 	CategoryTagName []localization.LocalizedName `json:"category_tag_name,omitempty"`
 	Rank            int                          `json:"rank"`
 	Population      int                          `json:"population"`

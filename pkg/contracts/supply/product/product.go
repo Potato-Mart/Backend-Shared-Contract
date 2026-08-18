@@ -1,13 +1,14 @@
 package product
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/localization"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/product/product_enums"
 )
 
 // Product is the global conceptual product: what the item is, independently of
@@ -18,17 +19,19 @@ import (
 // market-dependent metric. Sellable identity lives on SKU, market availability
 // on listing.MarketListing, and authoritative prices in Pricing price books.
 type Product struct {
-	ID             string                        `json:"id"`
-	Status         product_enums.ProductStatus   `json:"status"`
-	Content        ProductContent                `json:"content"`
-	Classification ProductClassification         `json:"classification"`
-	Supply         *classification.ProductSupply `json:"supply,omitempty"`
-	Administration *ProductAdministration        `json:"administration,omitempty"`
+	ID             string                           `json:"id"`
+	SKUCode        string                           `json:"sku_code"`
+	StorageType    classification_enums.StorageType `json:"storage_type"`
+	Status         product_enums.ProductStatus      `json:"status"`
+	Content        ProductContent                   `json:"content"`
+	Classification ProductClassification            `json:"classification"`
+	Supply         *classification.ProductSupply    `json:"supply,omitempty"`
+	Administration *ProductAdministration           `json:"administration,omitempty"`
 }
 
 // ProductContent contains the customer-facing, locale-aware product facts.
 type ProductContent struct {
-	Name         string                              `json:"name"`
+	Name         localization.LocalizedName          `json:"name"`
 	Descriptions []localization.LocalizedDescription `json:"descriptions,omitempty"`
 	Localization *ProductLocalization                `json:"localization,omitempty"`
 	Origin       *ProductOrigin                      `json:"origin,omitempty"`
@@ -50,10 +53,10 @@ type ProductOrigin struct {
 // ProductClassification contains references to the product's catalogue
 // classification. Category tags are deliberately lightweight references.
 type ProductClassification struct {
-	ProductCategoryCode string                          `json:"product_category_code"`
-	BrandRef            *classification.BrandRef        `json:"brand_ref,omitempty"`
-	CollectionRef       *classification.CollectionRef   `json:"collection_ref,omitempty"`
-	CategoryTags        []classification.CategoryTagRef `json:"category_tags,omitempty"`
+	SKUSeriesCode string                          `json:"sku_series_code"`
+	Brands        []classification.BrandRef       `json:"brands,omitempty"`
+	CollectionRef *classification.CollectionRef   `json:"collection_ref,omitempty"`
+	CategoryTags  []classification.CategoryTagRef `json:"category_tags,omitempty"`
 }
 
 // ProductAdministration retains master-data history and audit information.

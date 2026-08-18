@@ -3,9 +3,9 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/settlement/settlement_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/terminal/terminal_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/payments/settlement/settlement_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/payments/terminal/terminal_enums"
 )
 
 func TestPaymentEnumsValidateKnownValues(t *testing.T) {

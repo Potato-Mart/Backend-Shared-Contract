@@ -3,12 +3,12 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // WMSDraft is an uncommitted package-aware warehouse operation.
@@ -31,14 +31,14 @@ type WMSDraft struct {
 
 // WMSDraftItem captures an observed package scan and canonical inventory refs.
 type WMSDraftItem struct {
-	ID               string                               `json:"id"`
-	SKUID            string                               `json:"sku_id"`
-	ProductName      string                               `json:"product_name,omitempty"`
-	ScannedBarcode   string                               `json:"scanned_barcode,omitempty"`
-	PackageOptionID  string                               `json:"package_option_id"`
-	HandlingUnit     packaging_enums.PackageHandlingUnit  `json:"handling_unit"`
-	LotID            string                               `json:"lot_id,omitempty"`
-	Location         StockLocationRef                     `json:"location"`
-	Composition      packaging.PackageCompositionSnapshot `json:"composition"`
-	ObservedDateMark *InventoryDateMark                   `json:"observed_date_mark,omitempty"`
+	ID                string                               `json:"id"`
+	SKUCode           string                               `json:"sku_code"`
+	ProductName       string                               `json:"product_name,omitempty"`
+	ScannedBarcode    string                               `json:"scanned_barcode,omitempty"`
+	PackageOptionCode string                               `json:"package_option_code"`
+	HandlingUnit      packaging_enums.PackageHandlingUnit  `json:"handling_unit"`
+	LotID             string                               `json:"lot_id,omitempty"`
+	Location          StockLocationRef                     `json:"location"`
+	Composition       packaging.PackageCompositionSnapshot `json:"composition"`
+	ObservedDateMark  *InventoryDateMark                   `json:"observed_date_mark,omitempty"`
 }

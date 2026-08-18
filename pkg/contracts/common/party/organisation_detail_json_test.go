@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"testing"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
 )
 
 func TestOrganisationDetailJSONUsesObjectMediaLogo(t *testing.T) {
 	payload, err := json.Marshal(OrganisationDetail{
 		PartyRef: PartyRef{ID: "org_1", Name: "Potato Mart"},
 		Logo: &security.ObjectMedia{
-			ID:  "media_logo_1",
-			URL: "https://cdn.example.test/organisations/potato-mart.png",
+			Code: "media_logo_1",
+			URL:  "https://cdn.example.test/organisations/potato-mart.png",
 		},
 	})
 	if err != nil {
@@ -24,7 +24,7 @@ func TestOrganisationDetailJSONUsesObjectMediaLogo(t *testing.T) {
 		t.Fatalf("unmarshal organisation detail: %v", err)
 	}
 	logo, ok := shape["logo"].(map[string]any)
-	if !ok || logo["id"] != "media_logo_1" || logo["url"] != "https://cdn.example.test/organisations/potato-mart.png" {
+	if !ok || logo["code"] != "media_logo_1" || logo["url"] != "https://cdn.example.test/organisations/potato-mart.png" {
 		t.Fatalf("OrganisationDetail logo JSON = %s", payload)
 	}
 	if _, exists := shape["logo_url"]; exists {

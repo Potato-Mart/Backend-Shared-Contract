@@ -3,7 +3,7 @@ package promotion
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
 )
 
 // PromotionApplication is the immutable result of applying one promotion
@@ -15,11 +15,11 @@ type PromotionApplication struct {
 	PromotionRevision int64  `json:"promotion_revision"`
 	RelationID        string `json:"relation_id"`
 
-	ResolvedQualifierSKUIDs []string                     `json:"resolved_qualifier_sku_ids,omitempty"`
-	ResolvedTargetSKUIDs    []string                     `json:"resolved_target_sku_ids,omitempty"`
-	ResolvedTerms           []PromotionTerm              `json:"resolved_terms,omitempty"`
-	ResolvedAmounts         []PromotionAmount            `json:"resolved_amounts,omitempty"`
-	DisplayMessages         []localization.LocalizedText `json:"display_messages,omitempty"`
-	ReceiptMessages         []localization.LocalizedText `json:"receipt_messages,omitempty"`
-	AppliedAt               time.Time                    `json:"applied_at"`
+	ResolvedQualifierSKUCodes []string                     `json:"resolved_qualifier_sku_codes,omitempty"`
+	ResolvedTargetSKUCodes    []string                     `json:"resolved_target_sku_codes,omitempty"`
+	ResolvedTerms             []PromotionTerm              `json:"resolved_terms,omitempty"`
+	ResolvedAmounts           []PromotionAmount            `json:"resolved_amounts,omitempty"`
+	DisplayMessages           []localization.LocalizedText `json:"display_messages,omitempty"`
+	ReceiptMessages           []localization.LocalizedText `json:"receipt_messages,omitempty"`
+	AppliedAt                 time.Time                    `json:"applied_at"`
 }

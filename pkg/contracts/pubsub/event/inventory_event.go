@@ -3,12 +3,12 @@ package event
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/operations"
-	warehouse "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/operations"
+	warehouse "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // StockLocationAvailabilityChangedEvent represents a customer-accessible
@@ -17,7 +17,7 @@ type StockLocationAvailabilityChangedEvent struct {
 	AssignmentID             string                                     `json:"assignment_id"`
 	DepotCode                string                                     `json:"depot_code"`
 	LocationCode             string                                     `json:"location_code"`
-	SKUID                    string                                     `json:"sku_id"`
+	SKUCode                  string                                     `json:"sku_code"`
 	AvailableBeforeBaseUnits int64                                      `json:"available_before_base_units"`
 	AvailableAfterBaseUnits  int64                                      `json:"available_after_base_units"`
 	Direction                warehouse_enums.StockAvailabilityDirection `json:"direction"`
@@ -30,7 +30,7 @@ type StockLocationAvailabilityChangedEvent struct {
 
 type InventoryLotReceivedEvent struct {
 	LotID               string                               `json:"lot_id"`
-	SKUID               string                               `json:"sku_id"`
+	SKUCode             string                               `json:"sku_code"`
 	DepotCode           string                               `json:"depot_code"`
 	DestinationBucketID string                               `json:"destination_bucket_id"`
 	ReceivedComposition packaging.PackageCompositionSnapshot `json:"received_composition"`
@@ -43,9 +43,9 @@ type InventoryLotReceivedEvent struct {
 type InventoryStockBucketChangedEvent struct {
 	BucketID                 string                               `json:"bucket_id"`
 	Location                 warehouse.StockLocationRef           `json:"location"`
-	SKUID                    string                               `json:"sku_id"`
+	SKUCode                  string                               `json:"sku_code"`
 	LotID                    string                               `json:"lot_id,omitempty"`
-	PackageOptionID          string                               `json:"package_option_id"`
+	PackageOptionCode        string                               `json:"package_option_code"`
 	HandlingUnit             packaging_enums.PackageHandlingUnit  `json:"handling_unit"`
 	Condition                warehouse_enums.InventoryCondition   `json:"condition"`
 	Disposition              warehouse_enums.InventoryDisposition `json:"disposition"`
@@ -62,13 +62,13 @@ type InventoryStockBucketChangedEvent struct {
 
 type InventoryPackageConvertedEvent struct {
 	MovementID                    string                               `json:"movement_id"`
-	SKUID                         string                               `json:"sku_id"`
+	SKUCode                       string                               `json:"sku_code"`
 	DepotCode                     string                               `json:"depot_code"`
 	LotID                         string                               `json:"lot_id"`
 	SourceBucketID                string                               `json:"source_bucket_id"`
 	DestinationBucketID           string                               `json:"destination_bucket_id"`
-	SourcePackageOptionID         string                               `json:"source_package_option_id"`
-	DestinationPackageOptionID    string                               `json:"destination_package_option_id"`
+	SourcePackageOptionCode       string                               `json:"source_package_option_code"`
+	DestinationPackageOptionCode  string                               `json:"destination_package_option_code"`
 	BaseUnits                     int64                                `json:"base_units"`
 	SourcePackageComposition      packaging.PackageCompositionSnapshot `json:"source_package_composition"`
 	DestinationPackageComposition packaging.PackageCompositionSnapshot `json:"destination_package_composition"`
@@ -79,7 +79,7 @@ type InventoryPackageConvertedEvent struct {
 
 type InventoryQualityAssessedEvent struct {
 	QualityAssessmentID string                               `json:"quality_assessment_id"`
-	SKUID               string                               `json:"sku_id"`
+	SKUCode             string                               `json:"sku_code"`
 	DepotCode           string                               `json:"depot_code"`
 	BucketID            string                               `json:"bucket_id"`
 	StockUnitID         string                               `json:"stock_unit_id,omitempty"`
@@ -95,7 +95,7 @@ type InventoryQualityAssessedEvent struct {
 
 type InventoryReservationChangedEvent struct {
 	ReservationID        string                                 `json:"reservation_id"`
-	SKUID                string                                 `json:"sku_id"`
+	SKUCode              string                                 `json:"sku_code"`
 	DepotCode            string                                 `json:"depot_code"`
 	PreviousStatus       warehouse_enums.StockReservationStatus `json:"previous_status,omitempty"`
 	Status               warehouse_enums.StockReservationStatus `json:"status"`
@@ -110,7 +110,7 @@ type StockStagingChangedEvent struct {
 	ReservationID       string                               `json:"reservation_id"`
 	AllocationID        string                               `json:"allocation_id"`
 	OrderNumber         string                               `json:"order_number"`
-	SKUID               string                               `json:"sku_id"`
+	SKUCode             string                               `json:"sku_code"`
 	SourceLocation      warehouse.StockLocationRef           `json:"source_location"`
 	DestinationLocation warehouse.StockLocationRef           `json:"destination_location"`
 	StagedComposition   packaging.PackageCompositionSnapshot `json:"staged_composition"`
@@ -126,9 +126,9 @@ type InventorySaleCommittedEvent struct {
 	ReservationID        string                               `json:"reservation_id"`
 	AllocationID         string                               `json:"allocation_id"`
 	BucketID             string                               `json:"bucket_id"`
-	SKUID                string                               `json:"sku_id"`
+	SKUCode              string                               `json:"sku_code"`
 	LotID                string                               `json:"lot_id,omitempty"`
-	PackageOptionID      string                               `json:"package_option_id"`
+	PackageOptionCode    string                               `json:"package_option_code"`
 	CommittedComposition packaging.PackageCompositionSnapshot `json:"committed_composition"`
 	InventoryRevision    int64                                `json:"inventory_revision"`
 	OccurredAt           time.Time                            `json:"occurred_at"`
@@ -136,7 +136,7 @@ type InventorySaleCommittedEvent struct {
 
 type InventoryDateMarkThresholdEvent struct {
 	LotID       string                                     `json:"lot_id"`
-	SKUID       string                                     `json:"sku_id"`
+	SKUCode     string                                     `json:"sku_code"`
 	DepotCode   string                                     `json:"depot_code"`
 	DateMark    warehouse.InventoryDateMark                `json:"date_mark"`
 	Threshold   warehouse_enums.InventoryDateMarkThreshold `json:"threshold"`

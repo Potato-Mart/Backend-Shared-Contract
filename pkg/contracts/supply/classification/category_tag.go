@@ -1,15 +1,16 @@
 package classification
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
 )
 
 type CategoryTag struct {
 	ID             string                       `json:"id"`
-	Slug           string                       `json:"slug,omitempty"`
+	Code           string                       `json:"code"`
+	Slug           string                       `json:"slug"`
 	Name           []localization.LocalizedName `json:"name"`
-	CollectionID   string                       `json:"collection_id"`
+	CollectionCode string                       `json:"collection_code"`
 	CollectionName []localization.LocalizedName `json:"collection_name"`
 
 	audit.AuditFields
@@ -19,7 +20,6 @@ type CategoryTag struct {
 // classification or audit details. It is used by canonical product records and
 // other membership-style models.
 type CategoryTagRef struct {
-	ID   string                       `json:"id"`
-	Slug string                       `json:"slug,omitempty"`
+	Code string                       `json:"code"`
 	Name []localization.LocalizedName `json:"name,omitempty"`
 }

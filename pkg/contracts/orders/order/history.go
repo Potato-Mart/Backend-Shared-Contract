@@ -3,7 +3,7 @@ package order
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/orders/order/order_enums"
 )
 
 type StatusHistory struct {

@@ -3,12 +3,12 @@ package marketing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/commerce/commerce_enums"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/localization"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/marketing/marketing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/commerce/commerce_enums"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/marketing/marketing_enums"
 )
 
 // Promotion is the public, code-addressed marketing definition for an
@@ -24,10 +24,10 @@ type Promotion struct {
 	PromotionPosition   PromotionPosition            `json:"promotion_position"`
 	PromotionConditions PromotionConditions          `json:"promotion_conditions"`
 	ScopeRelations      ScopeRelations               `json:"scope_relations"`
-	// MarketID and CountryCode are the denormalized owning market and its
+	// MarketCode and CountryCode are the denormalized owning market and its
 	// country, carried so a geographically scoped staff query is a plain
 	// indexed match.
-	MarketID    string                `json:"market_id,omitempty"`
+	MarketCode  string                `json:"market_code,omitempty"`
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 
 	audit.AuditFields

@@ -3,10 +3,10 @@ package event
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/payments/payment/payment_enums"
 )
 
 // PaymentCapturedEvent is emitted on the payment-events topic when a payment
@@ -19,11 +19,11 @@ type PaymentCapturedEvent struct {
 	Method            payment_enums.PaymentMethod `json:"method,omitempty"`
 	Amount            money.Money                 `json:"amount"`
 	ProviderSessionID string                      `json:"provider_session_id,omitempty"`
-	// MarketID, DepotCode, and CountryCode are the denormalized geography the event
+	// MarketCode, DepotCode, and CountryCode are the denormalized geography the event
 	// belongs to. They are absent on every event published before v28.0.0;
 	// a consumer that persists a geographically scoped record treats an
 	// absent value as "no evidence" and fails closed rather than defaulting.
-	MarketID    string                `json:"market_id,omitempty"`
+	MarketCode  string                `json:"market_code,omitempty"`
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	DepotCode   string                `json:"depot_code,omitempty"`
 	CapturedAt  time.Time             `json:"captured_at"`
@@ -42,11 +42,11 @@ type PaymentFailedEvent struct {
 	RetailCustomerNumber string                      `json:"retail_customer_number,omitempty"`
 	OrganisationAccessID string                      `json:"organisation_access_id,omitempty"`
 	Reason               string                      `json:"reason,omitempty"`
-	// MarketID and CountryCode are the denormalized geography the event
+	// MarketCode and CountryCode are the denormalized geography the event
 	// belongs to. They are absent on every event published before v28.0.0;
 	// a consumer that persists a geographically scoped record treats an
 	// absent value as "no evidence" and fails closed rather than defaulting.
-	MarketID    string                `json:"market_id,omitempty"`
+	MarketCode  string                `json:"market_code,omitempty"`
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	FailedAt    time.Time             `json:"failed_at"`
 	RequestID   string                `json:"request_id,omitempty"`
@@ -60,11 +60,11 @@ type ReceiptGeneratedEvent struct {
 	RetailCustomerNumber string                     `json:"retail_customer_number,omitempty"`
 	OrganisationAccessID string                     `json:"organisation_access_id,omitempty"`
 	DocumentKind         payment_enums.DocumentKind `json:"document_kind"`
-	// MarketID, DepotCode, and CountryCode are the denormalized geography the event
+	// MarketCode, DepotCode, and CountryCode are the denormalized geography the event
 	// belongs to. They are absent on every event published before v28.0.0;
 	// a consumer that persists a geographically scoped record treats an
 	// absent value as "no evidence" and fails closed rather than defaulting.
-	MarketID    string                `json:"market_id,omitempty"`
+	MarketCode  string                `json:"market_code,omitempty"`
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	DepotCode   string                `json:"depot_code,omitempty"`
 	Revision    int64                 `json:"revision"`
@@ -79,11 +79,11 @@ type InvoiceIssuedEvent struct {
 	OrderNumber          string `json:"order_number"`
 	RetailCustomerNumber string `json:"retail_customer_number,omitempty"`
 	OrganisationAccessID string `json:"organisation_access_id,omitempty"`
-	// MarketID and CountryCode are the denormalized geography the event
+	// MarketCode and CountryCode are the denormalized geography the event
 	// belongs to. They are absent on every event published before v28.0.0;
 	// a consumer that persists a geographically scoped record treats an
 	// absent value as "no evidence" and fails closed rather than defaulting.
-	MarketID    string                `json:"market_id,omitempty"`
+	MarketCode  string                `json:"market_code,omitempty"`
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	IssuedAt    time.Time             `json:"issued_at"`
 	RequestID   string                `json:"request_id,omitempty"`

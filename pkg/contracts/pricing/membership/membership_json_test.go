@@ -3,14 +3,14 @@ package membership_test
 import (
 	"encoding/json"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/membership"
 
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/membership/membership_enums"
 )
 
 func TestMembershipAccountAndTierRoundTrip(t *testing.T) {
@@ -153,7 +153,7 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 		Type:           membership_enums.MembershipRewardTypeOrderDiscount,
 		PointsCost:     500,
 		DiscountAmount: &discount,
-		SKUID:          "A00001",
+		SKUCode:        "A00001",
 		IsActive:       true,
 	}
 	redemption := membership.RewardRedemption{
@@ -168,11 +168,11 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 	}
 	plan := membership.SubscriptionPlan{
 		ID:            "plan_1",
-		SKUID:         "A00001",
+		SKUCode:       "A00001",
 		UnitPrice:     money.Money{AmountMinor: 1200, Currency: "AUD"},
 		FrequencyDays: 7,
 		IsActive:      true,
-		MarketID:      "mkt_au_vic",
+		MarketCode:    "mkt_au_vic",
 		CountryCode:   "AU",
 	}
 	subscription := membership.MemberSubscription{
@@ -183,7 +183,7 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 		Status:         membership_enums.MemberSubscriptionStatusActive,
 		StartedAt:      now,
 		NextOrderAt:    now.AddDate(0, 0, 7),
-		MarketID:       "mkt_au_vic",
+		MarketCode:     "mkt_au_vic",
 		CountryCode:    "AU",
 	}
 
@@ -206,8 +206,8 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal reward/subscription contracts: %v", err)
 	}
-	if decoded.Reward.PointsCost != 500 || decoded.Reward.SKUID != "A00001" || decoded.Redemption.PointsSpent != 500 ||
-		decoded.Plan.SKUID != "A00001" || decoded.Plan.FrequencyDays != 7 || decoded.Subscription.Status != membership_enums.MemberSubscriptionStatusActive {
+	if decoded.Reward.PointsCost != 500 || decoded.Reward.SKUCode != "A00001" || decoded.Redemption.PointsSpent != 500 ||
+		decoded.Plan.SKUCode != "A00001" || decoded.Plan.FrequencyDays != 7 || decoded.Subscription.Status != membership_enums.MemberSubscriptionStatusActive {
 		t.Fatalf("reward/subscription contracts did not round-trip: %+v", decoded)
 	}
 	if strings.Contains(string(payload), `"product":`) {
@@ -216,11 +216,11 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 	// A staff-facing subscription list is geo-scoped off the subscription
 	// itself, never by joining through PlanID, so the subscription must carry
 	// its own market and country.
-	if decoded.Subscription.MarketID != "mkt_au_vic" || decoded.Subscription.CountryCode != "AU" {
+	if decoded.Subscription.MarketCode != "mkt_au_vic" || decoded.Subscription.CountryCode != "AU" {
 		t.Fatalf("member subscription geography did not round-trip: %+v", decoded.Subscription)
 	}
 	if !strings.Contains(string(payload), `"subscription":{`) ||
-		!strings.Contains(string(payload), `"market_id":"mkt_au_vic","country_code":"AU"`) {
+		!strings.Contains(string(payload), `"market_code":"mkt_au_vic","country_code":"AU"`) {
 		t.Fatalf("member subscription JSON is missing its denormalized geography: %s", payload)
 	}
 
@@ -230,7 +230,7 @@ func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
 	if err != nil {
 		t.Fatalf("marshal bare member subscription: %v", err)
 	}
-	if strings.Contains(string(bare), "market_id") || strings.Contains(string(bare), "country_code") {
+	if strings.Contains(string(bare), "market_code") || strings.Contains(string(bare), "country_code") {
 		t.Fatalf("member subscription geography must be omitempty: %s", bare)
 	}
 }

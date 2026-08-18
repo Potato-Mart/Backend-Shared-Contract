@@ -3,7 +3,7 @@ package review
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/review/review_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/review/review_enums"
 )
 
 // RatingDistributionBucket records the number of ratings for one score.
@@ -25,7 +25,7 @@ type RatingSummary struct {
 // contain only approved text; customer and moderation identity never appear.
 type ProductReview struct {
 	ID               string    `json:"id"`
-	SKUID            string    `json:"sku_id"`
+	SKUCode          string    `json:"sku_code"`
 	Score            int       `json:"score"`
 	Title            string    `json:"title,omitempty"`
 	Body             string    `json:"body,omitempty"`
@@ -40,7 +40,7 @@ type ProductReview struct {
 // customer, account, or user identifier.
 type MyProductReview struct {
 	ID               string                              `json:"id"`
-	SKUID            string                              `json:"sku_id"`
+	SKUCode          string                              `json:"sku_code"`
 	Score            int                                 `json:"score"`
 	Title            string                              `json:"title,omitempty"`
 	Body             string                              `json:"body,omitempty"`
@@ -59,7 +59,7 @@ type MyProductReview struct {
 // ProductReview and MyProductReview.
 type ProductReviewModeration struct {
 	ID               string                              `json:"id"`
-	SKUID            string                              `json:"sku_id"`
+	SKUCode          string                              `json:"sku_code"`
 	Score            int                                 `json:"score"`
 	Title            string                              `json:"title,omitempty"`
 	Body             string                              `json:"body,omitempty"`

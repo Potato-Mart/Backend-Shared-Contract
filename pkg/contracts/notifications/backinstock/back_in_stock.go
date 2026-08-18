@@ -3,9 +3,9 @@ package backinstock
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	identity "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/identity/account"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/notifications/backinstock/backinstock_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	identity "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/identity/account"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/notifications/backinstock/backinstock_enums"
 )
 
 // BackInStockConsentSnapshot records the account and customer-level consent
@@ -30,11 +30,11 @@ type BackInStockDeliveryError struct {
 // BackInStockSubscription is a one-shot request to notify an authenticated
 // account when a SKU becomes storefront-visible and sellable again.
 type BackInStockSubscription struct {
-	ID    string `json:"id"`
-	SKUID string `json:"sku_id"`
-	// MarketID is the market the subscriber expects to buy the SKU in.
-	MarketID string `json:"market_id"`
-	// CountryCode is the denormalized country of MarketID, carried so a
+	ID      string `json:"id"`
+	SKUCode string `json:"sku_code"`
+	// MarketCode is the market the subscriber expects to buy the SKU in.
+	MarketCode string `json:"market_code"`
+	// CountryCode is the denormalized country of MarketCode, carried so a
 	// country-scoped staff query is a plain indexed match.
 	CountryCode         geography.CountryCode                     `json:"country_code,omitempty"`
 	UserID              string                                    `json:"user_id"`

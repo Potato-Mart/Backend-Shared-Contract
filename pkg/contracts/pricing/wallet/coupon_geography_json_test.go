@@ -6,12 +6,12 @@ import (
 	"testing"
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/promotion/promotion_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/wallet"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/wallet"
 )
 
 func TestCouponReusesPromotionScopePeriodTermsAndControls(t *testing.T) {
@@ -22,8 +22,8 @@ func TestCouponReusesPromotionScopePeriodTermsAndControls(t *testing.T) {
 		Scope: promotion.PromotionScope{
 			MatchMode: promotion_enums.PromotionMatchModeAll,
 			Groups: []promotion.PromotionScopeGroup{{
-				MatchMode:      promotion_enums.PromotionMatchModeAny,
-				CategoryTagIDs: []string{"tag_potato"},
+				MatchMode:        promotion_enums.PromotionMatchModeAny,
+				CategoryTagCodes: []string{"tag_potato"},
 			}},
 		},
 		Period: promotion.PromotionPeriod{StartsAt: &startsAt, Timezone: "Australia/Sydney"},
@@ -43,7 +43,7 @@ func TestCouponReusesPromotionScopePeriodTermsAndControls(t *testing.T) {
 			t.Fatalf("coupon JSON = %s, want %s", payload, want)
 		}
 	}
-	for _, retired := range []string{`"applies_to"`, `"sku_ids"`, `"category_tags"`, `"discount_type"`, `"discount_value"`, `"usage_limit"`, `"used_count"`, `"per_customer_limit"`, `"schedule_timezone"`} {
+	for _, retired := range []string{`"applies_to"`, `"sku_codes"`, `"category_tags"`, `"discount_type"`, `"discount_value"`, `"usage_limit"`, `"used_count"`, `"per_customer_limit"`, `"schedule_timezone"`} {
 		if strings.Contains(string(payload), retired) {
 			t.Fatalf("coupon JSON retained %s: %s", retired, payload)
 		}
@@ -53,7 +53,7 @@ func TestCouponReusesPromotionScopePeriodTermsAndControls(t *testing.T) {
 	if err := json.Unmarshal(payload, &got); err != nil {
 		t.Fatalf("unmarshal coupon: %v", err)
 	}
-	if got.Scope.Groups[0].CategoryTagIDs[0] != "tag_potato" || got.Period.StartsAt == nil || got.Terms[0].MoneyValue == nil || got.Controls.GeographicScope.Mode != geography_enums.GeographicScopeModeTargeted {
+	if got.Scope.Groups[0].CategoryTagCodes[0] != "tag_potato" || got.Period.StartsAt == nil || got.Terms[0].MoneyValue == nil || got.Controls.GeographicScope.Mode != geography_enums.GeographicScopeModeTargeted {
 		t.Fatalf("coupon reusable promotion fields did not round-trip: %+v", got)
 	}
 }

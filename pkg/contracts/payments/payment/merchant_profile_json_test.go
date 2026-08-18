@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/payments/payment/payment_enums"
 )
 
 // The values below are structural placeholders only. Real merchant legal
@@ -19,7 +19,7 @@ func TestMerchantLegalProfileIsEffectiveDatedPerMarket(t *testing.T) {
 	effectiveFrom := time.Date(2026, 8, 12, 0, 0, 0, 0, time.UTC)
 	registeredFrom := temporal.Date("2020-07-20")
 	payload, err := json.Marshal(MerchantLegalProfile{
-		ID: "profile_1", MarketID: "market_au",
+		ID: "profile_1", MarketCode: "market_au",
 		LegalName:             "Example Legal Name",
 		TradingName:           "Example Trading Name",
 		BusinessNumberScheme:  payment_enums.BusinessNumberSchemeABN,
@@ -38,7 +38,7 @@ func TestMerchantLegalProfileIsEffectiveDatedPerMarket(t *testing.T) {
 		t.Fatalf("marshal merchant profile: %v", err)
 	}
 	for _, want := range []string{
-		`"market_id":"market_au"`, `"legal_name":"Example Legal Name"`,
+		`"market_code":"market_au"`, `"legal_name":"Example Legal Name"`,
 		`"business_number_scheme":"abn"`, `"tax_registration_status":"registered"`,
 		`"tax_registered_from":"2020-07-20"`, `"address"`, `"contact"`,
 		`"status":"active"`, `"effective_from":"2026-08-12T00:00:00Z"`, `"revision":1`,
@@ -52,7 +52,7 @@ func TestMerchantLegalProfileIsEffectiveDatedPerMarket(t *testing.T) {
 func TestMerchantAndBuyerSnapshotsFreezeIssuanceIdentity(t *testing.T) {
 	frozenAt := time.Date(2026, 8, 12, 4, 5, 6, 0, time.UTC)
 	issuer, err := json.Marshal(MerchantLegalSnapshot{
-		ProfileID: "profile_1", ProfileRevision: 3, MarketID: "market_au",
+		ProfileID: "profile_1", ProfileRevision: 3, MarketCode: "market_au",
 		LegalName:             "Example Legal Name",
 		BusinessNumberScheme:  payment_enums.BusinessNumberSchemeABN,
 		BusinessNumber:        "00000000000",

@@ -3,16 +3,16 @@ package security
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security/security_enums"
 )
 
 // ObjectMedia is the safe render projection of an object-storage asset.
 // It intentionally contains only the stable identity and URL needed by
 // consumer-facing contracts.
 type ObjectMedia struct {
-	ID  string `json:"id"`
-	URL string `json:"url,omitempty"`
+	Code string `json:"code"`
+	URL  string `json:"url,omitempty"`
 }
 
 // ObjectMediaAsset is the complete stored-asset record. The bytes live in
@@ -20,6 +20,7 @@ type ObjectMedia struct {
 // protection information needed to manage the asset.
 type ObjectMediaAsset struct {
 	ID              string                         `json:"id"`
+	Code            string                         `json:"code"`
 	Filename        string                         `json:"filename"`
 	Bucket          string                         `json:"bucket"`
 	StoragePath     string                         `json:"storage_path"`

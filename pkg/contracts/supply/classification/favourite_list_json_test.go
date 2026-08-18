@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification/classification_enums"
 )
 
 func TestFavouriteListJSONShape(t *testing.T) {
@@ -21,7 +21,7 @@ func TestFavouriteListJSONShape(t *testing.T) {
 		Name:            "List-1",
 		DefaultNameSlot: 1,
 		Products: []classification.FavouriteListProduct{{
-			SKUID:   "SKU-1",
+			SKUCode: "SKU-1",
 			AddedAt: now,
 		}},
 	}
@@ -29,7 +29,7 @@ func TestFavouriteListJSONShape(t *testing.T) {
 	if err != nil {
 		t.Fatalf("marshal favourite list: %v", err)
 	}
-	for _, want := range []string{`"type":"wholesale_organisation"`, `"organisation_code":"ORG-1"`, `"default_name_slot":1`, `"sku_id":"SKU-1"`} {
+	for _, want := range []string{`"type":"wholesale_organisation"`, `"organisation_code":"ORG-1"`, `"default_name_slot":1`, `"sku_code":"SKU-1"`} {
 		if !strings.Contains(string(payload), want) {
 			t.Fatalf("favourite list JSON = %s, want %s", payload, want)
 		}

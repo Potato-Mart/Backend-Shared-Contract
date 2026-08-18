@@ -11,19 +11,19 @@ package pos
 import (
 	"time"
 
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/order"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/orders/order"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/pos/pos_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/orders/pos/pos_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/product"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/payment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/payments/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/payments/payment/payment_enums"
 )
 
 // Register is one physical or virtual point-of-sale register standing in a
@@ -32,7 +32,7 @@ import (
 type Register struct {
 	ID          string                `json:"id"`
 	DepotCode   string                `json:"depot_code"`
-	MarketID    string                `json:"market_id,omitempty"`
+	MarketCode  string                `json:"market_code,omitempty"`
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	TerminalID  string                `json:"terminal_id,omitempty"`
 	Name        string                `json:"name"`
@@ -54,7 +54,7 @@ type RegisterSession struct {
 	RegisterID   string                  `json:"register_id"`
 	TerminalID   string                  `json:"terminal_id,omitempty"`
 	DepotCode    string                  `json:"depot_code"`
-	MarketID     string                  `json:"market_id,omitempty"`
+	MarketCode   string                  `json:"market_code,omitempty"`
 	CountryCode  geography.CountryCode   `json:"country_code,omitempty"`
 	BusinessDate temporal.Date           `json:"business_date"`
 	Status       pos_enums.SessionStatus `json:"status"`
@@ -110,7 +110,6 @@ type SessionTotalsSnapshot struct {
 // recorded for one receipt line. It never exposes the inventory evidence in
 // accepted package pricing.
 type ReceiptLine struct {
-	SKUID string `json:"sku_id"`
 	// SKUCode is the frozen SKU code captured when the receipt was issued.
 	SKUCode               string                           `json:"sku_code"`
 	ProductName           string                           `json:"product_name"`
@@ -138,7 +137,7 @@ type ReceiptLine struct {
 // threshold applies.
 type ReceiptSnapshot struct {
 	OrderNumber string    `json:"order_number"`
-	MarketID    string    `json:"market_id"`
+	MarketCode  string    `json:"market_code"`
 	Revision    int64     `json:"revision"`
 	IssuedAt    time.Time `json:"issued_at"`
 

@@ -3,23 +3,24 @@ package warehouse_test
 import (
 	"encoding/json"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse"
 
 	"reflect"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestStockLocationAndBalanceJSONShapes(t *testing.T) {
 	location := warehouse.StockLocation{
 		ID: "location_1", DepotCode: "AU-VIC-MEL-DC-01",
 		LocationCode:    warehouse.StockLocationCodeOnlineStageFrozen,
-		StorageType:     warehouse_enums.StorageFrozen,
+		StorageType:     classification_enums.StorageFrozen,
 		Purpose:         warehouse_enums.StockLocationPurposeOnlineOrderStaging,
 		HandlingMode:    warehouse_enums.StockLocationHandlingMixed,
 		Access:          warehouse_enums.StockLocationAccessStaffOnly,
@@ -41,7 +42,7 @@ func TestStockLocationAndBalanceJSONShapes(t *testing.T) {
 	zero := int64(0)
 	balanceShape := marshalStockLocationObject(t, warehouse.StockLocationProductBalance{
 		AssignmentID: "assignment_1", DepotCode: location.DepotCode,
-		LocationCode: location.LocationCode, SKUID: "A00001",
+		LocationCode: location.LocationCode, SKUCode: "A00001",
 		PackageComposition: stockLocationComposition(packaging_enums.PackageHandlingUnitEach, "pkg_each", zero, 1),
 		OnHandBaseUnits:    zero, ReservedBaseUnits: zero, AvailableBaseUnits: zero,
 		IsOutOfStock: true, Revision: 7,
@@ -59,15 +60,15 @@ func TestRequiredSystemStockLocationCodesJSON(t *testing.T) {
 		name        string
 		code        string
 		wantCode    string
-		storageType warehouse_enums.StorageType
+		storageType classification_enums.StorageType
 		purpose     warehouse_enums.StockLocationPurpose
 	}{
-		{name: "quality hold ambient", code: warehouse.StockLocationCodeQualityHoldAmbient, wantCode: "SYS-QH-AMBIENT", storageType: warehouse_enums.StorageAmbient, purpose: warehouse_enums.StockLocationPurposeQualityHold},
-		{name: "quality hold chilled", code: warehouse.StockLocationCodeQualityHoldChilled, wantCode: "SYS-QH-CHILLED", storageType: warehouse_enums.StorageChilled, purpose: warehouse_enums.StockLocationPurposeQualityHold},
-		{name: "quality hold frozen", code: warehouse.StockLocationCodeQualityHoldFrozen, wantCode: "SYS-QH-FROZEN", storageType: warehouse_enums.StorageFrozen, purpose: warehouse_enums.StockLocationPurposeQualityHold},
-		{name: "online stage ambient", code: warehouse.StockLocationCodeOnlineStageAmbient, wantCode: "SYS-ONLINE-STAGE-AMBIENT", storageType: warehouse_enums.StorageAmbient, purpose: warehouse_enums.StockLocationPurposeOnlineOrderStaging},
-		{name: "online stage chilled", code: warehouse.StockLocationCodeOnlineStageChilled, wantCode: "SYS-ONLINE-STAGE-CHILLED", storageType: warehouse_enums.StorageChilled, purpose: warehouse_enums.StockLocationPurposeOnlineOrderStaging},
-		{name: "online stage frozen", code: warehouse.StockLocationCodeOnlineStageFrozen, wantCode: "SYS-ONLINE-STAGE-FROZEN", storageType: warehouse_enums.StorageFrozen, purpose: warehouse_enums.StockLocationPurposeOnlineOrderStaging},
+		{name: "quality hold ambient", code: warehouse.StockLocationCodeQualityHoldAmbient, wantCode: "SYS-QH-AMBIENT", storageType: classification_enums.StorageAmbient, purpose: warehouse_enums.StockLocationPurposeQualityHold},
+		{name: "quality hold chilled", code: warehouse.StockLocationCodeQualityHoldChilled, wantCode: "SYS-QH-CHILLED", storageType: classification_enums.StorageChilled, purpose: warehouse_enums.StockLocationPurposeQualityHold},
+		{name: "quality hold frozen", code: warehouse.StockLocationCodeQualityHoldFrozen, wantCode: "SYS-QH-FROZEN", storageType: classification_enums.StorageFrozen, purpose: warehouse_enums.StockLocationPurposeQualityHold},
+		{name: "online stage ambient", code: warehouse.StockLocationCodeOnlineStageAmbient, wantCode: "SYS-ONLINE-STAGE-AMBIENT", storageType: classification_enums.StorageAmbient, purpose: warehouse_enums.StockLocationPurposeOnlineOrderStaging},
+		{name: "online stage chilled", code: warehouse.StockLocationCodeOnlineStageChilled, wantCode: "SYS-ONLINE-STAGE-CHILLED", storageType: classification_enums.StorageChilled, purpose: warehouse_enums.StockLocationPurposeOnlineOrderStaging},
+		{name: "online stage frozen", code: warehouse.StockLocationCodeOnlineStageFrozen, wantCode: "SYS-ONLINE-STAGE-FROZEN", storageType: classification_enums.StorageFrozen, purpose: warehouse_enums.StockLocationPurposeOnlineOrderStaging},
 	}
 
 	seen := make(map[string]struct{}, len(tests))
@@ -115,11 +116,11 @@ func TestStockLocationAssignmentReplacesProductPlacement(t *testing.T) {
 		ID:                       "assignment_1",
 		DepotCode:                "AU-VIC-MEL-DC-01",
 		LocationCode:             "A-01-03",
-		SKUID:                    "A00001",
+		SKUCode:                  "A00001",
 		ElectronicShelfLabelCode: "ESL-001",
 		IsActive:                 true,
 	})
-	for _, key := range []string{"id", "depot_code", "location_code", "sku_id", "electronic_shelf_label_code", "is_active"} {
+	for _, key := range []string{"id", "depot_code", "location_code", "sku_code", "electronic_shelf_label_code", "is_active"} {
 		if _, ok := shape[key]; !ok {
 			t.Fatalf("stock location assignment JSON missing %q: %+v", key, shape)
 		}
@@ -131,11 +132,11 @@ func stockLocationComposition(unit packaging_enums.PackageHandlingUnit, optionID
 	return packaging.PackageCompositionSnapshot{
 		TotalBaseUnits: baseUnits,
 		Components: []packaging.PackageComponentSnapshot{{
-			PackageOptionID: optionID,
-			HandlingUnit:    unit,
-			PackageCount:    count,
-			UnitsPerPackage: unitsPerPackage,
-			BaseUnits:       baseUnits,
+			PackageOptionCode: optionID,
+			HandlingUnit:      unit,
+			PackageCount:      count,
+			UnitsPerPackage:   unitsPerPackage,
+			BaseUnits:         baseUnits,
 		}},
 	}
 }

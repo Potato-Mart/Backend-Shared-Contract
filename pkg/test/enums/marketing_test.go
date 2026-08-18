@@ -3,8 +3,8 @@ package enums_test
 import (
 	"testing"
 
-	legacy_marketing_enums "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/insights/marketing/marketing_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/marketing/marketing_enums"
+	legacy_marketing_enums "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/insights/marketing/marketing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/marketing/marketing_enums"
 )
 
 func TestMarketingEnumsValidateLockedV28Values(t *testing.T) {

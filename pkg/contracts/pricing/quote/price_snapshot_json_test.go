@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/quote/quote_enums"
 )
 
 func TestTaxSnapshotKeepsTheRateExactAsAFraction(t *testing.T) {
@@ -26,7 +26,7 @@ func TestTaxSnapshotKeepsTheRateExactAsAFraction(t *testing.T) {
 		{pricebook_enums.PriceTaxInclusionExclusive, quote_enums.TaxCalculationSourceExclusiveAddition, 1, 10},
 	} {
 		payload, err := json.Marshal(TaxSnapshot{
-			TaxCategoryID: "tax_au_gst", TaxRuleID: "rule_au_gst", TaxRuleRevision: 1,
+			TaxCategoryCode: "tax_au_gst", TaxRuleID: "rule_au_gst", TaxRuleRevision: 1,
 			InclusionBasis: tc.basis, RateNumerator: tc.numerator, RateDenominator: tc.denominator,
 			TaxableBase:       money.Money{AmountMinor: 1100, Currency: "AUD"},
 			AllocatedTax:      money.Money{AmountMinor: 100, Currency: "AUD"},

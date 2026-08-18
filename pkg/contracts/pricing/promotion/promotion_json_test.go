@@ -6,11 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/commerce/commerce_enums"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/commerce/commerce_enums"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 func TestPromotionRoundTripsOpenPromotionAndRelationKinds(t *testing.T) {
@@ -33,15 +33,15 @@ func TestPromotionRoundTripsOpenPromotionAndRelationKinds(t *testing.T) {
 			MatchMode: promotion_enums.PromotionMatchModeAll,
 			Groups: []PromotionScopeGroup{{
 				MatchMode:        promotion_enums.PromotionMatchModeAny,
-				CategoryTagIDs:   []string{"tag_potato"},
+				CategoryTagCodes: []string{"tag_potato"},
 				MinimumBaseUnits: 1,
 			}},
 		},
 		Relations: []PromotionRelation{{
 			ID:             "rel_future",
 			Kind:           "future_qualifier_to_target",
-			QualifierScope: PromotionScope{MatchMode: promotion_enums.PromotionMatchModeAll, Groups: []PromotionScopeGroup{{MatchMode: promotion_enums.PromotionMatchModeAny, SKUIDs: []string{"POTATO-001"}}}},
-			TargetScope:    PromotionScope{MatchMode: promotion_enums.PromotionMatchModeAll, Groups: []PromotionScopeGroup{{MatchMode: promotion_enums.PromotionMatchModeAny, SKUIDs: []string{"POTATO-002"}}}},
+			QualifierScope: PromotionScope{MatchMode: promotion_enums.PromotionMatchModeAll, Groups: []PromotionScopeGroup{{MatchMode: promotion_enums.PromotionMatchModeAny, SKUCodes: []string{"POTATO-001"}}}},
+			TargetScope:    PromotionScope{MatchMode: promotion_enums.PromotionMatchModeAll, Groups: []PromotionScopeGroup{{MatchMode: promotion_enums.PromotionMatchModeAny, SKUCodes: []string{"POTATO-002"}}}},
 		}},
 		Controls: PromotionControls{
 			Priority:            10,

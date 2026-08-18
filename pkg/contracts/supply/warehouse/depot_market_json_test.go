@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse"
 )
 
 func TestDepotMarketAssociatesPhysicalSitesWithCommercialMarkets(t *testing.T) {
 	effectiveFrom := time.Date(2026, 8, 12, 0, 0, 0, 0, time.UTC)
 	value := warehouse.DepotMarket{
-		ID: "depot_market_1", DepotCode: "AU-VIC-MEL-DC-01", MarketID: "market_au",
+		ID: "depot_market_1", DepotCode: "AU-VIC-MEL-DC-01", MarketCode: "market_au",
 		IsActive: true, EffectiveFrom: effectiveFrom,
 	}
 
@@ -21,7 +21,7 @@ func TestDepotMarketAssociatesPhysicalSitesWithCommercialMarkets(t *testing.T) {
 		t.Fatalf("marshal depot market: %v", err)
 	}
 	for _, want := range []string{
-		`"depot_code":"AU-VIC-MEL-DC-01"`, `"market_id":"market_au"`,
+		`"depot_code":"AU-VIC-MEL-DC-01"`, `"market_code":"market_au"`,
 		`"is_active":true`, `"effective_from":"2026-08-12T00:00:00Z"`,
 	} {
 		if !strings.Contains(string(payload), want) {
@@ -33,7 +33,7 @@ func TestDepotMarketAssociatesPhysicalSitesWithCommercialMarkets(t *testing.T) {
 	}
 	// A depot services a market commercially; it never carries the market's
 	// country, currency, or price configuration.
-	for _, forbidden := range []string{`"country_code"`, `"currency"`, `"price_book_id"`} {
+	for _, forbidden := range []string{`"country_code"`, `"currency"`, `"price_book_code"`} {
 		if strings.Contains(string(payload), forbidden) {
 			t.Fatalf("DepotMarket leaked commercial configuration %s: %s", forbidden, payload)
 		}
@@ -43,7 +43,7 @@ func TestDepotMarketAssociatesPhysicalSitesWithCommercialMarkets(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal depot market: %v", err)
 	}
-	if decoded.DepotCode != value.DepotCode || decoded.MarketID != value.MarketID || !decoded.IsActive {
+	if decoded.DepotCode != value.DepotCode || decoded.MarketCode != value.MarketCode || !decoded.IsActive {
 		t.Fatalf("depot market did not round-trip: %+v", decoded)
 	}
 
@@ -51,7 +51,7 @@ func TestDepotMarketAssociatesPhysicalSitesWithCommercialMarkets(t *testing.T) {
 	// many and Depot.Country is never assumed to equal Market.Country.
 	closedAt := effectiveFrom.AddDate(1, 0, 0)
 	second := warehouse.DepotMarket{
-		ID: "depot_market_2", DepotCode: "AU-VIC-MEL-DC-01", MarketID: "market_nz",
+		ID: "depot_market_2", DepotCode: "AU-VIC-MEL-DC-01", MarketCode: "market_nz",
 		IsActive: false, EffectiveFrom: effectiveFrom, EffectiveTo: &closedAt,
 	}
 	both, err := json.Marshal([]warehouse.DepotMarket{value, second})

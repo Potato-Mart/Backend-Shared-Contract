@@ -6,17 +6,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/customers/wholesale/wholesale_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/product/product_enums"
 )
 
 func TestPriceBookOwnsCurrencyChannelAudienceAndPolicies(t *testing.T) {
 	validFrom := time.Date(2026, 8, 12, 0, 0, 0, 0, time.UTC)
 	payload, err := json.Marshal(PriceBook{
-		ID: "book_au_online", Code: "AU_ONLINE", Name: "AU online", MarketID: "market_au",
+		ID: "book_au_online", Code: "AU_ONLINE", Name: "AU online", MarketCode: "market_au",
 		Currency: "AUD", CurrencyExponent: money.CurrencyExponent{Currency: "AUD", Exponent: 2},
 		Channel: commerce_enums.OrderTypeOnline, Audience: product_enums.PriceAudienceRetail,
 		TaxInclusion: pricebook_enums.PriceTaxInclusionInclusive,
@@ -28,7 +28,7 @@ func TestPriceBookOwnsCurrencyChannelAudienceAndPolicies(t *testing.T) {
 		t.Fatalf("marshal price book: %v", err)
 	}
 	for _, want := range []string{
-		`"market_id":"market_au"`, `"currency":"AUD"`, `"channel":"online"`,
+		`"market_code":"market_au"`, `"currency":"AUD"`, `"channel":"online"`,
 		`"audience":"retail"`, `"tax_inclusion":"tax_inclusive"`,
 		`"price_ending":"charm_nine"`, `"status":"active"`,
 	} {
@@ -42,7 +42,7 @@ func TestPriceEntryIsApprovalGatedAndRevisioned(t *testing.T) {
 	validFrom := time.Date(2026, 8, 12, 0, 0, 0, 0, time.UTC)
 	sourceRevision := int64(7)
 	value := PriceEntry{
-		ID: "entry_1", PriceBookID: "book_au_online", SKUID: "sku_a00001",
+		ID: "entry_1", PriceBookCode: "book_au_online", SKUCode: "sku_a00001",
 		Amount:     money.Money{AmountMinor: 319, Currency: "AUD"},
 		Status:     pricebook_enums.PriceEntryStatusDraft,
 		Derivation: pricebook_enums.PriceDerivationSuggestedFromBaseCost,
@@ -54,7 +54,7 @@ func TestPriceEntryIsApprovalGatedAndRevisioned(t *testing.T) {
 		t.Fatalf("marshal price entry: %v", err)
 	}
 	for _, want := range []string{
-		`"price_book_id":"book_au_online"`, `"sku_id":"sku_a00001"`,
+		`"price_book_code":"book_au_online"`, `"sku_code":"sku_a00001"`,
 		`"amount":{"amount_minor":319,"currency":"AUD"}`,
 		`"status":"draft"`, `"derivation":"suggested_from_base_cost"`,
 		`"source_base_cost_revision":7`,
@@ -78,7 +78,7 @@ func TestPriceEntryIsApprovalGatedAndRevisioned(t *testing.T) {
 
 func TestPriceBookAssignmentPopulatesOnlyItsResolutionLevel(t *testing.T) {
 	organisation, err := json.Marshal(PriceBookAssignment{
-		ID: "assignment_1", MarketID: "market_au", PriceBookID: "book_au_supermarket",
+		ID: "assignment_1", MarketCode: "market_au", PriceBookCode: "book_au_supermarket",
 		Kind:                 pricebook_enums.PriceBookAssignmentKindOrganisationCategory,
 		OrganisationCategory: wholesale_enums.WholesaleOrganisationCategorySupermarket,
 		Status:               pricebook_enums.PriceBookStatusActive,
@@ -96,7 +96,7 @@ func TestPriceBookAssignmentPopulatesOnlyItsResolutionLevel(t *testing.T) {
 	}
 
 	channel, err := json.Marshal(PriceBookAssignment{
-		ID: "assignment_2", MarketID: "market_au", PriceBookID: "book_au_online",
+		ID: "assignment_2", MarketCode: "market_au", PriceBookCode: "book_au_online",
 		Kind:    pricebook_enums.PriceBookAssignmentKindChannelDefault,
 		Channel: commerce_enums.OrderTypeOnline,
 		Status:  pricebook_enums.PriceBookStatusActive,

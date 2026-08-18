@@ -6,16 +6,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pubsub/event"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/listing/listing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pubsub/event"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/listing/listing_enums"
 )
 
 func TestCatalogBaseCostChangedEventJSONShape(t *testing.T) {
 	now := time.Date(2026, 8, 12, 7, 8, 9, 0, time.UTC)
 	previous := money.Money{AmountMinor: 500, Currency: "AUD"}
 	shape := marshalObject(t, event.CatalogBaseCostChangedEvent{
-		SKUID:            "sku_a00001",
+		SKUCode:          "sku_a00001",
 		Currency:         "AUD",
 		PreviousAmount:   &previous,
 		Amount:           money.Money{AmountMinor: 550, Currency: "AUD"},
@@ -26,7 +26,7 @@ func TestCatalogBaseCostChangedEventJSONShape(t *testing.T) {
 		EffectiveFrom:    now,
 		OccurredAt:       now,
 	})
-	for _, key := range []string{"sku_id", "currency", "previous_amount", "amount", "previous_revision", "revision", "effective_from", "occurred_at"} {
+	for _, key := range []string{"sku_code", "currency", "previous_amount", "amount", "previous_revision", "revision", "effective_from", "occurred_at"} {
 		if _, ok := shape[key]; !ok {
 			t.Fatalf("base cost changed JSON missing %q: %+v", key, shape)
 		}
@@ -41,11 +41,11 @@ func TestCatalogListingChangedEventCarriesListingIdentityAndRevision(t *testing.
 	leadDays := int32(21)
 	value := event.CatalogListingChangedEvent{
 		ListingID:              "listing_1",
-		MarketID:               "market_au",
-		SKUID:                  "sku_a00001",
+		MarketCode:             "market_au",
+		SKUCode:                "sku_a00001",
 		PreviousStatus:         listing_enums.MarketListingStatusDraft,
 		Status:                 listing_enums.MarketListingStatusActive,
-		TaxCategoryID:          "tax_au_gst",
+		TaxCategoryCode:        "tax_au_gst",
 		UnitPricingRequired:    true,
 		ExpiryLeadDaysOverride: &leadDays,
 		PreviousRevision:       6,
@@ -59,8 +59,8 @@ func TestCatalogListingChangedEventCarriesListingIdentityAndRevision(t *testing.
 		t.Fatalf("marshal listing changed event: %v", err)
 	}
 	for _, want := range []string{
-		`"listing_id":"listing_1"`, `"market_id":"market_au"`, `"sku_id":"sku_a00001"`,
-		`"previous_status":"draft"`, `"status":"active"`, `"tax_category_id":"tax_au_gst"`,
+		`"listing_id":"listing_1"`, `"market_code":"market_au"`, `"sku_code":"sku_a00001"`,
+		`"previous_status":"draft"`, `"status":"active"`, `"tax_category_code":"tax_au_gst"`,
 		`"unit_pricing_required":true`, `"expiry_lead_days_override":21`,
 		`"previous_revision":6`, `"revision":7`,
 	} {

@@ -3,7 +3,7 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
 )
 
 // DepotMarket associates one physical depot with one commercial market. A
@@ -12,7 +12,7 @@ import (
 type DepotMarket struct {
 	ID            string     `json:"id"`
 	DepotCode     string     `json:"depot_code"`
-	MarketID      string     `json:"market_id"`
+	MarketCode    string     `json:"market_code"`
 	IsActive      bool       `json:"is_active"`
 	EffectiveFrom time.Time  `json:"effective_from"`
 	EffectiveTo   *time.Time `json:"effective_to,omitempty"`

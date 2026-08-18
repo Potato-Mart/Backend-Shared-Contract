@@ -15,18 +15,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	order "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/pos"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/promotion/promotion_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/quote"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/quote/quote_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/listing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	order "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/orders/pos"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/quote"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/listing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestV27PromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *testing.T) {
@@ -36,16 +36,16 @@ func TestV27PromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *test
 		Groups: []promotion.PromotionScopeGroup{
 			{
 				MatchMode:        promotion_enums.PromotionMatchModeAny,
-				SKUIDs:           []string{"POTATO-A", "POTATO-B"},
+				SKUCodes:         []string{"POTATO-A", "POTATO-B"},
 				MinimumBaseUnits: 3,
 				MaximumBaseUnits: &maximum,
 			},
 			{
-				MatchMode:        promotion_enums.PromotionMatchModeAll,
-				CollectionIDs:    []string{"collection-weekly", "collection-seasonal"},
-				CategoryTagIDs:   []string{"tag-organic", "tag-local"},
-				PackageOptionIDs: []string{"package-each", "package-case"},
-				MinimumBaseUnits: 1,
+				MatchMode:          promotion_enums.PromotionMatchModeAll,
+				CollectionCodes:    []string{"collection-weekly", "collection-seasonal"},
+				CategoryTagCodes:   []string{"tag-organic", "tag-local"},
+				PackageOptionCodes: []string{"package-each", "package-case"},
+				MinimumBaseUnits:   1,
 			},
 		},
 	}
@@ -71,10 +71,10 @@ func TestV27PromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *test
 	if got.MatchMode != promotion_enums.PromotionMatchModeAll || len(got.Groups) != 2 {
 		t.Fatalf("outer ALL scope changed: %+v", got)
 	}
-	if first := got.Groups[0]; first.MatchMode != promotion_enums.PromotionMatchModeAny || len(first.SKUIDs) != 2 || first.MaximumBaseUnits == nil || *first.MaximumBaseUnits != 12 {
+	if first := got.Groups[0]; first.MatchMode != promotion_enums.PromotionMatchModeAny || len(first.SKUCodes) != 2 || first.MaximumBaseUnits == nil || *first.MaximumBaseUnits != 12 {
 		t.Fatalf("product quantity-pool group changed: %+v", first)
 	}
-	if second := got.Groups[1]; second.MatchMode != promotion_enums.PromotionMatchModeAll || len(second.CollectionIDs) != 2 || len(second.CategoryTagIDs) != 2 || len(second.PackageOptionIDs) != 2 || second.MaximumBaseUnits != nil {
+	if second := got.Groups[1]; second.MatchMode != promotion_enums.PromotionMatchModeAll || len(second.CollectionCodes) != 2 || len(second.CategoryTagCodes) != 2 || len(second.PackageOptionCodes) != 2 || second.MaximumBaseUnits != nil {
 		t.Fatalf("collection/tag/package group or unlimited maximum changed: %+v", second)
 	}
 }
@@ -82,8 +82,8 @@ func TestV27PromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *test
 func TestV27PriceSnapshotFreezesRuleTaxAndEligibilityEvidence(t *testing.T) {
 	capturedAt := time.Date(2026, 8, 12, 9, 30, 0, 0, time.UTC)
 	value := quote.PriceSnapshot{
-		QuoteID: "quote-1", LineID: "line-1", SKUID: "sku-potato-a", MarketID: "market-au",
-		PriceBookID: "book-au-online", PriceBookRevision: 5,
+		QuoteID: "quote-1", LineID: "line-1", SKUCode: "sku-potato-a", MarketCode: "market-au",
+		PriceBookCode: "book-au-online", PriceBookRevision: 5,
 		PriceEntryID: "entry-1", PriceEntryRevision: 8,
 		Currency: "AUD", CurrencyExponent: money.CurrencyExponent{Currency: "AUD", Exponent: 2},
 		ListUnitPrice:  money.Money{AmountMinor: 800, Currency: "AUD"},
@@ -92,7 +92,7 @@ func TestV27PriceSnapshotFreezesRuleTaxAndEligibilityEvidence(t *testing.T) {
 		TaxAmount:      money.Money{AmountMinor: 62, Currency: "AUD"},
 		LineTotal:      money.Money{AmountMinor: 680, Currency: "AUD"},
 		Tax: quote.TaxSnapshot{
-			TaxCategoryID: "tax-au-gst", TaxRuleID: "rule-au-gst", TaxRuleRevision: 2,
+			TaxCategoryCode: "tax-au-gst", TaxRuleID: "rule-au-gst", TaxRuleRevision: 2,
 			InclusionBasis:    pricebook_enums.PriceTaxInclusionInclusive,
 			RateNumerator:     1,
 			RateDenominator:   11,
@@ -110,8 +110,8 @@ func TestV27PriceSnapshotFreezesRuleTaxAndEligibilityEvidence(t *testing.T) {
 			RoundedAmount: money.Money{AmountMinor: 680, Currency: "AUD"},
 		},
 		Eligibility: listing.SaleEligibilitySnapshot{
-			MarketID: "market-au", SKUID: "sku-potato-a", ListingID: "listing-1", ListingRevision: 3,
-			TaxCategoryID: "tax-au-gst", DepotCode: "SYD-01",
+			MarketCode: "market-au", SKUCode: "sku-potato-a", ListingID: "listing-1", ListingRevision: 3,
+			TaxCategoryCode: "tax-au-gst", DepotCode: "SYD-01",
 			StockLocation:      warehouse.StockLocationRef{DepotCode: "SYD-01", LocationCode: "A-1"},
 			Condition:          warehouse_enums.InventoryConditionGood,
 			Disposition:        warehouse_enums.InventoryDispositionStandardSellable,
@@ -152,8 +152,8 @@ func TestV27PriceSnapshotFreezesRuleTaxAndEligibilityEvidence(t *testing.T) {
 func TestV27PromotionApplicationsPreserveOrderedResolvedSKUEvidence(t *testing.T) {
 	appliedAt := time.Date(2026, 8, 12, 9, 30, 0, 0, time.UTC)
 	applications := []promotion.PromotionApplication{
-		{PromotionID: "promotion-membership", PromotionKind: "membership_discount", PromotionRevision: 2, RelationID: "relation-membership", ResolvedTargetSKUIDs: []string{"sku-potato-a"}, AppliedAt: appliedAt},
-		{PromotionID: "promotion-bundle", PromotionKind: "future_bundle_kind", PromotionRevision: 7, RelationID: "relation-bundle", ResolvedQualifierSKUIDs: []string{"sku-potato-a", "sku-potato-b"}, ResolvedTargetSKUIDs: []string{"sku-potato-a"}, AppliedAt: appliedAt},
+		{PromotionID: "promotion-membership", PromotionKind: "membership_discount", PromotionRevision: 2, RelationID: "relation-membership", ResolvedTargetSKUCodes: []string{"sku-potato-a"}, AppliedAt: appliedAt},
+		{PromotionID: "promotion-bundle", PromotionKind: "future_bundle_kind", PromotionRevision: 7, RelationID: "relation-bundle", ResolvedQualifierSKUCodes: []string{"sku-potato-a", "sku-potato-b"}, ResolvedTargetSKUCodes: []string{"sku-potato-a"}, AppliedAt: appliedAt},
 	}
 
 	payload, err := json.Marshal(applications)
@@ -167,15 +167,15 @@ func TestV27PromotionApplicationsPreserveOrderedResolvedSKUEvidence(t *testing.T
 	if len(got) != 2 || got[0].PromotionID != "promotion-membership" || got[1].PromotionID != "promotion-bundle" {
 		t.Fatalf("promotion stacking order changed: %+v", got)
 	}
-	if got[1].RelationID != "relation-bundle" || len(got[1].ResolvedQualifierSKUIDs) != 2 || len(got[1].ResolvedTargetSKUIDs) != 1 {
+	if got[1].RelationID != "relation-bundle" || len(got[1].ResolvedQualifierSKUCodes) != 2 || len(got[1].ResolvedTargetSKUCodes) != 1 {
 		t.Fatalf("resolved qualifier-to-target evidence changed: %+v", got[1])
 	}
 
 	applicationType := reflect.TypeOf(promotion.PromotionApplication{})
 	for fieldName, wantTag := range map[string]string{
-		"RelationID":              "relation_id",
-		"ResolvedQualifierSKUIDs": "resolved_qualifier_sku_ids,omitempty",
-		"ResolvedTargetSKUIDs":    "resolved_target_sku_ids,omitempty",
+		"RelationID":                "relation_id",
+		"ResolvedQualifierSKUCodes": "resolved_qualifier_sku_codes,omitempty",
+		"ResolvedTargetSKUCodes":    "resolved_target_sku_codes,omitempty",
 	} {
 		field, ok := applicationType.FieldByName(fieldName)
 		if !ok || field.Tag.Get("json") != wantTag {
@@ -186,7 +186,7 @@ func TestV27PromotionApplicationsPreserveOrderedResolvedSKUEvidence(t *testing.T
 
 func TestV27CustomerSummariesExposeOnlyFrozenSafePricingFacts(t *testing.T) {
 	for _, model := range []reflect.Type{reflect.TypeOf(pos.ReceiptLine{}), reflect.TypeOf(order.OrderLineSummary{})} {
-		for _, required := range []string{"SKUID", "ProductName", "ProductImage", "ProductPackageOption", "CapturedAt", "PackagePrice", "TaxAmount", "DiscountAmount", "PromotionApplications", "Total"} {
+		for _, required := range []string{"SKUCode", "ProductName", "ProductImage", "ProductPackageOption", "CapturedAt", "PackagePrice", "TaxAmount", "DiscountAmount", "PromotionApplications", "Total"} {
 			if _, ok := model.FieldByName(required); !ok {
 				t.Errorf("%s is missing frozen customer-safe field %s", model, required)
 			}
@@ -207,14 +207,14 @@ func TestV27CustomerSummariesExposeOnlyFrozenSafePricingFacts(t *testing.T) {
 func TestV27OperationalCategoryTagEvidenceIsLocationQualified(t *testing.T) {
 	model := reflect.TypeOf(operations.InventoryCategoryTagEvidence{})
 	assertJSONFields(t, model, map[string]string{
-		"SKUID":           "sku_id",
-		"PackageOptionID": "package_option_id",
-		"CategoryTag":     "category_tag",
-		"StockLocation":   "stock_location",
-		"Condition":       "condition",
-		"Disposition":     "disposition",
-		"DateMark":        "date_mark,omitempty",
-		"AsOf":            "as_of",
+		"SKUCode":           "sku_code",
+		"PackageOptionCode": "package_option_code",
+		"CategoryTag":       "category_tag",
+		"StockLocation":     "stock_location",
+		"Condition":         "condition",
+		"Disposition":       "disposition",
+		"DateMark":          "date_mark,omitempty",
+		"AsOf":              "as_of",
 	})
 	field, _ := model.FieldByName("StockLocation")
 	if field.Type != reflect.TypeOf(warehouse.StockLocationRef{}) {
@@ -329,7 +329,7 @@ func v27PromotionScopeStructurallyUsable(scope promotion.PromotionScope) bool {
 		if !group.MatchMode.IsValid() {
 			return false
 		}
-		selectorCount := len(group.SKUIDs) + len(group.CollectionIDs) + len(group.CategoryTagIDs) + len(group.PackageOptionIDs)
+		selectorCount := len(group.SKUCodes) + len(group.CollectionCodes) + len(group.CategoryTagCodes) + len(group.PackageOptionCodes)
 		if selectorCount == 0 || group.MinimumBaseUnits < 0 {
 			return false
 		}

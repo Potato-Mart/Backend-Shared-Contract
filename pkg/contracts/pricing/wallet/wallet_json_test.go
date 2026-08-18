@@ -3,19 +3,19 @@ package wallet_test
 import (
 	"encoding/json"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/benefit"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/wallet"
 
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/benefit/benefit_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/benefit/benefit_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 func TestCustomerWalletRoundTrip(t *testing.T) {
@@ -94,7 +94,7 @@ func TestCustomerWalletRoundTrip(t *testing.T) {
 func TestGiftCardDenominationPolicyRoundTrip(t *testing.T) {
 	editedAt := time.Date(2026, 8, 17, 4, 5, 6, 0, time.UTC)
 	policy := wallet.GiftCardDenominationPolicy{
-		MarketID:            "mkt-au",
+		MarketCode:          "mkt-au",
 		CountryCode:         "AU",
 		Version:             2,
 		Currency:            "AUD",
@@ -111,7 +111,7 @@ func TestGiftCardDenominationPolicyRoundTrip(t *testing.T) {
 	if err != nil {
 		t.Fatalf("marshal gift-card denomination policy: %v", err)
 	}
-	const wire = `{"market_id":"mkt-au","country_code":"AU","version":2,"currency":"AUD",` +
+	const wire = `{"market_code":"mkt-au","country_code":"AU","version":2,"currency":"AUD",` +
 		`"allowed_amounts_minor":[50000,80000,100000,150000,200000],` +
 		`"created_at":"2026-08-17T04:05:06Z","created_by":"usr_seed",` +
 		`"updated_at":"2026-08-17T04:05:06Z","updated_by":"usr_country_admin"}`
@@ -123,7 +123,7 @@ func TestGiftCardDenominationPolicyRoundTrip(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal gift-card denomination policy: %v", err)
 	}
-	if decoded.MarketID != "mkt-au" || decoded.CountryCode != "AU" ||
+	if decoded.MarketCode != "mkt-au" || decoded.CountryCode != "AU" ||
 		decoded.Version != 2 || decoded.Currency != "AUD" ||
 		len(decoded.AllowedAmountsMinor) != 5 || decoded.AllowedAmountsMinor[1] != 80_000 {
 		t.Fatalf("gift-card denomination policy did not round-trip: %+v", decoded)
@@ -138,7 +138,7 @@ func TestGiftCardDenominationPolicyRoundTrip(t *testing.T) {
 func TestGiftCardDenominationBonusRoundTrip(t *testing.T) {
 	// Byte-exact wire form. Bonuses are an ordered slice of pairs, never a map,
 	// so consumers may compare two policy revisions byte for byte.
-	const wire = `{"market_id":"mkt-au","country_code":"AU","version":3,"currency":"AUD",` +
+	const wire = `{"market_code":"mkt-au","country_code":"AU","version":3,"currency":"AUD",` +
 		`"allowed_amounts_minor":[50000,100000,200000],` +
 		`"bonus_amounts_minor":[{"amount_minor":50000,"bonus_minor":0},` +
 		`{"amount_minor":100000,"bonus_minor":5000},` +
@@ -171,13 +171,13 @@ func TestGiftCardDenominationBonusRoundTrip(t *testing.T) {
 
 	// A policy with no bonuses simply omits the slice; every other key stays.
 	bonusFree, err := json.Marshal(wallet.GiftCardDenominationPolicy{
-		MarketID: "mkt-au", CountryCode: "AU",
+		MarketCode: "mkt-au", CountryCode: "AU",
 		Version: 3, Currency: "AUD", AllowedAmountsMinor: []int64{50_000},
 	})
 	if err != nil {
 		t.Fatalf("marshal bonus-free gift-card denomination policy: %v", err)
 	}
-	const bonusFreeWire = `{"market_id":"mkt-au","country_code":"AU","version":3,` +
+	const bonusFreeWire = `{"market_code":"mkt-au","country_code":"AU","version":3,` +
 		`"currency":"AUD","allowed_amounts_minor":[50000],` +
 		`"created_at":"0001-01-01T00:00:00Z","updated_at":"0001-01-01T00:00:00Z"}`
 	if string(bonusFree) != bonusFreeWire {

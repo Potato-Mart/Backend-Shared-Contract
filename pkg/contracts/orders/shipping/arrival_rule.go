@@ -3,9 +3,9 @@ package shipping
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/temporal"
 )
 
 // ShippingArrivalRule represents a weekly warehouse-arrival window.

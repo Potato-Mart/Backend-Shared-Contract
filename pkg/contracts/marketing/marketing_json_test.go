@@ -6,15 +6,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/commerce/commerce_enums"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/marketing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/marketing/marketing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/commerce/commerce_enums"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/marketing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/marketing/marketing_enums"
 )
 
 func TestCampaignUsesPublicBenefitReferencesAndSafeMedia(t *testing.T) {
@@ -22,7 +22,7 @@ func TestCampaignUsesPublicBenefitReferencesAndSafeMedia(t *testing.T) {
 	campaign := marketing.Campaign{
 		CampaignCode: "spring-launch",
 		Title:        []localization.LocalizedName{{Language: "en", Name: "Spring launch"}},
-		Cover:        &security.ObjectMedia{ID: "media_campaign_1", URL: "https://cdn.example.test/campaign.png"},
+		Cover:        &security.ObjectMedia{Code: "media_campaign_1", URL: "https://cdn.example.test/campaign.png"},
 		CampaignDetail: marketing.CampaignDetail{
 			Message:      []localization.LocalizedText{{Language: "en", Text: "Fresh offers are here"}},
 			CampaignType: marketing_enums.CampaignTypeMixed,
@@ -60,7 +60,7 @@ func TestCampaignUsesPublicBenefitReferencesAndSafeMedia(t *testing.T) {
 		`"coupon_details":[{"code":"WELCOME10"`,
 		`"promotion_details":[{"code":"SPRING-BUNDLE"`,
 		`"path":"/promotions/spring-launch"`,
-		`"cover":{"id":"media_campaign_1","url":"https://cdn.example.test/campaign.png"}`,
+		`"cover":{"code":"media_campaign_1","url":"https://cdn.example.test/campaign.png"}`,
 		`"customer_type":"all"`,
 		`"platform":"all"`,
 	} {
@@ -81,7 +81,7 @@ func TestCampaignUsesPublicBenefitReferencesAndSafeMedia(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal campaign: %v", err)
 	}
-	if decoded.CampaignDetail.CouponDetails[0].Code != "WELCOME10" || decoded.Cover == nil || decoded.Cover.ID != "media_campaign_1" {
+	if decoded.CampaignDetail.CouponDetails[0].Code != "WELCOME10" || decoded.Cover == nil || decoded.Cover.Code != "media_campaign_1" {
 		t.Fatalf("campaign did not round-trip: %+v", decoded)
 	}
 }
@@ -104,7 +104,7 @@ func TestCouponPromotionMessageAndTemplatesRoundTrip(t *testing.T) {
 	coupon := marketing.Coupon{
 		CouponCode:  "WELCOME10",
 		CouponName:  []localization.LocalizedName{{Language: "en", Name: "Welcome 10"}},
-		CouponCover: &security.ObjectMedia{ID: "media_coupon_1"},
+		CouponCover: &security.ObjectMedia{Code: "media_coupon_1"},
 		CouponDetail: marketing.CouponDetail{
 			Description: []localization.LocalizedDescription{{Language: "en", Description: "A welcome benefit"}},
 			CouponType:  marketing_enums.CouponTypePercentage,
@@ -122,7 +122,7 @@ func TestCouponPromotionMessageAndTemplatesRoundTrip(t *testing.T) {
 	promotion := marketing.Promotion{
 		PromotionCode: "SPRING-BUNDLE",
 		PromotionName: []localization.LocalizedName{{Language: "en", Name: "Spring bundle"}},
-		Cover:         &security.ObjectMedia{ID: "media_promotion_1"},
+		Cover:         &security.ObjectMedia{Code: "media_promotion_1"},
 		PromotionDetail: marketing.PromotionDetail{
 			Description:   []localization.LocalizedDescription{{Language: "en", Description: "Buy one, get one"}},
 			PromotionType: marketing_enums.PromotionTypeBOGO,
@@ -153,7 +153,7 @@ func TestCouponPromotionMessageAndTemplatesRoundTrip(t *testing.T) {
 		Channel:          marketing_enums.MarketingChannelEmail,
 		Subject:          []localization.LocalizedText{{Language: "en", Text: "Spring is here"}},
 		Message:          []localization.LocalizedText{{Language: "en", Text: "Fresh offers are ready"}},
-		Images:           []security.ObjectMedia{{ID: "media_message_1", URL: "https://cdn.example.test/message.png"}},
+		Images:           []security.ObjectMedia{{Code: "media_message_1", URL: "https://cdn.example.test/message.png"}},
 		Status:           marketing_enums.MarketingMessageStatusScheduled,
 		GeographicScope:  scope,
 		ScheduleTimezone: "Australia/Sydney",

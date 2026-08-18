@@ -3,14 +3,14 @@ package wish_test
 import (
 	"encoding/json"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/wish"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/wish"
 
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/wish/wish_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/wish/wish_enums"
 )
 
 func TestWishProposalJSONIsIdentityFree(t *testing.T) {

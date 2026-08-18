@@ -3,20 +3,20 @@ package purchase
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/purchase/purchase_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/purchase/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse"
 )
 
 type Receipt struct {
 	ID           string                             `json:"id"`
 	OrderNumber  string                             `json:"order_number"`
 	DepotCode    string                             `json:"depot_code,omitempty"`
-	MarketID     string                             `json:"market_id,omitempty"`
+	MarketCode   string                             `json:"market_code,omitempty"`
 	CountryCode  geography.CountryCode              `json:"country_code,omitempty"`
 	Reference    string                             `json:"reference,omitempty"`
 	SupplierCode string                             `json:"supplier_code,omitempty"`
@@ -32,12 +32,11 @@ type Receipt struct {
 }
 
 type ReceiptItem struct {
-	ID    string `json:"id,omitempty"`
-	SKUID string `json:"sku_id"`
+	ID string `json:"id,omitempty"`
 	// SKUCode is the frozen SKU code captured when the receipt line was recorded.
 	SKUCode             string                               `json:"sku_code"`
 	ProductName         string                               `json:"product_name,omitempty"`
-	PackageOptionID     string                               `json:"package_option_id"`
+	PackageOptionCode   string                               `json:"package_option_code"`
 	LotID               string                               `json:"lot_id"`
 	DestinationBucketID string                               `json:"destination_bucket_id"`
 	DestinationLocation warehouse.StockLocationRef           `json:"destination_location"`

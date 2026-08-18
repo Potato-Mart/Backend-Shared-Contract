@@ -3,8 +3,8 @@ package operations
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // InventoryCauseRef identifies the contract record that caused an inventory
@@ -18,13 +18,13 @@ type InventoryCauseRef struct {
 // Logical reservation lifecycle changes are represented by StockReservation.
 type StockMovement struct {
 	ID                               string                                `json:"id"`
-	SKUID                            string                                `json:"sku_id"`
+	SKUCode                          string                                `json:"sku_code"`
 	Type                             warehouse_enums.StockMovementType     `json:"type"`
 	SourceBucketID                   string                                `json:"source_bucket_id,omitempty"`
 	DestinationBucketID              string                                `json:"destination_bucket_id,omitempty"`
 	LotID                            string                                `json:"lot_id,omitempty"`
-	SourcePackageOptionID            string                                `json:"source_package_option_id,omitempty"`
-	DestinationPackageOptionID       string                                `json:"destination_package_option_id,omitempty"`
+	SourcePackageOptionCode          string                                `json:"source_package_option_code,omitempty"`
+	DestinationPackageOptionCode     string                                `json:"destination_package_option_code,omitempty"`
 	BaseUnits                        int64                                 `json:"base_units"`
 	SourcePackageComposition         *packaging.PackageCompositionSnapshot `json:"source_package_composition,omitempty"`
 	DestinationPackageComposition    *packaging.PackageCompositionSnapshot `json:"destination_package_composition,omitempty"`

@@ -3,22 +3,22 @@ package retail
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/orders/shipping"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/customers/retail/retail_enums"
 )
 
 // RetailCustomer is the grouped business profile for a retailCustomer
 // account/persona. Portal admission is controlled by identity.AccountType and
 // identity.PortalAccess, not by this profile.
 //
-// MarketID and CountryCode are the denormalized home market and country of
+// MarketCode and CountryCode are the denormalized home market and country of
 // the customer, carried so a geographically scoped staff query is a plain
 // indexed match.
 type RetailCustomer struct {
@@ -28,7 +28,7 @@ type RetailCustomer struct {
 	AccountID             string                            `json:"account_id,omitempty"`
 	PrimaryAuthIdentityID string                            `json:"primary_auth_identity_id,omitempty"`
 	AuthIdentityIDs       []string                          `json:"auth_identity_ids,omitempty"`
-	MarketID              string                            `json:"market_id,omitempty"`
+	MarketCode            string                            `json:"market_code,omitempty"`
 	CountryCode           geography.CountryCode             `json:"country_code,omitempty"`
 	BasicInfo             RetailCustomerBasicInfo           `json:"basic_info"`
 	Lifecycle             RetailCustomerLifecycle           `json:"lifecycle"`

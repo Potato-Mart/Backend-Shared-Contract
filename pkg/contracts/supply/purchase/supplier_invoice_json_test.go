@@ -6,19 +6,19 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/purchase"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/purchase/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/purchase"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/purchase/purchase_enums"
 )
 
 func supplierComposition(baseUnits int64) packaging.PackageCompositionSnapshot {
 	return packaging.PackageCompositionSnapshot{
 		TotalBaseUnits: baseUnits,
 		Components: []packaging.PackageComponentSnapshot{{
-			PackageOptionID: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase,
+			PackageOptionCode: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase,
 			PackageCount: baseUnits / 12, UnitsPerPackage: 12, BaseUnits: baseUnits,
 		}},
 	}
@@ -67,7 +67,7 @@ func TestSupplierInvoiceDocumentIsImmutableAndHashed(t *testing.T) {
 	value := purchase.SupplierInvoiceDocument{
 		Reference:     "INV-2026-0001.pdf",
 		ContentSHA256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-		MediaID:       "media_1",
+		MediaCode:     "media_1",
 		ReceivedAt:    receivedAt,
 	}
 	payload, err := json.Marshal(value)
@@ -91,7 +91,7 @@ func TestSupplierInvoiceLineRecordsExplicitHeaderCalculatedAndUnknownTax(t *test
 	calculated := money.Money{AmountMinor: 600, Currency: "AUD"}
 
 	explicit := purchase.SupplierInvoiceLine{
-		ID: "line_1", SKUID: "sku_a00001", SKUCode: "A00001",
+		ID: "line_1", SKUCode: "A00001",
 		Composition: supplierComposition(12), BaseUnits: 12,
 		UnitPrice:      money.Money{AmountMinor: 550, Currency: "AUD"},
 		LineAmount:     money.Money{AmountMinor: 6600, Currency: "AUD"},
@@ -114,8 +114,8 @@ func TestSupplierInvoiceLineRecordsExplicitHeaderCalculatedAndUnknownTax(t *test
 		decodedExplicit.DeclaredTax == nil || decodedExplicit.DeclaredTax.AmountMinor != 600 {
 		t.Fatalf("explicit supplier tax did not round-trip: %+v", decodedExplicit)
 	}
-	if decodedExplicit.SKUID != "sku_a00001" || decodedExplicit.SKUCode != "A00001" {
-		t.Fatalf("invoice line must carry both the sku link and the frozen code: %+v", decodedExplicit)
+	if decodedExplicit.SKUCode != "A00001" {
+		t.Fatalf("invoice line must carry the immutable SKU code: %+v", decodedExplicit)
 	}
 	if strings.Contains(string(payload), `"calculated_tax"`) {
 		t.Fatalf("an explicitly declared line must not also carry a calculated tax: %s", payload)
@@ -124,7 +124,7 @@ func TestSupplierInvoiceLineRecordsExplicitHeaderCalculatedAndUnknownTax(t *test
 	// Missing tax may be calculated only for an explicitly taxable line with
 	// a known basis.
 	calculatedLine, err := json.Marshal(purchase.SupplierInvoiceLine{
-		ID: "line_2", SKUID: "sku_a00002", SKUCode: "A00002",
+		ID: "line_2", SKUCode: "A00002",
 		TaxTreatment:  purchase_enums.LineTaxTreatmentTaxable,
 		PriceBasis:    purchase_enums.TaxPriceBasisInclusive,
 		CalculatedTax: &calculated,
@@ -142,7 +142,7 @@ func TestSupplierInvoiceLineRecordsExplicitHeaderCalculatedAndUnknownTax(t *test
 	// Unknown taxability or basis carries no tax figure at all and cannot be
 	// claimed; the invoice status is what blocks confirmation.
 	unknown, err := json.Marshal(purchase.SupplierInvoiceLine{
-		ID: "line_3", SKUID: "sku_a00003", SKUCode: "A00003",
+		ID: "line_3", SKUCode: "A00003",
 		TaxTreatment:  purchase_enums.LineTaxTreatmentUnknown,
 		PriceBasis:    purchase_enums.TaxPriceBasisUnknown,
 		TaxSource:     purchase_enums.SupplierTaxSourceAbsent,
@@ -181,7 +181,7 @@ func TestSupplierInvoiceKeepsFreightAndDutySeparateAndProtectsAgainstDuplicates(
 		PurchaseOrderNumbers: []string{"PO-1"},
 		ReceiptIDs:           []string{"receipt_1"},
 		Lines: []purchase.SupplierInvoiceLine{{
-			ID: "line_1", SKUID: "sku_a00001", SKUCode: "A00001",
+			ID: "line_1", SKUCode: "A00001",
 			Composition: supplierComposition(12), BaseUnits: 12,
 			UnitPrice:           money.Money{AmountMinor: 550, Currency: "AUD"},
 			LineAmount:          money.Money{AmountMinor: 6600, Currency: "AUD"},
@@ -253,7 +253,7 @@ func TestSupplierInvoiceBlockedWithoutQualifyingEvidence(t *testing.T) {
 		IssueDate: temporal.Date("2026-08-11"),
 		Currency:  "AUD",
 		Lines: []purchase.SupplierInvoiceLine{{
-			ID: "line_1", SKUID: "sku_a00004", SKUCode: "A00004",
+			ID: "line_1", SKUCode: "A00004",
 			TaxTreatment:  purchase_enums.LineTaxTreatmentUnknown,
 			PriceBasis:    purchase_enums.TaxPriceBasisUnknown,
 			TaxSource:     purchase_enums.SupplierTaxSourceAbsent,

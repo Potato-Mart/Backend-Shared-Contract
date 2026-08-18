@@ -3,10 +3,10 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/identity/access/access_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/identity/account/account_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/identity/role/role_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/identity/access/access_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/identity/account/account_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/identity/role/role_enums"
 )
 
 func TestIdentityEnumsValidateKnownValues(t *testing.T) {

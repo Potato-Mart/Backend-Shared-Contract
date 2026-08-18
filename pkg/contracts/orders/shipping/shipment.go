@@ -3,21 +3,21 @@ package shipping
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 type OutboundShipment struct {
 	ID        string `json:"id"`
 	DepotCode string `json:"depot_code"`
-	// MarketID and CountryCode are the denormalized market and country of
+	// MarketCode and CountryCode are the denormalized market and country of
 	// the dispatching depot, carried so a geographically scoped staff query
 	// is a plain indexed match.
-	MarketID      string                                 `json:"market_id,omitempty"`
+	MarketCode    string                                 `json:"market_code,omitempty"`
 	CountryCode   geography.CountryCode                  `json:"country_code,omitempty"`
 	PickingListID string                                 `json:"picking_list_id,omitempty"`
 	OrderNumber   string                                 `json:"order_number"`
@@ -43,7 +43,7 @@ type PackingDiscrepancy struct {
 	OrderNumber          string                                 `json:"order_number"`
 	OrderDate            time.Time                              `json:"order_date"`
 	CustomerName         string                                 `json:"customer_name,omitempty"`
-	SKUID                string                                 `json:"sku_id"`
+	SKUCode              string                                 `json:"sku_code"`
 	ProductName          string                                 `json:"product_name,omitempty"`
 	Kind                 warehouse_enums.PackingDiscrepancyKind `json:"kind"`
 	RequestedComposition packaging.PackageCompositionSnapshot   `json:"requested_composition"`

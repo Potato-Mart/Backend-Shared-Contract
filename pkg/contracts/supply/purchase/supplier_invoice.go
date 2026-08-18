@@ -3,11 +3,11 @@ package purchase
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/purchase/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/purchase/purchase_enums"
 )
 
 // SupplierTaxIdentity is the supplier's own registration evidence recorded on
@@ -30,7 +30,7 @@ type SupplierTaxIdentity struct {
 type SupplierInvoiceDocument struct {
 	Reference     string    `json:"reference"`
 	ContentSHA256 string    `json:"content_sha256"`
-	MediaID       string    `json:"media_id,omitempty"`
+	MediaCode     string    `json:"media_code,omitempty"`
 	ReceivedAt    time.Time `json:"received_at"`
 }
 
@@ -38,14 +38,13 @@ type SupplierInvoiceDocument struct {
 // Freight and duty stay recorded here separately and are never blended into
 // carrying cost.
 type SupplierInvoiceLine struct {
-	ID    string `json:"id"`
-	SKUID string `json:"sku_id"`
+	ID string `json:"id"`
 	// SKUCode is the frozen SKU code captured when the invoice was recorded.
-	SKUCode         string                               `json:"sku_code"`
-	Description     string                               `json:"description,omitempty"`
-	PackageOptionID string                               `json:"package_option_id,omitempty"`
-	Composition     packaging.PackageCompositionSnapshot `json:"composition"`
-	BaseUnits       int64                                `json:"base_units"`
+	SKUCode           string                               `json:"sku_code"`
+	Description       string                               `json:"description,omitempty"`
+	PackageOptionCode string                               `json:"package_option_code,omitempty"`
+	Composition       packaging.PackageCompositionSnapshot `json:"composition"`
+	BaseUnits         int64                                `json:"base_units"`
 
 	UnitPrice  money.Money `json:"unit_price"`
 	LineAmount money.Money `json:"line_amount"`

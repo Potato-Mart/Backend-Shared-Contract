@@ -3,9 +3,9 @@ package event
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
-	analytics "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/insights/analytics"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	analytics "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/insights/analytics"
 )
 
 // RefundRequestedEvent is emitted on the refund-events topic when a refund is
@@ -16,11 +16,11 @@ type RefundRequestedEvent struct {
 	OrderNumber string      `json:"order_number"`
 	Amount      money.Money `json:"amount"`
 	RequestedBy string      `json:"requested_by,omitempty"`
-	// MarketID and CountryCode are the denormalized geography the event
+	// MarketCode and CountryCode are the denormalized geography the event
 	// belongs to. They are absent on every event published before v28.0.0;
 	// a consumer that persists a geographically scoped record treats an
 	// absent value as "no evidence" and fails closed rather than defaulting.
-	MarketID    string                `json:"market_id,omitempty"`
+	MarketCode  string                `json:"market_code,omitempty"`
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	RequestedAt time.Time             `json:"requested_at"`
 	Reason      string                `json:"reason,omitempty"`
@@ -45,11 +45,11 @@ type RefundCompletedEvent struct {
 	QualifyingSpendReversal *money.Money               `json:"qualifying_spend_reversal,omitempty"`
 	PointsToRestore         int                        `json:"points_to_restore,omitempty"`
 	FullOrderRefund         bool                       `json:"full_order_refund,omitempty"`
-	// MarketID and CountryCode are the denormalized geography the event
+	// MarketCode and CountryCode are the denormalized geography the event
 	// belongs to. They are absent on every event published before v28.0.0;
 	// a consumer that persists a geographically scoped record treats an
 	// absent value as "no evidence" and fails closed rather than defaulting.
-	MarketID    string                `json:"market_id,omitempty"`
+	MarketCode  string                `json:"market_code,omitempty"`
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	CompletedAt time.Time             `json:"completed_at"`
 	RequestID   string                `json:"request_id,omitempty"`
@@ -63,11 +63,11 @@ type RefundFailedEvent struct {
 	OrderNumber string      `json:"order_number"`
 	Amount      money.Money `json:"amount,omitempty"`
 	Reason      string      `json:"reason,omitempty"`
-	// MarketID and CountryCode are the denormalized geography the event
+	// MarketCode and CountryCode are the denormalized geography the event
 	// belongs to. They are absent on every event published before v28.0.0;
 	// a consumer that persists a geographically scoped record treats an
 	// absent value as "no evidence" and fails closed rather than defaulting.
-	MarketID    string                `json:"market_id,omitempty"`
+	MarketCode  string                `json:"market_code,omitempty"`
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	FailedAt    time.Time             `json:"failed_at"`
 	RequestID   string                `json:"request_id,omitempty"`

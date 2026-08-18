@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
 )
 
 func TestUserProfileJSONIncludesObjectMediaAvatarWhenPresent(t *testing.T) {
@@ -14,8 +14,8 @@ func TestUserProfileJSONIncludesObjectMediaAvatarWhenPresent(t *testing.T) {
 		Email:       "customer@example.test",
 		DisplayName: "Customer",
 		Avatar: &security.ObjectMedia{
-			ID:  "med_avatar",
-			URL: "https://cdn.example.test/avatar.png",
+			Code: "med_avatar",
+			URL:  "https://cdn.example.test/avatar.png",
 		},
 		Active: true,
 	})
@@ -23,10 +23,10 @@ func TestUserProfileJSONIncludesObjectMediaAvatarWhenPresent(t *testing.T) {
 		t.Fatalf("marshal user profile: %v", err)
 	}
 	text := string(body)
-	if !strings.Contains(text, `"avatar":{"id":"med_avatar","url":"https://cdn.example.test/avatar.png"}`) {
+	if !strings.Contains(text, `"avatar":{"code":"med_avatar","url":"https://cdn.example.test/avatar.png"}`) {
 		t.Fatalf("UserProfile JSON = %s, want nested object_media avatar", text)
 	}
-	for _, legacy := range []string{"avatar_media_id", "avatar_url"} {
+	for _, legacy := range []string{"avatar_media_code", "avatar_url"} {
 		if strings.Contains(text, legacy) {
 			t.Fatalf("UserProfile JSON retained legacy %s: %s", legacy, text)
 		}

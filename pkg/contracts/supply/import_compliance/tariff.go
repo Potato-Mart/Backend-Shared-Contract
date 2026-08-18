@@ -3,11 +3,11 @@ package import_compliance
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/temporal"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/import_compliance/import_compliance_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/import_compliance/import_compliance_enums"
 )
 
 // RateValue preserves official source text because tariff schedules may use
@@ -32,7 +32,7 @@ type TariffClassification struct {
 type TariffLineSnapshot struct {
 	ID                  string `json:"id"`
 	PurchaseOrderLineID string `json:"purchase_order_line_id,omitempty"`
-	SKUID               string `json:"sku_id,omitempty"`
+	SKUCode             string `json:"sku_code,omitempty"`
 	Barcode             string `json:"barcode,omitempty"`
 	ProductName         string `json:"product_name,omitempty"`
 	AlternateNames      string `json:"alternate_names,omitempty"`
@@ -71,12 +71,12 @@ type TariffAssessment struct {
 type TariffProfile struct {
 	ID       string           `json:"id"`
 	Revision RevisionMetadata `json:"revision"`
-	// MarketID and CountryCode are the denormalized market and country the
+	// MarketCode and CountryCode are the denormalized market and country the
 	// record belongs to, carried so a geographically scoped staff query is
 	// a plain indexed match.
-	MarketID             string                               `json:"market_id,omitempty"`
+	MarketCode           string                               `json:"market_code,omitempty"`
 	CountryCode          geography.CountryCode                `json:"country_code,omitempty"`
-	SKUID                string                               `json:"sku_id"`
+	SKUCode              string                               `json:"sku_code"`
 	Jurisdiction         import_compliance_enums.Jurisdiction `json:"jurisdiction"`
 	Classification       TariffClassification                 `json:"classification"`
 	EffectiveFrom        temporal.Date                        `json:"effective_from,omitempty"`
@@ -92,7 +92,7 @@ type TariffProfile struct {
 type TrademarkEvidence struct {
 	ID                 string                               `json:"id"`
 	Revision           RevisionMetadata                     `json:"revision"`
-	SKUID              string                               `json:"sku_id,omitempty"`
+	SKUCode            string                               `json:"sku_code,omitempty"`
 	Jurisdiction       import_compliance_enums.Jurisdiction `json:"jurisdiction"`
 	Mark               string                               `json:"mark"`
 	Status             string                               `json:"status,omitempty"`

@@ -5,18 +5,18 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging/packaging_enums"
 )
 
 func TestPackageCompositionJSONPreservesKnownZeroQuantities(t *testing.T) {
 	composition := PackageCompositionSnapshot{
 		TotalBaseUnits: 0,
 		Components: []PackageComponentSnapshot{{
-			PackageOptionID: "pkg_case_12",
-			HandlingUnit:    packaging_enums.PackageHandlingUnitCase,
-			PackageCount:    0,
-			UnitsPerPackage: 12,
-			BaseUnits:       0,
+			PackageOptionCode: "pkg_case_12",
+			HandlingUnit:      packaging_enums.PackageHandlingUnitCase,
+			PackageCount:      0,
+			UnitsPerPackage:   12,
+			BaseUnits:         0,
 		}},
 	}
 	body, err := json.Marshal(composition)

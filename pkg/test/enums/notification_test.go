@@ -3,8 +3,8 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/notifications/backinstock/backinstock_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/notifications/customer/customer_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/notifications/backinstock/backinstock_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/notifications/customer/customer_enums"
 )
 
 func TestNotificationEnums(t *testing.T) {

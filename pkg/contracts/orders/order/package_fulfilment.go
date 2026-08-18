@@ -3,11 +3,11 @@ package order
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/pricing/quote"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/quote"
 )
 
 // PricedPackageComponent freezes the immutable Pricing snapshot, requested
@@ -45,12 +45,12 @@ type GroupOrderContext struct {
 // GroupOrderAggregateLine records one parent-owned aggregate package demand
 // and its reservation and allocation references.
 type GroupOrderAggregateLine struct {
-	ID       string `json:"id"`
-	SKUID    string `json:"sku_id"`
-	MarketID string `json:"market_id"`
+	ID         string `json:"id"`
+	SKUCode    string `json:"sku_code"`
+	MarketCode string `json:"market_code"`
 	// PriceSnapshot evidence for the aggregate line lives on its components;
 	// the line itself carries only identity, composition, and totals.
-	PackageOptionID      string                               `json:"package_option_id"`
+	PackageOptionCode    string                               `json:"package_option_code"`
 	RequestedComposition packaging.PackageCompositionSnapshot `json:"requested_composition"`
 	AllocatedComposition packaging.PackageCompositionSnapshot `json:"allocated_composition"`
 	ShortageComposition  packaging.PackageCompositionSnapshot `json:"shortage_composition"`

@@ -3,7 +3,7 @@ package wish
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v28/pkg/contracts/supply/wish/wish_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/wish/wish_enums"
 )
 
 // WishProposal is a customer-submitted product idea without customer identity.
@@ -15,7 +15,7 @@ type WishProposal struct {
 	ReferenceURL         string                       `json:"reference_url,omitempty"`
 	State                wish_enums.WishProposalState `json:"state"`
 	ConvertedCandidateID string                       `json:"converted_candidate_id,omitempty"`
-	CreatedSKUID         string                       `json:"created_sku_id,omitempty"`
+	CreatedSKUCode       string                       `json:"created_sku_code,omitempty"`
 	CreatedAt            time.Time                    `json:"created_at"`
 	UpdatedAt            time.Time                    `json:"updated_at"`
 }
