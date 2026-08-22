@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v29.0.2` | 2026-08-22 | Patch | Raises the repository-owned Go toolchain requirement to Go 1.26.7. No exported model, JSON shape, enum value, event schema, or module path changes. |
 | `v29.0.1` | 2026-08-19 | Patch | Completes the V29 code-only persistence boundary: catalogue collection, category-tag, brand, supplier, country, and media relationships now serialize only immutable codes; listing evidence and schema-v3 listing events no longer duplicate the root Mongo listing ID. Keeps the `/v29` module path. |
 | `v29.0.0` | 2026-08-19 | Major | Catalogue business-key hard cut: replaces ProductCategory with SKUSeries, centralizes StorageType under classification, makes SKU code the canonical product and cross-domain identity, makes Product names localized, adds multi-brand/multi-supplier products and supplier availability, moves manufacturing to CountryRef, replaces catalog/commercial/media reference IDs and slugs with immutable codes, and bumps SKU-bearing events to schema version 3. Changes the module path to `/v29`; all consumers must migrate explicitly. |
 | `v28.0.0` | 2026-08-17 | Major | Workforce RBAC and geographic-scoping hard cutover: replaces the built-in role set with six ranked roles (`countryAdmin`, `depotManager`, and `warehouseManager` in; `admin`, `warehouse`, `cashier`, and `sales` out), adds `Role.rank`, the flat `scope_level`/`country_code`/`market_ids`/`depot_codes` access-token claims, `access.StaffGeoScope` and `access_enums.ScopeLevel`, `UserProfile.geo_scope`, per-market gift-card denomination policies, and per-register daily POS sessions replacing operator shifts; denormalizes `market_id`/`country_code`/`depot_code` across staff-visible models and the event payloads their consumers persist, including `MemberSubscription` and the Insights analytics facts. Changes the module path to `/v28`; all consumers must migrate explicitly. |
@@ -123,6 +124,17 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v29.0.2 (2026-08-22) - Go 1.26.7 Toolchain Baseline
+
+### Toolchain update
+
+- Raises the repository-owned Go directive from Go 1.26 to the exact Go 1.26.7 patch release.
+- Keeps the `/v29` module path and every exported model, JSON field, enum value, and event schema unchanged.
+
+### Consumer action
+
+No consumer upgrade is required for this toolchain-only release. Services may remain pinned to `v29.0.1` until the coordinated Go 1.27.0 rollout adopts the final contract patch.
 
 ## v29.0.1 (2026-08-19) - Code-Only Catalogue References And Listing Evidence
 
