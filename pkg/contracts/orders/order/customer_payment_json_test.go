@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	sales "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 func TestCustomerPaymentSummaryPointAwardAndDebtRoundTrip(t *testing.T) {
@@ -16,7 +16,7 @@ func TestCustomerPaymentSummaryPointAwardAndDebtRoundTrip(t *testing.T) {
 	remainingDebt := 3
 	summary := sales.CustomerPaymentSummary{
 		OrderNumber:         "MAMA260730ABC123",
-		PointsAwardStatus:   membership_enums.PointAwardStatusAwarded,
+		PointsAwardStatus:   wallet_enums.PointAwardStatusAwarded,
 		PointsEarned:        &gross,
 		PointsAppliedToDebt: &debtRepaid,
 		PointsNetCredited:   &netCredit,
@@ -43,7 +43,7 @@ func TestCustomerPaymentSummaryPointAwardAndDebtRoundTrip(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal customer payment summary: %v", err)
 	}
-	if decoded.PointsAwardStatus != membership_enums.PointAwardStatusAwarded ||
+	if decoded.PointsAwardStatus != wallet_enums.PointAwardStatusAwarded ||
 		decoded.PointsEarned == nil || *decoded.PointsEarned != gross ||
 		decoded.PointsAppliedToDebt == nil || *decoded.PointsAppliedToDebt != debtRepaid ||
 		decoded.PointsNetCredited == nil || *decoded.PointsNetCredited != netCredit ||
@@ -53,12 +53,12 @@ func TestCustomerPaymentSummaryPointAwardAndDebtRoundTrip(t *testing.T) {
 }
 
 func TestCustomerPaymentSummaryPointAwardStatusesAndKnownZero(t *testing.T) {
-	statuses := []membership_enums.PointAwardStatus{
-		membership_enums.PointAwardStatusIneligible,
-		membership_enums.PointAwardStatusDisabled,
-		membership_enums.PointAwardStatusPending,
-		membership_enums.PointAwardStatusAwarded,
-		membership_enums.PointAwardStatusFailed,
+	statuses := []wallet_enums.PointAwardStatus{
+		wallet_enums.PointAwardStatusIneligible,
+		wallet_enums.PointAwardStatusDisabled,
+		wallet_enums.PointAwardStatusPending,
+		wallet_enums.PointAwardStatusAwarded,
+		wallet_enums.PointAwardStatusFailed,
 	}
 	zero := 0
 	for _, status := range statuses {

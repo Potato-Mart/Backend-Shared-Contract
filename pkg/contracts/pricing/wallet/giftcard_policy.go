@@ -32,12 +32,3 @@ type GiftCardDenominationPolicy struct {
 
 	audit.AuditFields
 }
-
-// GiftCardDenominationBonus records the bonus balance a buyer receives for one
-// allowed denomination. The buyer is charged AmountMinor; the issued card
-// carries AmountMinor + BonusMinor. Both are minor units of the policy's
-// currency.
-type GiftCardDenominationBonus struct {
-	AmountMinor int64 `json:"amount_minor"`
-	BonusMinor  int64 `json:"bonus_minor"`
-}

@@ -4,16 +4,15 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/customers/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/marketing/campaign/campaign_enums"
 )
 
 // CampaignChangedEvent is the customer-safe storefront-events projection used
 // only to invalidate/refetch authoritative campaign content. It contains no
 // authored copy, targeting rules, provider destination, or customer data.
 type CampaignChangedEvent struct {
-	CampaignID         string                              `json:"campaign_id"`
-	CampaignKey        string                              `json:"campaign_key"`
-	SeriesKey          string                              `json:"series_key,omitempty"`
+	CampaignCode       string                              `json:"campaign_code"`
+	SeriesCode         string                              `json:"series_code,omitempty"`
 	PromotionID        string                              `json:"promotion_id,omitempty"`
 	Status             campaign_enums.CampaignStatus       `json:"status"`
 	IsActive           bool                                `json:"is_active"`
@@ -30,9 +29,8 @@ type CampaignChangedEvent struct {
 // and linked campaign content; rule-engine internals never enter the event.
 type PromotionChangedEvent struct {
 	PromotionID     string                              `json:"promotion_id"`
-	SeriesKey       string                              `json:"series_key,omitempty"`
-	CampaignID      string                              `json:"campaign_id,omitempty"`
-	CampaignKey     string                              `json:"campaign_key,omitempty"`
+	SeriesCode      string                              `json:"series_code,omitempty"`
+	CampaignCode    string                              `json:"campaign_code,omitempty"`
 	ScopeMode       geography_enums.GeographicScopeMode `json:"scope_mode"`
 	ScopeRevision   int64                               `json:"scope_revision"`
 	Published       bool                                `json:"published"`

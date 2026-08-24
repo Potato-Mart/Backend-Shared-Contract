@@ -18,7 +18,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/order/order_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/shipping"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/wallet/wallet_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification/classification_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/operations"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/product"
@@ -281,7 +281,7 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 				RewardRedemptionID: "reward_redemption_1",
 				RewardCode:         "reward_1",
 				CustomerNumber:     "RC-20260727-ABCDEF",
-				RewardType:         membership_enums.MembershipRewardTypeOrderDiscount,
+				RewardType:         wallet_enums.RewardTypeOrderDiscount,
 				PointsSpent:        500,
 				DiscountAmount:     &discount,
 				OccurredAt:         &rewardOccurredAt,

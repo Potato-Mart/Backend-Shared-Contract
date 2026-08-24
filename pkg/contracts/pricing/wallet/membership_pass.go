@@ -1,10 +1,6 @@
 package wallet
 
-import (
-	"time"
-
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/wallet/wallet_enums"
-)
+import "time"
 
 // MembershipPassContent is the provider-neutral snapshot used to issue a
 // customer-owned membership pass. Google save-JWT responses, Apple pass
@@ -15,12 +11,4 @@ type MembershipPassContent struct {
 	AvailablePoints int                   `json:"available_points"`
 	Barcode         MembershipPassBarcode `json:"barcode"`
 	GeneratedAt     time.Time             `json:"generated_at"`
-}
-
-// MembershipPassBarcode is the canonical scannable membership identifier.
-// Value is the raw retail customer number; AlternateText is safe display copy.
-type MembershipPassBarcode struct {
-	Format        wallet_enums.WalletPassBarcodeFormat `json:"format"`
-	Value         string                               `json:"value"`
-	AlternateText string                               `json:"alternate_text,omitempty"`
 }

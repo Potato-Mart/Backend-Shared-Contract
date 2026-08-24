@@ -43,19 +43,3 @@ type GiftCard struct {
 
 	audit.AuditFields
 }
-
-// GiftCardTransaction is one entry in a gift card's balance ledger. A positive
-// Delta tops up (issue / top_up / refund); a negative Delta redeems.
-// BalanceAfter is the running balance after this entry.
-type GiftCardTransaction struct {
-	ID                 string                                 `json:"id"`
-	GiftCardCode       string                                 `json:"gift_card_code"`
-	Delta              money.Money                            `json:"delta"`
-	BalanceAfter       money.Money                            `json:"balance_after"`
-	Reason             wallet_enums.GiftCardTransactionReason `json:"reason"`
-	ReservationID      string                                 `json:"reservation_id,omitempty"`
-	RelatedOrderNumber string                                 `json:"related_order_number,omitempty"`
-	Note               string                                 `json:"note,omitempty"`
-	CreatedBy          string                                 `json:"created_by,omitempty"`
-	CreatedAt          time.Time                              `json:"created_at"`
-}
