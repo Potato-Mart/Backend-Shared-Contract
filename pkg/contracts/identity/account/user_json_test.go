@@ -2,6 +2,7 @@ package account
 
 import (
 	"encoding/json"
+	"reflect"
 	"strings"
 	"testing"
 
@@ -29,6 +30,20 @@ func TestUserProfileJSONIncludesObjectMediaAvatarWhenPresent(t *testing.T) {
 	for _, legacy := range []string{"avatar_media_code", "avatar_url"} {
 		if strings.Contains(text, legacy) {
 			t.Fatalf("UserProfile JSON retained legacy %s: %s", legacy, text)
+		}
+	}
+}
+
+func TestIdentityAccountModelsDoNotEmbedNotificationPreferenceOrMarketingConsentState(t *testing.T) {
+	for _, check := range []struct {
+		model reflect.Type
+		field string
+	}{
+		{model: reflect.TypeOf(UserProfile{}), field: "NotificationPreferences"},
+		{model: reflect.TypeOf(RetailCustomerAccountProfile{}), field: "MarketingConsentRef"},
+	} {
+		if _, found := check.model.FieldByName(check.field); found {
+			t.Fatalf("%s must not retain %s; notification preference and consent state is Notification-owned", check.model.Name(), check.field)
 		}
 	}
 }

@@ -13,18 +13,16 @@ import (
 // as password hashes and refresh token material never appear here —
 // they live only inside the service that manages identity.
 type UserProfile struct {
-	ID                      string                       `json:"id"`
-	Email                   string                       `json:"email"`
-	DisplayName             string                       `json:"display_name,omitempty"`
-	Avatar                  *security.ObjectMedia        `json:"avatar,omitempty"`
-	Active                  bool                         `json:"active"`
-	Accounts                []UserAccountSummary         `json:"accounts,omitempty"`
-	PrimaryAccountID        string                       `json:"primary_account_id,omitempty"`
-	PrimaryAccountType      account_enums.AccountType    `json:"primary_account_type,omitempty"`
-	MFAEnabled              bool                         `json:"mfa_enabled,omitempty"`
-	EmailVerified           bool                         `json:"email_verified"`
-	NotificationPreferences *UserNotificationPreferences `json:"notification_preferences,omitempty"`
-
+	ID                 string                    `json:"id"`
+	Email              string                    `json:"email"`
+	DisplayName        string                    `json:"display_name,omitempty"`
+	Avatar             *security.ObjectMedia     `json:"avatar,omitempty"`
+	Active             bool                      `json:"active"`
+	Accounts           []UserAccountSummary      `json:"accounts,omitempty"`
+	PrimaryAccountID   string                    `json:"primary_account_id,omitempty"`
+	PrimaryAccountType account_enums.AccountType `json:"primary_account_type,omitempty"`
+	MFAEnabled         bool                      `json:"mfa_enabled,omitempty"`
+	EmailVerified      bool                      `json:"email_verified"`
 	// GeoScope is the workforce principal's geographic grant. It is absent
 	// on customer profiles and on workforce profiles whose scope has not
 	// been assigned yet; consumers fail closed on an absent scope rather

@@ -41,7 +41,7 @@ func TestV27InventoryAndCommerceEventTypes(t *testing.T) {
 				event_enums.EventTypeFulfilmentTrackingUpdated,
 				event_enums.EventTypeCustomerRegistered,
 				event_enums.EventTypeCustomerProfileUpdated,
-				event_enums.EventTypeCustomerConsentChanged,
+				event_enums.EventTypeNotificationPreferencesChanged,
 				event_enums.EventTypeWalletGiftCardIssued,
 				event_enums.EventTypeCatalogBaseCostChanged,
 				event_enums.EventTypeCatalogListingChanged,
