@@ -14,7 +14,6 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/customers/retail/retail_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/shipping/shipping_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/product/product_enums"
 )
 
@@ -30,7 +29,6 @@ func TestOrderBuyerAndItemPricingRoundTrip(t *testing.T) {
 			Type:                      retail_enums.BuyerTypeWholesaleOrganisation,
 			WholesaleOrganisationCode: "org_1",
 			OrganisationAccessID:      "oacc_1",
-			FulfilmentIntent:          shipping_enums.FulfilmentIntentDelivery,
 		},
 		Items: []sales.OrderItem{
 			{
@@ -66,9 +64,6 @@ func TestOrderBuyerAndItemPricingRoundTrip(t *testing.T) {
 	}
 	if decoded.Buyer.WholesaleOrganisationCode != "org_1" || decoded.Buyer.OrganisationAccessID != "oacc_1" {
 		t.Fatalf("buyer org references did not round-trip: %+v", decoded.Buyer)
-	}
-	if decoded.Buyer.FulfilmentIntent != shipping_enums.FulfilmentIntentDelivery {
-		t.Fatalf("buyer.fulfilment_intent = %q, want delivery", decoded.Buyer.FulfilmentIntent)
 	}
 	if len(decoded.Items) != 1 || decoded.Items[0].Pricing == nil || decoded.Items[0].Pricing.Audience != product_enums.PriceAudienceWholesale {
 		t.Fatalf("item pricing.audience did not round-trip: %+v", decoded.Items)

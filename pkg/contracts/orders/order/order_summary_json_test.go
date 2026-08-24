@@ -9,10 +9,14 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography/geography_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/packaging/packaging_enums"
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/shipping/shipping_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/payments/payment/payment_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/promotion"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/product"
@@ -28,8 +32,18 @@ func TestOrderSummaryJSONShape(t *testing.T) {
 		Channel:           commerce_enums.OrderTypeOnline,
 		PlacedAt:          now,
 		UpdatedAt:         now,
-		Total:             money.Money{AmountMinor: 4200, Currency: "AUD"},
-		ItemCount:         1,
+		FulfilmentLocation: shipping.FulfilmentLocationSnapshot{
+			Intent: shipping_enums.FulfilmentIntentDelivery,
+			GeographicContext: geography.GeographicContext{
+				Source:      geography_enums.GeographicContextSourceDeliveryAddress,
+				MarketCode:  "mkt_au_vic",
+				CountryCode: "AU",
+			},
+			LocationFingerprint: "locfp_01",
+			CapturedAt:          now,
+		},
+		Total:     money.Money{AmountMinor: 4200, Currency: "AUD"},
+		ItemCount: 1,
 		Items: []sales.OrderLineSummary{
 			{
 				SKUCode:      "A0001",
@@ -64,7 +78,7 @@ func TestOrderSummaryJSONShape(t *testing.T) {
 	}
 	for _, key := range []string{
 		"order_number", "status", "payment_status", "fulfillment_status",
-		"placed_at", "total", "item_count", "items",
+		"placed_at", "fulfilment_location", "total", "item_count", "items",
 	} {
 		if _, ok := got[key]; !ok {
 			t.Fatalf("missing json key %q in %s", key, payload)
@@ -82,6 +96,9 @@ func TestOrderSummaryJSONShape(t *testing.T) {
 		decoded.Items[0].Subtotal.AmountMinor != 4200 || decoded.Items[0].TaxAmount.AmountMinor != 382 ||
 		decoded.Items[0].DiscountAmount.AmountMinor != 100 || len(decoded.Items[0].PromotionApplications) != 0 {
 		t.Fatalf("order summary did not round-trip: %+v", decoded)
+	}
+	if decoded.FulfilmentLocation.Intent != shipping_enums.FulfilmentIntentDelivery || decoded.FulfilmentLocation.GeographicContext.MarketCode != "mkt_au_vic" {
+		t.Fatalf("order summary fulfilment location did not round-trip: %+v", decoded.FulfilmentLocation)
 	}
 	line := got["items"].([]any)[0].(map[string]any)
 	for _, key := range []string{"sku_code", "sku_code", "product_package_option", "captured_at", "package_count", "package_price", "subtotal", "tax_amount", "discount_amount", "promotion_applications"} {

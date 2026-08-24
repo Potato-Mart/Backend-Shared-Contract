@@ -24,7 +24,8 @@ func TestGeographicScopeAndContextJSON(t *testing.T) {
 	}
 
 	context := GeographicContext{
-		Source:             geography_enums.GeographicContextSourceRetailCustomerProfile,
+		Source:             geography_enums.GeographicContextSourceDeliveryAddress,
+		MarketCode:         "mkt_au_vic",
 		CountryCode:        "AU",
 		SubdivisionCode:    "AU-VIC",
 		DepotRegionCode:    "AU-VIC-MEL",
@@ -43,7 +44,7 @@ func TestGeographicScopeAndContextJSON(t *testing.T) {
 	if err := json.Unmarshal(payload, &got); err != nil {
 		t.Fatalf("unmarshal geographic context: %v", err)
 	}
-	for _, key := range []string{"source", "country_code", "subdivision_code", "depot_region_code", "depot_code", "matched_target_kind", "matched_target_code", "scope_revision", "rule_revision", "evaluation_timezone"} {
+	for _, key := range []string{"source", "market_code", "country_code", "subdivision_code", "depot_region_code", "depot_code", "matched_target_kind", "matched_target_code", "scope_revision", "rule_revision", "evaluation_timezone"} {
 		if _, ok := got[key]; !ok {
 			t.Fatalf("GeographicContext JSON missing %q: %s", key, payload)
 		}

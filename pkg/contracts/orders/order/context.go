@@ -1,10 +1,7 @@
 package order
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/customers/retail/retail_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/shipping/shipping_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/product/product_enums"
 )
 
 // BuyerContext is the shared, channel-independent description of who is
@@ -18,19 +15,8 @@ import (
 // one exists. WholesaleOrganisationCode / OrganisationAccessID carry the B2B
 // linkage that the existing Cart.CustomerNumber / Order.Customer fields cannot.
 type BuyerContext struct {
-	Type                      retail_enums.BuyerType          `json:"type,omitempty"`
-	RetailCustomerNumber      string                          `json:"retail_customer_number,omitempty"`
-	WholesaleOrganisationCode string                          `json:"wholesale_organisation_code,omitempty"`
-	OrganisationAccessID      string                          `json:"organisation_access_id,omitempty"`
-	FulfilmentIntent          shipping_enums.FulfilmentIntent `json:"fulfilment_intent,omitempty"`
-}
-
-// PricingContext is the shared commercial pricing context under which a line
-// price was determined. It is descriptive only: the contract records the
-// audience and visibility that applied, never the resolver logic that picked
-// the price.
-type PricingContext struct {
-	Audience          product_enums.PriceAudience   `json:"audience,omitempty"`
-	Visibility        product_enums.PriceVisibility `json:"visibility,omitempty"`
-	GeographicContext geography.GeographicContext   `json:"geographic_context"`
+	Type                      retail_enums.BuyerType `json:"type,omitempty"`
+	RetailCustomerNumber      string                 `json:"retail_customer_number,omitempty"`
+	WholesaleOrganisationCode string                 `json:"wholesale_organisation_code,omitempty"`
+	OrganisationAccessID      string                 `json:"organisation_access_id,omitempty"`
 }
