@@ -5,6 +5,7 @@ import (
 	"go/parser"
 	"go/token"
 	"io/fs"
+	"os"
 	"path/filepath"
 	"reflect"
 	"sort"
@@ -45,11 +46,13 @@ func TestV30RetiredNotificationAndCampaignProductionShapesAreAbsent(t *testing.T
 	var violations []string
 	for _, root := range retiredSourceRoots {
 		root := filepath.Join(pkgRoot, filepath.FromSlash(root))
+		if _, statErr := os.Stat(root); os.IsNotExist(statErr) {
+			continue
+		} else if statErr != nil {
+			t.Fatalf("inspect retired source root %s: %v", root, statErr)
+		}
 		err := filepath.WalkDir(root, func(path string, entry fs.DirEntry, walkErr error) error {
 			if walkErr != nil {
-				if strings.Contains(walkErr.Error(), "cannot find the file") || strings.Contains(walkErr.Error(), "The system cannot find") {
-					return nil
-				}
 				return walkErr
 			}
 			if !entry.IsDir() && strings.HasSuffix(path, ".go") {
