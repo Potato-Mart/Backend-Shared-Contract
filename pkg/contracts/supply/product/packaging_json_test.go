@@ -16,8 +16,8 @@ func TestV30PackageAndBarcodeReferencesUseBusinessCodes(t *testing.T) {
 		Package ProductPackageOption     `json:"package"`
 		Barcode ProductBarcodeAssignment `json:"barcode"`
 	}{
-		Package: ProductPackageOption{Code: "PKG-A00001-EACH", SKUCode: "A00001", HandlingUnit: packaging_enums.PackageHandlingUnitEach, UnitsPerPackage: 1, EffectiveFrom: now},
-		Barcode: ProductBarcodeAssignment{Code: "BAR-A00001", SKUCode: "A00001", PackageOptionCode: "PKG-A00001-EACH", Value: "A00001", Format: product_enums.BarcodeFormatCode128, EffectiveFrom: now},
+		Package: ProductPackageOption{Code: "PKG-A00001-EACH", HandlingUnit: packaging_enums.PackageHandlingUnitEach, UnitsPerPackage: 1, EffectiveFrom: now},
+		Barcode: ProductBarcodeAssignment{Code: "BAR-A00001", PackageOptionCode: "PKG-A00001-EACH", Value: "A00001", Format: product_enums.BarcodeFormatCode128, EffectiveFrom: now},
 	})
 	if err != nil {
 		t.Fatal(err)
