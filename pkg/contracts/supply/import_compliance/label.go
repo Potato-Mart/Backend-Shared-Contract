@@ -1,11 +1,11 @@
 package import_compliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/import_compliance/import_compliance_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/import_compliance/import_compliance_enums"
 )
 
 // LabelMaster is one product/package label revision. It remains independent of

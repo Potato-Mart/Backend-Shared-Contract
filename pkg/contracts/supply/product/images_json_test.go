@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification"
 )
 
 func TestImagesHasExactlyCanonicalObjectMediaFields(t *testing.T) {

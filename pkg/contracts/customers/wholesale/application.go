@@ -3,12 +3,12 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification/classification_enums"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/customers/wholesale/wholesale_enums"
 )
 
 // WholesaleApplicantSnapshot freezes the applicant identity reviewed by an

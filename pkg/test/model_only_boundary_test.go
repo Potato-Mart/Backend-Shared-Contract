@@ -29,7 +29,7 @@ var modelBoundaryApprovedMethods = map[string]struct{}{
 
 var modelBoundaryJSONTag = regexp.MustCompile(`^json:"[^"]*"$`)
 
-func TestV28ContractIsJSONModelOnly(t *testing.T) {
+func TestV30ContractIsJSONModelOnly(t *testing.T) {
 	var violations []string
 	pkgRoot := sharedContractPkgRoot(t)
 	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
@@ -114,7 +114,7 @@ func TestV28ContractIsJSONModelOnly(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v28 contract: %v", err)
+		t.Fatalf("scan v30 contract: %v", err)
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)

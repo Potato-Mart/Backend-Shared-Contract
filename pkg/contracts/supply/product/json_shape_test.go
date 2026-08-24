@@ -7,13 +7,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/product/product_enums"
 )
 
-func TestV29CanonicalProductJSONShape(t *testing.T) {
+func TestV30CanonicalProductJSONShape(t *testing.T) {
 	product := Product{
 		ID: "64c13ab08edf48a008793ca6", SKUCode: "A00001", StorageType: classification_enums.StorageAmbient,
 		Status: product_enums.ProductStatusActive,
@@ -45,7 +45,7 @@ func TestV29CanonicalProductJSONShape(t *testing.T) {
 	}
 }
 
-func TestV29SKUAndEmbeddedPackageUseCodesOnly(t *testing.T) {
+func TestV30SKUAndEmbeddedPackageUseCodesOnly(t *testing.T) {
 	now := time.Date(2026, 8, 19, 0, 0, 0, 0, time.UTC)
 	sku := SKU{
 		SKUCode: "A00001", StorageType: classification_enums.StorageAmbient, Status: product_enums.SKUStatusActive,
@@ -68,7 +68,7 @@ func TestV29SKUAndEmbeddedPackageUseCodesOnly(t *testing.T) {
 	}
 }
 
-func TestV29ProductAndSKUStorageTypeCanBeEnforcedEqual(t *testing.T) {
+func TestV30ProductAndSKUStorageTypeCanBeEnforcedEqual(t *testing.T) {
 	product := Product{StorageType: classification_enums.StorageFrozen}
 	sku := SKU{StorageType: classification_enums.StorageFrozen}
 	if product.StorageType != sku.StorageType {

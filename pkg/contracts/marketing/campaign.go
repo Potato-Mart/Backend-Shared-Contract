@@ -3,11 +3,11 @@ package marketing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/marketing/marketing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/audit"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/localization"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/marketing/marketing_enums"
 )
 
 // Campaign is the public, campaign-owned composition of storefront copy and

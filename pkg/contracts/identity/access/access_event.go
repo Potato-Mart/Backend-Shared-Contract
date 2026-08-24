@@ -3,9 +3,9 @@ package access
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/identity/identity_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/customers/wholesale/wholesale_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/identity/account/account_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/identity/identity_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/identity/account/account_enums"
 )
 
 // PortalAccessGrantedEvent is emitted when an account is granted access to a

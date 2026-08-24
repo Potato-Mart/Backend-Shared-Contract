@@ -3,9 +3,9 @@ package event
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
-	analytics "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/insights/analytics"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
+	analytics "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/insights/analytics"
 )
 
 // RefundRequestedEvent is emitted on the refund-events topic when a refund is

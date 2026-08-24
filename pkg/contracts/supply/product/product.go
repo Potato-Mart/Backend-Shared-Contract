@@ -1,14 +1,14 @@
 package product
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/localization"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/product/product_enums"
 )
 
 // Product is the global conceptual product: what the item is, independently of

@@ -6,11 +6,11 @@ package promotion
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/localization"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 // Promotion is a revisioned, open-ended promotion definition. Kind is an open

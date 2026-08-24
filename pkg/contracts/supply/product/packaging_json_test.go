@@ -6,11 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/product/product_enums"
 )
 
-func TestV29PackageAndBarcodeReferencesUseBusinessCodes(t *testing.T) {
+func TestV30PackageAndBarcodeReferencesUseBusinessCodes(t *testing.T) {
 	now := time.Date(2026, 8, 19, 0, 0, 0, 0, time.UTC)
 	payload, err := json.Marshal(struct {
 		Package ProductPackageOption     `json:"package"`

@@ -3,8 +3,8 @@ package order
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/order/order_enums"
 )
 
 // PreorderItemSnapshot is server-stamped from Supply's active SKU policy.

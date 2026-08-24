@@ -3,11 +3,11 @@ package enums_test
 import (
 	"testing"
 
-	legacy_marketing_enums "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/insights/marketing/marketing_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/marketing/marketing_enums"
+	legacy_marketing_enums "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/insights/marketing/marketing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/marketing/marketing_enums"
 )
 
-func TestMarketingEnumsValidateLockedV28Values(t *testing.T) {
+func TestMarketingEnumsValidateLockedV30Values(t *testing.T) {
 	assertStringEnums(t, []enumCase{
 		{name: "marketing.CampaignStatus", valid: []stringEnum{marketing_enums.CampaignStatusDraft, marketing_enums.CampaignStatusScheduled, marketing_enums.CampaignStatusActive, marketing_enums.CampaignStatusCompleted, marketing_enums.CampaignStatusArchived}, invalid: marketing_enums.CampaignStatus("__invalid__")},
 		{name: "marketing.CampaignType", valid: []stringEnum{marketing_enums.CampaignTypeCoupon, marketing_enums.CampaignTypePromotion, marketing_enums.CampaignTypeMixed}, invalid: marketing_enums.CampaignType("__invalid__")},
@@ -27,7 +27,7 @@ func TestMarketingEnumsValidateLockedV28Values(t *testing.T) {
 	})
 }
 
-func TestLegacyMarketingEnumsRemainCoveredDuringV28Foundation(t *testing.T) {
+func TestLegacyMarketingEnumsRemainCoveredDuringV30Foundation(t *testing.T) {
 	assertStringEnums(t, []enumCase{
 		{name: "insights.marketing.MarketingChannel", valid: []stringEnum{legacy_marketing_enums.MarketingChannelEmail, legacy_marketing_enums.MarketingChannelSMS, legacy_marketing_enums.MarketingChannelLine, legacy_marketing_enums.MarketingChannelExport}, invalid: legacy_marketing_enums.MarketingChannel("__invalid__")},
 		{name: "insights.marketing.MarketingCampaignStatus", valid: []stringEnum{legacy_marketing_enums.MarketingCampaignStatusDraft, legacy_marketing_enums.MarketingCampaignStatusSending, legacy_marketing_enums.MarketingCampaignStatusSent, legacy_marketing_enums.MarketingCampaignStatusPartial, legacy_marketing_enums.MarketingCampaignStatusFailed, legacy_marketing_enums.MarketingCampaignStatusCancelled, legacy_marketing_enums.MarketingCampaignStatusExported}, invalid: legacy_marketing_enums.MarketingCampaignStatus("__invalid__")},

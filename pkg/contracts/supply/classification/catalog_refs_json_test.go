@@ -5,12 +5,12 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification"
 )
 
-func TestV2901CatalogReferencesAreCodeOnly(t *testing.T) {
+func TestV3001CatalogReferencesAreCodeOnly(t *testing.T) {
 	tests := []struct {
 		name  string
 		value any
@@ -40,7 +40,7 @@ func TestV2901CatalogReferencesAreCodeOnly(t *testing.T) {
 	}
 }
 
-func TestV2901CommonGeographyAndMediaRenderTypesRemainRich(t *testing.T) {
+func TestV3001CommonGeographyAndMediaRenderTypesRemainRich(t *testing.T) {
 	countryType := reflect.TypeOf(geography.CountryRef{})
 	if _, ok := countryType.FieldByName("Name"); !ok {
 		t.Fatal("geography.CountryRef must retain its optional display name")

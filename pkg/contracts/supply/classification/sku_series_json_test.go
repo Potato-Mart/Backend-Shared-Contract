@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification/classification_enums"
 )
 
-func TestV29SKUSeriesJSONIncludesPrimaryEnglishName(t *testing.T) {
+func TestV30SKUSeriesJSONIncludesPrimaryEnglishName(t *testing.T) {
 	body, err := json.Marshal(SKUSeries{
 		ID: "64c13ab08edf48a008793ca5", Code: "F2", StorageType: classification_enums.StorageFrozen,
 		PrimaryName: localization.LocalizedName{Language: "en", Name: "Frozen Meat"},
@@ -26,7 +26,7 @@ func TestV29SKUSeriesJSONIncludesPrimaryEnglishName(t *testing.T) {
 	}
 }
 
-func TestV29StorageTypeEnum(t *testing.T) {
+func TestV30StorageTypeEnum(t *testing.T) {
 	for _, value := range []classification_enums.StorageType{classification_enums.StorageAmbient, classification_enums.StorageChilled, classification_enums.StorageFrozen} {
 		if !value.IsValid() {
 			t.Fatalf("storage type %q must validate", value)

@@ -3,11 +3,11 @@ package order
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/quote"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/quote"
 )
 
 // PricedPackageComponent freezes the immutable Pricing snapshot, requested

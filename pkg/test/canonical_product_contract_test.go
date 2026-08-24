@@ -11,12 +11,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/product/product_enums"
 )
 
 type canonicalProductField struct {
@@ -24,7 +24,7 @@ type canonicalProductField struct {
 	typeOf reflect.Type
 }
 
-func TestV29GlobalProductHasSKUCodeAndAuthoritativeStorage(t *testing.T) {
+func TestV30GlobalProductHasSKUCodeAndAuthoritativeStorage(t *testing.T) {
 	assertExactFields(t, reflect.TypeOf(product.Product{}), map[string]canonicalProductField{
 		"ID":             {json: "id", typeOf: reflect.TypeOf("")},
 		"SKUCode":        {json: "sku_code", typeOf: reflect.TypeOf("")},
@@ -37,7 +37,7 @@ func TestV29GlobalProductHasSKUCodeAndAuthoritativeStorage(t *testing.T) {
 	})
 }
 
-func TestV29SKUHasNoDatabaseOrProductIdentifier(t *testing.T) {
+func TestV30SKUHasNoDatabaseOrProductIdentifier(t *testing.T) {
 	assertExactFields(t, reflect.TypeOf(product.SKU{}), map[string]canonicalProductField{
 		"SKUCode":            {json: "sku_code", typeOf: reflect.TypeOf("")},
 		"PackageOptions":     {json: "package_options", typeOf: reflect.TypeOf([]product.ProductPackageOption{})},
@@ -49,7 +49,7 @@ func TestV29SKUHasNoDatabaseOrProductIdentifier(t *testing.T) {
 	})
 }
 
-func TestV29ProductionModelsRejectLegacyCatalogueSymbols(t *testing.T) {
+func TestV30ProductionModelsRejectLegacyCatalogueSymbols(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	legacyIdentifiers := map[string]struct{}{"SKUID": {}, "SKUIDs": {}, "ProductCategory": {}}
 	legacyJSON := []string{"sku_id", "sku_ids", "product_category_code", "brand_ref", "package_option_id", "market_id", "price_book_id", "tax_category_id"}

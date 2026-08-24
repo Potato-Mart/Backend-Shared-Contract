@@ -3,19 +3,19 @@ package import_compliance_test
 import (
 	"encoding/json"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
 
-	import_compliance "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/import_compliance"
+	import_compliance "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/import_compliance"
 
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/import_compliance/import_compliance_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/purchase/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/import_compliance/import_compliance_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/purchase/purchase_enums"
 )
 
 func TestImportSettingsJSONUsesFixedPointFields(t *testing.T) {

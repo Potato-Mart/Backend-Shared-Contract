@@ -3,13 +3,13 @@ package marketing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/metadata"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/audit"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/metadata"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/insights/marketing/marketing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/insights/marketing/marketing_enums"
 )
 
 // MarketingCampaign records a single EDM / SMS / LINE push broadcast.

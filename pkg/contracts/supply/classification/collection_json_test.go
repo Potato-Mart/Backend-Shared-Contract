@@ -5,11 +5,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification"
 )
 
-func TestV29CollectionAndTagsHaveRootSlugsAndCodeOnlyReferences(t *testing.T) {
+func TestV30CollectionAndTagsHaveRootSlugsAndCodeOnlyReferences(t *testing.T) {
 	collection := classification.Collection{
 		ID: "64c13ab08edf48a008793ca2", Code: "COL0001", Slug: "frozen-food",
 		Name: []localization.LocalizedName{{Language: "en", Name: "Frozen Food"}},
@@ -37,7 +37,7 @@ func TestV29CollectionAndTagsHaveRootSlugsAndCodeOnlyReferences(t *testing.T) {
 	}
 }
 
-func TestV2901CollectionIconUsesCodeOnlyCatalogMediaRef(t *testing.T) {
+func TestV3001CollectionIconUsesCodeOnlyCatalogMediaRef(t *testing.T) {
 	body, err := json.Marshal(classification.Collection{Icon: &classification.ObjectMediaRef{Code: "MED-COLLECTION"}})
 	if err != nil {
 		t.Fatal(err)

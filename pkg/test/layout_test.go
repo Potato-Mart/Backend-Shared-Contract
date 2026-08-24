@@ -12,9 +12,9 @@ import (
 	"testing"
 )
 
-const v28ContractImportPrefix = "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/"
+const v30ContractImportPrefix = "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/"
 
-var v28ExpectedEnumPackages = []string{
+var v30ExpectedEnumPackages = []string{
 	"contracts/common/apiresponse/apiresponse_enums",
 	"contracts/common/commerce/commerce_enums",
 	"contracts/common/geography/geography_enums",
@@ -29,6 +29,7 @@ var v28ExpectedEnumPackages = []string{
 	"contracts/identity/deletion/deletion_enums",
 	"contracts/identity/role/role_enums",
 	"contracts/insights/marketing/marketing_enums",
+	"contracts/marketing/campaign/campaign_enums",
 	"contracts/marketing/marketing_enums",
 	"contracts/notifications/backinstock/backinstock_enums",
 	"contracts/notifications/customer/customer_enums",
@@ -56,7 +57,7 @@ var v28ExpectedEnumPackages = []string{
 	"contracts/supply/wish/wish_enums",
 }
 
-func TestV28CommonAndEnumPackageLayout(t *testing.T) {
+func TestV30CommonAndEnumPackageLayout(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	contractsRoot := filepath.Join(pkgRoot, "contracts")
 	legacyShared := filepath.Join(contractsRoot, "common", "shared")
@@ -64,8 +65,8 @@ func TestV28CommonAndEnumPackageLayout(t *testing.T) {
 		t.Fatalf("legacy common/shared directory must not exist: %v", err)
 	}
 
-	expected := make(map[string]struct{}, len(v28ExpectedEnumPackages))
-	for _, packagePath := range v28ExpectedEnumPackages {
+	expected := make(map[string]struct{}, len(v30ExpectedEnumPackages))
+	for _, packagePath := range v30ExpectedEnumPackages {
 		expected[packagePath] = struct{}{}
 	}
 	found := make(map[string]struct{}, len(expected))
@@ -111,7 +112,7 @@ func TestV28CommonAndEnumPackageLayout(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v28 package layout: %v", err)
+		t.Fatalf("scan v30 package layout: %v", err)
 	}
 	for packagePath := range expected {
 		if _, ok := found[packagePath]; !ok {
@@ -120,11 +121,11 @@ func TestV28CommonAndEnumPackageLayout(t *testing.T) {
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)
-		t.Fatalf("v28 package layout violations:\n%s", strings.Join(violations, "\n"))
+		t.Fatalf("v30 package layout violations:\n%s", strings.Join(violations, "\n"))
 	}
 }
 
-func TestV28EnumTypesExposeIntrinsicValidation(t *testing.T) {
+func TestV30EnumTypesExposeIntrinsicValidation(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	contractsRoot := filepath.Join(pkgRoot, "contracts")
 	type methods map[string]map[string]struct{}
@@ -204,15 +205,15 @@ func TestV28EnumTypesExposeIntrinsicValidation(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v28 enum methods: %v", err)
+		t.Fatalf("scan v30 enum methods: %v", err)
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)
-		t.Fatalf("v28 enum validation violations:\n%s", strings.Join(violations, "\n"))
+		t.Fatalf("v30 enum validation violations:\n%s", strings.Join(violations, "\n"))
 	}
 }
 
-func TestV28CommonPackageDependencyGraph(t *testing.T) {
+func TestV30CommonPackageDependencyGraph(t *testing.T) {
 	expected := map[string][]string{
 		"contracts/common/apiresponse/apiresponse_enums": {},
 		"contracts/common/audit":                         {},
@@ -256,14 +257,14 @@ func TestV28CommonPackageDependencyGraph(t *testing.T) {
 		}
 		for _, imported := range file.Imports {
 			importPath := strings.Trim(imported.Path.Value, `"`)
-			if strings.HasPrefix(importPath, v28ContractImportPrefix) {
-				actual[packagePath][strings.TrimPrefix(importPath, v28ContractImportPrefix)] = struct{}{}
+			if strings.HasPrefix(importPath, v30ContractImportPrefix) {
+				actual[packagePath][strings.TrimPrefix(importPath, v30ContractImportPrefix)] = struct{}{}
 			}
 		}
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("read v28 common dependency graph: %v", err)
+		t.Fatalf("read v30 common dependency graph: %v", err)
 	}
 
 	var violations []string
@@ -280,12 +281,12 @@ func TestV28CommonPackageDependencyGraph(t *testing.T) {
 			violations = append(violations, "unclassified common package "+packagePath)
 		}
 	}
-	if cycle := v28DependencyCycle(actual); len(cycle) > 0 {
+	if cycle := v30DependencyCycle(actual); len(cycle) > 0 {
 		violations = append(violations, "common package dependency cycle: "+strings.Join(cycle, " -> "))
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)
-		t.Fatalf("v28 common dependency graph violations:\n%s", strings.Join(violations, "\n"))
+		t.Fatalf("v30 common dependency graph violations:\n%s", strings.Join(violations, "\n"))
 	}
 }
 
@@ -298,7 +299,7 @@ func stringSetKeys(values map[string]struct{}) []string {
 	return keys
 }
 
-func v28DependencyCycle(graph map[string]map[string]struct{}) []string {
+func v30DependencyCycle(graph map[string]map[string]struct{}) []string {
 	const (
 		unvisited = iota
 		visiting
@@ -331,7 +332,7 @@ func v28DependencyCycle(graph map[string]map[string]struct{}) []string {
 		states[node] = visited
 		return nil
 	}
-	for _, node := range v28GraphNodes(graph) {
+	for _, node := range v30GraphNodes(graph) {
 		if states[node] == unvisited {
 			if cycle := visit(node); len(cycle) > 0 {
 				return cycle
@@ -341,7 +342,7 @@ func v28DependencyCycle(graph map[string]map[string]struct{}) []string {
 	return nil
 }
 
-func v28GraphNodes(graph map[string]map[string]struct{}) []string {
+func v30GraphNodes(graph map[string]map[string]struct{}) []string {
 	nodes := make([]string, 0, len(graph))
 	for node := range graph {
 		nodes = append(nodes, node)

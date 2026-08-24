@@ -3,10 +3,10 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/identity/access/access_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/identity/account/account_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/identity/role/role_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/identity/access/access_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/identity/account/account_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/identity/role/role_enums"
 )
 
 func TestIdentityEnumsValidateKnownValues(t *testing.T) {
@@ -45,7 +45,7 @@ func TestWorkforceRoleAndScopeWireValuesAreLocked(t *testing.T) {
 		{6, role_enums.UserRoleWarehouseOperator, "warehouseOperator"},
 	}
 	if len(roles) != 6 {
-		t.Fatalf("the built-in workforce set holds %d roles; v28 locks exactly six", len(roles))
+		t.Fatalf("the built-in workforce set holds %d roles; v30 locks exactly six", len(roles))
 	}
 	for index, entry := range roles {
 		if entry.rank != index+1 {
@@ -59,7 +59,7 @@ func TestWorkforceRoleAndScopeWireValuesAreLocked(t *testing.T) {
 		}
 	}
 
-	// The v28 cut-over retires these four keys. They must never validate
+	// The v30 cut-over retires these four keys. They must never validate
 	// again: a stale token or seeded document carrying one is not a role.
 	// `sales` joins the list because POS/till duty is decided by geographic
 	// scope rather than by a dedicated selling rank — every remaining rank

@@ -1,6 +1,6 @@
 package classification
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
 
 // CountryCodeRef is the code-only country relationship persisted by catalog
 // records. Display names are resolved from the canonical geography master.

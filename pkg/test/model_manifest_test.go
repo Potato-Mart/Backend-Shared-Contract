@@ -13,10 +13,10 @@ import (
 	"testing"
 )
 
-// v28ModelPackageManifest classifies every production package. Adding an
+// v30ModelPackageManifest classifies every production package. Adding an
 // exported type changes the digest below and requires an explicit manifest
 // review instead of silently expanding the contract surface.
-var v28ModelPackageManifest = map[string]string{
+var v30ModelPackageManifest = map[string]string{
 	"contracts/common/apiresponse/apiresponse_enums":             "enum",
 	"contracts/common/audit":                                     "record,value",
 	"contracts/common/commerce/commerce_enums":                   "enum",
@@ -53,6 +53,7 @@ var v28ModelPackageManifest = map[string]string{
 	"contracts/insights/analytics":                               "record",
 	"contracts/insights/marketing":                               "entity,record",
 	"contracts/insights/marketing/marketing_enums":               "enum",
+	"contracts/marketing/campaign/campaign_enums":                "enum",
 	"contracts/marketing":                                        "entity,event,record,value",
 	"contracts/marketing/marketing_enums":                        "enum",
 	"contracts/notifications/backinstock":                        "entity,event,record",
@@ -109,11 +110,11 @@ var v28ModelPackageManifest = map[string]string{
 	"versioning":                                                 "module-metadata",
 }
 
-// Reviewed for the v28.0.0 RBAC and geographic-scoping cut-over. The digest
+// Reviewed for the v30.0.0 RBAC and geographic-scoping cut-over. The digest
 // captures the complete exported model manifest, so the change below was
 // classified explicitly before the digest was moved.
 //
-// v28.0.0 adds three exported types and removes two, with no manifest
+// v30.0.0 adds three exported types and removes two, with no manifest
 // classification change:
 //
 //   - access.StaffGeoScope — the persisted workforce geographic grant, a
@@ -126,12 +127,12 @@ var v28ModelPackageManifest = map[string]string{
 //     .SessionStatus likewise replaces ShiftStatus inside the existing "enum"
 //     class.
 //
-// Every other v28 change is a field on an existing type — the flat scope
+// Every other v30 change is a field on an existing type — the flat scope
 // claims, Role.rank, the gift-card policy's market/country/audit fields, and
 // the denormalized market_code/country_code/depot_code geography — and fields do
 // not enter this digest.
 //
-// Re-reviewed for the pre-tag v28.0.0 correction pass, which deliberately
+// Re-reviewed for the pre-tag v30.0.0 correction pass, which deliberately
 // leaves this digest UNCHANGED. The digest hashes package|class|TypeName
 // triples only, so none of that pass's changes can reach it:
 //
@@ -146,9 +147,9 @@ var v28ModelPackageManifest = map[string]string{
 // than a skipped gate: this comment is the review record, and the guards that
 // actually police the change are the workforce wire lock in pkg/test/enums
 // and the removed-identifier set in hard_cutover_test.go.
-const v28ExportedTypeManifestDigest = "58dd547a85311715f70021f0ecd3eb354f2fbcb4cc2ebf07ba590388b7193236"
+const v30ExportedTypeManifestDigest = "58dd547a85311715f70021f0ecd3eb354f2fbcb4cc2ebf07ba590388b7193236"
 
-func TestV28ExportedTypesMatchModelManifest(t *testing.T) {
+func TestV30ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)
 	var entries []string
 	pkgRoot := sharedContractPkgRoot(t)
@@ -163,9 +164,9 @@ func TestV28ExportedTypesMatchModelManifest(t *testing.T) {
 		if packagePath == "." {
 			return nil
 		}
-		class, classified := v28ModelPackageManifest[packagePath]
+		class, classified := v30ModelPackageManifest[packagePath]
 		if !classified {
-			t.Errorf("%s is not classified in the v28 model manifest", packagePath)
+			t.Errorf("%s is not classified in the v30 model manifest", packagePath)
 			return nil
 		}
 		seenPackages[packagePath] = true
@@ -190,9 +191,9 @@ func TestV28ExportedTypesMatchModelManifest(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("read v28 model manifest: %v", err)
+		t.Fatalf("read v30 model manifest: %v", err)
 	}
-	for packagePath := range v28ModelPackageManifest {
+	for packagePath := range v30ModelPackageManifest {
 		if !seenPackages[packagePath] {
 			t.Errorf("manifest package %s has no production source", packagePath)
 		}
@@ -200,7 +201,7 @@ func TestV28ExportedTypesMatchModelManifest(t *testing.T) {
 	sort.Strings(entries)
 	sum := sha256.Sum256([]byte(strings.Join(entries, "\n")))
 	got := hex.EncodeToString(sum[:])
-	if got != v28ExportedTypeManifestDigest {
+	if got != v30ExportedTypeManifestDigest {
 		t.Fatalf("exported model manifest changed: got %s; classify the change and update the reviewed digest", got)
 	}
 }

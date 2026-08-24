@@ -3,11 +3,11 @@ package access
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/audit"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/identity/identity_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/identity/access/access_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/identity/account/account_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/identity/identity_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/identity/access/access_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/identity/account/account_enums"
 )
 
 // PortalAccess records whether an account/persona may enter one front-door
