@@ -3,7 +3,7 @@ package wish
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/wish/wish_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/wish/wish_enums"
 )
 
 // WishBallot is a revisioned, time-bounded set of candidate identifiers.

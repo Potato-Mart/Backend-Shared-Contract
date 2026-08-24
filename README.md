@@ -15,8 +15,8 @@ workflows.
 ## Latest Version
 
 ```text
-v29.0.2
-github.com/Potato-Mart/Backend-Shared-Contract/v29
+v30.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v30
 ```
 
 See [RELEASE_NOTES.md](RELEASE_NOTES.md) for the release history,
@@ -27,16 +27,16 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v29 v29.0.2
+require github.com/Potato-Mart/Backend-Shared-Contract/v30 v30.0.0
 ```
 
-Import packages from the same `/v29` module path.
+Import packages from the same `/v30` module path.
 
 ## Package Layout
 
 - Common models are grouped by concern under `pkg/contracts/common`, such as
   `geography`, `party`, `packaging`, `security`, `temporal`, `measurement`, and
-  `money`. The legacy `common/shared` package does not exist in v29.
+  `money`. The legacy `common/shared` package does not exist in v30.
 - Finite enum types live in a leaf `<domain>_enums` package beside the models
   that use them. For example, product models import
   `supply/product/product_enums`, while common security models import
@@ -49,12 +49,20 @@ Import packages from the same `/v29` module path.
   `pricing/market`, `pricing/pricebook`, and `pricing/quote`. Promotion
   mechanics live under `pricing/promotion`; wallet models under
   `pricing/wallet`; shipment models under `orders/shipping`.
+- Customer market is resolved only from the frozen
+  `orders/shipping.FulfilmentLocationSnapshot`; retail analytics are standalone
+  `insights/analytics` records. Notification topics, preferences, protected
+  deliveries, and customer-safe in-app inbox projections live only under
+  `notifications`.
+- Marketing owns canonical `marketing/campaign` and `marketing/message`
+  authoring models. General customer reviews live under `review`, with separate
+  protected, public, and owner-safe projections.
 - `supply/product.Product` is keyed by the immutable `sku_code`, owns the
   authoritative storage requirement, localized content, classification,
-  provenance, status, and optional administration. `supply/product.SKU` is the
-  code-only sellable and stockable shape that owns package options, barcodes,
-  net content, and the enforced storage copy. Neither carries price, tax,
-  channel sellability, or a market-dependent metric.
+  provenance, package options, barcode assignments, net content, status, and
+  optional administration. `supply/product.SellingProduct` is the customer-safe
+  market-priced projection; raw product records carry no price, tax,
+  channel sellability, or market-dependent metric.
 - Authoritative prices live in `pricing/pricebook.PriceEntry` inside a
   market-scoped `PriceBook`; commercial availability lives in
   `supply/listing.MarketListing`. `MarketCode` and `CountryCode` are separate
@@ -71,7 +79,7 @@ Import packages from the same `/v29` module path.
   applications. Only promotion lifecycle status and match mode are closed
   promotion enums.
 - This module is contract-only. The seven backend services and the parent
-  `go.work` must migrate to `/v29` before consuming this release.
+  `go.work` must migrate to `/v30` before consuming this release.
 
 ## Boundary Governance
 

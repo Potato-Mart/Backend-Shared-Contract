@@ -6,18 +6,18 @@ import (
 	"testing"
 )
 
-func TestV29ModuleMetadata(t *testing.T) {
-	if ModuleName != "Backend-Shared-Contract" || ModuleVersion != "v29.0.2" || MajorVersion != "v29" {
+func TestV30ModuleMetadata(t *testing.T) {
+	if ModuleName != "Backend-Shared-Contract" || ModuleVersion != "v30.0.0" || MajorVersion != "v30" {
 		t.Fatalf("unexpected module metadata: %q %q %q", ModuleName, ModuleVersion, MajorVersion)
 	}
 }
 
-func TestV29ModulePath(t *testing.T) {
+func TestV30ModulePath(t *testing.T) {
 	contents, err := os.ReadFile("../../go.mod")
 	if err != nil {
 		t.Fatalf("read go.mod: %v", err)
 	}
-	moduleLine := "module github.com/Potato-Mart/Backend-Shared-Contract/v29"
+	moduleLine := "module github.com/Potato-Mart/Backend-Shared-Contract/v30"
 	if !strings.Contains(string(contents), moduleLine) ||
 		strings.Contains(string(contents), "Backend-Shared-Contract/v19") ||
 		strings.Contains(string(contents), "Backend-Shared-Contract/v20") ||
@@ -28,6 +28,6 @@ func TestV29ModulePath(t *testing.T) {
 		strings.Contains(string(contents), "Backend-Shared-Contract/v25") ||
 		strings.Contains(string(contents), "Backend-Shared-Contract/v26") ||
 		strings.Contains(string(contents), "Backend-Shared-Contract/v27") {
-		t.Fatalf("go.mod must use the v29 hard-cut module path: %s", contents)
+		t.Fatalf("go.mod must use the v30 hard-cut module path: %s", contents)
 	}
 }

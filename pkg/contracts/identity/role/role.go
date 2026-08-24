@@ -3,9 +3,9 @@ package role
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/audit"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/identity/role/role_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/identity/role/role_enums"
 )
 
 // Role is the projection of a role definition stored in mgmt_roles.

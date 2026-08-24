@@ -5,11 +5,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification"
 )
 
-func TestV29ProductStoryUsesLocalizedNameAndMediaCodes(t *testing.T) {
+func TestV30ProductStoryUsesLocalizedNameAndMediaCodes(t *testing.T) {
 	body, err := json.Marshal(Product{Content: ProductContent{
 		Name:   localization.LocalizedName{Language: "en", Name: "Golden Potato"},
 		Images: &Images{Cover: &classification.ObjectMediaRef{Code: "MED-COVER"}, Gallery: []classification.ObjectMediaRef{{Code: "MED-GALLERY"}}},

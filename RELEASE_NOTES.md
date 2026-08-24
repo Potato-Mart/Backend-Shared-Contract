@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v30.0.0` | 2026-08-24 | Major | Domain ownership hard cut: centralizes backend-defined notification topics and preferences, moves customer analytics to Insights, resolves commercial market from frozen fulfilment location, consolidates Marketing/Pricing ownership, publishes SellingProduct, and generalizes Review contracts. Changes the module path to `/v30`; all consumers must migrate explicitly. |
 | `v29.0.2` | 2026-08-22 | Patch | Raises the repository-owned Go toolchain requirement to Go 1.26.7. No exported model, JSON shape, enum value, event schema, or module path changes. |
 | `v29.0.1` | 2026-08-19 | Patch | Completes the V29 code-only persistence boundary: catalogue collection, category-tag, brand, supplier, country, and media relationships now serialize only immutable codes; listing evidence and schema-v3 listing events no longer duplicate the root Mongo listing ID. Keeps the `/v29` module path. |
 | `v29.0.0` | 2026-08-19 | Major | Catalogue business-key hard cut: replaces ProductCategory with SKUSeries, centralizes StorageType under classification, makes SKU code the canonical product and cross-domain identity, makes Product names localized, adds multi-brand/multi-supplier products and supplier availability, moves manufacturing to CountryRef, replaces catalog/commercial/media reference IDs and slugs with immutable codes, and bumps SKU-bearing events to schema version 3. Changes the module path to `/v29`; all consumers must migrate explicitly. |
@@ -124,6 +125,46 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v30.0.0 (2026-08-24) - Notification, Commerce, Selling Product, And Review Domain Cutover
+
+### Breaking contract
+
+- Module path and release metadata move to `github.com/Potato-Mart/Backend-Shared-Contract/v30` and `v30.0.0`.
+- Retail customers no longer persist market, country, marketing preference, or analytics fields. Market is resolved from the Orders-owned fulfilment-location snapshot; retail analytics are standalone Insights records.
+- Notification preference, topic, delivery, and public inbox models move to `contracts/notifications`. Topic codes, social provider codes, message modes, and destination codes are backend-configured strings; fixed topic groups, customer notification topics, BackInStock, and provider constants are removed.
+- Marketing is limited to campaign and authored-message contracts. Pricing owns promotion, wallet coupon, benefit, membership, pricebook, and market contracts. The public selling surface is `product.SellingProduct`, not `SKU`.
+- Product-only Supply review contracts are replaced by neutral order, product, campaign, and app-feedback review contracts with private owner, public, and internal projections.
+
+### Consumer action
+
+1. Upgrade module imports and CI pins from `/v29 v29.0.1` to `/v30 v30.0.0` only when each owning service has migrated its DTOs, persistence, APIs, and runtime behavior.
+2. Resolve retail market during cart creation/update from the selected delivery address or fulfilment depot; never restore a customer home-market fallback.
+3. Use backend-managed notification topics and the centralized preference aggregate. Do not reintroduce hard-coded topic/provider constants or raw delivery credentials.
+4. Migrate catalogue consumers from `SKU` to `Product` and `SellingProduct`; use a price snapshot for committed checkout totals.
+5. Migrate review consumers to public/owner/internal projections and keep customer numbers and moderation history out of public responses.
+
+### Consumer Migration Matrix
+
+| Immutable v29 consumer | Required v30 migration before adoption | This release performs it? |
+| --- | --- | --- |
+| Backend-Customers | Remove persisted retail market/country/marketing/analytics fields; use fulfilment-location snapshots and centralized notification preferences. | No |
+| Backend-Identity | Remove embedded notification preference state and route preference writes/events through Notifications. | No |
+| Backend-Insights | Persist standalone retail analytics and marketing prediction/evidence records under Insights ownership. | No |
+| Backend-Orders | Resolve delivery address or depot to the frozen fulfilment snapshot, reprice on change, and recreate a cart on cross-market resolution. | No |
+| Backend-Payments | Update wallet point/reward enum imports and retain checkout `PriceSnapshot` as transaction truth. | No |
+| Backend-Pricing | Own promotion, wallet, membership, benefit, market, pricebook, and public `SellingPrice` publishing rules. | No |
+| Backend-Supply | Replace SKU aggregate consumption with Product/SellingProduct and move product-only review integration to neutral Review subjects. | No |
+
+Every migration includes the `/v30` import/go.mod update plus service-owned
+runtime, persistence, indexes, DTOs, OpenAPI, generated clients, frontend
+consumers, tests, and CI changes. Those changes are intentionally outside this
+shared-contract release and must be released independently by the owning
+service.
+
+### Compatibility
+
+The seven service repositories remain pinned to immutable v29 during this contract-only release. This repository does not claim downstream runtime adoption, API compatibility, storage migration, or OpenAPI/client regeneration.
 
 ## v29.0.2 (2026-08-22) - Go 1.26.7 Toolchain Baseline
 

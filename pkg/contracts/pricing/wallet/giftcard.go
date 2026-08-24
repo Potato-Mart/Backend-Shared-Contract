@@ -3,14 +3,14 @@ package wallet
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/benefit"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 // GiftCard is a stored-value instrument with a re-spendable balance. The
@@ -42,20 +42,4 @@ type GiftCard struct {
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 
 	audit.AuditFields
-}
-
-// GiftCardTransaction is one entry in a gift card's balance ledger. A positive
-// Delta tops up (issue / top_up / refund); a negative Delta redeems.
-// BalanceAfter is the running balance after this entry.
-type GiftCardTransaction struct {
-	ID                 string                                 `json:"id"`
-	GiftCardCode       string                                 `json:"gift_card_code"`
-	Delta              money.Money                            `json:"delta"`
-	BalanceAfter       money.Money                            `json:"balance_after"`
-	Reason             wallet_enums.GiftCardTransactionReason `json:"reason"`
-	ReservationID      string                                 `json:"reservation_id,omitempty"`
-	RelatedOrderNumber string                                 `json:"related_order_number,omitempty"`
-	Note               string                                 `json:"note,omitempty"`
-	CreatedBy          string                                 `json:"created_by,omitempty"`
-	CreatedAt          time.Time                              `json:"created_at"`
 }

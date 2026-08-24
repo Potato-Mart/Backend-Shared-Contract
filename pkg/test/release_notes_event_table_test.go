@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pubsub/event/event_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pubsub/event/event_enums"
 )
 
 // v27EventSchemaVersion2Payloads is the reviewed set of routed Pub/Sub payloads
@@ -29,7 +29,7 @@ import (
 // dead-lettered in production, so the document and this slice are pinned to
 // each other.
 //
-// v28.0.0 does not move the schema version. Its payload additions — the
+// v30.0.0 does not move the schema version. Its payload additions — the
 // optional market_code, country_code, and depot_code geography — are all
 // omitempty fields that a version-2 consumer decodes unchanged, so this table
 // and the v27.0.0 section that publishes it stay authoritative. Publishers

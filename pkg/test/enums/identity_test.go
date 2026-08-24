@@ -3,16 +3,15 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/identity/access/access_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/identity/account/account_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/identity/role/role_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/identity/access/access_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/identity/account/account_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/identity/role/role_enums"
 )
 
 func TestIdentityEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
 		{name: "identityenum.AuthIdentityProvider", valid: []stringEnum{account_enums.AuthIdentityProviderPassword, account_enums.AuthIdentityProviderGoogle, account_enums.AuthIdentityProviderApple, account_enums.AuthIdentityProviderAzureAD, account_enums.AuthIdentityProviderOkta, account_enums.AuthIdentityProviderPasskey, account_enums.AuthIdentityProviderServiceToken, account_enums.AuthIdentityProviderLine, account_enums.AuthIdentityProviderFacebook, account_enums.AuthIdentityProviderDiscord, account_enums.AuthIdentityProviderMicrosoft, account_enums.AuthIdentityProviderOIDC}, invalid: account_enums.AuthIdentityProvider("__invalid__")},
-		{name: "identityenum.NotificationTopicGroup", valid: []stringEnum{account_enums.NotificationTopicGroupPayment, account_enums.NotificationTopicGroupOrder, account_enums.NotificationTopicGroupReceipt, account_enums.NotificationTopicGroupProductUpdates, account_enums.NotificationTopicGroupPromotions}, invalid: account_enums.NotificationTopicGroup("__invalid__")},
 		{name: "identityenum.AuthIdentityStatus", valid: []stringEnum{account_enums.AuthIdentityStatusActive, account_enums.AuthIdentityStatusDisabled, account_enums.AuthIdentityStatusRevoked}, invalid: account_enums.AuthIdentityStatus("__invalid__")},
 		{name: "identityenum.DeviceType", valid: []stringEnum{account_enums.DeviceTypeDesktop, account_enums.DeviceTypeMobile, account_enums.DeviceTypeTablet, account_enums.DeviceTypeAPI}, invalid: account_enums.DeviceType("__invalid__")},
 		{name: "securityenum.IdentityDomain", valid: []stringEnum{security_enums.IdentityDomainCustomer, security_enums.IdentityDomainWorkforce, security_enums.IdentityDomainService}, invalid: security_enums.IdentityDomain("__invalid__")},
@@ -45,7 +44,7 @@ func TestWorkforceRoleAndScopeWireValuesAreLocked(t *testing.T) {
 		{6, role_enums.UserRoleWarehouseOperator, "warehouseOperator"},
 	}
 	if len(roles) != 6 {
-		t.Fatalf("the built-in workforce set holds %d roles; v28 locks exactly six", len(roles))
+		t.Fatalf("the built-in workforce set holds %d roles; v30 locks exactly six", len(roles))
 	}
 	for index, entry := range roles {
 		if entry.rank != index+1 {
@@ -59,7 +58,7 @@ func TestWorkforceRoleAndScopeWireValuesAreLocked(t *testing.T) {
 		}
 	}
 
-	// The v28 cut-over retires these four keys. They must never validate
+	// The v30 cut-over retires these four keys. They must never validate
 	// again: a stale token or seeded document carrying one is not a role.
 	// `sales` joins the list because POS/till duty is decided by geographic
 	// scope rather than by a dedicated selling rank — every remaining rank

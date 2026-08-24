@@ -1,9 +1,9 @@
 package wallet
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
 )
 
 // GiftCardDenominationPolicy is the versioned, server-authored set of purchase
@@ -31,13 +31,4 @@ type GiftCardDenominationPolicy struct {
 	BonusAmountsMinor []GiftCardDenominationBonus `json:"bonus_amounts_minor,omitempty"`
 
 	audit.AuditFields
-}
-
-// GiftCardDenominationBonus records the bonus balance a buyer receives for one
-// allowed denomination. The buyer is charged AmountMinor; the issued card
-// carries AmountMinor + BonusMinor. Both are minor units of the policy's
-// currency.
-type GiftCardDenominationBonus struct {
-	AmountMinor int64 `json:"amount_minor"`
-	BonusMinor  int64 `json:"bonus_minor"`
 }

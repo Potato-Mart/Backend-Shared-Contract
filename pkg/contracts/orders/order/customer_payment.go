@@ -3,10 +3,10 @@ package order
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 // CustomerPaymentSummary is the customer-safe projection of how an order was
@@ -21,7 +21,7 @@ type CustomerPaymentSummary struct {
 	RefundedTotal       *money.Money                            `json:"refunded_total,omitempty"`
 	TotalPaid           *money.Money                            `json:"total_paid,omitempty"`
 	Allocations         []CustomerPaymentAllocation             `json:"allocations,omitempty"`
-	PointsAwardStatus   membership_enums.PointAwardStatus       `json:"points_award_status,omitempty"`
+	PointsAwardStatus   wallet_enums.PointAwardStatus           `json:"points_award_status,omitempty"`
 	PointsEarned        *int                                    `json:"points_earned,omitempty"`
 	PointsAppliedToDebt *int                                    `json:"points_applied_to_debt,omitempty"`
 	PointsNetCredited   *int                                    `json:"points_net_credited,omitempty"`
@@ -32,28 +32,4 @@ type CustomerPaymentSummary struct {
 	MissingComponents   []payment_enums.PaymentSummaryComponent `json:"missing_components,omitempty"`
 	PaidAt              *time.Time                              `json:"paid_at,omitempty"`
 	UpdatedAt           *time.Time                              `json:"updated_at,omitempty"`
-}
-
-// CustomerPaymentAllocation is one customer-safe row of an order's payment
-// composition. It is also the reusable invoice payment-row shape.
-type CustomerPaymentAllocation struct {
-	AllocationID   string                                      `json:"allocation_id,omitempty"`
-	Kind           payment_enums.CustomerPaymentAllocationKind `json:"kind"`
-	Method         payment_enums.PaymentMethod                 `json:"method,omitempty"`
-	Provider       string                                      `json:"provider,omitempty"`
-	Amount         money.Money                                 `json:"amount"`
-	Points         *int                                        `json:"points,omitempty"`
-	Status         string                                      `json:"status,omitempty"`
-	OccurredAt     time.Time                                   `json:"occurred_at"`
-	RefundedAmount *money.Money                                `json:"refunded_amount,omitempty"`
-}
-
-// InvoiceEmailDelivery records one customer-requested invoice email
-// redelivery and its lifecycle state.
-type InvoiceEmailDelivery struct {
-	InvoiceNumber string                            `json:"invoice_number"`
-	DeliveryID    string                            `json:"delivery_id"`
-	Status        payment_enums.InvoiceResendStatus `json:"status"`
-	RecipientHint string                            `json:"recipient_hint,omitempty"`
-	RequestedAt   time.Time                         `json:"requested_at"`
 }

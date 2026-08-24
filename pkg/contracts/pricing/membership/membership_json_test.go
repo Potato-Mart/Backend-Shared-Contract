@@ -2,235 +2,41 @@ package membership_test
 
 import (
 	"encoding/json"
-
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/membership"
-
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
-func TestMembershipAccountAndTierRoundTrip(t *testing.T) {
-	now := time.Date(2026, 6, 23, 0, 0, 0, 0, time.UTC)
+func TestMembershipAccountComposesWalletOwnedPointsSummary(t *testing.T) {
+	now := time.Date(2026, 8, 24, 0, 0, 0, 0, time.UTC)
 	account := membership.MembershipAccount{
-		ID:      "RC-20260727-ABCDEF",
-		TierKey: "gold",
-		Status:  membership_enums.MembershipAccountStatusActive,
-		Wallet: membership.MembershipWalletSummary{
-			TotalPoints:     1200,
-			ReservedPoints:  200,
-			AvailablePoints: 1000,
-			PointDebt:       25,
-			ExpiringPoints:  300,
-			CalculatedAt:    now,
-		},
-		EnrolledAt: now,
+		ID: "RC-1", Status: membership_enums.MembershipAccountStatusActive,
+		Wallet: wallet.PointsSummary{AvailablePoints: 120, CalculatedAt: now}, EnrolledAt: now,
 	}
-	tier := membership.MembershipTier{
-		TierKey:             "gold",
-		Label:               "Gold",
-		QualificationMetric: membership_enums.MembershipTierMetricAnnualSpend,
-		MinQualifyingSpend:  money.Money{AmountMinor: 100000, Currency: "AUD"},
-		PointMultiplier:     2,
-		IsActive:            true,
-		IsSystem:            true,
-	}
-
-	payload, err := json.Marshal(struct {
-		Account membership.MembershipAccount `json:"account"`
-		Tier    membership.MembershipTier    `json:"tier"`
-	}{Account: account, Tier: tier})
+	payload, err := json.Marshal(account)
 	if err != nil {
-		t.Fatalf("marshal membership account/tier: %v", err)
+		t.Fatalf("marshal membership account: %v", err)
 	}
-
-	var decoded struct {
-		Account membership.MembershipAccount `json:"account"`
-		Tier    membership.MembershipTier    `json:"tier"`
-	}
-	if err := json.Unmarshal(payload, &decoded); err != nil {
-		t.Fatalf("unmarshal membership account/tier: %v", err)
-	}
-	if decoded.Account.Wallet.AvailablePoints != 1000 || decoded.Account.Wallet.PointDebt != 25 ||
-		decoded.Tier.QualificationMetric != membership_enums.MembershipTierMetricAnnualSpend {
-		t.Fatalf("membership account/tier did not round-trip: %+v", decoded)
+	if !strings.Contains(string(payload), `"wallet":{"total_points":0,"reserved_points":0,"available_points":120`) {
+		t.Fatalf("membership must compose wallet summary: %s", payload)
 	}
 }
 
-func TestPointLedgerBucketsAndReservationRoundTrip(t *testing.T) {
-	now := time.Date(2026, 6, 23, 0, 0, 0, 0, time.UTC)
-	expiresSoon := time.Date(2026, 7, 7, 0, 0, 0, 0, time.UTC)
-	expiresLater := time.Date(2026, 10, 15, 0, 0, 0, 0, time.UTC)
-	debtDelta := 20
-	debtAfter := 20
-	entry := membership.PointLedgerEntry{
-		ID:             "redeem_1",
-		CustomerNumber: "RC-20260727-ABCDEF",
-		Delta:          -40,
-		Reason:         membership_enums.MembershipPointReasonRedeem,
-		BalanceAfter:   60,
-		DebtDelta:      &debtDelta,
-		DebtAfter:      &debtAfter,
-		Allocations: []membership.PointAllocation{
-			{LedgerEntryID: "earn_1", Points: 30, ExpiresAt: &expiresSoon},
-			{LedgerEntryID: "earn_2", Points: 10, ExpiresAt: &expiresLater},
-		},
-		CreatedAt: now,
-	}
-	breakdown := membership.PointBalanceBreakdown{
-		CustomerNumber:  "RC-20260727-ABCDEF",
-		TotalPoints:     100,
-		ReservedPoints:  40,
-		AvailablePoints: 60,
-		PointDebt:       20,
-		ExpiringPoints:  100,
-		Buckets: []membership.PointBucket{
-			{Points: 30, ExpiresAt: &expiresSoon, SourceLedgerEntryID: "earn_1", Reason: membership_enums.MembershipPointReasonOrder},
-			{Points: 70, ExpiresAt: &expiresLater, SourceLedgerEntryID: "earn_2", Reason: membership_enums.MembershipPointReasonSignupBonus},
-		},
-		CalculatedAt: now,
-	}
-	reservation := membership.PointReservation{
-		ID:             "res_1",
-		CustomerNumber: "RC-20260727-ABCDEF",
-		Points:         40,
-		Status:         membership_enums.PointReservationStatusReserved,
-		Reason:         membership_enums.MembershipPointReasonRedeem,
-		RedemptionType: membership_enums.MembershipRedemptionTypeCheckoutDiscount,
-		Allocations:    entry.Allocations,
-		ExpiresAt:      now.Add(10 * time.Minute),
-		CreatedAt:      now,
-	}
-
+func TestMembershipPolicyAndRewardCatalogStayInMembership(t *testing.T) {
+	reward := membership.Reward{Code: "reward-1", Type: wallet_enums.RewardTypeVoucher, PointsCost: 100, IsActive: true}
 	payload, err := json.Marshal(struct {
-		Entry       membership.PointLedgerEntry      `json:"entry"`
-		Breakdown   membership.PointBalanceBreakdown `json:"breakdown"`
-		Reservation membership.PointReservation      `json:"reservation"`
-	}{Entry: entry, Breakdown: breakdown, Reservation: reservation})
+		Policy membership.PointsPolicy `json:"policy"`
+		Reward membership.Reward       `json:"reward"`
+	}{Policy: membership.PointsPolicy{PointsPerMinorUnit: 1, RedemptionStepPoints: 100}, Reward: reward})
 	if err != nil {
-		t.Fatalf("marshal point contracts: %v", err)
+		t.Fatalf("marshal membership policy and reward: %v", err)
 	}
-
-	var decoded struct {
-		Entry       membership.PointLedgerEntry      `json:"entry"`
-		Breakdown   membership.PointBalanceBreakdown `json:"breakdown"`
-		Reservation membership.PointReservation      `json:"reservation"`
-	}
-	if err := json.Unmarshal(payload, &decoded); err != nil {
-		t.Fatalf("unmarshal point contracts: %v", err)
-	}
-	if len(decoded.Entry.Allocations) != 2 || decoded.Entry.DebtDelta == nil || *decoded.Entry.DebtDelta != 20 ||
-		decoded.Entry.DebtAfter == nil || *decoded.Entry.DebtAfter != 20 ||
-		decoded.Breakdown.PointDebt != 20 || len(decoded.Breakdown.Buckets) != 2 || decoded.Reservation.Points != 40 {
-		t.Fatalf("point contracts did not round-trip: %+v", decoded)
-	}
-
-	zero := 0
-	repaymentDelta := -20
-	repaidPayload, err := json.Marshal(membership.PointLedgerEntry{
-		ID: "debt_repaid_1", CustomerNumber: "RC-20260727-ABCDEF",
-		Reason:    membership_enums.MembershipPointReasonDebtRepaid,
-		DebtDelta: &repaymentDelta, DebtAfter: &zero, CreatedAt: now,
-	})
-	if err != nil {
-		t.Fatalf("marshal final debt repayment: %v", err)
-	}
-	if !strings.Contains(string(repaidPayload), `"debt_after":0`) {
-		t.Fatalf("final debt repayment must preserve known zero: %s", repaidPayload)
-	}
-}
-
-func TestRewardRedemptionAndMemberSubscriptionRoundTrip(t *testing.T) {
-	now := time.Date(2026, 6, 23, 0, 0, 0, 0, time.UTC)
-	discount := money.Money{AmountMinor: 500, Currency: "AUD"}
-	reward := membership.Reward{
-		ID:             "reward_1",
-		Code:           "reward_1",
-		Name:           "Five dollar discount",
-		Type:           membership_enums.MembershipRewardTypeOrderDiscount,
-		PointsCost:     500,
-		DiscountAmount: &discount,
-		SKUCode:        "A00001",
-		IsActive:       true,
-	}
-	redemption := membership.RewardRedemption{
-		ID:             "redemption_1",
-		CustomerNumber: "RC-20260727-ABCDEF",
-		RewardCode:     "reward_1",
-		ReservationID:  "res_1",
-		PointsSpent:    500,
-		Status:         membership_enums.MembershipRewardRedemptionStatusRedeemed,
-		DiscountAmount: &discount,
-		CreatedAt:      now,
-	}
-	plan := membership.SubscriptionPlan{
-		ID:            "plan_1",
-		SKUCode:       "A00001",
-		UnitPrice:     money.Money{AmountMinor: 1200, Currency: "AUD"},
-		FrequencyDays: 7,
-		IsActive:      true,
-		MarketCode:    "mkt_au_vic",
-		CountryCode:   "AU",
-	}
-	subscription := membership.MemberSubscription{
-		ID:             "sub_1",
-		CustomerNumber: "RC-20260727-ABCDEF",
-		PlanID:         "plan_1",
-		Qty:            2,
-		Status:         membership_enums.MemberSubscriptionStatusActive,
-		StartedAt:      now,
-		NextOrderAt:    now.AddDate(0, 0, 7),
-		MarketCode:     "mkt_au_vic",
-		CountryCode:    "AU",
-	}
-
-	payload, err := json.Marshal(struct {
-		Reward       membership.Reward             `json:"reward"`
-		Redemption   membership.RewardRedemption   `json:"redemption"`
-		Plan         membership.SubscriptionPlan   `json:"plan"`
-		Subscription membership.MemberSubscription `json:"subscription"`
-	}{Reward: reward, Redemption: redemption, Plan: plan, Subscription: subscription})
-	if err != nil {
-		t.Fatalf("marshal reward/subscription contracts: %v", err)
-	}
-
-	var decoded struct {
-		Reward       membership.Reward             `json:"reward"`
-		Redemption   membership.RewardRedemption   `json:"redemption"`
-		Plan         membership.SubscriptionPlan   `json:"plan"`
-		Subscription membership.MemberSubscription `json:"subscription"`
-	}
-	if err := json.Unmarshal(payload, &decoded); err != nil {
-		t.Fatalf("unmarshal reward/subscription contracts: %v", err)
-	}
-	if decoded.Reward.PointsCost != 500 || decoded.Reward.SKUCode != "A00001" || decoded.Redemption.PointsSpent != 500 ||
-		decoded.Plan.SKUCode != "A00001" || decoded.Plan.FrequencyDays != 7 || decoded.Subscription.Status != membership_enums.MemberSubscriptionStatusActive {
-		t.Fatalf("reward/subscription contracts did not round-trip: %+v", decoded)
-	}
-	if strings.Contains(string(payload), `"product":`) {
-		t.Fatalf("membership product links must be scalar SKU codes: %s", payload)
-	}
-	// A staff-facing subscription list is geo-scoped off the subscription
-	// itself, never by joining through PlanID, so the subscription must carry
-	// its own market and country.
-	if decoded.Subscription.MarketCode != "mkt_au_vic" || decoded.Subscription.CountryCode != "AU" {
-		t.Fatalf("member subscription geography did not round-trip: %+v", decoded.Subscription)
-	}
-	if !strings.Contains(string(payload), `"subscription":{`) ||
-		!strings.Contains(string(payload), `"market_code":"mkt_au_vic","country_code":"AU"`) {
-		t.Fatalf("member subscription JSON is missing its denormalized geography: %s", payload)
-	}
-
-	// Both fields are omitempty so a pre-v28 record decodes unchanged and an
-	// unscoped writer emits no key at all.
-	bare, err := json.Marshal(membership.MemberSubscription{ID: "sub_2"})
-	if err != nil {
-		t.Fatalf("marshal bare member subscription: %v", err)
-	}
-	if strings.Contains(string(bare), "market_code") || strings.Contains(string(bare), "country_code") {
-		t.Fatalf("member subscription geography must be omitempty: %s", bare)
+	if !strings.Contains(string(payload), `"points_per_minor_unit":1`) || !strings.Contains(string(payload), `"type":"VOUCHER"`) {
+		t.Fatalf("unexpected membership payload: %s", payload)
 	}
 }

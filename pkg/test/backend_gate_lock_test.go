@@ -1,26 +1,26 @@
 package pkg_test
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
 
 	"reflect"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/apiresponse/apiresponse_enums"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/orders/pos"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/payments/payment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/market"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/pricebook"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/pricing/quote"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/cost"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/listing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/purchase"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/apiresponse/apiresponse_enums"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/pos"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/payments/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/market"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/pricebook"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/quote"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/cost"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/listing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/purchase"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/warehouse"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v29/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/packaging/packaging_enums"
 )
 
 // TestV27BackendGateModelSurface locks the reusable model primitives needed by
@@ -35,6 +35,7 @@ func TestV27BackendGateModelSurface(t *testing.T) {
 		"Country":            "country",
 	})
 	assertJSONFields(t, reflect.TypeOf(geography.GeographicContext{}), map[string]string{
+		"MarketCode":         "market_code,omitempty",
 		"DepotCode":          "depot_code,omitempty",
 		"ScopeRevision":      "scope_revision",
 		"RuleRevision":       "rule_revision",
@@ -138,7 +139,7 @@ func TestV27BackendGateModelSurface(t *testing.T) {
 		"IsOutOfStock": "is_out_of_stock",
 		"AsOf":         "as_of",
 	})
-	assertJSONFields(t, reflect.TypeOf(product.SKU{}), map[string]string{
+	assertJSONFields(t, reflect.TypeOf(product.Product{}), map[string]string{
 		"SKUCode":            "sku_code",
 		"PackageOptions":     "package_options",
 		"BarcodeAssignments": "barcode_assignments,omitempty",
@@ -199,7 +200,6 @@ func TestV27BackendGateModelSurface(t *testing.T) {
 	assertJSONFields(t, reflect.TypeOf(sales.BuyerContext{}), map[string]string{
 		"Type":                 "type,omitempty",
 		"RetailCustomerNumber": "retail_customer_number,omitempty",
-		"FulfilmentIntent":     "fulfilment_intent,omitempty",
 	})
 
 	if !packaging_enums.PackageHandlingUnitEach.IsValid() || packaging_enums.PackageHandlingUnitEach.String() != "EACH" {
