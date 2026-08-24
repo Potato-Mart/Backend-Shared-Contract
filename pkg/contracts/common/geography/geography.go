@@ -2,12 +2,6 @@ package geography
 
 import "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography/geography_enums"
 
-// CountryCode is an ISO 3166-1 alpha-2 country code such as AU, TW, JP, or US.
-type CountryCode string
-
-// SubdivisionCode is an ISO 3166-2 subdivision code such as AU-VIC or US-CA.
-type SubdivisionCode string
-
 // CountryRef carries an authoritative country code and optional display name.
 type CountryRef struct {
 	Code CountryCode `json:"code"`

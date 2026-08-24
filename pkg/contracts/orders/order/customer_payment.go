@@ -33,27 +33,3 @@ type CustomerPaymentSummary struct {
 	PaidAt              *time.Time                              `json:"paid_at,omitempty"`
 	UpdatedAt           *time.Time                              `json:"updated_at,omitempty"`
 }
-
-// CustomerPaymentAllocation is one customer-safe row of an order's payment
-// composition. It is also the reusable invoice payment-row shape.
-type CustomerPaymentAllocation struct {
-	AllocationID   string                                      `json:"allocation_id,omitempty"`
-	Kind           payment_enums.CustomerPaymentAllocationKind `json:"kind"`
-	Method         payment_enums.PaymentMethod                 `json:"method,omitempty"`
-	Provider       string                                      `json:"provider,omitempty"`
-	Amount         money.Money                                 `json:"amount"`
-	Points         *int                                        `json:"points,omitempty"`
-	Status         string                                      `json:"status,omitempty"`
-	OccurredAt     time.Time                                   `json:"occurred_at"`
-	RefundedAmount *money.Money                                `json:"refunded_amount,omitempty"`
-}
-
-// InvoiceEmailDelivery records one customer-requested invoice email
-// redelivery and its lifecycle state.
-type InvoiceEmailDelivery struct {
-	InvoiceNumber string                            `json:"invoice_number"`
-	DeliveryID    string                            `json:"delivery_id"`
-	Status        payment_enums.InvoiceResendStatus `json:"status"`
-	RecipientHint string                            `json:"recipient_hint,omitempty"`
-	RequestedAt   time.Time                         `json:"requested_at"`
-}

@@ -21,18 +21,17 @@ var v30ExpectedEnumPackages = []string{
 	"contracts/common/identity/identity_enums",
 	"contracts/common/packaging/packaging_enums",
 	"contracts/common/security/security_enums",
-	"contracts/customers/campaign/campaign_enums",
 	"contracts/customers/retail/retail_enums",
 	"contracts/customers/wholesale/wholesale_enums",
 	"contracts/identity/access/access_enums",
 	"contracts/identity/account/account_enums",
 	"contracts/identity/deletion/deletion_enums",
 	"contracts/identity/role/role_enums",
+	"contracts/insights/analytics/analytics_enums",
 	"contracts/insights/marketing/marketing_enums",
 	"contracts/marketing/campaign/campaign_enums",
-	"contracts/marketing/marketing_enums",
-	"contracts/notifications/backinstock/backinstock_enums",
-	"contracts/notifications/customer/customer_enums",
+	"contracts/marketing/message/message_enums",
+	"contracts/notifications/notification_enums",
 	"contracts/orders/order/order_enums",
 	"contracts/orders/pos/pos_enums",
 	"contracts/orders/shipping/shipping_enums",
@@ -52,7 +51,7 @@ var v30ExpectedEnumPackages = []string{
 	"contracts/supply/listing/listing_enums",
 	"contracts/supply/product/product_enums",
 	"contracts/supply/purchase/purchase_enums",
-	"contracts/supply/review/review_enums",
+	"contracts/review/review_enums",
 	"contracts/supply/warehouse/warehouse_enums",
 	"contracts/supply/wish/wish_enums",
 }
@@ -77,6 +76,15 @@ func TestV30CommonAndEnumPackageLayout(t *testing.T) {
 		}
 		if entry.IsDir() {
 			if !strings.HasSuffix(entry.Name(), "_enums") {
+				return nil
+			}
+			// Local tooling can leave an empty directory after a package hard cut.
+			// Only a directory containing Go source is a contract enum package.
+			sources, globErr := filepath.Glob(filepath.Join(path, "*.go"))
+			if globErr != nil {
+				return globErr
+			}
+			if len(sources) == 0 {
 				return nil
 			}
 			packagePath := "contracts/" + relativePkgPath(t, contractsRoot, path)

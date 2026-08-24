@@ -144,6 +144,24 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 4. Migrate catalogue consumers from `SKU` to `Product` and `SellingProduct`; use a price snapshot for committed checkout totals.
 5. Migrate review consumers to public/owner/internal projections and keep customer numbers and moderation history out of public responses.
 
+### Consumer Migration Matrix
+
+| Immutable v29 consumer | Required v30 migration before adoption | This release performs it? |
+| --- | --- | --- |
+| Backend-Customers | Remove persisted retail market/country/marketing/analytics fields; use fulfilment-location snapshots and centralized notification preferences. | No |
+| Backend-Identity | Remove embedded notification preference state and route preference writes/events through Notifications. | No |
+| Backend-Insights | Persist standalone retail analytics and marketing prediction/evidence records under Insights ownership. | No |
+| Backend-Orders | Resolve delivery address or depot to the frozen fulfilment snapshot, reprice on change, and recreate a cart on cross-market resolution. | No |
+| Backend-Payments | Update wallet point/reward enum imports and retain checkout `PriceSnapshot` as transaction truth. | No |
+| Backend-Pricing | Own promotion, wallet, membership, benefit, market, pricebook, and public `SellingPrice` publishing rules. | No |
+| Backend-Supply | Replace SKU aggregate consumption with Product/SellingProduct and move product-only review integration to neutral Review subjects. | No |
+
+Every migration includes the `/v30` import/go.mod update plus service-owned
+runtime, persistence, indexes, DTOs, OpenAPI, generated clients, frontend
+consumers, tests, and CI changes. Those changes are intentionally outside this
+shared-contract release and must be released independently by the owning
+service.
+
 ### Compatibility
 
 The seven service repositories remain pinned to immutable v29 during this contract-only release. This repository does not claim downstream runtime adoption, API compatibility, storage migration, or OpenAPI/client regeneration.

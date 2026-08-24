@@ -293,20 +293,6 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"insights/analytics.SKUDemandForecast": v27StringSet(
 			"CurrentStockAtRun",
 		),
-		"customers/campaign.Audience": v27StringSet(
-			"Region",
-		),
-		"customers/campaign.CampaignProductPrediction": v27StringSet(
-			"PredictedDemandUnits", "SellableAvailableUnits", "ConfirmedInboundUnits",
-			"NetRequiredUnits", "SuggestedOrderUnits", "MinimumOrderQuantity",
-			"SuggestedCartons", "CartonSize",
-		),
-		"customers/campaign.CampaignPredictionEvidence": v27StringSet(
-			"RawNetUnits", "NormalizedUnits",
-		),
-		"customers/campaign.CampaignSupplierPrediction": v27StringSet(
-			"TotalUnits",
-		),
 		"supply/classification.SKUSeries": v27StringSet(
 			"Storage",
 		),
@@ -499,20 +485,6 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		),
 		"insights/analytics.SKUDemandForecast": v27StringSet(
 			"current_stock_at_run",
-		),
-		"customers/campaign.Audience": v27StringSet(
-			"region",
-		),
-		"customers/campaign.CampaignProductPrediction": v27StringSet(
-			"predicted_demand_units", "sellable_available_units", "confirmed_inbound_units",
-			"net_required_units", "suggested_order_units", "minimum_order_quantity",
-			"suggested_cartons", "carton_size",
-		),
-		"customers/campaign.CampaignPredictionEvidence": v27StringSet(
-			"raw_net_units", "normalized_units",
-		),
-		"customers/campaign.CampaignSupplierPrediction": v27StringSet(
-			"total_units",
 		),
 		"supply/classification.SKUSeries": v27StringSet(
 			"storage",

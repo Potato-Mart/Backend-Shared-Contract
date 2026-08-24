@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/customers/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/marketing/campaign/campaign_enums"
 )
 
 func TestCampaignEnumsValidateKnownValues(t *testing.T) {
@@ -13,6 +13,5 @@ func TestCampaignEnumsValidateKnownValues(t *testing.T) {
 		{name: "campaignenum.CampaignPlacement", valid: []stringEnum{campaign_enums.CampaignPlacementTopBanner, campaign_enums.CampaignPlacementHomeHero, campaign_enums.CampaignPlacementModal, campaign_enums.CampaignPlacementCheckoutNotice, campaign_enums.CampaignPlacementProductNotice}, invalid: campaign_enums.CampaignPlacement("__invalid__")},
 		{name: "campaignenum.CampaignPlatform", valid: []stringEnum{campaign_enums.CampaignPlatformWeb, campaign_enums.CampaignPlatformMobile}, invalid: campaign_enums.CampaignPlatform("__invalid__")},
 		{name: "campaignenum.CampaignSeverity", valid: []stringEnum{campaign_enums.CampaignSeverityInfo, campaign_enums.CampaignSeveritySuccess, campaign_enums.CampaignSeverityWarning, campaign_enums.CampaignSeverityCritical}, invalid: campaign_enums.CampaignSeverity("__invalid__")},
-		{name: "campaignenum.CampaignMessagingCategory", valid: []stringEnum{campaign_enums.CampaignMessagingCategoryPromotion, campaign_enums.CampaignMessagingCategoryAnnouncement, campaign_enums.CampaignMessagingCategoryNewProduct, campaign_enums.CampaignMessagingCategoryPreorder}, invalid: campaign_enums.CampaignMessagingCategory("__invalid__")},
 	})
 }

@@ -49,6 +49,14 @@ Import packages from the same `/v30` module path.
   `pricing/market`, `pricing/pricebook`, and `pricing/quote`. Promotion
   mechanics live under `pricing/promotion`; wallet models under
   `pricing/wallet`; shipment models under `orders/shipping`.
+- Customer market is resolved only from the frozen
+  `orders/shipping.FulfilmentLocationSnapshot`; retail analytics are standalone
+  `insights/analytics` records. Notification topics, preferences, protected
+  deliveries, and customer-safe in-app inbox projections live only under
+  `notifications`.
+- Marketing owns canonical `marketing/campaign` and `marketing/message`
+  authoring models. General customer reviews live under `review`, with separate
+  protected, public, and owner-safe projections.
 - `supply/product.Product` is keyed by the immutable `sku_code`, owns the
   authoritative storage requirement, localized content, classification,
   provenance, package options, barcode assignments, net content, status, and

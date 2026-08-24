@@ -12,7 +12,7 @@ func TestV30SKUSeriesJSONIncludesPrimaryEnglishName(t *testing.T) {
 	body, err := json.Marshal(SKUSeries{
 		ID: "64c13ab08edf48a008793ca5", Code: "F2", StorageType: classification_enums.StorageFrozen,
 		PrimaryName: localization.LocalizedName{Language: "en", Name: "Frozen Meat"},
-		OtherNames: []localization.LocalizedName{{Language: "zh-TW", Name: "冷凍肉品"}, {Language: "zh-CN", Name: "冷冻肉品"}},
+		OtherNames:  []localization.LocalizedName{{Language: "zh-TW", Name: "冷凍肉品"}, {Language: "zh-CN", Name: "冷冻肉品"}},
 	})
 	if err != nil {
 		t.Fatal(err)

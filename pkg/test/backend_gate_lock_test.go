@@ -35,6 +35,7 @@ func TestV27BackendGateModelSurface(t *testing.T) {
 		"Country":            "country",
 	})
 	assertJSONFields(t, reflect.TypeOf(geography.GeographicContext{}), map[string]string{
+		"MarketCode":         "market_code,omitempty",
 		"DepotCode":          "depot_code,omitempty",
 		"ScopeRevision":      "scope_revision",
 		"RuleRevision":       "rule_revision",
@@ -138,7 +139,7 @@ func TestV27BackendGateModelSurface(t *testing.T) {
 		"IsOutOfStock": "is_out_of_stock",
 		"AsOf":         "as_of",
 	})
-	assertJSONFields(t, reflect.TypeOf(product.SKU{}), map[string]string{
+	assertJSONFields(t, reflect.TypeOf(product.Product{}), map[string]string{
 		"SKUCode":            "sku_code",
 		"PackageOptions":     "package_options",
 		"BarcodeAssignments": "barcode_assignments,omitempty",
@@ -199,7 +200,6 @@ func TestV27BackendGateModelSurface(t *testing.T) {
 	assertJSONFields(t, reflect.TypeOf(sales.BuyerContext{}), map[string]string{
 		"Type":                 "type,omitempty",
 		"RetailCustomerNumber": "retail_customer_number,omitempty",
-		"FulfilmentIntent":     "fulfilment_intent,omitempty",
 	})
 
 	if !packaging_enums.PackageHandlingUnitEach.IsValid() || packaging_enums.PackageHandlingUnitEach.String() != "EACH" {

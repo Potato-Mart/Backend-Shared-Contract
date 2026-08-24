@@ -36,8 +36,6 @@ var v30ModelPackageManifest = map[string]string{
 	"contracts/common/security":                                  "event,record,value",
 	"contracts/common/security/security_enums":                   "enum",
 	"contracts/common/temporal":                                  "value",
-	"contracts/customers/campaign":                               "entity,event,record,snapshot",
-	"contracts/customers/campaign/campaign_enums":                "enum",
 	"contracts/customers/retail":                                 "entity,event,record,snapshot",
 	"contracts/customers/retail/retail_enums":                    "enum",
 	"contracts/customers/wholesale":                              "entity,record,snapshot",
@@ -51,15 +49,15 @@ var v30ModelPackageManifest = map[string]string{
 	"contracts/identity/role":                                    "entity,event,record",
 	"contracts/identity/role/role_enums":                         "enum",
 	"contracts/insights/analytics":                               "record",
-	"contracts/insights/marketing":                               "entity,record",
+	"contracts/insights/analytics/analytics_enums":               "enum",
+	"contracts/insights/marketing":                               "record",
 	"contracts/insights/marketing/marketing_enums":               "enum",
+	"contracts/marketing/campaign":                               "entity,record",
 	"contracts/marketing/campaign/campaign_enums":                "enum",
-	"contracts/marketing":                                        "entity,event,record,value",
-	"contracts/marketing/marketing_enums":                        "enum",
-	"contracts/notifications/backinstock":                        "entity,event,record",
-	"contracts/notifications/backinstock/backinstock_enums":      "enum",
-	"contracts/notifications/customer":                           "entity,event,record",
-	"contracts/notifications/customer/customer_enums":            "enum",
+	"contracts/marketing/message":                                "entity,record",
+	"contracts/marketing/message/message_enums":                  "enum",
+	"contracts/notifications":                                    "entity,record,value",
+	"contracts/notifications/notification_enums":                 "enum",
 	"contracts/orders/order":                                     "entity,event,snapshot,record",
 	"contracts/orders/order/order_enums":                         "enum",
 	"contracts/orders/pos":                                       "entity,record,snapshot",
@@ -89,6 +87,8 @@ var v30ModelPackageManifest = map[string]string{
 	"contracts/pubsub/envelop":                                   "record",
 	"contracts/pubsub/event":                                     "event,record",
 	"contracts/pubsub/event/event_enums":                         "enum",
+	"contracts/review":                                           "entity,record,value",
+	"contracts/review/review_enums":                              "enum",
 	"contracts/supply/classification":                            "entity,record,value",
 	"contracts/supply/cost":                                      "entity,record",
 	"contracts/supply/classification/classification_enums":       "enum",
@@ -101,8 +101,6 @@ var v30ModelPackageManifest = map[string]string{
 	"contracts/supply/product/product_enums":                     "enum",
 	"contracts/supply/purchase":                                  "entity,record",
 	"contracts/supply/purchase/purchase_enums":                   "enum",
-	"contracts/supply/review":                                    "entity,record,value",
-	"contracts/supply/review/review_enums":                       "enum",
 	"contracts/supply/warehouse":                                 "entity,event,record,snapshot,value",
 	"contracts/supply/warehouse/warehouse_enums":                 "enum",
 	"contracts/supply/wish":                                      "entity,record,value",
@@ -110,44 +108,12 @@ var v30ModelPackageManifest = map[string]string{
 	"versioning":                                                 "module-metadata",
 }
 
-// Reviewed for the v30.0.0 RBAC and geographic-scoping cut-over. The digest
-// captures the complete exported model manifest, so the change below was
-// classified explicitly before the digest was moved.
-//
-// v30.0.0 adds three exported types and removes two, with no manifest
-// classification change:
-//
-//   - access.StaffGeoScope — the persisted workforce geographic grant, a
-//     record under contracts/identity/access's existing "record" class.
-//   - access_enums.ScopeLevel — global/country/market/depot, an enum under
-//     contracts/identity/access/access_enums' existing "enum" class.
-//   - pos.RegisterSession and pos.SessionTotalsSnapshot replace
-//     pos.RegisterShift and pos.ShiftTotalsSnapshot, keeping the
-//     contracts/orders/pos "entity" and "snapshot" classes. pos_enums
-//     .SessionStatus likewise replaces ShiftStatus inside the existing "enum"
-//     class.
-//
-// Every other v30 change is a field on an existing type — the flat scope
-// claims, Role.rank, the gift-card policy's market/country/audit fields, and
-// the denormalized market_code/country_code/depot_code geography — and fields do
-// not enter this digest.
-//
-// Re-reviewed for the pre-tag v30.0.0 correction pass, which deliberately
-// leaves this digest UNCHANGED. The digest hashes package|class|TypeName
-// triples only, so none of that pass's changes can reach it:
-//
-//   - Dropping the `sales` workforce rank removes a constant, not a type;
-//     role_enums.UserRole itself is untouched.
-//   - membership.MemberSubscription.market_code/country_code,
-//     analytics.OrderItemFact/RefundItemFact/MetricRollup/SKUDemandForecast
-//     .country_code, and MetricRollup.market_code are all fields on types that
-//     already exist and already carry their manifest class.
-//
-// An unmoved digest is therefore the correct, reviewed outcome here rather
-// than a skipped gate: this comment is the review record, and the guards that
-// actually police the change are the workforce wire lock in pkg/test/enums
-// and the removed-identifier set in hard_cutover_test.go.
-const v30ExportedTypeManifestDigest = "58dd547a85311715f70021f0ecd3eb354f2fbcb4cc2ebf07ba590388b7193236"
+// Reviewed for the v30.0.0 domain redesign. The digest captures
+// package|class|TypeName triples, including the newly classified canonical
+// Marketing campaign/message packages, centralized Notifications, neutral
+// Review, SellingProduct/SellingPrice, and split Pricing ownership. Field-only
+// changes are locked by the JSON and hard-cutover tests instead.
+const v30ExportedTypeManifestDigest = "daebf1ec67b9882292c506f4fa1f51e76464e14dc93216eea6e5ca00fead7a04"
 
 func TestV30ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

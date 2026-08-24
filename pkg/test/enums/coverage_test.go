@@ -11,8 +11,9 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/packaging/packaging_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/customers/campaign/campaign_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/customers/wholesale/wholesale_enums"
+	insights_marketing_enums "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/insights/marketing/marketing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/marketing/campaign/campaign_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/order/order_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/pos/pos_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/payments/payment/payment_enums"
@@ -38,8 +39,8 @@ func TestV30EnumCoverageIncludesEveryStringEnum(t *testing.T) {
 func TestV30FormerlyUncoveredEnumValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
 		{name: "campaign.CampaignStatus", valid: []stringEnum{campaign_enums.CampaignStatusDraft, campaign_enums.CampaignStatusScheduled, campaign_enums.CampaignStatusActive, campaign_enums.CampaignStatusCompleted, campaign_enums.CampaignStatusArchived}, invalid: campaign_enums.CampaignStatus("__invalid__")},
-		{name: "campaign.CampaignPredictionStatus", valid: []stringEnum{campaign_enums.CampaignPredictionStatusNotApplicable, campaign_enums.CampaignPredictionStatusReady, campaign_enums.CampaignPredictionStatusWarning}, invalid: campaign_enums.CampaignPredictionStatus("__invalid__")},
-		{name: "campaign.CampaignPredictionSource", valid: []stringEnum{campaign_enums.CampaignPredictionSourceSameSeries, campaign_enums.CampaignPredictionSourceSimilarEvent, campaign_enums.CampaignPredictionSourceLast14DaysDoubled}, invalid: campaign_enums.CampaignPredictionSource("__invalid__")},
+		{name: "insights.CampaignPredictionStatus", valid: []stringEnum{insights_marketing_enums.CampaignPredictionStatusNotApplicable, insights_marketing_enums.CampaignPredictionStatusReady, insights_marketing_enums.CampaignPredictionStatusWarning}, invalid: insights_marketing_enums.CampaignPredictionStatus("__invalid__")},
+		{name: "insights.CampaignPredictionSource", valid: []stringEnum{insights_marketing_enums.CampaignPredictionSourceSameSeries, insights_marketing_enums.CampaignPredictionSourceSimilarEvent, insights_marketing_enums.CampaignPredictionSourceLast14DaysDoubled}, invalid: insights_marketing_enums.CampaignPredictionSource("__invalid__")},
 		{name: "wholesale.WholesaleApplicationStatus", valid: []stringEnum{wholesale_enums.WholesaleApplicationStatusPending, wholesale_enums.WholesaleApplicationStatusApproved, wholesale_enums.WholesaleApplicationStatusRejected}, invalid: wholesale_enums.WholesaleApplicationStatus("__invalid__")},
 		{name: "wholesale.GroupOrderManagerApplicationStatus", valid: []stringEnum{wholesale_enums.GroupOrderManagerApplicationStatusPending, wholesale_enums.GroupOrderManagerApplicationStatusApproved, wholesale_enums.GroupOrderManagerApplicationStatusRejected, wholesale_enums.GroupOrderManagerApplicationStatusCancelled}, invalid: wholesale_enums.GroupOrderManagerApplicationStatus("__invalid__")},
 		{name: "order.CustomerOrderBucket", valid: []stringEnum{order_enums.CustomerOrderBucketCurrent, order_enums.CustomerOrderBucketCompleted, order_enums.CustomerOrderBucketCancelled, order_enums.CustomerOrderBucketRefunded}, invalid: order_enums.CustomerOrderBucket("__invalid__")},
