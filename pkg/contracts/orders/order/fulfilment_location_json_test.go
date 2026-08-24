@@ -64,3 +64,24 @@ func TestCartAndOrderUseFulfilmentLocationSnapshot(t *testing.T) {
 		})
 	}
 }
+
+func TestCartAndOrderRequireMarketAndCountryToMatchFulfilmentLocation(t *testing.T) {
+	capturedAt := time.Date(2026, 8, 24, 1, 2, 3, 0, time.UTC)
+	location := shipping.FulfilmentLocationSnapshot{
+		Intent:            shipping_enums.FulfilmentIntentPickup,
+		GeographicContext: geography.GeographicContext{MarketCode: "mkt_au_vic", CountryCode: "AU"},
+		SelectedDepotCode: "AU-VIC-MEL-DC-01", LocationFingerprint: "locfp_01", CapturedAt: capturedAt,
+	}
+	wrongMarketCart := order.Cart{MarketCode: "mkt_au_nsw", CountryCode: "AU", FulfilmentLocation: location}
+	if wrongMarketCart.MarketCode == wrongMarketCart.FulfilmentLocation.GeographicContext.MarketCode && wrongMarketCart.CountryCode == wrongMarketCart.FulfilmentLocation.GeographicContext.CountryCode {
+		t.Fatal("mismatched cart fixture was classified as consistent")
+	}
+	wrongCountryOrder := order.Order{MarketCode: "mkt_au_vic", CountryCode: "NZ", FulfilmentLocation: location}
+	if wrongCountryOrder.MarketCode == wrongCountryOrder.FulfilmentLocation.GeographicContext.MarketCode && wrongCountryOrder.CountryCode == wrongCountryOrder.FulfilmentLocation.GeographicContext.CountryCode {
+		t.Fatal("mismatched order fixture was classified as consistent")
+	}
+	matchingCart := order.Cart{MarketCode: "mkt_au_vic", CountryCode: "AU", FulfilmentLocation: location}
+	if matchingCart.MarketCode != matchingCart.FulfilmentLocation.GeographicContext.MarketCode || matchingCart.CountryCode != matchingCart.FulfilmentLocation.GeographicContext.CountryCode {
+		t.Fatal("matching cart fixture was classified as inconsistent")
+	}
+}

@@ -11,9 +11,9 @@ import (
 // Coupon is a code-based discount that customers enter at checkout.
 // Unlike Promotion (auto-applied rule), a coupon is manually redeemed.
 type Coupon struct {
-	ID          string `json:"id"`
-	Code        string `json:"code"`
-	Description string `json:"description,omitempty"`
+	ID      string        `json:"id"`
+	Code    string        `json:"code"`
+	Content CouponContent `json:"content"`
 
 	Scope    promotion.PromotionScope    `json:"scope"`
 	Period   promotion.PromotionPeriod   `json:"period"`

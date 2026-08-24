@@ -113,7 +113,7 @@ var v30ModelPackageManifest = map[string]string{
 // Marketing campaign/message packages, centralized Notifications, neutral
 // Review, SellingProduct/SellingPrice, and split Pricing ownership. Field-only
 // changes are locked by the JSON and hard-cutover tests instead.
-const v30ExportedTypeManifestDigest = "daebf1ec67b9882292c506f4fa1f51e76464e14dc93216eea6e5ca00fead7a04"
+const v30ExportedTypeManifestDigest = "52dd9babdea83eed53066fbcdc70e1d95c12a2a401693a3136496445f9576b93"
 
 func TestV30ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

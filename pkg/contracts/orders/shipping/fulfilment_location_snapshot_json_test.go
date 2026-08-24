@@ -63,3 +63,31 @@ func TestFulfilmentLocationSnapshotPickupOmitsDeliveryAddress(t *testing.T) {
 		t.Fatalf("pickup fulfilment location JSON = %s", payload)
 	}
 }
+
+func TestFulfilmentLocationSnapshotLocksAddressOrDepotInvariant(t *testing.T) {
+	capturedAt := time.Date(2026, 8, 24, 1, 2, 3, 0, time.UTC)
+	context := geography.GeographicContext{MarketCode: "mkt_au_vic", CountryCode: "AU"}
+	for name, snapshot := range map[string]FulfilmentLocationSnapshot{
+		"delivery-requires-address": {Intent: shipping_enums.FulfilmentIntentDelivery, GeographicContext: context, LocationFingerprint: "locfp_1", CapturedAt: capturedAt},
+		"delivery-forbids-depot":    {Intent: shipping_enums.FulfilmentIntentDelivery, DeliveryAddress: &party.ContactAddress{}, SelectedDepotCode: "AU-VIC-01", GeographicContext: context, LocationFingerprint: "locfp_1", CapturedAt: capturedAt},
+		"pickup-requires-depot":     {Intent: shipping_enums.FulfilmentIntentPickup, GeographicContext: context, LocationFingerprint: "locfp_1", CapturedAt: capturedAt},
+		"pickup-forbids-address":    {Intent: shipping_enums.FulfilmentIntentPickup, DeliveryAddress: &party.ContactAddress{}, SelectedDepotCode: "AU-VIC-01", GeographicContext: context, LocationFingerprint: "locfp_1", CapturedAt: capturedAt},
+	} {
+		t.Run(name, func(t *testing.T) {
+			if fulfilmentLocationHasValidAddressOrDepot(snapshot) {
+				t.Fatal("invalid fulfilment location fixture was classified as valid")
+			}
+		})
+	}
+}
+
+func fulfilmentLocationHasValidAddressOrDepot(snapshot FulfilmentLocationSnapshot) bool {
+	switch snapshot.Intent {
+	case shipping_enums.FulfilmentIntentDelivery:
+		return snapshot.DeliveryAddress != nil && snapshot.SelectedDepotCode == ""
+	case shipping_enums.FulfilmentIntentPickup, shipping_enums.FulfilmentIntentInStoreCarry:
+		return snapshot.DeliveryAddress == nil && snapshot.SelectedDepotCode != ""
+	default:
+		return false
+	}
+}

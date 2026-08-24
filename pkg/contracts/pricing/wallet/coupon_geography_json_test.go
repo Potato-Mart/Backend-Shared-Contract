@@ -8,6 +8,7 @@ import (
 
 	geography "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/localization"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/promotion"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/promotion/promotion_enums"
@@ -18,7 +19,10 @@ func TestCouponReusesPromotionScopePeriodTermsAndControls(t *testing.T) {
 	startsAt := time.Date(2026, 8, 9, 0, 0, 0, 0, time.UTC)
 	minimumAmount := money.Money{AmountMinor: 2_000, Currency: "AUD"}
 	payload, err := json.Marshal(wallet.Coupon{
-		ID: "coupon_1", Code: "NSW10", Description: "NSW potato coupon",
+		ID: "coupon_1", Code: "NSW10", Content: wallet.CouponContent{
+			Names:        []localization.LocalizedName{{Language: "en", Name: "New South Wales savings"}},
+			Descriptions: []localization.LocalizedDescription{{Language: "en", Description: "NSW potato coupon"}},
+		},
 		Scope: promotion.PromotionScope{
 			MatchMode: promotion_enums.PromotionMatchModeAll,
 			Groups: []promotion.PromotionScopeGroup{{
@@ -38,7 +42,7 @@ func TestCouponReusesPromotionScopePeriodTermsAndControls(t *testing.T) {
 	if err != nil {
 		t.Fatalf("marshal coupon: %v", err)
 	}
-	for _, want := range []string{`"scope":{"unrestricted":false`, `"period":{"starts_at":"2026-08-09T00:00:00Z","timezone":"Australia/Sydney"}`, `"terms":[{`, `"controls":{"geographic_scope"`} {
+	for _, want := range []string{`"content":{"names":[{"language":"en","name":"New South Wales savings"}]`, `"scope":{"unrestricted":false`, `"period":{"starts_at":"2026-08-09T00:00:00Z","timezone":"Australia/Sydney"}`, `"terms":[{`, `"controls":{"geographic_scope"`} {
 		if !strings.Contains(string(payload), want) {
 			t.Fatalf("coupon JSON = %s, want %s", payload, want)
 		}
@@ -53,7 +57,7 @@ func TestCouponReusesPromotionScopePeriodTermsAndControls(t *testing.T) {
 	if err := json.Unmarshal(payload, &got); err != nil {
 		t.Fatalf("unmarshal coupon: %v", err)
 	}
-	if got.Scope.Groups[0].CategoryTagCodes[0] != "tag_potato" || got.Period.StartsAt == nil || got.Terms[0].MoneyValue == nil || got.Controls.GeographicScope.Mode != geography_enums.GeographicScopeModeTargeted {
+	if got.Content.Names[0].Name != "New South Wales savings" || got.Content.Descriptions[0].Description != "NSW potato coupon" || got.Scope.Groups[0].CategoryTagCodes[0] != "tag_potato" || got.Period.StartsAt == nil || got.Terms[0].MoneyValue == nil || got.Controls.GeographicScope.Mode != geography_enums.GeographicScopeModeTargeted {
 		t.Fatalf("coupon reusable promotion fields did not round-trip: %+v", got)
 	}
 }
