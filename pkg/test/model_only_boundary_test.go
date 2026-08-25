@@ -14,19 +14,19 @@ import (
 	"testing"
 )
 
-// v31ModelBoundaryForbiddenTypeSuffixes identify endpoint and orchestration
+// modelBoundaryForbiddenTypeSuffixes identify endpoint and orchestration
 // shapes. Domain records may describe a request in their fields, but this
 // module must not publish transport DTOs or service workflows as types.
-var v31ModelBoundaryForbiddenTypeSuffixes = []string{
+var modelBoundaryForbiddenTypeSuffixes = []string{
 	"Request", "Response", "Input", "Output", "Command", "Query",
 	"Acknowledgement", "Acknowledgment", "Pagination", "Page", "Result",
 	"Migration",
 }
 
-// v31ModelBoundaryForbiddenTypeNames are deliberately narrow so domain value
+// modelBoundaryForbiddenTypeNames are deliberately narrow so domain value
 // records such as GeographicContext and PricingContext remain valid while the
 // known runtime/transport shapes cannot return in a different package.
-var v31ModelBoundaryForbiddenTypeNames = map[string]string{
+var modelBoundaryForbiddenTypeNames = map[string]string{
 	"AccessTokenClaims":                  "token claims are owned by Identity runtime",
 	"CheckoutCompensationRequestedEvent": "checkout compensation is a backend workflow",
 	"CommandEnvelope":                    "command envelopes are service workflow transport",
@@ -40,7 +40,7 @@ var v31ModelBoundaryForbiddenTypeNames = map[string]string{
 	"WorkflowStatus":                     "workflow state is backend-local",
 }
 
-var v31ModelBoundaryForbiddenPackageSegments = map[string]struct{}{
+var modelBoundaryForbiddenPackageSegments = map[string]struct{}{
 	"adapter": {}, "adapters": {}, "command": {}, "commands": {},
 	"controller": {}, "controllers": {}, "dto": {}, "handler": {},
 	"handlers": {}, "http": {}, "migration": {}, "migrations": {},
@@ -48,7 +48,7 @@ var v31ModelBoundaryForbiddenPackageSegments = map[string]struct{}{
 	"repositories": {}, "storage": {}, "transport": {}, "workflow": {},
 }
 
-var v31ModelBoundaryForbiddenImportPrefixes = []string{
+var modelBoundaryForbiddenImportPrefixes = []string{
 	"database/sql",
 	"go.mongodb.org/",
 	"gorm.io/",
@@ -61,9 +61,9 @@ var v31ModelBoundaryForbiddenImportPrefixes = []string{
 	"net/http",
 }
 
-const v31EventEnvelopeSource = "contracts/pubsub/envelop/envelope.go"
+const eventEnvelopeSource = "contracts/pubsub/envelop/envelope.go"
 
-var v31ProviderMetadataForbiddenSources = map[string]struct{}{
+var providerMetadataForbiddenSources = map[string]struct{}{
 	"contracts/payments/settlement/settlement.go":         {},
 	"contracts/payments/terminal/terminal.go":             {},
 	"contracts/payments/terminal/terminal_transaction.go": {},
@@ -71,11 +71,11 @@ var v31ProviderMetadataForbiddenSources = map[string]struct{}{
 
 var modelBoundaryJSONTag = regexp.MustCompile(`^json:"[^"]*"$`)
 
-// TestV31ContractIsJSONModelOrEnumOnly keeps this repository limited to
+// TestContractIsJSONModelOrEnumOnly keeps this repository limited to
 // serializable domain records, open value types, and closed enums. Services
 // own transport DTOs, command workflows, persistence records, provider
 // diagnostics, runtime helpers, and migration code.
-func TestV31ContractIsJSONModelOrEnumOnly(t *testing.T) {
+func TestContractIsJSONModelOrEnumOnly(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	contractsRoot := filepath.Join(pkgRoot, "contracts")
 	var violations []string
@@ -99,17 +99,17 @@ func TestV31ContractIsJSONModelOrEnumOnly(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v31 contract boundary: %v", err)
+		t.Fatalf("scan contract boundary: %v", err)
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)
-		t.Fatalf("v31 model-or-enum contract boundary violations:\n%s", strings.Join(violations, "\n"))
+		t.Fatalf("model-or-enum contract boundary violations:\n%s", strings.Join(violations, "\n"))
 	}
 }
 
 func modelBoundaryInspectPackagePath(normalized string, violations *[]string) {
 	for _, segment := range strings.Split(filepath.ToSlash(filepath.Dir(normalized)), "/") {
-		if _, forbidden := v31ModelBoundaryForbiddenPackageSegments[segment]; forbidden {
+		if _, forbidden := modelBoundaryForbiddenPackageSegments[segment]; forbidden {
 			*violations = append(*violations, normalized+": forbidden non-model package segment "+segment)
 		}
 	}
@@ -170,7 +170,7 @@ func modelBoundaryJSONImportAliases(fset *token.FileSet, file *ast.File, normali
 			*violations = append(*violations, modelBoundaryPosition(fset, imported.Pos())+": invalid import path")
 			continue
 		}
-		for _, forbidden := range v31ModelBoundaryForbiddenImportPrefixes {
+		for _, forbidden := range modelBoundaryForbiddenImportPrefixes {
 			if importPath == forbidden || strings.HasPrefix(importPath, forbidden+"/") {
 				*violations = append(*violations, modelBoundaryPosition(fset, imported.Pos())+": non-model dependency "+importPath)
 			}
@@ -178,7 +178,7 @@ func modelBoundaryJSONImportAliases(fset *token.FileSet, file *ast.File, normali
 		if importPath != "encoding/json" {
 			continue
 		}
-		if normalized != v31EventEnvelopeSource {
+		if normalized != eventEnvelopeSource {
 			*violations = append(*violations, modelBoundaryPosition(fset, imported.Pos())+": encoding/json is reserved for the Pub/Sub event envelope")
 			continue
 		}
@@ -250,7 +250,7 @@ func modelBoundaryInspectTypes(fset *token.FileSet, declaration *ast.GenDecl, is
 			continue
 		}
 		if typeSpec.Assign.IsValid() {
-			*violations = append(*violations, modelBoundaryPosition(fset, typeSpec.Pos())+": compatibility/type alias "+typeSpec.Name.Name)
+			*violations = append(*violations, modelBoundaryPosition(fset, typeSpec.Pos())+": type alias "+typeSpec.Name.Name)
 			continue
 		}
 		if !typeSpec.Name.IsExported() {
@@ -273,13 +273,13 @@ func modelBoundaryInspectTypes(fset *token.FileSet, declaration *ast.GenDecl, is
 
 func modelBoundaryForbiddenTypeReason(typeSpec *ast.TypeSpec) string {
 	name := typeSpec.Name.Name
-	if reason, forbidden := v31ModelBoundaryForbiddenTypeNames[name]; forbidden {
+	if reason, forbidden := modelBoundaryForbiddenTypeNames[name]; forbidden {
 		return reason
 	}
 	if strings.Contains(name, "DTO") || strings.Contains(name, "Dto") {
 		return "endpoint DTO type"
 	}
-	for _, suffix := range v31ModelBoundaryForbiddenTypeSuffixes {
+	for _, suffix := range modelBoundaryForbiddenTypeSuffixes {
 		if strings.HasSuffix(name, suffix) {
 			return "endpoint DTO/workflow type"
 		}
@@ -323,7 +323,7 @@ func modelBoundaryInspectStructFields(fset *token.FileSet, declaration *ast.GenD
 		for _, field := range structure.Fields.List {
 			modelBoundaryInspectStructFieldTag(fset, field, violations)
 			modelBoundaryInspectProviderMetadataField(fset, field, normalized, violations)
-			if selector, rawMessage := modelBoundaryDirectRawMessageSelector(field.Type, jsonAliases); rawMessage && normalized == v31EventEnvelopeSource && typeSpec.Name.Name == "EventEnvelope" && len(field.Names) == 1 && field.Names[0].Name == "Payload" {
+			if selector, rawMessage := modelBoundaryDirectRawMessageSelector(field.Type, jsonAliases); rawMessage && normalized == eventEnvelopeSource && typeSpec.Name.Name == "EventEnvelope" && len(field.Names) == 1 && field.Names[0].Name == "Payload" {
 				allowedRawMessages[selector.Pos()] = struct{}{}
 			}
 		}
@@ -331,7 +331,7 @@ func modelBoundaryInspectStructFields(fset *token.FileSet, declaration *ast.GenD
 }
 
 func modelBoundaryInspectProviderMetadataField(fset *token.FileSet, field *ast.Field, normalized string, violations *[]string) {
-	if _, forbiddenSource := v31ProviderMetadataForbiddenSources[normalized]; !forbiddenSource {
+	if _, forbiddenSource := providerMetadataForbiddenSources[normalized]; !forbiddenSource {
 		return
 	}
 	for _, name := range field.Names {
@@ -394,7 +394,7 @@ func modelBoundaryInspectRawMessages(fset *token.FileSet, file *ast.File, jsonAl
 			return true
 		}
 		if _, allowed := allowedRawMessages[selector.Pos()]; !allowed {
-			*violations = append(*violations, modelBoundaryPosition(fset, selector.Pos())+": json.RawMessage is allowed only for EventEnvelope.Payload in "+v31EventEnvelopeSource)
+			*violations = append(*violations, modelBoundaryPosition(fset, selector.Pos())+": json.RawMessage is allowed only for EventEnvelope.Payload in "+eventEnvelopeSource)
 		}
 		return true
 	})

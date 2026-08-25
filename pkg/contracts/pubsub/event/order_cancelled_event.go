@@ -14,9 +14,9 @@ type OrderCancelledEvent struct {
 	OrganisationAccessID string `json:"organisation_access_id,omitempty"`
 	CancelledBy          string `json:"cancelled_by,omitempty"`
 	// MarketCode and CountryCode are the denormalized geography the event
-	// belongs to. They are absent on every event published before v28.0.0;
-	// a consumer that persists a geographically scoped record treats an
-	// absent value as "no evidence" and fails closed rather than defaulting.
+	// belongs to. Empty values provide no geographic evidence; a consumer
+	// that persists a geographically scoped record must fail closed rather
+	// than defaulting them.
 	MarketCode  string                `json:"market_code,omitempty"`
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	CancelledAt time.Time             `json:"cancelled_at"`

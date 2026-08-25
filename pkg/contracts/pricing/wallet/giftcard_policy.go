@@ -8,7 +8,7 @@ import (
 
 // GiftCardDenominationPolicy is the versioned, server-authored set of purchase
 // denominations for one market. Owning services remain responsible for
-// validation, caching, cutover, and authorization behavior.
+// validation, caching, lifecycle, and authorization behavior.
 //
 // The policy is stored per market, one active record per MarketCode, and
 // CountryCode is the denormalized country of that market so a country-scoped

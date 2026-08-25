@@ -20,7 +20,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/orders/shipping"
 )
 
-func TestV31CustomerAndOrderGeographyHardCutover(t *testing.T) {
+func TestCustomerAndOrderGeographyUsesCanonicalFields(t *testing.T) {
 	assertNoModelFields(t, reflect.TypeOf(retail.RetailCustomer{}), "MarketCode", "CountryCode", "Marketing", "Analytics")
 	assertNoModelFields(t, reflect.TypeOf(account.UserProfile{}), "NotificationPreferences")
 	for _, model := range []reflect.Type{reflect.TypeOf(order.Cart{}), reflect.TypeOf(order.Order{})} {
@@ -32,16 +32,16 @@ func TestV31CustomerAndOrderGeographyHardCutover(t *testing.T) {
 	}
 }
 
-func TestV31PublishedNotificationContainsOnlyInAppSafeFields(t *testing.T) {
+func TestPublishedNotificationContainsOnlyInAppSafeFields(t *testing.T) {
 	assertNoModelFields(t, reflect.TypeOf(notifications.PublishedNotification{}),
 		"Recipient", "DestinationCode", "ProviderCode", "Deliveries", "ErrorCode", "ErrorMessage", "Email", "Push", "SMS", "SocialMedia")
 }
 
-// TestV31NotificationProvidersRemainOpenCodes preserves the v30 boundary:
-// provider implementations and their fixed identifiers are configured by the
-// owning backend. The notification model may carry an open provider_code, but
-// it may not acquire a provider enum or fixed Line/Discord wire literal.
-func TestV31NotificationProvidersRemainOpenCodes(t *testing.T) {
+// TestNotificationProvidersRemainOpenCodes keeps provider implementations and
+// fixed identifiers in the owning backend. The notification model may carry an
+// open provider_code, but it may not acquire a provider enum or fixed
+// Line/Discord wire literal.
+func TestNotificationProvidersRemainOpenCodes(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	notificationsRoot := filepath.Join(pkgRoot, "contracts", "notifications")
 	var violations []string
@@ -86,7 +86,7 @@ func TestV31NotificationProvidersRemainOpenCodes(t *testing.T) {
 	}
 }
 
-func TestV31RetiredNotificationAndCampaignProductionShapesAreAbsent(t *testing.T) {
+func TestRetiredNotificationAndCampaignProductionShapesAreAbsent(t *testing.T) {
 	retiredSourceRoots := []string{
 		"contracts/customers/campaign",
 		"contracts/notifications/backinstock",
@@ -147,18 +147,18 @@ func TestV31RetiredNotificationAndCampaignProductionShapesAreAbsent(t *testing.T
 				return true
 			}
 			if _, forbidden := forbiddenIdentifiers[identifier.Name]; forbidden {
-				violations = append(violations, relativePkgPath(t, pkgRoot, path)+": forbidden hard-cutover identifier "+identifier.Name)
+				violations = append(violations, relativePkgPath(t, pkgRoot, path)+": forbidden retired identifier "+identifier.Name)
 			}
 			return true
 		})
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan hard-cutover identifiers: %v", err)
+		t.Fatalf("scan retired identifiers: %v", err)
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)
-		t.Fatalf("v31 hard-cutover violations:\n%s", strings.Join(violations, "\n"))
+		t.Fatalf("retired-shape violations:\n%s", strings.Join(violations, "\n"))
 	}
 }
 

@@ -21,9 +21,8 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/temporal"
 )
 
-func TestV27MovedCommonModelsMatchV23GoldenJSON(t *testing.T) {
-	// These byte-for-byte fixtures are the v23.0.0 wire baseline for every
-	// common model moved by the v27 package reorganization.
+func TestCommonModelJSONShapesRemainStable(t *testing.T) {
+	// These byte-for-byte fixtures lock the JSON shape of every common model.
 	createdAt := time.Date(2026, time.August, 7, 3, 4, 5, 0, time.UTC)
 	address := geography.Address{
 		Line1:      "1 Market Lane",
@@ -46,7 +45,7 @@ func TestV27MovedCommonModelsMatchV23GoldenJSON(t *testing.T) {
 		{"AuditFields", audit.AuditFields{CreatedAt: createdAt, UpdatedAt: createdAt}, `{"created_at":"2026-08-07T03:04:05Z","updated_at":"2026-08-07T03:04:05Z"}`},
 		{"LifecycleAction", audit.LifecycleAction{By: "operator-1"}, `{"by":"operator-1"}`},
 		{"ContactAddress", party.ContactAddress{ID: "address-1", Contact: &party.Recipient{Name: "Ada", Email: "ada@example.test"}, Address: &address}, `{"id":"address-1","contact":{"name":"Ada","email":"ada@example.test"},"address":{"line1":"1 Market Lane","locality":"Dandenong South","administrative_area":{"code":"AU-VIC","name":"Victoria","type":"STATE"},"postal_code":"3175","country":{"code":"AU","name":"Australia"}}}`},
-		{"OrganisationDetail", party.OrganisationDetail{PartyRef: party.PartyRef{ID: "org-1", Code: "POTATO", Name: "Potato Mart"}, TradingName: "Potato Mart", Metadata: metadata.Metadata{"source": "v23.0.0"}}, `{"id":"org-1","code":"POTATO","name":"Potato Mart","trading_name":"Potato Mart","metadata":{"source":"v23.0.0"}}`},
+		{"OrganisationDetail", party.OrganisationDetail{PartyRef: party.PartyRef{ID: "org-1", Code: "POTATO", Name: "Potato Mart"}, TradingName: "Potato Mart", Metadata: metadata.Metadata{"source": "fixture"}}, `{"id":"org-1","code":"POTATO","name":"Potato Mart","trading_name":"Potato Mart","metadata":{"source":"fixture"}}`},
 		{"PartyRef", party.PartyRef{ID: "party-1", Code: "SUP-1", Name: "Supplier", Phone: "+61", Email: "supplier@example.test"}, `{"id":"party-1","code":"SUP-1","name":"Supplier","phone":"+61","email":"supplier@example.test"}`},
 		{"Recipient", party.Recipient{Name: "Ada", Phone: "+61", Email: "ada@example.test"}, `{"name":"Ada","phone":"+61","email":"ada@example.test"}`},
 		{"PersonName", party.PersonName{FirstName: "Ada", PreferredName: "A"}, `{"first_name":"Ada","preferred_name":"A"}`},
@@ -68,7 +67,7 @@ func TestV27MovedCommonModelsMatchV23GoldenJSON(t *testing.T) {
 		{"PhysicalPackage", packaging.PhysicalPackage{Dimensions: &measurement.Dimensions{WidthMM: 1, LengthMM: 2, HeightMM: 3}, Weight: &measurement.Weight{Grams: 500}}, `{"dimensions":{"width_mm":1,"length_mm":2,"height_mm":3},"weight":{"grams":500}}`},
 		{"PackageComponentSnapshot", packaging.PackageComponentSnapshot{PackageOptionCode: "each", HandlingUnit: packaging_enums.PackageHandlingUnitEach, PackageCount: 1, UnitsPerPackage: 2, BaseUnits: 2}, `{"package_option_code":"each","handling_unit":"EACH","package_count":1,"units_per_package":2,"base_units":2}`},
 		{"PackageCompositionSnapshot", packaging.PackageCompositionSnapshot{TotalBaseUnits: 2, Components: []packaging.PackageComponentSnapshot{{PackageOptionCode: "each", HandlingUnit: packaging_enums.PackageHandlingUnitEach, PackageCount: 1, UnitsPerPackage: 2, BaseUnits: 2}}}, `{"total_base_units":2,"components":[{"package_option_code":"each","handling_unit":"EACH","package_count":1,"units_per_package":2,"base_units":2}]}`},
-		{"Metadata", metadata.Metadata{"source": "v23.0.0", "unchanged": true}, `{"source":"v23.0.0","unchanged":true}`},
+		{"Metadata", metadata.Metadata{"source": "fixture", "unchanged": true}, `{"source":"fixture","unchanged":true}`},
 		{"Money", money.Money{AmountMinor: 1234, Currency: "AUD"}, `{"amount_minor":1234,"currency":"AUD"}`},
 	}
 
@@ -76,7 +75,7 @@ func TestV27MovedCommonModelsMatchV23GoldenJSON(t *testing.T) {
 		t.Run(fixture.name, func(t *testing.T) {
 			got, err := json.Marshal(fixture.value)
 			if err != nil {
-				t.Fatalf("marshal v23 golden fixture: %v", err)
+				t.Fatalf("marshal JSON-shape fixture: %v", err)
 			}
 			if string(got) != fixture.want {
 				t.Fatalf("JSON changed:\n got: %s\nwant: %s", got, fixture.want)

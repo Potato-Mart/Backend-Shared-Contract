@@ -10,11 +10,11 @@ import (
 	"testing"
 )
 
-// TestV31DomainPackageLayout verifies the domain package paths after every
+// TestDomainPackageLayout verifies the domain package paths after every
 // production model has been split into its own source file.
-func TestV31DomainPackageLayout(t *testing.T) {
+func TestDomainPackageLayout(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
-	legacyImportCompliance := "import" + "compliance"
+	retiredImportCompliance := "import" + "compliance"
 	requiredFiles := map[string]string{
 		"contracts/supply/classification/sku_series.go":                                     "classification",
 		"contracts/supply/classification/category_tag.go":                                   "classification",
@@ -68,7 +68,7 @@ func TestV31DomainPackageLayout(t *testing.T) {
 		fset := token.NewFileSet()
 		file, err := parser.ParseFile(fset, path, nil, parser.PackageClauseOnly)
 		if err != nil {
-			t.Errorf("required v27 model file %s is missing or invalid: %v", relativePath, err)
+			t.Errorf("required model file %s is missing or invalid: %v", relativePath, err)
 			continue
 		}
 		if got := file.Name.Name; got != wantPackage {
@@ -79,7 +79,7 @@ func TestV31DomainPackageLayout(t *testing.T) {
 	for _, relativePath := range []string{
 		"contracts/supply/category",
 		"contracts/supply/favourite",
-		"contracts/supply/" + legacyImportCompliance,
+		"contracts/supply/" + retiredImportCompliance,
 		"contracts/supply/product/brand.go",
 		"contracts/supply/product/category_tag.go",
 		"contracts/supply/product/collection.go",
@@ -104,18 +104,18 @@ func TestV31DomainPackageLayout(t *testing.T) {
 		"contracts/supply/product/detail_image.go",
 		"contracts/supply/product/offer.go",
 		"contracts/orders/order/volume_discount.go",
-		"test/enums/" + legacyImportCompliance + "_test.go",
+		"test/enums/" + retiredImportCompliance + "_test.go",
 	} {
 		path := filepath.Join(pkgRoot, filepath.FromSlash(relativePath))
 		if _, err := os.Stat(path); !os.IsNotExist(err) {
-			t.Errorf("retired v27 path must not exist: %s", relativePath)
+			t.Errorf("retired path must not exist: %s", relativePath)
 		}
 	}
 }
 
-func TestV27SourcesRejectLegacyImportComplianceIdentifier(t *testing.T) {
+func TestSourcesRejectRetiredImportComplianceIdentifier(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
-	legacyIdentifier := "import" + "compliance"
+	retiredIdentifier := "import" + "compliance"
 	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
 			return walkErr
@@ -127,12 +127,12 @@ func TestV27SourcesRejectLegacyImportComplianceIdentifier(t *testing.T) {
 		if err != nil {
 			return err
 		}
-		if strings.Contains(string(contents), legacyIdentifier) {
-			t.Errorf("%s retains legacy %s identifier", relativePkgPath(t, pkgRoot, path), legacyIdentifier)
+		if strings.Contains(string(contents), retiredIdentifier) {
+			t.Errorf("%s retains retired %s identifier", relativePkgPath(t, pkgRoot, path), retiredIdentifier)
 		}
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v27 source layout: %v", err)
+		t.Fatalf("scan source layout: %v", err)
 	}
 }

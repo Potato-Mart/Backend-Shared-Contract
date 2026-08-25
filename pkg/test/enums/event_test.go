@@ -6,7 +6,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pubsub/event/event_enums"
 )
 
-func TestV27InventoryAndCommerceEventTypes(t *testing.T) {
+func TestInventoryAndCommerceEventTypes(t *testing.T) {
 	assertStringEnums(t, []enumCase{
 		{
 			name: "events.EventType",
@@ -57,7 +57,7 @@ func TestV27InventoryAndCommerceEventTypes(t *testing.T) {
 	}
 	for _, retired := range []event_enums.EventType{"inventory.package_pricing_available", "inventory.package_pricing_withdrawn"} {
 		if retired.IsValid() {
-			t.Fatalf("retired v26 event type %q must not validate", retired)
+			t.Fatalf("retired event type %q must not validate", retired)
 		}
 	}
 	if got := event_enums.EventTypeCatalogBaseCostChanged.String(); got != "catalog.base_cost_changed" {

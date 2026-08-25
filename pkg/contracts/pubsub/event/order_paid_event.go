@@ -12,12 +12,10 @@ import (
 // OrderPaidEvent is emitted on the order-events topic when an order reaches
 // the paid state.
 //
-// Subtotal, DiscountAmount, and Tags are qualification evidence added in
-// v27.3.0. Every event published before that release carries none of them, so a
-// consumer that qualifies on them must fail closed: an empty Subtotal or
-// DiscountAmount currency and a nil Tags slice mean "no evidence", never a zero
-// subtotal, a zero discount, or an untagged order. Consumers must skip
-// qualification for such an event rather than infer a value from AmountPaid.
+// Subtotal, DiscountAmount, and Tags are qualification evidence. An empty
+// Subtotal or DiscountAmount currency and a nil Tags slice mean "no evidence",
+// never a zero subtotal, a zero discount, or an untagged order. Consumers must
+// skip qualification for such an event rather than infer a value from AmountPaid.
 type OrderPaidEvent struct {
 	OrderID     string                      `json:"order_id"`
 	OrderNumber string                      `json:"order_number"`
@@ -36,10 +34,10 @@ type OrderPaidEvent struct {
 	Items                []analytics.OrderItemFact `json:"items,omitempty"`
 	RetailCustomerNumber string                    `json:"retail_customer_number,omitempty"`
 	OrganisationAccessID string                    `json:"organisation_access_id,omitempty"`
-	// MarketCode, DepotCode, and CountryCode are the denormalized geography the event
-	// belongs to. They are absent on every event published before v28.0.0;
-	// a consumer that persists a geographically scoped record treats an
-	// absent value as "no evidence" and fails closed rather than defaulting.
+	// MarketCode, DepotCode, and CountryCode are the denormalized geography
+	// the event belongs to. Empty values provide no geographic evidence; a
+	// consumer that persists a geographically scoped record must fail closed
+	// rather than defaulting them.
 	MarketCode  string                `json:"market_code,omitempty"`
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	DepotCode   string                `json:"depot_code,omitempty"`

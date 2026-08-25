@@ -27,9 +27,9 @@ func TestUserProfileJSONIncludesObjectMediaAvatarWhenPresent(t *testing.T) {
 	if !strings.Contains(text, `"avatar":{"code":"med_avatar","url":"https://cdn.example.test/avatar.png"}`) {
 		t.Fatalf("UserProfile JSON = %s, want nested object_media avatar", text)
 	}
-	for _, legacy := range []string{"avatar_media_code", "avatar_url"} {
-		if strings.Contains(text, legacy) {
-			t.Fatalf("UserProfile JSON retained legacy %s: %s", legacy, text)
+	for _, retired := range []string{"avatar_media_code", "avatar_url"} {
+		if strings.Contains(text, retired) {
+			t.Fatalf("UserProfile JSON retained retired %s: %s", retired, text)
 		}
 	}
 }

@@ -9,7 +9,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/classification"
 )
 
-func TestV30ProductStoryUsesLocalizedNameAndMediaCodes(t *testing.T) {
+func TestProductStoryUsesLocalizedNameAndMediaCodes(t *testing.T) {
 	body, err := json.Marshal(Product{Content: ProductContent{
 		Name:   localization.LocalizedName{Language: "en", Name: "Golden Potato"},
 		Images: &Images{Cover: &classification.ObjectMediaRef{Code: "MED-COVER"}, Gallery: []classification.ObjectMediaRef{{Code: "MED-GALLERY"}}},

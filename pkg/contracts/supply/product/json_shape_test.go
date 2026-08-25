@@ -18,7 +18,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/product/product_enums"
 )
 
-func TestV30CanonicalProductJSONShape(t *testing.T) {
+func TestCanonicalProductJSONShape(t *testing.T) {
 	product := Product{
 		ID: "64c13ab08edf48a008793ca6", SKUCode: "A00001", StorageType: classification_enums.StorageAmbient,
 		Status: product_enums.ProductStatusActive,
@@ -47,14 +47,14 @@ func TestV30CanonicalProductJSONShape(t *testing.T) {
 			t.Fatalf("Product JSON = %s, want %s", body, want)
 		}
 	}
-	for _, legacy := range []string{`"product_category_code"`, `"brand_ref"`, `"supplier"`, `"media_id"`, `"url"`, `"slug"`} {
-		if strings.Contains(string(body), legacy) {
-			t.Fatalf("Product retained legacy %s: %s", legacy, body)
+	for _, retired := range []string{`"product_category_code"`, `"brand_ref"`, `"supplier"`, `"media_id"`, `"url"`, `"slug"`} {
+		if strings.Contains(string(body), retired) {
+			t.Fatalf("Product retained retired %s: %s", retired, body)
 		}
 	}
 }
 
-func TestV30ProductOwnsPackageAndBarcodeFacts(t *testing.T) {
+func TestProductOwnsPackageAndBarcodeFacts(t *testing.T) {
 	now := time.Date(2026, 8, 19, 0, 0, 0, 0, time.UTC)
 	value := Product{
 		SKUCode: "A00001", StorageType: classification_enums.StorageAmbient, Status: product_enums.ProductStatusActive,
@@ -83,7 +83,7 @@ func TestV30ProductOwnsPackageAndBarcodeFacts(t *testing.T) {
 	}
 }
 
-func TestV30SellingProductIsCustomerSafeAndRenderComplete(t *testing.T) {
+func TestSellingProductIsCustomerSafeAndRenderComplete(t *testing.T) {
 	now := time.Date(2026, 8, 24, 0, 0, 0, 0, time.UTC)
 	value := SellingProduct{
 		SKUCode: "A00001", SKUSeriesCode: "A0", StorageType: classification_enums.StorageAmbient,

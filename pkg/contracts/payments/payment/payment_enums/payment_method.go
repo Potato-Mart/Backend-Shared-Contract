@@ -8,9 +8,7 @@ const (
 	PaymentMethodCash         PaymentMethod = "cash"
 	PaymentMethodQR           PaymentMethod = "qr"
 	PaymentMethodBankTransfer PaymentMethod = "bank_transfer"
-	// PaymentMethodPayTo is the v27-compatible canonical method for the
-	// Stripe-hosted Australian PayTo flow. BankTransfer remains valid for
-	// existing bank-transfer records and consumers.
+	// PaymentMethodPayTo identifies the Stripe-hosted Australian PayTo flow.
 	PaymentMethodPayTo PaymentMethod = "payto"
 	// PaymentMethodLink preserves Stripe Link as a distinct customer-selected
 	// payment method for receipts, refunds, reporting, and event consumers.

@@ -90,7 +90,7 @@ func TestWholesaleOrganisationJSONShape(t *testing.T) {
 			t.Fatalf("WholesaleOrganisation JSON should not include flat approval key %q: %s", key, payload)
 		}
 		if key == "primary_wholesale_customer_id" {
-			t.Fatalf("WholesaleOrganisation JSON should not include legacy primary customer key %q: %s", key, payload)
+			t.Fatalf("WholesaleOrganisation JSON should not include retired primary customer key %q: %s", key, payload)
 		}
 	}
 }

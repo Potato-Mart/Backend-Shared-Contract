@@ -10,10 +10,9 @@ import (
 //
 // MarketCode and CountryCode are the denormalized geography the aggregate is
 // attributed to. A rollup carrying neither is platform-wide and is readable
-// only at global scope; a geographically scoped principal filters on these
-// two fields and a rollup that does not match is not returned. Both are
-// absent on rollups computed before v28.0.0, and an absent value means
-// "unattributed" rather than "everywhere".
+// only at global scope. A geographically scoped principal filters on these
+// fields; empty values provide no matching geography and must not widen the
+// reader's visibility.
 type MetricRollup struct {
 	Metric       string                `json:"metric"`
 	Granularity  string                `json:"granularity"`

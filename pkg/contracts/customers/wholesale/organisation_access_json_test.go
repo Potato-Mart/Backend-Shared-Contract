@@ -51,7 +51,7 @@ func TestOrganisationAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *test
 	}
 	for _, key := range []string{"membership_id", "invited_by", "invited_at", "revoked_by", "revoked_at"} {
 		if _, ok := got[key]; ok {
-			t.Fatalf("OrganisationAccess JSON should not include legacy or flat key %q: %s", key, payload)
+			t.Fatalf("OrganisationAccess JSON should not include retired or flat key %q: %s", key, payload)
 		}
 	}
 

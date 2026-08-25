@@ -86,7 +86,7 @@ func TestIdentityWholesaleSessionJSONUsesOrganisationAccessID(t *testing.T) {
 		t.Fatalf("session missing organisation_access_id: %s", payload)
 	}
 	if _, ok := got["membership_id"]; ok {
-		t.Fatalf("session should not include legacy membership_id: %s", payload)
+		t.Fatalf("session should not include retired membership_id: %s", payload)
 	}
 }
 

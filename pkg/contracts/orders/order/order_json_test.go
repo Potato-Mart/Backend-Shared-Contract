@@ -87,7 +87,7 @@ func TestOrderJSONOmitsEmptyHistory(t *testing.T) {
 	}
 }
 
-func TestV25LineItemsUsePackageComponentsAndRequireOrderItemID(t *testing.T) {
+func TestLineItemsUsePackageComponentsAndRequireOrderItemID(t *testing.T) {
 	cartPayload, err := json.Marshal(sales.CartItem{TotalBaseUnits: 1})
 	if err != nil {
 		t.Fatalf("marshal cart item: %v", err)

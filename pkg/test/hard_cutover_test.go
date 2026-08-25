@@ -13,9 +13,9 @@ import (
 	"testing"
 )
 
-func TestV27NonSupplyProductionModelsRejectLegacyMediaShapes(t *testing.T) {
-	legacyTypes := v27StringSet("Media", "MediaReference")
-	legacyFields := v27StringSet(
+func TestNonSupplyProductionModelsRejectRetiredMediaShapes(t *testing.T) {
+	retiredMediaTypes := stringSet("Media", "MediaReference")
+	retiredMediaFields := stringSet(
 		"MediaCode", "MediaURL",
 		"AvatarMediaCode", "AvatarURL",
 		"LogoURL",
@@ -23,7 +23,7 @@ func TestV27NonSupplyProductionModelsRejectLegacyMediaShapes(t *testing.T) {
 		"CoverMediaCode", "CoverURL",
 		"ImageMediaCodes", "ImageURLs",
 	)
-	legacyJSONKeys := v27StringSet(
+	retiredMediaJSONKeys := stringSet(
 		"media_code", "media_url",
 		"avatar_media_code", "avatar_url",
 		"logo_url",
@@ -46,8 +46,8 @@ func TestV27NonSupplyProductionModelsRejectLegacyMediaShapes(t *testing.T) {
 			return relativeErr
 		}
 		relativePath = filepath.ToSlash(relativePath)
-		// Supply-only image records are deliberately exempt from the v27
-		// ObjectMedia cutover, except for the canonical Product.Images contract
+		// Supply-only image records are deliberately exempt from the ObjectMedia
+		// boundary, except for the canonical Product.Images contract
 		// covered by its package test.
 		if strings.HasPrefix(relativePath, "contracts/supply/") {
 			return nil
@@ -71,8 +71,8 @@ func TestV27NonSupplyProductionModelsRejectLegacyMediaShapes(t *testing.T) {
 				if !ok {
 					continue
 				}
-				if _, legacy := legacyTypes[typeSpecification.Name.Name]; legacy {
-					t.Errorf("%s declares retired v27 media type %s", path, typeSpecification.Name.Name)
+				if _, retired := retiredMediaTypes[typeSpecification.Name.Name]; retired {
+					t.Errorf("%s declares retired media type %s", path, typeSpecification.Name.Name)
 				}
 				structure, ok := typeSpecification.Type.(*ast.StructType)
 				if !ok {
@@ -80,14 +80,14 @@ func TestV27NonSupplyProductionModelsRejectLegacyMediaShapes(t *testing.T) {
 				}
 				for _, field := range structure.Fields.List {
 					for _, name := range field.Names {
-						if _, legacy := legacyFields[name.Name]; legacy {
-							t.Errorf("%s retains legacy media field %s.%s", path, typeSpecification.Name.Name, name.Name)
+						if _, retired := retiredMediaFields[name.Name]; retired {
+							t.Errorf("%s retains retired media field %s.%s", path, typeSpecification.Name.Name, name.Name)
 						}
 					}
-					jsonKey, present := v27JSONFieldName(t, path, field)
+					jsonKey, present := jsonFieldName(t, path, field)
 					if present {
-						if _, legacy := legacyJSONKeys[jsonKey]; legacy {
-							t.Errorf("%s retains legacy media JSON key %q on %s", path, jsonKey, typeSpecification.Name.Name)
+						if _, retired := retiredMediaJSONKeys[jsonKey]; retired {
+							t.Errorf("%s retains retired media JSON key %q on %s", path, jsonKey, typeSpecification.Name.Name)
 						}
 					}
 				}
@@ -100,20 +100,17 @@ func TestV27NonSupplyProductionModelsRejectLegacyMediaShapes(t *testing.T) {
 	}
 }
 
-func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
-	removedIdentifiers := v27StringSet(
-		// v30 workforce-role cut-over: admin, warehouse, and cashier are
-		// replaced by countryAdmin, depotManager, and warehouseManager, and
-		// POS sign-in moves to every staff role instead of a cashier role.
-		// sales goes the same way: till duty follows the geographic scope a
-		// principal holds, so a dedicated selling rank granted no authority
-		// the remaining six ranks did not already carry.
+func TestProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
+	removedIdentifiers := stringSet(
+		// Workforce roles are represented by countryAdmin, depotManager, and
+		// warehouseManager. POS sign-in and till duty follow a principal's
+		// geographic scope, so a dedicated selling role grants no authority.
 		"UserRoleAdmin",
 		"UserRoleWarehouse",
 		"UserRoleCashier",
 		"UserRoleSales",
 
-		// v30 POS cut-over: per-operator shifts are replaced by one daily
+		// Per-operator shifts are replaced by one daily
 		// session per register, shared by every operator on it.
 		"RegisterShift",
 		"ShiftTotalsSnapshot",
@@ -122,7 +119,7 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"ShiftStatusClosed",
 		"ShiftID",
 
-		// Earlier hard cut-overs that remain forbidden in v27.
+		// Retired identifiers that must remain forbidden.
 		"MembershipOwnerRef",
 		"MembershipOwnerType",
 		"EligibleOwnerTypes",
@@ -141,7 +138,7 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"CouponPreview",
 		"CouponPreviews",
 
-		// Geography, depot, product, packing, and legacy availability types.
+		// Geography, depot, product, packing, and retired availability types.
 		"PostcodeRule",
 		"DepotProduct",
 		"ProductPlacement",
@@ -161,7 +158,7 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"DeliveryRegionRegionalVIC",
 		"DeliveryRegionInterstate",
 
-		// v27 global product/SKU split and market pricing cutover.
+		// Product/SKU and market-pricing boundary.
 		"ProductSKUCode",
 		"ProductSKUCodes",
 		"CategorySKUCode",
@@ -187,7 +184,7 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"PackingSessionStatusResolved",
 
 		// Logical reserve/release and split transfer values are not physical
-		// movement types in v27.
+		// movement types.
 		"StockMovementTypePurchaseReceipt",
 		"StockMovementTypeSaleReserve",
 		"StockMovementTypeSaleRelease",
@@ -203,13 +200,12 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"EventTypeProductSellabilityChanged",
 	)
 
-	removedTypes := v27StringSet(
-		// v30 replaces the per-operator POS shift with a per-register daily
-		// session.
+	removedTypes := stringSet(
+		// A per-register daily session replaces the per-operator POS shift.
 		"orders/pos.RegisterShift",
 		"orders/pos.ShiftTotalsSnapshot",
 
-		// The v27 canonical-product cut-over removes all endpoint-specific
+		// Canonical product models exclude all endpoint-specific
 		// product projections and product-owned snapshot duplicates.
 		"orders/pos.CatalogProduct",
 		"orders/order.VolumeDiscountTier",
@@ -247,7 +243,7 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"orders/shipping.DeliveryRegion",
 		"supply/warehouse.PackingSessionStatus",
 
-		// v27 removes the catalogue commerce projections, the combined
+		// The contract excludes catalogue commerce projections, the combined
 		// package-pricing record, and the category-shaped classification SKU.
 		"supply/product.ProductPackaging",
 		"supply/product.ProductCommerce",
@@ -260,148 +256,148 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	)
 
 	removedFields := map[string]map[string]struct{}{
-		// v29.0.1 catalog relationships and listing evidence persist immutable
+		// Catalog relationships and listing evidence persist immutable
 		// business codes only. Mutable display projections and listing database
 		// identifiers are resolved by their owning service.
-		"supply/classification.CollectionRef": v27StringSet(
+		"supply/classification.CollectionRef": stringSet(
 			"Name",
 		),
-		"supply/classification.CategoryTagRef": v27StringSet(
+		"supply/classification.CategoryTagRef": stringSet(
 			"Name",
 		),
-		"supply/classification.BrandRef": v27StringSet(
+		"supply/classification.BrandRef": stringSet(
 			"Name", "Logo",
 		),
-		"supply/classification.ProductSupplierRef": v27StringSet(
+		"supply/classification.ProductSupplierRef": stringSet(
 			"Name",
 		),
-		"pubsub/event.CatalogListingChangedEvent": v27StringSet(
+		"pubsub/event.CatalogListingChangedEvent": stringSet(
 			"ListingID",
 		),
-		"supply/listing.SaleEligibilitySnapshot": v27StringSet(
+		"supply/listing.SaleEligibilitySnapshot": stringSet(
 			"ListingID",
 		),
-		"common/geography.Address": v27StringSet(
+		"common/geography.Address": stringSet(
 			"City", "State", "Postcode",
 		),
-		"insights/analytics.OrderItemFact": v27StringSet(
+		"insights/analytics.OrderItemFact": stringSet(
 			"Quantity",
 		),
-		"insights/analytics.RefundItemFact": v27StringSet(
+		"insights/analytics.RefundItemFact": stringSet(
 			"Quantity",
 		),
-		"insights/analytics.SKUDemandForecast": v27StringSet(
+		"insights/analytics.SKUDemandForecast": stringSet(
 			"CurrentStockAtRun",
 		),
-		"supply/classification.SKUSeries": v27StringSet(
+		"supply/classification.SKUSeries": stringSet(
 			"Storage",
 		),
-		"orders/pos.CatalogProduct": v27StringSet(
+		"orders/pos.CatalogProduct": stringSet(
 			"ID", "SKU", "Barcode", "Storage", "Price", "CurrentStock",
 		),
-		// v27 reinstates a stable Product.ID as the global product identity;
-		// the v26 removal of "ID"/"id" is deliberately retired here. Every
-		// other v26 removal on Product remains forbidden, and v27 adds the
+		// Product.ID is the global product identity.
+		// Retired Product fields remain forbidden, while
+		// the current surface excludes
 		// commerce/metrics/packaging projections it retired.
-		"supply/product.Product": v27StringSet(
+		"supply/product.Product": stringSet(
 			"SKU", "Barcode", "Storage", "PlacingArea", "CurrentStock",
 			"RestockedAt", "ExpiredAt", "Pricing", "Physical",
 			"Packaging", "Commerce", "Metrics", "Selling", "Taxed",
 		),
-		"supply/product.Snapshot": v27StringSet(
+		"supply/product.Snapshot": stringSet(
 			"ID", "SKU", "Storage", "DisplayStatus", "Barcode",
 		),
-		"supply/product.StorefrontDisplay":       v27StringSet(),
-		"supply/product.StorefrontMerchandising": v27StringSet(),
-		"supply/product.StorefrontProduct": v27StringSet(
+		"supply/product.StorefrontDisplay":       stringSet(),
+		"supply/product.StorefrontMerchandising": stringSet(),
+		"supply/product.StorefrontProduct": stringSet(
 			"SKU", "Barcode", "Storage", "CurrentStock", "Pricing", "ExpiryDate", "DisplayStatus",
 		),
-		"supply/import_compliance.LabelMaster": v27StringSet(
+		"supply/import_compliance.LabelMaster": stringSet(
 			"SourceProduct", "SKU",
 		),
-		"supply/import_compliance.DeclarationLine": v27StringSet(
+		"supply/import_compliance.DeclarationLine": stringSet(
 			"ProductReference",
 		),
-		"supply/import_compliance.TariffLineSnapshot": v27StringSet(
+		"supply/import_compliance.TariffLineSnapshot": stringSet(
 			"SKU",
 		),
-		"supply/import_compliance.TariffProfile":     v27StringSet(),
-		"supply/import_compliance.TrademarkEvidence": v27StringSet(),
-		"supply/purchase.OrderItem": v27StringSet(
+		"supply/import_compliance.TariffProfile":     stringSet(),
+		"supply/import_compliance.TrademarkEvidence": stringSet(),
+		"supply/purchase.OrderItem": stringSet(
 			"OrderedQty", "ReceivedQty", "RejectedQty", "LocationCode", "ExpireAt",
 		),
-		"supply/purchase.ReceiptItem": v27StringSet(
+		"supply/purchase.ReceiptItem": stringSet(
 			"SKU", "OrderedQty", "ReceivedQty", "RejectedQty", "LocationCode",
 		),
-		"orders/order.CartItem": v27StringSet(
+		"orders/order.CartItem": stringSet(
 			"Price", "Quantity",
 		),
-		"orders/order.DemandBucket": v27StringSet(
+		"orders/order.DemandBucket": stringSet(
 			"SKU", "QtyUnits", "CartonQty", "CartonSize",
 		),
-		"orders/order.OpenDemandLine": v27StringSet(
+		"orders/order.OpenDemandLine": stringSet(
 			"SKU", "QtyUnits", "CartonQty", "CartonSize",
 		),
-		"orders/order.Order": v27StringSet(
+		"orders/order.Order": stringSet(
 			"DeliveryRegion",
 		),
-		"orders/order.OrderItem": v27StringSet(
+		"orders/order.OrderItem": stringSet(
 			"UnitPrice", "Quantity", "CartonQty", "CartonSize",
 		),
-		"orders/order.OrderLineSummary": v27StringSet(
+		"orders/order.OrderLineSummary": stringSet(
 			"Quantity", "UnitPrice",
 		),
-		"orders/order.OrderPackingProgress": v27StringSet(
+		"orders/order.OrderPackingProgress": stringSet(
 			"BoxPlan",
 		),
-		"orders/order.PreorderItemState": v27StringSet(
+		"orders/order.PreorderItemState": stringSet(
 			"OrderedQuantity", "AllocatedQuantity",
 		),
-		"orders/order.VolumeDiscountTier": v27StringSet(
+		"orders/order.VolumeDiscountTier": stringSet(
 			"MinCartons",
 		),
-		"orders/shipping.DeliveryAreaRate": v27StringSet(
+		"orders/shipping.DeliveryAreaRate": stringSet(
 			"Postcode", "Suburb", "DeliveryRegion",
 		),
-		"orders/shipping.Zone": v27StringSet(
+		"orders/shipping.Zone": stringSet(
 			"States", "Postcodes", "IsLocal",
 		),
-		"supply/warehouse.DamageReport": v27StringSet(
+		"supply/warehouse.DamageReport": stringSet(
 			"DamagedQty",
 		),
-		"supply/warehouse.Depot": v27StringSet(
+		"supply/warehouse.Depot": stringSet(
 			"PostcodeRules",
 		),
-		"supply/operations.InboundItem": v27StringSet(
+		"supply/operations.InboundItem": stringSet(
 			"Barcode", "Storage", "ExpectedQty", "ReceivedQty", "LocationCode",
 		),
-		"supply/operations.PackingDamage": v27StringSet(
+		"supply/operations.PackingDamage": stringSet(
 			"SKU", "DamagedQty", "DamageReportID", "StockMovementID",
 		),
-		"orders/shipping.PackingDiscrepancy": v27StringSet(
+		"orders/shipping.PackingDiscrepancy": stringSet(
 			"OrderedQty", "ScannedQty", "DiffQty", "UnitPrice", "ReturnToStock",
 			"DamageReportID", "StockMovementID", "DamagedQty",
 		),
-		"supply/operations.PackingLine": v27StringSet(
+		"supply/operations.PackingLine": stringSet(
 			"SKU", "OrderedQty", "ScannedQty", "DamagedQty",
 		),
-		"supply/operations.PickingListItem": v27StringSet(
+		"supply/operations.PickingListItem": stringSet(
 			"Barcode", "Location", "QuantityRequired", "QuantityPicked",
 		),
-		"supply/warehouse.StockLocation": v27StringSet(
+		"supply/warehouse.StockLocation": stringSet(
 			"Code", "Zone",
 		),
-		"supply/warehouse.StockLocationProductBalance": v27StringSet(
+		"supply/warehouse.StockLocationProductBalance": stringSet(
 			"AvailabilityRevision",
 		),
-		"supply/operations.StockMovement": v27StringSet(
+		"supply/operations.StockMovement": stringSet(
 			"SKU", "ProductName", "DepotCode", "LocationCode", "QtyDelta", "BalanceAfter",
 			"CreatedBy", "SalesOrderNumber", "ReferenceType", "ReferenceID", "Metadata",
 		),
-		"supply/warehouse.WMSDraft": v27StringSet(
+		"supply/warehouse.WMSDraft": stringSet(
 			"TotalQty",
 		),
-		"supply/warehouse.WMSDraftItem": v27StringSet(
+		"supply/warehouse.WMSDraftItem": stringSet(
 			"Barcode", "LocationCode", "Qty", "ExpiryYM",
 		),
 	}
@@ -409,7 +405,7 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	// These JSON keys are unambiguously retired everywhere. Reused names such
 	// as state, sku, barcode, quantity, unit_price, pricing, storage, and
 	// location_code are checked against their exact owning type below.
-	removedJSONKeys := v27StringSet(
+	removedJSONKeys := stringSet(
 		"sort_order",
 		"quiet_hours",
 		"fcm_destination",
@@ -434,7 +430,7 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"manual_frozen_count",
 		"postcode_rules",
 
-		// v27 foreign-key and package-pricing cutover. The frozen
+		// Foreign-key and package-pricing boundary. The frozen
 		// "sku_code" key is deliberately NOT listed here: it survives on
 		// the seven transaction-evidence types and is policed by the
 		// canonical-product allowlist test instead.
@@ -456,155 +452,155 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	)
 
 	removedJSONKeysByType := map[string]map[string]struct{}{
-		"supply/classification.CollectionRef": v27StringSet(
+		"supply/classification.CollectionRef": stringSet(
 			"name",
 		),
-		"supply/classification.CategoryTagRef": v27StringSet(
+		"supply/classification.CategoryTagRef": stringSet(
 			"name",
 		),
-		"supply/classification.BrandRef": v27StringSet(
+		"supply/classification.BrandRef": stringSet(
 			"name", "logo",
 		),
-		"supply/classification.ProductSupplierRef": v27StringSet(
+		"supply/classification.ProductSupplierRef": stringSet(
 			"name",
 		),
-		"pubsub/event.CatalogListingChangedEvent": v27StringSet(
+		"pubsub/event.CatalogListingChangedEvent": stringSet(
 			"listing_id",
 		),
-		"supply/listing.SaleEligibilitySnapshot": v27StringSet(
+		"supply/listing.SaleEligibilitySnapshot": stringSet(
 			"listing_id",
 		),
-		"common/geography.Address": v27StringSet(
+		"common/geography.Address": stringSet(
 			"city", "state", "postcode",
 		),
-		"insights/analytics.OrderItemFact": v27StringSet(
+		"insights/analytics.OrderItemFact": stringSet(
 			"quantity",
 		),
-		"insights/analytics.RefundItemFact": v27StringSet(
+		"insights/analytics.RefundItemFact": stringSet(
 			"quantity",
 		),
-		"insights/analytics.SKUDemandForecast": v27StringSet(
+		"insights/analytics.SKUDemandForecast": stringSet(
 			"current_stock_at_run",
 		),
-		"supply/classification.SKUSeries": v27StringSet(
+		"supply/classification.SKUSeries": stringSet(
 			"storage",
 		),
-		"orders/pos.CatalogProduct": v27StringSet(
+		"orders/pos.CatalogProduct": stringSet(
 			"id", "sku", "barcode", "storage", "price", "current_stock",
 		),
-		"supply/product.Product": v27StringSet(
+		"supply/product.Product": stringSet(
 			"sku", "barcode", "storage", "placing_area", "current_stock",
 			"restocked_at", "expired_at", "pricing", "physical",
 			"packaging", "commerce", "metrics", "selling", "taxed",
 		),
-		"supply/product.Snapshot": v27StringSet(
+		"supply/product.Snapshot": stringSet(
 			"id", "sku", "storage", "display_status", "barcode",
 		),
-		"supply/product.StorefrontDisplay":       v27StringSet(),
-		"supply/product.StorefrontMerchandising": v27StringSet(),
-		"supply/product.StorefrontProduct": v27StringSet(
+		"supply/product.StorefrontDisplay":       stringSet(),
+		"supply/product.StorefrontMerchandising": stringSet(),
+		"supply/product.StorefrontProduct": stringSet(
 			"sku", "barcode", "storage", "current_stock", "pricing", "expiry_date", "display_status",
 		),
-		"supply/import_compliance.LabelMaster": v27StringSet(
+		"supply/import_compliance.LabelMaster": stringSet(
 			"source_product", "sku",
 		),
-		"supply/import_compliance.DeclarationLine": v27StringSet(
+		"supply/import_compliance.DeclarationLine": stringSet(
 			"product_reference",
 		),
-		"supply/import_compliance.TariffLineSnapshot": v27StringSet(
+		"supply/import_compliance.TariffLineSnapshot": stringSet(
 			"sku",
 		),
-		"supply/import_compliance.TariffProfile":     v27StringSet(),
-		"supply/import_compliance.TrademarkEvidence": v27StringSet(),
-		"supply/purchase.OrderItem": v27StringSet(
+		"supply/import_compliance.TariffProfile":     stringSet(),
+		"supply/import_compliance.TrademarkEvidence": stringSet(),
+		"supply/purchase.OrderItem": stringSet(
 			"ordered_qty", "received_qty", "rejected_qty", "location_code", "expire_at",
 		),
-		"supply/purchase.ReceiptItem": v27StringSet(
+		"supply/purchase.ReceiptItem": stringSet(
 			"sku", "ordered_qty", "received_qty", "rejected_qty", "location_code",
 		),
-		"orders/order.CartItem": v27StringSet(
+		"orders/order.CartItem": stringSet(
 			"price", "quantity",
 		),
-		"orders/order.DemandBucket": v27StringSet(
+		"orders/order.DemandBucket": stringSet(
 			"sku", "qty_units", "carton_qty", "carton_size",
 		),
-		"orders/order.OpenDemandLine": v27StringSet(
+		"orders/order.OpenDemandLine": stringSet(
 			"sku", "qty_units", "carton_qty", "carton_size",
 		),
-		"orders/order.Order": v27StringSet(
+		"orders/order.Order": stringSet(
 			"delivery_region",
 		),
-		"orders/order.OrderItem": v27StringSet(
+		"orders/order.OrderItem": stringSet(
 			"unit_price", "quantity", "carton_qty", "carton_size",
 		),
-		"orders/order.OrderLineSummary": v27StringSet(
+		"orders/order.OrderLineSummary": stringSet(
 			"quantity", "unit_price",
 		),
-		"orders/order.OrderPackingProgress": v27StringSet(
+		"orders/order.OrderPackingProgress": stringSet(
 			"box_plan",
 		),
-		"orders/order.PreorderItemState": v27StringSet(
+		"orders/order.PreorderItemState": stringSet(
 			"ordered_quantity", "allocated_quantity",
 		),
-		"orders/order.VolumeDiscountTier": v27StringSet(
+		"orders/order.VolumeDiscountTier": stringSet(
 			"min_cartons",
 		),
-		"orders/shipping.DeliveryAreaRate": v27StringSet(
+		"orders/shipping.DeliveryAreaRate": stringSet(
 			"postcode", "suburb", "delivery_region",
 		),
-		"orders/shipping.Zone": v27StringSet(
+		"orders/shipping.Zone": stringSet(
 			"states", "postcodes", "is_local",
 		),
-		"supply/warehouse.DamageReport": v27StringSet(
+		"supply/warehouse.DamageReport": stringSet(
 			"damaged_qty",
 		),
-		"supply/warehouse.Depot": v27StringSet(
+		"supply/warehouse.Depot": stringSet(
 			"postcode_rules",
 		),
-		// v30: depots are the only site identity, so no record carries a
+		// Depots are the only site identity, so no record carries a
 		// store code, and POS records key on the register's daily session.
-		"orders/pos.Register": v27StringSet(
+		"orders/pos.Register": stringSet(
 			"store_id",
 		),
-		"orders/pos.CashMovement": v27StringSet(
+		"orders/pos.CashMovement": stringSet(
 			"shift_id",
 		),
-		"orders/order.POSAttribution": v27StringSet(
+		"orders/order.POSAttribution": stringSet(
 			"store_id", "shift_id",
 		),
-		"payments/terminal.Terminal": v27StringSet(
+		"payments/terminal.Terminal": stringSet(
 			"store_id",
 		),
-		"supply/operations.InboundItem": v27StringSet(
+		"supply/operations.InboundItem": stringSet(
 			"barcode", "storage", "expected_qty", "received_qty", "location_code",
 		),
-		"supply/operations.PackingDamage": v27StringSet(
+		"supply/operations.PackingDamage": stringSet(
 			"sku", "damaged_qty", "damage_report_id", "stock_movement_id",
 		),
-		"orders/shipping.PackingDiscrepancy": v27StringSet(
+		"orders/shipping.PackingDiscrepancy": stringSet(
 			"ordered_qty", "scanned_qty", "diff_qty", "unit_price", "return_to_stock",
 			"damage_report_id", "stock_movement_id", "damaged_qty",
 		),
-		"supply/operations.PackingLine": v27StringSet(
+		"supply/operations.PackingLine": stringSet(
 			"sku", "ordered_qty", "scanned_qty", "damaged_qty",
 		),
-		"supply/operations.PickingListItem": v27StringSet(
+		"supply/operations.PickingListItem": stringSet(
 			"barcode", "location", "quantity_required", "quantity_picked",
 		),
-		"supply/warehouse.StockLocation": v27StringSet(
+		"supply/warehouse.StockLocation": stringSet(
 			"code", "zone",
 		),
-		"supply/warehouse.StockLocationProductBalance": v27StringSet(
+		"supply/warehouse.StockLocationProductBalance": stringSet(
 			"availability_revision",
 		),
-		"supply/operations.StockMovement": v27StringSet(
+		"supply/operations.StockMovement": stringSet(
 			"sku", "product_name", "depot_code", "location_code", "qty_delta", "balance_after",
 			"created_by", "sales_order_number", "reference_type", "reference_id", "metadata",
 		),
-		"supply/warehouse.WMSDraft": v27StringSet(
+		"supply/warehouse.WMSDraft": stringSet(
 			"total_qty",
 		),
-		"supply/warehouse.WMSDraftItem": v27StringSet(
+		"supply/warehouse.WMSDraftItem": stringSet(
 			"barcode", "location_code", "qty", "expiry_ym",
 		),
 	}
@@ -636,7 +632,7 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 				return true
 			}
 			if _, removed := removedIdentifiers[identifier.Name]; removed {
-				t.Errorf("%s contains removed v27 identifier %s", path, identifier.Name)
+				t.Errorf("%s contains removed identifier %s", path, identifier.Name)
 			}
 			return true
 		})
@@ -652,10 +648,10 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 					continue
 				}
 
-				typeKey := v27ProductionTypeKey(pkgRoot, path, typeSpecification.Name.Name)
+				typeKey := productionTypeKey(pkgRoot, path, typeSpecification.Name.Name)
 				seenTypes[typeKey] = struct{}{}
 				if _, removed := removedTypes[typeKey]; removed {
-					t.Errorf("%s declares removed v27 type %s", path, typeKey)
+					t.Errorf("%s declares removed type %s", path, typeKey)
 				}
 
 				structure, ok := typeSpecification.Type.(*ast.StructType)
@@ -665,19 +661,19 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 				for _, field := range structure.Fields.List {
 					for _, name := range field.Names {
 						if _, removed := removedFields[typeKey][name.Name]; removed {
-							t.Errorf("%s declares removed v27 field %s.%s", path, typeKey, name.Name)
+							t.Errorf("%s declares removed field %s.%s", path, typeKey, name.Name)
 						}
 					}
 
-					jsonKey, present := v27JSONFieldName(t, path, field)
+					jsonKey, present := jsonFieldName(t, path, field)
 					if !present || jsonKey == "-" {
 						continue
 					}
 					if _, removed := removedJSONKeys[jsonKey]; removed {
-						t.Errorf("%s contains removed v27 JSON key %q", path, jsonKey)
+						t.Errorf("%s contains removed JSON key %q", path, jsonKey)
 					}
 					if _, removed := removedJSONKeysByType[typeKey][jsonKey]; removed {
-						t.Errorf("%s contains removed v27 JSON key %q on %s", path, jsonKey, typeKey)
+						t.Errorf("%s contains removed JSON key %q on %s", path, jsonKey, typeKey)
 					}
 				}
 			}
@@ -703,7 +699,7 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	}
 }
 
-func TestV31GoSourcesContainNoOlderContractImports(t *testing.T) {
+func TestGoSourcesContainNoOlderContractImports(t *testing.T) {
 	const contractImportRoot = "github.com/Potato-Mart/Backend-Shared-Contract/"
 	const currentContractImportPrefix = contractImportRoot + "v31/"
 	pkgRoot := sharedContractPkgRoot(t)
@@ -725,7 +721,7 @@ func TestV31GoSourcesContainNoOlderContractImports(t *testing.T) {
 				return unquoteErr
 			}
 			if strings.HasPrefix(importPath, contractImportRoot) && !strings.HasPrefix(importPath, currentContractImportPrefix) {
-				t.Errorf("%s imports non-v31 shared-contract path %s", path, importPath)
+				t.Errorf("%s imports a non-current shared-contract path %s", path, importPath)
 			}
 		}
 		return nil
@@ -735,10 +731,10 @@ func TestV31GoSourcesContainNoOlderContractImports(t *testing.T) {
 	}
 }
 
-func TestV27ProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(t *testing.T) {
-	legacyImportCompliance := "import" + "compliance"
-	legacyImportComplianceEnums := legacyImportCompliance + "_enums"
-	retiredIdentifiers := v27StringSet(
+func TestProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(t *testing.T) {
+	retiredImportCompliance := "import" + "compliance"
+	retiredImportComplianceEnums := retiredImportCompliance + "_enums"
+	retiredIdentifiers := stringSet(
 		"AcceptedOffer",
 		"AppliedPromotion",
 		"AppliedPromotions",
@@ -792,10 +788,10 @@ func TestV27ProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(
 		"UsageLimits",
 		"VolumeDiscountAppliesTo",
 		"VolumeDiscountTier",
-		legacyImportCompliance,
-		legacyImportComplianceEnums,
+		retiredImportCompliance,
+		retiredImportComplianceEnums,
 	)
-	retiredTypes := v27StringSet(
+	retiredTypes := stringSet(
 		"common/security.Media",
 		"common/security.MediaReference",
 		"orders/pos.CatalogProduct",
@@ -852,8 +848,8 @@ func TestV27ProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(
 		"contracts/pricing/promotion/receipt_offer.go",
 		"contracts/pricing/promotion/shared.go",
 		"contracts/pricing/promotion/storefront_promotion.go",
-		"contracts/supply/" + legacyImportCompliance,
-		"contracts/supply/" + legacyImportCompliance + "/" + legacyImportComplianceEnums,
+		"contracts/supply/" + retiredImportCompliance,
+		"contracts/supply/" + retiredImportCompliance + "/" + retiredImportComplianceEnums,
 		"contracts/supply/product/offer.go",
 		"contracts/supply/classification/sku.go",
 		"contracts/pricing/promotion/package_pricing.go",
@@ -863,9 +859,9 @@ func TestV27ProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(
 	for _, retiredPath := range retiredPaths {
 		absolutePath := filepath.Join(pkgRoot, filepath.FromSlash(retiredPath))
 		if _, err := os.Stat(absolutePath); err == nil {
-			t.Errorf("retired v27 production path remains: %s", retiredPath)
+			t.Errorf("retired production path remains: %s", retiredPath)
 		} else if !os.IsNotExist(err) {
-			t.Errorf("inspect retired v27 production path %s: %v", retiredPath, err)
+			t.Errorf("inspect retired production path %s: %v", retiredPath, err)
 		}
 	}
 
@@ -882,12 +878,12 @@ func TestV27ProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(
 			return relativeErr
 		}
 		relativePath = filepath.ToSlash(relativePath)
-		// The additive v30 marketing foundation deliberately reintroduces its
-		// own closed promotion and discount vocabulary under the separate
-		// canonical marketing namespace. The v27 removal still applies to the
-		// legacy Pricing-owned promotion grammar and every other namespace.
+		// Marketing owns its closed promotion and discount vocabulary under its
+		// canonical namespace. The retired Pricing-owned grammar remains
+		// forbidden in every other namespace.
+
 		marketingFoundation := strings.HasPrefix(relativePath, "contracts/marketing/")
-		if strings.Contains(relativePath, "/"+legacyImportCompliance+"/") || strings.HasSuffix(relativePath, "/"+legacyImportCompliance) {
+		if strings.Contains(relativePath, "/"+retiredImportCompliance+"/") || strings.HasSuffix(relativePath, "/"+retiredImportCompliance) {
 			t.Errorf("%s retains retired import-compliance package path", path)
 		}
 
@@ -896,7 +892,7 @@ func TestV27ProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(
 		if parseErr != nil {
 			return parseErr
 		}
-		if file.Name != nil && file.Name.Name == legacyImportCompliance {
+		if file.Name != nil && file.Name.Name == retiredImportCompliance {
 			t.Errorf("%s retains retired import-compliance package identifier", path)
 		}
 		for _, specification := range file.Imports {
@@ -904,7 +900,7 @@ func TestV27ProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(
 			if unquoteErr != nil {
 				return unquoteErr
 			}
-			if strings.Contains(importPath, "/"+legacyImportCompliance) {
+			if strings.Contains(importPath, "/"+retiredImportCompliance) {
 				t.Errorf("%s imports retired import-compliance path %s", path, importPath)
 			}
 		}
@@ -919,9 +915,9 @@ func TestV27ProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(
 				if !ok {
 					continue
 				}
-				typeKey := v27ProductionTypeKey(pkgRoot, path, typeSpecification.Name.Name)
+				typeKey := productionTypeKey(pkgRoot, path, typeSpecification.Name.Name)
 				if _, retired := retiredTypes[typeKey]; retired {
-					t.Errorf("%s declares retired v27 type %s", path, typeKey)
+					t.Errorf("%s declares retired type %s", path, typeKey)
 				}
 			}
 		}
@@ -930,7 +926,7 @@ func TestV27ProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(
 			switch value := node.(type) {
 			case *ast.Ident:
 				if _, retired := retiredIdentifiers[value.Name]; retired && !marketingFoundation {
-					t.Errorf("%s retains retired v27 identifier %s", path, value.Name)
+					t.Errorf("%s retains retired identifier %s", path, value.Name)
 				}
 			case *ast.BasicLit:
 				if value.Kind != token.STRING {
@@ -943,7 +939,7 @@ func TestV27ProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(
 				lowerText := strings.ToLower(text)
 				for _, fragment := range retiredWireFragments {
 					if strings.Contains(lowerText, fragment) {
-						t.Errorf("%s retains retired v27 wire fragment %q", path, fragment)
+						t.Errorf("%s retains retired wire fragment %q", path, fragment)
 					}
 				}
 			}
@@ -956,7 +952,7 @@ func TestV27ProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(
 	}
 }
 
-func v27StringSet(values ...string) map[string]struct{} {
+func stringSet(values ...string) map[string]struct{} {
 	set := make(map[string]struct{}, len(values))
 	for _, value := range values {
 		set[value] = struct{}{}
@@ -964,7 +960,7 @@ func v27StringSet(values ...string) map[string]struct{} {
 	return set
 }
 
-func v27ProductionTypeKey(pkgRoot string, path string, typeName string) string {
+func productionTypeKey(pkgRoot string, path string, typeName string) string {
 	relativePath, _ := filepath.Rel(pkgRoot, path)
 	directory := filepath.ToSlash(filepath.Dir(relativePath))
 	directory = strings.TrimPrefix(directory, "contracts/")
@@ -974,7 +970,7 @@ func v27ProductionTypeKey(pkgRoot string, path string, typeName string) string {
 	return directory + "." + typeName
 }
 
-func v27JSONFieldName(t *testing.T, path string, field *ast.Field) (string, bool) {
+func jsonFieldName(t *testing.T, path string, field *ast.Field) (string, bool) {
 	t.Helper()
 	if field.Tag == nil {
 		return "", false

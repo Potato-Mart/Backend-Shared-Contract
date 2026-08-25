@@ -10,7 +10,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/product"
 )
 
-func TestV30BrandRootRetainsIDAndSlugWhileReferenceUsesCode(t *testing.T) {
+func TestBrandRootRetainsIDAndSlugWhileReferenceUsesCode(t *testing.T) {
 	brand := classification.Brand{
 		ID: "64c13ab08edf48a008793ca1", Code: "BRD000001", Slug: "happy-potato",
 		Name: []localization.LocalizedName{{Language: "en", Name: "Happy Potato"}},
@@ -34,7 +34,7 @@ func TestV30BrandRootRetainsIDAndSlugWhileReferenceUsesCode(t *testing.T) {
 	}
 }
 
-func TestV3001BrandLogoUsesCodeOnlyCatalogMediaRef(t *testing.T) {
+func TestBrandLogoUsesCodeOnlyCatalogMediaRef(t *testing.T) {
 	body, err := json.Marshal(classification.Brand{Logo: &classification.ObjectMediaRef{Code: "MED-BRAND"}})
 	if err != nil {
 		t.Fatal(err)
@@ -44,7 +44,7 @@ func TestV3001BrandLogoUsesCodeOnlyCatalogMediaRef(t *testing.T) {
 	}
 }
 
-func TestV30ProductCarriesOrderedBrandReferences(t *testing.T) {
+func TestProductCarriesOrderedBrandReferences(t *testing.T) {
 	body, err := json.Marshal(product.Product{Classification: product.ProductClassification{
 		SKUSeriesCode: "A0",
 		Brands:        []classification.BrandRef{{Code: "BRD000001"}, {Code: "BRD000002"}},
@@ -57,7 +57,7 @@ func TestV30ProductCarriesOrderedBrandReferences(t *testing.T) {
 	}
 }
 
-func TestV30CategoryTagRefUsesCodeWithoutSlugOrID(t *testing.T) {
+func TestCategoryTagRefUsesCodeWithoutSlugOrID(t *testing.T) {
 	body, err := json.Marshal(classification.CategoryTagRef{Code: "TAG0001"})
 	if err != nil {
 		t.Fatal(err)

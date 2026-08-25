@@ -12,7 +12,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/classification"
 )
 
-func TestV30SupplierExpansionAndCodeOnlyManufacturing(t *testing.T) {
+func TestSupplierExpansionAndCodeOnlyManufacturing(t *testing.T) {
 	supplier := classification.Supplier{
 		OrganisationDetail:   party.OrganisationDetail{PartyRef: party.PartyRef{ID: "64c13ab08edf48a008793ca4", Code: "SUP0001", Name: "Supplier"}},
 		GeographicLocation:   &geography.Address{Line1: "1 Supply Rd", Locality: "Sydney", PostalCode: "2000", Country: geography.CountryRef{Code: "AU"}},
@@ -35,11 +35,11 @@ func TestV30SupplierExpansionAndCodeOnlyManufacturing(t *testing.T) {
 		}
 	}
 	if strings.Contains(string(body), `"location"`) || strings.Contains(string(body), `"supplier_id"`) {
-		t.Fatalf("Supplier retained legacy reference: %s", body)
+		t.Fatalf("Supplier retained retired reference: %s", body)
 	}
 }
 
-func TestV30ProductSupplyUsesMultipleSupplierCodes(t *testing.T) {
+func TestProductSupplyUsesMultipleSupplierCodes(t *testing.T) {
 	body, err := json.Marshal(classification.ProductSupply{Suppliers: []classification.ProductSupplierRef{{Code: "SUP0001"}, {Code: "SUP0002"}}})
 	if err != nil {
 		t.Fatal(err)
@@ -49,7 +49,7 @@ func TestV30ProductSupplyUsesMultipleSupplierCodes(t *testing.T) {
 	}
 }
 
-func TestV3001ManufacturingCountryReferenceIsCodeOnly(t *testing.T) {
+func TestManufacturingCountryReferenceIsCodeOnly(t *testing.T) {
 	body, err := json.Marshal(classification.ProductManufacturing{
 		CompanyName: "Maker",
 		CountryRef:  &classification.CountryCodeRef{Code: "TW"},

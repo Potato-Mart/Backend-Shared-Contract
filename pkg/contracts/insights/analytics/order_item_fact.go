@@ -17,10 +17,9 @@ type OrderItemFact struct {
 	MarketCode string `json:"market_code"`
 	// CountryCode is the denormalized country the fact is attributed to,
 	// carried so a country-scoped principal can be filtered by a plain
-	// indexed match instead of joining every market back to its country.
-	// It is absent on facts recorded before v28.0.0; an absent value means
-	// "unattributed" and the consumer handles it fail-closed rather than
-	// widening the reader's visibility.
+	// indexed match instead of joining every market back to its country. An
+	// empty value provides no geographic evidence and must be handled
+	// fail-closed rather than widening the reader's visibility.
 	CountryCode        geography.CountryCode                `json:"country_code,omitempty"`
 	ProductName        string                               `json:"product_name,omitempty"`
 	BrandCode          string                               `json:"brand_code,omitempty"`

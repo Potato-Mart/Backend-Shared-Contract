@@ -44,7 +44,7 @@ func TestWorkforceRoleAndScopeWireValuesAreLocked(t *testing.T) {
 		{6, role_enums.UserRoleWarehouseOperator, "warehouseOperator"},
 	}
 	if len(roles) != 6 {
-		t.Fatalf("the built-in workforce set holds %d roles; v30 locks exactly six", len(roles))
+		t.Fatalf("the built-in workforce set holds %d roles; want exactly six", len(roles))
 	}
 	for index, entry := range roles {
 		if entry.rank != index+1 {
@@ -58,7 +58,7 @@ func TestWorkforceRoleAndScopeWireValuesAreLocked(t *testing.T) {
 		}
 	}
 
-	// The v30 cut-over retires these four keys. They must never validate
+	// The role model retires these four keys. They must never validate
 	// again: a stale token or seeded document carrying one is not a role.
 	// `sales` joins the list because POS/till duty is decided by geographic
 	// scope rather than by a dedicated selling rank — every remaining rank
