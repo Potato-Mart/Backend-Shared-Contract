@@ -121,7 +121,7 @@ func TestRatingSummaryJSONHasFiveScoreCounts(t *testing.T) {
 	}
 }
 
-func TestReviewEnumsUseTheV30Values(t *testing.T) {
+func TestReviewEnumsUseCanonicalValues(t *testing.T) {
 	for _, value := range []review_enums.ReviewType{
 		review_enums.ReviewTypeOrder,
 		review_enums.ReviewTypeProduct,

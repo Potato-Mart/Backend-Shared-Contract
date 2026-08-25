@@ -7,12 +7,15 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"testing"
 )
 
 const contractImportPrefix = "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/"
+
+var contractMajorPath = regexp.MustCompile(`github\.com/Potato-Mart/Backend-Shared-Contract/v([0-9]+)/`)
 
 var expectedEnumPackages = []string{
 	"contracts/common/commerce/commerce_enums",
@@ -179,8 +182,13 @@ func TestCommonAndEnumPackageLayout(t *testing.T) {
 		if readErr != nil {
 			return readErr
 		}
-		if strings.Contains(string(contents), "/v23/") || strings.Contains(string(contents), "common/shared") {
-			violations = append(violations, relativePkgPath(t, pkgRoot, path)+": retired module or common/shared source path")
+		if strings.Contains(string(contents), "common/shared") {
+			violations = append(violations, relativePkgPath(t, pkgRoot, path)+": retired common/shared source path")
+		}
+		for _, match := range contractMajorPath.FindAllStringSubmatch(string(contents), -1) {
+			if match[1] != "32" {
+				violations = append(violations, relativePkgPath(t, pkgRoot, path)+": non-current shared-contract major source path "+match[0])
+			}
 		}
 		if !strings.HasSuffix(filepath.Base(filepath.Dir(path)), "_enums") {
 			return nil

@@ -23,7 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
-| `v32.0.0` | 2026-08-26 | Major | In-progress V32 hard cut: moves the module path to `/v32`; the final contract surface and consumer actions are completed before release. |
+| `v32.0.0` | 2026-08-26 | Major | Hard V32 cut: moves the module path to `/v32`, centralizes workforce permission vocabulary, adds commerce evidence, and publishes a money-free price invalidation fact. Service adoption remains external. |
 | `v31.0.1` | 2026-08-25 | Patch | Retains the Go 1.26.7 baseline and removes active historical compatibility scaffolding without changing the `/v31` contract surface. |
 | `v31.0.0` | 2026-08-25 | Major | Contract-boundary hard cut: removes persistence, token-claim, workflow, provider-transport, and hard-coded operational constants from the shared model tree; moves exact release metadata to `go.mod`; moves the Review package under Customer ownership; and changes the module path to `/v31`. All consumers must migrate explicitly. |
 | `v30.0.0` | 2026-08-24 | Major | Domain ownership hard cut: centralizes backend-defined notification topics and preferences, moves customer analytics to Insights, resolves commercial market from frozen fulfilment location, consolidates Marketing/Pricing ownership, publishes SellingProduct, and generalizes Review contracts. Changes the module path to `/v30`; all consumers must migrate explicitly. |
@@ -129,14 +129,56 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
 
-## v32.0.0 (2026-08-26) - Contract Convergence (In Progress)
+## v32.0.0 (2026-08-26) - Contract Convergence
 
 ### Breaking contract
 
 - Module path and release metadata move to
   `github.com/Potato-Mart/Backend-Shared-Contract/v32` and `v32.0.0`.
-- This release is a hard cut. It retains no `/v31` forwarding packages,
-  compatibility aliases, fallback JSON fields, or parallel old/new shapes.
+- `role.Role.Permissions` changes from `[]string` to
+  `[]role_enums.PermissionKey`. Its JSON representation remains a string
+  array; `access.LoginSession.Permissions` deliberately remains `[]string`
+  because a login session can carry mixed audience permissions.
+- This is a hard cut. It retains no `/v31` forwarding packages, compatibility
+  aliases, fallback JSON fields, deprecated declarations, or parallel old/new
+  shapes.
+
+### Added contract surface
+
+- `role_enums.PermissionKey` provides the exact 102 workforce permission wire
+  values from Identity, with allocation-free `String` and `IsValid` methods.
+  `PermissionClassification` provides `ui`, `field-level`, `service-only`,
+  and `intentionally-reserved`; `role.PermissionDefinition` supplies typed
+  key, risk, and classification metadata without moving Identity's catalogue
+  policy into the shared contract.
+- `shipping_enums.FulfilmentIntentDigital` represents non-physical
+  fulfilment. A digital `FulfilmentLocationSnapshot` has neither delivery
+  address nor depot, while retaining frozen geographic context, location
+  fingerprint, and capture time.
+- `purchase.ReceiptItem` can preserve optional supplier and manufacturer lot
+  codes. `wallet.RewardRedemption` can preserve optional `market_code` and
+  typed `country_code` evidence.
+- `event.PriceChangedEvent` is the customer-safe invalidation fact for a
+  price revision. It contains only `market_code`, `sku_code`, `revision`,
+  `refetch_required`, and `changed_at`.
+
+### V32 Storefront Event
+
+| Payload | Event type | Topic | Contract guarantee |
+| --- | --- | --- | --- |
+| `PriceChangedEvent` | `price.changed` | `storefront-events` | Refetch-only invalidation; no money, currency, price-book, rule, actor, provider, device, or customer data. |
+
+`price.changed` does not introduce an event-version constant or alter the
+historical Event Schema Version 2 table.
+
+### Deliberate exclusions
+
+This release adds no routes, DTOs, claims, persistence models, workflow
+commands, provider models, event-version constants, ESL models, receipt unit
+rows, reward transactions, or storefront transport projections. Backend
+runtime behavior, OpenAPI, generated clients, Terraform, dependencies,
+database/index changes, branches, commits, and pull requests remain outside
+this contract-only change.
 
 ### Consumer action
 
@@ -145,18 +187,44 @@ separately authorized service change. This contract release does not modify
 service runtime behavior, persistence, DTOs, OpenAPI, generated clients,
 infrastructure, or CI configuration.
 
+### Read-only Backend Follow-ups (Not Executed)
+
+These are PR handoff recommendations, not execution authorization. No backend
+repository was edited by this release.
+
+- **Identity:** adopt shared permission keys and definitions first; retain
+  catalogue policy, reconciliation, claims, and persistence locally.
+- **Customers:** remove its workforce mirror; retain `WholesalePermission`,
+  address-derived geography, and customer-owned workflows.
+- **Payments:** use canonical `payto`, require complete capability context and
+  exact non-empty currency, and test digital flows.
+- **Orders:** implement truthful digital snapshots; complete the unwired
+  stock-wake allocator using existing Supply APIs; migrate checkout
+  compensation only after Pricing supplies its replacement operation.
+- **Pricing:** round-trip reward geography; make price approval and outbox
+  atomic behind a concurrency fence; publish `price.changed` only when a real
+  consumer exists.
+- **Supply:** propagate receipt lot codes, reject digital from physical depot
+  resolution, and separately correct receipt/PO, market filtering, and
+  replenishment workflows.
+- **Insights:** retain strict analytics ownership, remove unused
+  `analytics.export`, and neither consume `price.changed` nor produce
+  forecasts.
+- **Notification:** adopt the shared audit permission, safely acknowledge an
+  unknown `price.changed`, and add no Notification contract models.
+
 ### Consumer Migration Matrix
 
 | Consumer | Required action before V32 adoption | This release performs it? |
 | --- | --- | --- |
-| Backend-Identity | Adopt the shared permission vocabulary and complete its service-local migration. | No |
-| Backend-Customers | Replace its private workforce vocabulary in a service-local migration. | No |
-| Backend-Payments | Adopt V32 while retaining provider/runtime boundaries locally. | No |
-| Backend-Orders | Adopt V32 with its service-owned digital and checkout migrations. | No |
-| Backend-Pricing | Adopt V32 with its service-owned wallet and price publication work. | No |
-| Backend-Supply | Adopt V32 with its service-owned receipt and inventory work. | No |
-| Backend-Insights | Adopt V32 while retaining its strict analytics boundary. | No |
-| Backend-Notification | Adopt V32 while retaining delivery/runtime ownership locally. | No |
+| Backend-Identity | Adopt shared permission keys/definitions while retaining catalogue policy, claims, and persistence locally. | No |
+| Backend-Customers | Remove the workforce mirror without changing its wholesale, geography, or workflow ownership. | No |
+| Backend-Payments | Adopt V32 with canonical PayTo/capability/currency and digital-flow work kept locally. | No |
+| Backend-Orders | Implement truthful digital snapshots and complete its Supply-backed allocator and later compensation migration. | No |
+| Backend-Pricing | Round-trip reward geography and atomically publish a future price invalidation only for a real consumer. | No |
+| Backend-Supply | Propagate lot evidence and reject digital physical-depot resolution in service-owned flows. | No |
+| Backend-Insights | Retain analytics boundaries, remove `analytics.export`, and do not consume the new event or produce forecasts. | No |
+| Backend-Notification | Adopt shared audit permission and safely ignore the event without new contract models. | No |
 
 ## v31.0.1 (2026-08-25) - Active-Surface Cleanup
 

@@ -17,7 +17,7 @@ type LabelProductEvidence struct {
 	AlternateNames []localization.LocalizedName `json:"alternate_names,omitempty"`
 	Brand          string                       `json:"brand,omitempty"`
 	// MarketCode and TaxCategoryCode replace the retired product-level Taxed
-	// flag: taxability is a market listing fact in v27, so compliance
+	// flag: taxability is a market-listing fact, so compliance
 	// freezes the market and its Pricing-owned tax category instead.
 	MarketCode           string    `json:"market_code,omitempty"`
 	TaxCategoryCode      string    `json:"tax_category_code,omitempty"`
