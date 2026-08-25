@@ -89,11 +89,11 @@ a plain indexed match rather than a join through market and depot tables. The
 contract declares those fields; each service owns the indexes and the filter
 injection.
 
-## Sessions and claims
+## Sessions and access records
 
-Identity claims, login sessions, refresh records, portal decisions, and
-security/audit events carry the stable identifiers needed to preserve domain,
-account, and portal isolation, including:
+`access.LoginSession`, `PortalAccess`, and relevant security/audit records
+carry the stable identifiers needed to preserve domain, account, and portal
+isolation, including:
 
 - `auth_identity_id`
 - `identity_domain`
@@ -104,19 +104,11 @@ account, and portal isolation, including:
 - `audience`
 - scoped role and organisation identifiers when applicable
 
-`access.AccessTokenClaims` additionally carries the workforce scope as four
-flat, optional claims — `scope_level`, `country_code`, `market_ids`, and
-`depot_codes` — mirroring `StaffGeoScope`. They are absent on customer and
-service-to-service tokens.
-
-Consumers **fail closed**: a workforce token that carries no valid
-`scope_level` is rejected, never treated as global. `superAdmin` and
-service-to-service callers resolve to global scope. Events and
-service-to-service calls are never geographically truncated; scoping applies to
+Token-claim schemas, refresh-token storage, request correlation, and
+authorization evaluation are Backend-Identity implementation concerns. The
+shared contract deliberately does not define those transport or persistence
+shapes. Each backend independently applies `StaffGeoScope` to its own
 staff-facing reads and writes.
-
-The shared models record those values. Issuers and consumers independently
-enforce their required claim tuples and audience policy.
 
 ## Customer and organisation records
 

@@ -2,11 +2,12 @@ package cost
 
 import (
 	"encoding/json"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/money"
 )
 
 func TestBaseAcquisitionCostIsTaxExclusiveAndRevisioned(t *testing.T) {
@@ -66,13 +67,13 @@ func TestDepotCarryingCostDerivesTheAverageFromExactIntegers(t *testing.T) {
 	}
 }
 
-func TestCarryingCostMovementReversalIsLinkedAndIdempotent(t *testing.T) {
+func TestCarryingCostMovementReversalRemainsLinkedWithoutRetryKey(t *testing.T) {
 	occurredAt := time.Date(2026, 8, 12, 1, 2, 3, 0, time.UTC)
 	payload, err := json.Marshal(CarryingCostMovement{
 		ID: "movement_2", SKUCode: "sku_a00001", DepotCode: "AU-VIC-MEL-DC-01",
 		ReferenceType: "supplier_return", ReferenceID: "return_1",
-		IdempotencyKey: "supplier_return:return_1", ReversesMovementID: "movement_1",
-		BaseUnitDelta: -12, CarryingCostDelta: -6600,
+		ReversesMovementID: "movement_1",
+		BaseUnitDelta:      -12, CarryingCostDelta: -6600,
 		BalanceBaseUnitsAfter: 108, BalanceCarryingCostMinorAfter: 59400,
 		Currency: "AUD", Revision: 6, OccurredAt: occurredAt,
 	})
@@ -80,12 +81,18 @@ func TestCarryingCostMovementReversalIsLinkedAndIdempotent(t *testing.T) {
 		t.Fatalf("marshal carrying cost movement: %v", err)
 	}
 	for _, want := range []string{
-		`"idempotency_key":"supplier_return:return_1"`,
 		`"reverses_movement_id":"movement_1"`,
 		`"carrying_cost_minor_delta":-6600`,
+		`"revision":6`,
 	} {
 		if !strings.Contains(string(payload), want) {
 			t.Fatalf("CarryingCostMovement JSON = %s, want %s", payload, want)
 		}
+	}
+	if strings.Contains(string(payload), `"idempotency_key"`) {
+		t.Fatalf("CarryingCostMovement must not expose persistence retry state: %s", payload)
+	}
+	if _, exists := reflect.TypeOf(CarryingCostMovement{}).FieldByName("IdempotencyKey"); exists {
+		t.Fatal("CarryingCostMovement must not expose IdempotencyKey")
 	}
 }

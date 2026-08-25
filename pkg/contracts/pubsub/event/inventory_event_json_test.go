@@ -3,16 +3,16 @@ package event_test
 import (
 	"encoding/json"
 
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pubsub/event"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/warehouse"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pubsub/event"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/warehouse"
 
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestV27InventoryEventJSONShapes(t *testing.T) {
@@ -84,7 +84,7 @@ func TestV27InventoryEventJSONShapes(t *testing.T) {
 			value: event.StockStagingChangedEvent{
 				StagingRecordID: "staging_1", ReservationID: "reservation_1", AllocationID: "allocation_1",
 				OrderNumber: "SO-1", SKUCode: "A00001", SourceLocation: location,
-				DestinationLocation: warehouse.StockLocationRef{DepotCode: location.DepotCode, LocationCode: warehouse.StockLocationCodeOnlineStageAmbient},
+				DestinationLocation: warehouse.StockLocationRef{DepotCode: location.DepotCode, LocationCode: "SYS-ONLINE-STAGE-AMBIENT"},
 				StagedComposition:   caseComposition, MovementID: "movement_stage", Revision: 1, OccurredAt: now,
 			},
 			required: []string{"staging_record_id", "source_location", "destination_location", "revision"},

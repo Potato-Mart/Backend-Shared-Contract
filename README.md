@@ -4,8 +4,7 @@
 
 Backend-Shared-Contract is Potato Mart's shared Go module for reusable
 cross-service data models. It contains domain entities, records, snapshots,
-events, value objects, typed enums, required model-identity constants, and
-model-version metadata.
+events, value objects, typed enums, and build metadata declared in `go.mod`.
 
 The module is deliberately model-only. Backend services remain responsible for
 their routes, request and response DTOs, HTTP envelopes, validation,
@@ -15,11 +14,11 @@ workflows.
 ## Latest Version
 
 ```text
-v30.0.0
-github.com/Potato-Mart/Backend-Shared-Contract/v30
+v31.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v31
 ```
 
-See [RELEASE_NOTES.md](RELEASE_NOTES.md) for the release history,
+See [release notes](docs/release-notes.md) for the release history,
 breaking changes and consumer actions.
 
 ## Usage
@@ -27,16 +26,16 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v30 v30.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v31 v31.0.0
 ```
 
-Import packages from the same `/v30` module path.
+Import packages from the same `/v31` module path.
 
 ## Package Layout
 
 - Common models are grouped by concern under `pkg/contracts/common`, such as
   `geography`, `party`, `packaging`, `security`, `temporal`, `measurement`, and
-  `money`. The legacy `common/shared` package does not exist in v30.
+  `money`. The legacy `common/shared` package does not exist in v31.
 - Finite enum types live in a leaf `<domain>_enums` package beside the models
   that use them. For example, product models import
   `supply/product/product_enums`, while common security models import
@@ -55,8 +54,8 @@ Import packages from the same `/v30` module path.
   deliveries, and customer-safe in-app inbox projections live only under
   `notifications`.
 - Marketing owns canonical `marketing/campaign` and `marketing/message`
-  authoring models. General customer reviews live under `review`, with separate
-  protected, public, and owner-safe projections.
+  authoring models. General customer reviews live under `customers/review`,
+  with separate protected, public, and owner-safe projections.
 - `supply/product.Product` is keyed by the immutable `sku_code`, owns the
   authoritative storage requirement, localized content, classification,
   provenance, package options, barcode assignments, net content, status, and
@@ -79,21 +78,26 @@ Import packages from the same `/v30` module path.
   applications. Only promotion lifecycle status and match mode are closed
   promotion enums.
 - This module is contract-only. The seven backend services and the parent
-  `go.work` must migrate to `/v30` before consuming this release.
+  `go.work` must migrate to `/v31` before consuming this release.
 
 ## Boundary Governance
 
 Ordinary `json` struct tags and standard `encoding/json` define every shared
 wire shape. The package manifest and AST boundary tests reject unclassified
-exported models, non-JSON tags, custom codecs, endpoint DTO naming, paths,
-scopes, free business functions, type aliases, deprecated declarations, and
-non-intrinsic receiver methods. Approved receiver behavior is limited to
-single-value `String` or `IsValid` enum methods.
+exported models, non-JSON tags, hidden persistence fields, raw provider
+payloads, endpoint DTO and workflow naming, command-like Pub/Sub events,
+paths, scopes, free business
+functions, type aliases, deprecated declarations, and non-intrinsic receiver
+methods. Approved receiver behavior is limited to single-value `String` or
+`IsValid` enum methods. The sole raw JSON exception is the generic Pub/Sub
+event envelope. Every production model source file contains one exported
+struct, and every closed enum has its own source file in a leaf `_enums`
+package.
 
 Published model changes follow semantic versioning. Breaking exported shapes
 or wire values require a new major module path. A cut-over removes the replaced
 field, type, enum value, event, and test in the same change; deprecated aliases
-and fallback JSON shapes are not retained. `RELEASE_NOTES.md` is the source of
+and fallback JSON shapes are not retained. `docs/release-notes.md` is the source of
 truth for release-specific JSON changes and consumer actions.
 
 ## Repository Layout and Naming
@@ -105,8 +109,8 @@ truth for release-specific JSON changes and consumer actions.
   `pkg/test/enums`.
 - Keep Bash scripts in `scripts/bash` and PowerShell scripts in
   `scripts/powershell`.
-- Version numbers remain allowed in release tags, module paths, version
-  metadata, and historical release content.
+- Version numbers remain allowed in release tags, module paths, the
+  `go.mod` contract-release declaration, and historical release content.
 
 ## Verification
 
@@ -122,8 +126,8 @@ Go command is `GOWORK=off go test ./...`.
 
 ## Change and Release Workflow
 
-Follow [GIT_WORKFLOW.md](GIT_WORKFLOW.md) for required branch, commit, push,
+Follow the [Git workflow](docs/git-workflow.md) for required branch, commit, push,
 pull request, merge, and release-tag rules.
 
-See [Contract Versioning](pkg/versioning/VERSIONING_RULE.md) for the complete
+See [Contract Versioning](docs/contract-versioning.md) for the complete
 version rules and release flow.

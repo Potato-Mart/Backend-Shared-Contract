@@ -6,6 +6,7 @@ import (
 	"go/token"
 	"io/fs"
 	"path/filepath"
+	"reflect"
 	"regexp"
 	"sort"
 	"strconv"
@@ -13,26 +14,73 @@ import (
 	"testing"
 )
 
-var modelBoundaryForbiddenTypeSuffixes = []string{
-	"Request", "Response", "Input", "Payload", "DTO", "Dto",
-	"Command", "Query", "Acknowledgement", "Acknowledgment",
-	"Pagination", "Page", "Result",
+// v31ModelBoundaryForbiddenTypeSuffixes identify endpoint and orchestration
+// shapes. Domain records may describe a request in their fields, but this
+// module must not publish transport DTOs or service workflows as types.
+var v31ModelBoundaryForbiddenTypeSuffixes = []string{
+	"Request", "Response", "Input", "Output", "Command", "Query",
+	"Acknowledgement", "Acknowledgment", "Pagination", "Page", "Result",
+	"Migration",
 }
 
-var modelBoundaryForbiddenPackagePrefixes = []string{
-	"enums", "logic", "serviceauth",
+// v31ModelBoundaryForbiddenTypeNames are deliberately narrow so domain value
+// records such as GeographicContext and PricingContext remain valid while the
+// known runtime/transport shapes cannot return in a different package.
+var v31ModelBoundaryForbiddenTypeNames = map[string]string{
+	"AccessTokenClaims":                  "token claims are owned by Identity runtime",
+	"CheckoutCompensationRequestedEvent": "checkout compensation is a backend workflow",
+	"CommandEnvelope":                    "command envelopes are service workflow transport",
+	"CommandReceipt":                     "command receipts are service workflow transport",
+	"InvoiceDeliveryRequestedEvent":      "invoice redelivery is a backend workflow",
+	"ProviderOperationContext":           "provider operation state is backend-local",
+	"ProviderPayloads":                   "raw provider payloads are backend-local",
+	"RequestContext":                     "request context is transport runtime state",
+	"ServiceOperation":                   "service operations are workflow transport",
+	"VoucherClaimIssuedEvent":            "voucher claim delivery is a backend workflow",
+	"WorkflowStatus":                     "workflow state is backend-local",
 }
 
-var modelBoundaryApprovedMethods = map[string]struct{}{
-	"String": {}, "IsValid": {},
+var v31ModelBoundaryForbiddenPackageSegments = map[string]struct{}{
+	"adapter": {}, "adapters": {}, "command": {}, "commands": {},
+	"controller": {}, "controllers": {}, "dto": {}, "handler": {},
+	"handlers": {}, "http": {}, "migration": {}, "migrations": {},
+	"persistence": {}, "query": {}, "queries": {}, "repository": {},
+	"repositories": {}, "storage": {}, "transport": {}, "workflow": {},
+}
+
+var v31ModelBoundaryForbiddenImportPrefixes = []string{
+	"database/sql",
+	"go.mongodb.org/",
+	"gorm.io/",
+	"github.com/jackc/pgx",
+	"github.com/jmoiron/sqlx",
+	"cloud.google.com/go/datastore",
+	"cloud.google.com/go/firestore",
+	"cloud.google.com/go/pubsub",
+	"google.golang.org/grpc",
+	"net/http",
+}
+
+const v31EventEnvelopeSource = "contracts/pubsub/envelop/envelope.go"
+
+var v31ProviderMetadataForbiddenSources = map[string]struct{}{
+	"contracts/payments/settlement/settlement.go":         {},
+	"contracts/payments/terminal/terminal.go":             {},
+	"contracts/payments/terminal/terminal_transaction.go": {},
 }
 
 var modelBoundaryJSONTag = regexp.MustCompile(`^json:"[^"]*"$`)
 
-func TestV30ContractIsJSONModelOnly(t *testing.T) {
-	var violations []string
+// TestV31ContractIsJSONModelOrEnumOnly keeps this repository limited to
+// serializable domain records, open value types, and closed enums. Services
+// own transport DTOs, command workflows, persistence records, provider
+// diagnostics, runtime helpers, and migration code.
+func TestV31ContractIsJSONModelOrEnumOnly(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
-	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
+	contractsRoot := filepath.Join(pkgRoot, "contracts")
+	var violations []string
+
+	err := filepath.WalkDir(contractsRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
 			return walkErr
 		}
@@ -40,97 +88,122 @@ func TestV30ContractIsJSONModelOnly(t *testing.T) {
 			return nil
 		}
 
-		normalized := relativePkgPath(t, pkgRoot, path)
-		for _, prefix := range modelBoundaryForbiddenPackagePrefixes {
-			if normalized == prefix || strings.HasPrefix(normalized, prefix+"/") {
-				violations = append(violations, normalized+": forbidden non-model package")
-			}
-		}
-
 		fset := token.NewFileSet()
-		file, parseErr := parser.ParseFile(fset, path, nil, parser.ImportsOnly)
+		file, parseErr := parser.ParseFile(fset, path, nil, parser.ParseComments)
 		if parseErr != nil {
 			return parseErr
 		}
-		for _, imported := range file.Imports {
-			importPath, unquoteErr := strconv.Unquote(imported.Path.Value)
-			if unquoteErr != nil {
-				return unquoteErr
-			}
-			for _, forbidden := range []string{"database/sql", "go.mongodb.org/", "gorm.io/", "github.com/jmoiron/sqlx", "github.com/jackc/pgx", "cloud.google.com/go/firestore", "cloud.google.com/go/datastore"} {
-				if importPath == forbidden || strings.HasPrefix(importPath, forbidden) {
-					violations = append(violations, modelBoundaryPosition(fset, imported.Pos())+": non-JSON dependency "+importPath)
-				}
-			}
-		}
-		file, parseErr = parser.ParseFile(fset, path, nil, parser.ParseComments)
-		if parseErr != nil {
-			return parseErr
-		}
-		stringEnumTypes := modelBoundaryStringEnumTypes(file)
-
-		for _, decl := range file.Decls {
-			switch typed := decl.(type) {
-			case *ast.FuncDecl:
-				if typed.Recv == nil {
-					violations = append(violations, modelBoundaryPosition(fset, typed.Pos())+": free function "+typed.Name.Name)
-					continue
-				}
-				if _, approved := modelBoundaryApprovedMethods[typed.Name.Name]; !approved {
-					violations = append(violations, modelBoundaryPosition(fset, typed.Pos())+": non-intrinsic method "+typed.Name.Name)
-					continue
-				}
-				modelBoundaryValidateIntrinsicMethod(fset, typed, stringEnumTypes, &violations)
-			case *ast.GenDecl:
-				modelBoundaryInspectDeclaration(fset, typed, stringEnumTypes, &violations)
-			}
-		}
-
-		for _, group := range file.Comments {
-			if strings.Contains(group.Text(), "Deprecated:") || strings.Contains(group.Text(), "@deprecated") {
-				violations = append(violations, normalized+": deprecated production declaration")
-			}
-		}
-
-		ast.Inspect(file, func(node ast.Node) bool {
-			field, ok := node.(*ast.Field)
-			if !ok {
-				return true
-			}
-			if field.Tag == nil {
-				for _, name := range field.Names {
-					if name.IsExported() {
-						violations = append(violations, modelBoundaryPosition(fset, name.Pos())+": exported JSON field without json tag "+name.Name)
-					}
-				}
-				return true
-			}
-			tag, unquoteErr := strconv.Unquote(field.Tag.Value)
-			if unquoteErr != nil || !modelBoundaryJSONTag.MatchString(tag) {
-				violations = append(violations, modelBoundaryPosition(fset, field.Tag.Pos())+": struct tags must contain exactly one json tag")
-			}
-			return true
-		})
+		normalized := relativePkgPath(t, pkgRoot, path)
+		modelBoundaryInspectPackagePath(normalized, &violations)
+		modelBoundaryInspectProductionFile(fset, file, normalized, &violations)
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v30 contract: %v", err)
+		t.Fatalf("scan v31 contract boundary: %v", err)
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)
-		t.Fatalf("model-only contract boundary violations:\n%s", strings.Join(violations, "\n"))
+		t.Fatalf("v31 model-or-enum contract boundary violations:\n%s", strings.Join(violations, "\n"))
 	}
 }
 
-func modelBoundaryStringEnumTypes(file *ast.File) map[string]struct{} {
+func modelBoundaryInspectPackagePath(normalized string, violations *[]string) {
+	for _, segment := range strings.Split(filepath.ToSlash(filepath.Dir(normalized)), "/") {
+		if _, forbidden := v31ModelBoundaryForbiddenPackageSegments[segment]; forbidden {
+			*violations = append(*violations, normalized+": forbidden non-model package segment "+segment)
+		}
+	}
+}
+
+func modelBoundaryInspectProductionFile(fset *token.FileSet, file *ast.File, normalized string, violations *[]string) {
+	if filepath.Base(normalized) == "doc.go" {
+		if len(file.Imports) != 0 || len(file.Decls) != 0 {
+			*violations = append(*violations, normalized+": package documentation files may not contain imports or declarations")
+		}
+		return
+	}
+
+	isEnumFile := modelBoundaryIsLeafEnumFile(normalized)
+	jsonAliases := modelBoundaryJSONImportAliases(fset, file, normalized, violations)
+	stringTypes := modelBoundaryStringTypes(file)
+	enumTypes := modelBoundaryClosedStringEnumTypes(file, stringTypes)
+	allowedRawMessages := make(map[token.Pos]struct{})
+
+	for _, declaration := range file.Decls {
+		switch typed := declaration.(type) {
+		case *ast.FuncDecl:
+			if typed.Recv == nil {
+				*violations = append(*violations, modelBoundaryPosition(fset, typed.Pos())+": free function "+typed.Name.Name)
+				continue
+			}
+			modelBoundaryValidateIntrinsicMethod(fset, typed, enumTypes, violations)
+		case *ast.GenDecl:
+			switch typed.Tok {
+			case token.TYPE:
+				modelBoundaryInspectTypes(fset, typed, isEnumFile, enumTypes, violations)
+				modelBoundaryInspectStructFields(fset, typed, normalized, jsonAliases, allowedRawMessages, violations)
+			case token.CONST:
+				modelBoundaryInspectConstants(fset, typed, isEnumFile, enumTypes, violations)
+			case token.VAR:
+				*violations = append(*violations, modelBoundaryPosition(fset, typed.Pos())+": variables are runtime state, not shared contracts")
+			}
+		}
+	}
+
+	modelBoundaryInspectRawMessages(fset, file, jsonAliases, allowedRawMessages, violations)
+	for _, group := range file.Comments {
+		if strings.Contains(group.Text(), "Deprecated:") || strings.Contains(group.Text(), "@deprecated") {
+			*violations = append(*violations, normalized+": deprecated production declaration")
+		}
+	}
+}
+
+func modelBoundaryIsLeafEnumFile(normalized string) bool {
+	return strings.HasSuffix(filepath.Base(filepath.Dir(normalized)), "_enums")
+}
+
+func modelBoundaryJSONImportAliases(fset *token.FileSet, file *ast.File, normalized string, violations *[]string) map[string]struct{} {
+	aliases := make(map[string]struct{})
+	for _, imported := range file.Imports {
+		importPath, err := strconv.Unquote(imported.Path.Value)
+		if err != nil {
+			*violations = append(*violations, modelBoundaryPosition(fset, imported.Pos())+": invalid import path")
+			continue
+		}
+		for _, forbidden := range v31ModelBoundaryForbiddenImportPrefixes {
+			if importPath == forbidden || strings.HasPrefix(importPath, forbidden+"/") {
+				*violations = append(*violations, modelBoundaryPosition(fset, imported.Pos())+": non-model dependency "+importPath)
+			}
+		}
+		if importPath != "encoding/json" {
+			continue
+		}
+		if normalized != v31EventEnvelopeSource {
+			*violations = append(*violations, modelBoundaryPosition(fset, imported.Pos())+": encoding/json is reserved for the Pub/Sub event envelope")
+			continue
+		}
+		if imported.Name == nil {
+			aliases["json"] = struct{}{}
+			continue
+		}
+		if imported.Name.Name == "_" || imported.Name.Name == "." {
+			*violations = append(*violations, modelBoundaryPosition(fset, imported.Name.Pos())+": event envelope must import encoding/json with a named package alias")
+			continue
+		}
+		aliases[imported.Name.Name] = struct{}{}
+	}
+	return aliases
+}
+
+func modelBoundaryStringTypes(file *ast.File) map[string]struct{} {
 	stringTypes := make(map[string]struct{})
-	for _, decl := range file.Decls {
-		general, ok := decl.(*ast.GenDecl)
+	for _, declaration := range file.Decls {
+		general, ok := declaration.(*ast.GenDecl)
 		if !ok || general.Tok != token.TYPE {
 			continue
 		}
-		for _, spec := range general.Specs {
-			typeSpec, ok := spec.(*ast.TypeSpec)
+		for _, specification := range general.Specs {
+			typeSpec, ok := specification.(*ast.TypeSpec)
 			if !ok || typeSpec.Assign.IsValid() {
 				continue
 			}
@@ -140,15 +213,22 @@ func modelBoundaryStringEnumTypes(file *ast.File) map[string]struct{} {
 			}
 		}
 	}
+	return stringTypes
+}
+
+// modelBoundaryClosedStringEnumTypes reports string types with typed constant
+// members in the same file. Open code types (for example CountryCode) remain
+// values, not enums, and are permitted outside an _enums leaf package.
+func modelBoundaryClosedStringEnumTypes(file *ast.File, stringTypes map[string]struct{}) map[string]struct{} {
 	enumTypes := make(map[string]struct{})
-	for _, decl := range file.Decls {
-		general, ok := decl.(*ast.GenDecl)
+	for _, declaration := range file.Decls {
+		general, ok := declaration.(*ast.GenDecl)
 		if !ok || general.Tok != token.CONST {
 			continue
 		}
-		for _, spec := range general.Specs {
-			valueSpec, ok := spec.(*ast.ValueSpec)
-			if !ok || valueSpec.Type == nil {
+		for _, specification := range general.Specs {
+			valueSpec, ok := specification.(*ast.ValueSpec)
+			if !ok {
 				continue
 			}
 			constantType, ok := valueSpec.Type.(*ast.Ident)
@@ -163,84 +243,166 @@ func modelBoundaryStringEnumTypes(file *ast.File) map[string]struct{} {
 	return enumTypes
 }
 
-func modelBoundaryInspectDeclaration(fset *token.FileSet, decl *ast.GenDecl, stringEnumTypes map[string]struct{}, violations *[]string) {
-	for _, spec := range decl.Specs {
-		switch typed := spec.(type) {
-		case *ast.TypeSpec:
-			if typed.Assign.IsValid() {
-				*violations = append(*violations, modelBoundaryPosition(fset, typed.Pos())+": compatibility/type alias "+typed.Name.Name)
-			}
-			if !typed.Name.IsExported() {
-				continue
-			}
-			for _, suffix := range modelBoundaryForbiddenTypeSuffixes {
-				if strings.HasSuffix(typed.Name.Name, suffix) {
-					*violations = append(*violations, modelBoundaryPosition(fset, typed.Pos())+": endpoint DTO type "+typed.Name.Name)
-				}
-			}
-			if typed.Name.Name == "Scope" || strings.HasSuffix(typed.Name.Name, "Scopes") || strings.Contains(typed.Name.Name, "ServiceToken") {
-				*violations = append(*violations, modelBoundaryPosition(fset, typed.Pos())+": service-auth catalogue type "+typed.Name.Name)
-			}
-		case *ast.ValueSpec:
-			for index, name := range typed.Names {
-				if !name.IsExported() {
-					continue
-				}
-				if decl.Tok == token.VAR {
-					*violations = append(*violations, modelBoundaryPosition(fset, name.Pos())+": exported mutable variable "+name.Name)
-				}
-				if strings.HasPrefix(name.Name, "Path") || strings.HasPrefix(name.Name, "Route") || strings.Contains(name.Name, "Endpoint") {
-					*violations = append(*violations, modelBoundaryPosition(fset, name.Pos())+": exported path/route constant "+name.Name)
-				}
-				// A service-auth scope catalogue is forbidden. A member of a
-				// string-backed enum declared in this file is a model value,
-				// not a catalogue entry, so a name such as ScopeLevelDepot is
-				// allowed — unless it carries the "domain:action" shape a
-				// service scope uses, which is forbidden however it is typed.
-				scopeNamed := strings.HasPrefix(name.Name, "Scope") || strings.Contains(name.Name, "ServiceScope")
-				enumMember := modelBoundaryTypedEnumMember(typed, stringEnumTypes)
-				value, isStringLiteral := modelBoundaryStringConstantValue(typed, index)
-				if scopeNamed && (!enumMember || strings.Contains(value, ":")) {
-					*violations = append(*violations, modelBoundaryPosition(fset, name.Pos())+": exported service-scope constant "+name.Name)
-				}
-				if isStringLiteral && strings.HasPrefix(value, "/") {
-					*violations = append(*violations, modelBoundaryPosition(fset, name.Pos())+": exported route string "+name.Name)
-				}
+func modelBoundaryInspectTypes(fset *token.FileSet, declaration *ast.GenDecl, isEnumFile bool, enumTypes map[string]struct{}, violations *[]string) {
+	for _, specification := range declaration.Specs {
+		typeSpec, ok := specification.(*ast.TypeSpec)
+		if !ok {
+			continue
+		}
+		if typeSpec.Assign.IsValid() {
+			*violations = append(*violations, modelBoundaryPosition(fset, typeSpec.Pos())+": compatibility/type alias "+typeSpec.Name.Name)
+			continue
+		}
+		if !typeSpec.Name.IsExported() {
+			*violations = append(*violations, modelBoundaryPosition(fset, typeSpec.Pos())+": private production type "+typeSpec.Name.Name)
+			continue
+		}
+
+		_, isEnum := enumTypes[typeSpec.Name.Name]
+		if isEnumFile && !isEnum {
+			*violations = append(*violations, modelBoundaryPosition(fset, typeSpec.Pos())+": enum package may only define one closed string enum")
+		}
+		if !isEnumFile && isEnum {
+			*violations = append(*violations, modelBoundaryPosition(fset, typeSpec.Pos())+": closed enum "+typeSpec.Name.Name+" must live in a leaf _enums package")
+		}
+		if reason := modelBoundaryForbiddenTypeReason(typeSpec); reason != "" {
+			*violations = append(*violations, modelBoundaryPosition(fset, typeSpec.Pos())+": "+reason+" "+typeSpec.Name.Name)
+		}
+	}
+}
+
+func modelBoundaryForbiddenTypeReason(typeSpec *ast.TypeSpec) string {
+	name := typeSpec.Name.Name
+	if reason, forbidden := v31ModelBoundaryForbiddenTypeNames[name]; forbidden {
+		return reason
+	}
+	if strings.Contains(name, "DTO") || strings.Contains(name, "Dto") {
+		return "endpoint DTO type"
+	}
+	for _, suffix := range v31ModelBoundaryForbiddenTypeSuffixes {
+		if strings.HasSuffix(name, suffix) {
+			return "endpoint DTO/workflow type"
+		}
+	}
+	if _, isStruct := typeSpec.Type.(*ast.StructType); isStruct {
+		if strings.Contains(name, "Command") || strings.Contains(name, "Workflow") {
+			return "service workflow type"
+		}
+	}
+	return ""
+}
+
+func modelBoundaryInspectConstants(fset *token.FileSet, declaration *ast.GenDecl, isEnumFile bool, enumTypes map[string]struct{}, violations *[]string) {
+	for _, specification := range declaration.Specs {
+		valueSpec, ok := specification.(*ast.ValueSpec)
+		if !ok {
+			*violations = append(*violations, modelBoundaryPosition(fset, specification.Pos())+": unsupported constant declaration")
+			continue
+		}
+		enumType, typedEnum := valueSpec.Type.(*ast.Ident)
+		if !isEnumFile || !typedEnum {
+			*violations = append(*violations, modelBoundaryPosition(fset, valueSpec.Pos())+": non-enum constants are not shared contracts")
+			continue
+		}
+		if _, known := enumTypes[enumType.Name]; !known {
+			*violations = append(*violations, modelBoundaryPosition(fset, valueSpec.Pos())+": constants must be typed members of a closed string enum")
+		}
+	}
+}
+
+func modelBoundaryInspectStructFields(fset *token.FileSet, declaration *ast.GenDecl, normalized string, jsonAliases map[string]struct{}, allowedRawMessages map[token.Pos]struct{}, violations *[]string) {
+	for _, specification := range declaration.Specs {
+		typeSpec, ok := specification.(*ast.TypeSpec)
+		if !ok {
+			continue
+		}
+		structure, ok := typeSpec.Type.(*ast.StructType)
+		if !ok {
+			continue
+		}
+		for _, field := range structure.Fields.List {
+			modelBoundaryInspectStructFieldTag(fset, field, violations)
+			modelBoundaryInspectProviderMetadataField(fset, field, normalized, violations)
+			if selector, rawMessage := modelBoundaryDirectRawMessageSelector(field.Type, jsonAliases); rawMessage && normalized == v31EventEnvelopeSource && typeSpec.Name.Name == "EventEnvelope" && len(field.Names) == 1 && field.Names[0].Name == "Payload" {
+				allowedRawMessages[selector.Pos()] = struct{}{}
 			}
 		}
 	}
 }
 
-// modelBoundaryTypedEnumMember reports whether spec declares constants of a
-// string-backed enum type declared in the same file.
-func modelBoundaryTypedEnumMember(spec *ast.ValueSpec, stringEnumTypes map[string]struct{}) bool {
-	declaredType, ok := spec.Type.(*ast.Ident)
+func modelBoundaryInspectProviderMetadataField(fset *token.FileSet, field *ast.Field, normalized string, violations *[]string) {
+	if _, forbiddenSource := v31ProviderMetadataForbiddenSources[normalized]; !forbiddenSource {
+		return
+	}
+	for _, name := range field.Names {
+		if name.Name == "Metadata" {
+			*violations = append(*violations, modelBoundaryPosition(fset, name.Pos())+": provider-facing contracts may not expose untyped metadata")
+		}
+	}
+}
+
+func modelBoundaryInspectStructFieldTag(fset *token.FileSet, field *ast.Field, violations *[]string) {
+	if len(field.Names) == 0 {
+		return // embedded shared value records retain their own JSON fields.
+	}
+	for _, name := range field.Names {
+		if !name.IsExported() {
+			*violations = append(*violations, modelBoundaryPosition(fset, name.Pos())+": private struct field "+name.Name)
+			continue
+		}
+		if field.Tag == nil {
+			*violations = append(*violations, modelBoundaryPosition(fset, name.Pos())+": exported JSON field without json tag "+name.Name)
+		}
+	}
+	if field.Tag == nil {
+		return
+	}
+	rawTag, err := strconv.Unquote(field.Tag.Value)
+	if err != nil || !modelBoundaryJSONTag.MatchString(rawTag) {
+		*violations = append(*violations, modelBoundaryPosition(fset, field.Tag.Pos())+": struct tags must contain exactly one json tag")
+		return
+	}
+	if reflect.StructTag(rawTag).Get("json") == "-" {
+		*violations = append(*violations, modelBoundaryPosition(fset, field.Tag.Pos())+": exported fields may not use json:\"-\"")
+	}
+}
+
+func modelBoundaryDirectRawMessageSelector(expression ast.Expr, jsonAliases map[string]struct{}) (*ast.SelectorExpr, bool) {
+	selector, ok := expression.(*ast.SelectorExpr)
+	if !ok || selector.Sel.Name != "RawMessage" {
+		return nil, false
+	}
+	identifier, ok := selector.X.(*ast.Ident)
 	if !ok {
-		return false
+		return nil, false
 	}
-	_, enum := stringEnumTypes[declaredType.Name]
-	return enum
+	_, imported := jsonAliases[identifier.Name]
+	return selector, imported
 }
 
-// modelBoundaryStringConstantValue returns the unquoted string value assigned
-// at index, and whether that value is a plain string literal.
-func modelBoundaryStringConstantValue(spec *ast.ValueSpec, index int) (string, bool) {
-	if index >= len(spec.Values) {
-		return "", false
-	}
-	literal, ok := spec.Values[index].(*ast.BasicLit)
-	if !ok || literal.Kind != token.STRING {
-		return "", false
-	}
-	value, err := strconv.Unquote(literal.Value)
-	if err != nil {
-		return "", false
-	}
-	return value, true
+func modelBoundaryInspectRawMessages(fset *token.FileSet, file *ast.File, jsonAliases map[string]struct{}, allowedRawMessages map[token.Pos]struct{}, violations *[]string) {
+	ast.Inspect(file, func(node ast.Node) bool {
+		selector, ok := node.(*ast.SelectorExpr)
+		if !ok || selector.Sel.Name != "RawMessage" {
+			return true
+		}
+		identifier, ok := selector.X.(*ast.Ident)
+		if !ok {
+			return true
+		}
+		if _, imported := jsonAliases[identifier.Name]; !imported {
+			return true
+		}
+		if _, allowed := allowedRawMessages[selector.Pos()]; !allowed {
+			*violations = append(*violations, modelBoundaryPosition(fset, selector.Pos())+": json.RawMessage is allowed only for EventEnvelope.Payload in "+v31EventEnvelopeSource)
+		}
+		return true
+	})
 }
 
-func modelBoundaryValidateIntrinsicMethod(fset *token.FileSet, method *ast.FuncDecl, stringEnumTypes map[string]struct{}, violations *[]string) {
+func modelBoundaryValidateIntrinsicMethod(fset *token.FileSet, method *ast.FuncDecl, enumTypes map[string]struct{}, violations *[]string) {
 	if method.Name.Name != "String" && method.Name.Name != "IsValid" {
+		*violations = append(*violations, modelBoundaryPosition(fset, method.Pos())+": non-intrinsic method "+method.Name.Name)
 		return
 	}
 	if method.Recv == nil || len(method.Recv.List) != 1 {
@@ -252,8 +414,8 @@ func modelBoundaryValidateIntrinsicMethod(fset *token.FileSet, method *ast.FuncD
 		*violations = append(*violations, modelBoundaryPosition(fset, method.Pos())+": "+method.Name.Name+" requires a value receiver on a string-backed enum")
 		return
 	}
-	if _, approved := stringEnumTypes[receiver.Name]; !approved {
-		*violations = append(*violations, modelBoundaryPosition(fset, method.Pos())+": "+method.Name.Name+" receiver "+receiver.Name+" is not a string-backed enum")
+	if _, approved := enumTypes[receiver.Name]; !approved {
+		*violations = append(*violations, modelBoundaryPosition(fset, method.Pos())+": "+method.Name.Name+" receiver "+receiver.Name+" is not a closed string enum")
 		return
 	}
 	if method.Type.Params != nil && len(method.Type.Params.List) != 0 {

@@ -13,11 +13,10 @@ import (
 	"testing"
 )
 
-// v30ModelPackageManifest classifies every production package. Adding an
+// v31ModelPackageManifest classifies every production package. Adding an
 // exported type changes the digest below and requires an explicit manifest
 // review instead of silently expanding the contract surface.
-var v30ModelPackageManifest = map[string]string{
-	"contracts/common/apiresponse/apiresponse_enums":             "enum",
+var v31ModelPackageManifest = map[string]string{
 	"contracts/common/audit":                                     "record,value",
 	"contracts/common/commerce/commerce_enums":                   "enum",
 	"contracts/common/device":                                    "record",
@@ -40,12 +39,10 @@ var v30ModelPackageManifest = map[string]string{
 	"contracts/customers/retail/retail_enums":                    "enum",
 	"contracts/customers/wholesale":                              "entity,record,snapshot",
 	"contracts/customers/wholesale/wholesale_enums":              "enum",
-	"contracts/identity/access":                                  "claims,event,record,session",
+	"contracts/identity/access":                                  "event,record,session",
 	"contracts/identity/access/access_enums":                     "enum",
 	"contracts/identity/account":                                 "entity,event,record",
 	"contracts/identity/account/account_enums":                   "enum",
-	"contracts/identity/deletion":                                "record,snapshot",
-	"contracts/identity/deletion/deletion_enums":                 "enum",
 	"contracts/identity/role":                                    "entity,event,record",
 	"contracts/identity/role/role_enums":                         "enum",
 	"contracts/insights/analytics":                               "record",
@@ -87,8 +84,8 @@ var v30ModelPackageManifest = map[string]string{
 	"contracts/pubsub/envelop":                                   "record",
 	"contracts/pubsub/event":                                     "event,record",
 	"contracts/pubsub/event/event_enums":                         "enum",
-	"contracts/review":                                           "entity,record,value",
-	"contracts/review/review_enums":                              "enum",
+	"contracts/customers/review":                                 "entity,record,value",
+	"contracts/customers/review/review_enums":                    "enum",
 	"contracts/supply/classification":                            "entity,record,value",
 	"contracts/supply/cost":                                      "entity,record",
 	"contracts/supply/classification/classification_enums":       "enum",
@@ -105,21 +102,20 @@ var v30ModelPackageManifest = map[string]string{
 	"contracts/supply/warehouse/warehouse_enums":                 "enum",
 	"contracts/supply/wish":                                      "entity,record,value",
 	"contracts/supply/wish/wish_enums":                           "enum",
-	"versioning":                                                 "module-metadata",
 }
 
-// Reviewed for the v30.0.0 domain redesign. The digest captures
-// package|class|TypeName triples, including the newly classified canonical
-// Marketing campaign/message packages, centralized Notifications, neutral
-// Review, SellingProduct/SellingPrice, and split Pricing ownership. Field-only
-// changes are locked by the JSON and hard-cutover tests instead.
-const v30ExportedTypeManifestDigest = "52dd9babdea83eed53066fbcdc70e1d95c12a2a401693a3136496445f9576b93"
+// Reviewed for the v31.0.0 boundary cleanup. The digest captures
+// package|class|TypeName triples after removing service-local DTO, workflow,
+// persistence, provider-diagnostic, migration, and release-version surfaces.
+// Field-only changes are locked by the JSON and hard-cutover tests instead.
+const v31ExportedTypeManifestDigest = "e6156312693c3ba46bd077c55fbabc5c2479469c2a2baf077388420bf60d0624"
 
-func TestV30ExportedTypesMatchModelManifest(t *testing.T) {
+func TestV31ExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)
 	var entries []string
 	pkgRoot := sharedContractPkgRoot(t)
-	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
+	contractsRoot := filepath.Join(pkgRoot, "contracts")
+	err := filepath.WalkDir(contractsRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
 			return walkErr
 		}
@@ -130,9 +126,9 @@ func TestV30ExportedTypesMatchModelManifest(t *testing.T) {
 		if packagePath == "." {
 			return nil
 		}
-		class, classified := v30ModelPackageManifest[packagePath]
+		class, classified := v31ModelPackageManifest[packagePath]
 		if !classified {
-			t.Errorf("%s is not classified in the v30 model manifest", packagePath)
+			t.Errorf("%s is not classified in the v31 model manifest", packagePath)
 			return nil
 		}
 		seenPackages[packagePath] = true
@@ -157,9 +153,9 @@ func TestV30ExportedTypesMatchModelManifest(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("read v30 model manifest: %v", err)
+		t.Fatalf("read v31 model manifest: %v", err)
 	}
-	for packagePath := range v30ModelPackageManifest {
+	for packagePath := range v31ModelPackageManifest {
 		if !seenPackages[packagePath] {
 			t.Errorf("manifest package %s has no production source", packagePath)
 		}
@@ -167,7 +163,7 @@ func TestV30ExportedTypesMatchModelManifest(t *testing.T) {
 	sort.Strings(entries)
 	sum := sha256.Sum256([]byte(strings.Join(entries, "\n")))
 	got := hex.EncodeToString(sum[:])
-	if got != v30ExportedTypeManifestDigest {
+	if got != v31ExportedTypeManifestDigest {
 		t.Fatalf("exported model manifest changed: got %s; classify the change and update the reviewed digest", got)
 	}
 }

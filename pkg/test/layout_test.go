@@ -12,10 +12,9 @@ import (
 	"testing"
 )
 
-const v30ContractImportPrefix = "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/"
+const v31ContractImportPrefix = "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/"
 
-var v30ExpectedEnumPackages = []string{
-	"contracts/common/apiresponse/apiresponse_enums",
+var v31ExpectedEnumPackages = []string{
 	"contracts/common/commerce/commerce_enums",
 	"contracts/common/geography/geography_enums",
 	"contracts/common/identity/identity_enums",
@@ -25,7 +24,6 @@ var v30ExpectedEnumPackages = []string{
 	"contracts/customers/wholesale/wholesale_enums",
 	"contracts/identity/access/access_enums",
 	"contracts/identity/account/account_enums",
-	"contracts/identity/deletion/deletion_enums",
 	"contracts/identity/role/role_enums",
 	"contracts/insights/analytics/analytics_enums",
 	"contracts/insights/marketing/marketing_enums",
@@ -51,12 +49,91 @@ var v30ExpectedEnumPackages = []string{
 	"contracts/supply/listing/listing_enums",
 	"contracts/supply/product/product_enums",
 	"contracts/supply/purchase/purchase_enums",
-	"contracts/review/review_enums",
+	"contracts/customers/review/review_enums",
 	"contracts/supply/warehouse/warehouse_enums",
 	"contracts/supply/wish/wish_enums",
 }
 
-func TestV30CommonAndEnumPackageLayout(t *testing.T) {
+// TestV31PkgTreeContainsOnlyContractsAndRepositoryGates keeps release
+// metadata, workflows, and runtime helpers out of pkg. Production contract
+// source belongs under contracts; repository-wide test gates belong under
+// test. Everything else is backend-local or repository documentation.
+func TestV31PkgTreeContainsOnlyContractsAndRepositoryGates(t *testing.T) {
+	pkgRoot := sharedContractPkgRoot(t)
+	var violations []string
+
+	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if entry.IsDir() || !strings.HasSuffix(path, ".go") {
+			return nil
+		}
+		relative := relativePkgPath(t, pkgRoot, path)
+		if strings.HasPrefix(relative, "contracts/") || strings.HasPrefix(relative, "test/") {
+			return nil
+		}
+		violations = append(violations, relative+": Go source must live under contracts or test")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("scan pkg tree: %v", err)
+	}
+	if len(violations) > 0 {
+		sort.Strings(violations)
+		t.Fatalf("v31 pkg-tree boundary violations:\n%s", strings.Join(violations, "\n"))
+	}
+}
+
+func TestV31ReviewPackageHardCutover(t *testing.T) {
+	pkgRoot := sharedContractPkgRoot(t)
+	legacyReviewRoot := filepath.Join(pkgRoot, "contracts", "review")
+	if _, err := os.Stat(legacyReviewRoot); err == nil {
+		t.Errorf("retired Review package directory must not exist: %s", legacyReviewRoot)
+	} else if !os.IsNotExist(err) {
+		t.Fatalf("inspect retired Review package directory: %v", err)
+	}
+
+	canonicalReviewRoot := filepath.Join(pkgRoot, "contracts", "customers", "review")
+	if info, err := os.Stat(canonicalReviewRoot); err != nil {
+		t.Fatalf("canonical Review package directory is missing: %v", err)
+	} else if !info.IsDir() {
+		t.Fatalf("canonical Review package path is not a directory: %s", canonicalReviewRoot)
+	}
+
+	legacyImportPrefix := v31ContractImportPrefix + "contracts/review"
+	var violations []string
+	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
+		}
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".go") {
+			return nil
+		}
+
+		fset := token.NewFileSet()
+		file, parseErr := parser.ParseFile(fset, path, nil, parser.ImportsOnly)
+		if parseErr != nil {
+			return parseErr
+		}
+		for _, imported := range file.Imports {
+			importPath := strings.Trim(imported.Path.Value, `"`)
+			if importPath == legacyImportPrefix || strings.HasPrefix(importPath, legacyImportPrefix+"/") {
+				violations = append(violations, relativePkgPath(t, pkgRoot, path)+": imports retired Review package "+importPath)
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("scan Review package imports: %v", err)
+	}
+	if len(violations) > 0 {
+		sort.Strings(violations)
+		t.Fatalf("v31 Review package hard-cutover violations:\n%s", strings.Join(violations, "\n"))
+	}
+}
+
+func TestV31CommonAndEnumPackageLayout(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	contractsRoot := filepath.Join(pkgRoot, "contracts")
 	legacyShared := filepath.Join(contractsRoot, "common", "shared")
@@ -64,8 +141,8 @@ func TestV30CommonAndEnumPackageLayout(t *testing.T) {
 		t.Fatalf("legacy common/shared directory must not exist: %v", err)
 	}
 
-	expected := make(map[string]struct{}, len(v30ExpectedEnumPackages))
-	for _, packagePath := range v30ExpectedEnumPackages {
+	expected := make(map[string]struct{}, len(v31ExpectedEnumPackages))
+	for _, packagePath := range v31ExpectedEnumPackages {
 		expected[packagePath] = struct{}{}
 	}
 	found := make(map[string]struct{}, len(expected))
@@ -120,7 +197,7 @@ func TestV30CommonAndEnumPackageLayout(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v30 package layout: %v", err)
+		t.Fatalf("scan v31 package layout: %v", err)
 	}
 	for packagePath := range expected {
 		if _, ok := found[packagePath]; !ok {
@@ -129,11 +206,11 @@ func TestV30CommonAndEnumPackageLayout(t *testing.T) {
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)
-		t.Fatalf("v30 package layout violations:\n%s", strings.Join(violations, "\n"))
+		t.Fatalf("v31 package layout violations:\n%s", strings.Join(violations, "\n"))
 	}
 }
 
-func TestV30EnumTypesExposeIntrinsicValidation(t *testing.T) {
+func TestV31EnumTypesExposeIntrinsicValidation(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	contractsRoot := filepath.Join(pkgRoot, "contracts")
 	type methods map[string]map[string]struct{}
@@ -213,35 +290,34 @@ func TestV30EnumTypesExposeIntrinsicValidation(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v30 enum methods: %v", err)
+		t.Fatalf("scan v31 enum methods: %v", err)
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)
-		t.Fatalf("v30 enum validation violations:\n%s", strings.Join(violations, "\n"))
+		t.Fatalf("v31 enum validation violations:\n%s", strings.Join(violations, "\n"))
 	}
 }
 
-func TestV30CommonPackageDependencyGraph(t *testing.T) {
+func TestV31CommonPackageDependencyGraph(t *testing.T) {
 	expected := map[string][]string{
-		"contracts/common/apiresponse/apiresponse_enums": {},
-		"contracts/common/audit":                         {},
-		"contracts/common/commerce/commerce_enums":       {},
-		"contracts/common/device":                        {},
-		"contracts/common/geography":                     {"contracts/common/geography/geography_enums"},
-		"contracts/common/geography/geography_enums":     {},
-		"contracts/common/geometry":                      {},
-		"contracts/common/identity":                      {},
-		"contracts/common/identity/identity_enums":       {},
-		"contracts/common/localization":                  {},
-		"contracts/common/measurement":                   {},
-		"contracts/common/metadata":                      {},
-		"contracts/common/money":                         {},
-		"contracts/common/packaging":                     {"contracts/common/measurement", "contracts/common/packaging/packaging_enums"},
-		"contracts/common/packaging/packaging_enums":     {},
-		"contracts/common/party":                         {"contracts/common/geography", "contracts/common/metadata", "contracts/common/money", "contracts/common/security"},
-		"contracts/common/security":                      {"contracts/common/audit", "contracts/common/metadata", "contracts/common/security/security_enums", "contracts/identity/role/role_enums"},
-		"contracts/common/security/security_enums":       {},
-		"contracts/common/temporal":                      {},
+		"contracts/common/audit":                     {},
+		"contracts/common/commerce/commerce_enums":   {},
+		"contracts/common/device":                    {},
+		"contracts/common/geography":                 {"contracts/common/geography/geography_enums"},
+		"contracts/common/geography/geography_enums": {},
+		"contracts/common/geometry":                  {},
+		"contracts/common/identity":                  {},
+		"contracts/common/identity/identity_enums":   {},
+		"contracts/common/localization":              {},
+		"contracts/common/measurement":               {},
+		"contracts/common/metadata":                  {},
+		"contracts/common/money":                     {},
+		"contracts/common/packaging":                 {"contracts/common/measurement", "contracts/common/packaging/packaging_enums"},
+		"contracts/common/packaging/packaging_enums": {},
+		"contracts/common/party":                     {"contracts/common/geography", "contracts/common/metadata", "contracts/common/money", "contracts/common/security"},
+		"contracts/common/security":                  {"contracts/common/audit", "contracts/common/metadata", "contracts/common/security/security_enums", "contracts/identity/role/role_enums"},
+		"contracts/common/security/security_enums":   {},
+		"contracts/common/temporal":                  {},
 	}
 
 	pkgRoot := sharedContractPkgRoot(t)
@@ -265,14 +341,14 @@ func TestV30CommonPackageDependencyGraph(t *testing.T) {
 		}
 		for _, imported := range file.Imports {
 			importPath := strings.Trim(imported.Path.Value, `"`)
-			if strings.HasPrefix(importPath, v30ContractImportPrefix) {
-				actual[packagePath][strings.TrimPrefix(importPath, v30ContractImportPrefix)] = struct{}{}
+			if strings.HasPrefix(importPath, v31ContractImportPrefix) {
+				actual[packagePath][strings.TrimPrefix(importPath, v31ContractImportPrefix)] = struct{}{}
 			}
 		}
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("read v30 common dependency graph: %v", err)
+		t.Fatalf("read v31 common dependency graph: %v", err)
 	}
 
 	var violations []string
@@ -289,12 +365,12 @@ func TestV30CommonPackageDependencyGraph(t *testing.T) {
 			violations = append(violations, "unclassified common package "+packagePath)
 		}
 	}
-	if cycle := v30DependencyCycle(actual); len(cycle) > 0 {
+	if cycle := v31DependencyCycle(actual); len(cycle) > 0 {
 		violations = append(violations, "common package dependency cycle: "+strings.Join(cycle, " -> "))
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)
-		t.Fatalf("v30 common dependency graph violations:\n%s", strings.Join(violations, "\n"))
+		t.Fatalf("v31 common dependency graph violations:\n%s", strings.Join(violations, "\n"))
 	}
 }
 
@@ -307,7 +383,7 @@ func stringSetKeys(values map[string]struct{}) []string {
 	return keys
 }
 
-func v30DependencyCycle(graph map[string]map[string]struct{}) []string {
+func v31DependencyCycle(graph map[string]map[string]struct{}) []string {
 	const (
 		unvisited = iota
 		visiting
@@ -340,7 +416,7 @@ func v30DependencyCycle(graph map[string]map[string]struct{}) []string {
 		states[node] = visited
 		return nil
 	}
-	for _, node := range v30GraphNodes(graph) {
+	for _, node := range v31GraphNodes(graph) {
 		if states[node] == unvisited {
 			if cycle := visit(node); len(cycle) > 0 {
 				return cycle
@@ -350,7 +426,7 @@ func v30DependencyCycle(graph map[string]map[string]struct{}) []string {
 	return nil
 }
 
-func v30GraphNodes(graph map[string]map[string]struct{}) []string {
+func v31GraphNodes(graph map[string]map[string]struct{}) []string {
 	nodes := make([]string, 0, len(graph))
 	for node := range graph {
 		nodes = append(nodes, node)

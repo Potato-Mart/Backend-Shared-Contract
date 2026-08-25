@@ -1,6 +1,6 @@
 package promotion
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/promotion/promotion_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pricing/promotion/promotion_enums"
 
 // PromotionScopeGroup is one reusable product selector and quantity range.
 type PromotionScopeGroup struct {

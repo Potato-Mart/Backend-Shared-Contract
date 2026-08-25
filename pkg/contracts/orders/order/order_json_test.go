@@ -6,23 +6,23 @@ import (
 	"testing"
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/security"
 
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/order"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/orders/order"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/shipping"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/wallet/wallet_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestOrderJSONRoundTripWithHistory(t *testing.T) {

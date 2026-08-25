@@ -3,23 +3,23 @@ package warehouse_test
 import (
 	"encoding/json"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/warehouse"
 
 	"reflect"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestStockLocationAndBalanceJSONShapes(t *testing.T) {
 	location := warehouse.StockLocation{
 		ID: "location_1", DepotCode: "AU-VIC-MEL-DC-01",
-		LocationCode:    warehouse.StockLocationCodeOnlineStageFrozen,
+		LocationCode:    "SYS-ONLINE-STAGE-FROZEN",
 		StorageType:     classification_enums.StorageFrozen,
 		Purpose:         warehouse_enums.StockLocationPurposeOnlineOrderStaging,
 		HandlingMode:    warehouse_enums.StockLocationHandlingMixed,
@@ -52,58 +52,6 @@ func TestStockLocationAndBalanceJSONShapes(t *testing.T) {
 		if _, ok := balanceShape[key]; !ok {
 			t.Fatalf("known zero quantity %q was omitted: %+v", key, balanceShape)
 		}
-	}
-}
-
-func TestRequiredSystemStockLocationCodesJSON(t *testing.T) {
-	tests := []struct {
-		name        string
-		code        string
-		wantCode    string
-		storageType classification_enums.StorageType
-		purpose     warehouse_enums.StockLocationPurpose
-	}{
-		{name: "quality hold ambient", code: warehouse.StockLocationCodeQualityHoldAmbient, wantCode: "SYS-QH-AMBIENT", storageType: classification_enums.StorageAmbient, purpose: warehouse_enums.StockLocationPurposeQualityHold},
-		{name: "quality hold chilled", code: warehouse.StockLocationCodeQualityHoldChilled, wantCode: "SYS-QH-CHILLED", storageType: classification_enums.StorageChilled, purpose: warehouse_enums.StockLocationPurposeQualityHold},
-		{name: "quality hold frozen", code: warehouse.StockLocationCodeQualityHoldFrozen, wantCode: "SYS-QH-FROZEN", storageType: classification_enums.StorageFrozen, purpose: warehouse_enums.StockLocationPurposeQualityHold},
-		{name: "online stage ambient", code: warehouse.StockLocationCodeOnlineStageAmbient, wantCode: "SYS-ONLINE-STAGE-AMBIENT", storageType: classification_enums.StorageAmbient, purpose: warehouse_enums.StockLocationPurposeOnlineOrderStaging},
-		{name: "online stage chilled", code: warehouse.StockLocationCodeOnlineStageChilled, wantCode: "SYS-ONLINE-STAGE-CHILLED", storageType: classification_enums.StorageChilled, purpose: warehouse_enums.StockLocationPurposeOnlineOrderStaging},
-		{name: "online stage frozen", code: warehouse.StockLocationCodeOnlineStageFrozen, wantCode: "SYS-ONLINE-STAGE-FROZEN", storageType: classification_enums.StorageFrozen, purpose: warehouse_enums.StockLocationPurposeOnlineOrderStaging},
-	}
-
-	seen := make(map[string]struct{}, len(tests))
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if tt.code != tt.wantCode {
-				t.Fatalf("system location code = %q, want %q", tt.code, tt.wantCode)
-			}
-			if _, duplicate := seen[tt.code]; duplicate {
-				t.Fatalf("duplicate system location code %q", tt.code)
-			}
-			seen[tt.code] = struct{}{}
-
-			shape := marshalStockLocationObject(t, warehouse.StockLocation{
-				ID:              "location_" + tt.code,
-				DepotCode:       "AU-VIC-MEL-DC-01",
-				LocationCode:    tt.code,
-				StorageType:     tt.storageType,
-				Purpose:         tt.purpose,
-				HandlingMode:    warehouse_enums.StockLocationHandlingMixed,
-				Access:          warehouse_enums.StockLocationAccessStaffOnly,
-				CollectionMode:  warehouse_enums.StockLocationCollectionUnrestricted,
-				IsSystemManaged: true,
-				IsActive:        true,
-			})
-			if shape["location_code"] != tt.wantCode {
-				t.Fatalf("system location JSON code = %v, want %q: %+v", shape["location_code"], tt.wantCode, shape)
-			}
-			if shape["storage_type"] != tt.storageType.String() || shape["purpose"] != tt.purpose.String() {
-				t.Fatalf("system location JSON lost storage type or purpose: %+v", shape)
-			}
-			if shape["is_system_managed"] != true {
-				t.Fatalf("system location JSON was not system managed: %+v", shape)
-			}
-		})
 	}
 }
 

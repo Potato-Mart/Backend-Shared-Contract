@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/warehouse"
 )
 
 func TestDepotMarketAssociatesPhysicalSitesWithCommercialMarkets(t *testing.T) {

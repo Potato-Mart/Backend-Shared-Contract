@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Source version to repair or publish; defaults to ModuleVersion"
+        description: "Source version to repair or publish; defaults to the source contract-release declaration"
         required: false
         default: ""
         type: string
@@ -66,7 +66,7 @@ jobs:
               throw "Requested version '$requestedVersion' is not valid release semver."
           }
           if ($requestedVersion -ne $sourceVersion) {
-              throw "Requested version '$requestedVersion' does not match source ModuleVersion '$sourceVersion'."
+              throw "Requested version '$requestedVersion' does not match the source contract-release declaration '$sourceVersion'."
           }
 
           Add-Content -LiteralPath $env:GITHUB_OUTPUT -Value "version=$sourceVersion"
@@ -140,7 +140,7 @@ jobs:
               exit 0
           }
 
-          $releaseNotes = Get-Content -LiteralPath RELEASE_NOTES.md -Raw
+          $releaseNotes = Get-Content -LiteralPath docs/release-notes.md -Raw
           $escapedVersion = [regex]::Escape($env:VERSION)
           $sectionPattern = "(?ms)^##\s+$escapedVersion[^\r\n]*\r?\n.*?(?=^##\s+v\d+\.\d+\.\d+|\z)"
           $section = [regex]::Match($releaseNotes, $sectionPattern)

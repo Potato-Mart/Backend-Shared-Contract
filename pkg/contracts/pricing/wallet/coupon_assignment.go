@@ -1,9 +1,9 @@
 package wallet
 
 import (
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/benefit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/wallet/wallet_enums"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pricing/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pricing/wallet/wallet_enums"
 	"time"
 )
 

@@ -3,8 +3,8 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/orders/order/order_enums"
 )
 
 func TestOrderEnumsValidateKnownValues(t *testing.T) {

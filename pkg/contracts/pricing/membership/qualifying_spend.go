@@ -3,8 +3,8 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pricing/membership/membership_enums"
 )
 
 // QualifyingSpendLedgerEntry is immutable spend evidence for one retail
@@ -16,7 +16,6 @@ type QualifyingSpendLedgerEntry struct {
 	Reason             membership_enums.QualifyingSpendReason `json:"reason"`
 	RelatedOrderNumber string                                 `json:"related_order_number,omitempty"`
 	RelatedRefundID    string                                 `json:"related_refund_id,omitempty"`
-	IdempotencyKey     string                                 `json:"idempotency_key"`
 	OccurredAt         time.Time                              `json:"occurred_at"`
 	CreatedAt          time.Time                              `json:"created_at"`
 }

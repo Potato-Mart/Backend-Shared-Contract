@@ -1,8 +1,8 @@
 package product
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/localization"
 )
 
 // ProductOrigin is the customer-facing origin display block for a product.

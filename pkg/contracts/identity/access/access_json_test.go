@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/identity/identity_enums"
-	identity "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/identity/access"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/identity/access/access_enums"
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/identity/account"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/identity/account/account_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/identity/identity_enums"
+	identity "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/identity/access"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/identity/access/access_enums"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/identity/account"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/identity/account/account_enums"
 )
 
 func TestPortalAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T) {
@@ -60,17 +60,7 @@ func TestPortalAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T)
 	}
 }
 
-func TestIdentityWholesaleAccessJSONUsesOrganisationAccessID(t *testing.T) {
-	claims := identity.AccessTokenClaims{
-		Subject:                   "user_1",
-		UserID:                    "user_1",
-		SessionID:                 "session_1",
-		AccountID:                 "acct_1",
-		Portal:                    identity_enums.PortalWholesale,
-		WholesaleOrganisationCode: "org_1",
-		OrganisationAccessID:      "access_1",
-		RoleKey:                   "buyer",
-	}
+func TestIdentityWholesaleSessionJSONUsesOrganisationAccessID(t *testing.T) {
 	session := identity.LoginSession{
 		ID:                        "session_1",
 		UserID:                    "user_1",
@@ -83,28 +73,20 @@ func TestIdentityWholesaleAccessJSONUsesOrganisationAccessID(t *testing.T) {
 		ExpiresAt:                 time.Date(2026, 6, 23, 1, 0, 0, 0, time.UTC),
 	}
 
-	payload, err := json.Marshal(struct {
-		Claims  identity.AccessTokenClaims `json:"claims"`
-		Session identity.LoginSession      `json:"session"`
-	}{Claims: claims, Session: session})
+	payload, err := json.Marshal(session)
 	if err != nil {
-		t.Fatalf("marshal identity wholesale access payload: %v", err)
+		t.Fatalf("marshal identity wholesale session: %v", err)
 	}
 
-	var got map[string]map[string]any
+	var got map[string]any
 	if err := json.Unmarshal(payload, &got); err != nil {
-		t.Fatalf("unmarshal identity wholesale access JSON: %v", err)
+		t.Fatalf("unmarshal identity wholesale session JSON: %v", err)
 	}
-	for group, fields := range got {
-		if _, ok := fields["organisation_access_id"]; !ok {
-			t.Fatalf("%s missing organisation_access_id: %s", group, payload)
-		}
-		if _, ok := fields["membership_id"]; ok {
-			t.Fatalf("%s should not include legacy membership_id: %s", group, payload)
-		}
+	if _, ok := got["organisation_access_id"]; !ok {
+		t.Fatalf("session missing organisation_access_id: %s", payload)
 	}
-	if got["claims"]["session_id"] != "session_1" {
-		t.Fatalf("claims missing session_id: %s", payload)
+	if _, ok := got["membership_id"]; ok {
+		t.Fatalf("session should not include legacy membership_id: %s", payload)
 	}
 }
 
@@ -131,15 +113,12 @@ func TestUserDeviceExactLastLoginIPRoundTrip(t *testing.T) {
 	}
 }
 
-func TestOptionalSessionAndLastLoginIPFieldsOmitZeroValues(t *testing.T) {
-	payload, err := json.Marshal(struct {
-		Claims identity.AccessTokenClaims `json:"claims"`
-		Device accountenum.UserDevice     `json:"device"`
-	}{})
+func TestOptionalLastLoginIPFieldOmitsZeroValue(t *testing.T) {
+	payload, err := json.Marshal(accountenum.UserDevice{})
 	if err != nil {
-		t.Fatalf("marshal zero-value identity projections: %v", err)
+		t.Fatalf("marshal zero-value user device: %v", err)
 	}
-	for _, key := range []string{`"session_id"`, `"last_login_ip"`} {
+	for _, key := range []string{`"last_login_ip"`} {
 		if strings.Contains(string(payload), key) {
 			t.Fatalf("zero-value optional field %s must be omitted: %s", key, payload)
 		}

@@ -2,18 +2,19 @@ package security_test
 
 import (
 	"encoding/json"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/identity/role/role_enums"
-	order "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/order"
-	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/payments/terminal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/payments/terminal/terminal_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/identity/role/role_enums"
+	order "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/orders/order"
+	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/payments/terminal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/payments/terminal/terminal_enums"
 )
 
 func TestHistoryOmittedWhenEmpty(t *testing.T) {
@@ -43,11 +44,6 @@ func TestHistoryEntryRoundTrip(t *testing.T) {
 			ActorID:    "usr_1",
 			ActorEmail: "ops@example.com",
 			ActorRole:  role_enums.UserRoleDepotManager,
-		},
-		RequestContext: security.RequestContext{
-			RequestID:     "req_1",
-			CorrelationID: "corr_1",
-			TraceID:       "trace_1",
 		},
 		ReasonCode:        "terminal_timeout",
 		Note:              "Provider status check could not confirm the outcome.",
@@ -86,8 +82,8 @@ func TestHistoryEntryRoundTrip(t *testing.T) {
 	if !got.OccurredAt.Equal(occurredAt) {
 		t.Fatalf("occurred_at = %s, want %s", got.OccurredAt, occurredAt)
 	}
-	if got.ActorEmail != "ops@example.com" || got.RequestID != "req_1" {
-		t.Fatalf("actor/request context did not round-trip: %+v", got)
+	if got.ActorEmail != "ops@example.com" {
+		t.Fatalf("actor reference did not round-trip: %+v", got)
 	}
 	if got.RiskLevel != security_enums.SecurityRiskLevelHigh {
 		t.Fatalf("risk_level = %q, want %q", got.RiskLevel, security_enums.SecurityRiskLevelHigh)
@@ -97,6 +93,41 @@ func TestHistoryEntryRoundTrip(t *testing.T) {
 	}
 	if len(got.Changes) != 1 || got.Changes[0].Field != "status" || got.Changes[0].ToValue != "override_pending" {
 		t.Fatalf("changes did not round-trip: %+v", got.Changes)
+	}
+}
+
+func TestAuditDomainRecordsExcludeTransportCorrelationFields(t *testing.T) {
+	models := []any{
+		security.HistoryEntry{},
+		security.SecurityEvent{},
+		security.AuditLogEntry{},
+		security.AccessLogEntry{},
+	}
+	fields := []string{
+		"DeviceKey", "SessionID", "IPAddress", "UserAgent", "RequestID", "CorrelationID", "TraceID",
+	}
+	jsonKeys := []string{
+		`"device_key"`, `"session_id"`, `"ip_address"`, `"user_agent"`, `"request_id"`, `"correlation_id"`, `"trace_id"`,
+	}
+
+	for _, model := range models {
+		modelType := reflect.TypeOf(model)
+		for _, field := range fields {
+			if _, found := modelType.FieldByName(field); found {
+				t.Errorf("%s retains transport/correlation field %s", modelType, field)
+			}
+		}
+
+		payload, err := json.Marshal(model)
+		if err != nil {
+			t.Errorf("marshal %s: %v", modelType, err)
+			continue
+		}
+		for _, key := range jsonKeys {
+			if strings.Contains(string(payload), key) {
+				t.Errorf("%s retains transport/correlation JSON key %s: %s", modelType, key, payload)
+			}
+		}
 	}
 }
 

@@ -3,12 +3,12 @@ package message
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/audit"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/localization"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/marketing/message/message_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/notifications/notification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/audit"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/localization"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/marketing/message/message_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/notifications/notification_enums"
 )
 
 // MarketingMessage is an authored, aggregated outbound marketing send. It

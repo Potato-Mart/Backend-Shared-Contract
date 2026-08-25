@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/classification/classification_enums"
 )
 
 func TestV30SKUSeriesJSONIncludesPrimaryEnglishName(t *testing.T) {

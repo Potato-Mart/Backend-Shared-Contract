@@ -1,6 +1,6 @@
 package geography
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography/geography_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/geography/geography_enums"
 
 // GeographicScope is either explicitly global or an inclusive list of
 // country, subdivision, depot-region, or depot targets.

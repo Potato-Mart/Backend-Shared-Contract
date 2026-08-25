@@ -11,15 +11,15 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/orders/pos"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pubsub/event/event_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/purchase"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/orders/pos"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pubsub/event/event_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/purchase"
 )
 
-// TestV30TransactionEvidenceUsesOneImmutableSKUCode freezes the hard cut from
+// TestV31TransactionEvidenceUsesOneImmutableSKUCode freezes the hard cut from
 // the former ID-plus-frozen-code pair to one business key.
-func TestV30TransactionEvidenceUsesOneImmutableSKUCode(t *testing.T) {
+func TestV31TransactionEvidenceUsesOneImmutableSKUCode(t *testing.T) {
 	for _, model := range []reflect.Type{
 		reflect.TypeOf(order.CartItem{}),
 		reflect.TypeOf(order.OrderItem{}),

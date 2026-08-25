@@ -3,9 +3,9 @@ package role
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/audit"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/identity/identity_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/identity/identity_enums"
 )
 
 // RoleAssignment grants a role key to a user in an account, portal, and

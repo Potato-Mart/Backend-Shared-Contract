@@ -1,6 +1,6 @@
 package product
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/localization"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/localization"
 
 // SellingProductContent contains the resolved, localized product display data
 // that a customer client can render without querying catalogue master records.

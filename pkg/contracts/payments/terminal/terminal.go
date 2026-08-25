@@ -5,12 +5,11 @@ package terminal
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/metadata"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/geography"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/payments/terminal/terminal_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/payments/terminal/terminal_enums"
 )
 
 // Terminal is an EFTPOS device registered for POS use at one depot.
@@ -37,8 +36,7 @@ type Terminal struct {
 	DeregisteredAt *time.Time `json:"deregistered_at,omitempty"`
 	LastSeenAt     *time.Time `json:"last_seen_at,omitempty"`
 
-	Metadata metadata.Metadata       `json:"metadata,omitempty"`
-	History  []security.HistoryEntry `json:"history,omitempty"`
+	History []security.HistoryEntry `json:"history,omitempty"`
 
 	audit.AuditFields
 }

@@ -2,13 +2,16 @@ package wallet_test
 
 import (
 	"encoding/json"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/wallet"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pricing/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pricing/benefit/benefit_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pricing/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 func TestCustomerWalletOwnsPointsSummaryWithoutMembershipImport(t *testing.T) {
@@ -39,5 +42,31 @@ func TestOperationalPointsAndRewardRecordsAreWalletOwned(t *testing.T) {
 	}
 	if !strings.Contains(string(payload), `"reason":"REWARD_REDEEM"`) || !strings.Contains(string(payload), `"status":"REDEEMED"`) {
 		t.Fatalf("unexpected wallet operations payload: %s", payload)
+	}
+}
+
+func TestCheckoutBenefitReservationExcludesPersistenceRetryKey(t *testing.T) {
+	now := time.Date(2026, 8, 25, 0, 0, 0, 0, time.UTC)
+	reservation := wallet.CheckoutBenefitReservation{
+		ID:          "benefit_reservation_1",
+		Owner:       benefit.OwnerRef{OwnerType: benefit_enums.OwnerTypeRetailCustomer, OwnerID: "RC-1"},
+		OrderNumber: "order_1",
+		Status:      wallet_enums.CheckoutBenefitReservationStatusReserved,
+		ExpiresAt:   now.Add(time.Hour),
+		CreatedAt:   now,
+		UpdatedAt:   now,
+	}
+	payload, err := json.Marshal(reservation)
+	if err != nil {
+		t.Fatalf("marshal checkout benefit reservation: %v", err)
+	}
+	if strings.Contains(string(payload), `"idempotency_key"`) {
+		t.Fatalf("checkout benefit reservation must not expose persistence retry state: %s", payload)
+	}
+	if _, exists := reflect.TypeOf(wallet.CheckoutBenefitReservation{}).FieldByName("IdempotencyKey"); exists {
+		t.Fatal("checkout benefit reservation must not expose IdempotencyKey")
+	}
+	if !strings.Contains(string(payload), `"order_number":"order_1"`) || !strings.Contains(string(payload), `"expires_at"`) {
+		t.Fatalf("checkout benefit reservation lost business reference or timestamp: %s", payload)
 	}
 }

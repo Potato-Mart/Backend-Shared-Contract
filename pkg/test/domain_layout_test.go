@@ -10,8 +10,9 @@ import (
 	"testing"
 )
 
-// TestV27DomainPackageLayout verifies the v27 contract's requested domain paths.
-func TestV27DomainPackageLayout(t *testing.T) {
+// TestV31DomainPackageLayout verifies the domain package paths after every
+// production model has been split into its own source file.
+func TestV31DomainPackageLayout(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	legacyImportCompliance := "import" + "compliance"
 	requiredFiles := map[string]string{
@@ -22,7 +23,7 @@ func TestV27DomainPackageLayout(t *testing.T) {
 		"contracts/supply/classification/supplier.go":                                       "classification",
 		"contracts/supply/classification/favourite_list.go":                                 "classification",
 		"contracts/supply/classification/classification_enums/favourite_list_error_code.go": "classification_enums",
-		"contracts/supply/import_compliance/declaration.go":                                 "import_compliance",
+		"contracts/supply/import_compliance/manufacturer_declaration.go":                    "import_compliance",
 		"contracts/supply/import_compliance/import_compliance_enums/artifact_kind.go":       "import_compliance_enums",
 		"contracts/supply/listing/market_listing.go":                                        "listing",
 		"contracts/supply/listing/listing_enums/market_listing_status.go":                   "listing_enums",
@@ -35,25 +36,25 @@ func TestV27DomainPackageLayout(t *testing.T) {
 		"contracts/common/money/currency.go":                                                "money",
 		"contracts/common/measurement/net_content.go":                                       "measurement",
 		"contracts/customers/wholesale/wholesale_enums/organisation_category.go":            "wholesale_enums",
-		"contracts/supply/operations/availability.go":                                       "operations",
-		"contracts/supply/operations/packing.go":                                            "operations",
-		"contracts/supply/operations/picking.go":                                            "operations",
-		"contracts/supply/operations/reservation.go":                                        "operations",
-		"contracts/supply/operations/inbound.go":                                            "operations",
+		"contracts/supply/operations/product_stock_summary.go":                              "operations",
+		"contracts/supply/operations/packing_line.go":                                       "operations",
+		"contracts/supply/operations/picking_list.go":                                       "operations",
+		"contracts/supply/operations/stock_reservation.go":                                  "operations",
+		"contracts/supply/operations/inbound_receipt.go":                                    "operations",
 		"contracts/supply/operations/stock_movement.go":                                     "operations",
 		"contracts/supply/operations/inventory_category_tag_evidence.go":                    "operations",
-		"contracts/orders/shipping/shipment.go":                                             "shipping",
+		"contracts/orders/shipping/outbound_shipment.go":                                    "shipping",
 		"contracts/pricing/promotion/promotion.go":                                          "promotion",
 		"contracts/pricing/promotion/scope.go":                                              "promotion",
 		"contracts/pricing/promotion/relation.go":                                           "promotion",
 		"contracts/pricing/promotion/application.go":                                        "promotion",
 		"contracts/pricing/quote/price_snapshot.go":                                         "quote",
 		"contracts/pricing/quote/quote_enums/tax_calculation_source.go":                     "quote_enums",
-		"contracts/supply/cost/acquisition_cost.go":                                         "cost",
-		"contracts/supply/listing/sale_eligibility.go":                                      "listing",
+		"contracts/supply/cost/base_acquisition_cost.go":                                    "cost",
+		"contracts/supply/listing/sale_eligibility_snapshot.go":                             "listing",
 		"contracts/supply/purchase/supplier_invoice.go":                                     "purchase",
 		"contracts/supply/purchase/purchase_enums/input_tax_claim_status.go":                "purchase_enums",
-		"contracts/payments/payment/merchant_profile.go":                                    "payment",
+		"contracts/payments/payment/merchant_legal_profile.go":                              "payment",
 		"contracts/payments/payment/payment_enums/merchant_profile_status.go":               "payment_enums",
 		"contracts/orders/pos/cash_rounding.go":                                             "pos",
 		"contracts/supply/warehouse/warehouse_enums/damage_sale_tier.go":                    "warehouse_enums",
