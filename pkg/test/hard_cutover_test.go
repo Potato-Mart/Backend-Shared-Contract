@@ -703,9 +703,9 @@ func TestV27ProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	}
 }
 
-func TestV30GoSourcesContainNoOlderContractImports(t *testing.T) {
+func TestV31GoSourcesContainNoOlderContractImports(t *testing.T) {
 	const contractImportRoot = "github.com/Potato-Mart/Backend-Shared-Contract/"
-	const currentContractImportPrefix = contractImportRoot + "v30/"
+	const currentContractImportPrefix = contractImportRoot + "v31/"
 	pkgRoot := sharedContractPkgRoot(t)
 	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
@@ -725,7 +725,7 @@ func TestV30GoSourcesContainNoOlderContractImports(t *testing.T) {
 				return unquoteErr
 			}
 			if strings.HasPrefix(importPath, contractImportRoot) && !strings.HasPrefix(importPath, currentContractImportPrefix) {
-				t.Errorf("%s imports non-v30 shared-contract path %s", path, importPath)
+				t.Errorf("%s imports non-v31 shared-contract path %s", path, importPath)
 			}
 		}
 		return nil

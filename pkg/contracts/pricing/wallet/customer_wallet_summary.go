@@ -1,6 +1,6 @@
 package wallet
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/money"
 
 // CustomerWalletSummary is the customer-safe headline projection of wallet
 // holdings. Membership policy is composed by Membership, not imported here.

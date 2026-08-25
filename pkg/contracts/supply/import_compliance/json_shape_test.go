@@ -3,68 +3,19 @@ package import_compliance_test
 import (
 	"encoding/json"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/geography"
 
-	import_compliance "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/import_compliance"
+	import_compliance "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/import_compliance"
 
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/import_compliance/import_compliance_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/purchase/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/import_compliance/import_compliance_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/purchase/purchase_enums"
 )
-
-func TestImportSettingsJSONUsesFixedPointFields(t *testing.T) {
-	settings := import_compliance.ImportSettings{
-		ID:                      "import_settings",
-		Revision:                import_compliance.RevisionMetadata{Number: 1, State: import_compliance_enums.ReviewStateDraft},
-		TWDPerAUDMicros:         21_250_000,
-		NextInvoiceNumber:       1001,
-		ExportMarginBasisPoints: 1500,
-		DefaultSignatoryName:    "A. Signatory",
-		TaiwanTaxBasisPoints:    500,
-		AirCargo: import_compliance.AirCargoSettings{
-			ReferenceWeightGrams:                         100_000,
-			TaiwanInspectionCost:                         money.Money{AmountMinor: 1500, Currency: "TWD"},
-			StorageThresholdGrams:                        50_000,
-			StorageUnderThresholdCost:                    money.Money{AmountMinor: 200, Currency: "TWD"},
-			StorageAtOrOverThresholdCost:                 money.Money{AmountMinor: 300, Currency: "TWD"},
-			VolumetricDivisorCubicCentimetresPerKilogram: 6000,
-		},
-		AmbientSea: import_compliance.AmbientSeaSettings{ReferenceVolumeCubicCentimetres: 1_000_000},
-		FrozenSea:  import_compliance.FrozenSeaSettings{ReferenceVolumeCubicCentimetres: 2_000_000},
-		IngredientRules: []import_compliance.IngredientDeclarationRule{
-			{ID: "rule_1", Ingredients: "milk", Statement: "Contains milk"},
-		},
-	}
-
-	payload, err := json.Marshal(settings)
-	if err != nil {
-		t.Fatalf("marshal import settings: %v", err)
-	}
-	text := string(payload)
-	for _, key := range []string{
-		`"twd_per_aud_micros":21250000`,
-		`"export_margin_basis_points":1500`,
-		`"taiwan_tax_basis_points":500`,
-		`"reference_weight_grams":100000`,
-		`"volumetric_divisor_cubic_centimetres_per_kilogram":6000`,
-		`"reference_volume_cubic_centimetres":1000000`,
-	} {
-		if !strings.Contains(text, key) {
-			t.Fatalf("settings JSON missing fixed-point field %s: %s", key, payload)
-		}
-	}
-	for _, forbidden := range []string{`"exchange_rate"`, `"export_margin"`, `"air_ref_weight"`, `"taiwan_base_storage_cost"`} {
-		if strings.Contains(text, forbidden) {
-			t.Fatalf("settings JSON exposed ambiguous floating-point field %s: %s", forbidden, payload)
-		}
-	}
-}
 
 func TestDeclarationAndLabelRoundTripManagedMediaAndMeasurements(t *testing.T) {
 	now := time.Date(2026, 7, 16, 3, 4, 5, 0, time.UTC)

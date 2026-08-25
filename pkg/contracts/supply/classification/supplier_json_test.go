@@ -5,11 +5,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/classification"
 )
 
 func TestV30SupplierExpansionAndCodeOnlyManufacturing(t *testing.T) {

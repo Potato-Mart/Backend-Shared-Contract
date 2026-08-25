@@ -1,14 +1,13 @@
 package access
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/geography"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/identity/access/access_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/identity/access/access_enums"
 )
 
 // StaffGeoScope is the persisted geographic grant held by one workforce
-// principal. It is the stored form of the flat scope claims minted into an
-// access token, and it is never carried by customer principals.
+// principal. It is never carried by customer principals.
 //
 // Level decides which of the remaining fields are meaningful: global carries
 // none, country carries CountryCode, market carries MarketCodes (and the

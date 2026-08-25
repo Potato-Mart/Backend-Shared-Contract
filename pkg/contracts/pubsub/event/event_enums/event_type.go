@@ -5,19 +5,17 @@ package event_enums
 type EventType string
 
 const (
-	EventTypeOrderCreated                  EventType = "order.created"
-	EventTypeOrderPaid                     EventType = "order.paid"
-	EventTypeOrderStatusChanged            EventType = "order.status_changed"
-	EventTypeOrderCancelled                EventType = "order.cancelled"
-	EventTypeCheckoutCompensationRequested EventType = "checkout.compensation_requested"
-	EventTypePaymentCaptured               EventType = "payment.captured"
-	EventTypePaymentFailed                 EventType = "payment.failed"
-	EventTypeInvoiceIssued                 EventType = "invoice.issued"
-	EventTypeInvoiceDeliveryRequested      EventType = "invoice.delivery_requested"
-	EventTypeReceiptGenerated              EventType = "receipt.generated"
-	EventTypeRefundRequested               EventType = "refund.requested"
-	EventTypeRefundCompleted               EventType = "refund.completed"
-	EventTypeRefundFailed                  EventType = "refund.failed"
+	EventTypeOrderCreated       EventType = "order.created"
+	EventTypeOrderPaid          EventType = "order.paid"
+	EventTypeOrderStatusChanged EventType = "order.status_changed"
+	EventTypeOrderCancelled     EventType = "order.cancelled"
+	EventTypePaymentCaptured    EventType = "payment.captured"
+	EventTypePaymentFailed      EventType = "payment.failed"
+	EventTypeInvoiceIssued      EventType = "invoice.issued"
+	EventTypeReceiptGenerated   EventType = "receipt.generated"
+	EventTypeRefundRequested    EventType = "refund.requested"
+	EventTypeRefundCompleted    EventType = "refund.completed"
+	EventTypeRefundFailed       EventType = "refund.failed"
 
 	EventTypeInventoryLotReceived              EventType = "inventory.lot_received"
 	EventTypeInventoryStockBucketChanged       EventType = "inventory.stock_bucket_changed"
@@ -39,7 +37,6 @@ const (
 	EventTypeCustomerProfileUpdated         EventType = "customer.profile_updated"
 	EventTypeNotificationPreferencesChanged EventType = "notification.preferences_changed"
 	EventTypeWalletGiftCardIssued           EventType = "wallet.gift_card_issued"
-	EventTypeVoucherClaimIssued             EventType = "voucher.claim_issued"
 
 	EventTypeCatalogBaseCostChanged EventType = "catalog.base_cost_changed"
 	EventTypeCatalogListingChanged  EventType = "catalog.listing_changed"
@@ -56,8 +53,8 @@ const (
 func (t EventType) IsValid() bool {
 	switch t {
 	case EventTypeOrderCreated, EventTypeOrderPaid, EventTypeOrderStatusChanged,
-		EventTypeOrderCancelled, EventTypeCheckoutCompensationRequested,
-		EventTypePaymentCaptured, EventTypePaymentFailed, EventTypeInvoiceIssued, EventTypeInvoiceDeliveryRequested,
+		EventTypeOrderCancelled,
+		EventTypePaymentCaptured, EventTypePaymentFailed, EventTypeInvoiceIssued,
 		EventTypeReceiptGenerated,
 		EventTypeRefundRequested, EventTypeRefundCompleted, EventTypeRefundFailed,
 		EventTypeInventoryLotReceived, EventTypeInventoryStockBucketChanged,
@@ -70,7 +67,6 @@ func (t EventType) IsValid() bool {
 		EventTypeFulfilmentTrackingUpdated,
 		EventTypeCustomerRegistered, EventTypeCustomerProfileUpdated,
 		EventTypeNotificationPreferencesChanged, EventTypeWalletGiftCardIssued,
-		EventTypeVoucherClaimIssued,
 		EventTypeCatalogBaseCostChanged, EventTypeCatalogListingChanged,
 		EventTypeProductSalesPerformanceUpdated,
 		EventTypePromotionChanged, EventTypeCampaignChanged,

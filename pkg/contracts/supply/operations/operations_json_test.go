@@ -5,16 +5,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/packaging/packaging_enums"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pubsub/event"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/product/product_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/packaging/packaging_enums"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pubsub/event"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestReservationAndStagingJSONShapes(t *testing.T) {
@@ -37,7 +37,7 @@ func TestReservationAndStagingJSONShapes(t *testing.T) {
 		OrderNumber: "SO-1", SKUCode: "A00001", PackageOptionCode: "pkg_case_12",
 		SourceBucketID: "bucket_1", DestinationBucketID: "bucket_stage",
 		SourceLocation:      warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01"},
-		DestinationLocation: warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: warehouse.StockLocationCodeOnlineStageAmbient},
+		DestinationLocation: warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "SYS-ONLINE-STAGE-AMBIENT"},
 		StagedComposition:   caseComposition, MovementID: "movement_1", StagedBy: "operator_1", StagedAt: dateMarkAt,
 	})
 	for _, key := range []string{"source_location", "destination_location", "staged_composition", "movement_id"} {

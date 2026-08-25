@@ -3,16 +3,9 @@ package operations
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/warehouse/warehouse_enums"
 )
-
-// InventoryCauseRef identifies the contract record that caused an inventory
-// change.
-type InventoryCauseRef struct {
-	Type string `json:"type"`
-	ID   string `json:"id"`
-}
 
 // StockMovement represents a physical base-unit transfer or state change.
 // Logical reservation lifecycle changes are represented by StockReservation.

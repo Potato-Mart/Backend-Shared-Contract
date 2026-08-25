@@ -3,8 +3,8 @@ package security
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/security/security_enums"
 )
 
 // AuditLogEntry is one immutable record of an administrative action.
@@ -20,7 +20,6 @@ type AuditLogEntry struct {
 	Action     string `json:"action"`             // dotted key e.g. "customer.update"
 	Resource   string `json:"resource,omitempty"` // dotted key e.g. "customer:cust_123"
 	ResourceID string `json:"resource_id,omitempty"`
-	RequestContext
 	RecordOutcome
 	RiskLevel     security_enums.SecurityRiskLevel `json:"risk_level,omitempty"`
 	IntegrityHash string                           `json:"integrity_hash,omitempty"`

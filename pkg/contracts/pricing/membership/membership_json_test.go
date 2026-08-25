@@ -2,14 +2,16 @@ package membership_test
 
 import (
 	"encoding/json"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/membership/membership_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/wallet"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pricing/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pricing/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 func TestMembershipAccountComposesWalletOwnedPointsSummary(t *testing.T) {
@@ -38,5 +40,31 @@ func TestMembershipPolicyAndRewardCatalogStayInMembership(t *testing.T) {
 	}
 	if !strings.Contains(string(payload), `"points_per_minor_unit":1`) || !strings.Contains(string(payload), `"type":"VOUCHER"`) {
 		t.Fatalf("unexpected membership payload: %s", payload)
+	}
+}
+
+func TestQualifyingSpendLedgerEntryExcludesPersistenceRetryKey(t *testing.T) {
+	now := time.Date(2026, 8, 25, 0, 0, 0, 0, time.UTC)
+	entry := membership.QualifyingSpendLedgerEntry{
+		ID:                 "spend_1",
+		CustomerNumber:     "RC-1",
+		Amount:             money.Money{AmountMinor: 1250, Currency: "AUD"},
+		Reason:             membership_enums.QualifyingSpendReasonOrderPaid,
+		RelatedOrderNumber: "order_1",
+		OccurredAt:         now,
+		CreatedAt:          now,
+	}
+	payload, err := json.Marshal(entry)
+	if err != nil {
+		t.Fatalf("marshal qualifying spend entry: %v", err)
+	}
+	if strings.Contains(string(payload), `"idempotency_key"`) {
+		t.Fatalf("qualifying spend entry must not expose persistence retry state: %s", payload)
+	}
+	if _, exists := reflect.TypeOf(membership.QualifyingSpendLedgerEntry{}).FieldByName("IdempotencyKey"); exists {
+		t.Fatal("qualifying spend entry must not expose IdempotencyKey")
+	}
+	if !strings.Contains(string(payload), `"related_order_number":"order_1"`) || !strings.Contains(string(payload), `"occurred_at"`) {
+		t.Fatalf("qualifying spend entry lost business reference or timestamp: %s", payload)
 	}
 }

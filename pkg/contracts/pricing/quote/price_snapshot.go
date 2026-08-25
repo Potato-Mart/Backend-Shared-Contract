@@ -7,109 +7,12 @@ package quote
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/quote/quote_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/listing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/listing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/product/product_enums"
 )
-
-// TaxSnapshot is the frozen tax evidence for one line. The rate is kept as an
-// exact numerator over denominator so an inclusive extraction and an exclusive
-// addition are both reproducible without floats.
-type TaxSnapshot struct {
-	TaxCategoryCode string `json:"tax_category_code"`
-	TaxRuleID       string `json:"tax_rule_id"`
-	TaxRuleRevision int64  `json:"tax_rule_revision"`
-
-	InclusionBasis pricebook_enums.PriceTaxInclusion `json:"inclusion_basis"`
-	// RateNumerator over RateDenominator is the exact rate that was
-	// applied, for example 1/11 to extract tax from a tax-inclusive
-	// consideration or 1/10 to add tax to a tax-exclusive one.
-	RateNumerator   int64 `json:"rate_numerator"`
-	RateDenominator int64 `json:"rate_denominator"`
-
-	TaxableBase  money.Money `json:"taxable_base"`
-	AllocatedTax money.Money `json:"allocated_tax"`
-
-	CalculationSource quote_enums.TaxCalculationSource `json:"calculation_source"`
-	RoundingMethod    quote_enums.TaxRoundingMethod    `json:"rounding_method"`
-}
-
-// RoundingEvidence records the exact value a rounded minor amount came from
-// and the rule that reduced it, so every rounded cent is reproducible.
-type RoundingEvidence struct {
-	Mode        quote_enums.RoundingMode          `json:"mode"`
-	PriceEnding pricebook_enums.PriceEndingPolicy `json:"price_ending"`
-	Exponent    int32                             `json:"exponent"`
-	// ExactNumerator over ExactDenominator is the unrounded value in minor
-	// units before the mode was applied.
-	ExactNumerator   int64       `json:"exact_numerator"`
-	ExactDenominator int64       `json:"exact_denominator"`
-	RoundedAmount    money.Money `json:"rounded_amount"`
-	// RemainderRank and RemainderMinorApplied record this line's position
-	// and share when document minor units were allocated by largest
-	// remainder. TieBreakKey is the stable line identity used to break
-	// equal remainders.
-	RemainderRank         int32  `json:"remainder_rank,omitempty"`
-	RemainderMinorApplied int64  `json:"remainder_minor_applied,omitempty"`
-	TieBreakKey           string `json:"tie_break_key,omitempty"`
-}
-
-// AppliedPriceRule is one frozen rule outcome. Kind is an open string so new
-// commercial mechanics do not require a contract major bump; current values
-// include group_15, group_20, expiry_20, expiry_bogo, damage_tier_30,
-// damage_tier_50, damage_tier_80, and custom_pos. Exclusive rules never stack
-// with each other or with ordinary promotions.
-type AppliedPriceRule struct {
-	Kind         string `json:"kind"`
-	RuleID       string `json:"rule_id,omitempty"`
-	RuleRevision int64  `json:"rule_revision,omitempty"`
-	Exclusive    bool   `json:"exclusive"`
-	// FactorNumerator over FactorDenominator is the exact multiplier the
-	// rule applied, for example 85/100 for group_15 or 8/10 for
-	// damage_tier_30.
-	FactorNumerator   int64       `json:"factor_numerator,omitempty"`
-	FactorDenominator int64       `json:"factor_denominator,omitempty"`
-	AmountBefore      money.Money `json:"amount_before"`
-	AmountAfter       money.Money `json:"amount_after"`
-	// ChargeableBaseUnits records how many base units the rule charged for,
-	// which differs from the reserved quantity under a buy-one-get-one
-	// expiry mechanic.
-	ChargeableBaseUnits int64     `json:"chargeable_base_units,omitempty"`
-	Reason              string    `json:"reason,omitempty"`
-	AppliedAt           time.Time `json:"applied_at"`
-}
-
-// UnitPriceEvidence is the comparison-unit price shown beside an ordinary
-// grocery listing. Exempt records a listing that is not required to display a
-// comparison price, with the reason a markdown created that exemption.
-type UnitPriceEvidence struct {
-	NetContent       measurement.NetContent `json:"net_content"`
-	ComparisonAmount money.Money            `json:"comparison_amount"`
-	Exempt           bool                   `json:"exempt"`
-	ExemptionReason  string                 `json:"exemption_reason,omitempty"`
-}
-
-// CustomPriceOverrideEvidence freezes a cashier-entered tax-inclusive unit
-// amount together with the actor, the mandatory reason, the approved price it
-// replaced, and the cost comparison recorded at the time.
-type CustomPriceOverrideEvidence struct {
-	ActorUserID string `json:"actor_user_id"`
-	Reason      string `json:"reason"`
-	// SourceApprovedPrice is the approved price the override replaced.
-	SourceApprovedPrice money.Money `json:"source_approved_price"`
-	// OverrideGrossAmount is the tax-inclusive unit amount the cashier
-	// entered. Tax is extracted from it rather than added to it.
-	OverrideGrossAmount money.Money                `json:"override_gross_amount"`
-	CostComparison      quote_enums.CostComparison `json:"cost_comparison"`
-	ComparedCost        *money.Money               `json:"compared_cost,omitempty"`
-	BelowCostWarning    bool                       `json:"below_cost_warning"`
-	OverriddenAt        time.Time                  `json:"overridden_at"`
-}
 
 // PriceSnapshot is the immutable commercial evidence for one priced line. It
 // is the authoritative historical value for the transaction that captured it.

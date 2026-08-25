@@ -3,11 +3,10 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/metadata"
-
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/customers/wholesale/wholesale_enums"
 )
 
 // OrganisationAccess links a user account/persona to a wholesale organisation
@@ -33,20 +32,4 @@ type OrganisationAccess struct {
 	Metadata                  metadata.Metadata                        `json:"metadata,omitempty"`
 
 	audit.AuditFields
-}
-
-// OrganisationAccessSummary is the compact access projection carried by
-// access/session and organisation contact responses.
-type OrganisationAccessSummary struct {
-	ID                        string                                   `json:"id"`
-	WholesaleOrganisationCode string                                   `json:"wholesale_organisation_code"`
-	UserID                    string                                   `json:"user_id"`
-	AccountID                 string                                   `json:"account_id,omitempty"`
-	RoleKey                   string                                   `json:"role_key"`
-	Status                    wholesale_enums.OrganisationAccessStatus `json:"status"`
-	Name                      party.PersonName                         `json:"name,omitempty"`
-	Contacts                  party.ContactChannels                    `json:"contacts,omitempty"`
-	JobTitle                  string                                   `json:"job_title,omitempty"`
-	Department                string                                   `json:"department,omitempty"`
-	IsPrimary                 bool                                     `json:"is_primary,omitempty"`
 }

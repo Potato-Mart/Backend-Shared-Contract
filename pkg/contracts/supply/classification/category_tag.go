@@ -1,8 +1,8 @@
 package classification
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/localization"
 )
 
 type CategoryTag struct {
@@ -14,10 +14,4 @@ type CategoryTag struct {
 	CollectionName []localization.LocalizedName `json:"collection_name"`
 
 	audit.AuditFields
-}
-
-// CategoryTagRef identifies a category tag by its immutable code without
-// embedding mutable classification or audit details.
-type CategoryTagRef struct {
-	Code string `json:"code"`
 }

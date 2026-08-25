@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 func TestPromotionScopeRepresentsPerProductAndCombinedQuantityRequirements(t *testing.T) {

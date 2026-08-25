@@ -1,14 +1,14 @@
 package access
 
 import (
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/security"
 
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/identity/identity_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/identity/identity_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/security/security_enums"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/identity/account/account_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/identity/account/account_enums"
 )
 
 // LoginSession is a non-secret projection of an active login. A session is
@@ -48,22 +48,4 @@ type LoginSession struct {
 	RevokedAt                 *time.Time                        `json:"revoked_at,omitempty"`
 	RevokedReason             string                            `json:"revoked_reason,omitempty"`
 	History                   []security.HistoryEntry           `json:"history,omitempty"`
-}
-
-// RefreshTokenRecord is the non-secret persistence/audit projection for a
-// rotating refresh token. Implementations persist only a token hash.
-type RefreshTokenRecord struct {
-	ID             string                        `json:"id"`
-	TokenHash      string                        `json:"-"`
-	UserID         string                        `json:"user_id"`
-	AuthIdentityID string                        `json:"auth_identity_id"`
-	IdentityDomain security_enums.IdentityDomain `json:"identity_domain"`
-	AccountID      string                        `json:"account_id"`
-	Portal         identity_enums.Portal         `json:"portal"`
-	Audience       string                        `json:"audience"`
-	IssuedAt       time.Time                     `json:"issued_at"`
-	ExpiresAt      time.Time                     `json:"expires_at"`
-	RotatedAt      *time.Time                    `json:"rotated_at,omitempty"`
-	RevokedAt      *time.Time                    `json:"revoked_at,omitempty"`
-	RevokedReason  string                        `json:"revoked_reason,omitempty"`
 }

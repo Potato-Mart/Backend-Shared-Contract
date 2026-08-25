@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pubsub/event/event_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pubsub/event/event_enums"
 )
 
 // v27EventSchemaVersion2Payloads is the reviewed set of routed Pub/Sub payloads
@@ -23,7 +23,7 @@ import (
 // embedding, slice, or pointer changed a JSON key, which is why
 // OrderPackingProjection is present even though its own fields are unchanged.
 //
-// RELEASE_NOTES.md declares this table the source of truth for consumers, and
+// docs/release-notes.md declares this table the source of truth for consumers, and
 // consumers reject a wrong event_version rather than decoding it leniently. A
 // payload missing here would be silently decoded with an empty sku_code or
 // dead-lettered in production, so the document and this slice are pinned to
@@ -74,7 +74,7 @@ func TestV27ReleaseNotesEventTableMatchesTheReviewedPayloadSet(t *testing.T) {
 	section := v27ReleaseNotesSection(t)
 	matches := releaseNotesEventRow.FindAllStringSubmatch(section, -1)
 	if len(matches) == 0 {
-		t.Fatal("RELEASE_NOTES.md v27.0.0 section contains no event schema version 2 rows")
+		t.Fatal("docs/release-notes.md v27.0.0 section contains no event schema version 2 rows")
 	}
 
 	var payloads []string
@@ -103,7 +103,7 @@ func TestV27ReleaseNotesEventTableMatchesTheReviewedPayloadSet(t *testing.T) {
 	want := append([]string(nil), v27EventSchemaVersion2Payloads...)
 	sort.Strings(want)
 	if strings.Join(got, ",") != strings.Join(want, ",") {
-		t.Fatalf("RELEASE_NOTES.md event table payloads =\n  %v\nreviewed set =\n  %v", got, want)
+		t.Fatalf("docs/release-notes.md event table payloads =\n  %v\nreviewed set =\n  %v", got, want)
 	}
 }
 
@@ -132,15 +132,15 @@ func TestV27EventSchemaVersion2PayloadsAreDeclaredRoutedTypes(t *testing.T) {
 
 func v27ReleaseNotesSection(t *testing.T) string {
 	t.Helper()
-	path := filepath.Join(filepath.Dir(sharedContractPkgRoot(t)), "RELEASE_NOTES.md")
+	path := filepath.Join(filepath.Dir(sharedContractPkgRoot(t)), "docs", "release-notes.md")
 	contents, err := os.ReadFile(path)
 	if err != nil {
-		t.Fatalf("read RELEASE_NOTES.md: %v", err)
+		t.Fatalf("read docs/release-notes.md: %v", err)
 	}
 	text := string(contents)
 	start := strings.Index(text, "## v27.0.0 ")
 	if start < 0 {
-		t.Fatal("RELEASE_NOTES.md has no v27.0.0 release section")
+		t.Fatal("docs/release-notes.md has no v27.0.0 release section")
 	}
 	rest := text[start+len("## v27.0.0 "):]
 	if end := strings.Index(rest, "\n## v"); end >= 0 {

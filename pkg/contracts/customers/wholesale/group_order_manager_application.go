@@ -3,17 +3,9 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/customers/wholesale/wholesale_enums"
 )
-
-type GroupOrderManagerApplicantSnapshot struct {
-	UserID               string `json:"user_id"`
-	RetailAccountID      string `json:"retail_account_id"`
-	RetailCustomerNumber string `json:"retail_customer_number"`
-	Name                 string `json:"name,omitempty"`
-	Email                string `json:"email,omitempty"`
-}
 
 type GroupOrderManagerApplication struct {
 	ID                        string                                             `json:"id,omitempty"`

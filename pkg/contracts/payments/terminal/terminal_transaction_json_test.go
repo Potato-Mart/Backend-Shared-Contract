@@ -2,17 +2,24 @@ package terminal_test
 
 import (
 	"encoding/json"
+	"go/ast"
+	"go/parser"
+	"go/token"
+	"io/fs"
+	"path/filepath"
+	"reflect"
+	"runtime"
+	"strings"
 	"testing"
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/metadata"
-	payment "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/payments/payment"
-	settlement "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/payments/settlement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/payments/settlement/settlement_enums"
-	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/payments/terminal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/payments/terminal/terminal_enums"
+	payment "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/payments/payment"
+	settlement "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/payments/settlement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/payments/settlement/settlement_enums"
+	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/payments/terminal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/payments/terminal/terminal_enums"
 )
 
 func TestTerminalTransactionJSONRoundTripWithHistory(t *testing.T) {
@@ -29,25 +36,12 @@ func TestTerminalTransactionJSONRoundTripWithHistory(t *testing.T) {
 		ProviderDetails: &terminal.TerminalProviderDetails{
 			TerminalID: "provider_term_1",
 		},
-		OperationContext: &terminal.ProviderOperationContext{
-			RequestID:         "provider_req_1",
-			MerchantReference: "merchant_ref_1",
-			IdempotencyKey:    "idem_1",
-		},
 		Type:            terminal_enums.TerminalTxTypePurchase,
 		Requested:       terminal.Amounts{Currency: "AUD", PurchaseMinor: 10000},
 		Status:          terminal_enums.TerminalTxStatusFinalised,
 		FinancialStatus: terminal_enums.TerminalTxFinancialStatusApproved,
 		Result:          terminal.Amounts{Currency: "AUD", PurchaseMinor: 10000, AuthorizedMinor: 10000},
 		ProviderResult:  "approved",
-		ProviderData: metadata.Metadata{
-			"terminal_batch": "batch_1",
-		},
-		Payloads: &terminal.ProviderPayloads{
-			Request:             json.RawMessage(`{"sale":"request"}`),
-			Response:            json.RawMessage(`{"sale":"response"}`),
-			DisplayNotification: json.RawMessage(`{"display":"approved"}`),
-		},
 		History: []security.HistoryEntry{
 			{
 				OccurredAt: occurredAt,
@@ -79,14 +73,19 @@ func TestTerminalTransactionJSONRoundTripWithHistory(t *testing.T) {
 			t.Fatalf("TerminalTransaction JSON missing top-level %q: %s", key, payload)
 		}
 	}
-	for _, key := range []string{"provider_details", "operation_context", "provider_payloads"} {
+	for _, key := range []string{"provider_details"} {
 		if _, ok := got[key]; !ok {
 			t.Fatalf("TerminalTransaction JSON missing nested provider support %q: %s", key, payload)
 		}
 	}
-	for _, key := range []string{"provider_request_id", "provider_terminal_id", "merchant_reference", "idempotency_key", "provider_request", "provider_response", "display_notification"} {
+	for _, key := range []string{
+		"operation_context", "provider_payloads", "provider_data",
+		"receipt_options",
+		"provider_request_id", "provider_terminal_id", "merchant_reference", "idempotency_key",
+		"provider_request", "provider_response", "display_notification",
+	} {
 		if _, ok := got[key]; ok {
-			t.Fatalf("TerminalTransaction JSON should not include flat provider key %q: %s", key, payload)
+			t.Fatalf("TerminalTransaction JSON should not include provider transport or opaque data key %q: %s", key, payload)
 		}
 	}
 
@@ -96,17 +95,8 @@ func TestTerminalTransactionJSONRoundTripWithHistory(t *testing.T) {
 	if decoded.ProviderDetails == nil || decoded.ProviderDetails.TerminalID != "provider_term_1" {
 		t.Fatalf("provider details did not round-trip: %+v", decoded.ProviderDetails)
 	}
-	if decoded.OperationContext == nil || decoded.OperationContext.IdempotencyKey != "idem_1" {
-		t.Fatalf("operation context did not round-trip: %+v", decoded.OperationContext)
-	}
-	if decoded.Payloads == nil || len(decoded.Payloads.Request) == 0 || len(decoded.Payloads.DisplayNotification) == 0 {
-		t.Fatalf("provider payloads did not round-trip: %+v", decoded.Payloads)
-	}
 	if decoded.Result.AuthorizedMinor != 10000 || decoded.FinancialStatus != terminal_enums.TerminalTxFinancialStatusApproved {
 		t.Fatalf("result/financial status did not round-trip: %+v", decoded)
-	}
-	if decoded.ProviderData["terminal_batch"] != "batch_1" {
-		t.Fatalf("provider data did not round-trip: %+v", decoded.ProviderData)
 	}
 	if len(decoded.History) != 1 || decoded.History[0].Changes[0].ToValue != "finalised" {
 		t.Fatalf("history did not round-trip: %+v", decoded.History)
@@ -125,7 +115,6 @@ func TestTerminalProviderDetailsJSONShapes(t *testing.T) {
 			TerminalID: "provider_term_1",
 			DeviceID:   "device_1",
 			Nickname:   "Front Counter",
-			BaseURL:    "https://terminal.example.com",
 		},
 	}
 
@@ -146,7 +135,17 @@ func TestTerminalProviderDetailsJSONShapes(t *testing.T) {
 	if _, ok := got["provider_details"]; !ok {
 		t.Fatalf("Terminal JSON missing provider_details: %s", payload)
 	}
-	for _, key := range []string{"provider_merchant_id", "provider_store_id", "provider_terminal_id", "provider_device_id", "terminal_nickname", "provider_base_url"} {
+	providerDetails, ok := got["provider_details"].(map[string]any)
+	if !ok {
+		t.Fatalf("Terminal provider_details has unexpected shape: %#v", got["provider_details"])
+	}
+	if _, ok := providerDetails["base_url"]; ok {
+		t.Fatalf("Terminal provider_details must not expose a provider endpoint: %s", payload)
+	}
+	for _, key := range []string{
+		"provider_merchant_id", "provider_store_id", "provider_terminal_id", "provider_device_id", "terminal_nickname",
+		"provider_base_url", "base_url",
+	} {
 		if _, ok := got[key]; ok {
 			t.Fatalf("Terminal JSON should not include flat provider key %q: %s", key, payload)
 		}
@@ -154,18 +153,65 @@ func TestTerminalProviderDetailsJSONShapes(t *testing.T) {
 
 }
 
+func TestTerminalContractsExcludeProviderTransportAndOpaqueFields(t *testing.T) {
+	assertNoFields(t, reflect.TypeOf(terminal.TerminalProviderDetails{}), "BaseURL")
+	assertNoFields(t, reflect.TypeOf(terminal.Terminal{}), "Metadata")
+	assertNoFields(t, reflect.TypeOf(terminal.TerminalTransaction{}), "OperationContext", "Payloads", "ProviderData", "ReceiptOptions", "Metadata")
+	assertNoFields(t, reflect.TypeOf(settlement.Settlement{}), "OperationContext", "Payloads", "Metadata")
+	assertPackageDoesNotDeclareType(t, "ReceiptOptions")
+}
+
+func assertNoFields(t *testing.T, recordType reflect.Type, names ...string) {
+	t.Helper()
+	for _, name := range names {
+		if _, exists := recordType.FieldByName(name); exists {
+			t.Errorf("%s must not expose provider transport or opaque field %s", recordType.Name(), name)
+		}
+	}
+}
+
+func assertPackageDoesNotDeclareType(t *testing.T, typeName string) {
+	t.Helper()
+	_, testFile, _, ok := runtime.Caller(0)
+	if !ok {
+		t.Fatal("locate terminal contract test source")
+	}
+
+	packages, err := parser.ParseDir(token.NewFileSet(), filepath.Dir(testFile), func(info fs.FileInfo) bool {
+		return !strings.HasSuffix(info.Name(), "_test.go")
+	}, 0)
+	if err != nil {
+		t.Fatalf("parse terminal contract package: %v", err)
+	}
+	contractPackage, ok := packages["terminal"]
+	if !ok {
+		t.Fatalf("terminal package not found while checking retired type %s", typeName)
+	}
+	for _, sourceFile := range contractPackage.Files {
+		for _, declaration := range sourceFile.Decls {
+			general, ok := declaration.(*ast.GenDecl)
+			if !ok || general.Tok != token.TYPE {
+				continue
+			}
+			for _, specification := range general.Specs {
+				typeSpecification, ok := specification.(*ast.TypeSpec)
+				if ok && typeSpecification.Name.Name == typeName {
+					t.Errorf("terminal contract must not declare retired request-control type %s", typeName)
+				}
+			}
+		}
+	}
+}
+
 func TestSettlementJSONGroupsProviderSupportFields(t *testing.T) {
 	settlement := settlement.Settlement{
 		ID:                   "settlement_1",
 		TerminalID:           "term_1",
 		ProviderSettlementID: "provider_settlement_1",
-		ProviderDetails:      &terminal.TerminalProviderDetails{MerchantID: "merchant_1", TerminalID: "provider_term_1"},
-		OperationContext:     &terminal.ProviderOperationContext{RequestID: "provider_req_1", IdempotencyKey: "idem_1"},
 		Type:                 settlement_enums.SettlementTypeSettlement,
 		Status:               terminal_enums.TerminalTxStatusFinalised,
 		FinancialStatus:      terminal_enums.TerminalTxFinancialStatusApproved,
 		Totals:               settlement.SettlementTotals{Currency: "AUD", TotalMinor: 10000},
-		Payloads:             &terminal.ProviderPayloads{Request: json.RawMessage(`{"settle":"request"}`)},
 	}
 
 	payload, err := json.Marshal(settlement)
@@ -182,14 +228,12 @@ func TestSettlementJSONGroupsProviderSupportFields(t *testing.T) {
 			t.Fatalf("Settlement JSON missing top-level %q: %s", key, payload)
 		}
 	}
-	for _, key := range []string{"provider_details", "operation_context", "provider_payloads"} {
-		if _, ok := got[key]; !ok {
-			t.Fatalf("Settlement JSON missing nested provider support %q: %s", key, payload)
-		}
-	}
-	for _, key := range []string{"provider_merchant_id", "provider_terminal_id", "provider_request_id", "idempotency_key", "provider_request"} {
+	for _, key := range []string{
+		"operation_context", "provider_payloads", "provider_details", "metadata",
+		"provider_merchant_id", "provider_terminal_id", "provider_request_id", "idempotency_key", "provider_request",
+	} {
 		if _, ok := got[key]; ok {
-			t.Fatalf("Settlement JSON should not include flat provider key %q: %s", key, payload)
+			t.Fatalf("Settlement JSON should not include provider transport key %q: %s", key, payload)
 		}
 	}
 

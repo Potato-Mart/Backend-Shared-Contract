@@ -3,7 +3,7 @@ package wish
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/wish/wish_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/wish/wish_enums"
 )
 
 // WishProposal is a customer-submitted product idea without customer identity.

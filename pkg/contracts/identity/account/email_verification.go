@@ -14,5 +14,4 @@ type EmailVerificationAudit struct {
 	WasVerified bool      `json:"was_verified"`
 	IsVerified  bool      `json:"is_verified"`
 	VerifiedAt  time.Time `json:"verified_at"`
-	RequestID   string    `json:"request_id,omitempty"`
 }

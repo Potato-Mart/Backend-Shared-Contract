@@ -12,15 +12,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/pricebook"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pricing/pricebook"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/product/product_enums"
 )
 
 type canonicalProductField struct {
@@ -28,7 +28,7 @@ type canonicalProductField struct {
 	typeOf reflect.Type
 }
 
-func TestV30GlobalProductHasSKUCodeAndAuthoritativeStorage(t *testing.T) {
+func TestV31GlobalProductHasSKUCodeAndAuthoritativeStorage(t *testing.T) {
 	assertExactFields(t, reflect.TypeOf(product.Product{}), map[string]canonicalProductField{
 		"ID":                 {json: "id", typeOf: reflect.TypeOf("")},
 		"SKUCode":            {json: "sku_code", typeOf: reflect.TypeOf("")},
@@ -44,7 +44,7 @@ func TestV30GlobalProductHasSKUCodeAndAuthoritativeStorage(t *testing.T) {
 	})
 }
 
-func TestV30SellingProductPublishesOnlyRenderCompleteCommercialData(t *testing.T) {
+func TestV31SellingProductPublishesOnlyRenderCompleteCommercialData(t *testing.T) {
 	assertExactFields(t, reflect.TypeOf(product.SellingProduct{}), map[string]canonicalProductField{
 		"SKUCode":            {json: "sku_code", typeOf: reflect.TypeOf("")},
 		"SKUSeriesCode":      {json: "sku_series_code", typeOf: reflect.TypeOf("")},
@@ -58,7 +58,7 @@ func TestV30SellingProductPublishesOnlyRenderCompleteCommercialData(t *testing.T
 	})
 }
 
-func TestV30SellingPriceExcludesPriceBookAdministration(t *testing.T) {
+func TestV31SellingPriceExcludesPriceBookAdministration(t *testing.T) {
 	assertExactFields(t, reflect.TypeOf(pricebook.SellingPrice{}), map[string]canonicalProductField{
 		"UnitPrice":        {json: "unit_price", typeOf: reflect.TypeOf(money.Money{})},
 		"CurrencyExponent": {json: "currency_exponent", typeOf: reflect.TypeOf(money.CurrencyExponent{})},
@@ -73,7 +73,7 @@ func TestV30SellingPriceExcludesPriceBookAdministration(t *testing.T) {
 	})
 }
 
-func TestV30PricebookNeverImportsParentProductPackage(t *testing.T) {
+func TestV31PricebookNeverImportsParentProductPackage(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	pricebookRoot := filepath.Join(pkgRoot, "contracts", "pricing", "pricebook")
 	var violations []string
@@ -89,7 +89,7 @@ func TestV30PricebookNeverImportsParentProductPackage(t *testing.T) {
 			return parseErr
 		}
 		for _, imported := range file.Imports {
-			if strings.Trim(imported.Path.Value, `"`) == "github.com/Potato-Mart/Backend-Shared-Contract/v30/pkg/contracts/supply/product" {
+			if strings.Trim(imported.Path.Value, `"`) == "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/product" {
 				violations = append(violations, relativePkgPath(t, pkgRoot, path)+": Pricebook imports parent Product package")
 			}
 		}
@@ -103,7 +103,7 @@ func TestV30PricebookNeverImportsParentProductPackage(t *testing.T) {
 	}
 }
 
-func TestV30ProductionModelsRejectLegacyCatalogueSymbols(t *testing.T) {
+func TestV31ProductionModelsRejectLegacyCatalogueSymbols(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	legacyIdentifiers := map[string]struct{}{"SKUID": {}, "SKUIDs": {}, "ProductCategory": {}}
 	legacyJSON := []string{"sku_id", "sku_ids", "product_category_code", "brand_ref", "package_option_id", "market_id", "price_book_id", "tax_category_id"}
