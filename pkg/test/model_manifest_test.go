@@ -108,7 +108,7 @@ var modelPackageManifest = map[string]string{
 // service-local DTO, workflow, persistence, provider-diagnostic, migration,
 // and build-metadata surfaces. Field-only changes are locked by JSON-shape and
 // retired-symbol tests instead.
-const exportedTypeManifestDigest = "8862f0490735b77a5bdccee5d94102cdafd8371e32aa4a5c8a4db97664c70871"
+const exportedTypeManifestDigest = "225e8b2370d58d9e1d073bd2fd663a95929a6a0c71aa4d24fb0c8e8754a2feff"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)
