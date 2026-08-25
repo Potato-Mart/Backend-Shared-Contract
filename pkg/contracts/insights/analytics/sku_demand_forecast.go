@@ -1,10 +1,10 @@
 package analytics
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security/security_enums"
 	"time"
 )
 

@@ -1,8 +1,8 @@
 package retail
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/customers/retail/retail_enums"
 )
 
 // RetailCustomerSummary is a compact retail customer projection for lists,

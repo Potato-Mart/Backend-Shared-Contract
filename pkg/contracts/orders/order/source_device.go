@@ -1,9 +1,9 @@
 package order
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/device"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/device"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/orders/order/order_enums"
 )
 
 // SourceDevice captures request and POS attribution for the order source.

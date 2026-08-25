@@ -3,9 +3,9 @@ package event
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/operations"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // StockLocationAvailabilityChangedEvent represents a customer-accessible

@@ -3,7 +3,7 @@ package marketing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/insights/marketing/marketing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/insights/marketing/marketing_enums"
 )
 
 // CampaignPredictionEvidence records an input window used by a forecast.

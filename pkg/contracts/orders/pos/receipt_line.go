@@ -1,10 +1,10 @@
 package pos
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/money"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/product"
 	"time"
 )
 

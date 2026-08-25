@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v32.0.0` | 2026-08-26 | Major | In-progress V32 hard cut: moves the module path to `/v32`; the final contract surface and consumer actions are completed before release. |
 | `v31.0.1` | 2026-08-25 | Patch | Retains the Go 1.26.7 baseline and removes active historical compatibility scaffolding without changing the `/v31` contract surface. |
 | `v31.0.0` | 2026-08-25 | Major | Contract-boundary hard cut: removes persistence, token-claim, workflow, provider-transport, and hard-coded operational constants from the shared model tree; moves exact release metadata to `go.mod`; moves the Review package under Customer ownership; and changes the module path to `/v31`. All consumers must migrate explicitly. |
 | `v30.0.0` | 2026-08-24 | Major | Domain ownership hard cut: centralizes backend-defined notification topics and preferences, moves customer analytics to Insights, resolves commercial market from frozen fulfilment location, consolidates Marketing/Pricing ownership, publishes SellingProduct, and generalizes Review contracts. Changes the module path to `/v30`; all consumers must migrate explicitly. |
@@ -127,6 +128,35 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v32.0.0 (2026-08-26) - Contract Convergence (In Progress)
+
+### Breaking contract
+
+- Module path and release metadata move to
+  `github.com/Potato-Mart/Backend-Shared-Contract/v32` and `v32.0.0`.
+- This release is a hard cut. It retains no `/v31` forwarding packages,
+  compatibility aliases, fallback JSON fields, or parallel old/new shapes.
+
+### Consumer action
+
+Each backend service must adopt the released `/v32 v32.0.0` module only in a
+separately authorized service change. This contract release does not modify
+service runtime behavior, persistence, DTOs, OpenAPI, generated clients,
+infrastructure, or CI configuration.
+
+### Consumer Migration Matrix
+
+| Consumer | Required action before V32 adoption | This release performs it? |
+| --- | --- | --- |
+| Backend-Identity | Adopt the shared permission vocabulary and complete its service-local migration. | No |
+| Backend-Customers | Replace its private workforce vocabulary in a service-local migration. | No |
+| Backend-Payments | Adopt V32 while retaining provider/runtime boundaries locally. | No |
+| Backend-Orders | Adopt V32 with its service-owned digital and checkout migrations. | No |
+| Backend-Pricing | Adopt V32 with its service-owned wallet and price publication work. | No |
+| Backend-Supply | Adopt V32 with its service-owned receipt and inventory work. | No |
+| Backend-Insights | Adopt V32 while retaining its strict analytics boundary. | No |
+| Backend-Notification | Adopt V32 while retaining delivery/runtime ownership locally. | No |
 
 ## v31.0.1 (2026-08-25) - Active-Surface Cleanup
 

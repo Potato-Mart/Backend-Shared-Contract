@@ -701,7 +701,7 @@ func TestProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 
 func TestGoSourcesContainNoOlderContractImports(t *testing.T) {
 	const contractImportRoot = "github.com/Potato-Mart/Backend-Shared-Contract/"
-	const currentContractImportPrefix = contractImportRoot + "v31/"
+	const currentContractImportPrefix = contractImportRoot + "v32/"
 	pkgRoot := sharedContractPkgRoot(t)
 	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {

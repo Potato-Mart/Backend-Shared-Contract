@@ -3,7 +3,7 @@ package retail
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/customers/retail/retail_enums"
 )
 
 // RetailCustomerReceiptPreferences groups the customer's receipt format

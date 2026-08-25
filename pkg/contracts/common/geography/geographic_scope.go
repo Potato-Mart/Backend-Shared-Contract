@@ -1,6 +1,6 @@
 package geography
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/geography/geography_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography/geography_enums"
 
 // GeographicContext is the immutable geographic resolution snapshot carried
 // by pricing, eligibility, and order projections.

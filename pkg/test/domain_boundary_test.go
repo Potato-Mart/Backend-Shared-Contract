@@ -13,11 +13,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/customers/retail"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/identity/account"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/notifications"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/customers/retail"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/identity/account"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/notifications"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/orders/shipping"
 )
 
 func TestCustomerAndOrderGeographyUsesCanonicalFields(t *testing.T) {
