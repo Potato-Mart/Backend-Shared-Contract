@@ -31,9 +31,11 @@ tree, whose contents are restricted to contract models and enums.
    git diff --check
    ```
 
-4. Push only the feature branch, open an approved pull request, resolve review
-   threads, and wait for the required `Go tests` check. Do not create or push
-   the version tag from the feature branch.
+4. Push only the feature branch, open a pull request, resolve review threads,
+   and wait for the required `Go tests` check. Contributors without bypass
+   permission need the required approval; release maintainers may use the
+   documented pull-request-only bypass. Do not create or push the version tag
+   from the feature branch.
 5. Merging to `main` triggers `.github/workflows/release.yml`. The workflow
    reruns the contract tests, verifies source-version alignment, creates the
    immutable annotated tag, and creates or repairs the matching GitHub Release.

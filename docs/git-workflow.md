@@ -33,7 +33,15 @@ workflows, version metadata, validation, and release governance documents.
 
 The `main` ruleset must require a pull request, code-owner review, stale-review
 dismissal, and the `Go tests` check. For these paths, approval from either
-release maintainer satisfies the required code-owner review.
+release maintainer satisfies the required code-owner review for contributors
+without bypass permission.
+
+`@Potato-Mart/release-maintainers` is a pull-request-only ruleset bypass actor.
+Either maintainer may explicitly bypass the ruleset to merge their own pull
+request without a second maintainer's approval. This never grants a direct push
+to `main`; GitHub retains the pull request and bypass audit trail. Maintainers
+should still wait for the required `Go tests` check unless an incident requires
+an audited exception.
 
 ## Releases
 
