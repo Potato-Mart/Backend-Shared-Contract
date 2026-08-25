@@ -27,7 +27,7 @@ func TestIdentityEnumsValidateKnownValues(t *testing.T) {
 // assertStringEnums cannot do this: it compares an enum constant against its
 // own reflected string, so editing a constant's value still round-trips and
 // still satisfies IsValid. Identity mints these strings into JWT role and
-// scope claims, and all seven services plus the admin client authorize on
+// scope claims, and all eight services plus the admin client authorize on
 // them, so a silent edit would re-authorize live principals with no test
 // turning red. The literals below are the lock.
 func TestWorkforceRoleAndScopeWireValuesAreLocked(t *testing.T) {
