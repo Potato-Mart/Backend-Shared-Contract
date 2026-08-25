@@ -23,7 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
-| `v31.0.1` | 2026-08-25 | Patch | Raises the repository Go toolchain baseline to 1.27.0 and removes active historical compatibility scaffolding without changing the `/v31` contract surface. |
+| `v31.0.1` | 2026-08-25 | Patch | Retains the Go 1.26.7 baseline and removes active historical compatibility scaffolding without changing the `/v31` contract surface. |
 | `v31.0.0` | 2026-08-25 | Major | Contract-boundary hard cut: removes persistence, token-claim, workflow, provider-transport, and hard-coded operational constants from the shared model tree; moves exact release metadata to `go.mod`; moves the Review package under Customer ownership; and changes the module path to `/v31`. All consumers must migrate explicitly. |
 | `v30.0.0` | 2026-08-24 | Major | Domain ownership hard cut: centralizes backend-defined notification topics and preferences, moves customer analytics to Insights, resolves commercial market from frozen fulfilment location, consolidates Marketing/Pricing ownership, publishes SellingProduct, and generalizes Review contracts. Changes the module path to `/v30`; all consumers must migrate explicitly. |
 | `v29.0.2` | 2026-08-22 | Patch | Raises the repository-owned Go toolchain requirement to Go 1.26.7. No exported model, JSON shape, enum value, event schema, or module path changes. |
@@ -128,7 +128,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
 
-## v31.0.1 (2026-08-25) - Go 1.27.0 Toolchain And Active-Surface Cleanup
+## v31.0.1 (2026-08-25) - Active-Surface Cleanup
 
 ### Breaking Contract Changes
 
@@ -146,7 +146,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 ### Other Changes
 
-- Raises the repository-owned Go directive from Go 1.26.7 to Go 1.27.0.
+- Retains the repository-owned Go directive at the exact Go 1.26.7 patch release.
 
 ### Contract Files Changed
 
@@ -155,7 +155,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 ### Compatibility Notes
 
 - No exported model, JSON field, enum value, event schema, or module-path change is included.
-- Consumers require no import migration for this patch; services adopt the Go 1.27.0 toolchain when they move to this release.
+- Consumers require no import or toolchain migration for this patch.
 
 ## v31.0.0 (2026-08-25) - Model-Only Boundary Cleanup
 
