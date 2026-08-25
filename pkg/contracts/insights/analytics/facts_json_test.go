@@ -10,11 +10,8 @@ import (
 )
 
 // TestAnalyticsFactsCarryCountryAttribution locks the country a scoped read
-// filters on. Before v28.0.0 these models carried market_code only, so a
-// countryAdmin could not be filtered at all and Insights had to refuse the
-// read rather than widen it — the rank-2 principal could see no analytics.
-// The field is omitempty, so a fact recorded without it decodes unchanged and
-// the consumer treats the absence as "unattributed", fail-closed.
+// filters on. The field is optional so facts without country attribution stay
+// distinguishable from facts attributed to a specific country.
 func TestAnalyticsFactsCarryCountryAttribution(t *testing.T) {
 	composition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}}
 	populated := map[string]any{

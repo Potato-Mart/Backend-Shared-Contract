@@ -34,6 +34,6 @@ func TestImagesHasExactlyCanonicalObjectMediaFields(t *testing.T) {
 		t.Fatalf("ProductContent.Images = %#v, want *Images json:images,omitempty", images)
 	}
 	if _, exists := reflect.TypeOf(Product{}).FieldByName("Media"); exists {
-		t.Fatal("Product must not retain the legacy Media field")
+		t.Fatal("Product must not retain the retired Media field")
 	}
 }

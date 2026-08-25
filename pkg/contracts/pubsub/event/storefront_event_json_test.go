@@ -85,9 +85,9 @@ func TestCampaignLinkRevisionCTAAndMediaJSON(t *testing.T) {
 	if strings.Contains(string(payload), `"region"`) {
 		t.Fatalf("campaign retained removed audience region: %s", payload)
 	}
-	for _, legacy := range []string{`"media_code"`, `"media_url"`} {
-		if strings.Contains(string(payload), legacy) {
-			t.Fatalf("campaign retained legacy %s: %s", legacy, payload)
+	for _, retired := range []string{`"media_code"`, `"media_url"`} {
+		if strings.Contains(string(payload), retired) {
+			t.Fatalf("campaign retained retired %s: %s", retired, payload)
 		}
 	}
 }

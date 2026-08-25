@@ -10,7 +10,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/classification"
 )
 
-func TestV3001CatalogReferencesAreCodeOnly(t *testing.T) {
+func TestCatalogReferencesAreCodeOnly(t *testing.T) {
 	tests := []struct {
 		name  string
 		value any
@@ -40,7 +40,7 @@ func TestV3001CatalogReferencesAreCodeOnly(t *testing.T) {
 	}
 }
 
-func TestV3001CommonGeographyAndMediaRenderTypesRemainRich(t *testing.T) {
+func TestCommonGeographyAndMediaRenderTypesRemainRich(t *testing.T) {
 	countryType := reflect.TypeOf(geography.CountryRef{})
 	if _, ok := countryType.FieldByName("Name"); !ok {
 		t.Fatal("geography.CountryRef must retain its optional display name")

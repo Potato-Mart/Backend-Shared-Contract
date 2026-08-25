@@ -13,10 +13,10 @@ import (
 	"testing"
 )
 
-// v31ModelPackageManifest classifies every production package. Adding an
+// modelPackageManifest classifies every production package. Adding an
 // exported type changes the digest below and requires an explicit manifest
 // review instead of silently expanding the contract surface.
-var v31ModelPackageManifest = map[string]string{
+var modelPackageManifest = map[string]string{
 	"contracts/common/audit":                                     "record,value",
 	"contracts/common/commerce/commerce_enums":                   "enum",
 	"contracts/common/device":                                    "record",
@@ -104,13 +104,13 @@ var v31ModelPackageManifest = map[string]string{
 	"contracts/supply/wish/wish_enums":                           "enum",
 }
 
-// Reviewed for the v31.0.0 boundary cleanup. The digest captures
-// package|class|TypeName triples after removing service-local DTO, workflow,
-// persistence, provider-diagnostic, migration, and release-version surfaces.
-// Field-only changes are locked by the JSON and hard-cutover tests instead.
-const v31ExportedTypeManifestDigest = "e6156312693c3ba46bd077c55fbabc5c2479469c2a2baf077388420bf60d0624"
+// The digest captures package|class|TypeName triples after excluding
+// service-local DTO, workflow, persistence, provider-diagnostic, migration,
+// and build-metadata surfaces. Field-only changes are locked by JSON-shape and
+// retired-symbol tests instead.
+const exportedTypeManifestDigest = "e6156312693c3ba46bd077c55fbabc5c2479469c2a2baf077388420bf60d0624"
 
-func TestV31ExportedTypesMatchModelManifest(t *testing.T) {
+func TestExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)
 	var entries []string
 	pkgRoot := sharedContractPkgRoot(t)
@@ -126,9 +126,9 @@ func TestV31ExportedTypesMatchModelManifest(t *testing.T) {
 		if packagePath == "." {
 			return nil
 		}
-		class, classified := v31ModelPackageManifest[packagePath]
+		class, classified := modelPackageManifest[packagePath]
 		if !classified {
-			t.Errorf("%s is not classified in the v31 model manifest", packagePath)
+			t.Errorf("%s is not classified in the model manifest", packagePath)
 			return nil
 		}
 		seenPackages[packagePath] = true
@@ -153,9 +153,9 @@ func TestV31ExportedTypesMatchModelManifest(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("read v31 model manifest: %v", err)
+		t.Fatalf("read model manifest: %v", err)
 	}
-	for packagePath := range v31ModelPackageManifest {
+	for packagePath := range modelPackageManifest {
 		if !seenPackages[packagePath] {
 			t.Errorf("manifest package %s has no production source", packagePath)
 		}
@@ -163,7 +163,7 @@ func TestV31ExportedTypesMatchModelManifest(t *testing.T) {
 	sort.Strings(entries)
 	sum := sha256.Sum256([]byte(strings.Join(entries, "\n")))
 	got := hex.EncodeToString(sum[:])
-	if got != v31ExportedTypeManifestDigest {
+	if got != exportedTypeManifestDigest {
 		t.Fatalf("exported model manifest changed: got %s; classify the change and update the reviewed digest", got)
 	}
 }

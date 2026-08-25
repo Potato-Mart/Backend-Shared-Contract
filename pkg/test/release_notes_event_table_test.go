@@ -16,34 +16,11 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pubsub/event/event_enums"
 )
 
-// v27EventSchemaVersion2Payloads is the reviewed set of routed Pub/Sub payloads
-// that publish event_version "2". It was derived by walking the transitive JSON
-// key set of every payload type in contracts/pubsub/event against the v26 tree:
-// a payload is listed when a nested type reached through any depth of
-// embedding, slice, or pointer changed a JSON key, which is why
-// OrderPackingProjection is present even though its own fields are unchanged.
-//
-// docs/release-notes.md declares this table the source of truth for consumers, and
-// consumers reject a wrong event_version rather than decoding it leniently. A
-// payload missing here would be silently decoded with an empty sku_code or
-// dead-lettered in production, so the document and this slice are pinned to
-// each other.
-//
-// v30.0.0 does not move the schema version. Its payload additions — the
-// optional market_code, country_code, and depot_code geography — are all
-// omitempty fields that a version-2 consumer decodes unchanged, so this table
-// and the v27.0.0 section that publishes it stay authoritative. Publishers
-// must not bump event_version for them; a bump would break every consumer
-// that rejects a version it does not recognize, for no decode benefit.
-//
-// That holds for the nested additions too. OrderFact and RefundFact are listed
-// here and now embed analytics item facts that gained an optional country_code,
-// which is exactly the "nested type reached through a slice" case the
-// derivation above describes — but the rule that put OrderPackingProjection on
-// this list is a CHANGED JSON key, and an added omitempty key is not one. No
-// version-2 consumer decodes these payloads differently, so the set is
-// unchanged and event_version stays "2".
-var v27EventSchemaVersion2Payloads = []string{
+// eventSchemaVersion2Payloads is the reviewed set of routed Pub/Sub payloads
+// that publish event_version "2". The release notes publish the same table as
+// the consumer source of truth, so this test keeps the documentation and
+// declared event types aligned.
+var eventSchemaVersion2Payloads = []string{
 	"CatalogBaseCostChangedEvent",
 	"CatalogListingChangedEvent",
 	"InventoryDateMarkThresholdEvent",
@@ -67,14 +44,14 @@ var releaseNotesEventRow = regexp.MustCompile(
 	"(?m)^\\| *([0-9]+) *\\| *`([^`]+)` *\\| *`([^`]+)` *\\| *`([^`]+)` *\\|",
 )
 
-// TestV27ReleaseNotesEventTableMatchesTheReviewedPayloadSet keeps the published
+// TestReleaseNotesEventTableMatchesReviewedPayloadSet keeps the published
 // event schema version 2 table and the reviewed payload set from drifting
 // apart. Editing either side alone fails here.
-func TestV27ReleaseNotesEventTableMatchesTheReviewedPayloadSet(t *testing.T) {
-	section := v27ReleaseNotesSection(t)
+func TestReleaseNotesEventTableMatchesReviewedPayloadSet(t *testing.T) {
+	section := eventSchemaVersion2Section(t)
 	matches := releaseNotesEventRow.FindAllStringSubmatch(section, -1)
 	if len(matches) == 0 {
-		t.Fatal("docs/release-notes.md v27.0.0 section contains no event schema version 2 rows")
+		t.Fatal("docs/release-notes.md event schema version 2 section contains no rows")
 	}
 
 	var payloads []string
@@ -100,37 +77,37 @@ func TestV27ReleaseNotesEventTableMatchesTheReviewedPayloadSet(t *testing.T) {
 
 	got := append([]string(nil), payloads...)
 	sort.Strings(got)
-	want := append([]string(nil), v27EventSchemaVersion2Payloads...)
+	want := append([]string(nil), eventSchemaVersion2Payloads...)
 	sort.Strings(want)
 	if strings.Join(got, ",") != strings.Join(want, ",") {
 		t.Fatalf("docs/release-notes.md event table payloads =\n  %v\nreviewed set =\n  %v", got, want)
 	}
 }
 
-// TestV27EventSchemaVersion2PayloadsAreDeclaredRoutedTypes proves every listed
+// TestEventSchemaVersion2PayloadsAreDeclaredRoutedTypes proves every listed
 // payload is a real exported type in the routed event package, so a typo or a
 // renamed payload cannot survive in the published table.
-func TestV27EventSchemaVersion2PayloadsAreDeclaredRoutedTypes(t *testing.T) {
-	declared := v27RoutedEventPayloadTypes(t)
-	for _, payload := range v27EventSchemaVersion2Payloads {
+func TestEventSchemaVersion2PayloadsAreDeclaredRoutedTypes(t *testing.T) {
+	declared := routedEventPayloadTypes(t)
+	for _, payload := range eventSchemaVersion2Payloads {
 		if _, ok := declared[payload]; !ok {
 			t.Errorf("event schema version 2 payload %s is not an exported type in contracts/pubsub/event", payload)
 		}
 	}
 
-	// The retired v26 payload must not reappear in the routed package or in
-	// the published table.
+	// The retired payload must not reappear in the routed package or in the
+	// published table.
 	if _, ok := declared["PackagePricingAvailabilityChangedEvent"]; ok {
 		t.Error("retired PackagePricingAvailabilityChangedEvent must not be declared in contracts/pubsub/event")
 	}
-	for _, payload := range v27EventSchemaVersion2Payloads {
+	for _, payload := range eventSchemaVersion2Payloads {
 		if payload == "PackagePricingAvailabilityChangedEvent" {
 			t.Error("retired PackagePricingAvailabilityChangedEvent must not appear in the event schema version 2 table")
 		}
 	}
 }
 
-func v27ReleaseNotesSection(t *testing.T) string {
+func eventSchemaVersion2Section(t *testing.T) string {
 	t.Helper()
 	path := filepath.Join(filepath.Dir(sharedContractPkgRoot(t)), "docs", "release-notes.md")
 	contents, err := os.ReadFile(path)
@@ -138,18 +115,19 @@ func v27ReleaseNotesSection(t *testing.T) string {
 		t.Fatalf("read docs/release-notes.md: %v", err)
 	}
 	text := string(contents)
-	start := strings.Index(text, "## v27.0.0 ")
-	if start < 0 {
-		t.Fatal("docs/release-notes.md has no v27.0.0 release section")
+	const heading = "### Event Schema Version 2 / 事件結構版本 2"
+	if count := strings.Count(text, heading); count != 1 {
+		t.Fatalf("docs/release-notes.md has %d %q headings, want exactly one", count, heading)
 	}
-	rest := text[start+len("## v27.0.0 "):]
-	if end := strings.Index(rest, "\n## v"); end >= 0 {
+	start := strings.Index(text, heading)
+	rest := text[start+len(heading):]
+	if end := strings.Index(rest, "\n### "); end >= 0 {
 		return rest[:end]
 	}
 	return rest
 }
 
-func v27RoutedEventPayloadTypes(t *testing.T) map[string]struct{} {
+func routedEventPayloadTypes(t *testing.T) map[string]struct{} {
 	t.Helper()
 	root := filepath.Join(sharedContractPkgRoot(t), "contracts", "pubsub", "event")
 	declared := make(map[string]struct{})

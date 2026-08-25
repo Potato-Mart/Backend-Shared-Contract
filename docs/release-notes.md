@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v31.0.1` | 2026-08-25 | Patch | Raises the repository Go toolchain baseline to 1.27.0 and removes active historical compatibility scaffolding without changing the `/v31` contract surface. |
 | `v31.0.0` | 2026-08-25 | Major | Contract-boundary hard cut: removes persistence, token-claim, workflow, provider-transport, and hard-coded operational constants from the shared model tree; moves exact release metadata to `go.mod`; moves the Review package under Customer ownership; and changes the module path to `/v31`. All consumers must migrate explicitly. |
 | `v30.0.0` | 2026-08-24 | Major | Domain ownership hard cut: centralizes backend-defined notification topics and preferences, moves customer analytics to Insights, resolves commercial market from frozen fulfilment location, consolidates Marketing/Pricing ownership, publishes SellingProduct, and generalizes Review contracts. Changes the module path to `/v30`; all consumers must migrate explicitly. |
 | `v29.0.2` | 2026-08-22 | Patch | Raises the repository-owned Go toolchain requirement to Go 1.26.7. No exported model, JSON shape, enum value, event schema, or module path changes. |
@@ -126,6 +127,35 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v31.0.1 (2026-08-25) - Go 1.27.0 Toolchain And Active-Surface Cleanup
+
+### Breaking Contract Changes
+
+- None. The module path remains `github.com/Potato-Mart/Backend-Shared-Contract/v31`.
+
+### Added
+
+- None.
+
+### Fixed
+
+- Removes the active historical `OrderPaidEvent` payload compatibility scenario.
+- Reframes active test names, helpers, fixtures, and comments around their current invariants rather than the release in which an invariant was introduced.
+- Rewords production comments to describe current optional-field semantics without retaining migration-era narration.
+
+### Other Changes
+
+- Raises the repository-owned Go directive from Go 1.26.7 to Go 1.27.0.
+
+### Contract Files Changed
+
+- `go.mod`, `README.md`, contract comments, and contract test coverage only.
+
+### Compatibility Notes
+
+- No exported model, JSON field, enum value, event schema, or module-path change is included.
+- Consumers require no import migration for this patch; services adopt the Go 1.27.0 toolchain when they move to this release.
 
 ## v31.0.0 (2026-08-25) - Model-Only Boundary Cleanup
 

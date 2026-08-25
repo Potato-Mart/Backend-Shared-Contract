@@ -14,9 +14,9 @@ type SKUDemandForecast struct {
 	MarketCode string `json:"market_code"`
 	DepotCode  string `json:"depot_code"`
 	// CountryCode is the denormalized country the forecast is attributed to,
-	// so a country-scoped principal is filtered by a plain indexed match. It
-	// is absent on forecasts computed before v28.0.0; an absent value means
-	// "unattributed" and is handled fail-closed by the consumer.
+	// so a country-scoped principal is filtered by a plain indexed match. An
+	// empty value provides no geographic evidence and is handled fail-closed
+	// by the consumer.
 	CountryCode          geography.CountryCode    `json:"country_code,omitempty"`
 	Channel              commerce_enums.OrderType `json:"channel"`
 	Timezone             string                   `json:"timezone"`

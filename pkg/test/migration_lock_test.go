@@ -17,9 +17,9 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/purchase"
 )
 
-// TestV31TransactionEvidenceUsesOneImmutableSKUCode freezes the hard cut from
-// the former ID-plus-frozen-code pair to one business key.
-func TestV31TransactionEvidenceUsesOneImmutableSKUCode(t *testing.T) {
+// TestTransactionEvidenceUsesOneImmutableSKUCode keeps one business key on
+// every transaction-evidence model.
+func TestTransactionEvidenceUsesOneImmutableSKUCode(t *testing.T) {
 	for _, model := range []reflect.Type{
 		reflect.TypeOf(order.CartItem{}),
 		reflect.TypeOf(order.OrderItem{}),
@@ -36,10 +36,10 @@ func TestV31TransactionEvidenceUsesOneImmutableSKUCode(t *testing.T) {
 	}
 }
 
-// TestV27CatalogEventTopologyIsDeclared locks the new catalog-events routing
+// TestCatalogEventTopologyIsDeclared locks catalog-events routing
 // vocabulary so the contract, the cloud topology, and the local emulator script
 // can be compared against one source of truth.
-func TestV27CatalogEventTopologyIsDeclared(t *testing.T) {
+func TestCatalogEventTopologyIsDeclared(t *testing.T) {
 	if got := event_enums.EventTopicCatalogEvents; got.String() != "catalog-events" || !got.IsValid() {
 		t.Fatalf("catalog topic = %q valid=%v", got, got.IsValid())
 	}
@@ -77,10 +77,10 @@ func TestV27CatalogEventTopologyIsDeclared(t *testing.T) {
 	}
 }
 
-// TestV27MonetaryFieldsUseMinorUnitIntegers keeps every money-shaped field an
+// TestMonetaryFieldsUseMinorUnitIntegers keeps every money-shaped field an
 // exact integer. A float in a price, cost, tax, or amount field would silently
 // drift across JSON and service boundaries.
-func TestV27MonetaryFieldsUseMinorUnitIntegers(t *testing.T) {
+func TestMonetaryFieldsUseMinorUnitIntegers(t *testing.T) {
 	monetaryFragments := []string{"amount", "_minor", "price", "cost", "tax"}
 	pkgRoot := sharedContractPkgRoot(t)
 	var violations []string
@@ -102,7 +102,7 @@ func TestV27MonetaryFieldsUseMinorUnitIntegers(t *testing.T) {
 			if !ok {
 				return true
 			}
-			jsonKey, present := v27JSONFieldName(t, path, field)
+			jsonKey, present := jsonFieldName(t, path, field)
 			if !present {
 				return true
 			}
@@ -128,7 +128,7 @@ func TestV27MonetaryFieldsUseMinorUnitIntegers(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v27 monetary fields: %v", err)
+		t.Fatalf("scan monetary fields: %v", err)
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)

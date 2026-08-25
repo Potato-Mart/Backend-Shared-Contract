@@ -85,7 +85,7 @@ func TestDeclarationAndLabelRoundTripManagedMediaAndMeasurements(t *testing.T) {
 	}
 	for _, removed := range []string{`"source_product":`, `"sku":`} {
 		if strings.Contains(string(labelPayload), removed) {
-			t.Fatalf("label retained legacy product link %s: %s", removed, labelPayload)
+			t.Fatalf("label retained retired product link %s: %s", removed, labelPayload)
 		}
 	}
 }

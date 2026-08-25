@@ -10,7 +10,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/product/product_enums"
 )
 
-func TestV30PackageAndBarcodeReferencesUseBusinessCodes(t *testing.T) {
+func TestPackageAndBarcodeReferencesUseBusinessCodes(t *testing.T) {
 	now := time.Date(2026, 8, 19, 0, 0, 0, 0, time.UTC)
 	payload, err := json.Marshal(struct {
 		Package ProductPackageOption     `json:"package"`
@@ -22,9 +22,9 @@ func TestV30PackageAndBarcodeReferencesUseBusinessCodes(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, legacy := range []string{`"sku_id"`, `"package_option_id"`, `"manufacturer_id"`} {
-		if strings.Contains(string(payload), legacy) {
-			t.Fatalf("package JSON retained %s: %s", legacy, payload)
+	for _, retired := range []string{`"sku_id"`, `"package_option_id"`, `"manufacturer_id"`} {
+		if strings.Contains(string(payload), retired) {
+			t.Fatalf("package JSON retained %s: %s", retired, payload)
 		}
 	}
 }

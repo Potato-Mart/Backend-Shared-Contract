@@ -20,11 +20,11 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/warehouse"
 )
 
-// TestV31BackendGateModelSurface locks the reusable model primitives needed by
+// TestBackendGateModelSurface locks the reusable model primitives needed by
 // the stock, geography, market-pricing, listing, and availability gates.
 // HTTP DTOs, stock commands, resolution rules, and error envelopes remain
 // service-owned.
-func TestV31BackendGateModelSurface(t *testing.T) {
+func TestBackendGateModelSurface(t *testing.T) {
 	assertJSONFields(t, reflect.TypeOf(geography.Address{}), map[string]string{
 		"Locality":           "locality",
 		"AdministrativeArea": "administrative_area,omitempty",

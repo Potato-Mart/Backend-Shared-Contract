@@ -28,7 +28,7 @@ type canonicalProductField struct {
 	typeOf reflect.Type
 }
 
-func TestV31GlobalProductHasSKUCodeAndAuthoritativeStorage(t *testing.T) {
+func TestGlobalProductHasSKUCodeAndAuthoritativeStorage(t *testing.T) {
 	assertExactFields(t, reflect.TypeOf(product.Product{}), map[string]canonicalProductField{
 		"ID":                 {json: "id", typeOf: reflect.TypeOf("")},
 		"SKUCode":            {json: "sku_code", typeOf: reflect.TypeOf("")},
@@ -44,7 +44,7 @@ func TestV31GlobalProductHasSKUCodeAndAuthoritativeStorage(t *testing.T) {
 	})
 }
 
-func TestV31SellingProductPublishesOnlyRenderCompleteCommercialData(t *testing.T) {
+func TestSellingProductPublishesOnlyRenderCompleteCommercialData(t *testing.T) {
 	assertExactFields(t, reflect.TypeOf(product.SellingProduct{}), map[string]canonicalProductField{
 		"SKUCode":            {json: "sku_code", typeOf: reflect.TypeOf("")},
 		"SKUSeriesCode":      {json: "sku_series_code", typeOf: reflect.TypeOf("")},
@@ -58,7 +58,7 @@ func TestV31SellingProductPublishesOnlyRenderCompleteCommercialData(t *testing.T
 	})
 }
 
-func TestV31SellingPriceExcludesPriceBookAdministration(t *testing.T) {
+func TestSellingPriceExcludesPriceBookAdministration(t *testing.T) {
 	assertExactFields(t, reflect.TypeOf(pricebook.SellingPrice{}), map[string]canonicalProductField{
 		"UnitPrice":        {json: "unit_price", typeOf: reflect.TypeOf(money.Money{})},
 		"CurrencyExponent": {json: "currency_exponent", typeOf: reflect.TypeOf(money.CurrencyExponent{})},
@@ -73,7 +73,7 @@ func TestV31SellingPriceExcludesPriceBookAdministration(t *testing.T) {
 	})
 }
 
-func TestV31PricebookNeverImportsParentProductPackage(t *testing.T) {
+func TestPricebookNeverImportsParentProductPackage(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	pricebookRoot := filepath.Join(pkgRoot, "contracts", "pricing", "pricebook")
 	var violations []string
@@ -103,10 +103,10 @@ func TestV31PricebookNeverImportsParentProductPackage(t *testing.T) {
 	}
 }
 
-func TestV31ProductionModelsRejectLegacyCatalogueSymbols(t *testing.T) {
+func TestProductionModelsRejectRetiredCatalogueSymbols(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
-	legacyIdentifiers := map[string]struct{}{"SKUID": {}, "SKUIDs": {}, "ProductCategory": {}}
-	legacyJSON := []string{"sku_id", "sku_ids", "product_category_code", "brand_ref", "package_option_id", "market_id", "price_book_id", "tax_category_id"}
+	retiredIdentifiers := map[string]struct{}{"SKUID": {}, "SKUIDs": {}, "ProductCategory": {}}
+	retiredJSON := []string{"sku_id", "sku_ids", "product_category_code", "brand_ref", "package_option_id", "market_id", "price_book_id", "tax_category_id"}
 	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
 			return walkErr
@@ -122,16 +122,16 @@ func TestV31ProductionModelsRejectLegacyCatalogueSymbols(t *testing.T) {
 		ast.Inspect(file, func(node ast.Node) bool {
 			switch value := node.(type) {
 			case *ast.Ident:
-				if _, legacy := legacyIdentifiers[value.Name]; legacy {
-					t.Errorf("%s retains legacy identifier %s", fset.Position(value.Pos()), value.Name)
+				if _, retired := retiredIdentifiers[value.Name]; retired {
+					t.Errorf("%s retains retired identifier %s", fset.Position(value.Pos()), value.Name)
 				}
 			case *ast.Field:
 				if value.Tag == nil {
 					return true
 				}
-				for _, key := range legacyJSON {
+				for _, key := range retiredJSON {
 					if strings.Contains(value.Tag.Value, `json:\"`+key) {
-						t.Errorf("%s retains legacy JSON key %s", fset.Position(value.Tag.Pos()), key)
+						t.Errorf("%s retains retired JSON key %s", fset.Position(value.Tag.Pos()), key)
 					}
 				}
 			}

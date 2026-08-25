@@ -29,7 +29,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
-func TestV27PromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *testing.T) {
+func TestPromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *testing.T) {
 	maximum := int64(12)
 	scope := promotion.PromotionScope{
 		MatchMode: promotion_enums.PromotionMatchModeAll,
@@ -50,13 +50,13 @@ func TestV27PromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *test
 		},
 	}
 
-	if !v27PromotionScopeStructurallyUsable(scope) {
+	if !promotionScopeStructurallyUsable(scope) {
 		t.Fatal("populated restricted scope must be structurally usable")
 	}
-	if v27PromotionScopeStructurallyUsable(promotion.PromotionScope{MatchMode: promotion_enums.PromotionMatchModeAll}) {
+	if promotionScopeStructurallyUsable(promotion.PromotionScope{MatchMode: promotion_enums.PromotionMatchModeAll}) {
 		t.Fatal("an empty restricted scope must not be structurally usable")
 	}
-	if !v27PromotionScopeStructurallyUsable(promotion.PromotionScope{Unrestricted: true, MatchMode: promotion_enums.PromotionMatchModeAny}) {
+	if !promotionScopeStructurallyUsable(promotion.PromotionScope{Unrestricted: true, MatchMode: promotion_enums.PromotionMatchModeAny}) {
 		t.Fatal("an explicitly unrestricted scope must be structurally usable without groups")
 	}
 
@@ -79,7 +79,7 @@ func TestV27PromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *test
 	}
 }
 
-func TestV27PriceSnapshotFreezesRuleTaxAndEligibilityEvidence(t *testing.T) {
+func TestPriceSnapshotFreezesRuleTaxAndEligibilityEvidence(t *testing.T) {
 	capturedAt := time.Date(2026, 8, 12, 9, 30, 0, 0, time.UTC)
 	value := quote.PriceSnapshot{
 		QuoteID: "quote-1", LineID: "line-1", SKUCode: "sku-potato-a", MarketCode: "market-au",
@@ -149,7 +149,7 @@ func TestV27PriceSnapshotFreezesRuleTaxAndEligibilityEvidence(t *testing.T) {
 	}
 }
 
-func TestV27PromotionApplicationsPreserveOrderedResolvedSKUEvidence(t *testing.T) {
+func TestPromotionApplicationsPreserveOrderedResolvedSKUEvidence(t *testing.T) {
 	appliedAt := time.Date(2026, 8, 12, 9, 30, 0, 0, time.UTC)
 	applications := []promotion.PromotionApplication{
 		{PromotionID: "promotion-membership", PromotionKind: "membership_discount", PromotionRevision: 2, RelationID: "relation-membership", ResolvedTargetSKUCodes: []string{"sku-potato-a"}, AppliedAt: appliedAt},
@@ -184,7 +184,7 @@ func TestV27PromotionApplicationsPreserveOrderedResolvedSKUEvidence(t *testing.T
 	}
 }
 
-func TestV27CustomerSummariesExposeOnlyFrozenSafePricingFacts(t *testing.T) {
+func TestCustomerSummariesExposeOnlyFrozenSafePricingFacts(t *testing.T) {
 	for _, model := range []reflect.Type{reflect.TypeOf(pos.ReceiptLine{}), reflect.TypeOf(order.OrderLineSummary{})} {
 		for _, required := range []string{"SKUCode", "ProductName", "ProductImage", "ProductPackageOption", "CapturedAt", "PackagePrice", "TaxAmount", "DiscountAmount", "PromotionApplications", "Total"} {
 			if _, ok := model.FieldByName(required); !ok {
@@ -204,7 +204,7 @@ func TestV27CustomerSummariesExposeOnlyFrozenSafePricingFacts(t *testing.T) {
 	}
 }
 
-func TestV27OperationalCategoryTagEvidenceIsLocationQualified(t *testing.T) {
+func TestOperationalCategoryTagEvidenceIsLocationQualified(t *testing.T) {
 	model := reflect.TypeOf(operations.InventoryCategoryTagEvidence{})
 	assertJSONFields(t, model, map[string]string{
 		"SKUCode":           "sku_code",
@@ -222,7 +222,7 @@ func TestV27OperationalCategoryTagEvidenceIsLocationQualified(t *testing.T) {
 	}
 }
 
-func TestV27PromotionProductionSurfaceRejectsRetiredMechanicsAndDependencies(t *testing.T) {
+func TestPromotionProductionSurfaceRejectsRetiredMechanicsAndDependencies(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	retiredIdentifiers := map[string]struct{}{
 		"SellableOffer": {}, "SellableOfferSnapshot": {}, "AcceptedOffer": {},
@@ -318,7 +318,7 @@ func TestV27PromotionProductionSurfaceRejectsRetiredMechanicsAndDependencies(t *
 	}
 }
 
-func v27PromotionScopeStructurallyUsable(scope promotion.PromotionScope) bool {
+func promotionScopeStructurallyUsable(scope promotion.PromotionScope) bool {
 	if scope.Unrestricted {
 		return scope.MatchMode.IsValid()
 	}

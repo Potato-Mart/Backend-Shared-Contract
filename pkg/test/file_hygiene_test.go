@@ -11,10 +11,10 @@ import (
 	"testing"
 )
 
-// TestV31ProductionEnumFilesContainExactlyOneClosedStringEnum ensures a
+// TestProductionEnumFilesContainExactlyOneClosedStringEnum ensures a
 // finite enum has a dedicated leaf package and source file. Open typed codes
 // such as CountryCode intentionally remain model values and are not enums.
-func TestV31ProductionEnumFilesContainExactlyOneClosedStringEnum(t *testing.T) {
+func TestProductionEnumFilesContainExactlyOneClosedStringEnum(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	contractsRoot := filepath.Join(pkgRoot, "contracts")
 	var violations []string
@@ -47,18 +47,18 @@ func TestV31ProductionEnumFilesContainExactlyOneClosedStringEnum(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v31 enum file hygiene: %v", err)
+		t.Fatalf("scan enum file hygiene: %v", err)
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)
-		t.Fatalf("v31 enum file hygiene violations:\n%s", strings.Join(violations, "\n"))
+		t.Fatalf("enum file hygiene violations:\n%s", strings.Join(violations, "\n"))
 	}
 }
 
-// TestV31ProductionModelFilesContainOneExportedStruct keeps every production
+// TestProductionModelFilesContainOneExportedStruct keeps every production
 // model in a dedicated source file. Tests may group helpers and fixtures, but
 // production records must not accumulate unrelated exported shapes.
-func TestV31ProductionModelFilesContainOneExportedStruct(t *testing.T) {
+func TestProductionModelFilesContainOneExportedStruct(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	contractsRoot := filepath.Join(pkgRoot, "contracts")
 	var violations []string
@@ -86,11 +86,11 @@ func TestV31ProductionModelFilesContainOneExportedStruct(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan v31 model file hygiene: %v", err)
+		t.Fatalf("scan model file hygiene: %v", err)
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)
-		t.Fatalf("v31 model file hygiene violations:\n%s", strings.Join(violations, "\n"))
+		t.Fatalf("model file hygiene violations:\n%s", strings.Join(violations, "\n"))
 	}
 }
 
