@@ -3,6 +3,7 @@ package wallet
 import (
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/money"
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pricing/wallet/wallet_enums"
@@ -10,8 +11,13 @@ import (
 
 // RewardRedemption records a customer's redemption of a Membership reward.
 type RewardRedemption struct {
-	ID                 string                              `json:"id"`
-	CustomerNumber     string                              `json:"customer_number"`
+	ID             string `json:"id"`
+	CustomerNumber string `json:"customer_number"`
+	// MarketCode and CountryCode are the denormalized market and country used
+	// when this redemption was created, so geographically scoped reads are
+	// plain indexed matches.
+	MarketCode         string                              `json:"market_code,omitempty"`
+	CountryCode        geography.CountryCode               `json:"country_code,omitempty"`
 	RewardCode         string                              `json:"reward_code"`
 	ReservationID      string                              `json:"reservation_id,omitempty"`
 	PointsSpent        int                                 `json:"points_spent"`

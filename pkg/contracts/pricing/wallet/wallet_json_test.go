@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pricing/benefit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pricing/benefit/benefit_enums"
@@ -42,6 +43,34 @@ func TestOperationalPointsAndRewardRecordsAreWalletOwned(t *testing.T) {
 	}
 	if !strings.Contains(string(payload), `"reason":"REWARD_REDEEM"`) || !strings.Contains(string(payload), `"status":"REDEEMED"`) {
 		t.Fatalf("unexpected wallet operations payload: %s", payload)
+	}
+}
+
+func TestRewardRedemptionFreezesOptionalMarketAndCountry(t *testing.T) {
+	now := time.Date(2026, 8, 24, 0, 0, 0, 0, time.UTC)
+	redemption := wallet.RewardRedemption{
+		ID:             "rr-1",
+		CustomerNumber: "RC-1",
+		MarketCode:     "mkt_au_vic",
+		CountryCode:    geography.CountryCode("AU"),
+		RewardCode:     "reward-1",
+		PointsSpent:    100,
+		Status:         wallet_enums.RewardRedemptionStatusRedeemed,
+		CreatedAt:      now,
+	}
+	payload, err := json.Marshal(redemption)
+	if err != nil {
+		t.Fatalf("marshal reward redemption: %v", err)
+	}
+	if !strings.Contains(string(payload), `"market_code":"mkt_au_vic"`) || !strings.Contains(string(payload), `"country_code":"AU"`) {
+		t.Fatalf("reward redemption omitted geographic evidence: %s", payload)
+	}
+	emptyPayload, err := json.Marshal(wallet.RewardRedemption{})
+	if err != nil {
+		t.Fatalf("marshal empty reward redemption: %v", err)
+	}
+	if strings.Contains(string(emptyPayload), `"market_code"`) || strings.Contains(string(emptyPayload), `"country_code"`) {
+		t.Fatalf("empty reward redemption retained optional geography: %s", emptyPayload)
 	}
 }
 

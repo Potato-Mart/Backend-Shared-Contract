@@ -11,7 +11,9 @@ import (
 // FulfilmentLocationSnapshot freezes the address or depot that resolved a
 // cart's commercial market and eligibility. Delivery uses DeliveryAddress and
 // no SelectedDepotCode; pickup and in-store carry use SelectedDepotCode and no
-// DeliveryAddress. Changing this snapshot requires the cart to be repriced.
+// DeliveryAddress; digital uses neither. Every intent retains the resolved
+// geographic context, location fingerprint, and capture timestamp. Changing
+// this snapshot requires the cart to be repriced.
 type FulfilmentLocationSnapshot struct {
 	Intent              shipping_enums.FulfilmentIntent `json:"intent"`
 	DeliveryAddress     *party.ContactAddress           `json:"delivery_address,omitempty"`

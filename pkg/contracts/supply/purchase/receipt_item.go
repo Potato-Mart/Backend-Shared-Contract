@@ -12,6 +12,8 @@ type ReceiptItem struct {
 	ProductName         string                               `json:"product_name,omitempty"`
 	PackageOptionCode   string                               `json:"package_option_code"`
 	LotID               string                               `json:"lot_id"`
+	SupplierLotCode     string                               `json:"supplier_lot_code,omitempty"`
+	ManufacturerLotCode string                               `json:"manufacturer_lot_code,omitempty"`
 	DestinationBucketID string                               `json:"destination_bucket_id"`
 	DestinationLocation warehouse.StockLocationRef           `json:"destination_location"`
 	DateMark            *warehouse.InventoryDateMark         `json:"date_mark,omitempty"`
