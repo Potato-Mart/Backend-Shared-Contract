@@ -99,3 +99,53 @@ func TestCheckoutBenefitReservationExcludesPersistenceRetryKey(t *testing.T) {
 		t.Fatalf("checkout benefit reservation lost business reference or timestamp: %s", payload)
 	}
 }
+
+func TestRewardRedemptionOutcomeCarriesTypedIssueEvidence(t *testing.T) {
+	now := time.Date(2026, 8, 26, 0, 0, 0, 0, time.UTC)
+	redemption := wallet.RewardRedemption{
+		ID:             "redemption_1",
+		CustomerNumber: "RC-1",
+		RewardCode:     "reward-partner",
+		PointsSpent:    5000,
+		Status:         wallet_enums.RewardRedemptionStatusRedeemed,
+		Outcome: &wallet.RewardRedemptionOutcome{
+			GiftCardCode: "gc-001",
+			External: &wallet.ExternalRewardFulfilment{
+				ProviderCode:      "partner_stream_plus",
+				ExternalReference: "sub_889",
+				Status:            wallet_enums.ExternalRewardFulfilmentStatusProvisioned,
+				ProvisionedAt:     &now,
+			},
+		},
+		CreatedAt: now,
+	}
+	payload, err := json.Marshal(redemption)
+	if err != nil {
+		t.Fatalf("marshal reward redemption: %v", err)
+	}
+	if !strings.Contains(string(payload), `"customer_number":"RC-1"`) || !strings.Contains(string(payload), `"points_spent":5000`) {
+		t.Fatalf("reward redemption lost the redeeming member or the points spent: %s", payload)
+	}
+	if !strings.Contains(string(payload), `"outcome":{"gift_card_code":"gc-001"`) {
+		t.Fatalf("reward redemption lost its issued gift-card evidence: %s", payload)
+	}
+	if !strings.Contains(string(payload), `"provider_code":"partner_stream_plus"`) || !strings.Contains(string(payload), `"status":"PROVISIONED"`) {
+		t.Fatalf("reward redemption lost its external partner fulfilment: %s", payload)
+	}
+
+	var decoded wallet.RewardRedemption
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal reward redemption: %v", err)
+	}
+	if decoded.Outcome == nil || decoded.Outcome.External == nil || decoded.Outcome.External.ExternalReference != "sub_889" {
+		t.Fatalf("decoded reward redemption outcome = %#v", decoded.Outcome)
+	}
+
+	bare, err := json.Marshal(wallet.RewardRedemption{})
+	if err != nil {
+		t.Fatalf("marshal empty reward redemption: %v", err)
+	}
+	if strings.Contains(string(bare), `"outcome"`) {
+		t.Fatalf("an unfulfilled reward redemption must omit its outcome: %s", bare)
+	}
+}

@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/money"
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pricing/wallet/wallet_enums"
 )
@@ -22,9 +21,8 @@ type RewardRedemption struct {
 	ReservationID      string                              `json:"reservation_id,omitempty"`
 	PointsSpent        int                                 `json:"points_spent"`
 	Status             wallet_enums.RewardRedemptionStatus `json:"status"`
-	DiscountAmount     *money.Money                        `json:"discount_amount,omitempty"`
+	Outcome            *RewardRedemptionOutcome            `json:"outcome,omitempty"`
 	RelatedOrderNumber string                              `json:"related_order_number,omitempty"`
-	VoucherCode        string                              `json:"voucher_code,omitempty"`
 	FulfilledAt        *time.Time                          `json:"fulfilled_at,omitempty"`
 	ExpiresAt          *time.Time                          `json:"expires_at,omitempty"`
 	CreatedBy          string                              `json:"created_by,omitempty"`
