@@ -17,7 +17,7 @@ type OrganisationAccess struct {
 	WholesaleOrganisationCode string                                   `json:"wholesale_organisation_code"`
 	UserID                    string                                   `json:"user_id"`
 	AccountID                 string                                   `json:"account_id"`
-	RoleKey                   string                                   `json:"role_key"`
+	RoleKey                   wholesale_enums.WholesaleBuyerRole       `json:"role_key"`
 	Status                    wholesale_enums.OrganisationAccessStatus `json:"status"`
 	Name                      party.PersonName                         `json:"name,omitempty"`
 	Contacts                  party.ContactChannels                    `json:"contacts,omitempty"`

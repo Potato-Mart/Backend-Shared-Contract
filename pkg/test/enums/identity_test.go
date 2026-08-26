@@ -58,12 +58,19 @@ func TestWorkforceRoleAndScopeWireValuesAreLocked(t *testing.T) {
 		}
 	}
 
-	// The role model retires these four keys. They must never validate
-	// again: a stale token or seeded document carrying one is not a role.
-	// `sales` joins the list because POS/till duty is decided by geographic
-	// scope rather than by a dedicated selling rank — every remaining rank
-	// can work a register, so a `sales` rank carried no distinct authority.
-	for _, retired := range []string{"admin", "warehouse", "cashier", "sales"} {
+	// The role model retires these keys. They must never validate again: a
+	// stale token or seeded document carrying one is not a role.
+	// `sales` is listed because POS/till duty is decided by geographic scope
+	// rather than by a dedicated selling rank — every remaining rank can work
+	// a register, so a `sales` rank carried no distinct authority.
+	// `customer`, `client`, and `user` are listed because UserRole once named
+	// the audience rather than a workforce rank. Audiences are separated by
+	// account type, portal, and portal access, never by a role, so a customer
+	// role would reopen the hole those keys left behind.
+	for _, retired := range []string{
+		"admin", "warehouse", "cashier", "sales",
+		"customer", "client", "user",
+	} {
 		if role_enums.UserRole(retired).IsValid() {
 			t.Errorf("retired role %q still validates", retired)
 		}

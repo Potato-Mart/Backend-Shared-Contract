@@ -110,6 +110,12 @@ func TestProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"UserRoleCashier",
 		"UserRoleSales",
 
+		// UserRole once named the audience rather than a workforce rank.
+		// Account type, portal, and portal access separate audiences now, so
+		// a customer-shaped role must not return.
+		"UserRoleCustomer",
+		"UserRoleClient",
+
 		// Per-operator shifts are replaced by one daily
 		// session per register, shared by every operator on it.
 		"RegisterShift",

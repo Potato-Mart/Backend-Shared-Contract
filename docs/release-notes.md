@@ -151,6 +151,14 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
   and drops its eighteen buyer-portal constants, `IsValid`, and `String`. The
   wire values are unchanged, but the catalogue and buyer-role matrix are now
   seeded by Backend-Customers rather than declared by the contract.
+- `wholesale.OrganisationAccess.RoleKey` and
+  `wholesale.OrganisationAccessSummary.RoleKey` change from `string` to the
+  closed `wholesale_enums.WholesaleBuyerRole`. Both records are wholesale-only,
+  so the key is single-audience and can be typed; the JSON stays a string, and
+  the published schema becomes a truthful five-value enum.
+  `access.LoginSession.RoleKey` and `access.OrganisationAccessChangedEvent`
+  stay untyped, the first because a session spans portals and the second
+  because typing it would import a customer domain into identity.
 - `membership.Reward` replaces `name` and `description` with localized `names`
   and `descriptions`, and moves `discount_amount`, `discount_percent`,
   `sku_code`, and `voucher_code_prefix` into the typed `benefit` arm set. The
@@ -270,7 +278,7 @@ repository was edited by this release.
 | Consumer | Required action before V32 adoption | This release performs it? |
 | --- | --- | --- |
 | Backend-Identity | Seed the permission catalogue and retired-key deny list locally per the handoff document; the contract ships types only. Retain catalogue policy, claims, and persistence locally. | No |
-| Backend-Customers | Remove the workforce mirror and seed the buyer-portal permission catalogue locally per the handoff document, without changing its geography or workflow ownership. | No |
+| Backend-Customers | Remove the workforce mirror, seed the buyer-portal permission catalogue locally per the handoff document, and adopt the typed buyer role key on organisation access (regenerate swagger; the trim-and-validate guards stay, since typing is documentation rather than runtime enforcement). | No |
 | Backend-Payments | Adopt V32 with canonical PayTo/capability/currency and digital-flow work kept locally. | No |
 | Backend-Orders | Implement truthful digital snapshots and complete its Supply-backed allocator and later compensation migration. | No |
 | Backend-Pricing | Round-trip reward geography, adopt the reward benefit and redemption outcome arms with their reversal ledger reason, and atomically publish a future price invalidation only for a real consumer. | No |
