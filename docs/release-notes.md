@@ -142,6 +142,10 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
   `IsValid`, and no `String`, so a consumer cannot validate a key against the
   contract; `access.LoginSession.Permissions` deliberately remains `[]string`
   because a login session can carry mixed audience permissions.
+- `wholesale_enums.WholesalePermission` moves to `wholesale.WholesalePermission`
+  and drops its eighteen buyer-portal constants, `IsValid`, and `String`. The
+  wire values are unchanged, but the catalogue and buyer-role matrix are now
+  seeded by Backend-Customers rather than declared by the contract.
 - This is a hard cut. It retains no `/v31` forwarding packages, compatibility
   aliases, fallback JSON fields, deprecated declarations, or parallel old/new
   shapes.
@@ -158,6 +162,11 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
   is the catalogue-metadata seed-record shape Backend-Identity populates,
   supplying typed key, risk, and classification metadata without moving
   Identity's catalogue policy into the shared contract.
+- `wholesale.WholesalePermission` is the matching open typed string for
+  buyer-portal permissions. Backend-Customers owns and seeds that catalogue,
+  its buyer-role matrix, and its forbidden-permission policy per
+  `docs/permission-catalogue-handoff.md`. A repository gate keeps both
+  permission catalogues out of the contract.
 - `shipping_enums.FulfilmentIntentDigital` represents non-physical
   fulfilment. A digital `FulfilmentLocationSnapshot` has neither delivery
   address nor depot, while retaining frozen geographic context, location
@@ -203,8 +212,10 @@ repository was edited by this release.
   locally per `docs/permission-catalogue-handoff.md`; the contract ships types
   only. Retain catalogue policy, reconciliation, claims, and persistence
   locally.
-- **Customers:** remove its workforce mirror; retain `WholesalePermission`,
-  address-derived geography, and customer-owned workflows.
+- **Customers:** remove its workforce mirror; seed the buyer-portal permission
+  catalogue and buyer-role matrix locally per
+  `docs/permission-catalogue-handoff.md`; retain address-derived geography and
+  customer-owned workflows.
 - **Payments:** use canonical `payto`, require complete capability context and
   exact non-empty currency, and test digital flows.
 - **Orders:** implement truthful digital snapshots; complete the unwired
@@ -227,7 +238,7 @@ repository was edited by this release.
 | Consumer | Required action before V32 adoption | This release performs it? |
 | --- | --- | --- |
 | Backend-Identity | Seed the permission catalogue and retired-key deny list locally per the handoff document; the contract ships types only. Retain catalogue policy, claims, and persistence locally. | No |
-| Backend-Customers | Remove the workforce mirror without changing its wholesale, geography, or workflow ownership. | No |
+| Backend-Customers | Remove the workforce mirror and seed the buyer-portal permission catalogue locally per the handoff document, without changing its geography or workflow ownership. | No |
 | Backend-Payments | Adopt V32 with canonical PayTo/capability/currency and digital-flow work kept locally. | No |
 | Backend-Orders | Implement truthful digital snapshots and complete its Supply-backed allocator and later compensation migration. | No |
 | Backend-Pricing | Round-trip reward geography and atomically publish a future price invalidation only for a real consumer. | No |

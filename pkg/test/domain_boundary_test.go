@@ -172,22 +172,28 @@ func assertNoModelFields(t *testing.T, model reflect.Type, names ...string) {
 	}
 }
 
-// TestWorkforcePermissionKeysRemainOpenCodes keeps the workforce permission
-// catalogue in the owning backend. The role contract may carry an open
-// PermissionKey string, but it may not reacquire the retired constant block or
-// a fixed dotted permission wire literal.
-func TestWorkforcePermissionKeysRemainOpenCodes(t *testing.T) {
+// TestPermissionKeysRemainOpenCodes keeps each permission catalogue in the
+// backend that owns it: workforce keys in Backend-Identity and buyer-portal
+// keys in Backend-Customers. The contract may carry the open PermissionKey and
+// WholesalePermission strings, but neither domain may reacquire a retired
+// constant block or a fixed dotted permission wire literal.
+func TestPermissionKeysRemainOpenCodes(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
-	retiredPath := "contracts/identity/role/role_enums/permission_key.go"
-	if _, statErr := os.Stat(filepath.Join(pkgRoot, filepath.FromSlash(retiredPath))); statErr == nil {
-		t.Errorf("retired production path remains: %s", retiredPath)
-	} else if !os.IsNotExist(statErr) {
-		t.Errorf("inspect retired production path %s: %v", retiredPath, statErr)
+	for _, retiredPath := range []string{
+		"contracts/identity/role/role_enums/permission_key.go",
+		"contracts/customers/wholesale/wholesale_enums/wholesale_permission.go",
+	} {
+		if _, statErr := os.Stat(filepath.Join(pkgRoot, filepath.FromSlash(retiredPath))); statErr == nil {
+			t.Errorf("retired production path remains: %s", retiredPath)
+		} else if !os.IsNotExist(statErr) {
+			t.Errorf("inspect retired production path %s: %v", retiredPath, statErr)
+		}
 	}
 
-	permissionConstantPattern := regexp.MustCompile(`^PermissionKey[A-Z][A-Za-z0-9_]*$`)
+	permissionConstantPattern := regexp.MustCompile(`^(PermissionKey|WholesalePermission)[A-Z][A-Za-z0-9_]*$`)
 	permissionWirePattern := regexp.MustCompile(`^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*)+$`)
-	const roleScope = "contracts/identity/role/"
+	permissionCodeTypes := map[string]struct{}{"PermissionKey": {}, "WholesalePermission": {}}
+	permissionScopes := []string{"contracts/identity/role/", "contracts/customers/wholesale/"}
 	var violations []string
 
 	err := filepath.WalkDir(filepath.Join(pkgRoot, "contracts"), func(path string, entry fs.DirEntry, walkErr error) error {
@@ -203,7 +209,13 @@ func TestWorkforcePermissionKeysRemainOpenCodes(t *testing.T) {
 			return parseErr
 		}
 		relativePath := relativePkgPath(t, pkgRoot, path)
-		inRoleScope := strings.HasPrefix(relativePath, roleScope)
+		inPermissionScope := false
+		for _, scope := range permissionScopes {
+			if strings.HasPrefix(relativePath, scope) {
+				inPermissionScope = true
+				break
+			}
+		}
 		ast.Inspect(file, func(node ast.Node) bool {
 			switch typed := node.(type) {
 			case *ast.Ident:
@@ -226,15 +238,15 @@ func TestWorkforcePermissionKeysRemainOpenCodes(t *testing.T) {
 					case *ast.SelectorExpr:
 						declaredType = typeExpression.Sel.Name
 					}
-					if declaredType != "PermissionKey" {
+					if _, isPermissionCode := permissionCodeTypes[declaredType]; !isPermissionCode {
 						continue
 					}
 					for _, name := range valueSpec.Names {
-						violations = append(violations, relativePath+": hard-coded PermissionKey constant "+name.Name)
+						violations = append(violations, relativePath+": hard-coded "+declaredType+" constant "+name.Name)
 					}
 				}
 			case *ast.BasicLit:
-				if !inRoleScope || typed.Kind != token.STRING {
+				if !inPermissionScope || typed.Kind != token.STRING {
 					return true
 				}
 				literal, unquoteErr := strconv.Unquote(typed.Value)
@@ -247,10 +259,10 @@ func TestWorkforcePermissionKeysRemainOpenCodes(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Fatalf("scan workforce permission boundary: %v", err)
+		t.Fatalf("scan permission boundary: %v", err)
 	}
 	if len(violations) > 0 {
 		sort.Strings(violations)
-		t.Fatalf("the workforce permission catalogue is owned and seeded by Backend-Identity, not the contract:\n%s", strings.Join(violations, "\n"))
+		t.Fatalf("permission catalogues are owned and seeded by Backend-Identity and Backend-Customers, not the contract:\n%s", strings.Join(violations, "\n"))
 	}
 }
