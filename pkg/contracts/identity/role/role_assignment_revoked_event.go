@@ -11,7 +11,7 @@ type RoleAssignmentRevokedEvent struct {
 	UserID           string                `json:"user_id"`
 	AccountID        string                `json:"account_id"`
 	Portal           identity_enums.Portal `json:"portal"`
-	RoleKey          string                `json:"role_key"`
+	RoleKey          RoleCode              `json:"role_key"`
 	ScopeType        string                `json:"scope_type,omitempty"`
 	ScopeID          string                `json:"scope_id,omitempty"`
 	RevokedBy        string                `json:"revoked_by,omitempty"`

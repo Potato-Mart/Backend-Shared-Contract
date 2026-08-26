@@ -142,6 +142,11 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
   `IsValid`, and no `String`, so a consumer cannot validate a key against the
   contract; `access.LoginSession.Permissions` deliberately remains `[]string`
   because a login session can carry mixed audience permissions.
+- `role.RoleAssignment.RoleKey` and the role-assignment granted and revoked
+  events change from `string` to the open `role.RoleCode`. The JSON stays a
+  string. `RoleKey` is deliberately not a closed enum: `Portal` selects the
+  vocabulary, so a control-portal grant carries a workforce `UserRole` key
+  and a wholesale-portal grant carries a wholesale buyer role key.
 - `wholesale_enums.WholesalePermission` moves to `wholesale.WholesalePermission`
   and drops its eighteen buyer-portal constants, `IsValid`, and `String`. The
   wire values are unchanged, but the catalogue and buyer-role matrix are now
@@ -169,6 +174,10 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
   is the catalogue-metadata seed-record shape Backend-Identity populates,
   supplying typed key, risk, and classification metadata without moving
   Identity's catalogue policy into the shared contract.
+- `role.RoleCode` is the open typed string a cross-audience role grant travels
+  as. It carries no constants, because the vocabulary it draws from depends on
+  the grant's portal and each owning service validates against its own
+  catalogue.
 - `wholesale.WholesalePermission` is the matching open typed string for
   buyer-portal permissions. Backend-Customers owns and seeds that catalogue,
   its buyer-role matrix, and its forbidden-permission policy per
