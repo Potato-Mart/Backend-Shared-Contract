@@ -3,11 +3,16 @@ package role_enums
 // UserRole is a persisted workforce RBAC role key. Role-to-permission policy
 // is owned by Identity and enforced independently by each backend.
 //
-// The six built-in roles form a strict rank order from 1 (widest) to 6
-// (narrowest); Role.Rank carries that number. Ranks 2 and below are
-// geographically scoped: countryAdmin holds one country, marketing holds
-// markets, and depotManager, warehouseManager, and warehouseOperator hold
-// depots. Only superAdmin is global.
+// The six built-in roles form a strict authority order from rank 1 to rank 6;
+// Role.Rank carries that number. Rank orders authority, not geographic
+// breadth, and the two ladders do not line up: rank 3 depotManager is
+// depot-scoped while rank 4 marketing is market-scoped, so the lower rank
+// holds the narrower geography. A consumer resolves what a principal may see
+// from access.StaffGeoScope, never by inferring breadth from the rank number.
+//
+// Only superAdmin is global. Ranks 2 and below are geographically scoped:
+// countryAdmin holds one country, marketing holds markets, and depotManager,
+// warehouseManager, and warehouseOperator hold depots.
 //
 // There is no selling rank. Working a register is a permission every rank may
 // hold, bounded by the geographic scope the principal is granted, so neither

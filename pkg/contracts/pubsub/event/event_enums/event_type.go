@@ -42,6 +42,7 @@ const (
 	EventTypeCatalogListingChanged  EventType = "catalog.listing_changed"
 
 	EventTypeProductSalesPerformanceUpdated EventType = "product.sales_performance_updated"
+	EventTypePriceChanged                   EventType = "price.changed"
 	EventTypePromotionChanged               EventType = "promotion.changed"
 	EventTypeCampaignChanged                EventType = "campaign.changed"
 
@@ -69,7 +70,7 @@ func (t EventType) IsValid() bool {
 		EventTypeNotificationPreferencesChanged, EventTypeWalletGiftCardIssued,
 		EventTypeCatalogBaseCostChanged, EventTypeCatalogListingChanged,
 		EventTypeProductSalesPerformanceUpdated,
-		EventTypePromotionChanged, EventTypeCampaignChanged,
+		EventTypePriceChanged, EventTypePromotionChanged, EventTypeCampaignChanged,
 		EventTypeAnalyticsOrderFact, EventTypeAnalyticsPaymentFact,
 		EventTypeAnalyticsRefundFact:
 		return true

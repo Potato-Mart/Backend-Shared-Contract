@@ -61,7 +61,7 @@ var modelBoundaryForbiddenImportPrefixes = []string{
 	"net/http",
 }
 
-const eventEnvelopeSource = "contracts/pubsub/envelop/envelope.go"
+const eventEnvelopeSource = "contracts/pubsub/envelop/event_envelope.go"
 
 var providerMetadataForbiddenSources = map[string]struct{}{
 	"contracts/payments/settlement/settlement.go":         {},

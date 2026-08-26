@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v32.0.0` | 2026-08-26 | Major | Hard V32 cut: moves the module path to `/v32`, converts workforce and buyer-portal permission keys to service-owned open typed codes, reshapes the reward catalog and redemption records around extensible benefit and outcome arms, adds commerce evidence, and publishes a money-free price invalidation fact. Service adoption remains external. |
 | `v31.0.1` | 2026-08-25 | Patch | Retains the Go 1.26.7 baseline and removes active historical compatibility scaffolding without changing the `/v31` contract surface. |
 | `v31.0.0` | 2026-08-25 | Major | Contract-boundary hard cut: removes persistence, token-claim, workflow, provider-transport, and hard-coded operational constants from the shared model tree; moves exact release metadata to `go.mod`; moves the Review package under Customer ownership; and changes the module path to `/v31`. All consumers must migrate explicitly. |
 | `v30.0.0` | 2026-08-24 | Major | Domain ownership hard cut: centralizes backend-defined notification topics and preferences, moves customer analytics to Insights, resolves commercial market from frozen fulfilment location, consolidates Marketing/Pricing ownership, publishes SellingProduct, and generalizes Review contracts. Changes the module path to `/v30`; all consumers must migrate explicitly. |
@@ -127,6 +128,182 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v32.0.0 (2026-08-26) - Contract Convergence
+
+### Breaking contract
+
+- Module path and release metadata move to
+  `github.com/Potato-Mart/Backend-Shared-Contract/v32` and `v32.0.0`.
+- `role.Role.Permissions` changes from `[]string` to the open
+  `[]role.PermissionKey`, and `role.PermissionDefinition.Key` changes to
+  `role.PermissionKey`. Their JSON representation remains a string array and a
+  string. `role.PermissionKey` exposes no permission-key constants, no
+  `IsValid`, and no `String`, so a consumer cannot validate a key against the
+  contract; `access.LoginSession.Permissions` deliberately remains `[]string`
+  because a login session can carry mixed audience permissions.
+- `role.RoleAssignment.RoleKey` and the role-assignment granted and revoked
+  events change from `string` to the open `role.RoleCode`. The JSON stays a
+  string. `RoleKey` is deliberately not a closed enum: `Portal` selects the
+  vocabulary, so a control-portal grant carries a workforce `UserRole` key
+  and a wholesale-portal grant carries a wholesale buyer role key.
+- `wholesale_enums.WholesalePermission` moves to `wholesale.WholesalePermission`
+  and drops its eighteen buyer-portal constants, `IsValid`, and `String`. The
+  wire values are unchanged, but the catalogue and buyer-role matrix are now
+  seeded by Backend-Customers rather than declared by the contract.
+- `wholesale.OrganisationAccess.RoleKey` and
+  `wholesale.OrganisationAccessSummary.RoleKey` change from `string` to the
+  closed `wholesale_enums.WholesaleBuyerRole`. Both records are wholesale-only,
+  so the key is single-audience and can be typed; the JSON stays a string, and
+  the published schema becomes a truthful five-value enum.
+  `access.LoginSession.RoleKey` and `access.OrganisationAccessChangedEvent`
+  stay untyped, the first because a session spans portals and the second
+  because typing it would import a customer domain into identity.
+- `security.ActorRef.ActorRole` changes from `role_enums.UserRole` to an open
+  `string`, and the struct gains `actor_domain`. The typed role was
+  unrecordable for two of the three audiences it serves: a retail actor left
+  it empty and so looked identical to a background job, while a wholesale
+  buyer's role was minted as a `UserRole` that failed validation, persisted,
+  and was silently blanked on read. `actor_domain` names the trust domain that
+  acted, and the open role holds whichever catalogue's key that domain uses.
+- `membership.Reward` replaces `name` and `description` with localized `names`
+  and `descriptions`, and moves `discount_amount`, `discount_percent`,
+  `sku_code`, and `voucher_code_prefix` into the typed `benefit` arm set. The
+  floating-point `discount_percent` is retired for integer
+  `discount_basis_points`.
+- `wallet.RewardRedemption` replaces its inlined `discount_amount` and
+  `voucher_code` with the typed `outcome` record.
+- This is a hard cut. It retains no `/v31` forwarding packages, compatibility
+  aliases, fallback JSON fields, deprecated declarations, or parallel old/new
+  shapes.
+
+### Added contract surface
+
+- `role.PermissionKey` is an open typed string, the same pattern as
+  `money.CurrencyCode` and `geography.CountryCode`, and carries no constants
+  and no methods. The concrete permission catalogue, its validation, and the
+  retired-key deny list are owned and seeded by Backend-Identity per
+  `docs/permission-catalogue-handoff.md`.
+  `role_enums.PermissionClassification` provides `ui`, `field-level`,
+  `service-only`, and `intentionally-reserved`; `role.PermissionDefinition`
+  is the catalogue-metadata seed-record shape Backend-Identity populates,
+  supplying typed key, risk, and classification metadata without moving
+  Identity's catalogue policy into the shared contract.
+- `security.ActorRef` gains `actor_domain`, a
+  `security_enums.IdentityDomain`, so audit, access, history, and security
+  records attribute an action to the customer, workforce, or service domain
+  that caused it. An absent domain is no evidence of an actor; a consumer
+  attributing an action fails closed. The key is deliberately `actor_domain`
+  rather than `identity_domain`, because `SecurityEvent` already carries a
+  subject-side `identity_domain` that would otherwise shadow the embedded
+  actor field out of the payload.
+- `role.RoleCode` is the open typed string a cross-audience role grant travels
+  as. It carries no constants, because the vocabulary it draws from depends on
+  the grant's portal and each owning service validates against its own
+  catalogue.
+- `wholesale.WholesalePermission` is the matching open typed string for
+  buyer-portal permissions. Backend-Customers owns and seeds that catalogue,
+  its buyer-role matrix, and its forbidden-permission policy per
+  `docs/permission-catalogue-handoff.md`. A repository gate keeps both
+  permission catalogues out of the contract.
+- `shipping_enums.FulfilmentIntentDigital` represents non-physical
+  fulfilment. A digital `FulfilmentLocationSnapshot` has neither delivery
+  address nor depot, while retaining frozen geographic context, location
+  fingerprint, and capture time.
+- `purchase.ReceiptItem` can preserve optional supplier and manufacturer lot
+  codes. `wallet.RewardRedemption` can preserve optional `market_code` and
+  typed `country_code` evidence.
+- `event.PriceChangedEvent` is the customer-safe invalidation fact for a
+  price revision. It contains only `market_code`, `sku_code`, `revision`,
+  `refetch_required`, and `changed_at`.
+- `membership.RewardBenefit` carries a reward's type-specific configuration in
+  one typed arm set, following `TierBenefitValue` and `PromotionTerm`. It
+  covers a discount amount or basis points, a product `sku_code`, a voucher
+  template, a `coupon_code`, a gift-card value, and
+  `membership.ExternalRewardBenefit` for a partner subscription or service.
+  `wallet_enums.RewardType` gains `COUPON`, `GIFT_CARD`, and `EXTERNAL`.
+- `wallet.RewardRedemptionOutcome` records what a redemption issued, and
+  `wallet.ExternalRewardFulfilment` carries the partner-side evidence with the
+  new `wallet_enums.ExternalRewardFulfilmentStatus` (`PENDING`,
+  `PROVISIONED`, `FAILED`, `REVOKED`). `wallet.RewardRedemption` already
+  identified the redeeming member by `customer_number` and the points spent.
+- `wallet_enums.PointLedgerReason` gains `REWARD_REDEEM_REVERSAL` so
+  `wallet.PointLedgerEntry` records points returned when a redeemed reward is
+  cancelled or external provisioning fails. Points earned on a member purchase
+  (`ORDER`) and points spent on a reward (`REWARD_REDEEM`) already existed, so
+  the ledger needs no new fields.
+
+### V32 Storefront Event
+
+| Payload | Event type | Topic | Contract guarantee |
+| --- | --- | --- | --- |
+| `PriceChangedEvent` | `price.changed` | `storefront-events` | Refetch-only invalidation; no money, currency, price-book, rule, actor, provider, device, or customer data. |
+
+`price.changed` does not introduce an event-version constant or alter the
+historical Event Schema Version 2 table.
+
+### Deliberate exclusions
+
+This release adds no routes, DTOs, claims, persistence models, workflow
+commands, provider models, event-version constants, ESL models, receipt unit
+rows, or storefront transport projections. Backend runtime behavior, OpenAPI,
+generated clients, Terraform, dependencies, database/index changes, branches,
+commits, and pull requests remain outside this contract-only change.
+
+### Consumer action
+
+Each backend service must adopt the released `/v32 v32.0.0` module only in a
+separately authorized service change. This contract release does not modify
+service runtime behavior, persistence, DTOs, OpenAPI, generated clients,
+infrastructure, or CI configuration.
+
+### Read-only Backend Follow-ups (Not Executed)
+
+These are PR handoff recommendations, not execution authorization. No backend
+repository was edited by this release.
+
+- **Identity:** seed the permission catalogue and retired-key deny list
+  locally per `docs/permission-catalogue-handoff.md`; the contract ships types
+  only. Retain catalogue policy, reconciliation, claims, and persistence
+  locally.
+- **Customers:** remove its workforce mirror; seed the buyer-portal permission
+  catalogue and buyer-role matrix locally per
+  `docs/permission-catalogue-handoff.md`; retain address-derived geography and
+  customer-owned workflows.
+- **Payments:** use canonical `payto`, require complete capability context and
+  exact non-empty currency, and test digital flows.
+- **Orders:** implement truthful digital snapshots; complete the unwired
+  stock-wake allocator using existing Supply APIs; migrate checkout
+  compensation only after Pricing supplies its replacement operation.
+- **Pricing:** round-trip reward geography; adopt the reward benefit and
+  redemption outcome arms and write `REWARD_REDEEM_REVERSAL` ledger entries;
+  make price approval and outbox atomic behind a concurrency fence; publish
+  `price.changed` only when a real consumer exists.
+- **Supply:** propagate receipt lot codes, reject digital from physical depot
+  resolution, and separately correct receipt/PO, market filtering, and
+  replenishment workflows.
+- **Insights:** retain strict analytics ownership, remove unused
+  `analytics.export`, and neither consume `price.changed` nor produce
+  forecasts.
+- **Notification:** adopt the shared audit permission, safely acknowledge an
+  unknown `price.changed`, and add no Notification contract models.
+- **All services:** every audit and access writer assigns `claims.Role()` into
+  `ActorRef.ActorRole`, which now takes a `string`; convert at the call site,
+  set `ActorDomain` from the caller's identity domain, and delete the
+  read-side helpers that blanked a role failing `UserRole` validation.
+
+### Consumer Migration Matrix
+
+| Consumer | Required action before V32 adoption | This release performs it? |
+| --- | --- | --- |
+| Backend-Identity | Seed the permission catalogue and retired-key deny list locally per the handoff document; the contract ships types only. Retain catalogue policy, claims, and persistence locally. | No |
+| Backend-Customers | Remove the workforce mirror, seed the buyer-portal permission catalogue locally per the handoff document, and adopt the typed buyer role key on organisation access (regenerate swagger; the trim-and-validate guards stay, since typing is documentation rather than runtime enforcement). | No |
+| Backend-Payments | Adopt V32 with canonical PayTo/capability/currency and digital-flow work kept locally. | No |
+| Backend-Orders | Implement truthful digital snapshots and complete its Supply-backed allocator and later compensation migration. | No |
+| Backend-Pricing | Round-trip reward geography, adopt the reward benefit and redemption outcome arms with their reversal ledger reason, and atomically publish a future price invalidation only for a real consumer. | No |
+| Backend-Supply | Propagate lot evidence and reject digital physical-depot resolution in service-owned flows. | No |
+| Backend-Insights | Retain analytics boundaries, remove `analytics.export`, and do not consume the new event or produce forecasts. | No |
+| Backend-Notification | Adopt shared audit permission and safely ignore the event without new contract models. | No |
 
 ## v31.0.1 (2026-08-25) - Active-Surface Cleanup
 

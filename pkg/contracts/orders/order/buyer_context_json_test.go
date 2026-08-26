@@ -3,18 +3,18 @@ package order_test
 import (
 	"encoding/json"
 
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/orders/order"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/orders/order"
 
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/commerce/commerce_enums"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/customers/retail/retail_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/product/product_enums"
 )
 
 // TestOrderBuyerAndItemPricingRoundTrip checks the additive buyer/commercial

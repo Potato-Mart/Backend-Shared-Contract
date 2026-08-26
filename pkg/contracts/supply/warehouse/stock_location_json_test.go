@@ -3,17 +3,17 @@ package warehouse_test
 import (
 	"encoding/json"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/warehouse"
 
 	"reflect"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestStockLocationAndBalanceJSONShapes(t *testing.T) {

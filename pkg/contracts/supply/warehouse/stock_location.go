@@ -1,9 +1,9 @@
 package warehouse
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/geometry"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geometry"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // StockLocation is a depot-qualified physical inventory location.

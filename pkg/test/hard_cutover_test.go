@@ -110,6 +110,12 @@ func TestProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		"UserRoleCashier",
 		"UserRoleSales",
 
+		// UserRole once named the audience rather than a workforce rank.
+		// Account type, portal, and portal access separate audiences now, so
+		// a customer-shaped role must not return.
+		"UserRoleCustomer",
+		"UserRoleClient",
+
 		// Per-operator shifts are replaced by one daily
 		// session per register, shared by every operator on it.
 		"RegisterShift",
@@ -701,7 +707,7 @@ func TestProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 
 func TestGoSourcesContainNoOlderContractImports(t *testing.T) {
 	const contractImportRoot = "github.com/Potato-Mart/Backend-Shared-Contract/"
-	const currentContractImportPrefix = contractImportRoot + "v31/"
+	const currentContractImportPrefix = contractImportRoot + "v32/"
 	pkgRoot := sharedContractPkgRoot(t)
 	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {

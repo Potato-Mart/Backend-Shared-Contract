@@ -1,8 +1,8 @@
 package shipping
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/money"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/money"
 )
 
 // DeliveryAreaRate is the customer-safe geographic rate and depot projection.

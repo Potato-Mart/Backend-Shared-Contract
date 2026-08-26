@@ -1,9 +1,9 @@
 package warehouse
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/packaging"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/packaging/packaging_enums"
 )
 
 // WMSDraftItem captures an observed package scan and canonical inventory refs.

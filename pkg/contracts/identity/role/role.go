@@ -3,16 +3,16 @@ package role
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/audit"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/identity/role/role_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/identity/role/role_enums"
 )
 
 // Role is the projection of a role definition stored in mgmt_roles.
 //
 // The role enum value (Key) is the wire-stable identifier used by JWT
-// claims and middleware checks; Permissions is the list of permission
-// strings granted to anyone holding this role.
+// claims and middleware checks; Permissions is the list of permission keys
+// granted to anyone holding this role.
 //
 // IsSystem marks the six built-in workforce roles that the platform ships
 // with (superAdmin, countryAdmin, depotManager, marketing, warehouseManager,
@@ -25,7 +25,7 @@ type Role struct {
 	Key                         role_enums.UserRole `json:"key"`
 	Label                       string              `json:"label"`
 	Description                 string              `json:"description,omitempty"`
-	Permissions                 []string            `json:"permissions"`
+	Permissions                 []PermissionKey     `json:"permissions"`
 	Rank                        int                 `json:"rank,omitempty"`
 	IsSystem                    bool                `json:"is_system"`
 	OwnerID                     string              `json:"owner_id,omitempty"`

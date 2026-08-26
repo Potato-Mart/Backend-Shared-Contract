@@ -7,8 +7,8 @@ and to each backend's local enforcement layer.
 
 ## Core records
 
-`User` is the canonical principal profile. It contains no credential or global
-role policy.
+`UserProfile` is the canonical principal profile. It contains no credential or
+global role policy.
 
 `AuthIdentity` records a provider identity in an explicit identity domain. It
 stores provider and verification metadata, but never password hashes, refresh
@@ -45,7 +45,14 @@ are camelCase and stable; `role.Role.rank` carries the hierarchy position, 1
 whether it is one of the six system roles. System roles cannot be deleted,
 but a `superAdmin` may adjust their permissions. The contract does not define
 the permission strings themselves — Backend-Identity owns that matrix, and each
-backend enforces it independently.
+backend enforces it independently. `role.PermissionKey` is the open typed code
+those strings travel as; it carries no constants, so the contract names the
+shape of a permission key without naming a single one. `role.PermissionDefinition`
+is the catalogue-metadata record Backend-Identity seeds — key, label,
+description, module, risk level, MFA requirement, and classification — for one
+permission it owns. A consumer therefore treats a permission key as an opaque
+string and never validates one locally; Identity validates a key against the
+seeded catalogue, including its retired-key deny list.
 
 **There is no selling rank.** Point-of-sale sign-in is a permission every rank
 may hold, bounded by the geographic scope that rank is granted, so neither a
@@ -66,7 +73,7 @@ the breadth, widest to narrowest — country, then market, then depot:
 | --- | --- | --- | --- |
 | `global` | everything | none | 1 `superAdmin` |
 | `country` | one country | `country_code` | 2 `countryAdmin` |
-| `market` | the granted markets | `market_ids` (with their `country_code`) | 4 `marketing` |
+| `market` | the granted markets | `market_codes` (with their `country_code`) | 4 `marketing` |
 | `depot` | the granted depots | `depot_codes` | 3 `depotManager`, 5 `warehouseManager`, 6 `warehouseOperator` |
 
 Rank orders **authority**, not geographic breadth, and the two ladders do not
@@ -76,14 +83,14 @@ resolves what a principal may see from `scope_level` and its grant fields, never
 by inferring breadth from the rank number.
 
 `access.StaffGeoScope` is the persisted grant,
-`{level, country_code, market_ids, depot_codes}`. It hangs off a workforce
+`{level, country_code, market_codes, depot_codes}`. It hangs off a workforce
 profile as `account.UserProfile.geo_scope` and is absent on customer profiles.
 
 **Depots are the only site identity in the platform.** Some depots trade as
 stores, but there is no store entity, no store code, and no store scope level.
 A site-scoped principal is scoped by depot code.
 
-Staff-visible records across the domains carry denormalized `market_id`,
+Staff-visible records across the domains carry denormalized `market_code`,
 `country_code`, and — where a site applies — `depot_code`, so a scoped query is
 a plain indexed match rather than a join through market and depot tables. The
 contract declares those fields; each service owns the indexes and the filter
@@ -112,13 +119,13 @@ staff-facing reads and writes.
 
 ## Customer and organisation records
 
-Retail customer business details use `customers.RetailCustomer`.
+Retail customer business details use `retail.RetailCustomer`.
 
 Wholesale organisation business details use
 `wholesale.WholesaleOrganisation`, with people linked through
 `wholesale.OrganisationAccess`. Organisation approval, portal grants, account
 state, and organisation access remain distinct persisted records.
 
-`common.OrganisationDetail` provides the shared organisation value shape used
+`party.OrganisationDetail` provides the shared organisation value shape used
 by suppliers and wholesale organisations. It is a data model, not an onboarding
 or authorization workflow.

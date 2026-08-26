@@ -6,17 +6,17 @@ import (
 	"testing"
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/purchase"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/purchase"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/purchase/purchase_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/purchase/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestOrderJSONRoundTripWithHistory(t *testing.T) {
@@ -127,6 +127,8 @@ func TestReceiptJSONUsesLotBucketAndPackageComposition(t *testing.T) {
 				SKUCode:             "A00001",
 				PackageOptionCode:   "pkg_case_12",
 				LotID:               "lot_1",
+				SupplierLotCode:     "supplier_lot_1",
+				ManufacturerLotCode: "manufacturer_lot_1",
 				DestinationBucketID: "bucket_1",
 				DestinationLocation: warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01-03"},
 				DateMark: &warehouse.InventoryDateMark{
@@ -146,7 +148,7 @@ func TestReceiptJSONUsesLotBucketAndPackageComposition(t *testing.T) {
 		t.Fatalf("marshal purchase receipt: %v", err)
 	}
 	text := string(payload)
-	for _, expected := range []string{`"lot_id":"lot_1"`, `"destination_bucket_id":"bucket_1"`, `"location_code":"A-01-03"`, `"date_mark_at":"2027-01-31T13:00:00Z"`, `"received_composition"`, `"total_base_units":0`} {
+	for _, expected := range []string{`"lot_id":"lot_1"`, `"supplier_lot_code":"supplier_lot_1"`, `"manufacturer_lot_code":"manufacturer_lot_1"`, `"destination_bucket_id":"bucket_1"`, `"location_code":"A-01-03"`, `"date_mark_at":"2027-01-31T13:00:00Z"`, `"received_composition"`, `"total_base_units":0`} {
 		if !strings.Contains(text, expected) {
 			t.Fatalf("purchase receipt missing %s: %s", expected, payload)
 		}
@@ -154,6 +156,18 @@ func TestReceiptJSONUsesLotBucketAndPackageComposition(t *testing.T) {
 	for _, removed := range []string{`"sku"`, `"ordered_qty"`, `"received_qty"`, `"rejected_qty"`, `"expire_at"`} {
 		if strings.Contains(text, removed) {
 			t.Fatalf("purchase receipt contains removed JSON key %s: %s", removed, payload)
+		}
+	}
+}
+
+func TestReceiptItemLotCodesAreOptional(t *testing.T) {
+	payload, err := json.Marshal(purchase.ReceiptItem{})
+	if err != nil {
+		t.Fatalf("marshal receipt item: %v", err)
+	}
+	for _, field := range []string{`"supplier_lot_code"`, `"manufacturer_lot_code"`} {
+		if strings.Contains(string(payload), field) {
+			t.Fatalf("empty receipt item retained optional %s: %s", field, payload)
 		}
 	}
 }

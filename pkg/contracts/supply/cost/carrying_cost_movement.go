@@ -3,7 +3,7 @@ package cost
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/money"
 )
 
 // CarryingCostMovement is one auditable change to a depot carrying-cost

@@ -6,11 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/customers/review"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/customers/review/review_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/customers/review"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/customers/review/review_enums"
 )
 
 func TestReviewProjectionsKeepPrivateAndModerationFieldsOutOfCustomerPayloads(t *testing.T) {
@@ -121,7 +121,7 @@ func TestRatingSummaryJSONHasFiveScoreCounts(t *testing.T) {
 	}
 }
 
-func TestReviewEnumsUseTheV30Values(t *testing.T) {
+func TestReviewEnumsUseCanonicalValues(t *testing.T) {
 	for _, value := range []review_enums.ReviewType{
 		review_enums.ReviewTypeOrder,
 		review_enums.ReviewTypeProduct,

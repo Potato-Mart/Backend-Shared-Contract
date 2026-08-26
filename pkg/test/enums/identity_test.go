@@ -3,10 +3,10 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/identity/access/access_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/identity/account/account_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/identity/role/role_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/identity/access/access_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/identity/account/account_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/identity/role/role_enums"
 )
 
 func TestIdentityEnumsValidateKnownValues(t *testing.T) {
@@ -27,7 +27,7 @@ func TestIdentityEnumsValidateKnownValues(t *testing.T) {
 // assertStringEnums cannot do this: it compares an enum constant against its
 // own reflected string, so editing a constant's value still round-trips and
 // still satisfies IsValid. Identity mints these strings into JWT role and
-// scope claims, and all seven services plus the admin client authorize on
+// scope claims, and all eight services plus the admin client authorize on
 // them, so a silent edit would re-authorize live principals with no test
 // turning red. The literals below are the lock.
 func TestWorkforceRoleAndScopeWireValuesAreLocked(t *testing.T) {
@@ -58,12 +58,19 @@ func TestWorkforceRoleAndScopeWireValuesAreLocked(t *testing.T) {
 		}
 	}
 
-	// The role model retires these four keys. They must never validate
-	// again: a stale token or seeded document carrying one is not a role.
-	// `sales` joins the list because POS/till duty is decided by geographic
-	// scope rather than by a dedicated selling rank — every remaining rank
-	// can work a register, so a `sales` rank carried no distinct authority.
-	for _, retired := range []string{"admin", "warehouse", "cashier", "sales"} {
+	// The role model retires these keys. They must never validate again: a
+	// stale token or seeded document carrying one is not a role.
+	// `sales` is listed because POS/till duty is decided by geographic scope
+	// rather than by a dedicated selling rank — every remaining rank can work
+	// a register, so a `sales` rank carried no distinct authority.
+	// `customer`, `client`, and `user` are listed because UserRole once named
+	// the audience rather than a workforce rank. Audiences are separated by
+	// account type, portal, and portal access, never by a role, so a customer
+	// role would reopen the hole those keys left behind.
+	for _, retired := range []string{
+		"admin", "warehouse", "cashier", "sales",
+		"customer", "client", "user",
+	} {
 		if role_enums.UserRole(retired).IsValid() {
 			t.Errorf("retired role %q still validates", retired)
 		}

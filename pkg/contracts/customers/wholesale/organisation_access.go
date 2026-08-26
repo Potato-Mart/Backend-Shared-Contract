@@ -3,10 +3,10 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/customers/wholesale/wholesale_enums"
 )
 
 // OrganisationAccess links a user account/persona to a wholesale organisation
@@ -17,7 +17,7 @@ type OrganisationAccess struct {
 	WholesaleOrganisationCode string                                   `json:"wholesale_organisation_code"`
 	UserID                    string                                   `json:"user_id"`
 	AccountID                 string                                   `json:"account_id"`
-	RoleKey                   string                                   `json:"role_key"`
+	RoleKey                   wholesale_enums.WholesaleBuyerRole       `json:"role_key"`
 	Status                    wholesale_enums.OrganisationAccessStatus `json:"status"`
 	Name                      party.PersonName                         `json:"name,omitempty"`
 	Contacts                  party.ContactChannels                    `json:"contacts,omitempty"`

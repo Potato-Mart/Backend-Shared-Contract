@@ -1,11 +1,11 @@
 package account
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/device"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/identity/identity_enums"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/identity/account/account_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/device"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/identity/identity_enums"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/identity/account/account_enums"
 	"time"
 )
 

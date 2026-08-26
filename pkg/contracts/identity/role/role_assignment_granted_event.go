@@ -1,7 +1,7 @@
 package role
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/identity/identity_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/identity/identity_enums"
 	"time"
 )
 
@@ -12,7 +12,7 @@ type RoleAssignmentGrantedEvent struct {
 	UserID           string                `json:"user_id"`
 	AccountID        string                `json:"account_id"`
 	Portal           identity_enums.Portal `json:"portal"`
-	RoleKey          string                `json:"role_key"`
+	RoleKey          RoleCode              `json:"role_key"`
 	ScopeType        string                `json:"scope_type,omitempty"`
 	ScopeID          string                `json:"scope_id,omitempty"`
 	GrantedBy        string                `json:"granted_by,omitempty"`

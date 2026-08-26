@@ -1,8 +1,8 @@
 package pos
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/orders/pos/pos_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/orders/pos/pos_enums"
 	"time"
 )
 

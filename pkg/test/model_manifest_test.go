@@ -37,13 +37,13 @@ var modelPackageManifest = map[string]string{
 	"contracts/common/temporal":                                  "value",
 	"contracts/customers/retail":                                 "entity,event,record,snapshot",
 	"contracts/customers/retail/retail_enums":                    "enum",
-	"contracts/customers/wholesale":                              "entity,record,snapshot",
+	"contracts/customers/wholesale":                              "entity,record,snapshot,value",
 	"contracts/customers/wholesale/wholesale_enums":              "enum",
 	"contracts/identity/access":                                  "event,record,session",
 	"contracts/identity/access/access_enums":                     "enum",
 	"contracts/identity/account":                                 "entity,event,record",
 	"contracts/identity/account/account_enums":                   "enum",
-	"contracts/identity/role":                                    "entity,event,record",
+	"contracts/identity/role":                                    "entity,event,record,value",
 	"contracts/identity/role/role_enums":                         "enum",
 	"contracts/insights/analytics":                               "record",
 	"contracts/insights/analytics/analytics_enums":               "enum",
@@ -108,7 +108,7 @@ var modelPackageManifest = map[string]string{
 // service-local DTO, workflow, persistence, provider-diagnostic, migration,
 // and build-metadata surfaces. Field-only changes are locked by JSON-shape and
 // retired-symbol tests instead.
-const exportedTypeManifestDigest = "e6156312693c3ba46bd077c55fbabc5c2479469c2a2baf077388420bf60d0624"
+const exportedTypeManifestDigest = "f00a5b95cdd937a3ca4752cc5f9188f975bf9750fb2af18a2a6a8795e812a088"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	seenPackages := make(map[string]bool)

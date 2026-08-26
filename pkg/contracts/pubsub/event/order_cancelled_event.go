@@ -1,7 +1,7 @@
 package event
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography"
 	"time"
 )
 

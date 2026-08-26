@@ -1,7 +1,7 @@
 package shipping
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/temporal"
 	"time"
 )
 

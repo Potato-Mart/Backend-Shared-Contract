@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/payments/payment/payment_enums"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/pubsub/event"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/payments/payment/payment_enums"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pubsub/event"
 )
 
 func TestReceiptGeneratedEventRoundTrip(t *testing.T) {

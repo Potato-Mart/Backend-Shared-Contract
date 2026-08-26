@@ -17,11 +17,14 @@ const (
 	PointLedgerReasonDebtIncurred PointLedgerReason = "DEBT_INCURRED"
 	PointLedgerReasonDebtRepaid   PointLedgerReason = "DEBT_REPAID"
 	PointLedgerReasonManual       PointLedgerReason = "MANUAL"
+	// PointLedgerReasonRewardRedeemReversal returns points to the member when a
+	// redeemed reward is cancelled or external partner provisioning fails.
+	PointLedgerReasonRewardRedeemReversal PointLedgerReason = "REWARD_REDEEM_REVERSAL"
 )
 
 func (r PointLedgerReason) IsValid() bool {
 	switch r {
-	case PointLedgerReasonOrder, PointLedgerReasonBirthday, PointLedgerReasonRedeem, PointLedgerReasonRefund, PointLedgerReasonRewardRedeem, PointLedgerReasonAdminAdjust, PointLedgerReasonExpired, PointLedgerReasonReferral, PointLedgerReasonSignupBonus, PointLedgerReasonTierUpgrade, PointLedgerReasonDebtIncurred, PointLedgerReasonDebtRepaid, PointLedgerReasonManual:
+	case PointLedgerReasonOrder, PointLedgerReasonBirthday, PointLedgerReasonRedeem, PointLedgerReasonRefund, PointLedgerReasonRewardRedeem, PointLedgerReasonAdminAdjust, PointLedgerReasonExpired, PointLedgerReasonReferral, PointLedgerReasonSignupBonus, PointLedgerReasonTierUpgrade, PointLedgerReasonDebtIncurred, PointLedgerReasonDebtRepaid, PointLedgerReasonManual, PointLedgerReasonRewardRedeemReversal:
 		return true
 	}
 	return false

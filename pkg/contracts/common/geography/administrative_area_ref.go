@@ -1,6 +1,6 @@
 package geography
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v31/pkg/contracts/common/geography/geography_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography/geography_enums"
 
 // AdministrativeAreaRef carries an authoritative subdivision code and
 // optional display metadata.
