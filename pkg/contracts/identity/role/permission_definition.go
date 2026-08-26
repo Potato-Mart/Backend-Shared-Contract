@@ -6,9 +6,10 @@ import (
 )
 
 // PermissionDefinition is the display and risk metadata for one workforce
-// permission. Identity owns the catalogue contents and role policy.
+// permission. Identity owns the catalogue contents and role policy, and seeds
+// one definition record per permission key it publishes.
 type PermissionDefinition struct {
-	Key            role_enums.PermissionKey            `json:"key"`
+	Key            PermissionKey                       `json:"key"`
 	Label          string                              `json:"label"`
 	Description    string                              `json:"description,omitempty"`
 	Module         string                              `json:"module"`

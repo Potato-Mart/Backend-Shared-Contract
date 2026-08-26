@@ -12,7 +12,7 @@ import (
 
 func TestPermissionDefinitionJSONUsesTypedWireValues(t *testing.T) {
 	definition := PermissionDefinition{
-		Key:            role_enums.PermissionKeyRoleWrite,
+		Key:            PermissionKey("role.write"),
 		Label:          "Manage roles",
 		Module:         "roles",
 		RiskLevel:      security_enums.SecurityRiskLevelCritical,
@@ -33,7 +33,7 @@ func TestPermissionDefinitionJSONUsesTypedWireValues(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal PermissionDefinition: %v", err)
 	}
-	if decoded.Key != role_enums.PermissionKeyRoleWrite || decoded.RiskLevel != security_enums.SecurityRiskLevelCritical || decoded.Classification != role_enums.PermissionClassificationUI {
+	if decoded.Key != PermissionKey("role.write") || decoded.RiskLevel != security_enums.SecurityRiskLevelCritical || decoded.Classification != role_enums.PermissionClassificationUI {
 		t.Fatalf("typed PermissionDefinition values = %#v", decoded)
 	}
 }
@@ -42,7 +42,7 @@ func TestRolePermissionsMarshalAsTypedStringArray(t *testing.T) {
 	value := Role{
 		Key:         role_enums.UserRoleSuperAdmin,
 		Label:       "Platform administrators",
-		Permissions: []role_enums.PermissionKey{role_enums.PermissionKeyUserRead, role_enums.PermissionKeyRoleWrite},
+		Permissions: []PermissionKey{PermissionKey("user.read"), PermissionKey("role.write")},
 		IsSystem:    true,
 	}
 
@@ -59,7 +59,7 @@ func TestRolePermissionsMarshalAsTypedStringArray(t *testing.T) {
 	if err := json.Unmarshal([]byte(`{"permissions":["user.read","role.write"]}`), &decoded); err != nil {
 		t.Fatalf("unmarshal Role permissions: %v", err)
 	}
-	if len(decoded.Permissions) != 2 || decoded.Permissions[0] != role_enums.PermissionKeyUserRead || decoded.Permissions[1] != role_enums.PermissionKeyRoleWrite {
+	if len(decoded.Permissions) != 2 || decoded.Permissions[0] != PermissionKey("user.read") || decoded.Permissions[1] != PermissionKey("role.write") {
 		t.Fatalf("decoded typed permissions = %#v", decoded.Permissions)
 	}
 }

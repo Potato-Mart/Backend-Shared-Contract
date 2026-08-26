@@ -45,7 +45,14 @@ are camelCase and stable; `role.Role.rank` carries the hierarchy position, 1
 whether it is one of the six system roles. System roles cannot be deleted,
 but a `superAdmin` may adjust their permissions. The contract does not define
 the permission strings themselves — Backend-Identity owns that matrix, and each
-backend enforces it independently.
+backend enforces it independently. `role.PermissionKey` is the open typed code
+those strings travel as; it carries no constants, so the contract names the
+shape of a permission key without naming a single one. `role.PermissionDefinition`
+is the catalogue-metadata record Backend-Identity seeds — key, label,
+description, module, risk level, MFA requirement, and classification — for one
+permission it owns. A consumer therefore treats a permission key as an opaque
+string and never validates one locally; Identity validates a key against the
+seeded catalogue, including its retired-key deny list.
 
 **There is no selling rank.** Point-of-sale sign-in is a permission every rank
 may hold, bounded by the geographic scope that rank is granted, so neither a

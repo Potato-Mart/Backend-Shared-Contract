@@ -23,7 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
-| `v32.0.0` | 2026-08-26 | Major | Hard V32 cut: moves the module path to `/v32`, centralizes workforce permission vocabulary, adds commerce evidence, and publishes a money-free price invalidation fact. Service adoption remains external. |
+| `v32.0.0` | 2026-08-26 | Major | Hard V32 cut: moves the module path to `/v32`, converts workforce permission keys to an Identity-owned open typed code, adds commerce evidence, and publishes a money-free price invalidation fact. Service adoption remains external. |
 | `v31.0.1` | 2026-08-25 | Patch | Retains the Go 1.26.7 baseline and removes active historical compatibility scaffolding without changing the `/v31` contract surface. |
 | `v31.0.0` | 2026-08-25 | Major | Contract-boundary hard cut: removes persistence, token-claim, workflow, provider-transport, and hard-coded operational constants from the shared model tree; moves exact release metadata to `go.mod`; moves the Review package under Customer ownership; and changes the module path to `/v31`. All consumers must migrate explicitly. |
 | `v30.0.0` | 2026-08-24 | Major | Domain ownership hard cut: centralizes backend-defined notification topics and preferences, moves customer analytics to Insights, resolves commercial market from frozen fulfilment location, consolidates Marketing/Pricing ownership, publishes SellingProduct, and generalizes Review contracts. Changes the module path to `/v30`; all consumers must migrate explicitly. |
@@ -135,9 +135,12 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 - Module path and release metadata move to
   `github.com/Potato-Mart/Backend-Shared-Contract/v32` and `v32.0.0`.
-- `role.Role.Permissions` changes from `[]string` to
-  `[]role_enums.PermissionKey`. Its JSON representation remains a string
-  array; `access.LoginSession.Permissions` deliberately remains `[]string`
+- `role.Role.Permissions` changes from `[]string` to the open
+  `[]role.PermissionKey`, and `role.PermissionDefinition.Key` changes to
+  `role.PermissionKey`. Their JSON representation remains a string array and a
+  string. `role.PermissionKey` exposes no permission-key constants, no
+  `IsValid`, and no `String`, so a consumer cannot validate a key against the
+  contract; `access.LoginSession.Permissions` deliberately remains `[]string`
   because a login session can carry mixed audience permissions.
 - This is a hard cut. It retains no `/v31` forwarding packages, compatibility
   aliases, fallback JSON fields, deprecated declarations, or parallel old/new
@@ -145,12 +148,16 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 ### Added contract surface
 
-- `role_enums.PermissionKey` provides the exact 102 workforce permission wire
-  values from Identity, with allocation-free `String` and `IsValid` methods.
-  `PermissionClassification` provides `ui`, `field-level`, `service-only`,
-  and `intentionally-reserved`; `role.PermissionDefinition` supplies typed
-  key, risk, and classification metadata without moving Identity's catalogue
-  policy into the shared contract.
+- `role.PermissionKey` is an open typed string, the same pattern as
+  `money.CurrencyCode` and `geography.CountryCode`, and carries no constants
+  and no methods. The concrete permission catalogue, its validation, and the
+  retired-key deny list are owned and seeded by Backend-Identity per
+  `docs/permission-catalogue-handoff.md`.
+  `role_enums.PermissionClassification` provides `ui`, `field-level`,
+  `service-only`, and `intentionally-reserved`; `role.PermissionDefinition`
+  is the catalogue-metadata seed-record shape Backend-Identity populates,
+  supplying typed key, risk, and classification metadata without moving
+  Identity's catalogue policy into the shared contract.
 - `shipping_enums.FulfilmentIntentDigital` represents non-physical
   fulfilment. A digital `FulfilmentLocationSnapshot` has neither delivery
   address nor depot, while retaining frozen geographic context, location
@@ -192,8 +199,10 @@ infrastructure, or CI configuration.
 These are PR handoff recommendations, not execution authorization. No backend
 repository was edited by this release.
 
-- **Identity:** adopt shared permission keys and definitions first; retain
-  catalogue policy, reconciliation, claims, and persistence locally.
+- **Identity:** seed the permission catalogue and retired-key deny list
+  locally per `docs/permission-catalogue-handoff.md`; the contract ships types
+  only. Retain catalogue policy, reconciliation, claims, and persistence
+  locally.
 - **Customers:** remove its workforce mirror; retain `WholesalePermission`,
   address-derived geography, and customer-owned workflows.
 - **Payments:** use canonical `payto`, require complete capability context and
@@ -217,7 +226,7 @@ repository was edited by this release.
 
 | Consumer | Required action before V32 adoption | This release performs it? |
 | --- | --- | --- |
-| Backend-Identity | Adopt shared permission keys/definitions while retaining catalogue policy, claims, and persistence locally. | No |
+| Backend-Identity | Seed the permission catalogue and retired-key deny list locally per the handoff document; the contract ships types only. Retain catalogue policy, claims, and persistence locally. | No |
 | Backend-Customers | Remove the workforce mirror without changing its wholesale, geography, or workflow ownership. | No |
 | Backend-Payments | Adopt V32 with canonical PayTo/capability/currency and digital-flow work kept locally. | No |
 | Backend-Orders | Implement truthful digital snapshots and complete its Supply-backed allocator and later compensation migration. | No |
