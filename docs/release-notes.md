@@ -214,10 +214,9 @@ historical Event Schema Version 2 table.
 
 This release adds no routes, DTOs, claims, persistence models, workflow
 commands, provider models, event-version constants, ESL models, receipt unit
-rows, or storefront transport projections. Backend
-runtime behavior, OpenAPI, generated clients, Terraform, dependencies,
-database/index changes, branches, commits, and pull requests remain outside
-this contract-only change.
+rows, or storefront transport projections. Backend runtime behavior, OpenAPI,
+generated clients, Terraform, dependencies, database/index changes, branches,
+commits, and pull requests remain outside this contract-only change.
 
 ### Consumer action
 
