@@ -7,8 +7,8 @@ and to each backend's local enforcement layer.
 
 ## Core records
 
-`User` is the canonical principal profile. It contains no credential or global
-role policy.
+`UserProfile` is the canonical principal profile. It contains no credential or
+global role policy.
 
 `AuthIdentity` records a provider identity in an explicit identity domain. It
 stores provider and verification metadata, but never password hashes, refresh
