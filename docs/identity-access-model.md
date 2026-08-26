@@ -119,13 +119,13 @@ staff-facing reads and writes.
 
 ## Customer and organisation records
 
-Retail customer business details use `customers.RetailCustomer`.
+Retail customer business details use `retail.RetailCustomer`.
 
 Wholesale organisation business details use
 `wholesale.WholesaleOrganisation`, with people linked through
 `wholesale.OrganisationAccess`. Organisation approval, portal grants, account
 state, and organisation access remain distinct persisted records.
 
-`common.OrganisationDetail` provides the shared organisation value shape used
+`party.OrganisationDetail` provides the shared organisation value shape used
 by suppliers and wholesale organisations. It is a data model, not an onboarding
 or authorization workflow.
