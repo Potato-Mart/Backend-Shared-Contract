@@ -73,7 +73,7 @@ the breadth, widest to narrowest — country, then market, then depot:
 | --- | --- | --- | --- |
 | `global` | everything | none | 1 `superAdmin` |
 | `country` | one country | `country_code` | 2 `countryAdmin` |
-| `market` | the granted markets | `market_ids` (with their `country_code`) | 4 `marketing` |
+| `market` | the granted markets | `market_codes` (with their `country_code`) | 4 `marketing` |
 | `depot` | the granted depots | `depot_codes` | 3 `depotManager`, 5 `warehouseManager`, 6 `warehouseOperator` |
 
 Rank orders **authority**, not geographic breadth, and the two ladders do not
@@ -83,14 +83,14 @@ resolves what a principal may see from `scope_level` and its grant fields, never
 by inferring breadth from the rank number.
 
 `access.StaffGeoScope` is the persisted grant,
-`{level, country_code, market_ids, depot_codes}`. It hangs off a workforce
+`{level, country_code, market_codes, depot_codes}`. It hangs off a workforce
 profile as `account.UserProfile.geo_scope` and is absent on customer profiles.
 
 **Depots are the only site identity in the platform.** Some depots trade as
 stores, but there is no store entity, no store code, and no store scope level.
 A site-scoped principal is scoped by depot code.
 
-Staff-visible records across the domains carry denormalized `market_id`,
+Staff-visible records across the domains carry denormalized `market_code`,
 `country_code`, and — where a site applies — `depot_code`, so a scoped query is
 a plain indexed match rather than a join through market and depot tables. The
 contract declares those fields; each service owns the indexes and the filter
