@@ -159,6 +159,13 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
   `access.LoginSession.RoleKey` and `access.OrganisationAccessChangedEvent`
   stay untyped, the first because a session spans portals and the second
   because typing it would import a customer domain into identity.
+- `security.ActorRef.ActorRole` changes from `role_enums.UserRole` to an open
+  `string`, and the struct gains `actor_domain`. The typed role was
+  unrecordable for two of the three audiences it serves: a retail actor left
+  it empty and so looked identical to a background job, while a wholesale
+  buyer's role was minted as a `UserRole` that failed validation, persisted,
+  and was silently blanked on read. `actor_domain` names the trust domain that
+  acted, and the open role holds whichever catalogue's key that domain uses.
 - `membership.Reward` replaces `name` and `description` with localized `names`
   and `descriptions`, and moves `discount_amount`, `discount_percent`,
   `sku_code`, and `voucher_code_prefix` into the typed `benefit` arm set. The
@@ -182,6 +189,14 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
   is the catalogue-metadata seed-record shape Backend-Identity populates,
   supplying typed key, risk, and classification metadata without moving
   Identity's catalogue policy into the shared contract.
+- `security.ActorRef` gains `actor_domain`, a
+  `security_enums.IdentityDomain`, so audit, access, history, and security
+  records attribute an action to the customer, workforce, or service domain
+  that caused it. An absent domain is no evidence of an actor; a consumer
+  attributing an action fails closed. The key is deliberately `actor_domain`
+  rather than `identity_domain`, because `SecurityEvent` already carries a
+  subject-side `identity_domain` that would otherwise shadow the embedded
+  actor field out of the payload.
 - `role.RoleCode` is the open typed string a cross-audience role grant travels
   as. It carries no constants, because the vocabulary it draws from depends on
   the grant's portal and each owning service validates against its own
@@ -272,6 +287,10 @@ repository was edited by this release.
   forecasts.
 - **Notification:** adopt the shared audit permission, safely acknowledge an
   unknown `price.changed`, and add no Notification contract models.
+- **All services:** every audit and access writer assigns `claims.Role()` into
+  `ActorRef.ActorRole`, which now takes a `string`; convert at the call site,
+  set `ActorDomain` from the caller's identity domain, and delete the
+  read-side helpers that blanked a role failing `UserRole` validation.
 
 ### Consumer Migration Matrix
 

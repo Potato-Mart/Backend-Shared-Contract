@@ -11,7 +11,6 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/metadata"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/identity/role/role_enums"
 	order "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/orders/order"
 	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/payments/terminal"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/payments/terminal/terminal_enums"
@@ -41,9 +40,10 @@ func TestHistoryEntryRoundTrip(t *testing.T) {
 		},
 		Source: "provider",
 		ActorRef: security.ActorRef{
-			ActorID:    "usr_1",
-			ActorEmail: "ops@example.com",
-			ActorRole:  role_enums.UserRoleDepotManager,
+			ActorID:     "usr_1",
+			ActorEmail:  "ops@example.com",
+			ActorDomain: security_enums.IdentityDomainWorkforce,
+			ActorRole:   "depotManager",
 		},
 		ReasonCode:        "terminal_timeout",
 		Note:              "Provider status check could not confirm the outcome.",
@@ -85,6 +85,9 @@ func TestHistoryEntryRoundTrip(t *testing.T) {
 	if got.ActorEmail != "ops@example.com" {
 		t.Fatalf("actor reference did not round-trip: %+v", got)
 	}
+	if got.ActorDomain != security_enums.IdentityDomainWorkforce || got.ActorRole != "depotManager" {
+		t.Fatalf("actor domain and role did not round-trip: %+v", got.ActorRef)
+	}
 	if got.RiskLevel != security_enums.SecurityRiskLevelHigh {
 		t.Fatalf("risk_level = %q, want %q", got.RiskLevel, security_enums.SecurityRiskLevelHigh)
 	}
@@ -93,6 +96,49 @@ func TestHistoryEntryRoundTrip(t *testing.T) {
 	}
 	if len(got.Changes) != 1 || got.Changes[0].Field != "status" || got.Changes[0].ToValue != "override_pending" {
 		t.Fatalf("changes did not round-trip: %+v", got.Changes)
+	}
+}
+
+// TestSecurityEventSeparatesActorDomainFromSubjectDomain locks the two
+// distinct domains a security event carries. ActorRef is embedded, so naming
+// its domain field identity_domain would let the outer subject field shadow it
+// out of the payload with no compile error and no other failing test.
+func TestSecurityEventSeparatesActorDomainFromSubjectDomain(t *testing.T) {
+	event := security.SecurityEvent{
+		ID:       "sec_1",
+		Category: "access",
+		Title:    "Buyer exported an organisation order list",
+		Severity: security_enums.SecurityEventSeverityLow,
+		Status:   security_enums.SecurityEventStatusDetected,
+		ActorRef: security.ActorRef{
+			ActorID:     "usr_1",
+			ActorDomain: security_enums.IdentityDomainCustomer,
+			ActorRole:   "owner",
+		},
+		SubjectUserID:  "usr_2",
+		IdentityDomain: security_enums.IdentityDomainWorkforce,
+	}
+
+	payload, err := json.Marshal(event)
+	if err != nil {
+		t.Fatalf("marshal security event: %v", err)
+	}
+	if !strings.Contains(string(payload), `"actor_domain":"customer"`) {
+		t.Fatalf("actor domain must survive embedding: %s", payload)
+	}
+	if !strings.Contains(string(payload), `"identity_domain":"workforce"`) {
+		t.Fatalf("subject identity domain must survive embedding: %s", payload)
+	}
+
+	var decoded security.SecurityEvent
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal security event: %v", err)
+	}
+	if decoded.ActorDomain != security_enums.IdentityDomainCustomer {
+		t.Fatalf("actor domain = %q, want customer", decoded.ActorDomain)
+	}
+	if decoded.IdentityDomain != security_enums.IdentityDomainWorkforce {
+		t.Fatalf("subject identity domain = %q, want workforce", decoded.IdentityDomain)
 	}
 }
 

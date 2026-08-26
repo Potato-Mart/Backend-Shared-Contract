@@ -18,6 +18,8 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/packaging"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/packaging/packaging_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security/security_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/temporal"
 )
 
@@ -51,6 +53,10 @@ func TestCommonModelJSONShapesRemainStable(t *testing.T) {
 		{"PersonName", party.PersonName{FirstName: "Ada", PreferredName: "A"}, `{"first_name":"Ada","preferred_name":"A"}`},
 		{"ContactChannels", party.ContactChannels{Email: "ada@example.test", ExternalHandles: map[string]string{"wechat": "ada"}}, `{"email":"ada@example.test","external_handles":{"wechat":"ada"}}`},
 		{"IdentityLink", identity.IdentityLink{UserID: "user-1", AuthIdentityIDs: []string{"auth-1", "auth-2"}}, `{"user_id":"user-1","auth_identity_ids":["auth-1","auth-2"]}`},
+		{"ActorRef", security.ActorRef{ActorID: "usr-1", ActorEmail: "ops@example.test", ActorDomain: security_enums.IdentityDomainWorkforce, ActorRole: "depotManager"}, `{"actor_id":"usr-1","actor_email":"ops@example.test","actor_domain":"workforce","actor_role":"depotManager"}`},
+		{"ActorRefBuyer", security.ActorRef{ActorID: "usr-2", ActorDomain: security_enums.IdentityDomainCustomer, ActorRole: "owner"}, `{"actor_id":"usr-2","actor_domain":"customer","actor_role":"owner"}`},
+		{"ActorRefService", security.ActorRef{ActorDomain: security_enums.IdentityDomainService}, `{"actor_domain":"service"}`},
+		{"ActorRefEmpty", security.ActorRef{}, `{}`},
 		{"Date", temporal.Date("2026-08-07"), `"2026-08-07"`},
 		{"TimeOfDay", temporal.TimeOfDay("09:30"), `"09:30"`},
 		{"DeviceRecord", device.DeviceRecord{DeviceKey: "device-1", IPAddress: "127.0.0.1"}, `{"device_key":"device-1","ip_address":"127.0.0.1"}`},
