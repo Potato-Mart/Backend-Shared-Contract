@@ -1,7 +1,7 @@
 package classification
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/classification/classification_enums"
 )
 
 // FavouriteListOwner identifies either a retail user or a wholesale

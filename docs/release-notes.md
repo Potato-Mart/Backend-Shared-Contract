@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v33.0.0` | 2026-08-30 | Major | In progress: moves the module path to `/v33` and opens the domain-ownership restructure. Published contract and enum preservation, audit/privacy, event normalization, and consumer migration details are completed in the v33 migration guidance. |
 | `v32.0.0` | 2026-08-26 | Major | Hard V32 cut: moves the module path to `/v32`, converts workforce and buyer-portal permission keys to service-owned open typed codes, reshapes the reward catalog and redemption records around extensible benefit and outcome arms, adds commerce evidence, and publishes a money-free price invalidation fact. Service adoption remains external. |
 | `v31.0.1` | 2026-08-25 | Patch | Retains the Go 1.26.7 baseline and removes active historical compatibility scaffolding without changing the `/v31` contract surface. |
 | `v31.0.0` | 2026-08-25 | Major | Contract-boundary hard cut: removes persistence, token-claim, workflow, provider-transport, and hard-coded operational constants from the shared model tree; moves exact release metadata to `go.mod`; moves the Review package under Customer ownership; and changes the module path to `/v31`. All consumers must migrate explicitly. |
@@ -128,6 +129,22 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v33.0.0 (2026-08-30) - Domain-Ownership Restructure (In Progress)
+
+### Breaking contract
+
+- Module path and release metadata move to
+  `github.com/Potato-Mart/Backend-Shared-Contract/v33` and `v33.0.0`.
+- V33 is an unreleased contract line while this branch is in progress. Consumers
+  must not treat this declaration as a released tag or as verified consumer
+  adoption.
+
+### Planned consumer action
+
+- Update module requirements and imports from `/v32` to `/v33` only after the
+  published `v33.0.0` tag exists. Consumer migrations are external to this
+  repository and are not performed or verified here.
 
 ## v32.0.0 (2026-08-26) - Contract Convergence
 

@@ -12,15 +12,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pricing/pricebook"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/pricebook"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/product/product_enums"
 )
 
 type canonicalProductField struct {
@@ -89,7 +89,7 @@ func TestPricebookNeverImportsParentProductPackage(t *testing.T) {
 			return parseErr
 		}
 		for _, imported := range file.Imports {
-			if strings.Trim(imported.Path.Value, `"`) == "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/product" {
+			if strings.Trim(imported.Path.Value, `"`) == "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/product" {
 				violations = append(violations, relativePkgPath(t, pkgRoot, path)+": Pricebook imports parent Product package")
 			}
 		}

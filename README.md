@@ -14,8 +14,8 @@ workflows.
 ## Latest Version
 
 ```text
-v32.0.0
-github.com/Potato-Mart/Backend-Shared-Contract/v32
+v33.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v33
 ```
 
 See [release notes](docs/release-notes.md) for the release history,
@@ -26,10 +26,10 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v32 v32.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.0.0
 ```
 
-Import packages from the same `/v32` module path.
+Import packages from the same `/v33` module path.
 
 ## Package Layout
 

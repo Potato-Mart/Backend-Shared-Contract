@@ -1,6 +1,6 @@
 package wallet
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pricing/wallet/wallet_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/wallet_enums"
 
 // MembershipPassBarcode is the canonical scannable membership identifier.
 type MembershipPassBarcode struct {

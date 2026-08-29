@@ -3,7 +3,7 @@ package analytics
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/insights/analytics/analytics_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/insights/analytics/analytics_enums"
 )
 
 // RetailCustomerAnalyticsProfile is the standalone RFM analysis calculated

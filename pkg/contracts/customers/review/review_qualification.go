@@ -3,7 +3,7 @@ package review
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/customers/review/review_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/review/review_enums"
 )
 
 // ReviewQualification stores service-verified authorization evidence. The

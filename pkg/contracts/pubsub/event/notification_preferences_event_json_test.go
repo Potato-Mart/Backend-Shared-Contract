@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/notifications/notification_enums"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pubsub/event"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notifications/notification_enums"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pubsub/event"
 )
 
 func TestNotificationPreferencesChangedEventContainsOnlyChangedIdentifiers(t *testing.T) {

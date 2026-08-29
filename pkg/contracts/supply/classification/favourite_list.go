@@ -1,7 +1,7 @@
 package classification
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 )
 
 // FavouriteList is one named, persisted customer product collection.

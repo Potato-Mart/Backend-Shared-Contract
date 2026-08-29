@@ -1,7 +1,7 @@
 package operations
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging"
 )
 
 // PackingLine carries package compositions through fulfilment and returns.

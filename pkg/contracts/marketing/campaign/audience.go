@@ -1,6 +1,6 @@
 package campaign
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/marketing/campaign/campaign_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/marketing/campaign/campaign_enums"
 
 // Audience narrows a campaign by customer type and client platform.
 type Audience struct {

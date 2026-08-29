@@ -1,6 +1,6 @@
 package product
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/classification"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/classification"
 
 // Images groups code-only relationships to managed product media. Render URLs
 // are resolved from the media masters by the owning backend.

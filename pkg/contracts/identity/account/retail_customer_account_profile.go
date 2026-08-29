@@ -1,6 +1,6 @@
 package account
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/audit"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 
 // RetailCustomerAccountProfile contains lightweight references for a retail
 // customer account. CustomerNumber is also the membership account key.

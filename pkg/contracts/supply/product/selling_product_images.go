@@ -1,6 +1,6 @@
 package product
 
-import security "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security"
+import security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 
 // SellingProductImages is the resolved media projection of the Product image
 // groups. It carries render-safe object media rather than storage records or

@@ -1,6 +1,6 @@
 package security
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security/security_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security/security_enums"
 
 // ActorRef identifies the authenticated principal that performed an action.
 // It is shared by audit, access, and security records, which customers,

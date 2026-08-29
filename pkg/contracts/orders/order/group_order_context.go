@@ -1,6 +1,6 @@
 package order
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/orders/order/order_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/order/order_enums"
 
 // GroupOrderContext identifies an order as the consolidated fulfilment owner
 // or as a participant referencing that parent fulfilment.
