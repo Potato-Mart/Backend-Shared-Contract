@@ -1,0 +1,748 @@
+# v33 Contract Migration Guide
+
+## Status and scope
+
+`v33.0.0` is the Backend Shared Contract v33 line, dated 2026-08-30. This
+branch changes only this repository. It creates no tag, push, pull request,
+merge, deployment, or consumer migration; the annotated release tag is created
+only by the protected-main release workflow after a later merge.
+
+Every exported v32 contract and enum has exactly one reviewed v33 destination.
+V33 deletes **no** exported v32 contract or enum, including dormant and
+future-facing contracts. Package moves, clearer names, embedded shared field
+groups, and explicit JSON-shape changes are documented below; no compatibility
+alias is supplied for the `/v32` module path.
+
+## Consumer action
+
+After `v33.0.0` is tagged, change the module requirement and every import from
+`github.com/Potato-Mart/Backend-Shared-Contract/v32` to
+`github.com/Potato-Mart/Backend-Shared-Contract/v33`, then apply the exact
+mapping table in this document. Run consumer tests with the new module.
+
+Sibling consumers are read-only for this work. Their current v32 pins and their
+build/runtime adoption are external migration work; this repository does not
+claim v33 consumer verification.
+
+## Domain ownership
+
+| Area | V33 owning packages |
+| --- | --- |
+| Identity | `identity/access`, `identity/account`, `identity/authorisation` |
+| Customers | `customers/retail`, `customers/wholesale`, `customers/group`, `customers/preference` |
+| Orders | `orders/cart`, `orders/order`, `orders/group_order`, `orders/fulfilment`, `orders/shipping`, `orders/buyer`, `orders/subscription` |
+| Payments | `payments/payment`, `provider`, `merchant`, `receipt`, `register`, `settlement`, `terminal` |
+| Pricing | `pricing/pricebook`, `quote`, `promotion`, `benefit`, `coupon`, `membership`, `market`, `special`, and `pricing/wallet/*` |
+| Notification | `notification/core`, `email`, `sms`, `push`, `preference`, `delivery` |
+| Insights and Marketing | `insights/analytics`, `insights/sales`, `insights/customer`; `marketing/campaign`, `marketing/audience`, `marketing/message` |
+| Supply | `supply/catalogue/{classification,product,listing,review,wish,favourite}`, `inventory`, `warehouse`, `procurement`, `compliance`, `fulfilment`, `forecasting` |
+| Pub/Sub | `pubsub/envelope`, `pubsub/routing`, and producer-owned `orders`, `payments`, `supply`, `customers`, `pricing`, and `notification` payload packages |
+
+`marketing/message` remains intact. The target taxonomy intentionally has no
+populated `payments/invoice`, `payments/refund`, or `payments/finance` package.
+
+## Reviewed moves and clearer names
+
+- Orders `Payment`, `CustomerPaymentSummary`, and `CustomerPaymentAllocation`
+  are in `payments/payment`; receipt snapshots/lines/cash rounding are in
+  `payments/receipt`; registers, sessions, totals, method totals, cash movement,
+  and their enums are in `payments/register`. `orders/order.POSAttribution`
+  remains order-owned.
+- Physical `OutboundShipment` and `PackingDiscrepancy` are in
+  `supply/fulfilment`; order delivery intent, rates, schedules, and projections
+  remain under Orders. `SubscriptionPlan`, `MemberSubscription`, status,
+  `UnitPrice`, and `DiscountPercent` are in `orders/subscription`.
+- Procurement `Order`, `OrderItem`, `Receipt`, and `ReceiptItem` map one-to-one
+  to `PurchaseOrder`, `PurchaseOrderItem`, `PurchaseReceipt`, and
+  `PurchaseReceiptItem`. Operational `InboundReceipt` and `InboundItem` are
+  `WarehouseReceipt` and `WarehouseReceiptItem`.
+- `PriceAudience` is Pricing-owned. Supply retains its distinct
+  `PriceVisibility`; the separately owned Pricing price-visibility concept also
+  remains. Other reviewed parallel concepts, including `Rotation3`/`Vector3`,
+  `CouponContent`/`SupplierAvailablePromotion`, classification references,
+  access statuses, and price-book/promotion statuses remain distinct.
+- `RoleCode` is open for custom role keys while `UserRole` and all built-in role
+  constants remain. `TerminalProvider`, its constants, and validation behavior
+  remain unchanged.
+
+## Wire, audit, privacy, and event changes
+
+- `SecurityLogEntryFields`, `ProductFactDimensions`, and `PointBalances` embed
+  shared fields without removing their public root types. `RetailCustomer`
+  retains its embedded `IdentityLink`, and `orders/order.StatusHistory` remains.
+- Independently mutable persisted roots use `AuditFields` according to the
+  reviewed policy registry. PII-bearing identity, customer, and financial
+  records use `DataProtectionFields`; immutable ledgers, events, snapshots, and
+  projections do not receive generic audit metadata. `CarryingCostMovement`
+  carries actor, request, and correlation evidence while remaining immutable.
+- `LifecycleAction.By` and `.At` are required; `.At` is a non-pointer
+  `time.Time`. Notification consent is latest-state evidence with required
+  actor, source, policy version, request ID, and changed-at values stamped by
+  its owner. `NotificationPreferences` is not represented as the legal system
+  of record, and its changed event carries only identifiers, revision, and
+  changed topic/channel deltas.
+- `EventEnvelope.EventType` is `routing.EventType`; `EventVersion` is an open
+  string code. The envelope owns `occurred_at`, optional correlation ID,
+  causation event ID, and request ID. The reviewed catalogue, fulfilment, and
+  inventory/stock payloads no longer duplicate `occurred_at`. `OrderFact`,
+  `PaymentFact`, and `RefundFact` use `fact_id` and `fact_occurred_at`.
+  `FulfilmentTrackingEvent` includes optional `shipment_id` and `carrier`.
+
+### Current event-version registry
+
+| Version | Event types |
+| --- | --- |
+| `v4` | `inventory.lot_received`, `inventory.stock_bucket_changed`, `inventory.package_converted`, `inventory.quality_assessed`, `inventory.reservation_changed`, `inventory.staged`, `inventory.sold`, `inventory.date_mark_threshold_reached`, `stock.location_availability_changed`, `catalog.base_cost_changed`, `catalog.listing_changed`, `analytics.order_fact`, `analytics.refund_fact` |
+| `v3` | `order.paid`, `refund.completed`, `product.sales_performance_updated`, `fulfilment.packing_updated` |
+| `v2` | `campaign.changed`, `promotion.changed`, `fulfilment.shipped`, `fulfilment.delivered`, `fulfilment.completed`, `fulfilment.tracking_updated`, `analytics.payment_fact` |
+| `v1` | `order.created`, `order.status_changed`, `order.cancelled`, `payment.captured`, `payment.failed`, `invoice.issued`, `receipt.generated`, `refund.requested`, `refund.failed`, `customer.registered`, `customer.profile_updated`, `notification.preferences_changed`, `wallet.gift_card_issued`, `price.changed` |
+
+The historical event tables in the release notes are retained. Notification's
+existing campaign/promotion version mismatch is recorded as external follow-up
+work; this v33 contract release neither changes that integration nor claims to
+verify it.
+
+## Complete reviewed v32 to v33 mapping
+
+Each row explicitly maps both package path and exported contract/enum name. The
+table is mechanically materialized from the reviewed preservation manifest and
+is locked by repository tests at 634 entries.
+
+| v32 package | v32 contract or enum | v33 package | v33 contract or enum |
+| --- | --- | --- | --- |
+<!-- V32-MAPPING-START -->
+| `contracts/common/audit` | `AuditFields` | `contracts/common/audit` | `AuditFields` |
+| `contracts/common/audit` | `LifecycleAction` | `contracts/common/audit` | `LifecycleAction` |
+| `contracts/common/commerce/commerce_enums` | `OrderType` | `contracts/common/commerce/commerce_enums` | `OrderType` |
+| `contracts/common/device` | `DeviceRecord` | `contracts/common/device` | `DeviceRecord` |
+| `contracts/common/geography` | `Address` | `contracts/common/geography` | `Address` |
+| `contracts/common/geography` | `AdministrativeAreaRef` | `contracts/common/geography` | `AdministrativeAreaRef` |
+| `contracts/common/geography` | `CountryCode` | `contracts/common/geography` | `CountryCode` |
+| `contracts/common/geography` | `CountryRef` | `contracts/common/geography` | `CountryRef` |
+| `contracts/common/geography` | `GeographicContext` | `contracts/common/geography` | `GeographicContext` |
+| `contracts/common/geography` | `GeographicScope` | `contracts/common/geography` | `GeographicScope` |
+| `contracts/common/geography` | `GeographicTarget` | `contracts/common/geography` | `GeographicTarget` |
+| `contracts/common/geography` | `SubdivisionCode` | `contracts/common/geography` | `SubdivisionCode` |
+| `contracts/common/geography/geography_enums` | `AdministrativeAreaType` | `contracts/common/geography/geography_enums` | `AdministrativeAreaType` |
+| `contracts/common/geography/geography_enums` | `GeographicContextSource` | `contracts/common/geography/geography_enums` | `GeographicContextSource` |
+| `contracts/common/geography/geography_enums` | `GeographicScopeMode` | `contracts/common/geography/geography_enums` | `GeographicScopeMode` |
+| `contracts/common/geography/geography_enums` | `GeographicTargetKind` | `contracts/common/geography/geography_enums` | `GeographicTargetKind` |
+| `contracts/common/geometry` | `BoundingBox` | `contracts/common/geometry` | `BoundingBox` |
+| `contracts/common/geometry` | `Rotation3` | `contracts/common/geometry` | `Rotation3` |
+| `contracts/common/geometry` | `Size3D` | `contracts/common/geometry` | `Size3D` |
+| `contracts/common/geometry` | `Transform` | `contracts/common/geometry` | `Transform` |
+| `contracts/common/geometry` | `Vector3` | `contracts/common/geometry` | `Vector3` |
+| `contracts/common/identity` | `IdentityLink` | `contracts/common/identity` | `IdentityLink` |
+| `contracts/common/identity/identity_enums` | `Portal` | `contracts/common/identity/identity_enums` | `Portal` |
+| `contracts/common/localization` | `LocalizedDescription` | `contracts/common/localization` | `LocalizedDescription` |
+| `contracts/common/localization` | `LocalizedName` | `contracts/common/localization` | `LocalizedName` |
+| `contracts/common/localization` | `LocalizedText` | `contracts/common/localization` | `LocalizedText` |
+| `contracts/common/measurement` | `Dimensions` | `contracts/common/measurement` | `Dimensions` |
+| `contracts/common/measurement` | `Measure` | `contracts/common/measurement` | `Measure` |
+| `contracts/common/measurement` | `MeasurementUnit` | `contracts/common/measurement` | `MeasurementUnit` |
+| `contracts/common/measurement` | `NetContent` | `contracts/common/measurement` | `NetContent` |
+| `contracts/common/measurement` | `Weight` | `contracts/common/measurement` | `Weight` |
+| `contracts/common/metadata` | `Metadata` | `contracts/common/metadata` | `Metadata` |
+| `contracts/common/money` | `CurrencyCode` | `contracts/common/money` | `CurrencyCode` |
+| `contracts/common/money` | `CurrencyExponent` | `contracts/common/money` | `CurrencyExponent` |
+| `contracts/common/money` | `Money` | `contracts/common/money` | `Money` |
+| `contracts/common/packaging` | `PackageComponentSnapshot` | `contracts/common/packaging` | `PackageComponentSnapshot` |
+| `contracts/common/packaging` | `PackageCompositionSnapshot` | `contracts/common/packaging` | `PackageCompositionSnapshot` |
+| `contracts/common/packaging` | `PhysicalPackage` | `contracts/common/packaging` | `PhysicalPackage` |
+| `contracts/common/packaging/packaging_enums` | `PackageHandlingUnit` | `contracts/common/packaging/packaging_enums` | `PackageHandlingUnit` |
+| `contracts/common/party` | `ContactAddress` | `contracts/common/party` | `ContactAddress` |
+| `contracts/common/party` | `ContactChannels` | `contracts/common/party` | `ContactChannels` |
+| `contracts/common/party` | `OrganisationDetail` | `contracts/common/party` | `OrganisationDetail` |
+| `contracts/common/party` | `PartyRef` | `contracts/common/party` | `PartyRef` |
+| `contracts/common/party` | `PersonName` | `contracts/common/party` | `PersonName` |
+| `contracts/common/party` | `Recipient` | `contracts/common/party` | `Recipient` |
+| `contracts/common/security` | `AccessLogEntry` | `contracts/common/security` | `AccessLogEntry` |
+| `contracts/common/security` | `ActorRef` | `contracts/common/security` | `ActorRef` |
+| `contracts/common/security` | `AuditLogEntry` | `contracts/common/security` | `AuditLogEntry` |
+| `contracts/common/security` | `CustodyEvent` | `contracts/common/security` | `CustodyEvent` |
+| `contracts/common/security` | `DataProtectionFields` | `contracts/common/security` | `DataProtectionFields` |
+| `contracts/common/security` | `EvidenceRecord` | `contracts/common/security` | `EvidenceRecord` |
+| `contracts/common/security` | `HistoryChange` | `contracts/common/security` | `HistoryChange` |
+| `contracts/common/security` | `HistoryEntry` | `contracts/common/security` | `HistoryEntry` |
+| `contracts/common/security` | `ObjectMedia` | `contracts/common/security` | `ObjectMedia` |
+| `contracts/common/security` | `ObjectMediaAsset` | `contracts/common/security` | `ObjectMediaAsset` |
+| `contracts/common/security` | `ObjectMediaReference` | `contracts/common/security` | `ObjectMediaReference` |
+| `contracts/common/security` | `RecordOutcome` | `contracts/common/security` | `RecordOutcome` |
+| `contracts/common/security` | `SecurityEvent` | `contracts/common/security` | `SecurityEvent` |
+| `contracts/common/security` | `SecurityIncident` | `contracts/common/security` | `SecurityIncident` |
+| `contracts/common/security/security_enums` | `AlertLevel` | `contracts/common/security/security_enums` | `AlertLevel` |
+| `contracts/common/security/security_enums` | `AuditOutcome` | `contracts/common/security/security_enums` | `AuditOutcome` |
+| `contracts/common/security/security_enums` | `AuthAssuranceLevel` | `contracts/common/security/security_enums` | `AuthAssuranceLevel` |
+| `contracts/common/security/security_enums` | `AuthMethod` | `contracts/common/security/security_enums` | `AuthMethod` |
+| `contracts/common/security/security_enums` | `DataClassification` | `contracts/common/security/security_enums` | `DataClassification` |
+| `contracts/common/security/security_enums` | `DataProtectionBasis` | `contracts/common/security/security_enums` | `DataProtectionBasis` |
+| `contracts/common/security/security_enums` | `IdentityDomain` | `contracts/common/security/security_enums` | `IdentityDomain` |
+| `contracts/common/security/security_enums` | `MediaStatus` | `contracts/common/security/security_enums` | `MediaStatus` |
+| `contracts/common/security/security_enums` | `MediaVisibility` | `contracts/common/security/security_enums` | `MediaVisibility` |
+| `contracts/common/security/security_enums` | `SecurityEventSeverity` | `contracts/common/security/security_enums` | `SecurityEventSeverity` |
+| `contracts/common/security/security_enums` | `SecurityEventStatus` | `contracts/common/security/security_enums` | `SecurityEventStatus` |
+| `contracts/common/security/security_enums` | `SecurityRiskLevel` | `contracts/common/security/security_enums` | `SecurityRiskLevel` |
+| `contracts/common/temporal` | `Date` | `contracts/common/temporal` | `Date` |
+| `contracts/common/temporal` | `TimeOfDay` | `contracts/common/temporal` | `TimeOfDay` |
+| `contracts/customers/retail` | `RetailCustomer` | `contracts/customers/retail` | `RetailCustomer` |
+| `contracts/customers/retail` | `RetailCustomerBasicInfo` | `contracts/customers/retail` | `RetailCustomerBasicInfo` |
+| `contracts/customers/retail` | `RetailCustomerCommerceProfile` | `contracts/customers/retail` | `RetailCustomerCommerceProfile` |
+| `contracts/customers/retail` | `RetailCustomerLifecycle` | `contracts/customers/retail` | `RetailCustomerLifecycle` |
+| `contracts/customers/retail` | `RetailCustomerManagementProfile` | `contracts/customers/retail` | `RetailCustomerManagementProfile` |
+| `contracts/customers/retail` | `RetailCustomerProfileCompletion` | `contracts/customers/retail` | `RetailCustomerProfileCompletion` |
+| `contracts/customers/retail` | `RetailCustomerReceiptPreferences` | `contracts/customers/preference` | `RetailCustomerReceiptPreferences` |
+| `contracts/customers/retail` | `RetailCustomerReferralProfile` | `contracts/customers/retail` | `RetailCustomerReferralProfile` |
+| `contracts/customers/retail` | `RetailCustomerSummary` | `contracts/customers/retail` | `RetailCustomerSummary` |
+| `contracts/customers/retail/retail_enums` | `BuyerType` | `contracts/customers/retail/retail_enums` | `BuyerType` |
+| `contracts/customers/retail/retail_enums` | `CustomerAcquisitionSource` | `contracts/customers/retail/retail_enums` | `CustomerAcquisitionSource` |
+| `contracts/customers/retail/retail_enums` | `CustomerGender` | `contracts/customers/retail/retail_enums` | `CustomerGender` |
+| `contracts/customers/retail/retail_enums` | `CustomerIdentityKind` | `contracts/customers/retail/retail_enums` | `CustomerIdentityKind` |
+| `contracts/customers/retail/retail_enums` | `CustomerStatus` | `contracts/customers/retail/retail_enums` | `CustomerStatus` |
+| `contracts/customers/retail/retail_enums` | `PreferredContactMethod` | `contracts/customers/preference/preference_enums` | `PreferredContactMethod` |
+| `contracts/customers/retail/retail_enums` | `ReceiptFormat` | `contracts/customers/preference/preference_enums` | `ReceiptFormat` |
+| `contracts/customers/review` | `MyReview` | `contracts/supply/catalogue/review` | `MyReview` |
+| `contracts/customers/review` | `PublishedReview` | `contracts/supply/catalogue/review` | `PublishedReview` |
+| `contracts/customers/review` | `PublishedReviewSubject` | `contracts/supply/catalogue/review` | `PublishedReviewSubject` |
+| `contracts/customers/review` | `RatingSummary` | `contracts/supply/catalogue/review` | `RatingSummary` |
+| `contracts/customers/review` | `Review` | `contracts/supply/catalogue/review` | `Review` |
+| `contracts/customers/review` | `ReviewContent` | `contracts/supply/catalogue/review` | `ReviewContent` |
+| `contracts/customers/review` | `ReviewQualification` | `contracts/supply/catalogue/review` | `ReviewQualification` |
+| `contracts/customers/review` | `ReviewSubject` | `contracts/supply/catalogue/review` | `ReviewSubject` |
+| `contracts/customers/review/review_enums` | `ReviewErrorCode` | `contracts/supply/catalogue/review/review_enums` | `ReviewErrorCode` |
+| `contracts/customers/review/review_enums` | `ReviewQualificationKind` | `contracts/supply/catalogue/review/review_enums` | `ReviewQualificationKind` |
+| `contracts/customers/review/review_enums` | `ReviewRejectionReason` | `contracts/supply/catalogue/review/review_enums` | `ReviewRejectionReason` |
+| `contracts/customers/review/review_enums` | `ReviewStatus` | `contracts/supply/catalogue/review/review_enums` | `ReviewStatus` |
+| `contracts/customers/review/review_enums` | `ReviewType` | `contracts/supply/catalogue/review/review_enums` | `ReviewType` |
+| `contracts/customers/wholesale` | `GroupOrderManagerApplicantSnapshot` | `contracts/customers/group` | `GroupOrderManagerApplicantSnapshot` |
+| `contracts/customers/wholesale` | `GroupOrderManagerApplication` | `contracts/customers/group` | `GroupOrderManagerApplication` |
+| `contracts/customers/wholesale` | `OrganisationAccess` | `contracts/customers/wholesale` | `OrganisationAccess` |
+| `contracts/customers/wholesale` | `OrganisationAccessSummary` | `contracts/customers/wholesale` | `OrganisationAccessSummary` |
+| `contracts/customers/wholesale` | `WholesaleApplicantSnapshot` | `contracts/customers/wholesale` | `WholesaleApplicantSnapshot` |
+| `contracts/customers/wholesale` | `WholesaleApplication` | `contracts/customers/wholesale` | `WholesaleApplication` |
+| `contracts/customers/wholesale` | `WholesaleFreightPreset` | `contracts/customers/wholesale` | `WholesaleFreightPreset` |
+| `contracts/customers/wholesale` | `WholesaleOrganisation` | `contracts/customers/wholesale` | `WholesaleOrganisation` |
+| `contracts/customers/wholesale` | `WholesaleOrganisationSummary` | `contracts/customers/wholesale` | `WholesaleOrganisationSummary` |
+| `contracts/customers/wholesale` | `WholesalePermission` | `contracts/customers/wholesale` | `WholesalePermission` |
+| `contracts/customers/wholesale` | `WholesaleTerms` | `contracts/customers/wholesale` | `WholesaleTerms` |
+| `contracts/customers/wholesale/wholesale_enums` | `GroupOrderManagerApplicationStatus` | `contracts/customers/group/group_enums` | `GroupOrderManagerApplicationStatus` |
+| `contracts/customers/wholesale/wholesale_enums` | `OrganisationAccessStatus` | `contracts/customers/wholesale/wholesale_enums` | `OrganisationAccessStatus` |
+| `contracts/customers/wholesale/wholesale_enums` | `WholesaleApplicationState` | `contracts/customers/wholesale/wholesale_enums` | `WholesaleApplicationState` |
+| `contracts/customers/wholesale/wholesale_enums` | `WholesaleApplicationStatus` | `contracts/customers/wholesale/wholesale_enums` | `WholesaleApplicationStatus` |
+| `contracts/customers/wholesale/wholesale_enums` | `WholesaleBuyerRole` | `contracts/customers/wholesale/wholesale_enums` | `WholesaleBuyerRole` |
+| `contracts/customers/wholesale/wholesale_enums` | `WholesaleOrganisationCategory` | `contracts/customers/wholesale/wholesale_enums` | `WholesaleOrganisationCategory` |
+| `contracts/customers/wholesale/wholesale_enums` | `WholesaleOrganisationStatus` | `contracts/customers/wholesale/wholesale_enums` | `WholesaleOrganisationStatus` |
+| `contracts/identity/access` | `LoginSession` | `contracts/identity/access` | `LoginSession` |
+| `contracts/identity/access` | `OrganisationAccessChangedEvent` | `contracts/identity/access` | `OrganisationAccessChangedEvent` |
+| `contracts/identity/access` | `PortalAccess` | `contracts/identity/access` | `PortalAccess` |
+| `contracts/identity/access` | `PortalAccessGrantedEvent` | `contracts/identity/access` | `PortalAccessGrantedEvent` |
+| `contracts/identity/access` | `PortalAccessRevokedEvent` | `contracts/identity/access` | `PortalAccessRevokedEvent` |
+| `contracts/identity/access` | `StaffGeoScope` | `contracts/identity/access` | `StaffGeoScope` |
+| `contracts/identity/access/access_enums` | `PortalAccessStatus` | `contracts/identity/access/access_enums` | `PortalAccessStatus` |
+| `contracts/identity/access/access_enums` | `ScopeLevel` | `contracts/identity/access/access_enums` | `ScopeLevel` |
+| `contracts/identity/account` | `AdminAccountProfile` | `contracts/identity/account` | `AdminAccountProfile` |
+| `contracts/identity/account` | `AuthIdentity` | `contracts/identity/account` | `AuthIdentity` |
+| `contracts/identity/account` | `AuthIdentityLinkedEvent` | `contracts/identity/account` | `AuthIdentityLinkedEvent` |
+| `contracts/identity/account` | `AuthIdentitySummary` | `contracts/identity/account` | `AuthIdentitySummary` |
+| `contracts/identity/account` | `DeviceIP` | `contracts/identity/account` | `DeviceIP` |
+| `contracts/identity/account` | `EmailVerificationAudit` | `contracts/identity/account` | `EmailVerificationAudit` |
+| `contracts/identity/account` | `RetailCustomerAccountProfile` | `contracts/identity/account` | `RetailCustomerAccountProfile` |
+| `contracts/identity/account` | `UserAccount` | `contracts/identity/account` | `UserAccount` |
+| `contracts/identity/account` | `UserAccountCreatedEvent` | `contracts/identity/account` | `UserAccountCreatedEvent` |
+| `contracts/identity/account` | `UserAccountStatusChangedEvent` | `contracts/identity/account` | `UserAccountStatusChangedEvent` |
+| `contracts/identity/account` | `UserAccountSummary` | `contracts/identity/account` | `UserAccountSummary` |
+| `contracts/identity/account` | `UserConnectedIdentities` | `contracts/identity/account` | `UserConnectedIdentities` |
+| `contracts/identity/account` | `UserDevice` | `contracts/identity/account` | `UserDevice` |
+| `contracts/identity/account` | `UserDeviceSeenEvent` | `contracts/identity/account` | `UserDeviceSeenEvent` |
+| `contracts/identity/account` | `UserProfile` | `contracts/identity/account` | `UserProfile` |
+| `contracts/identity/account` | `WholesaleCustomerAccountProfile` | `contracts/identity/account` | `WholesaleCustomerAccountProfile` |
+| `contracts/identity/account/account_enums` | `AccountStatus` | `contracts/identity/account/account_enums` | `AccountStatus` |
+| `contracts/identity/account/account_enums` | `AccountType` | `contracts/identity/account/account_enums` | `AccountType` |
+| `contracts/identity/account/account_enums` | `AuthIdentityProvider` | `contracts/identity/account/account_enums` | `AuthIdentityProvider` |
+| `contracts/identity/account/account_enums` | `AuthIdentityStatus` | `contracts/identity/account/account_enums` | `AuthIdentityStatus` |
+| `contracts/identity/account/account_enums` | `DeviceType` | `contracts/identity/account/account_enums` | `DeviceType` |
+| `contracts/identity/account/account_enums` | `UserPreferredLanguage` | `contracts/identity/account/account_enums` | `UserPreferredLanguage` |
+| `contracts/identity/role` | `PermissionDefinition` | `contracts/identity/authorisation` | `PermissionDefinition` |
+| `contracts/identity/role` | `PermissionKey` | `contracts/identity/authorisation` | `PermissionKey` |
+| `contracts/identity/role` | `Role` | `contracts/identity/authorisation` | `Role` |
+| `contracts/identity/role` | `RoleAssignment` | `contracts/identity/authorisation` | `RoleAssignment` |
+| `contracts/identity/role` | `RoleAssignmentGrantedEvent` | `contracts/identity/authorisation` | `RoleAssignmentGrantedEvent` |
+| `contracts/identity/role` | `RoleAssignmentRevokedEvent` | `contracts/identity/authorisation` | `RoleAssignmentRevokedEvent` |
+| `contracts/identity/role` | `RoleCode` | `contracts/identity/authorisation` | `RoleCode` |
+| `contracts/identity/role/role_enums` | `PermissionClassification` | `contracts/identity/authorisation/role_enums` | `PermissionClassification` |
+| `contracts/identity/role/role_enums` | `UserRole` | `contracts/identity/authorisation/role_enums` | `UserRole` |
+| `contracts/insights/analytics` | `DailyPrediction` | `contracts/supply/forecasting` | `DailyPrediction` |
+| `contracts/insights/analytics` | `ForecastAvailabilitySnapshot` | `contracts/supply/forecasting` | `ForecastAvailabilitySnapshot` |
+| `contracts/insights/analytics` | `MetricRollup` | `contracts/insights/analytics` | `MetricRollup` |
+| `contracts/insights/analytics` | `OrderItemFact` | `contracts/insights/sales` | `OrderItemFact` |
+| `contracts/insights/analytics` | `RefundItemFact` | `contracts/insights/sales` | `RefundItemFact` |
+| `contracts/insights/analytics` | `RetailCustomerAnalyticsProfile` | `contracts/insights/customer` | `RetailCustomerAnalyticsProfile` |
+| `contracts/insights/analytics` | `SKUDemandForecast` | `contracts/supply/forecasting` | `SKUDemandForecast` |
+| `contracts/insights/analytics/analytics_enums` | `ChurnRisk` | `contracts/insights/analytics/analytics_enums` | `ChurnRisk` |
+| `contracts/insights/marketing` | `CampaignComparableEvent` | `contracts/supply/forecasting` | `CampaignComparableEvent` |
+| `contracts/insights/marketing` | `CampaignPrediction` | `contracts/supply/forecasting` | `CampaignPrediction` |
+| `contracts/insights/marketing` | `CampaignPredictionEvidence` | `contracts/supply/forecasting` | `CampaignPredictionEvidence` |
+| `contracts/insights/marketing` | `CampaignProductPrediction` | `contracts/supply/forecasting` | `CampaignProductPrediction` |
+| `contracts/insights/marketing` | `CampaignSupplierPrediction` | `contracts/supply/forecasting` | `CampaignSupplierPrediction` |
+| `contracts/insights/marketing/marketing_enums` | `CampaignPredictionSource` | `contracts/supply/forecasting/marketing_enums` | `CampaignPredictionSource` |
+| `contracts/insights/marketing/marketing_enums` | `CampaignPredictionStatus` | `contracts/supply/forecasting/marketing_enums` | `CampaignPredictionStatus` |
+| `contracts/marketing/campaign` | `Audience` | `contracts/marketing/audience` | `Audience` |
+| `contracts/marketing/campaign` | `Campaign` | `contracts/marketing/campaign` | `Campaign` |
+| `contracts/marketing/campaign` | `CampaignCategoryTarget` | `contracts/marketing/campaign` | `CampaignCategoryTarget` |
+| `contracts/marketing/campaign` | `CampaignTarget` | `contracts/marketing/campaign` | `CampaignTarget` |
+| `contracts/marketing/campaign` | `CTADestination` | `contracts/marketing/campaign` | `CTADestination` |
+| `contracts/marketing/campaign/campaign_enums` | `CampaignCTADestinationType` | `contracts/marketing/campaign/campaign_enums` | `CampaignCTADestinationType` |
+| `contracts/marketing/campaign/campaign_enums` | `CampaignCustomerType` | `contracts/marketing/campaign/campaign_enums` | `CampaignCustomerType` |
+| `contracts/marketing/campaign/campaign_enums` | `CampaignPlacement` | `contracts/marketing/campaign/campaign_enums` | `CampaignPlacement` |
+| `contracts/marketing/campaign/campaign_enums` | `CampaignPlatform` | `contracts/marketing/campaign/campaign_enums` | `CampaignPlatform` |
+| `contracts/marketing/campaign/campaign_enums` | `CampaignSeverity` | `contracts/marketing/campaign/campaign_enums` | `CampaignSeverity` |
+| `contracts/marketing/campaign/campaign_enums` | `CampaignStatus` | `contracts/marketing/campaign/campaign_enums` | `CampaignStatus` |
+| `contracts/marketing/message` | `MarketingMessage` | `contracts/marketing/message` | `MarketingMessage` |
+| `contracts/marketing/message` | `MarketingMessageSendSummary` | `contracts/marketing/message` | `MarketingMessageSendSummary` |
+| `contracts/marketing/message` | `MarketingMessageTemplate` | `contracts/marketing/message` | `MarketingMessageTemplate` |
+| `contracts/marketing/message/message_enums` | `MarketingMessageStatus` | `contracts/marketing/message/message_enums` | `MarketingMessageStatus` |
+| `contracts/marketing/message/message_enums` | `MarketingTemplateStatus` | `contracts/marketing/message/message_enums` | `MarketingTemplateStatus` |
+| `contracts/notifications` | `EmailNotification` | `contracts/notification/email` | `EmailNotification` |
+| `contracts/notifications` | `InAppNotification` | `contracts/notification/delivery` | `InAppNotification` |
+| `contracts/notifications` | `Notification` | `contracts/notification/core` | `Notification` |
+| `contracts/notifications` | `NotificationChannelConsent` | `contracts/notification/preference` | `NotificationChannelConsent` |
+| `contracts/notifications` | `NotificationChannelPreference` | `contracts/notification/preference` | `NotificationChannelPreference` |
+| `contracts/notifications` | `NotificationDelivery` | `contracts/notification/delivery` | `NotificationDelivery` |
+| `contracts/notifications` | `NotificationPreferences` | `contracts/notification/preference` | `NotificationPreferences` |
+| `contracts/notifications` | `NotificationRecipient` | `contracts/notification/core` | `NotificationRecipient` |
+| `contracts/notifications` | `NotificationReference` | `contracts/notification/core` | `NotificationReference` |
+| `contracts/notifications` | `NotificationTopic` | `contracts/notification/core` | `NotificationTopic` |
+| `contracts/notifications` | `NotificationTopicChannel` | `contracts/notification/core` | `NotificationTopicChannel` |
+| `contracts/notifications` | `NotificationTopicPreference` | `contracts/notification/preference` | `NotificationTopicPreference` |
+| `contracts/notifications` | `PublishedNotification` | `contracts/notification/core` | `PublishedNotification` |
+| `contracts/notifications` | `PushNotification` | `contracts/notification/push` | `PushNotification` |
+| `contracts/notifications` | `SMSNotification` | `contracts/notification/sms` | `SMSNotification` |
+| `contracts/notifications` | `SocialMediaNotification` | `contracts/notification/delivery` | `SocialMediaNotification` |
+| `contracts/notifications/notification_enums` | `InAppNotificationStatus` | `contracts/notification/core/notification_enums` | `InAppNotificationStatus` |
+| `contracts/notifications/notification_enums` | `NotificationChannel` | `contracts/notification/core/notification_enums` | `NotificationChannel` |
+| `contracts/notifications/notification_enums` | `NotificationDeliveryStatus` | `contracts/notification/core/notification_enums` | `NotificationDeliveryStatus` |
+| `contracts/notifications/notification_enums` | `NotificationStatus` | `contracts/notification/core/notification_enums` | `NotificationStatus` |
+| `contracts/orders/order` | `BuyerContext` | `contracts/orders/buyer` | `BuyerContext` |
+| `contracts/orders/order` | `Cart` | `contracts/orders/cart` | `Cart` |
+| `contracts/orders/order` | `CartItem` | `contracts/orders/cart` | `CartItem` |
+| `contracts/orders/order` | `CustomerPaymentAllocation` | `contracts/payments/payment` | `CustomerPaymentAllocation` |
+| `contracts/orders/order` | `CustomerPaymentSummary` | `contracts/payments/payment` | `CustomerPaymentSummary` |
+| `contracts/orders/order` | `DemandBucket` | `contracts/orders/order` | `DemandBucket` |
+| `contracts/orders/order` | `Fulfillment` | `contracts/orders/fulfilment` | `Fulfillment` |
+| `contracts/orders/order` | `GiftCardRedemptionSnapshot` | `contracts/orders/order` | `GiftCardRedemptionSnapshot` |
+| `contracts/orders/order` | `GroupOrderAggregateLine` | `contracts/orders/group_order` | `GroupOrderAggregateLine` |
+| `contracts/orders/order` | `GroupOrderContext` | `contracts/orders/group_order` | `GroupOrderContext` |
+| `contracts/orders/order` | `GroupOrderFulfilmentPlan` | `contracts/orders/group_order` | `GroupOrderFulfilmentPlan` |
+| `contracts/orders/order` | `GroupOrderParticipantShare` | `contracts/orders/group_order` | `GroupOrderParticipantShare` |
+| `contracts/orders/order` | `LooseSubstitutionPolicySnapshot` | `contracts/orders/order` | `LooseSubstitutionPolicySnapshot` |
+| `contracts/orders/order` | `OpenDemandLine` | `contracts/orders/order` | `OpenDemandLine` |
+| `contracts/orders/order` | `Order` | `contracts/orders/order` | `Order` |
+| `contracts/orders/order` | `OrderItem` | `contracts/orders/order` | `OrderItem` |
+| `contracts/orders/order` | `OrderLineSummary` | `contracts/orders/order` | `OrderLineSummary` |
+| `contracts/orders/order` | `OrderPackingProgress` | `contracts/orders/fulfilment` | `OrderPackingProgress` |
+| `contracts/orders/order` | `OrderSummary` | `contracts/orders/order` | `OrderSummary` |
+| `contracts/orders/order` | `Payment` | `contracts/payments/payment` | `Payment` |
+| `contracts/orders/order` | `PointRedemptionSnapshot` | `contracts/orders/order` | `PointRedemptionSnapshot` |
+| `contracts/orders/order` | `POSAttribution` | `contracts/orders/order` | `POSAttribution` |
+| `contracts/orders/order` | `PreorderItemSnapshot` | `contracts/orders/order` | `PreorderItemSnapshot` |
+| `contracts/orders/order` | `PreorderItemState` | `contracts/orders/order` | `PreorderItemState` |
+| `contracts/orders/order` | `PricedPackageComponent` | `contracts/orders/fulfilment` | `PricedPackageComponent` |
+| `contracts/orders/order` | `PricingContext` | `contracts/orders/buyer` | `PricingContext` |
+| `contracts/orders/order` | `RewardRedemptionSnapshot` | `contracts/orders/order` | `RewardRedemptionSnapshot` |
+| `contracts/orders/order` | `SourceDevice` | `contracts/orders/order` | `SourceDevice` |
+| `contracts/orders/order` | `StatusHistory` | `contracts/orders/order` | `StatusHistory` |
+| `contracts/orders/order` | `VoucherRedemptionSnapshot` | `contracts/orders/order` | `VoucherRedemptionSnapshot` |
+| `contracts/orders/order/order_enums` | `CustomerOrderBucket` | `contracts/orders/order/order_enums` | `CustomerOrderBucket` |
+| `contracts/orders/order/order_enums` | `FulfillmentReadiness` | `contracts/orders/order/order_enums` | `FulfillmentReadiness` |
+| `contracts/orders/order/order_enums` | `FulfillmentStatus` | `contracts/orders/order/order_enums` | `FulfillmentStatus` |
+| `contracts/orders/order/order_enums` | `GroupOrderRole` | `contracts/orders/group_order/group_order_enums` | `GroupOrderRole` |
+| `contracts/orders/order/order_enums` | `LooseSubstitutionPolicySource` | `contracts/orders/order/order_enums` | `LooseSubstitutionPolicySource` |
+| `contracts/orders/order/order_enums` | `OrderSourceDeviceType` | `contracts/orders/order/order_enums` | `OrderSourceDeviceType` |
+| `contracts/orders/order/order_enums` | `PreorderAllocationStatus` | `contracts/orders/order/order_enums` | `PreorderAllocationStatus` |
+| `contracts/orders/order/order_enums` | `SalesOrderStatus` | `contracts/orders/order/order_enums` | `SalesOrderStatus` |
+| `contracts/orders/pos` | `CashMovement` | `contracts/payments/register` | `CashMovement` |
+| `contracts/orders/pos` | `CashRoundingSnapshot` | `contracts/payments/receipt` | `CashRoundingSnapshot` |
+| `contracts/orders/pos` | `MethodTotal` | `contracts/payments/register` | `MethodTotal` |
+| `contracts/orders/pos` | `ReceiptLine` | `contracts/payments/receipt` | `ReceiptLine` |
+| `contracts/orders/pos` | `ReceiptSnapshot` | `contracts/payments/receipt` | `ReceiptSnapshot` |
+| `contracts/orders/pos` | `Register` | `contracts/payments/register` | `Register` |
+| `contracts/orders/pos` | `RegisterSession` | `contracts/payments/register` | `RegisterSession` |
+| `contracts/orders/pos` | `SessionTotalsSnapshot` | `contracts/payments/register` | `SessionTotalsSnapshot` |
+| `contracts/orders/pos/pos_enums` | `CashMovementKind` | `contracts/payments/register/register_enums` | `CashMovementKind` |
+| `contracts/orders/pos/pos_enums` | `SessionStatus` | `contracts/payments/register/register_enums` | `SessionStatus` |
+| `contracts/orders/shipping` | `DeliveryAreaRate` | `contracts/orders/shipping` | `DeliveryAreaRate` |
+| `contracts/orders/shipping` | `DeliveryDateGroup` | `contracts/orders/shipping` | `DeliveryDateGroup` |
+| `contracts/orders/shipping` | `DeliverySchedule` | `contracts/orders/shipping` | `DeliverySchedule` |
+| `contracts/orders/shipping` | `DeliverySlot` | `contracts/orders/shipping` | `DeliverySlot` |
+| `contracts/orders/shipping` | `FulfilmentLocationSnapshot` | `contracts/orders/shipping` | `FulfilmentLocationSnapshot` |
+| `contracts/orders/shipping` | `OutboundShipment` | `contracts/supply/fulfilment` | `OutboundShipment` |
+| `contracts/orders/shipping` | `PackageLimits` | `contracts/orders/shipping` | `PackageLimits` |
+| `contracts/orders/shipping` | `PackingDiscrepancy` | `contracts/supply/fulfilment` | `PackingDiscrepancy` |
+| `contracts/orders/shipping` | `PreferredDeliverySlot` | `contracts/orders/shipping` | `PreferredDeliverySlot` |
+| `contracts/orders/shipping` | `Rate` | `contracts/orders/shipping` | `Rate` |
+| `contracts/orders/shipping` | `ShippingArrivalBlacklist` | `contracts/orders/shipping` | `ShippingArrivalBlacklist` |
+| `contracts/orders/shipping` | `ShippingArrivalRule` | `contracts/orders/shipping` | `ShippingArrivalRule` |
+| `contracts/orders/shipping` | `Zone` | `contracts/orders/shipping` | `Zone` |
+| `contracts/orders/shipping/shipping_enums` | `DeliveryMethod` | `contracts/orders/shipping/shipping_enums` | `DeliveryMethod` |
+| `contracts/orders/shipping/shipping_enums` | `FulfilmentIntent` | `contracts/orders/shipping/shipping_enums` | `FulfilmentIntent` |
+| `contracts/orders/shipping/shipping_enums` | `ShippingRateName` | `contracts/orders/shipping/shipping_enums` | `ShippingRateName` |
+| `contracts/payments/payment` | `BuyerLegalSnapshot` | `contracts/payments/payment` | `BuyerLegalSnapshot` |
+| `contracts/payments/payment` | `MerchantLegalProfile` | `contracts/payments/merchant` | `MerchantLegalProfile` |
+| `contracts/payments/payment` | `MerchantLegalSnapshot` | `contracts/payments/merchant` | `MerchantLegalSnapshot` |
+| `contracts/payments/payment` | `Mx51PaymentReference` | `contracts/payments/provider` | `Mx51PaymentReference` |
+| `contracts/payments/payment` | `PaymentReference` | `contracts/payments/payment` | `PaymentReference` |
+| `contracts/payments/payment` | `StripePaymentReference` | `contracts/payments/provider` | `StripePaymentReference` |
+| `contracts/payments/payment` | `WalletPaymentReference` | `contracts/payments/provider` | `WalletPaymentReference` |
+| `contracts/payments/payment/payment_enums` | `BusinessNumberScheme` | `contracts/payments/payment/payment_enums` | `BusinessNumberScheme` |
+| `contracts/payments/payment/payment_enums` | `CustomerPaymentAllocationKind` | `contracts/payments/payment/payment_enums` | `CustomerPaymentAllocationKind` |
+| `contracts/payments/payment/payment_enums` | `DocumentKind` | `contracts/payments/payment/payment_enums` | `DocumentKind` |
+| `contracts/payments/payment/payment_enums` | `MerchantProfileStatus` | `contracts/payments/payment/payment_enums` | `MerchantProfileStatus` |
+| `contracts/payments/payment/payment_enums` | `PaymentCompleteness` | `contracts/payments/payment/payment_enums` | `PaymentCompleteness` |
+| `contracts/payments/payment/payment_enums` | `PaymentMethod` | `contracts/payments/payment/payment_enums` | `PaymentMethod` |
+| `contracts/payments/payment/payment_enums` | `PaymentRecordStatus` | `contracts/payments/payment/payment_enums` | `PaymentRecordStatus` |
+| `contracts/payments/payment/payment_enums` | `PaymentStatus` | `contracts/payments/payment/payment_enums` | `PaymentStatus` |
+| `contracts/payments/payment/payment_enums` | `PaymentSummaryComponent` | `contracts/payments/payment/payment_enums` | `PaymentSummaryComponent` |
+| `contracts/payments/payment/payment_enums` | `RecoveryDecision` | `contracts/payments/payment/payment_enums` | `RecoveryDecision` |
+| `contracts/payments/payment/payment_enums` | `TaxRegistrationStatus` | `contracts/payments/payment/payment_enums` | `TaxRegistrationStatus` |
+| `contracts/payments/settlement` | `Settlement` | `contracts/payments/settlement` | `Settlement` |
+| `contracts/payments/settlement` | `SettlementTotals` | `contracts/payments/settlement` | `SettlementTotals` |
+| `contracts/payments/settlement/settlement_enums` | `SettlementType` | `contracts/payments/settlement/settlement_enums` | `SettlementType` |
+| `contracts/payments/terminal` | `Amounts` | `contracts/payments/terminal` | `Amounts` |
+| `contracts/payments/terminal` | `Terminal` | `contracts/payments/terminal` | `Terminal` |
+| `contracts/payments/terminal` | `TerminalProviderDetails` | `contracts/payments/terminal` | `TerminalProviderDetails` |
+| `contracts/payments/terminal` | `TerminalTransaction` | `contracts/payments/terminal` | `TerminalTransaction` |
+| `contracts/payments/terminal/terminal_enums` | `TerminalConnectionMode` | `contracts/payments/terminal/terminal_enums` | `TerminalConnectionMode` |
+| `contracts/payments/terminal/terminal_enums` | `TerminalProvider` | `contracts/payments/terminal/terminal_enums` | `TerminalProvider` |
+| `contracts/payments/terminal/terminal_enums` | `TerminalRefundType` | `contracts/payments/terminal/terminal_enums` | `TerminalRefundType` |
+| `contracts/payments/terminal/terminal_enums` | `TerminalStatus` | `contracts/payments/terminal/terminal_enums` | `TerminalStatus` |
+| `contracts/payments/terminal/terminal_enums` | `TerminalTxFinancialStatus` | `contracts/payments/terminal/terminal_enums` | `TerminalTxFinancialStatus` |
+| `contracts/payments/terminal/terminal_enums` | `TerminalTxStatus` | `contracts/payments/terminal/terminal_enums` | `TerminalTxStatus` |
+| `contracts/payments/terminal/terminal_enums` | `TerminalTxType` | `contracts/payments/terminal/terminal_enums` | `TerminalTxType` |
+| `contracts/pricing/benefit` | `BenefitRef` | `contracts/pricing/benefit` | `BenefitRef` |
+| `contracts/pricing/benefit` | `OwnerRef` | `contracts/pricing/benefit` | `OwnerRef` |
+| `contracts/pricing/benefit/benefit_enums` | `OwnerType` | `contracts/pricing/benefit/benefit_enums` | `OwnerType` |
+| `contracts/pricing/market` | `Market` | `contracts/pricing/market` | `Market` |
+| `contracts/pricing/market/market_enums` | `MarketStatus` | `contracts/pricing/market/market_enums` | `MarketStatus` |
+| `contracts/pricing/membership` | `CustomerTierProgress` | `contracts/pricing/membership` | `CustomerTierProgress` |
+| `contracts/pricing/membership` | `ExternalRewardBenefit` | `contracts/pricing/membership` | `ExternalRewardBenefit` |
+| `contracts/pricing/membership` | `MemberCheckIn` | `contracts/pricing/membership` | `MemberCheckIn` |
+| `contracts/pricing/membership` | `MembershipAccount` | `contracts/pricing/membership` | `MembershipAccount` |
+| `contracts/pricing/membership` | `MembershipTier` | `contracts/pricing/membership` | `MembershipTier` |
+| `contracts/pricing/membership` | `MemberSubscription` | `contracts/orders/subscription` | `MemberSubscription` |
+| `contracts/pricing/membership` | `PointsPolicy` | `contracts/pricing/membership` | `PointsPolicy` |
+| `contracts/pricing/membership` | `QualificationWindow` | `contracts/pricing/membership` | `QualificationWindow` |
+| `contracts/pricing/membership` | `QualifyingSpendLedgerEntry` | `contracts/pricing/membership` | `QualifyingSpendLedgerEntry` |
+| `contracts/pricing/membership` | `Reward` | `contracts/pricing/membership` | `Reward` |
+| `contracts/pricing/membership` | `RewardBenefit` | `contracts/pricing/membership` | `RewardBenefit` |
+| `contracts/pricing/membership` | `SubscriptionPlan` | `contracts/orders/subscription` | `SubscriptionPlan` |
+| `contracts/pricing/membership` | `TierBenefit` | `contracts/pricing/membership` | `TierBenefit` |
+| `contracts/pricing/membership` | `TierBenefitValue` | `contracts/pricing/membership` | `TierBenefitValue` |
+| `contracts/pricing/membership` | `TierProgressTier` | `contracts/pricing/membership` | `TierProgressTier` |
+| `contracts/pricing/membership/membership_enums` | `MembershipAccountStatus` | `contracts/pricing/membership/membership_enums` | `MembershipAccountStatus` |
+| `contracts/pricing/membership/membership_enums` | `MembershipTierMetric` | `contracts/pricing/membership/membership_enums` | `MembershipTierMetric` |
+| `contracts/pricing/membership/membership_enums` | `MemberSubscriptionStatus` | `contracts/orders/subscription/subscription_enums` | `MemberSubscriptionStatus` |
+| `contracts/pricing/membership/membership_enums` | `QualifyingSpendReason` | `contracts/pricing/membership/membership_enums` | `QualifyingSpendReason` |
+| `contracts/pricing/membership/membership_enums` | `TierBenefitKind` | `contracts/pricing/membership/membership_enums` | `TierBenefitKind` |
+| `contracts/pricing/membership/membership_enums` | `TierProgressReason` | `contracts/pricing/membership/membership_enums` | `TierProgressReason` |
+| `contracts/pricing/pricebook` | `PriceBook` | `contracts/pricing/pricebook` | `PriceBook` |
+| `contracts/pricing/pricebook` | `PriceBookAssignment` | `contracts/pricing/pricebook` | `PriceBookAssignment` |
+| `contracts/pricing/pricebook` | `PriceEntry` | `contracts/pricing/pricebook` | `PriceEntry` |
+| `contracts/pricing/pricebook` | `SellingPrice` | `contracts/pricing/pricebook` | `SellingPrice` |
+| `contracts/pricing/pricebook/pricebook_enums` | `PriceBookAssignmentKind` | `contracts/pricing/pricebook/pricebook_enums` | `PriceBookAssignmentKind` |
+| `contracts/pricing/pricebook/pricebook_enums` | `PriceBookStatus` | `contracts/pricing/pricebook/pricebook_enums` | `PriceBookStatus` |
+| `contracts/pricing/pricebook/pricebook_enums` | `PriceDerivation` | `contracts/pricing/pricebook/pricebook_enums` | `PriceDerivation` |
+| `contracts/pricing/pricebook/pricebook_enums` | `PriceEndingPolicy` | `contracts/pricing/pricebook/pricebook_enums` | `PriceEndingPolicy` |
+| `contracts/pricing/pricebook/pricebook_enums` | `PriceEntryStatus` | `contracts/pricing/pricebook/pricebook_enums` | `PriceEntryStatus` |
+| `contracts/pricing/pricebook/pricebook_enums` | `PriceTaxInclusion` | `contracts/pricing/pricebook/pricebook_enums` | `PriceTaxInclusion` |
+| `contracts/pricing/pricebook/pricebook_enums` | `PriceVisibility` | `contracts/pricing/pricebook/pricebook_enums` | `PriceVisibility` |
+| `contracts/pricing/promotion` | `Promotion` | `contracts/pricing/promotion` | `Promotion` |
+| `contracts/pricing/promotion` | `PromotionAmount` | `contracts/pricing/promotion` | `PromotionAmount` |
+| `contracts/pricing/promotion` | `PromotionApplication` | `contracts/pricing/promotion` | `PromotionApplication` |
+| `contracts/pricing/promotion` | `PromotionContent` | `contracts/pricing/promotion` | `PromotionContent` |
+| `contracts/pricing/promotion` | `PromotionControls` | `contracts/pricing/promotion` | `PromotionControls` |
+| `contracts/pricing/promotion` | `PromotionPeriod` | `contracts/pricing/promotion` | `PromotionPeriod` |
+| `contracts/pricing/promotion` | `PromotionRelation` | `contracts/pricing/promotion` | `PromotionRelation` |
+| `contracts/pricing/promotion` | `PromotionScope` | `contracts/pricing/promotion` | `PromotionScope` |
+| `contracts/pricing/promotion` | `PromotionScopeGroup` | `contracts/pricing/promotion` | `PromotionScopeGroup` |
+| `contracts/pricing/promotion` | `PromotionSource` | `contracts/pricing/promotion` | `PromotionSource` |
+| `contracts/pricing/promotion` | `PromotionTerm` | `contracts/pricing/promotion` | `PromotionTerm` |
+| `contracts/pricing/promotion/promotion_enums` | `PromotionMatchMode` | `contracts/pricing/promotion/promotion_enums` | `PromotionMatchMode` |
+| `contracts/pricing/promotion/promotion_enums` | `PromotionStatus` | `contracts/pricing/promotion/promotion_enums` | `PromotionStatus` |
+| `contracts/pricing/quote` | `AppliedPriceRule` | `contracts/pricing/quote` | `AppliedPriceRule` |
+| `contracts/pricing/quote` | `CustomPriceOverrideEvidence` | `contracts/pricing/quote` | `CustomPriceOverrideEvidence` |
+| `contracts/pricing/quote` | `PriceSnapshot` | `contracts/pricing/quote` | `PriceSnapshot` |
+| `contracts/pricing/quote` | `RoundingEvidence` | `contracts/pricing/quote` | `RoundingEvidence` |
+| `contracts/pricing/quote` | `TaxSnapshot` | `contracts/pricing/quote` | `TaxSnapshot` |
+| `contracts/pricing/quote` | `UnitPriceEvidence` | `contracts/pricing/quote` | `UnitPriceEvidence` |
+| `contracts/pricing/quote/quote_enums` | `CostComparison` | `contracts/pricing/quote/quote_enums` | `CostComparison` |
+| `contracts/pricing/quote/quote_enums` | `RoundingMode` | `contracts/pricing/quote/quote_enums` | `RoundingMode` |
+| `contracts/pricing/quote/quote_enums` | `TaxCalculationSource` | `contracts/pricing/quote/quote_enums` | `TaxCalculationSource` |
+| `contracts/pricing/quote/quote_enums` | `TaxRoundingMethod` | `contracts/pricing/quote/quote_enums` | `TaxRoundingMethod` |
+| `contracts/pricing/wallet` | `CheckoutBenefitReservation` | `contracts/pricing/wallet/reservation` | `CheckoutBenefitReservation` |
+| `contracts/pricing/wallet` | `Coupon` | `contracts/pricing/coupon` | `Coupon` |
+| `contracts/pricing/wallet` | `CouponAssignment` | `contracts/pricing/coupon` | `CouponAssignment` |
+| `contracts/pricing/wallet` | `CouponBenefitReservation` | `contracts/pricing/wallet/reservation` | `CouponBenefitReservation` |
+| `contracts/pricing/wallet` | `CouponContent` | `contracts/pricing/coupon` | `CouponContent` |
+| `contracts/pricing/wallet` | `CouponUsageRecord` | `contracts/pricing/coupon` | `CouponUsageRecord` |
+| `contracts/pricing/wallet` | `CustomerWallet` | `contracts/pricing/wallet/balance` | `CustomerWallet` |
+| `contracts/pricing/wallet` | `CustomerWalletSummary` | `contracts/pricing/wallet/balance` | `CustomerWalletSummary` |
+| `contracts/pricing/wallet` | `ExternalRewardFulfilment` | `contracts/pricing/wallet/reward` | `ExternalRewardFulfilment` |
+| `contracts/pricing/wallet` | `GiftCard` | `contracts/pricing/wallet/giftcard` | `GiftCard` |
+| `contracts/pricing/wallet` | `GiftCardBenefitReservation` | `contracts/pricing/wallet/reservation` | `GiftCardBenefitReservation` |
+| `contracts/pricing/wallet` | `GiftCardDenominationBonus` | `contracts/pricing/wallet/giftcard` | `GiftCardDenominationBonus` |
+| `contracts/pricing/wallet` | `GiftCardDenominationPolicy` | `contracts/pricing/wallet/giftcard` | `GiftCardDenominationPolicy` |
+| `contracts/pricing/wallet` | `GiftCardTransaction` | `contracts/pricing/wallet/giftcard` | `GiftCardTransaction` |
+| `contracts/pricing/wallet` | `MembershipPassBarcode` | `contracts/pricing/membership` | `MembershipPassBarcode` |
+| `contracts/pricing/wallet` | `MembershipPassContent` | `contracts/pricing/membership` | `MembershipPassContent` |
+| `contracts/pricing/wallet` | `PointAllocation` | `contracts/pricing/wallet/points` | `PointAllocation` |
+| `contracts/pricing/wallet` | `PointBalanceBreakdown` | `contracts/pricing/wallet/points` | `PointBalanceBreakdown` |
+| `contracts/pricing/wallet` | `PointBucket` | `contracts/pricing/wallet/points` | `PointBucket` |
+| `contracts/pricing/wallet` | `PointLedgerEntry` | `contracts/pricing/wallet/ledger` | `PointLedgerEntry` |
+| `contracts/pricing/wallet` | `PointReservation` | `contracts/pricing/wallet/reservation` | `PointReservation` |
+| `contracts/pricing/wallet` | `PointsSummary` | `contracts/pricing/wallet/points` | `PointsSummary` |
+| `contracts/pricing/wallet` | `RewardRedemption` | `contracts/pricing/wallet/reward` | `RewardRedemption` |
+| `contracts/pricing/wallet` | `RewardRedemptionOutcome` | `contracts/pricing/wallet/reward` | `RewardRedemptionOutcome` |
+| `contracts/pricing/wallet` | `Voucher` | `contracts/pricing/special` | `Voucher` |
+| `contracts/pricing/wallet` | `VoucherBenefitReservation` | `contracts/pricing/wallet/reservation` | `VoucherBenefitReservation` |
+| `contracts/pricing/wallet` | `WalletInstrument` | `contracts/pricing/wallet/balance` | `WalletInstrument` |
+| `contracts/pricing/wallet/wallet_enums` | `CheckoutBenefitReservationStatus` | `contracts/pricing/wallet/wallet_enums` | `CheckoutBenefitReservationStatus` |
+| `contracts/pricing/wallet/wallet_enums` | `CouponSource` | `contracts/pricing/wallet/wallet_enums` | `CouponSource` |
+| `contracts/pricing/wallet/wallet_enums` | `ExternalRewardFulfilmentStatus` | `contracts/pricing/wallet/wallet_enums` | `ExternalRewardFulfilmentStatus` |
+| `contracts/pricing/wallet/wallet_enums` | `GiftCardStatus` | `contracts/pricing/wallet/wallet_enums` | `GiftCardStatus` |
+| `contracts/pricing/wallet/wallet_enums` | `GiftCardTransactionReason` | `contracts/pricing/wallet/wallet_enums` | `GiftCardTransactionReason` |
+| `contracts/pricing/wallet/wallet_enums` | `PointAwardStatus` | `contracts/pricing/wallet/wallet_enums` | `PointAwardStatus` |
+| `contracts/pricing/wallet/wallet_enums` | `PointLedgerReason` | `contracts/pricing/wallet/wallet_enums` | `PointLedgerReason` |
+| `contracts/pricing/wallet/wallet_enums` | `PointRedemptionType` | `contracts/pricing/wallet/wallet_enums` | `PointRedemptionType` |
+| `contracts/pricing/wallet/wallet_enums` | `PointReservationStatus` | `contracts/pricing/wallet/wallet_enums` | `PointReservationStatus` |
+| `contracts/pricing/wallet/wallet_enums` | `RewardRedemptionStatus` | `contracts/pricing/wallet/wallet_enums` | `RewardRedemptionStatus` |
+| `contracts/pricing/wallet/wallet_enums` | `RewardType` | `contracts/pricing/wallet/wallet_enums` | `RewardType` |
+| `contracts/pricing/wallet/wallet_enums` | `VoucherStatus` | `contracts/pricing/wallet/wallet_enums` | `VoucherStatus` |
+| `contracts/pricing/wallet/wallet_enums` | `WalletInstrumentType` | `contracts/pricing/wallet/wallet_enums` | `WalletInstrumentType` |
+| `contracts/pricing/wallet/wallet_enums` | `WalletPassBarcodeFormat` | `contracts/pricing/membership/membership_enums` | `WalletPassBarcodeFormat` |
+| `contracts/pricing/wallet/wallet_enums` | `WalletPassPlatform` | `contracts/pricing/membership/membership_enums` | `WalletPassPlatform` |
+| `contracts/pubsub/envelop` | `EventEnvelope` | `contracts/pubsub/envelope` | `EventEnvelope` |
+| `contracts/pubsub/event` | `CampaignChangedEvent` | `contracts/pubsub/pricing` | `CampaignChangedEvent` |
+| `contracts/pubsub/event` | `CatalogBaseCostChangedEvent` | `contracts/pubsub/supply` | `CatalogBaseCostChangedEvent` |
+| `contracts/pubsub/event` | `CatalogListingChangedEvent` | `contracts/pubsub/supply` | `CatalogListingChangedEvent` |
+| `contracts/pubsub/event` | `CustomerProfileUpdatedEvent` | `contracts/pubsub/customers` | `CustomerProfileUpdatedEvent` |
+| `contracts/pubsub/event` | `CustomerRegisteredEvent` | `contracts/pubsub/customers` | `CustomerRegisteredEvent` |
+| `contracts/pubsub/event` | `FulfilmentCompletedEvent` | `contracts/pubsub/supply` | `FulfilmentCompletedEvent` |
+| `contracts/pubsub/event` | `FulfilmentDeliveredEvent` | `contracts/pubsub/supply` | `FulfilmentDeliveredEvent` |
+| `contracts/pubsub/event` | `FulfilmentShippedEvent` | `contracts/pubsub/supply` | `FulfilmentShippedEvent` |
+| `contracts/pubsub/event` | `FulfilmentTrackingEvent` | `contracts/pubsub/supply` | `FulfilmentTrackingEvent` |
+| `contracts/pubsub/event` | `GiftCardIssuedEvent` | `contracts/pubsub/pricing` | `GiftCardIssuedEvent` |
+| `contracts/pubsub/event` | `InventoryDateMarkThresholdEvent` | `contracts/pubsub/supply` | `InventoryDateMarkThresholdEvent` |
+| `contracts/pubsub/event` | `InventoryLotReceivedEvent` | `contracts/pubsub/supply` | `InventoryLotReceivedEvent` |
+| `contracts/pubsub/event` | `InventoryPackageConvertedEvent` | `contracts/pubsub/supply` | `InventoryPackageConvertedEvent` |
+| `contracts/pubsub/event` | `InventoryQualityAssessedEvent` | `contracts/pubsub/supply` | `InventoryQualityAssessedEvent` |
+| `contracts/pubsub/event` | `InventoryReservationChangedEvent` | `contracts/pubsub/supply` | `InventoryReservationChangedEvent` |
+| `contracts/pubsub/event` | `InventorySaleCommittedEvent` | `contracts/pubsub/supply` | `InventorySaleCommittedEvent` |
+| `contracts/pubsub/event` | `InventoryStockBucketChangedEvent` | `contracts/pubsub/supply` | `InventoryStockBucketChangedEvent` |
+| `contracts/pubsub/event` | `InvoiceIssuedEvent` | `contracts/pubsub/payments` | `InvoiceIssuedEvent` |
+| `contracts/pubsub/event` | `NotificationPreferencesChangedEvent` | `contracts/pubsub/notification` | `NotificationPreferencesChangedEvent` |
+| `contracts/pubsub/event` | `OrderCancelledEvent` | `contracts/pubsub/orders` | `OrderCancelledEvent` |
+| `contracts/pubsub/event` | `OrderCreatedEvent` | `contracts/pubsub/orders` | `OrderCreatedEvent` |
+| `contracts/pubsub/event` | `OrderFact` | `contracts/pubsub/orders` | `OrderFact` |
+| `contracts/pubsub/event` | `OrderPackingProjection` | `contracts/pubsub/orders` | `OrderPackingProjection` |
+| `contracts/pubsub/event` | `OrderPaidEvent` | `contracts/pubsub/orders` | `OrderPaidEvent` |
+| `contracts/pubsub/event` | `OrderStatusChangedEvent` | `contracts/pubsub/orders` | `OrderStatusChangedEvent` |
+| `contracts/pubsub/event` | `PaymentCapturedEvent` | `contracts/pubsub/payments` | `PaymentCapturedEvent` |
+| `contracts/pubsub/event` | `PaymentFact` | `contracts/pubsub/payments` | `PaymentFact` |
+| `contracts/pubsub/event` | `PaymentFailedEvent` | `contracts/pubsub/payments` | `PaymentFailedEvent` |
+| `contracts/pubsub/event` | `PriceChangedEvent` | `contracts/pubsub/pricing` | `PriceChangedEvent` |
+| `contracts/pubsub/event` | `ProductSalesRollup` | `contracts/pubsub/supply` | `ProductSalesRollup` |
+| `contracts/pubsub/event` | `PromotionChangedEvent` | `contracts/pubsub/pricing` | `PromotionChangedEvent` |
+| `contracts/pubsub/event` | `ReceiptGeneratedEvent` | `contracts/pubsub/payments` | `ReceiptGeneratedEvent` |
+| `contracts/pubsub/event` | `RefundCompletedEvent` | `contracts/pubsub/payments` | `RefundCompletedEvent` |
+| `contracts/pubsub/event` | `RefundFact` | `contracts/pubsub/payments` | `RefundFact` |
+| `contracts/pubsub/event` | `RefundFailedEvent` | `contracts/pubsub/payments` | `RefundFailedEvent` |
+| `contracts/pubsub/event` | `RefundRequestedEvent` | `contracts/pubsub/payments` | `RefundRequestedEvent` |
+| `contracts/pubsub/event` | `StockLocationAvailabilityChangedEvent` | `contracts/pubsub/supply` | `StockLocationAvailabilityChangedEvent` |
+| `contracts/pubsub/event` | `StockStagingChangedEvent` | `contracts/pubsub/supply` | `StockStagingChangedEvent` |
+| `contracts/pubsub/event/event_enums` | `EventTopic` | `contracts/pubsub/routing` | `EventTopic` |
+| `contracts/pubsub/event/event_enums` | `EventType` | `contracts/pubsub/routing` | `EventType` |
+| `contracts/supply/classification` | `Brand` | `contracts/supply/catalogue/classification` | `Brand` |
+| `contracts/supply/classification` | `BrandRef` | `contracts/supply/catalogue/classification` | `BrandRef` |
+| `contracts/supply/classification` | `CategoryTag` | `contracts/supply/catalogue/classification` | `CategoryTag` |
+| `contracts/supply/classification` | `CategoryTagRef` | `contracts/supply/catalogue/classification` | `CategoryTagRef` |
+| `contracts/supply/classification` | `Collection` | `contracts/supply/catalogue/classification` | `Collection` |
+| `contracts/supply/classification` | `CollectionRef` | `contracts/supply/catalogue/classification` | `CollectionRef` |
+| `contracts/supply/classification` | `CountryCodeRef` | `contracts/supply/catalogue/classification` | `CountryCodeRef` |
+| `contracts/supply/classification` | `FavouriteList` | `contracts/supply/catalogue/favourite` | `FavouriteList` |
+| `contracts/supply/classification` | `FavouriteListOwner` | `contracts/supply/catalogue/favourite` | `FavouriteListOwner` |
+| `contracts/supply/classification` | `FavouriteListProduct` | `contracts/supply/catalogue/favourite` | `FavouriteListProduct` |
+| `contracts/supply/classification` | `ObjectMediaRef` | `contracts/supply/catalogue/classification` | `ObjectMediaRef` |
+| `contracts/supply/classification` | `ProductManufacturing` | `contracts/supply/catalogue/classification` | `ProductManufacturing` |
+| `contracts/supply/classification` | `ProductSupplierRef` | `contracts/supply/catalogue/classification` | `ProductSupplierRef` |
+| `contracts/supply/classification` | `ProductSupply` | `contracts/supply/catalogue/classification` | `ProductSupply` |
+| `contracts/supply/classification` | `SKUSeries` | `contracts/supply/catalogue/classification` | `SKUSeries` |
+| `contracts/supply/classification` | `Supplier` | `contracts/supply/catalogue/classification` | `Supplier` |
+| `contracts/supply/classification` | `SupplierAvailableProduct` | `contracts/supply/catalogue/classification` | `SupplierAvailableProduct` |
+| `contracts/supply/classification` | `SupplierAvailablePromotion` | `contracts/supply/catalogue/classification` | `SupplierAvailablePromotion` |
+| `contracts/supply/classification/classification_enums` | `FavouriteListErrorCode` | `contracts/supply/catalogue/favourite/favourite_enums` | `FavouriteListErrorCode` |
+| `contracts/supply/classification/classification_enums` | `FavouriteListOwnerType` | `contracts/supply/catalogue/favourite/favourite_enums` | `FavouriteListOwnerType` |
+| `contracts/supply/classification/classification_enums` | `StorageType` | `contracts/supply/catalogue/classification/classification_enums` | `StorageType` |
+| `contracts/supply/cost` | `BaseAcquisitionCost` | `contracts/supply/procurement` | `BaseAcquisitionCost` |
+| `contracts/supply/cost` | `CarryingCostMovement` | `contracts/supply/procurement` | `CarryingCostMovement` |
+| `contracts/supply/cost` | `DepotCarryingCost` | `contracts/supply/procurement` | `DepotCarryingCost` |
+| `contracts/supply/import_compliance` | `ArtifactReference` | `contracts/supply/compliance` | `ArtifactReference` |
+| `contracts/supply/import_compliance` | `CatalogueReference` | `contracts/supply/compliance` | `CatalogueReference` |
+| `contracts/supply/import_compliance` | `DeclarationLine` | `contracts/supply/compliance` | `DeclarationLine` |
+| `contracts/supply/import_compliance` | `DeclarationShipment` | `contracts/supply/compliance` | `DeclarationShipment` |
+| `contracts/supply/import_compliance` | `DeclarationSignatory` | `contracts/supply/compliance` | `DeclarationSignatory` |
+| `contracts/supply/import_compliance` | `EvidenceReference` | `contracts/supply/compliance` | `EvidenceReference` |
+| `contracts/supply/import_compliance` | `LabelImporter` | `contracts/supply/compliance` | `LabelImporter` |
+| `contracts/supply/import_compliance` | `LabelLayout` | `contracts/supply/compliance` | `LabelLayout` |
+| `contracts/supply/import_compliance` | `LabelMaster` | `contracts/supply/compliance` | `LabelMaster` |
+| `contracts/supply/import_compliance` | `LabelProductEvidence` | `contracts/supply/compliance` | `LabelProductEvidence` |
+| `contracts/supply/import_compliance` | `ManufacturerDeclaration` | `contracts/supply/compliance` | `ManufacturerDeclaration` |
+| `contracts/supply/import_compliance` | `ManufacturerDetails` | `contracts/supply/compliance` | `ManufacturerDetails` |
+| `contracts/supply/import_compliance` | `NutritionPanel` | `contracts/supply/compliance` | `NutritionPanel` |
+| `contracts/supply/import_compliance` | `PurchaseOrderSnapshot` | `contracts/supply/compliance` | `PurchaseOrderSnapshot` |
+| `contracts/supply/import_compliance` | `RateValue` | `contracts/supply/compliance` | `RateValue` |
+| `contracts/supply/import_compliance` | `RevisionMetadata` | `contracts/supply/compliance` | `RevisionMetadata` |
+| `contracts/supply/import_compliance` | `RFIBookingAgent` | `contracts/supply/compliance` | `RFIBookingAgent` |
+| `contracts/supply/import_compliance` | `RFIExternalEvent` | `contracts/supply/compliance` | `RFIExternalEvent` |
+| `contracts/supply/import_compliance` | `RFIInspectionLocation` | `contracts/supply/compliance` | `RFIInspectionLocation` |
+| `contracts/supply/import_compliance` | `RFIRecord` | `contracts/supply/compliance` | `RFIRecord` |
+| `contracts/supply/import_compliance` | `TariffAssessment` | `contracts/supply/compliance` | `TariffAssessment` |
+| `contracts/supply/import_compliance` | `TariffAssessmentRow` | `contracts/supply/compliance` | `TariffAssessmentRow` |
+| `contracts/supply/import_compliance` | `TariffClassification` | `contracts/supply/compliance` | `TariffClassification` |
+| `contracts/supply/import_compliance` | `TariffLineSnapshot` | `contracts/supply/compliance` | `TariffLineSnapshot` |
+| `contracts/supply/import_compliance` | `TariffProfile` | `contracts/supply/compliance` | `TariffProfile` |
+| `contracts/supply/import_compliance` | `TrademarkEvidence` | `contracts/supply/compliance` | `TrademarkEvidence` |
+| `contracts/supply/import_compliance/import_compliance_enums` | `ArtifactKind` | `contracts/supply/compliance/compliance_enums` | `ArtifactKind` |
+| `contracts/supply/import_compliance/import_compliance_enums` | `EvidenceKind` | `contracts/supply/compliance/compliance_enums` | `EvidenceKind` |
+| `contracts/supply/import_compliance/import_compliance_enums` | `ImportMode` | `contracts/supply/compliance/compliance_enums` | `ImportMode` |
+| `contracts/supply/import_compliance/import_compliance_enums` | `Jurisdiction` | `contracts/supply/compliance/compliance_enums` | `Jurisdiction` |
+| `contracts/supply/import_compliance/import_compliance_enums` | `LabelOrientation` | `contracts/supply/compliance/compliance_enums` | `LabelOrientation` |
+| `contracts/supply/import_compliance/import_compliance_enums` | `LabelSize` | `contracts/supply/compliance/compliance_enums` | `LabelSize` |
+| `contracts/supply/import_compliance/import_compliance_enums` | `ReviewState` | `contracts/supply/compliance/compliance_enums` | `ReviewState` |
+| `contracts/supply/import_compliance/import_compliance_enums` | `RFIChannel` | `contracts/supply/compliance/compliance_enums` | `RFIChannel` |
+| `contracts/supply/import_compliance/import_compliance_enums` | `RFIRequestedTime` | `contracts/supply/compliance/compliance_enums` | `RFIRequestedTime` |
+| `contracts/supply/import_compliance/import_compliance_enums` | `RFISubmissionState` | `contracts/supply/compliance/compliance_enums` | `RFISubmissionState` |
+| `contracts/supply/listing` | `DamageSaleApproval` | `contracts/supply/catalogue/listing` | `DamageSaleApproval` |
+| `contracts/supply/listing` | `MarketListing` | `contracts/supply/catalogue/listing` | `MarketListing` |
+| `contracts/supply/listing` | `SaleEligibilitySnapshot` | `contracts/supply/catalogue/listing` | `SaleEligibilitySnapshot` |
+| `contracts/supply/listing` | `SaleRestriction` | `contracts/supply/catalogue/listing` | `SaleRestriction` |
+| `contracts/supply/listing/listing_enums` | `MarketListingStatus` | `contracts/supply/catalogue/listing/listing_enums` | `MarketListingStatus` |
+| `contracts/supply/listing/listing_enums` | `SaleRestrictionKind` | `contracts/supply/catalogue/listing/listing_enums` | `SaleRestrictionKind` |
+| `contracts/supply/operations` | `ChannelProductStockSnapshot` | `contracts/supply/inventory` | `ChannelProductStockSnapshot` |
+| `contracts/supply/operations` | `DepotProductStockSnapshot` | `contracts/supply/inventory` | `DepotProductStockSnapshot` |
+| `contracts/supply/operations` | `InboundItem` | `contracts/supply/warehouse` | `WarehouseReceiptItem` |
+| `contracts/supply/operations` | `InboundReceipt` | `contracts/supply/warehouse` | `WarehouseReceipt` |
+| `contracts/supply/operations` | `InventoryCategoryTagEvidence` | `contracts/supply/inventory` | `InventoryCategoryTagEvidence` |
+| `contracts/supply/operations` | `InventoryCauseRef` | `contracts/supply/inventory` | `InventoryCauseRef` |
+| `contracts/supply/operations` | `LocationProductStockSnapshot` | `contracts/supply/inventory` | `LocationProductStockSnapshot` |
+| `contracts/supply/operations` | `OutboundContainerContent` | `contracts/supply/fulfilment` | `OutboundContainerContent` |
+| `contracts/supply/operations` | `OutboundContainerPlan` | `contracts/supply/fulfilment` | `OutboundContainerPlan` |
+| `contracts/supply/operations` | `PackageOptionProductStockSnapshot` | `contracts/supply/inventory` | `PackageOptionProductStockSnapshot` |
+| `contracts/supply/operations` | `PackageSubstitutionSnapshot` | `contracts/supply/fulfilment` | `PackageSubstitutionSnapshot` |
+| `contracts/supply/operations` | `PackingDamage` | `contracts/supply/fulfilment` | `PackingDamage` |
+| `contracts/supply/operations` | `PackingLine` | `contracts/supply/fulfilment` | `PackingLine` |
+| `contracts/supply/operations` | `PickingAllocation` | `contracts/supply/fulfilment` | `PickingAllocation` |
+| `contracts/supply/operations` | `PickingList` | `contracts/supply/fulfilment` | `PickingList` |
+| `contracts/supply/operations` | `PickingListItem` | `contracts/supply/fulfilment` | `PickingListItem` |
+| `contracts/supply/operations` | `ProductStockQuantitySnapshot` | `contracts/supply/inventory` | `ProductStockQuantitySnapshot` |
+| `contracts/supply/operations` | `ProductStockSummary` | `contracts/supply/inventory` | `ProductStockSummary` |
+| `contracts/supply/operations` | `StockMovement` | `contracts/supply/inventory` | `StockMovement` |
+| `contracts/supply/operations` | `StockReservation` | `contracts/supply/inventory` | `StockReservation` |
+| `contracts/supply/operations` | `StockReservationAllocation` | `contracts/supply/inventory` | `StockReservationAllocation` |
+| `contracts/supply/operations` | `StockStagingRecord` | `contracts/supply/inventory` | `StockStagingRecord` |
+| `contracts/supply/operations` | `StorefrontPlaceAvailability` | `contracts/supply/inventory` | `StorefrontPlaceAvailability` |
+| `contracts/supply/product` | `CategorySalesRank` | `contracts/supply/catalogue/product` | `CategorySalesRank` |
+| `contracts/supply/product` | `Images` | `contracts/supply/catalogue/product` | `Images` |
+| `contracts/supply/product` | `Product` | `contracts/supply/catalogue/product` | `Product` |
+| `contracts/supply/product` | `ProductAdministration` | `contracts/supply/catalogue/product` | `ProductAdministration` |
+| `contracts/supply/product` | `ProductBarcodeAssignment` | `contracts/supply/catalogue/product` | `ProductBarcodeAssignment` |
+| `contracts/supply/product` | `ProductClassification` | `contracts/supply/catalogue/product` | `ProductClassification` |
+| `contracts/supply/product` | `ProductContent` | `contracts/supply/catalogue/product` | `ProductContent` |
+| `contracts/supply/product` | `ProductLocalization` | `contracts/supply/catalogue/product` | `ProductLocalization` |
+| `contracts/supply/product` | `ProductOrigin` | `contracts/supply/catalogue/product` | `ProductOrigin` |
+| `contracts/supply/product` | `ProductPackageOption` | `contracts/supply/catalogue/product` | `ProductPackageOption` |
+| `contracts/supply/product` | `SalesPerformanceStats` | `contracts/supply/catalogue/product` | `SalesPerformanceStats` |
+| `contracts/supply/product` | `SalesTotals` | `contracts/supply/catalogue/product` | `SalesTotals` |
+| `contracts/supply/product` | `SalesWindowStats` | `contracts/supply/catalogue/product` | `SalesWindowStats` |
+| `contracts/supply/product` | `SellingProduct` | `contracts/supply/catalogue/product` | `SellingProduct` |
+| `contracts/supply/product` | `SellingProductBarcode` | `contracts/supply/catalogue/product` | `SellingProductBarcode` |
+| `contracts/supply/product` | `SellingProductClassification` | `contracts/supply/catalogue/product` | `SellingProductClassification` |
+| `contracts/supply/product` | `SellingProductClassificationRef` | `contracts/supply/catalogue/product` | `SellingProductClassificationRef` |
+| `contracts/supply/product` | `SellingProductContent` | `contracts/supply/catalogue/product` | `SellingProductContent` |
+| `contracts/supply/product` | `SellingProductImages` | `contracts/supply/catalogue/product` | `SellingProductImages` |
+| `contracts/supply/product` | `SellingProductPackageOption` | `contracts/supply/catalogue/product` | `SellingProductPackageOption` |
+| `contracts/supply/product/product_enums` | `BarcodeFormat` | `contracts/supply/catalogue/product/product_enums` | `BarcodeFormat` |
+| `contracts/supply/product/product_enums` | `PriceAudience` | `contracts/pricing/market/market_enums` | `PriceAudience` |
+| `contracts/supply/product/product_enums` | `PriceVisibility` | `contracts/supply/catalogue/product/product_enums` | `PriceVisibility` |
+| `contracts/supply/product/product_enums` | `ProductStatus` | `contracts/supply/catalogue/product/product_enums` | `ProductStatus` |
+| `contracts/supply/product/product_enums` | `StorefrontStockState` | `contracts/supply/catalogue/product/product_enums` | `StorefrontStockState` |
+| `contracts/supply/purchase` | `Order` | `contracts/supply/procurement` | `PurchaseOrder` |
+| `contracts/supply/purchase` | `OrderItem` | `contracts/supply/procurement` | `PurchaseOrderItem` |
+| `contracts/supply/purchase` | `Receipt` | `contracts/supply/procurement` | `PurchaseReceipt` |
+| `contracts/supply/purchase` | `ReceiptItem` | `contracts/supply/procurement` | `PurchaseReceiptItem` |
+| `contracts/supply/purchase` | `SupplierInvoice` | `contracts/supply/procurement` | `SupplierInvoice` |
+| `contracts/supply/purchase` | `SupplierInvoiceDocument` | `contracts/supply/procurement` | `SupplierInvoiceDocument` |
+| `contracts/supply/purchase` | `SupplierInvoiceLine` | `contracts/supply/procurement` | `SupplierInvoiceLine` |
+| `contracts/supply/purchase` | `SupplierTaxIdentity` | `contracts/supply/procurement` | `SupplierTaxIdentity` |
+| `contracts/supply/purchase/purchase_enums` | `InputTaxClaimStatus` | `contracts/supply/procurement/purchase_enums` | `InputTaxClaimStatus` |
+| `contracts/supply/purchase/purchase_enums` | `LineTaxTreatment` | `contracts/supply/procurement/purchase_enums` | `LineTaxTreatment` |
+| `contracts/supply/purchase/purchase_enums` | `PurchaseOrderStatus` | `contracts/supply/procurement/purchase_enums` | `PurchaseOrderStatus` |
+| `contracts/supply/purchase/purchase_enums` | `SupplierInvoiceStatus` | `contracts/supply/procurement/purchase_enums` | `SupplierInvoiceStatus` |
+| `contracts/supply/purchase/purchase_enums` | `SupplierTaxSource` | `contracts/supply/procurement/purchase_enums` | `SupplierTaxSource` |
+| `contracts/supply/purchase/purchase_enums` | `TaxPriceBasis` | `contracts/supply/procurement/purchase_enums` | `TaxPriceBasis` |
+| `contracts/supply/warehouse` | `CameraPreset` | `contracts/supply/warehouse` | `CameraPreset` |
+| `contracts/supply/warehouse` | `DamageReport` | `contracts/supply/warehouse` | `DamageReport` |
+| `contracts/supply/warehouse` | `Depot` | `contracts/supply/warehouse` | `Depot` |
+| `contracts/supply/warehouse` | `DepotCoverageRule` | `contracts/supply/warehouse` | `DepotCoverageRule` |
+| `contracts/supply/warehouse` | `DepotMarket` | `contracts/supply/warehouse` | `DepotMarket` |
+| `contracts/supply/warehouse` | `DepotRegion` | `contracts/supply/warehouse` | `DepotRegion` |
+| `contracts/supply/warehouse` | `InventoryDateMark` | `contracts/supply/warehouse` | `InventoryDateMark` |
+| `contracts/supply/warehouse` | `InventoryLot` | `contracts/supply/warehouse` | `InventoryLot` |
+| `contracts/supply/warehouse` | `InventoryStockBucket` | `contracts/supply/warehouse` | `InventoryStockBucket` |
+| `contracts/supply/warehouse` | `InventoryStockUnit` | `contracts/supply/warehouse` | `InventoryStockUnit` |
+| `contracts/supply/warehouse` | `LayoutNode` | `contracts/supply/warehouse` | `LayoutNode` |
+| `contracts/supply/warehouse` | `LayoutWall` | `contracts/supply/warehouse` | `LayoutWall` |
+| `contracts/supply/warehouse` | `ModelAsset` | `contracts/supply/warehouse` | `ModelAsset` |
+| `contracts/supply/warehouse` | `QualityAssessment` | `contracts/supply/warehouse` | `QualityAssessment` |
+| `contracts/supply/warehouse` | `StockLocation` | `contracts/supply/warehouse` | `StockLocation` |
+| `contracts/supply/warehouse` | `StockLocationAssignment` | `contracts/supply/warehouse` | `StockLocationAssignment` |
+| `contracts/supply/warehouse` | `StockLocationCollectionEligibility` | `contracts/supply/warehouse` | `StockLocationCollectionEligibility` |
+| `contracts/supply/warehouse` | `StockLocationProductBalance` | `contracts/supply/warehouse` | `StockLocationProductBalance` |
+| `contracts/supply/warehouse` | `StockLocationRef` | `contracts/supply/warehouse` | `StockLocationRef` |
+| `contracts/supply/warehouse` | `WarehouseLayout` | `contracts/supply/warehouse` | `WarehouseLayout` |
+| `contracts/supply/warehouse` | `WMSDraft` | `contracts/supply/warehouse` | `WMSDraft` |
+| `contracts/supply/warehouse` | `WMSDraftItem` | `contracts/supply/warehouse` | `WMSDraftItem` |
+| `contracts/supply/warehouse/warehouse_enums` | `CameraProjection` | `contracts/supply/warehouse/warehouse_enums` | `CameraProjection` |
+| `contracts/supply/warehouse/warehouse_enums` | `DamageSaleTier` | `contracts/supply/warehouse/warehouse_enums` | `DamageSaleTier` |
+| `contracts/supply/warehouse/warehouse_enums` | `DamageStage` | `contracts/supply/warehouse/warehouse_enums` | `DamageStage` |
+| `contracts/supply/warehouse/warehouse_enums` | `InboundReceiptStatus` | `contracts/supply/warehouse/warehouse_enums` | `InboundReceiptStatus` |
+| `contracts/supply/warehouse/warehouse_enums` | `InventoryCondition` | `contracts/supply/warehouse/warehouse_enums` | `InventoryCondition` |
+| `contracts/supply/warehouse/warehouse_enums` | `InventoryDateMarkKind` | `contracts/supply/warehouse/warehouse_enums` | `InventoryDateMarkKind` |
+| `contracts/supply/warehouse/warehouse_enums` | `InventoryDateMarkThreshold` | `contracts/supply/warehouse/warehouse_enums` | `InventoryDateMarkThreshold` |
+| `contracts/supply/warehouse/warehouse_enums` | `InventoryDisposition` | `contracts/supply/warehouse/warehouse_enums` | `InventoryDisposition` |
+| `contracts/supply/warehouse/warehouse_enums` | `LayoutNodeType` | `contracts/supply/warehouse/warehouse_enums` | `LayoutNodeType` |
+| `contracts/supply/warehouse/warehouse_enums` | `ModelFormat` | `contracts/supply/warehouse/warehouse_enums` | `ModelFormat` |
+| `contracts/supply/warehouse/warehouse_enums` | `OutboundShipmentStatus` | `contracts/supply/warehouse/warehouse_enums` | `OutboundShipmentStatus` |
+| `contracts/supply/warehouse/warehouse_enums` | `PackingDamageHandling` | `contracts/supply/warehouse/warehouse_enums` | `PackingDamageHandling` |
+| `contracts/supply/warehouse/warehouse_enums` | `PackingDiscrepancyKind` | `contracts/supply/warehouse/warehouse_enums` | `PackingDiscrepancyKind` |
+| `contracts/supply/warehouse/warehouse_enums` | `PickingItemStatus` | `contracts/supply/warehouse/warehouse_enums` | `PickingItemStatus` |
+| `contracts/supply/warehouse/warehouse_enums` | `PickingListStatus` | `contracts/supply/warehouse/warehouse_enums` | `PickingListStatus` |
+| `contracts/supply/warehouse/warehouse_enums` | `ShapeType` | `contracts/supply/warehouse/warehouse_enums` | `ShapeType` |
+| `contracts/supply/warehouse/warehouse_enums` | `StockAvailabilityDirection` | `contracts/supply/warehouse/warehouse_enums` | `StockAvailabilityDirection` |
+| `contracts/supply/warehouse/warehouse_enums` | `StockLocationAccess` | `contracts/supply/warehouse/warehouse_enums` | `StockLocationAccess` |
+| `contracts/supply/warehouse/warehouse_enums` | `StockLocationCollectionMode` | `contracts/supply/warehouse/warehouse_enums` | `StockLocationCollectionMode` |
+| `contracts/supply/warehouse/warehouse_enums` | `StockLocationCollectionRole` | `contracts/supply/warehouse/warehouse_enums` | `StockLocationCollectionRole` |
+| `contracts/supply/warehouse/warehouse_enums` | `StockLocationHandlingMode` | `contracts/supply/warehouse/warehouse_enums` | `StockLocationHandlingMode` |
+| `contracts/supply/warehouse/warehouse_enums` | `StockLocationPurpose` | `contracts/supply/warehouse/warehouse_enums` | `StockLocationPurpose` |
+| `contracts/supply/warehouse/warehouse_enums` | `StockMovementType` | `contracts/supply/warehouse/warehouse_enums` | `StockMovementType` |
+| `contracts/supply/warehouse/warehouse_enums` | `StockReservationStatus` | `contracts/supply/warehouse/warehouse_enums` | `StockReservationStatus` |
+| `contracts/supply/warehouse/warehouse_enums` | `WMSDraftStatus` | `contracts/supply/warehouse/warehouse_enums` | `WMSDraftStatus` |
+| `contracts/supply/warehouse/warehouse_enums` | `WMSDraftType` | `contracts/supply/warehouse/warehouse_enums` | `WMSDraftType` |
+| `contracts/supply/wish` | `WishBallot` | `contracts/supply/catalogue/wish` | `WishBallot` |
+| `contracts/supply/wish` | `WishCandidate` | `contracts/supply/catalogue/wish` | `WishCandidate` |
+| `contracts/supply/wish` | `WishProposal` | `contracts/supply/catalogue/wish` | `WishProposal` |
+| `contracts/supply/wish` | `WishRankingEntry` | `contracts/supply/catalogue/wish` | `WishRankingEntry` |
+| `contracts/supply/wish` | `WishSelection` | `contracts/supply/catalogue/wish` | `WishSelection` |
+| `contracts/supply/wish/wish_enums` | `WishBallotState` | `contracts/supply/catalogue/wish/wish_enums` | `WishBallotState` |
+| `contracts/supply/wish/wish_enums` | `WishCandidateState` | `contracts/supply/catalogue/wish/wish_enums` | `WishCandidateState` |
+| `contracts/supply/wish/wish_enums` | `WishErrorCode` | `contracts/supply/catalogue/wish/wish_enums` | `WishErrorCode` |
+| `contracts/supply/wish/wish_enums` | `WishProposalState` | `contracts/supply/catalogue/wish/wish_enums` | `WishProposalState` |
+<!-- V32-MAPPING-END -->

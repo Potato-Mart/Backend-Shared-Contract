@@ -5,7 +5,9 @@ import (
 	"go/parser"
 	"go/token"
 	"io/fs"
+	"os"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 	"testing"
@@ -653,6 +655,8 @@ var v32ContractPreservationManifest = map[string]string{
 
 const expectedV32ContractPreservationCount = 634
 
+var v33MigrationMappingRow = regexp.MustCompile("(?m)^\\| `([^`]+)` \\| `([^`]+)` \\| `([^`]+)` \\| `([^`]+)` \\|$")
+
 func TestV32ContractPreservationManifest(t *testing.T) {
 	if got := len(v32ContractPreservationManifest); got != expectedV32ContractPreservationCount {
 		t.Fatalf("preservation manifest entries = %d, want %d", got, expectedV32ContractPreservationCount)
@@ -701,5 +705,31 @@ func TestV32ContractPreservationManifest(t *testing.T) {
 	sort.Strings(missing)
 	if len(missing) > 0 {
 		t.Fatalf("v32 contracts or enums missing a v33 destination:\n%s", strings.Join(missing, "\n"))
+	}
+}
+
+func TestV33MigrationGuidePublishesCompletePreservationMapping(t *testing.T) {
+	path := filepath.Join(filepath.Dir(sharedContractPkgRoot(t)), "docs", "v33-migration.md")
+	contents, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatalf("read v33 migration guide: %v", err)
+	}
+
+	published := make(map[string]string)
+	for _, match := range v33MigrationMappingRow.FindAllStringSubmatch(string(contents), -1) {
+		oldKey := match[1] + "." + match[2]
+		destination := match[3] + "." + match[4]
+		if _, duplicate := published[oldKey]; duplicate {
+			t.Errorf("v33 migration guide duplicates mapping for %s", oldKey)
+		}
+		published[oldKey] = destination
+	}
+	if got := len(published); got != expectedV32ContractPreservationCount {
+		t.Fatalf("v33 migration guide mappings = %d, want %d", got, expectedV32ContractPreservationCount)
+	}
+	for oldKey, destination := range v32ContractPreservationManifest {
+		if got := published[oldKey]; got != destination {
+			t.Errorf("v33 migration guide maps %s to %q, want %q", oldKey, got, destination)
+		}
 	}
 }
