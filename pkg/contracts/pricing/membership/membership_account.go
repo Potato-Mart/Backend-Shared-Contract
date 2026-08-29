@@ -6,6 +6,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/metadata"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/membership/membership_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/points"
@@ -29,4 +30,5 @@ type MembershipAccount struct {
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 
 	audit.AuditFields
+	security.DataProtectionFields
 }

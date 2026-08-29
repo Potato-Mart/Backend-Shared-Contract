@@ -212,16 +212,12 @@ func TestRetailCustomerReceiptPreferencesOmittedWhenAbsent(t *testing.T) {
 }
 
 func TestNotificationPreferencesChangedEventContainsOnlyChangedIdentifiers(t *testing.T) {
-	changedAt := time.Date(2026, 7, 30, 2, 3, 4, 0, time.UTC)
 	preferencesEvent := event.NotificationPreferencesChangedEvent{
 		UserID:              "user_1",
 		CustomerNumber:      "RC-1",
 		PreferencesRevision: 3,
 		ChangedTopicCodes:   []string{"order_status"},
 		ChangedChannels:     []notification_enums.NotificationChannel{notification_enums.NotificationChannelPush},
-		Source:              "account_preferences",
-		ChangedAt:           changedAt,
-		RequestID:           "req_1",
 	}
 
 	payload, err := json.Marshal(preferencesEvent)
@@ -233,8 +229,6 @@ func TestNotificationPreferencesChangedEventContainsOnlyChangedIdentifiers(t *te
 		`"preferences_revision":3`,
 		`"changed_topic_codes":["order_status"]`,
 		`"changed_channels":["push"]`,
-		`"source":"account_preferences"`,
-		`"changed_at":"2026-07-30T02:03:04Z"`,
 	} {
 		if !strings.Contains(string(payload), field) {
 			t.Fatalf("notification preferences event missing %s: %s", field, payload)
@@ -245,7 +239,7 @@ func TestNotificationPreferencesChangedEventContainsOnlyChangedIdentifiers(t *te
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal notification preferences changed event: %v", err)
 	}
-	if decoded.UserID != "user_1" || len(decoded.ChangedChannels) != 1 || decoded.ChangedChannels[0] != notification_enums.NotificationChannelPush || !decoded.ChangedAt.Equal(changedAt) {
+	if decoded.UserID != "user_1" || len(decoded.ChangedChannels) != 1 || decoded.ChangedChannels[0] != notification_enums.NotificationChannelPush {
 		t.Fatalf("notification preferences event did not round-trip: %+v", decoded)
 	}
 }

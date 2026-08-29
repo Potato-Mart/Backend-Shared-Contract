@@ -27,7 +27,7 @@ func TestOrganisationAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *test
 		Contacts:                  party.ContactChannels{Email: "buyer@example.com"},
 		Department:                "Procurement",
 		JobTitle:                  "Buyer",
-		Invitation:                &audit.LifecycleAction{By: "admin_1", At: &invitedAt},
+		Invitation:                &audit.LifecycleAction{By: "admin_1", At: invitedAt},
 		JoinedAt:                  &joinedAt,
 	}
 

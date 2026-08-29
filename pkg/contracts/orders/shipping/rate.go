@@ -1,8 +1,7 @@
 package shipping
 
 import (
-	"time"
-
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/shipping/shipping_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/classification/classification_enums"
@@ -18,5 +17,6 @@ type Rate struct {
 	StorageType   classification_enums.StorageType `json:"storage_type,omitempty"`
 	PackageLimits *PackageLimits                   `json:"package_limits,omitempty"`
 	IsActive      bool                             `json:"is_active"`
-	CreatedAt     time.Time                        `json:"created_at"`
+
+	audit.AuditFields
 }

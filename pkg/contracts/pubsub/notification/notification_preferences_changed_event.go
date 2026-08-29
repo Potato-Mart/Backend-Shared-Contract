@@ -1,10 +1,6 @@
 package notification
 
-import (
-	"time"
-
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notification/core/notification_enums"
-)
+import "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notification/core/notification_enums"
 
 // NotificationPreferencesChangedEvent is emitted on customer-events after a
 // centralized notification preference revision is stored. It carries changed
@@ -16,7 +12,4 @@ type NotificationPreferencesChangedEvent struct {
 	PreferencesRevision int64                                    `json:"preferences_revision"`
 	ChangedTopicCodes   []string                                 `json:"changed_topic_codes,omitempty"`
 	ChangedChannels     []notification_enums.NotificationChannel `json:"changed_channels,omitempty"`
-	Source              string                                   `json:"source,omitempty"`
-	ChangedAt           time.Time                                `json:"changed_at"`
-	RequestID           string                                   `json:"request_id,omitempty"`
 }

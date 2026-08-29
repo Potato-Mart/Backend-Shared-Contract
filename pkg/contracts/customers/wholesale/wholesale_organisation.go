@@ -4,6 +4,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/party"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/wholesale/wholesale_enums"
 )
 
@@ -32,4 +33,5 @@ type WholesaleOrganisation struct {
 	Closure                     *audit.LifecycleAction                        `json:"closure,omitempty"`
 
 	audit.AuditFields
+	security.DataProtectionFields
 }

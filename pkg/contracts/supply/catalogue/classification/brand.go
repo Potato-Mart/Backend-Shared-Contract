@@ -1,6 +1,7 @@
 package classification
 
 import (
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/localization"
 )
 
@@ -11,4 +12,6 @@ type Brand struct {
 	Slug string                       `json:"slug"`
 	Name []localization.LocalizedName `json:"name"`
 	Logo *ObjectMediaRef              `json:"logo,omitempty"`
+
+	audit.AuditFields
 }

@@ -3,6 +3,7 @@ package ledger
 import (
 	"time"
 
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/points"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/wallet_enums"
 )
@@ -25,4 +26,6 @@ type PointLedgerEntry struct {
 	Note                      string                         `json:"note,omitempty"`
 	CreatedBy                 string                         `json:"created_by,omitempty"`
 	CreatedAt                 time.Time                      `json:"created_at"`
+
+	security.DataProtectionFields
 }

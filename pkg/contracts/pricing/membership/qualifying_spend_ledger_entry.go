@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/membership/membership_enums"
 )
 
@@ -18,4 +19,6 @@ type QualifyingSpendLedgerEntry struct {
 	RelatedRefundID    string                                 `json:"related_refund_id,omitempty"`
 	OccurredAt         time.Time                              `json:"occurred_at"`
 	CreatedAt          time.Time                              `json:"created_at"`
+
+	security.DataProtectionFields
 }

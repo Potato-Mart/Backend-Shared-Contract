@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	shippingcontract "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/fulfilment"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse/warehouse_enums"
 )
@@ -15,7 +16,7 @@ func TestOutboundShipmentDeliveredContractRoundTrips(t *testing.T) {
 		ID:          "shipment-1",
 		Status:      warehouse_enums.OutboundShipmentStatusDelivered,
 		DeliveredAt: &deliveredAt,
-		CreatedAt:   deliveredAt.Add(-time.Hour),
+		AuditFields: audit.AuditFields{CreatedAt: deliveredAt.Add(-time.Hour), UpdatedAt: deliveredAt.Add(-time.Hour)},
 	}
 
 	raw, err := json.Marshal(want)
@@ -38,9 +39,9 @@ func TestOutboundShipmentDeliveredContractRoundTrips(t *testing.T) {
 	}
 
 	raw, err = json.Marshal(shippingcontract.OutboundShipment{
-		ID:        "shipment-2",
-		Status:    warehouse_enums.OutboundShipmentStatusDispatched,
-		CreatedAt: deliveredAt.Add(-2 * time.Hour),
+		ID:          "shipment-2",
+		Status:      warehouse_enums.OutboundShipmentStatusDispatched,
+		AuditFields: audit.AuditFields{CreatedAt: deliveredAt.Add(-2 * time.Hour), UpdatedAt: deliveredAt.Add(-2 * time.Hour)},
 	})
 	if err != nil {
 		t.Fatalf("marshal shipment without delivery time: %v", err)

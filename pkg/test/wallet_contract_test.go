@@ -7,6 +7,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/benefit"
@@ -37,7 +38,7 @@ func TestCustomerWalletOwnsPointsSummaryWithoutMembershipImport(t *testing.T) {
 func TestOperationalPointsAndRewardRecordsAreWalletOwned(t *testing.T) {
 	now := time.Date(2026, 8, 24, 0, 0, 0, 0, time.UTC)
 	entry := ledger.PointLedgerEntry{ID: "pl-1", CustomerNumber: "RC-1", Delta: -100, Reason: wallet_enums.PointLedgerReasonRewardRedeem, BalanceAfter: 50, Remaining: 0, CreatedAt: now}
-	redemption := reward.RewardRedemption{ID: "rr-1", CustomerNumber: "RC-1", RewardCode: "reward-1", PointsSpent: 100, Status: wallet_enums.RewardRedemptionStatusRedeemed, CreatedAt: now}
+	redemption := reward.RewardRedemption{ID: "rr-1", CustomerNumber: "RC-1", RewardCode: "reward-1", PointsSpent: 100, Status: wallet_enums.RewardRedemptionStatusRedeemed, AuditFields: audit.AuditFields{CreatedAt: now, UpdatedAt: now}}
 	payload, err := json.Marshal(struct {
 		Entry      ledger.PointLedgerEntry `json:"entry"`
 		Redemption reward.RewardRedemption `json:"redemption"`
@@ -60,7 +61,7 @@ func TestRewardRedemptionFreezesOptionalMarketAndCountry(t *testing.T) {
 		RewardCode:     "reward-1",
 		PointsSpent:    100,
 		Status:         wallet_enums.RewardRedemptionStatusRedeemed,
-		CreatedAt:      now,
+		AuditFields:    audit.AuditFields{CreatedAt: now, UpdatedAt: now},
 	}
 	payload, err := json.Marshal(redemption)
 	if err != nil {
@@ -86,8 +87,7 @@ func TestCheckoutBenefitReservationExcludesPersistenceRetryKey(t *testing.T) {
 		OrderNumber: "order_1",
 		Status:      wallet_enums.CheckoutBenefitReservationStatusReserved,
 		ExpiresAt:   now.Add(time.Hour),
-		CreatedAt:   now,
-		UpdatedAt:   now,
+		AuditFields: audit.AuditFields{CreatedAt: now, UpdatedAt: now},
 	}
 	payload, err := json.Marshal(checkoutReservation)
 	if err != nil {
@@ -121,7 +121,7 @@ func TestRewardRedemptionOutcomeCarriesTypedIssueEvidence(t *testing.T) {
 				ProvisionedAt:     &now,
 			},
 		},
-		CreatedAt: now,
+		AuditFields: audit.AuditFields{CreatedAt: now, UpdatedAt: now},
 	}
 	payload, err := json.Marshal(redemption)
 	if err != nil {

@@ -9,6 +9,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/localization"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/metadata"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notification/core"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notification/core/notification_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notification/delivery"
@@ -21,7 +22,8 @@ import (
 func TestNotificationPreferencesSupportsBackendDefinedTopicsAndDestinationScopedSocialConsent(t *testing.T) {
 	changedAt := time.Date(2026, 8, 24, 2, 3, 4, 0, time.UTC)
 	prefs := preference.NotificationPreferences{
-		ID: "notification-preference-1", UserID: "user-1", CustomerNumber: "customer-1", Revision: 7, UpdatedAt: changedAt,
+		ID: "notification-preference-1", UserID: "user-1", CustomerNumber: "customer-1", Revision: 7,
+		AuditFields: audit.AuditFields{CreatedAt: changedAt, UpdatedAt: changedAt},
 		Topics: []preference.NotificationTopicPreference{{
 			TopicCode: "seasonal_restock", // backend-created, not a shared enum value.
 			Channels: []preference.NotificationChannelPreference{{
@@ -30,7 +32,8 @@ func TestNotificationPreferencesSupportsBackendDefinedTopicsAndDestinationScoped
 			}},
 		}},
 		Consents: []preference.NotificationChannelConsent{{
-			Channel: notification_enums.NotificationChannelSocialMedia, DestinationCode: "destination-opaque-1", Granted: true, ChangedAt: changedAt,
+			Channel: notification_enums.NotificationChannelSocialMedia, DestinationCode: "destination-opaque-1", Granted: true,
+			Actor: security.ActorRef{ActorID: "user-1"}, Source: "preference_centre", PolicyVersion: "2026-08", RequestID: "request-1", ChangedAt: changedAt,
 		}},
 	}
 
@@ -141,14 +144,14 @@ func TestSocialPreferencesRequireDestinationSelectionAndSeparateConsent(t *testi
 	if socialDestinationEnabled(prefs, "campaign_reminder", "destination-1") {
 		t.Fatal("newly selected destination is enabled without separate consent")
 	}
-	prefs.Consents = []preference.NotificationChannelConsent{{Channel: notification_enums.NotificationChannelSocialMedia, DestinationCode: "destination-1", Granted: true, ChangedAt: now}}
+	prefs.Consents = []preference.NotificationChannelConsent{{Channel: notification_enums.NotificationChannelSocialMedia, DestinationCode: "destination-1", Granted: true, Actor: security.ActorRef{ActorID: "user-1"}, Source: "preference_centre", PolicyVersion: "2026-08", RequestID: "request-1", ChangedAt: now}}
 	if !socialDestinationEnabled(prefs, "campaign_reminder", "destination-1") {
 		t.Fatal("selected destination with granted consent is disabled")
 	}
 	if socialDestinationEnabled(prefs, "campaign_reminder", "destination-2") {
 		t.Fatal("destination without consent is enabled")
 	}
-	invalidConsent := preference.NotificationPreferences{UserID: "user-1", Consents: []preference.NotificationChannelConsent{{Channel: notification_enums.NotificationChannelSocialMedia, Granted: true}}}
+	invalidConsent := preference.NotificationPreferences{UserID: "user-1", Consents: []preference.NotificationChannelConsent{{Channel: notification_enums.NotificationChannelSocialMedia, Granted: true, Actor: security.ActorRef{ActorID: "user-1"}, Source: "preference_centre", PolicyVersion: "2026-08", RequestID: "request-1", ChangedAt: now}}}
 	if invalidConsent.Consents[0].DestinationCode != "" {
 		t.Fatal("social consent fixture must demonstrate missing destination code")
 	}

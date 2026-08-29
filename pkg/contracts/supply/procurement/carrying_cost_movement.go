@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 )
 
 // CarryingCostMovement is one auditable change to a depot carrying-cost
@@ -30,4 +31,11 @@ type CarryingCostMovement struct {
 	Currency   money.CurrencyCode `json:"currency"`
 	Revision   int64              `json:"revision"`
 	OccurredAt time.Time          `json:"occurred_at"`
+	// Actor and request/correlation evidence identify the immutable movement's
+	// origin without adding mutable lifecycle fields to this ledger record.
+	Actor         security.ActorRef `json:"actor"`
+	RequestID     string            `json:"request_id,omitempty"`
+	CorrelationID string            `json:"correlation_id,omitempty"`
+
+	security.DataProtectionFields
 }

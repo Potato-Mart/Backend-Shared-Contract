@@ -4,6 +4,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/party"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/temporal"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/payment/payment_enums"
 	"time"
@@ -43,4 +44,5 @@ type MerchantLegalProfile struct {
 	Revision      int64                               `json:"revision"`
 
 	audit.AuditFields
+	security.DataProtectionFields
 }

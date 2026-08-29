@@ -3,6 +3,7 @@ package wish
 import (
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/wish/wish_enums"
 )
 
@@ -15,4 +16,6 @@ type WishBallot struct {
 	ClosesAt     time.Time                  `json:"closes_at"`
 	Revision     int64                      `json:"revision"`
 	AsOf         time.Time                  `json:"as_of"`
+
+	audit.AuditFields
 }

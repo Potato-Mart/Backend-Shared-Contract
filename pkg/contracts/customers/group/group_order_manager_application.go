@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 	wholesale_enums "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/group/group_enums"
 )
 
@@ -23,4 +24,5 @@ type GroupOrderManagerApplication struct {
 	DecisionReason            string                                             `json:"decision_reason,omitempty"`
 
 	audit.AuditFields
+	security.DataProtectionFields
 }

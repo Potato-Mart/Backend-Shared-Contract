@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 )
 
 func TestBaseAcquisitionCostIsTaxExclusiveAndRevisioned(t *testing.T) {
@@ -76,6 +77,7 @@ func TestCarryingCostMovementReversalRemainsLinkedWithoutRetryKey(t *testing.T) 
 		BaseUnitDelta:      -12, CarryingCostDelta: -6600,
 		BalanceBaseUnitsAfter: 108, BalanceCarryingCostMinorAfter: 59400,
 		Currency: "AUD", Revision: 6, OccurredAt: occurredAt,
+		Actor: security.ActorRef{ActorID: "operator_1"}, RequestID: "request_1", CorrelationID: "correlation_1",
 	})
 	if err != nil {
 		t.Fatalf("marshal carrying cost movement: %v", err)
@@ -84,6 +86,7 @@ func TestCarryingCostMovementReversalRemainsLinkedWithoutRetryKey(t *testing.T) 
 		`"reverses_movement_id":"movement_1"`,
 		`"carrying_cost_minor_delta":-6600`,
 		`"revision":6`,
+		`"actor":{"actor_id":"operator_1"}`, `"request_id":"request_1"`, `"correlation_id":"correlation_1"`,
 	} {
 		if !strings.Contains(string(payload), want) {
 			t.Fatalf("CarryingCostMovement JSON = %s, want %s", payload, want)

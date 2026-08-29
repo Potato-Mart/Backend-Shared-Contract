@@ -9,6 +9,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/localization"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/wish/wish_enums"
 )
@@ -22,8 +23,7 @@ func TestWishProposalJSONIsIdentityFree(t *testing.T) {
 		ReferenceURL:         "https://example.com/product",
 		State:                wish_enums.WishProposalStateConverted,
 		ConvertedCandidateID: "candidate_1",
-		CreatedAt:            now,
-		UpdatedAt:            now,
+		AuditFields:          audit.AuditFields{CreatedAt: now, UpdatedAt: now},
 	}
 
 	payload := marshalWishJSON(t, proposal)
@@ -52,8 +52,7 @@ func TestWishCandidateJSONUsesApprovedLocalizedContent(t *testing.T) {
 		ImageURLs:   []string{"https://cdn.example.com/wishes/candidate_1.jpg"},
 		State:       wish_enums.WishCandidateStatePublished,
 		PublishedAt: &now,
-		CreatedAt:   now,
-		UpdatedAt:   now,
+		AuditFields: audit.AuditFields{CreatedAt: now, UpdatedAt: now},
 	}
 
 	payload := marshalWishJSON(t, candidate)

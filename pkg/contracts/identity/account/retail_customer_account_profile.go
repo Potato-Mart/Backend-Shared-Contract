@@ -1,6 +1,9 @@
 package account
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
+import (
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
+)
 
 // RetailCustomerAccountProfile contains lightweight references for a retail
 // customer account. CustomerNumber is also the membership account key.
@@ -12,4 +15,5 @@ type RetailCustomerAccountProfile struct {
 	ReferralCode   string `json:"referral_code,omitempty"`
 
 	audit.AuditFields
+	security.DataProtectionFields
 }

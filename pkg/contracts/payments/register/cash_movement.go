@@ -1,9 +1,11 @@
 package register
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
-	pos_enums "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/register/register_enums"
 	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
+	pos_enums "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/register/register_enums"
 )
 
 // CashMovement is one cash-drawer movement recorded during a session.
@@ -17,4 +19,6 @@ type CashMovement struct {
 	Reason     string                     `json:"reason,omitempty"`
 	RecordedBy string                     `json:"recorded_by,omitempty"`
 	OccurredAt time.Time                  `json:"occurred_at"`
+
+	security.DataProtectionFields
 }

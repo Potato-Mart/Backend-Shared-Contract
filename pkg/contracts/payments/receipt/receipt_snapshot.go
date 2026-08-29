@@ -2,6 +2,7 @@ package receipt
 
 import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 	sales "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/order"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/merchant"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/payment"
@@ -39,4 +40,6 @@ type ReceiptSnapshot struct {
 	// cash. Lines, Subtotal, Tax, and Total always stay at exact minor
 	// units.
 	CashRounding *CashRoundingSnapshot `json:"cash_rounding,omitempty"`
+
+	security.DataProtectionFields
 }

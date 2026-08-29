@@ -2,6 +2,7 @@ package giftcard
 
 import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/wallet_enums"
 	"time"
 )
@@ -18,4 +19,6 @@ type GiftCardTransaction struct {
 	Note               string                                 `json:"note,omitempty"`
 	CreatedBy          string                                 `json:"created_by,omitempty"`
 	CreatedAt          time.Time                              `json:"created_at"`
+
+	security.DataProtectionFields
 }

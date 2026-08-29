@@ -3,6 +3,7 @@ package payment
 import (
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/metadata"
@@ -53,7 +54,6 @@ type Payment struct {
 	RefundReason string                  `json:"refund_reason,omitempty"`
 	Metadata     metadata.Metadata       `json:"metadata,omitempty"`
 	History      []security.HistoryEntry `json:"history,omitempty"`
-	CreatedAt    time.Time               `json:"created_at"`
-
+	audit.AuditFields
 	security.DataProtectionFields
 }

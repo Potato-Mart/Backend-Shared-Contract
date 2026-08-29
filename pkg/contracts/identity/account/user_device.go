@@ -33,4 +33,5 @@ type UserDevice struct {
 	RevokedReason      string                              `json:"revoked_reason,omitempty"`
 	History            []security.HistoryEntry             `json:"history,omitempty"`
 	device.DeviceRecord
+	security.DataProtectionFields
 }

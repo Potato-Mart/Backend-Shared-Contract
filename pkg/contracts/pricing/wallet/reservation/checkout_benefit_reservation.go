@@ -1,9 +1,12 @@
 package reservation
 
 import (
+	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/benefit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/wallet_enums"
-	"time"
 )
 
 // CheckoutBenefitReservation is the durable checkout hold for applied benefits.
@@ -19,6 +22,7 @@ type CheckoutBenefitReservation struct {
 	CommittedAt *time.Time                                    `json:"committed_at,omitempty"`
 	CancelledAt *time.Time                                    `json:"cancelled_at,omitempty"`
 	RefundedAt  *time.Time                                    `json:"refunded_at,omitempty"`
-	CreatedAt   time.Time                                     `json:"created_at"`
-	UpdatedAt   time.Time                                     `json:"updated_at"`
+
+	audit.AuditFields
+	security.DataProtectionFields
 }

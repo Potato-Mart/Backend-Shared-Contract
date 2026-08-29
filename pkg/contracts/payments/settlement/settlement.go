@@ -34,4 +34,5 @@ type Settlement struct {
 	History []security.HistoryEntry `json:"history,omitempty"`
 
 	audit.AuditFields
+	security.DataProtectionFields
 }

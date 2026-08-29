@@ -45,7 +45,7 @@ func TestWholesaleOrganisationJSONShape(t *testing.T) {
 		AuthIdentityIDs:             []string{"auth_123"},
 		PrimaryOrganisationAccessID: "access_123",
 		Status:                      wholesale_enums.WholesaleOrganisationStatusApproved,
-		Approval:                    &audit.LifecycleAction{By: "admin_1", At: &approvedAt, Reason: "verified"},
+		Approval:                    &audit.LifecycleAction{By: "admin_1", At: approvedAt, Reason: "verified"},
 	}
 
 	payload, err := json.Marshal(organisation)

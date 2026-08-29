@@ -1,10 +1,12 @@
 package coupon
 
 import (
+	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/benefit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/wallet_enums"
-	"time"
 )
 
 // CouponAssignment is an owner-specific issuance of a wallet Coupon.
@@ -21,5 +23,7 @@ type CouponAssignment struct {
 	VoidedAt            *time.Time                `json:"voided_at,omitempty"`
 	Note                string                    `json:"note,omitempty"`
 	History             []security.HistoryEntry   `json:"history,omitempty"`
-	CreatedAt           time.Time                 `json:"created_at"`
+
+	audit.AuditFields
+	security.DataProtectionFields
 }

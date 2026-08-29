@@ -3,6 +3,7 @@ package wish
 import (
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/localization"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/wish/wish_enums"
 )
@@ -18,6 +19,6 @@ type WishCandidate struct {
 	CreatedSKUCode string                              `json:"created_sku_code,omitempty"`
 	PublishedAt    *time.Time                          `json:"published_at,omitempty"`
 	FulfilledAt    *time.Time                          `json:"fulfilled_at,omitempty"`
-	CreatedAt      time.Time                           `json:"created_at"`
-	UpdatedAt      time.Time                           `json:"updated_at"`
+
+	audit.AuditFields
 }

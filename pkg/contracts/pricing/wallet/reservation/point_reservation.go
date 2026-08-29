@@ -3,6 +3,8 @@ package reservation
 import (
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/points"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/wallet_enums"
 )
@@ -23,6 +25,7 @@ type PointReservation struct {
 	CommittedAt               *time.Time                          `json:"committed_at,omitempty"`
 	CancelledAt               *time.Time                          `json:"cancelled_at,omitempty"`
 	CancelReason              string                              `json:"cancel_reason,omitempty"`
-	CreatedBy                 string                              `json:"created_by,omitempty"`
-	CreatedAt                 time.Time                           `json:"created_at"`
+
+	audit.AuditFields
+	security.DataProtectionFields
 }

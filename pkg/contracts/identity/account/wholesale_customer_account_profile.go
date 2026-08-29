@@ -1,6 +1,9 @@
 package account
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
+import (
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
+)
 
 // WholesaleCustomerAccountProfile contains lightweight wholesale organisation
 // references for a wholesaleCustomer organisation-principal account.
@@ -13,4 +16,5 @@ type WholesaleCustomerAccountProfile struct {
 	JobTitle                         string `json:"job_title,omitempty"`
 
 	audit.AuditFields
+	security.DataProtectionFields
 }

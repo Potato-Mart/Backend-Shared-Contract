@@ -11,6 +11,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/benefit/benefit_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/wallet_enums"
@@ -32,7 +33,7 @@ func TestCouponAssignmentRoundTrip(t *testing.T) {
 		RedeemedAt:          &now,
 		RedeemedOrderNumber: "MAMA260703ABC123",
 		Note:                "campaign issue",
-		CreatedAt:           now,
+		AuditFields:         audit.AuditFields{CreatedAt: now, UpdatedAt: now},
 	}
 
 	payload, err := json.Marshal(rec)

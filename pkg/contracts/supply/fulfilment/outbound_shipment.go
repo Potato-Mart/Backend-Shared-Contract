@@ -1,10 +1,12 @@
 package fulfilment
 
 import (
+	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse/warehouse_enums"
-	"time"
 )
 
 type OutboundShipment struct {
@@ -30,5 +32,6 @@ type OutboundShipment struct {
 	DispatchedAt   *time.Time              `json:"dispatched_at,omitempty"`
 	DeliveredAt    *time.Time              `json:"delivered_at,omitempty"`
 	History        []security.HistoryEntry `json:"history,omitempty"`
-	CreatedAt      time.Time               `json:"created_at"`
+	audit.AuditFields
+	security.DataProtectionFields
 }

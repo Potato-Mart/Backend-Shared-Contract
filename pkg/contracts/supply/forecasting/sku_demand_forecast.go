@@ -1,11 +1,13 @@
 package forecasting
 
 import (
+	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/commerce/commerce_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/metadata"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security/security_enums"
-	"time"
 )
 
 // SKUDemandForecast is one depot- and channel-qualified demand prediction.
@@ -34,4 +36,6 @@ type SKUDemandForecast struct {
 	AlertLevel        security_enums.AlertLevel `json:"alert_level"`
 	Algorithm         string                    `json:"algorithm"`
 	AlgorithmParams   metadata.Metadata         `json:"algorithm_params,omitempty"`
+
+	audit.AuditFields
 }

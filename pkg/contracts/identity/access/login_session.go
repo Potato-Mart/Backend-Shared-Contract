@@ -48,4 +48,5 @@ type LoginSession struct {
 	RevokedAt                 *time.Time                        `json:"revoked_at,omitempty"`
 	RevokedReason             string                            `json:"revoked_reason,omitempty"`
 	History                   []security.HistoryEntry           `json:"history,omitempty"`
+	security.DataProtectionFields
 }

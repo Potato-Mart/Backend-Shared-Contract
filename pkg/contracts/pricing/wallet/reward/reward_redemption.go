@@ -3,6 +3,7 @@ package reward
 import (
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/wallet_enums"
@@ -25,7 +26,8 @@ type RewardRedemption struct {
 	RelatedOrderNumber string                              `json:"related_order_number,omitempty"`
 	FulfilledAt        *time.Time                          `json:"fulfilled_at,omitempty"`
 	ExpiresAt          *time.Time                          `json:"expires_at,omitempty"`
-	CreatedBy          string                              `json:"created_by,omitempty"`
-	CreatedAt          time.Time                           `json:"created_at"`
 	History            []security.HistoryEntry             `json:"history,omitempty"`
+
+	audit.AuditFields
+	security.DataProtectionFields
 }

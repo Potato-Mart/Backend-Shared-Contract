@@ -36,4 +36,5 @@ type UserProfile struct {
 	AccessReviewedAt  *time.Time `json:"access_reviewed_at,omitempty"`
 
 	audit.AuditFields
+	security.DataProtectionFields
 }
