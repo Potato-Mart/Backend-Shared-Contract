@@ -9,6 +9,7 @@ import (
 	"testing"
 	"time"
 
+	commonidentity "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/identity"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/party"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/preference"
 	preference_enums "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/preference/preference_enums"
@@ -21,12 +22,11 @@ import (
 
 func TestRetailCustomerJSONShape(t *testing.T) {
 	customer := customers.RetailCustomer{
-		ID:                    "retail_123",
-		CustomerNumber:        "RC-123",
-		UserID:                "user_123",
-		AccountID:             "acct_123",
-		PrimaryAuthIdentityID: "auth_123",
-		AuthIdentityIDs:       []string{"auth_123"},
+		ID:             "retail_123",
+		CustomerNumber: "RC-123",
+		IdentityLink: commonidentity.IdentityLink{
+			UserID: "user_123", AccountID: "acct_123", PrimaryAuthIdentityID: "auth_123", AuthIdentityIDs: []string{"auth_123"},
+		},
 		BasicInfo: customers.RetailCustomerBasicInfo{
 			Name:     party.PersonName{DisplayName: "Retail Customer"},
 			Contacts: party.ContactChannels{Email: "retail@example.com"},

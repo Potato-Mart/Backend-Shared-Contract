@@ -10,7 +10,8 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/product"
 )
 
-type OrderItem struct {
+// PurchaseOrderItem is one frozen supplier order line.
+type PurchaseOrderItem struct {
 	ID string `json:"id,omitempty"`
 	// SKUCode is the frozen SKU code captured when the purchase line was raised.
 	SKUCode              string                               `json:"sku_code"`

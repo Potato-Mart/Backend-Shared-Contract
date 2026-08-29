@@ -53,7 +53,7 @@ func TestDomainPackageLayout(t *testing.T) {
 		"contracts/supply/fulfilment/outbound_shipment.go":                        "fulfilment",
 		"contracts/supply/inventory/stock_movement.go":                            "inventory",
 		"contracts/supply/procurement/supplier_invoice.go":                        "procurement",
-		"contracts/supply/warehouse/inbound_receipt.go":                           "warehouse",
+		"contracts/supply/warehouse/warehouse_receipt.go":                         "warehouse",
 		"contracts/pubsub/envelope/event_envelope.go":                             "envelope",
 		"contracts/pubsub/routing/event_type.go":                                  "routing",
 		"contracts/pubsub/orders/order_created_event.go":                          "orders",

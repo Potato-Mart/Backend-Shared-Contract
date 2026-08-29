@@ -1,6 +1,7 @@
 package retail
 
 import (
+	commonidentity "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/identity"
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
@@ -13,12 +14,9 @@ import (
 // account/persona. Portal admission is controlled by identity.AccountType and
 // identity.PortalAccess, not by this profile.
 type RetailCustomer struct {
-	ID                    string                                       `json:"id"`
-	CustomerNumber        string                                       `json:"customer_number,omitempty"`
-	UserID                string                                       `json:"user_id,omitempty"`
-	AccountID             string                                       `json:"account_id,omitempty"`
-	PrimaryAuthIdentityID string                                       `json:"primary_auth_identity_id,omitempty"`
-	AuthIdentityIDs       []string                                     `json:"auth_identity_ids,omitempty"`
+	ID             string `json:"id"`
+	CustomerNumber string `json:"customer_number,omitempty"`
+	commonidentity.IdentityLink
 	BasicInfo             RetailCustomerBasicInfo                      `json:"basic_info"`
 	Lifecycle             RetailCustomerLifecycle                      `json:"lifecycle"`
 	Management            RetailCustomerManagementProfile              `json:"management"`

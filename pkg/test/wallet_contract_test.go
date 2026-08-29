@@ -22,7 +22,7 @@ import (
 func TestCustomerWalletOwnsPointsSummaryWithoutMembershipImport(t *testing.T) {
 	now := time.Date(2026, 8, 24, 0, 0, 0, 0, time.UTC)
 	w := balance.CustomerWallet{CustomerNumber: "RC-1", Summary: balance.CustomerWalletSummary{
-		Points:                        points.PointsSummary{AvailablePoints: 120, PointDebt: 3, CalculatedAt: now},
+		Points:                        points.PointsSummary{PointBalances: points.PointBalances{AvailablePoints: 120, PointDebt: 3}, CalculatedAt: now},
 		GiftCardAvailableBalanceTotal: money.Money{AmountMinor: 500, Currency: "AUD"},
 	}, CalculatedAt: now}
 	payload, err := json.Marshal(w)

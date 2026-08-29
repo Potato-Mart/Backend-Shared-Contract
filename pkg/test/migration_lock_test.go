@@ -26,8 +26,8 @@ func TestTransactionEvidenceUsesOneImmutableSKUCode(t *testing.T) {
 		reflect.TypeOf(order.OrderItem{}),
 		reflect.TypeOf(order.OrderLineSummary{}),
 		reflect.TypeOf(pos.ReceiptLine{}),
-		reflect.TypeOf(purchase.OrderItem{}),
-		reflect.TypeOf(purchase.ReceiptItem{}),
+		reflect.TypeOf(purchase.PurchaseOrderItem{}),
+		reflect.TypeOf(purchase.PurchaseReceiptItem{}),
 		reflect.TypeOf(purchase.SupplierInvoiceLine{}),
 	} {
 		field, ok := model.FieldByName("SKUCode")

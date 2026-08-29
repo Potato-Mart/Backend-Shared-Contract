@@ -40,7 +40,7 @@ func TestPermissionDefinitionJSONUsesTypedWireValues(t *testing.T) {
 
 func TestRolePermissionsMarshalAsTypedStringArray(t *testing.T) {
 	value := Role{
-		Key:         role_enums.UserRoleSuperAdmin,
+		Key:         RoleCode(role_enums.UserRoleSuperAdmin),
 		Label:       "Platform administrators",
 		Permissions: []PermissionKey{PermissionKey("user.read"), PermissionKey("role.write")},
 		IsSystem:    true,

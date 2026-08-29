@@ -19,7 +19,7 @@ func TestMembershipAccountComposesWalletOwnedPointsSummary(t *testing.T) {
 	now := time.Date(2026, 8, 24, 0, 0, 0, 0, time.UTC)
 	account := membership.MembershipAccount{
 		ID: "RC-1", Status: membership_enums.MembershipAccountStatusActive,
-		Wallet: points.PointsSummary{AvailablePoints: 120, CalculatedAt: now}, EnrolledAt: now,
+		Wallet: points.PointsSummary{PointBalances: points.PointBalances{AvailablePoints: 120}, CalculatedAt: now}, EnrolledAt: now,
 	}
 	payload, err := json.Marshal(account)
 	if err != nil {

@@ -8,7 +8,8 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/classification/classification_enums"
 )
 
-type InboundItem struct {
+// WarehouseReceiptItem is one operationally received item.
+type WarehouseReceiptItem struct {
 	ID                  string                               `json:"id"`
 	SKUCode             string                               `json:"sku_code"`
 	ProductName         string                               `json:"product_name,omitempty"`

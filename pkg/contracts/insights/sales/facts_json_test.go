@@ -17,8 +17,8 @@ import (
 func TestAnalyticsFactsCarryCountryAttribution(t *testing.T) {
 	composition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}}
 	populated := map[string]any{
-		"order":    OrderItemFact{SKUCode: "A0001", MarketCode: "mkt_au_vic", CountryCode: "AU", PackageComposition: composition},
-		"refund":   RefundItemFact{SKUCode: "A0001", MarketCode: "mkt_au_vic", CountryCode: "AU", PackageComposition: composition},
+		"order":    OrderItemFact{ProductFactDimensions: ProductFactDimensions{SKUCode: "A0001", MarketCode: "mkt_au_vic", CountryCode: "AU", PackageComposition: composition}},
+		"refund":   RefundItemFact{ProductFactDimensions: ProductFactDimensions{SKUCode: "A0001", MarketCode: "mkt_au_vic", CountryCode: "AU", PackageComposition: composition}},
 		"rollup":   analytics.MetricRollup{Metric: "gross_sales", Granularity: "daily", MarketCode: "mkt_au_vic", CountryCode: "AU"},
 		"forecast": forecasting.SKUDemandForecast{SKUCode: "A0001", MarketCode: "mkt_au_vic", CountryCode: "AU"},
 	}
@@ -35,8 +35,8 @@ func TestAnalyticsFactsCarryCountryAttribution(t *testing.T) {
 	}
 
 	bare := map[string]any{
-		"order":    OrderItemFact{SKUCode: "A0001", PackageComposition: composition},
-		"refund":   RefundItemFact{SKUCode: "A0001", PackageComposition: composition},
+		"order":    OrderItemFact{ProductFactDimensions: ProductFactDimensions{SKUCode: "A0001", PackageComposition: composition}},
+		"refund":   RefundItemFact{ProductFactDimensions: ProductFactDimensions{SKUCode: "A0001", PackageComposition: composition}},
 		"rollup":   analytics.MetricRollup{Metric: "gross_sales"},
 		"forecast": forecasting.SKUDemandForecast{SKUCode: "A0001"},
 	}
@@ -55,8 +55,8 @@ func TestAnalyticsFactsCarryCountryAttribution(t *testing.T) {
 
 func TestItemFactsUseBrandCode(t *testing.T) {
 	for name, value := range map[string]any{
-		"order":  OrderItemFact{SKUCode: "A0001", BrandCode: "64c13ab08edf48a008793ca1", PackageComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}}},
-		"refund": RefundItemFact{SKUCode: "A0001", BrandCode: "64c13ab08edf48a008793ca1", PackageComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}}},
+		"order":  OrderItemFact{ProductFactDimensions: ProductFactDimensions{SKUCode: "A0001", BrandCode: "64c13ab08edf48a008793ca1", PackageComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}}}},
+		"refund": RefundItemFact{ProductFactDimensions: ProductFactDimensions{SKUCode: "A0001", BrandCode: "64c13ab08edf48a008793ca1", PackageComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}}}},
 	} {
 		t.Run(name, func(t *testing.T) {
 			body, err := json.Marshal(value)

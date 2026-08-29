@@ -11,7 +11,8 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/procurement/purchase_enums"
 )
 
-type Order struct {
+// PurchaseOrder is the independently mutable procurement order root.
+type PurchaseOrder struct {
 	ID          string                             `json:"id"`
 	OrderNumber string                             `json:"order_number"`
 	Status      purchase_enums.PurchaseOrderStatus `json:"status"`
@@ -22,7 +23,7 @@ type Order struct {
 	MarketCode   string                  `json:"market_code,omitempty"`
 	CountryCode  geography.CountryCode   `json:"country_code,omitempty"`
 	Currency     money.CurrencyCode      `json:"currency"`
-	Items        []OrderItem             `json:"items"`
+	Items        []PurchaseOrderItem     `json:"items"`
 	Subtotal     money.Money             `json:"subtotal"`
 	TaxAmount    money.Money             `json:"tax_amount"`
 	ShippingCost *money.Money            `json:"shipping_cost,omitempty"`

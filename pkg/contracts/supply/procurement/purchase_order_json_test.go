@@ -19,10 +19,10 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
-func TestOrderJSONRoundTripWithHistory(t *testing.T) {
+func TestPurchaseOrderJSONRoundTripWithHistory(t *testing.T) {
 	expectedAt := time.Date(2026, 6, 30, 0, 0, 0, 0, time.UTC)
 	occurredAt := time.Date(2026, 6, 17, 9, 0, 0, 0, time.UTC)
-	order := purchase.Order{
+	order := purchase.PurchaseOrder{
 		ID:           "po_1",
 		OrderNumber:  "PO-1001",
 		SupplierCode: "sup_1",
@@ -33,7 +33,7 @@ func TestOrderJSONRoundTripWithHistory(t *testing.T) {
 		TaxAmount:    money.Money{AmountMinor: 1000, Currency: "AUD"},
 		Total:        money.Money{AmountMinor: 11000, Currency: "AUD"},
 		ExpectedAt:   &expectedAt,
-		Items: []purchase.OrderItem{
+		Items: []purchase.PurchaseOrderItem{
 			{
 				ID:           "po_line_1",
 				SKUCode:      "A00001",
@@ -74,7 +74,7 @@ func TestOrderJSONRoundTripWithHistory(t *testing.T) {
 		t.Fatalf("marshal purchase order: %v", err)
 	}
 
-	var decoded purchase.Order
+	var decoded purchase.PurchaseOrder
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal purchase order: %v", err)
 	}
@@ -115,13 +115,13 @@ func TestOrderJSONRoundTripWithHistory(t *testing.T) {
 func TestReceiptJSONUsesLotBucketAndPackageComposition(t *testing.T) {
 	receivedAt := time.Date(2026, 6, 30, 2, 0, 0, 0, time.UTC)
 	dateMarkAt := time.Date(2027, 1, 31, 13, 0, 0, 0, time.UTC)
-	receipt := purchase.Receipt{
-		ID:          "receipt_1",
-		OrderNumber: "PO-1001",
-		DepotCode:   "AU-VIC-MEL-DC-01",
-		Status:      purchase_enums.PurchaseOrderStatusReceived,
-		ReceivedAt:  &receivedAt,
-		Items: []purchase.ReceiptItem{
+	receipt := purchase.PurchaseReceipt{
+		ID:                  "receipt_1",
+		PurchaseOrderNumber: "PO-1001",
+		DepotCode:           "AU-VIC-MEL-DC-01",
+		Status:              purchase_enums.PurchaseReceiptStatusConfirmed,
+		ReceivedAt:          &receivedAt,
+		Items: []purchase.PurchaseReceiptItem{
 			{
 				ID:                  "receipt_line_1",
 				SKUCode:             "A00001",
@@ -160,8 +160,8 @@ func TestReceiptJSONUsesLotBucketAndPackageComposition(t *testing.T) {
 	}
 }
 
-func TestReceiptItemLotCodesAreOptional(t *testing.T) {
-	payload, err := json.Marshal(purchase.ReceiptItem{})
+func TestPurchaseReceiptItemLotCodesAreOptional(t *testing.T) {
+	payload, err := json.Marshal(purchase.PurchaseReceiptItem{})
 	if err != nil {
 		t.Fatalf("marshal receipt item: %v", err)
 	}

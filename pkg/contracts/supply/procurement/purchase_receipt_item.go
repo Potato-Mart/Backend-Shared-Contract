@@ -5,7 +5,8 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse"
 )
 
-type ReceiptItem struct {
+// PurchaseReceiptItem is one received procurement line.
+type PurchaseReceiptItem struct {
 	ID string `json:"id,omitempty"`
 	// SKUCode is the frozen SKU code captured when the receipt line was recorded.
 	SKUCode             string                               `json:"sku_code"`
