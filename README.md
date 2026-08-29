@@ -123,7 +123,7 @@ dependency resolution:
 ```
 
 On Bash-based systems, run `bash scripts/bash/test-contract.sh`. The equivalent
-Go command is `GOWORK=off go test ./...`.
+Go command is `GOWORK=off go test -count=1 ./...`.
 
 ## Change and Release Workflow
 
