@@ -32,9 +32,9 @@ func TestInventoryEventJSONShapes(t *testing.T) {
 			value: event.InventoryLotReceivedEvent{
 				LotID: "lot_1", SKUCode: "A00001", DepotCode: location.DepotCode,
 				DestinationBucketID: "bucket_case", ReceivedComposition: caseComposition,
-				MovementID: "movement_receipt", LotRevision: 2, ReceivedAt: now, OccurredAt: now,
+				MovementID: "movement_receipt", LotRevision: 2, ReceivedAt: now,
 			},
-			required: []string{"lot_id", "received_composition", "lot_revision", "occurred_at"},
+			required: []string{"lot_id", "received_composition", "lot_revision"},
 		},
 		{
 			name: "bucket changed",
@@ -43,7 +43,7 @@ func TestInventoryEventJSONShapes(t *testing.T) {
 				PackageOptionCode: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase,
 				Condition: warehouse_enums.InventoryConditionGood, Disposition: warehouse_enums.InventoryDispositionStandardSellable,
 				OnHandBeforeBaseUnits: 12, OnHandAfterBaseUnits: 0, AvailableBeforeBaseUnits: 12,
-				AvailableAfterBaseUnits: 0, Cause: cause, Revision: 3, OccurredAt: now,
+				AvailableAfterBaseUnits: 0, Cause: cause, Revision: 3,
 			},
 			required: []string{"bucket_id", "location", "available_before_base_units", "available_after_base_units", "revision"},
 		},
@@ -54,9 +54,9 @@ func TestInventoryEventJSONShapes(t *testing.T) {
 				SourceBucketID: "bucket_case", DestinationBucketID: "bucket_each",
 				SourcePackageOptionCode: "pkg_case_12", DestinationPackageOptionCode: "pkg_each",
 				BaseUnits: 12, SourcePackageComposition: caseComposition, DestinationPackageComposition: eachComposition,
-				SourceBucketRevision: 4, DestinationBucketRevision: 2, OccurredAt: now,
+				SourceBucketRevision: 4, DestinationBucketRevision: 2,
 			},
-			required: []string{"depot_code", "source_bucket_id", "destination_bucket_id", "source_bucket_revision", "destination_bucket_revision", "occurred_at"},
+			required: []string{"depot_code", "source_bucket_id", "destination_bucket_id", "source_bucket_revision", "destination_bucket_revision"},
 		},
 		{
 			name: "quality assessed",
@@ -66,7 +66,7 @@ func TestInventoryEventJSONShapes(t *testing.T) {
 				ResultCondition:     warehouse_enums.InventoryConditionPackagingDamagedMinor,
 				PreviousDisposition: warehouse_enums.InventoryDispositionStandardSellable,
 				ResultDisposition:   warehouse_enums.InventoryDispositionReducedSellable,
-				MovementIDs:         []string{"movement_quality"}, Revision: 2, OccurredAt: now,
+				MovementIDs:         []string{"movement_quality"}, Revision: 2,
 			},
 			required: []string{"quality_assessment_id", "depot_code", "previous_condition", "result_disposition", "revision"},
 		},
@@ -75,7 +75,7 @@ func TestInventoryEventJSONShapes(t *testing.T) {
 			value: event.InventoryReservationChangedEvent{
 				ReservationID: "reservation_1", SKUCode: "A00001", DepotCode: location.DepotCode,
 				PreviousStatus: warehouse_enums.StockReservationStatusReserved, Status: warehouse_enums.StockReservationStatusStaged,
-				RequestedComposition: caseComposition, ReservedComposition: caseComposition, Revision: 4, OccurredAt: now,
+				RequestedComposition: caseComposition, ReservedComposition: caseComposition, Revision: 4,
 			},
 			required: []string{"reservation_id", "previous_status", "status", "requested_composition", "revision"},
 		},
@@ -85,7 +85,7 @@ func TestInventoryEventJSONShapes(t *testing.T) {
 				StagingRecordID: "staging_1", ReservationID: "reservation_1", AllocationID: "allocation_1",
 				OrderNumber: "SO-1", SKUCode: "A00001", SourceLocation: location,
 				DestinationLocation: warehouse.StockLocationRef{DepotCode: location.DepotCode, LocationCode: "SYS-ONLINE-STAGE-AMBIENT"},
-				StagedComposition:   caseComposition, MovementID: "movement_stage", Revision: 1, OccurredAt: now,
+				StagedComposition:   caseComposition, MovementID: "movement_stage", Revision: 1,
 			},
 			required: []string{"staging_record_id", "source_location", "destination_location", "revision"},
 		},
@@ -95,7 +95,7 @@ func TestInventoryEventJSONShapes(t *testing.T) {
 				MovementID: "movement_sale", OrderNumber: "SO-1", DepotCode: location.DepotCode, ReservationID: "reservation_1",
 				AllocationID: "allocation_1", BucketID: "bucket_case", SKUCode: "A00001",
 				LotID: "lot_1", PackageOptionCode: "pkg_case_12", CommittedComposition: caseComposition,
-				InventoryRevision: 5, OccurredAt: now,
+				InventoryRevision: 5,
 			},
 			required: []string{"order_number", "depot_code", "allocation_id", "committed_composition", "inventory_revision"},
 		},
@@ -104,9 +104,18 @@ func TestInventoryEventJSONShapes(t *testing.T) {
 			value: event.InventoryDateMarkThresholdEvent{
 				LotID: "lot_1", SKUCode: "A00001", DepotCode: location.DepotCode,
 				DateMark:  warehouse.InventoryDateMark{Kind: warehouse_enums.InventoryDateMarkBestBefore, DateMarkAt: now, Timezone: "Australia/Melbourne"},
-				Threshold: warehouse_enums.InventoryDateMarkThresholdApproaching, ThresholdAt: now, LotRevision: 3, OccurredAt: now,
+				Threshold: warehouse_enums.InventoryDateMarkThresholdApproaching, ThresholdAt: now, LotRevision: 3,
 			},
 			required: []string{"date_mark", "threshold", "threshold_at", "lot_revision"},
+		},
+		{
+			name: "stock location availability changed",
+			value: event.StockLocationAvailabilityChangedEvent{
+				AssignmentID: "assignment_1", DepotCode: location.DepotCode, LocationCode: location.LocationCode,
+				SKUCode: "A00001", AvailableBeforeBaseUnits: 12, AvailableAfterBaseUnits: 0,
+				Direction: warehouse_enums.StockAvailabilityOutOfStock, Cause: cause, Revision: 4, AsOf: now,
+			},
+			required: []string{"assignment_id", "available_before_base_units", "available_after_base_units", "as_of"},
 		},
 	}
 
@@ -118,8 +127,8 @@ func TestInventoryEventJSONShapes(t *testing.T) {
 					t.Fatalf("%T JSON missing %q: %+v", testCase.value, key, shape)
 				}
 			}
-			if occurredAt, ok := shape["occurred_at"]; ok && occurredAt != "2026-08-04T07:08:09Z" {
-				t.Fatalf("%T occurred_at = %v, want UTC instant", testCase.value, occurredAt)
+			if _, ok := shape["occurred_at"]; ok {
+				t.Fatalf("%T payload must rely on envelope occurred_at: %+v", testCase.value, shape)
 			}
 		})
 	}

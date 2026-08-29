@@ -145,7 +145,7 @@ func TestPackingPickingAndAvailabilityEventJSONShapes(t *testing.T) {
 		SKUCode: "A00001", AvailableBeforeBaseUnits: 12, AvailableAfterBaseUnits: 0,
 		Direction: warehouse_enums.StockAvailabilityOutOfStock,
 		Cause:     operations.InventoryCauseRef{Type: "SALE_COMMIT", ID: "movement_1"},
-		Revision:  8, OccurredAt: now, AsOf: now,
+		Revision:  8, AsOf: now,
 	})
 	if eventShape["direction"] != "OUT_OF_STOCK" || eventShape["revision"] != float64(8) {
 		t.Fatalf("availability event lost direction or revision: %+v", eventShape)

@@ -24,15 +24,17 @@ func TestCatalogBaseCostChangedEventJSONShape(t *testing.T) {
 		SourceType:       "supplier_invoice",
 		SourceID:         "invoice_1",
 		EffectiveFrom:    now,
-		OccurredAt:       now,
 	})
-	for _, key := range []string{"sku_code", "currency", "previous_amount", "amount", "previous_revision", "revision", "effective_from", "occurred_at"} {
+	for _, key := range []string{"sku_code", "currency", "previous_amount", "amount", "previous_revision", "revision", "effective_from"} {
 		if _, ok := shape[key]; !ok {
 			t.Fatalf("base cost changed JSON missing %q: %+v", key, shape)
 		}
 	}
-	if shape["revision"] != float64(5) || shape["occurred_at"] != "2026-08-12T07:08:09Z" {
+	if shape["revision"] != float64(5) {
 		t.Fatalf("base cost changed identity did not marshal: %+v", shape)
+	}
+	if _, ok := shape["occurred_at"]; ok {
+		t.Fatalf("base cost payload must rely on envelope occurred_at: %+v", shape)
 	}
 }
 
@@ -50,7 +52,6 @@ func TestCatalogListingChangedEventCarriesCodeIdentityAndRevision(t *testing.T) 
 		PreviousRevision:       6,
 		Revision:               7,
 		AvailableFrom:          now,
-		OccurredAt:             now,
 	}
 
 	payload, err := json.Marshal(value)
@@ -79,5 +80,8 @@ func TestCatalogListingChangedEventCarriesCodeIdentityAndRevision(t *testing.T) 
 	}
 	if got.Revision != 7 || got.PreviousRevision != 6 || got.ExpiryLeadDaysOverride == nil || *got.ExpiryLeadDaysOverride != 21 {
 		t.Fatalf("listing revision evidence did not round-trip: %+v", got)
+	}
+	if strings.Contains(string(payload), `"occurred_at"`) {
+		t.Fatalf("listing payload must rely on envelope occurred_at: %s", payload)
 	}
 }

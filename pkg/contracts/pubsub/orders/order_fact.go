@@ -10,7 +10,7 @@ import (
 
 // OrderFact is the immutable analytical projection of an order event.
 type OrderFact struct {
-	EventID              string                    `json:"event_id"`
+	FactID               string                    `json:"fact_id"`
 	OrderNumber          string                    `json:"order_number"`
 	RetailCustomerNumber string                    `json:"retail_customer_number,omitempty"`
 	OrganisationAccessID string                    `json:"organisation_access_id,omitempty"`
@@ -23,8 +23,8 @@ type OrderFact struct {
 	// the event belongs to. Empty values provide no geographic evidence; a
 	// consumer that persists a geographically scoped record must fail closed
 	// rather than defaulting them.
-	MarketCode  string                `json:"market_code,omitempty"`
-	CountryCode geography.CountryCode `json:"country_code,omitempty"`
-	DepotCode   string                `json:"depot_code,omitempty"`
-	OccurredAt  time.Time             `json:"occurred_at"`
+	MarketCode     string                `json:"market_code,omitempty"`
+	CountryCode    geography.CountryCode `json:"country_code,omitempty"`
+	DepotCode      string                `json:"depot_code,omitempty"`
+	FactOccurredAt time.Time             `json:"fact_occurred_at"`
 }

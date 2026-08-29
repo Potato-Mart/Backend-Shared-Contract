@@ -21,6 +21,5 @@ type StockLocationAvailabilityChangedEvent struct {
 	ElectronicShelfLabelCode string                                     `json:"electronic_shelf_label_code,omitempty"`
 	Cause                    inventory.InventoryCauseRef                `json:"cause"`
 	Revision                 int64                                      `json:"revision"`
-	OccurredAt               time.Time                                  `json:"occurred_at"`
 	AsOf                     time.Time                                  `json:"as_of"`
 }

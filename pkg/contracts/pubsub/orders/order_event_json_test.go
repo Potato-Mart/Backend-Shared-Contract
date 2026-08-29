@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
 	notification "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pubsub/orders"
@@ -42,5 +43,27 @@ func TestOrderPaidEventQualificationFieldsRoundTrip(t *testing.T) {
 	}
 	if decoded.Subtotal.AmountMinor-decoded.DiscountAmount.AmountMinor != decoded.AmountPaid.AmountMinor {
 		t.Fatalf("subtotal minus discount must reconcile with the amount paid: %+v", decoded)
+	}
+}
+
+func TestOrderFactJSONUsesFactIdentityAndTimestamp(t *testing.T) {
+	fact := notification.OrderFact{
+		FactID: "fact_1", OrderNumber: "SO-1", Status: "paid", ItemCount: 1,
+		Total:          money.Money{AmountMinor: 1000, Currency: "AUD"},
+		FactOccurredAt: time.Date(2026, 8, 30, 1, 2, 3, 0, time.UTC),
+	}
+	payload, err := json.Marshal(fact)
+	if err != nil {
+		t.Fatalf("marshal order fact: %v", err)
+	}
+	for _, want := range []string{`"fact_id":"fact_1"`, `"fact_occurred_at":"2026-08-30T01:02:03Z"`} {
+		if !strings.Contains(string(payload), want) {
+			t.Fatalf("order fact JSON missing %s: %s", want, payload)
+		}
+	}
+	for _, forbidden := range []string{`"event_id"`, `"occurred_at"`} {
+		if strings.Contains(string(payload), forbidden) {
+			t.Fatalf("order fact JSON retained %s: %s", forbidden, payload)
+		}
 	}
 }

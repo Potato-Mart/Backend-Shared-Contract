@@ -32,5 +32,4 @@ type CatalogListingChangedEvent struct {
 	AvailableFrom  time.Time  `json:"available_from"`
 	AvailableUntil *time.Time `json:"available_until,omitempty"`
 	ChangedBy      string     `json:"changed_by,omitempty"`
-	OccurredAt     time.Time  `json:"occurred_at"`
 }

@@ -1,8 +1,6 @@
 package supply
 
 import (
-	"time"
-
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/inventory"
 	warehouse "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse"
 
@@ -27,5 +25,4 @@ type InventoryStockBucketChangedEvent struct {
 	AvailableAfterBaseUnits  int64                                `json:"available_after_base_units"`
 	Cause                    inventory.InventoryCauseRef          `json:"cause"`
 	Revision                 int64                                `json:"revision"`
-	OccurredAt               time.Time                            `json:"occurred_at"`
 }

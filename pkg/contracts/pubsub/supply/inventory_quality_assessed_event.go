@@ -1,8 +1,6 @@
 package supply
 
 import (
-	"time"
-
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse/warehouse_enums"
@@ -21,5 +19,4 @@ type InventoryQualityAssessedEvent struct {
 	ResultDisposition   warehouse_enums.InventoryDisposition `json:"result_disposition"`
 	MovementIDs         []string                             `json:"movement_ids,omitempty"`
 	Revision            int64                                `json:"revision"`
-	OccurredAt          time.Time                            `json:"occurred_at"`
 }

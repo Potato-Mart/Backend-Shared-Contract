@@ -15,5 +15,4 @@ type InventoryLotReceivedEvent struct {
 	MovementID          string                               `json:"movement_id"`
 	LotRevision         int64                                `json:"lot_revision"`
 	ReceivedAt          time.Time                            `json:"received_at"`
-	OccurredAt          time.Time                            `json:"occurred_at"`
 }

@@ -9,7 +9,7 @@ import (
 
 // PaymentFact is the immutable analytical projection of a payment event.
 type PaymentFact struct {
-	EventID     string      `json:"event_id"`
+	FactID      string      `json:"fact_id"`
 	PaymentID   string      `json:"payment_id"`
 	OrderNumber string      `json:"order_number"`
 	Method      string      `json:"method,omitempty"`
@@ -19,7 +19,7 @@ type PaymentFact struct {
 	// belongs to. Empty values provide no geographic evidence; a consumer
 	// that persists a geographically scoped record must fail closed rather
 	// than defaulting them.
-	MarketCode  string                `json:"market_code,omitempty"`
-	CountryCode geography.CountryCode `json:"country_code,omitempty"`
-	OccurredAt  time.Time             `json:"occurred_at"`
+	MarketCode     string                `json:"market_code,omitempty"`
+	CountryCode    geography.CountryCode `json:"country_code,omitempty"`
+	FactOccurredAt time.Time             `json:"fact_occurred_at"`
 }

@@ -10,7 +10,7 @@ import (
 
 // RefundFact is the immutable analytical projection of a refund event.
 type RefundFact struct {
-	EventID     string                     `json:"event_id"`
+	FactID      string                     `json:"fact_id"`
 	RefundID    string                     `json:"refund_id"`
 	OrderNumber string                     `json:"order_number"`
 	Status      string                     `json:"status"`
@@ -20,7 +20,7 @@ type RefundFact struct {
 	// belongs to. Empty values provide no geographic evidence; a consumer
 	// that persists a geographically scoped record must fail closed rather
 	// than defaulting them.
-	MarketCode  string                `json:"market_code,omitempty"`
-	CountryCode geography.CountryCode `json:"country_code,omitempty"`
-	OccurredAt  time.Time             `json:"occurred_at"`
+	MarketCode     string                `json:"market_code,omitempty"`
+	CountryCode    geography.CountryCode `json:"country_code,omitempty"`
+	FactOccurredAt time.Time             `json:"fact_occurred_at"`
 }

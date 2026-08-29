@@ -25,5 +25,4 @@ type CatalogBaseCostChangedEvent struct {
 	SourceType       string      `json:"source_type,omitempty"`
 	SourceID         string      `json:"source_id,omitempty"`
 	EffectiveFrom    time.Time   `json:"effective_from"`
-	OccurredAt       time.Time   `json:"occurred_at"`
 }

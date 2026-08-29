@@ -1,10 +1,6 @@
 package supply
 
-import (
-	"time"
-
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging"
-)
+import "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging"
 
 type InventorySaleCommittedEvent struct {
 	MovementID           string                               `json:"movement_id"`
@@ -18,5 +14,4 @@ type InventorySaleCommittedEvent struct {
 	PackageOptionCode    string                               `json:"package_option_code"`
 	CommittedComposition packaging.PackageCompositionSnapshot `json:"committed_composition"`
 	InventoryRevision    int64                                `json:"inventory_revision"`
-	OccurredAt           time.Time                            `json:"occurred_at"`
 }

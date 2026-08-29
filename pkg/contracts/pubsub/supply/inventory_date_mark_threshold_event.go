@@ -16,5 +16,4 @@ type InventoryDateMarkThresholdEvent struct {
 	Threshold   warehouse_enums.InventoryDateMarkThreshold `json:"threshold"`
 	ThresholdAt time.Time                                  `json:"threshold_at"`
 	LotRevision int64                                      `json:"lot_revision"`
-	OccurredAt  time.Time                                  `json:"occurred_at"`
 }

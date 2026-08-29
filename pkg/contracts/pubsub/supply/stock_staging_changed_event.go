@@ -1,8 +1,6 @@
 package supply
 
 import (
-	"time"
-
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging"
 	warehouse "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse"
 )
@@ -18,5 +16,4 @@ type StockStagingChangedEvent struct {
 	StagedComposition   packaging.PackageCompositionSnapshot `json:"staged_composition"`
 	MovementID          string                               `json:"movement_id"`
 	Revision            int64                                `json:"revision"`
-	OccurredAt          time.Time                            `json:"occurred_at"`
 }
