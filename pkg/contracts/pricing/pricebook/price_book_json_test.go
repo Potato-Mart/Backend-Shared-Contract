@@ -9,8 +9,8 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/commerce/commerce_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/market/market_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/product/product_enums"
 )
 
 func TestPriceBookOwnsCurrencyChannelAudienceAndPolicies(t *testing.T) {
@@ -18,7 +18,7 @@ func TestPriceBookOwnsCurrencyChannelAudienceAndPolicies(t *testing.T) {
 	payload, err := json.Marshal(PriceBook{
 		ID: "book_au_online", Code: "AU_ONLINE", Name: "AU online", MarketCode: "market_au",
 		Currency: "AUD", CurrencyExponent: money.CurrencyExponent{Currency: "AUD", Exponent: 2},
-		Channel: commerce_enums.OrderTypeOnline, Audience: product_enums.PriceAudienceRetail,
+		Channel: commerce_enums.OrderTypeOnline, Audience: market_enums.PriceAudienceRetail,
 		TaxInclusion: pricebook_enums.PriceTaxInclusionInclusive,
 		PriceEnding:  pricebook_enums.PriceEndingPolicyCharmNine,
 		Status:       pricebook_enums.PriceBookStatusActive,

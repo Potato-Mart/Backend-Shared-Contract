@@ -15,12 +15,13 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/commerce/commerce_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/measurement"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/market/market_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/pricebook"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/product/product_enums"
 )
 
 type canonicalProductField struct {
@@ -64,7 +65,7 @@ func TestSellingPriceExcludesPriceBookAdministration(t *testing.T) {
 		"CurrencyExponent": {json: "currency_exponent", typeOf: reflect.TypeOf(money.CurrencyExponent{})},
 		"MarketCode":       {json: "market_code", typeOf: reflect.TypeOf("")},
 		"Channel":          {json: "channel", typeOf: reflect.TypeOf(commerce_enums.OrderType(""))},
-		"Audience":         {json: "audience", typeOf: reflect.TypeOf(product_enums.PriceAudience(""))},
+		"Audience":         {json: "audience", typeOf: reflect.TypeOf(market_enums.PriceAudience(""))},
 		"PriceVisibility":  {json: "price_visibility", typeOf: reflect.TypeOf(pricebook_enums.PriceVisibility(""))},
 		"TaxInclusion":     {json: "tax_inclusion", typeOf: reflect.TypeOf(pricebook_enums.PriceTaxInclusion(""))},
 		"ValidFrom":        {json: "valid_from", typeOf: reflect.TypeOf(time.Time{})},
@@ -89,7 +90,7 @@ func TestPricebookNeverImportsParentProductPackage(t *testing.T) {
 			return parseErr
 		}
 		for _, imported := range file.Imports {
-			if strings.Trim(imported.Path.Value, `"`) == "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/product" {
+			if strings.Trim(imported.Path.Value, `"`) == "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/product" {
 				violations = append(violations, relativePkgPath(t, pkgRoot, path)+": Pricebook imports parent Product package")
 			}
 		}

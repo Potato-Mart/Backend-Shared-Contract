@@ -1,0 +1,152 @@
+package supply_test
+
+import (
+	"encoding/json"
+
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pubsub/supply"
+	operations "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse"
+
+	"testing"
+	"time"
+
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse/warehouse_enums"
+)
+
+func TestInventoryEventJSONShapes(t *testing.T) {
+	now := time.Date(2026, 8, 4, 7, 8, 9, 0, time.UTC)
+	caseComposition := composition(packaging_enums.PackageHandlingUnitCase, "pkg_case_12", 1, 12)
+	eachComposition := composition(packaging_enums.PackageHandlingUnitEach, "pkg_each", 12, 1)
+	cause := operations.InventoryCauseRef{Type: "SALE_COMMIT", ID: "movement_1"}
+	location := warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01-03"}
+
+	cases := []struct {
+		name     string
+		value    any
+		required []string
+	}{
+		{
+			name: "lot received",
+			value: event.InventoryLotReceivedEvent{
+				LotID: "lot_1", SKUCode: "A00001", DepotCode: location.DepotCode,
+				DestinationBucketID: "bucket_case", ReceivedComposition: caseComposition,
+				MovementID: "movement_receipt", LotRevision: 2, ReceivedAt: now, OccurredAt: now,
+			},
+			required: []string{"lot_id", "received_composition", "lot_revision", "occurred_at"},
+		},
+		{
+			name: "bucket changed",
+			value: event.InventoryStockBucketChangedEvent{
+				BucketID: "bucket_case", Location: location, SKUCode: "A00001", LotID: "lot_1",
+				PackageOptionCode: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase,
+				Condition: warehouse_enums.InventoryConditionGood, Disposition: warehouse_enums.InventoryDispositionStandardSellable,
+				OnHandBeforeBaseUnits: 12, OnHandAfterBaseUnits: 0, AvailableBeforeBaseUnits: 12,
+				AvailableAfterBaseUnits: 0, Cause: cause, Revision: 3, OccurredAt: now,
+			},
+			required: []string{"bucket_id", "location", "available_before_base_units", "available_after_base_units", "revision"},
+		},
+		{
+			name: "package converted",
+			value: event.InventoryPackageConvertedEvent{
+				MovementID: "movement_conversion", SKUCode: "A00001", DepotCode: location.DepotCode, LotID: "lot_1",
+				SourceBucketID: "bucket_case", DestinationBucketID: "bucket_each",
+				SourcePackageOptionCode: "pkg_case_12", DestinationPackageOptionCode: "pkg_each",
+				BaseUnits: 12, SourcePackageComposition: caseComposition, DestinationPackageComposition: eachComposition,
+				SourceBucketRevision: 4, DestinationBucketRevision: 2, OccurredAt: now,
+			},
+			required: []string{"depot_code", "source_bucket_id", "destination_bucket_id", "source_bucket_revision", "destination_bucket_revision", "occurred_at"},
+		},
+		{
+			name: "quality assessed",
+			value: event.InventoryQualityAssessedEvent{
+				QualityAssessmentID: "assessment_1", SKUCode: "A00001", DepotCode: location.DepotCode, BucketID: "bucket_each",
+				AssessedComposition: eachComposition, PreviousCondition: warehouse_enums.InventoryConditionGood,
+				ResultCondition:     warehouse_enums.InventoryConditionPackagingDamagedMinor,
+				PreviousDisposition: warehouse_enums.InventoryDispositionStandardSellable,
+				ResultDisposition:   warehouse_enums.InventoryDispositionReducedSellable,
+				MovementIDs:         []string{"movement_quality"}, Revision: 2, OccurredAt: now,
+			},
+			required: []string{"quality_assessment_id", "depot_code", "previous_condition", "result_disposition", "revision"},
+		},
+		{
+			name: "reservation changed",
+			value: event.InventoryReservationChangedEvent{
+				ReservationID: "reservation_1", SKUCode: "A00001", DepotCode: location.DepotCode,
+				PreviousStatus: warehouse_enums.StockReservationStatusReserved, Status: warehouse_enums.StockReservationStatusStaged,
+				RequestedComposition: caseComposition, ReservedComposition: caseComposition, Revision: 4, OccurredAt: now,
+			},
+			required: []string{"reservation_id", "previous_status", "status", "requested_composition", "revision"},
+		},
+		{
+			name: "staging changed",
+			value: event.StockStagingChangedEvent{
+				StagingRecordID: "staging_1", ReservationID: "reservation_1", AllocationID: "allocation_1",
+				OrderNumber: "SO-1", SKUCode: "A00001", SourceLocation: location,
+				DestinationLocation: warehouse.StockLocationRef{DepotCode: location.DepotCode, LocationCode: "SYS-ONLINE-STAGE-AMBIENT"},
+				StagedComposition:   caseComposition, MovementID: "movement_stage", Revision: 1, OccurredAt: now,
+			},
+			required: []string{"staging_record_id", "source_location", "destination_location", "revision"},
+		},
+		{
+			name: "sale committed",
+			value: event.InventorySaleCommittedEvent{
+				MovementID: "movement_sale", OrderNumber: "SO-1", DepotCode: location.DepotCode, ReservationID: "reservation_1",
+				AllocationID: "allocation_1", BucketID: "bucket_case", SKUCode: "A00001",
+				LotID: "lot_1", PackageOptionCode: "pkg_case_12", CommittedComposition: caseComposition,
+				InventoryRevision: 5, OccurredAt: now,
+			},
+			required: []string{"order_number", "depot_code", "allocation_id", "committed_composition", "inventory_revision"},
+		},
+		{
+			name: "date mark threshold",
+			value: event.InventoryDateMarkThresholdEvent{
+				LotID: "lot_1", SKUCode: "A00001", DepotCode: location.DepotCode,
+				DateMark:  warehouse.InventoryDateMark{Kind: warehouse_enums.InventoryDateMarkBestBefore, DateMarkAt: now, Timezone: "Australia/Melbourne"},
+				Threshold: warehouse_enums.InventoryDateMarkThresholdApproaching, ThresholdAt: now, LotRevision: 3, OccurredAt: now,
+			},
+			required: []string{"date_mark", "threshold", "threshold_at", "lot_revision"},
+		},
+	}
+
+	for _, testCase := range cases {
+		t.Run(testCase.name, func(t *testing.T) {
+			shape := marshalObject(t, testCase.value)
+			for _, key := range testCase.required {
+				if _, ok := shape[key]; !ok {
+					t.Fatalf("%T JSON missing %q: %+v", testCase.value, key, shape)
+				}
+			}
+			if occurredAt, ok := shape["occurred_at"]; ok && occurredAt != "2026-08-04T07:08:09Z" {
+				t.Fatalf("%T occurred_at = %v, want UTC instant", testCase.value, occurredAt)
+			}
+		})
+	}
+}
+
+func composition(unit packaging_enums.PackageHandlingUnit, optionID string, count, unitsPerPackage int64) packaging.PackageCompositionSnapshot {
+	return packaging.PackageCompositionSnapshot{
+		TotalBaseUnits: count * unitsPerPackage,
+		Components: []packaging.PackageComponentSnapshot{{
+			PackageOptionCode: optionID,
+			HandlingUnit:      unit,
+			PackageCount:      count,
+			UnitsPerPackage:   unitsPerPackage,
+			BaseUnits:         count * unitsPerPackage,
+		}},
+	}
+}
+
+func marshalObject(t *testing.T, value any) map[string]any {
+	t.Helper()
+	payload, err := json.Marshal(value)
+	if err != nil {
+		t.Fatalf("marshal %T: %v", value, err)
+	}
+	var object map[string]any
+	if err := json.Unmarshal(payload, &object); err != nil {
+		t.Fatalf("unmarshal %T: %v", value, err)
+	}
+	return object
+}

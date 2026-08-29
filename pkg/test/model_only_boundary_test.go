@@ -61,7 +61,7 @@ var modelBoundaryForbiddenImportPrefixes = []string{
 	"net/http",
 }
 
-const eventEnvelopeSource = "contracts/pubsub/envelop/event_envelope.go"
+const eventEnvelopeSource = "contracts/pubsub/envelope/event_envelope.go"
 
 var providerMetadataForbiddenSources = map[string]struct{}{
 	"contracts/payments/settlement/settlement.go":         {},
@@ -159,7 +159,7 @@ func modelBoundaryInspectProductionFile(fset *token.FileSet, file *ast.File, nor
 }
 
 func modelBoundaryIsLeafEnumFile(normalized string) bool {
-	return strings.HasSuffix(filepath.Base(filepath.Dir(normalized)), "_enums")
+	return strings.HasSuffix(filepath.Base(filepath.Dir(normalized)), "_enums") || strings.HasPrefix(filepath.ToSlash(normalized), "contracts/pubsub/routing/")
 }
 
 func modelBoundaryJSONImportAliases(fset *token.FileSet, file *ast.File, normalized string, violations *[]string) map[string]struct{} {

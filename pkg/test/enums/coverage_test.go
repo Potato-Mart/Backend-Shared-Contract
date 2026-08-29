@@ -11,15 +11,16 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging/packaging_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security/security_enums"
+	group_enums "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/group/group_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/wholesale/wholesale_enums"
-	insights_marketing_enums "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/insights/marketing/marketing_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/marketing/campaign/campaign_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/pos/pos_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/payment/payment_enums"
+	pos_enums "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/register/register_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/benefit/benefit_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/membership/membership_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pubsub/event/event_enums"
+	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pubsub/routing"
+	insights_marketing_enums "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/forecasting/marketing_enums"
 )
 
 func TestEnumCoverageIncludesEveryStringEnum(t *testing.T) {
@@ -42,7 +43,7 @@ func TestAdditionalEnumValues(t *testing.T) {
 		{name: "insights.CampaignPredictionStatus", valid: []stringEnum{insights_marketing_enums.CampaignPredictionStatusNotApplicable, insights_marketing_enums.CampaignPredictionStatusReady, insights_marketing_enums.CampaignPredictionStatusWarning}, invalid: insights_marketing_enums.CampaignPredictionStatus("__invalid__")},
 		{name: "insights.CampaignPredictionSource", valid: []stringEnum{insights_marketing_enums.CampaignPredictionSourceSameSeries, insights_marketing_enums.CampaignPredictionSourceSimilarEvent, insights_marketing_enums.CampaignPredictionSourceLast14DaysDoubled}, invalid: insights_marketing_enums.CampaignPredictionSource("__invalid__")},
 		{name: "wholesale.WholesaleApplicationStatus", valid: []stringEnum{wholesale_enums.WholesaleApplicationStatusPending, wholesale_enums.WholesaleApplicationStatusApproved, wholesale_enums.WholesaleApplicationStatusRejected}, invalid: wholesale_enums.WholesaleApplicationStatus("__invalid__")},
-		{name: "wholesale.GroupOrderManagerApplicationStatus", valid: []stringEnum{wholesale_enums.GroupOrderManagerApplicationStatusPending, wholesale_enums.GroupOrderManagerApplicationStatusApproved, wholesale_enums.GroupOrderManagerApplicationStatusRejected, wholesale_enums.GroupOrderManagerApplicationStatusCancelled}, invalid: wholesale_enums.GroupOrderManagerApplicationStatus("__invalid__")},
+		{name: "wholesale.GroupOrderManagerApplicationStatus", valid: []stringEnum{group_enums.GroupOrderManagerApplicationStatusPending, group_enums.GroupOrderManagerApplicationStatusApproved, group_enums.GroupOrderManagerApplicationStatusRejected, group_enums.GroupOrderManagerApplicationStatusCancelled}, invalid: group_enums.GroupOrderManagerApplicationStatus("__invalid__")},
 		{name: "order.CustomerOrderBucket", valid: []stringEnum{order_enums.CustomerOrderBucketCurrent, order_enums.CustomerOrderBucketCompleted, order_enums.CustomerOrderBucketCancelled, order_enums.CustomerOrderBucketRefunded}, invalid: order_enums.CustomerOrderBucket("__invalid__")},
 		{name: "pos.SessionStatus", valid: []stringEnum{pos_enums.SessionStatusOpen, pos_enums.SessionStatusClosed}, invalid: pos_enums.SessionStatus("__invalid__")},
 		{name: "pos.CashMovementKind", valid: []stringEnum{pos_enums.CashMovementKindCashIn, pos_enums.CashMovementKindCashOut, pos_enums.CashMovementKindFloatAdjustment, pos_enums.CashMovementKindDrop}, invalid: pos_enums.CashMovementKind("__invalid__")},

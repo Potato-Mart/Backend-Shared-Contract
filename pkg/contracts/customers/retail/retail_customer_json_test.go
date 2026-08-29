@@ -10,11 +10,13 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/preference"
+	preference_enums "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/preference/preference_enums"
 	customers "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/retail"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/retail/retail_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notifications/notification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notification/core/notification_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/shipping"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pubsub/event"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pubsub/notification"
 )
 
 func TestRetailCustomerJSONShape(t *testing.T) {
@@ -143,10 +145,10 @@ func TestRetailCustomerReceiptPreferencesJSONShape(t *testing.T) {
 		BasicInfo: customers.RetailCustomerBasicInfo{
 			Name:                   party.PersonName{DisplayName: "Retail Customer"},
 			Contacts:               party.ContactChannels{Email: "retail@example.com"},
-			PreferredContactMethod: retail_enums.PreferredContactMethodPhone,
+			PreferredContactMethod: preference_enums.PreferredContactMethodPhone,
 		},
-		ReceiptPreferences: &customers.RetailCustomerReceiptPreferences{
-			Formats:   []retail_enums.ReceiptFormat{retail_enums.ReceiptFormatElectronic, retail_enums.ReceiptFormatPaper},
+		ReceiptPreferences: &preference.RetailCustomerReceiptPreferences{
+			Formats:   []preference_enums.ReceiptFormat{preference_enums.ReceiptFormatElectronic, preference_enums.ReceiptFormatPaper},
 			UpdatedAt: &electedAt,
 			Source:    "account_preferences",
 		},
@@ -172,9 +174,9 @@ func TestRetailCustomerReceiptPreferencesJSONShape(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal retail customer receipt preferences: %v", err)
 	}
-	if decoded.BasicInfo.PreferredContactMethod != retail_enums.PreferredContactMethodPhone ||
+	if decoded.BasicInfo.PreferredContactMethod != preference_enums.PreferredContactMethodPhone ||
 		decoded.ReceiptPreferences == nil || len(decoded.ReceiptPreferences.Formats) != 2 ||
-		decoded.ReceiptPreferences.Formats[1] != retail_enums.ReceiptFormatPaper ||
+		decoded.ReceiptPreferences.Formats[1] != preference_enums.ReceiptFormatPaper ||
 		decoded.ReceiptPreferences.UpdatedAt == nil || !decoded.ReceiptPreferences.UpdatedAt.Equal(electedAt) {
 		t.Fatalf("receipt preferences did not round-trip: %+v", decoded.ReceiptPreferences)
 	}
@@ -182,8 +184,8 @@ func TestRetailCustomerReceiptPreferencesJSONShape(t *testing.T) {
 	summary := customers.RetailCustomerSummary{
 		ID:     "retail_123",
 		Status: retail_enums.CustomerStatusActive,
-		ReceiptPreferences: &customers.RetailCustomerReceiptPreferences{
-			Formats: []retail_enums.ReceiptFormat{retail_enums.ReceiptFormatElectronic},
+		ReceiptPreferences: &preference.RetailCustomerReceiptPreferences{
+			Formats: []preference_enums.ReceiptFormat{preference_enums.ReceiptFormatElectronic},
 		},
 	}
 	summaryPayload, err := json.Marshal(summary)

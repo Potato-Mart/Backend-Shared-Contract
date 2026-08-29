@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pubsub/event/event_enums"
+	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pubsub/routing"
 )
 
 // eventSchemaVersion2Payloads is the reviewed set of routed Pub/Sub payloads
@@ -129,7 +129,7 @@ func eventSchemaVersion2Section(t *testing.T) string {
 
 func routedEventPayloadTypes(t *testing.T) map[string]struct{} {
 	t.Helper()
-	root := filepath.Join(sharedContractPkgRoot(t), "contracts", "pubsub", "event")
+	root := filepath.Join(sharedContractPkgRoot(t), "contracts", "pubsub")
 	declared := make(map[string]struct{})
 	err := filepath.WalkDir(root, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {
@@ -138,7 +138,11 @@ func routedEventPayloadTypes(t *testing.T) map[string]struct{} {
 		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".go") || strings.HasSuffix(entry.Name(), "_test.go") {
 			return nil
 		}
-		if filepath.Dir(path) != root {
+		relative, relErr := filepath.Rel(root, filepath.Dir(path))
+		if relErr != nil {
+			return relErr
+		}
+		if relative == "envelope" || relative == "routing" || strings.HasPrefix(relative, "envelope"+string(filepath.Separator)) || strings.HasPrefix(relative, "routing"+string(filepath.Separator)) {
 			return nil
 		}
 		fset := token.NewFileSet()

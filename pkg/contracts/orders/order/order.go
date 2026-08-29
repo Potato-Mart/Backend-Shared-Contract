@@ -12,6 +12,9 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/party"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/buyer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/group_order"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/shipping"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/order/order_enums"
@@ -40,12 +43,12 @@ type Order struct {
 	FulfillmentStatus order_enums.FulfillmentStatus `json:"fulfillment_status"`
 	Customer          party.PartyRef                `json:"customer"`
 
-	Buyer                *BuyerContext                       `json:"buyer,omitempty"`
-	FulfilmentLocation   shipping.FulfilmentLocationSnapshot `json:"fulfilment_location"`
-	GroupOrder           *GroupOrderContext                  `json:"group_order,omitempty"`
-	GroupOrderFulfilment *GroupOrderFulfilmentPlan           `json:"group_order_fulfilment,omitempty"`
-	Items                []OrderItem                         `json:"items"`
-	SourceDevice         SourceDevice                        `json:"source_device,omitempty"`
+	Buyer                *buyer.BuyerContext                   `json:"buyer,omitempty"`
+	FulfilmentLocation   shipping.FulfilmentLocationSnapshot   `json:"fulfilment_location"`
+	GroupOrder           *group_order.GroupOrderContext        `json:"group_order,omitempty"`
+	GroupOrderFulfilment *group_order.GroupOrderFulfilmentPlan `json:"group_order_fulfilment,omitempty"`
+	Items                []OrderItem                           `json:"items"`
+	SourceDevice         SourceDevice                          `json:"source_device,omitempty"`
 
 	// ── Shipping & billing ────────────────────────────────────────────
 	Billing          *party.ContactAddress           `json:"billing,omitempty"`
@@ -88,7 +91,7 @@ type Order struct {
 	GiftCardRedemptions   []GiftCardRedemptionSnapshot     `json:"gift_card_redemptions,omitempty"`
 	TrackingNumber        string                           `json:"tracking_number,omitempty"`
 	TrackingURL           string                           `json:"tracking_url,omitempty"`
-	Packing               *OrderPackingProgress            `json:"packing,omitempty"`
+	Packing               *fulfilment.OrderPackingProgress `json:"packing,omitempty"`
 	PackingRevision       int64                            `json:"packing_revision,omitempty"`
 	FulfillmentReadiness  order_enums.FulfillmentReadiness `json:"fulfillment_readiness"`
 	CustomerNote          string                           `json:"customer_note,omitempty"`

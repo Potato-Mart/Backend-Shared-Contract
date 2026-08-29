@@ -23,18 +23,22 @@ var expectedEnumPackages = []string{
 	"contracts/common/identity/identity_enums",
 	"contracts/common/packaging/packaging_enums",
 	"contracts/common/security/security_enums",
+	"contracts/customers/group/group_enums",
+	"contracts/customers/preference/preference_enums",
 	"contracts/customers/retail/retail_enums",
 	"contracts/customers/wholesale/wholesale_enums",
 	"contracts/identity/access/access_enums",
 	"contracts/identity/account/account_enums",
-	"contracts/identity/role/role_enums",
+	"contracts/identity/authorisation/role_enums",
 	"contracts/insights/analytics/analytics_enums",
-	"contracts/insights/marketing/marketing_enums",
+	"contracts/supply/forecasting/marketing_enums",
 	"contracts/marketing/campaign/campaign_enums",
 	"contracts/marketing/message/message_enums",
-	"contracts/notifications/notification_enums",
+	"contracts/notification/core/notification_enums",
 	"contracts/orders/order/order_enums",
-	"contracts/orders/pos/pos_enums",
+	"contracts/orders/group_order/group_order_enums",
+	"contracts/orders/subscription/subscription_enums",
+	"contracts/payments/register/register_enums",
 	"contracts/orders/shipping/shipping_enums",
 	"contracts/payments/payment/payment_enums",
 	"contracts/payments/settlement/settlement_enums",
@@ -46,15 +50,15 @@ var expectedEnumPackages = []string{
 	"contracts/pricing/promotion/promotion_enums",
 	"contracts/pricing/quote/quote_enums",
 	"contracts/pricing/wallet/wallet_enums",
-	"contracts/pubsub/event/event_enums",
-	"contracts/supply/classification/classification_enums",
-	"contracts/supply/import_compliance/import_compliance_enums",
-	"contracts/supply/listing/listing_enums",
-	"contracts/supply/product/product_enums",
-	"contracts/supply/purchase/purchase_enums",
-	"contracts/customers/review/review_enums",
+	"contracts/supply/catalogue/classification/classification_enums",
+	"contracts/supply/catalogue/favourite/favourite_enums",
+	"contracts/supply/catalogue/listing/listing_enums",
+	"contracts/supply/catalogue/product/product_enums",
+	"contracts/supply/catalogue/review/review_enums",
+	"contracts/supply/catalogue/wish/wish_enums",
+	"contracts/supply/compliance/compliance_enums",
+	"contracts/supply/procurement/purchase_enums",
 	"contracts/supply/warehouse/warehouse_enums",
-	"contracts/supply/wish/wish_enums",
 }
 
 // TestPkgTreeContainsOnlyContractsAndRepositoryGates keeps release
@@ -97,7 +101,7 @@ func TestRetiredReviewPackageIsAbsent(t *testing.T) {
 		t.Fatalf("inspect retired Review package directory: %v", err)
 	}
 
-	canonicalReviewRoot := filepath.Join(pkgRoot, "contracts", "customers", "review")
+	canonicalReviewRoot := filepath.Join(pkgRoot, "contracts", "supply", "catalogue", "review")
 	if info, err := os.Stat(canonicalReviewRoot); err != nil {
 		t.Fatalf("canonical Review package directory is missing: %v", err)
 	} else if !info.IsDir() {

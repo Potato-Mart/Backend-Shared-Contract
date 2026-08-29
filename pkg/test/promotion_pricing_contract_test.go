@@ -17,14 +17,14 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
 	order "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/pos"
+	pos "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/receipt"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/pricebook/pricebook_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/promotion"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/promotion/promotion_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/quote"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/quote/quote_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/listing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/operations"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/listing"
+	operations "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/inventory"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse/warehouse_enums"
 )

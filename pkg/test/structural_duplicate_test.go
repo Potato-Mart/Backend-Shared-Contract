@@ -20,8 +20,8 @@ import (
 // copy-and-paste models and stale exceptions fail this repository gate.
 var allowedStructuralDuplicateGroups = []string{
 	"common/geometry.Rotation3|common/geometry.Vector3",
-	"pricing/wallet.CouponContent|supply/classification.SupplierAvailablePromotion",
-	"supply/classification.BrandRef|supply/classification.CategoryTagRef|supply/classification.CollectionRef|supply/classification.ObjectMediaRef|supply/classification.ProductSupplierRef",
+	"pricing/coupon.CouponContent|supply/catalogue/classification.SupplierAvailablePromotion",
+	"supply/catalogue/classification.BrandRef|supply/catalogue/classification.CategoryTagRef|supply/catalogue/classification.CollectionRef|supply/catalogue/classification.ObjectMediaRef|supply/catalogue/classification.ProductSupplierRef",
 }
 
 func TestProductionStructLayoutsHaveNoUnreviewedDuplicates(t *testing.T) {

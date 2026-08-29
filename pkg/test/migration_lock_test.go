@@ -11,17 +11,18 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/cart"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/pos"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pubsub/event/event_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/purchase"
+	pos "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/receipt"
+	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pubsub/routing"
+	purchase "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/procurement"
 )
 
 // TestTransactionEvidenceUsesOneImmutableSKUCode keeps one business key on
 // every transaction-evidence model.
 func TestTransactionEvidenceUsesOneImmutableSKUCode(t *testing.T) {
 	for _, model := range []reflect.Type{
-		reflect.TypeOf(order.CartItem{}),
+		reflect.TypeOf(cart.CartItem{}),
 		reflect.TypeOf(order.OrderItem{}),
 		reflect.TypeOf(order.OrderLineSummary{}),
 		reflect.TypeOf(pos.ReceiptLine{}),

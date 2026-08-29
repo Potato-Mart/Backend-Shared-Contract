@@ -11,8 +11,8 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/commerce/commerce_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/market/market_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/product/product_enums"
 )
 
 // PriceBook is one pricing context inside exactly one market. It owns the
@@ -27,7 +27,7 @@ type PriceBook struct {
 	Currency         money.CurrencyCode                `json:"currency"`
 	CurrencyExponent money.CurrencyExponent            `json:"currency_exponent"`
 	Channel          commerce_enums.OrderType          `json:"channel"`
-	Audience         product_enums.PriceAudience       `json:"audience"`
+	Audience         market_enums.PriceAudience        `json:"audience"`
 	TaxInclusion     pricebook_enums.PriceTaxInclusion `json:"tax_inclusion"`
 	PriceEnding      pricebook_enums.PriceEndingPolicy `json:"price_ending"`
 	Status           pricebook_enums.PriceBookStatus   `json:"status"`

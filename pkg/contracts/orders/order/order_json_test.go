@@ -8,6 +8,8 @@ import (
 
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/cart"
+	orderfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/fulfilment"
 	sales "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/order"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/commerce/commerce_enums"
@@ -16,12 +18,11 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging/packaging_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/party"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/shipping"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/payment/payment_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/wallet_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/product"
+	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/fulfilment"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
@@ -88,7 +89,7 @@ func TestOrderJSONOmitsEmptyHistory(t *testing.T) {
 }
 
 func TestLineItemsUsePackageComponentsAndRequireOrderItemID(t *testing.T) {
-	cartPayload, err := json.Marshal(sales.CartItem{TotalBaseUnits: 1})
+	cartPayload, err := json.Marshal(cart.CartItem{TotalBaseUnits: 1})
 	if err != nil {
 		t.Fatalf("marshal cart item: %v", err)
 	}
@@ -123,13 +124,13 @@ func TestCartAndOrderItemsFreezeDirectProductFacts(t *testing.T) {
 		IsCanonical: true, IsActive: true, EffectiveFrom: capturedAt,
 	}
 	image := &security.ObjectMedia{Code: "media_1", URL: "https://cdn.example.test/products/A00001.png"}
-	cartItem := sales.CartItem{
+	cartItem := cart.CartItem{
 		SKUCode:              "A00001",
 		ProductName:          "Washed potatoes",
 		ProductImage:         image,
 		ProductPackageOption: packageOption,
 		CapturedAt:           capturedAt,
-		Components:           []sales.PricedPackageComponent{},
+		Components:           []orderfulfilment.PricedPackageComponent{},
 	}
 	orderItem := sales.OrderItem{
 		ID:                   "item_1",
@@ -138,7 +139,7 @@ func TestCartAndOrderItemsFreezeDirectProductFacts(t *testing.T) {
 		ProductImage:         image,
 		ProductPackageOption: packageOption,
 		CapturedAt:           capturedAt,
-		Components:           []sales.PricedPackageComponent{},
+		Components:           []orderfulfilment.PricedPackageComponent{},
 	}
 
 	for name, value := range map[string]any{"cart": cartItem, "order": orderItem} {
@@ -162,7 +163,7 @@ func TestCartAndOrderItemsFreezeDirectProductFacts(t *testing.T) {
 		})
 	}
 
-	var decodedCart sales.CartItem
+	var decodedCart cart.CartItem
 	cartPayload, err := json.Marshal(cartItem)
 	if err != nil {
 		t.Fatalf("marshal cart item: %v", err)
@@ -194,12 +195,12 @@ func TestOrderJSONRoundTripsPackingProgress(t *testing.T) {
 		ID:                "ord_pack",
 		OrderNumber:       "MAMA260709ABC123",
 		FulfillmentStatus: order_enums.FulfillmentStatusPacking,
-		Packing: &sales.OrderPackingProgress{
+		Packing: &orderfulfilment.OrderPackingProgress{
 			Status:    order_enums.FulfillmentStatusPacking,
 			Operator:  "packer@example.test",
 			StartedAt: &startedAt,
 			UpdatedAt: &updatedAt,
-			Lines: []operations.PackingLine{
+			Lines: []supplyfulfilment.PackingLine{
 				{
 					ID:                   "pack_line_1",
 					OrderItemID:          "item_1",
@@ -211,8 +212,8 @@ func TestOrderJSONRoundTripsPackingProgress(t *testing.T) {
 					PackedComposition:    packaging.PackageCompositionSnapshot{TotalBaseUnits: 3},
 				},
 			},
-			Containers: []operations.OutboundContainerPlan{{ID: "container_1", ContainerCode: "OUT-1", StorageType: classification_enums.StorageAmbient, UpdatedAt: updatedAt}},
-			Damages: []operations.PackingDamage{
+			Containers: []supplyfulfilment.OutboundContainerPlan{{ID: "container_1", ContainerCode: "OUT-1", StorageType: classification_enums.StorageAmbient, UpdatedAt: updatedAt}},
+			Damages: []supplyfulfilment.PackingDamage{
 				{
 					ID:                  "damage_1",
 					SKUCode:             "A00001",
@@ -223,7 +224,7 @@ func TestOrderJSONRoundTripsPackingProgress(t *testing.T) {
 					CreatedAt:           updatedAt,
 				},
 			},
-			Discrepancies: []shipping.PackingDiscrepancy{
+			Discrepancies: []supplyfulfilment.PackingDiscrepancy{
 				{
 					ID:                   "disc_1",
 					OrderNumber:          "MAMA260709ABC123",
