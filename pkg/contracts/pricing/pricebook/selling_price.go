@@ -3,10 +3,10 @@ package pricebook
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/market/market_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/pricebook/pricebook_enums"
 )
 
 // SellingPrice is the customer-safe market-scoped price snapshot that may be
@@ -17,7 +17,7 @@ type SellingPrice struct {
 	CurrencyExponent money.CurrencyExponent            `json:"currency_exponent"`
 	MarketCode       string                            `json:"market_code"`
 	Channel          commerce_enums.OrderType          `json:"channel"`
-	Audience         product_enums.PriceAudience       `json:"audience"`
+	Audience         market_enums.PriceAudience        `json:"audience"`
 	PriceVisibility  pricebook_enums.PriceVisibility   `json:"price_visibility"`
 	TaxInclusion     pricebook_enums.PriceTaxInclusion `json:"tax_inclusion"`
 	ValidFrom        time.Time                         `json:"valid_from"`

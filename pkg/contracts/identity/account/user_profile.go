@@ -3,10 +3,10 @@ package account
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/audit"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/identity/access"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/identity/account/account_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/identity/access"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/identity/account/account_enums"
 )
 
 // UserProfile is the public projection of a canonical user. Secret fields such
@@ -36,4 +36,5 @@ type UserProfile struct {
 	AccessReviewedAt  *time.Time `json:"access_reviewed_at,omitempty"`
 
 	audit.AuditFields
+	security.DataProtectionFields
 }

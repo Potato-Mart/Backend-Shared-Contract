@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography/geography_enums"
 )
 
 func TestAddressUsesTypedGeographyJSON(t *testing.T) {

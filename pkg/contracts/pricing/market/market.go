@@ -6,10 +6,10 @@
 package market
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pricing/market/market_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/market/market_enums"
 )
 
 // Market is a commercial selling region owned by Pricing. ID is the stable

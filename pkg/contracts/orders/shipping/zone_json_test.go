@@ -6,7 +6,8 @@ import (
 	"testing"
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
 )
 
 func TestZoneUsesTypedGeographicCoverage(t *testing.T) {
@@ -17,7 +18,7 @@ func TestZoneUsesTypedGeographicCoverage(t *testing.T) {
 		AdministrativeAreaCodes: []geography.SubdivisionCode{"AU-NSW"},
 		PostalCodes:             []string{"2000"},
 		IsActive:                true,
-		CreatedAt:               time.Date(2026, 8, 1, 0, 0, 0, 0, time.UTC),
+		AuditFields:             audit.AuditFields{CreatedAt: time.Date(2026, 8, 1, 0, 0, 0, 0, time.UTC), UpdatedAt: time.Date(2026, 8, 1, 0, 0, 0, 0, time.UTC)},
 	})
 	if err != nil {
 		t.Fatalf("marshal shipping zone: %v", err)

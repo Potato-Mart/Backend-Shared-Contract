@@ -1,6 +1,6 @@
 package geography
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography/geography_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography/geography_enums"
 
 // GeographicTarget names one inclusive target in the geographic hierarchy.
 type GeographicTarget struct {

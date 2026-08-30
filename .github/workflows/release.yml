@@ -74,7 +74,7 @@ jobs:
       - name: Test contracts
         env:
           GOWORK: off
-        run: go test ./...
+        run: go test -count=1 ./...
 
       - name: Ensure immutable annotated version tag
         env:

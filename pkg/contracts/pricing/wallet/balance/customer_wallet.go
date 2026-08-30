@@ -1,0 +1,18 @@
+package balance
+
+import (
+	"time"
+
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
+)
+
+// CustomerWallet is the retail read model of every value instrument held by a
+// customer. Its per-instrument ledgers remain authoritative.
+type CustomerWallet struct {
+	CustomerNumber string                `json:"customer_number"`
+	Instruments    []WalletInstrument    `json:"instruments,omitempty"`
+	Summary        CustomerWalletSummary `json:"summary"`
+	CalculatedAt   time.Time             `json:"calculated_at"`
+
+	security.DataProtectionFields
+}

@@ -3,7 +3,7 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 )
 
 // DepotMarket associates one physical depot with one commercial market. A

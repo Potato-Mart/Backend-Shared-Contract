@@ -282,8 +282,9 @@ exactly why `access.LoginSession.Permissions` stays `[]string`.
 ## Impact on the other services
 
 The remaining services compile against the open types and treat keys as opaque
-strings. Because v32 was never tagged, no released consumer ever depended on
-the deleted constants, so there is no migration shim to write.
+strings. `v32.0.0` is an annotated tag, so released consumers may depend on the
+published open types; each service must complete the documented migration.
+There is no migration shim for the deleted constants.
 
 One consequence worth noting: the v32 follow-ups call for removing the unused
 `analytics.export` permission. With the catalogue seeded rather than compiled

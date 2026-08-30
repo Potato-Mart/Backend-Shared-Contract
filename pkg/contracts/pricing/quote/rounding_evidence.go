@@ -1,9 +1,9 @@
 package quote
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/quote/quote_enums"
 )
 
 // RoundingEvidence records the exact value a rounded minor amount came from

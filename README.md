@@ -14,8 +14,8 @@ workflows.
 ## Latest Version
 
 ```text
-v32.0.0
-github.com/Potato-Mart/Backend-Shared-Contract/v32
+v33.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v33
 ```
 
 See [release notes](docs/release-notes.md) for the release history,
@@ -26,10 +26,10 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v32 v32.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.0.0
 ```
 
-Import packages from the same `/v32` module path.
+Import packages from the same `/v33` module path.
 
 ## Package Layout
 
@@ -38,34 +38,24 @@ Import packages from the same `/v32` module path.
   `money`. The legacy `common/shared` package does not exist.
 - Finite enum types live in a leaf `<domain>_enums` package beside the models
   that use them. For example, product models import
-  `supply/product/product_enums`, while common security models import
+  `supply/catalogue/product/product_enums`, while common security models import
   `common/security/security_enums`.
-- Supply classifications, import compliance, operations, market listings, and
-  cost use `supply/classification`, `supply/import_compliance`,
-  `supply/operations`, `supply/listing`, and `supply/cost`. The Go package name
-  for import compliance is `import_compliance`.
-- Commercial markets, price books, and immutable quote evidence live under
-  `pricing/market`, `pricing/pricebook`, and `pricing/quote`. Promotion
-  mechanics live under `pricing/promotion`; wallet models under
-  `pricing/wallet`; shipment models under `orders/shipping`.
-- Customer market is resolved only from the frozen
-  `orders/shipping.FulfilmentLocationSnapshot`; retail analytics are standalone
-  `insights/analytics` records. Notification topics, preferences, protected
-  deliveries, and customer-safe in-app inbox projections live only under
-  `notifications`.
-- Marketing owns canonical `marketing/campaign` and `marketing/message`
-  authoring models. General customer reviews live under `customers/review`,
-  with separate protected, public, and owner-safe projections.
-- `supply/product.Product` is keyed by the immutable `sku_code`, owns the
-  authoritative storage requirement, localized content, classification,
-  provenance, package options, barcode assignments, net content, status, and
-  optional administration. `supply/product.SellingProduct` is the customer-safe
-  market-priced projection; raw product records carry no price, tax,
-  channel sellability, or market-dependent metric.
-- Authoritative prices live in `pricing/pricebook.PriceEntry` inside a
-  market-scoped `PriceBook`; commercial availability lives in
-  `supply/listing.MarketListing`. `MarketCode` and `CountryCode` are separate
-  concepts, and one country may carry several markets.
+- Identity lives in `identity/{access,account,authorisation}`; customer records
+  live in `customers/{retail,wholesale,group,preference}`. Orders, payment,
+  pricing, notification, insight, marketing, and supply models use their named
+  v33 domain subpackages. See the complete package map and migration table in
+  [the v33 migration guide](docs/v33-migration.md).
+- Catalogue models live in `supply/catalogue/{classification,product,listing,
+  review,wish,favourite}`. Marketing retains `marketing/campaign`,
+  `marketing/audience`, and the complete `marketing/message` package.
+- Payment contracts split into `payments/payment`, `provider`, `merchant`,
+  `receipt`, `register`, `settlement`, and `terminal`; there are no standalone
+  invoice, refund, or finance packages. Physical outbound fulfilment is Supply
+  owned, while delivery intent, rates, schedules, and order projections remain
+  under Orders.
+- Notification uses the singular `notification` root with `core`, `email`,
+  `sms`, `push`, `preference`, and `delivery` packages. Pub/Sub uses
+  `pubsub/envelope`, `pubsub/routing`, and producer-owned payload packages.
 - Cross-domain catalogue and commercial links use immutable business codes:
   `sku_code`, `market_code`, `price_book_code`, `tax_category_code`, brand,
   collection, category-tag, supplier, package-option, and media codes. Root
@@ -96,10 +86,10 @@ struct, and every closed enum has its own source file in a leaf `_enums`
 package.
 
 Published model changes follow semantic versioning. Breaking exported shapes
-or wire values require a new major module path. A cut-over removes the replaced
-field, type, enum value, event, and test in the same change; deprecated aliases
-and fallback JSON shapes are not retained. `docs/release-notes.md` is the source of
-truth for release-specific JSON changes and consumer actions.
+or wire values require a new major module path. V33 preserves every exported
+v32 contract and enum at one reviewed v33 destination; it does not retire
+public contracts or enums. `docs/release-notes.md` is the source of truth for
+release-specific JSON changes and consumer actions.
 
 ## Repository Layout and Naming
 
@@ -123,7 +113,7 @@ dependency resolution:
 ```
 
 On Bash-based systems, run `bash scripts/bash/test-contract.sh`. The equivalent
-Go command is `GOWORK=off go test ./...`.
+Go command is `GOWORK=off go test -count=1 ./...`.
 
 ## Change and Release Workflow
 

@@ -3,12 +3,12 @@ package settlement
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/payments/settlement/settlement_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/payments/terminal/terminal_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/settlement/settlement_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/terminal/terminal_enums"
 )
 
 // Settlement is an end-of-day reconciliation/batch close
@@ -34,4 +34,5 @@ type Settlement struct {
 	History []security.HistoryEntry `json:"history,omitempty"`
 
 	audit.AuditFields
+	security.DataProtectionFields
 }

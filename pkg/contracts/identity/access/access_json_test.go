@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/identity/identity_enums"
-	identity "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/identity/access"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/identity/access/access_enums"
-	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/identity/account"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/identity/account/account_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/identity/identity_enums"
+	identity "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/identity/access"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/identity/access/access_enums"
+	accountenum "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/identity/account"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/identity/account/account_enums"
 )
 
 func TestPortalAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T) {
@@ -24,7 +24,7 @@ func TestPortalAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T)
 		AccountType: account_enums.AccountTypeRetailCustomer,
 		Portal:      identity_enums.PortalRetail,
 		Status:      access_enums.PortalAccessStatusActive,
-		Grant:       &audit.LifecycleAction{By: "admin_1", At: &grantedAt, Reason: "approved"},
+		Grant:       &audit.LifecycleAction{By: "admin_1", At: grantedAt, Reason: "approved"},
 	}
 
 	payload, err := json.Marshal(access)
@@ -55,7 +55,7 @@ func TestPortalAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T)
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal portal access: %v", err)
 	}
-	if decoded.Grant == nil || decoded.Grant.By != "admin_1" || decoded.Grant.At == nil || !decoded.Grant.At.Equal(grantedAt) {
+	if decoded.Grant == nil || decoded.Grant.By != "admin_1" || !decoded.Grant.At.Equal(grantedAt) {
 		t.Fatalf("grant lifecycle did not round-trip: %+v", decoded.Grant)
 	}
 }

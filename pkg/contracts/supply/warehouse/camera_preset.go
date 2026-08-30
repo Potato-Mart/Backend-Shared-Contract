@@ -1,9 +1,9 @@
 package warehouse
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geometry"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geometry"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // CameraPreset is a saved viewpoint a user can jump to in the 3D viewer.

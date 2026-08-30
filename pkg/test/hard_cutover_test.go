@@ -611,6 +611,9 @@ func TestProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 		),
 	}
 
+	remapCutoverTypePolicies(removedFields)
+	remapCutoverTypePolicies(removedJSONKeysByType)
+
 	pkgRoot := sharedContractPkgRoot(t)
 	seenTypes := make(map[string]struct{})
 	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
@@ -705,9 +708,54 @@ func TestProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	}
 }
 
+// remapCutoverTypePolicies keeps the existing field-removal evidence attached
+// to the same public type after the v33 ownership move.
+func remapCutoverTypePolicies(policy map[string]map[string]struct{}) {
+	for oldKey, newKey := range map[string]string{
+		"supply/classification.CollectionRef":         "supply/catalogue/classification.CollectionRef",
+		"supply/classification.CategoryTagRef":        "supply/catalogue/classification.CategoryTagRef",
+		"supply/classification.BrandRef":              "supply/catalogue/classification.BrandRef",
+		"supply/classification.ProductSupplierRef":    "supply/catalogue/classification.ProductSupplierRef",
+		"supply/classification.SKUSeries":             "supply/catalogue/classification.SKUSeries",
+		"pubsub/event.CatalogListingChangedEvent":     "pubsub/supply.CatalogListingChangedEvent",
+		"supply/listing.SaleEligibilitySnapshot":      "supply/catalogue/listing.SaleEligibilitySnapshot",
+		"insights/analytics.OrderItemFact":            "insights/sales.OrderItemFact",
+		"insights/analytics.RefundItemFact":           "insights/sales.RefundItemFact",
+		"insights/analytics.SKUDemandForecast":        "supply/forecasting.SKUDemandForecast",
+		"supply/product.Product":                      "supply/catalogue/product.Product",
+		"supply/import_compliance.LabelMaster":        "supply/compliance.LabelMaster",
+		"supply/import_compliance.DeclarationLine":    "supply/compliance.DeclarationLine",
+		"supply/import_compliance.TariffLineSnapshot": "supply/compliance.TariffLineSnapshot",
+		"supply/import_compliance.TariffProfile":      "supply/compliance.TariffProfile",
+		"supply/import_compliance.TrademarkEvidence":  "supply/compliance.TrademarkEvidence",
+		"supply/purchase.Order":                       "supply/procurement.PurchaseOrder",
+		"supply/purchase.OrderItem":                   "supply/procurement.PurchaseOrderItem",
+		"supply/purchase.Receipt":                     "supply/procurement.PurchaseReceipt",
+		"supply/purchase.ReceiptItem":                 "supply/procurement.PurchaseReceiptItem",
+		"orders/order.CartItem":                       "orders/cart.CartItem",
+		"orders/order.OrderPackingProgress":           "orders/fulfilment.OrderPackingProgress",
+		"orders/shipping.PackingDiscrepancy":          "supply/fulfilment.PackingDiscrepancy",
+		"supply/operations.InboundReceipt":            "supply/warehouse.WarehouseReceipt",
+		"supply/operations.InboundItem":               "supply/warehouse.WarehouseReceiptItem",
+		"supply/operations.PackingDamage":             "supply/fulfilment.PackingDamage",
+		"supply/operations.PackingLine":               "supply/fulfilment.PackingLine",
+		"supply/operations.PickingListItem":           "supply/fulfilment.PickingListItem",
+		"supply/operations.StockMovement":             "supply/inventory.StockMovement",
+		"orders/pos.Register":                         "payments/register.Register",
+		"orders/pos.CashMovement":                     "payments/register.CashMovement",
+	} {
+		values, found := policy[oldKey]
+		if !found {
+			continue
+		}
+		policy[newKey] = values
+		delete(policy, oldKey)
+	}
+}
+
 func TestGoSourcesContainNoOlderContractImports(t *testing.T) {
 	const contractImportRoot = "github.com/Potato-Mart/Backend-Shared-Contract/"
-	const currentContractImportPrefix = contractImportRoot + "v32/"
+	const currentContractImportPrefix = contractImportRoot + "v33/"
 	pkgRoot := sharedContractPkgRoot(t)
 	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {

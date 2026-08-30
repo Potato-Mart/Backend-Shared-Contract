@@ -3,12 +3,13 @@ package campaign
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/audit"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/localization"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/marketing/campaign/campaign_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pricing/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/localization"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/marketing/audience"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/marketing/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/benefit"
 )
 
 // Campaign is scheduled, targeted storefront content. BenefitRefs are
@@ -37,7 +38,7 @@ type Campaign struct {
 	StartsAt              *time.Time                       `json:"starts_at,omitempty"`
 	EndsAt                *time.Time                       `json:"ends_at,omitempty"`
 	ScheduleTimezone      string                           `json:"schedule_timezone"`
-	Audience              *Audience                        `json:"audience,omitempty"`
+	Audience              *audience.Audience               `json:"audience,omitempty"`
 	GeographicScope       geography.GeographicScope        `json:"geographic_scope"`
 	Targets               CampaignTarget                   `json:"targets,omitempty"`
 	Status                campaign_enums.CampaignStatus    `json:"status"`

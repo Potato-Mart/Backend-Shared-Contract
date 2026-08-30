@@ -3,10 +3,11 @@ package wholesale
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/party"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/wholesale/wholesale_enums"
 )
 
 // OrganisationAccess links a user account/persona to a wholesale organisation
@@ -32,4 +33,5 @@ type OrganisationAccess struct {
 	Metadata                  metadata.Metadata                        `json:"metadata,omitempty"`
 
 	audit.AuditFields
+	security.DataProtectionFields
 }

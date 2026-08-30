@@ -1,10 +1,10 @@
 package warehouse
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geometry"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geometry"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // ModelAsset is the JSON reference and rendering metadata for a 3D model file.

@@ -3,28 +3,30 @@ package retail_test
 import (
 	"encoding/json"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
 
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/party"
-	customers "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/customers/retail"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/customers/retail/retail_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/notifications/notification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/orders/shipping"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pubsub/event"
+	commonidentity "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/identity"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/preference"
+	preference_enums "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/preference/preference_enums"
+	customers "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/retail"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notification/core/notification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/shipping"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pubsub/notification"
 )
 
 func TestRetailCustomerJSONShape(t *testing.T) {
 	customer := customers.RetailCustomer{
-		ID:                    "retail_123",
-		CustomerNumber:        "RC-123",
-		UserID:                "user_123",
-		AccountID:             "acct_123",
-		PrimaryAuthIdentityID: "auth_123",
-		AuthIdentityIDs:       []string{"auth_123"},
+		ID:             "retail_123",
+		CustomerNumber: "RC-123",
+		IdentityLink: commonidentity.IdentityLink{
+			UserID: "user_123", AccountID: "acct_123", PrimaryAuthIdentityID: "auth_123", AuthIdentityIDs: []string{"auth_123"},
+		},
 		BasicInfo: customers.RetailCustomerBasicInfo{
 			Name:     party.PersonName{DisplayName: "Retail Customer"},
 			Contacts: party.ContactChannels{Email: "retail@example.com"},
@@ -143,10 +145,10 @@ func TestRetailCustomerReceiptPreferencesJSONShape(t *testing.T) {
 		BasicInfo: customers.RetailCustomerBasicInfo{
 			Name:                   party.PersonName{DisplayName: "Retail Customer"},
 			Contacts:               party.ContactChannels{Email: "retail@example.com"},
-			PreferredContactMethod: retail_enums.PreferredContactMethodPhone,
+			PreferredContactMethod: preference_enums.PreferredContactMethodPhone,
 		},
-		ReceiptPreferences: &customers.RetailCustomerReceiptPreferences{
-			Formats:   []retail_enums.ReceiptFormat{retail_enums.ReceiptFormatElectronic, retail_enums.ReceiptFormatPaper},
+		ReceiptPreferences: &preference.RetailCustomerReceiptPreferences{
+			Formats:   []preference_enums.ReceiptFormat{preference_enums.ReceiptFormatElectronic, preference_enums.ReceiptFormatPaper},
 			UpdatedAt: &electedAt,
 			Source:    "account_preferences",
 		},
@@ -172,9 +174,9 @@ func TestRetailCustomerReceiptPreferencesJSONShape(t *testing.T) {
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal retail customer receipt preferences: %v", err)
 	}
-	if decoded.BasicInfo.PreferredContactMethod != retail_enums.PreferredContactMethodPhone ||
+	if decoded.BasicInfo.PreferredContactMethod != preference_enums.PreferredContactMethodPhone ||
 		decoded.ReceiptPreferences == nil || len(decoded.ReceiptPreferences.Formats) != 2 ||
-		decoded.ReceiptPreferences.Formats[1] != retail_enums.ReceiptFormatPaper ||
+		decoded.ReceiptPreferences.Formats[1] != preference_enums.ReceiptFormatPaper ||
 		decoded.ReceiptPreferences.UpdatedAt == nil || !decoded.ReceiptPreferences.UpdatedAt.Equal(electedAt) {
 		t.Fatalf("receipt preferences did not round-trip: %+v", decoded.ReceiptPreferences)
 	}
@@ -182,8 +184,8 @@ func TestRetailCustomerReceiptPreferencesJSONShape(t *testing.T) {
 	summary := customers.RetailCustomerSummary{
 		ID:     "retail_123",
 		Status: retail_enums.CustomerStatusActive,
-		ReceiptPreferences: &customers.RetailCustomerReceiptPreferences{
-			Formats: []retail_enums.ReceiptFormat{retail_enums.ReceiptFormatElectronic},
+		ReceiptPreferences: &preference.RetailCustomerReceiptPreferences{
+			Formats: []preference_enums.ReceiptFormat{preference_enums.ReceiptFormatElectronic},
 		},
 	}
 	summaryPayload, err := json.Marshal(summary)
@@ -210,16 +212,12 @@ func TestRetailCustomerReceiptPreferencesOmittedWhenAbsent(t *testing.T) {
 }
 
 func TestNotificationPreferencesChangedEventContainsOnlyChangedIdentifiers(t *testing.T) {
-	changedAt := time.Date(2026, 7, 30, 2, 3, 4, 0, time.UTC)
 	preferencesEvent := event.NotificationPreferencesChangedEvent{
 		UserID:              "user_1",
 		CustomerNumber:      "RC-1",
 		PreferencesRevision: 3,
 		ChangedTopicCodes:   []string{"order_status"},
 		ChangedChannels:     []notification_enums.NotificationChannel{notification_enums.NotificationChannelPush},
-		Source:              "account_preferences",
-		ChangedAt:           changedAt,
-		RequestID:           "req_1",
 	}
 
 	payload, err := json.Marshal(preferencesEvent)
@@ -231,8 +229,6 @@ func TestNotificationPreferencesChangedEventContainsOnlyChangedIdentifiers(t *te
 		`"preferences_revision":3`,
 		`"changed_topic_codes":["order_status"]`,
 		`"changed_channels":["push"]`,
-		`"source":"account_preferences"`,
-		`"changed_at":"2026-07-30T02:03:04Z"`,
 	} {
 		if !strings.Contains(string(payload), field) {
 			t.Fatalf("notification preferences event missing %s: %s", field, payload)
@@ -243,7 +239,7 @@ func TestNotificationPreferencesChangedEventContainsOnlyChangedIdentifiers(t *te
 	if err := json.Unmarshal(payload, &decoded); err != nil {
 		t.Fatalf("unmarshal notification preferences changed event: %v", err)
 	}
-	if decoded.UserID != "user_1" || len(decoded.ChangedChannels) != 1 || decoded.ChangedChannels[0] != notification_enums.NotificationChannelPush || !decoded.ChangedAt.Equal(changedAt) {
+	if decoded.UserID != "user_1" || len(decoded.ChangedChannels) != 1 || decoded.ChangedChannels[0] != notification_enums.NotificationChannelPush {
 		t.Fatalf("notification preferences event did not round-trip: %+v", decoded)
 	}
 }

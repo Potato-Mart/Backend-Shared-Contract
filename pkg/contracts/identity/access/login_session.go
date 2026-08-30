@@ -1,14 +1,14 @@
 package access
 
 import (
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/identity/identity_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/identity/identity_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security/security_enums"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/identity/account/account_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/identity/account/account_enums"
 )
 
 // LoginSession is a non-secret projection of an active login. A session is
@@ -48,4 +48,5 @@ type LoginSession struct {
 	RevokedAt                 *time.Time                        `json:"revoked_at,omitempty"`
 	RevokedReason             string                            `json:"revoked_reason,omitempty"`
 	History                   []security.HistoryEntry           `json:"history,omitempty"`
+	security.DataProtectionFields
 }

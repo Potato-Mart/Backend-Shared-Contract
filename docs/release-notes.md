@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v33.0.0` | 2026-08-30 | Major | Domain-ownership restructure: moves the module path to `/v33`, preserves every exported v32 contract and enum at one reviewed destination, aligns audit/privacy evidence, and normalizes event envelopes. Consumer adoption remains external. |
 | `v32.0.0` | 2026-08-26 | Major | Hard V32 cut: moves the module path to `/v32`, converts workforce and buyer-portal permission keys to service-owned open typed codes, reshapes the reward catalog and redemption records around extensible benefit and outcome arms, adds commerce evidence, and publishes a money-free price invalidation fact. Service adoption remains external. |
 | `v31.0.1` | 2026-08-25 | Patch | Retains the Go 1.26.7 baseline and removes active historical compatibility scaffolding without changing the `/v31` contract surface. |
 | `v31.0.0` | 2026-08-25 | Major | Contract-boundary hard cut: removes persistence, token-claim, workflow, provider-transport, and hard-coded operational constants from the shared model tree; moves exact release metadata to `go.mod`; moves the Review package under Customer ownership; and changes the module path to `/v31`. All consumers must migrate explicitly. |
@@ -128,6 +129,36 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v33.0.0 (2026-08-30) - Domain-Ownership Restructure
+
+### Breaking contract
+
+- Module path and release metadata move to
+  `github.com/Potato-Mart/Backend-Shared-Contract/v33` and `v33.0.0`.
+- Package ownership is reorganized across Identity, Customers, Orders,
+  Payments, Pricing, Notification, Insights, Marketing, Supply, and Pub/Sub.
+  The complete old-path, new-path, old-name, and new-name table is in
+  [the v33 migration guide](v33-migration.md).
+- Every exported v32 contract and enum is preserved exactly once in the v33
+  preservation manifest. No public contract or enum is retired, including
+  dormant and future-facing records; a moved contract may have a clearer v33
+  name.
+- Independently mutable persisted roots carry reviewed audit fields, PII-bearing
+  records carry data-protection fields, and immutable ledgers, events,
+  snapshots, and projections remain free of generic audit metadata.
+- Pub/Sub metadata is normalized in `EventEnvelope`; the current 38-event
+  version registry, fact-field rename, and normalized payload shapes are in the
+  v33 migration guide. Historical event tables remain unchanged.
+
+### Consumer action and release boundary
+
+- Update module requirements and imports from `/v32` to `/v33` only after the
+  annotated `v33.0.0` tag exists. Consumer migrations are external to this
+  repository and are not performed or verified here.
+- This feature branch deliberately has no tag, push, pull request, merge, or
+  deployment. Protected-main release automation creates the release tag after a
+  later merge.
 
 ## v32.0.0 (2026-08-26) - Contract Convergence
 

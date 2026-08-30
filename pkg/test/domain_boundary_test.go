@@ -14,17 +14,18 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/customers/retail"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/identity/account"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/notifications"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/retail"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/identity/account"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notification/core"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/cart"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/shipping"
 )
 
 func TestCustomerAndOrderGeographyUsesCanonicalFields(t *testing.T) {
 	assertNoModelFields(t, reflect.TypeOf(retail.RetailCustomer{}), "MarketCode", "CountryCode", "Marketing", "Analytics")
 	assertNoModelFields(t, reflect.TypeOf(account.UserProfile{}), "NotificationPreferences")
-	for _, model := range []reflect.Type{reflect.TypeOf(order.Cart{}), reflect.TypeOf(order.Order{})} {
+	for _, model := range []reflect.Type{reflect.TypeOf(cart.Cart{}), reflect.TypeOf(order.Order{})} {
 		field, found := model.FieldByName("FulfilmentLocation")
 		if !found || field.Type != reflect.TypeOf(shipping.FulfilmentLocationSnapshot{}) || field.Tag.Get("json") != "fulfilment_location" {
 			t.Errorf("%s must carry the canonical fulfilment_location snapshot", model)
@@ -34,7 +35,7 @@ func TestCustomerAndOrderGeographyUsesCanonicalFields(t *testing.T) {
 }
 
 func TestPublishedNotificationContainsOnlyInAppSafeFields(t *testing.T) {
-	assertNoModelFields(t, reflect.TypeOf(notifications.PublishedNotification{}),
+	assertNoModelFields(t, reflect.TypeOf(core.PublishedNotification{}),
 		"Recipient", "DestinationCode", "ProviderCode", "Deliveries", "ErrorCode", "ErrorMessage", "Email", "Push", "SMS", "SocialMedia")
 }
 
@@ -44,7 +45,7 @@ func TestPublishedNotificationContainsOnlyInAppSafeFields(t *testing.T) {
 // Line/Discord wire literal.
 func TestNotificationProvidersRemainOpenCodes(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
-	notificationsRoot := filepath.Join(pkgRoot, "contracts", "notifications")
+	notificationsRoot := filepath.Join(pkgRoot, "contracts", "notification")
 	var violations []string
 
 	err := filepath.WalkDir(notificationsRoot, func(path string, entry fs.DirEntry, walkErr error) error {

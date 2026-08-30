@@ -1,23 +1,22 @@
 package pkg_test
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
 
 	"reflect"
 	"testing"
 
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/orders/pos"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/payments/payment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pricing/market"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pricing/pricebook"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pricing/quote"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/cost"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/listing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/operations"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/purchase"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/buyer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/merchant"
+	pos "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/receipt"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/market"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/pricebook"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/quote"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/listing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/product"
+	operations "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/procurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse"
 )
 
 // TestBackendGateModelSurface locks the reusable model primitives needed by
@@ -89,7 +88,7 @@ func TestBackendGateModelSurface(t *testing.T) {
 		"ValidityToken":      "validity_token",
 		"CapturedAt":         "captured_at",
 	})
-	assertJSONFields(t, reflect.TypeOf(payment.MerchantLegalSnapshot{}), map[string]string{
+	assertJSONFields(t, reflect.TypeOf(merchant.MerchantLegalSnapshot{}), map[string]string{
 		"ProfileID":             "profile_id",
 		"ProfileRevision":       "profile_revision",
 		"MarketCode":            "market_code",
@@ -107,20 +106,20 @@ func TestBackendGateModelSurface(t *testing.T) {
 		"IncrementMinor":     "increment_minor",
 		"Mode":               "mode",
 	})
-	assertJSONFields(t, reflect.TypeOf(cost.BaseAcquisitionCost{}), map[string]string{
+	assertJSONFields(t, reflect.TypeOf(procurement.BaseAcquisitionCost{}), map[string]string{
 		"SKUCode":  "sku_code",
 		"Currency": "currency",
 		"Amount":   "amount",
 		"Revision": "revision",
 	})
-	assertJSONFields(t, reflect.TypeOf(cost.DepotCarryingCost{}), map[string]string{
+	assertJSONFields(t, reflect.TypeOf(procurement.DepotCarryingCost{}), map[string]string{
 		"SKUCode":                "sku_code",
 		"DepotCode":              "depot_code",
 		"TotalCarryingCostMinor": "total_carrying_cost_minor",
 		"BaseUnitQuantity":       "base_unit_quantity",
 		"CurrentAverageUnitCost": "current_average_unit_cost,omitempty",
 	})
-	assertJSONFields(t, reflect.TypeOf(purchase.SupplierInvoiceLine{}), map[string]string{
+	assertJSONFields(t, reflect.TypeOf(procurement.SupplierInvoiceLine{}), map[string]string{
 		"SKUCode":       "sku_code",
 		"TaxTreatment":  "tax_treatment",
 		"PriceBasis":    "price_basis",
@@ -194,7 +193,7 @@ func TestBackendGateModelSurface(t *testing.T) {
 		"MarketCode": "market_code",
 		"IsActive":   "is_active",
 	})
-	assertJSONFields(t, reflect.TypeOf(sales.BuyerContext{}), map[string]string{
+	assertJSONFields(t, reflect.TypeOf(buyer.BuyerContext{}), map[string]string{
 		"Type":                 "type,omitempty",
 		"RetailCustomerNumber": "retail_customer_number,omitempty",
 	})

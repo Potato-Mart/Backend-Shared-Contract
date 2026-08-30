@@ -1,9 +1,10 @@
 package warehouse
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geometry"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geometry"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // StockLocation is a depot-qualified physical inventory location.
@@ -25,4 +26,6 @@ type StockLocation struct {
 	Size                  *geometry.Size3D                            `json:"size,omitempty"`
 	Shape                 warehouse_enums.ShapeType                   `json:"shape,omitempty"`
 	Color                 string                                      `json:"color,omitempty"`
+
+	audit.AuditFields
 }

@@ -3,14 +3,14 @@ package wholesale_test
 import (
 	"encoding/json"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/customers/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/wholesale"
 
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/wholesale/wholesale_enums"
 )
 
 func TestOrganisationAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *testing.T) {
@@ -27,7 +27,7 @@ func TestOrganisationAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *test
 		Contacts:                  party.ContactChannels{Email: "buyer@example.com"},
 		Department:                "Procurement",
 		JobTitle:                  "Buyer",
-		Invitation:                &audit.LifecycleAction{By: "admin_1", At: &invitedAt},
+		Invitation:                &audit.LifecycleAction{By: "admin_1", At: invitedAt},
 		JoinedAt:                  &joinedAt,
 	}
 

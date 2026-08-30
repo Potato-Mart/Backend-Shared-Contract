@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/orders/shipping/shipping_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/shipping/shipping_enums"
 )
 
 func TestFulfilmentLocationSnapshotJSONShape(t *testing.T) {

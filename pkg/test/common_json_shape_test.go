@@ -5,22 +5,22 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/device"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geometry"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/identity"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/device"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geometry"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/identity"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/temporal"
 )
 
 func TestCommonModelJSONShapesRemainStable(t *testing.T) {
@@ -45,7 +45,7 @@ func TestCommonModelJSONShapesRemainStable(t *testing.T) {
 	}{
 		{"Address", address, `{"line1":"1 Market Lane","locality":"Dandenong South","administrative_area":{"code":"AU-VIC","name":"Victoria","type":"STATE"},"postal_code":"3175","country":{"code":"AU","name":"Australia"}}`},
 		{"AuditFields", audit.AuditFields{CreatedAt: createdAt, UpdatedAt: createdAt}, `{"created_at":"2026-08-07T03:04:05Z","updated_at":"2026-08-07T03:04:05Z"}`},
-		{"LifecycleAction", audit.LifecycleAction{By: "operator-1"}, `{"by":"operator-1"}`},
+		{"LifecycleAction", audit.LifecycleAction{By: "operator-1", At: createdAt}, `{"by":"operator-1","at":"2026-08-07T03:04:05Z"}`},
 		{"ContactAddress", party.ContactAddress{ID: "address-1", Contact: &party.Recipient{Name: "Ada", Email: "ada@example.test"}, Address: &address}, `{"id":"address-1","contact":{"name":"Ada","email":"ada@example.test"},"address":{"line1":"1 Market Lane","locality":"Dandenong South","administrative_area":{"code":"AU-VIC","name":"Victoria","type":"STATE"},"postal_code":"3175","country":{"code":"AU","name":"Australia"}}}`},
 		{"OrganisationDetail", party.OrganisationDetail{PartyRef: party.PartyRef{ID: "org-1", Code: "POTATO", Name: "Potato Mart"}, TradingName: "Potato Mart", Metadata: metadata.Metadata{"source": "fixture"}}, `{"id":"org-1","code":"POTATO","name":"Potato Mart","trading_name":"Potato Mart","metadata":{"source":"fixture"}}`},
 		{"PartyRef", party.PartyRef{ID: "party-1", Code: "SUP-1", Name: "Supplier", Phone: "+61", Email: "supplier@example.test"}, `{"id":"party-1","code":"SUP-1","name":"Supplier","phone":"+61","email":"supplier@example.test"}`},

@@ -7,11 +7,11 @@ package quote
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/listing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/market/market_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/listing"
 )
 
 // PriceSnapshot is the immutable commercial evidence for one priced line. It
@@ -24,11 +24,11 @@ type PriceSnapshot struct {
 	PriceBookCode string `json:"price_book_code"`
 	// PriceBookRevision and PriceEntryRevision pin the exact price
 	// definitions that resolved. A newer revision requires a re-quote.
-	PriceBookRevision  int64                       `json:"price_book_revision"`
-	PriceEntryID       string                      `json:"price_entry_id"`
-	PriceEntryRevision int64                       `json:"price_entry_revision"`
-	Channel            commerce_enums.OrderType    `json:"channel"`
-	Audience           product_enums.PriceAudience `json:"audience"`
+	PriceBookRevision  int64                      `json:"price_book_revision"`
+	PriceEntryID       string                     `json:"price_entry_id"`
+	PriceEntryRevision int64                      `json:"price_entry_revision"`
+	Channel            commerce_enums.OrderType   `json:"channel"`
+	Audience           market_enums.PriceAudience `json:"audience"`
 
 	BaseUnits          int64                                `json:"base_units"`
 	PackageComposition packaging.PackageCompositionSnapshot `json:"package_composition"`

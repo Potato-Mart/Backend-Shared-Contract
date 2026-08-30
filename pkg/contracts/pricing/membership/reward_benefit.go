@@ -1,6 +1,6 @@
 package membership
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/money"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
 
 // RewardBenefit carries the type-specific configuration for one Reward. The
 // populated arm must match Reward.Type: a discount amount or basis points for

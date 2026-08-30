@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/supply/classification/classification_enums"
+	classification_enums "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/favourite/favourite_enums"
 )
 
 func TestFavouriteEnumsValidateKnownValues(t *testing.T) {

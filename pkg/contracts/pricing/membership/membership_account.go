@@ -3,12 +3,13 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/metadata"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pricing/membership/membership_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v32/pkg/contracts/pricing/wallet"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/points"
 )
 
 // MembershipAccount is the programme account for a retail customer. ID is the
@@ -17,7 +18,7 @@ type MembershipAccount struct {
 	ID          string                                   `json:"id"`
 	TierKey     string                                   `json:"tier_key,omitempty"`
 	Status      membership_enums.MembershipAccountStatus `json:"status"`
-	Wallet      wallet.PointsSummary                     `json:"wallet"`
+	Wallet      points.PointsSummary                     `json:"wallet"`
 	EnrolledAt  time.Time                                `json:"enrolled_at"`
 	SuspendedAt *time.Time                               `json:"suspended_at,omitempty"`
 	ClosedAt    *time.Time                               `json:"closed_at,omitempty"`
@@ -29,4 +30,5 @@ type MembershipAccount struct {
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 
 	audit.AuditFields
+	security.DataProtectionFields
 }
