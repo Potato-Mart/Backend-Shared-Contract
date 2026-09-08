@@ -20,6 +20,10 @@ type SupplierInvoiceLine struct {
 
 	UnitPrice  money.Money `json:"unit_price"`
 	LineAmount money.Money `json:"line_amount"`
+	// NetGoodsAmount is the frozen line total after goods discounts, excluding
+	// all tax (including nonrecoverable tax), freight, and duty. It applies to
+	// BaseUnits. Absence is unknown evidence; an explicit zero is a free line.
+	NetGoodsAmount *money.Money `json:"net_goods_amount,omitempty"`
 
 	TaxTreatment purchase_enums.LineTaxTreatment `json:"tax_treatment"`
 	PriceBasis   purchase_enums.TaxPriceBasis    `json:"price_basis"`
@@ -38,5 +42,8 @@ type SupplierInvoiceLine struct {
 
 	PurchaseOrderNumber string `json:"purchase_order_number,omitempty"`
 	ReceiptID           string `json:"receipt_id,omitempty"`
-	Note                string `json:"note,omitempty"`
+	// ReceiptAllocations identifies exact receipt items and their share of
+	// this line. The older ReceiptID remains available as a coarse reference.
+	ReceiptAllocations []SupplierInvoiceReceiptAllocation `json:"receipt_allocations,omitempty"`
+	Note               string                             `json:"note,omitempty"`
 }

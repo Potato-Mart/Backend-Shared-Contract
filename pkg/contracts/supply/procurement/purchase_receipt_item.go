@@ -8,6 +8,9 @@ import (
 // PurchaseReceiptItem is one received procurement line.
 type PurchaseReceiptItem struct {
 	ID string `json:"id,omitempty"`
+	// PurchaseOrderItemID identifies the exact line in the receipt's purchase
+	// order, including when that order contains multiple lines for one SKU.
+	PurchaseOrderItemID string `json:"purchase_order_item_id,omitempty"`
 	// SKUCode is the frozen SKU code captured when the receipt line was recorded.
 	SKUCode             string                               `json:"sku_code"`
 	ProductName         string                               `json:"product_name,omitempty"`
