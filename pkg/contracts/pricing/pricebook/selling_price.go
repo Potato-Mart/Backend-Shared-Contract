@@ -23,4 +23,8 @@ type SellingPrice struct {
 	ValidFrom        time.Time                         `json:"valid_from"`
 	ValidUntil       *time.Time                        `json:"valid_until,omitempty"`
 	AsOf             time.Time                         `json:"as_of"`
+	// Display is optional customer-facing price evidence resolved for the
+	// same market, channel, audience, unit, tax basis, and instant. Pricing
+	// owns consistency with UnitPrice and the validity of this projection.
+	Display *SellingPriceDisplay `json:"display,omitempty"`
 }

@@ -1,6 +1,6 @@
-// Package cost holds the Supply-owned private operational cost models. Base
+// Package procurement holds the Supply-owned private operational cost models. Base
 // acquisition cost and carrying cost are internal values: they never appear in
-// a storefront, order, invoice, or receipt response.
+// storefront, customer order, customer invoice, or customer receipt responses.
 package procurement
 
 import (
@@ -24,6 +24,12 @@ type BaseAcquisitionCost struct {
 	SourceID      string      `json:"source_id,omitempty"`
 	Revision      int64       `json:"revision"`
 	EffectiveFrom time.Time   `json:"effective_from"`
+	// Sources preserves the exact frozen quantity and net-goods amount for
+	// each contributing source line; Amount is the per-base-unit result.
+	Sources []NetGoodsCostSourceSnapshot `json:"sources,omitempty"`
+	// ManualLock records the active manual cost decision. Its absence means
+	// no manual lock is represented, not that the amount or source is zero.
+	ManualLock *audit.LifecycleAction `json:"manual_lock,omitempty"`
 
 	audit.AuditFields
 }

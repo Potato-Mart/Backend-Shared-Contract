@@ -43,6 +43,7 @@ type SupplierInvoice struct {
 	DuplicateKey   string                               `json:"duplicate_key"`
 	Status         purchase_enums.SupplierInvoiceStatus `json:"status"`
 	Reconciliation *audit.LifecycleAction               `json:"reconciliation,omitempty"`
+	Cancellation   *audit.LifecycleAction               `json:"cancellation,omitempty"`
 	Revision       int64                                `json:"revision"`
 
 	audit.AuditFields

@@ -25,5 +25,10 @@ type PurchaseOrderItem struct {
 	ReceivedComposition  packaging.PackageCompositionSnapshot `json:"received_composition"`
 	RejectedComposition  packaging.PackageCompositionSnapshot `json:"rejected_composition"`
 	LineTotal            money.Money                          `json:"line_total"`
-	Note                 string                               `json:"note,omitempty"`
+	// NetGoodsAmount is the validated, frozen total for
+	// OrderedComposition.TotalBaseUnits after goods discounts and excluding
+	// all tax, freight, and duty. Supply owns confirmation and provisional
+	// valuation; absent evidence does not imply LineTotal has this basis.
+	NetGoodsAmount *money.Money `json:"net_goods_amount,omitempty"`
+	Note           string       `json:"note,omitempty"`
 }

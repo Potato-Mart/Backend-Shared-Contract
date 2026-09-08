@@ -12,5 +12,6 @@ func TestQuoteEnumsValidateKnownValues(t *testing.T) {
 		{name: "quoteenum.TaxRoundingMethod", valid: []stringEnum{quote_enums.TaxRoundingMethodSumExactThenRound, quote_enums.TaxRoundingMethodPerLineRound}, invalid: quote_enums.TaxRoundingMethod("__invalid__")},
 		{name: "quoteenum.RoundingMode", valid: []stringEnum{quote_enums.RoundingModeHalfUp, quote_enums.RoundingModeHalfCentUp, quote_enums.RoundingModeCharmNineUp, quote_enums.RoundingModeCashIncrement, quote_enums.RoundingModeLargestRemainder}, invalid: quote_enums.RoundingMode("__invalid__")},
 		{name: "quoteenum.CostComparison", valid: []stringEnum{quote_enums.CostComparisonBelowCost, quote_enums.CostComparisonAtOrAboveCost, quote_enums.CostComparisonUnavailable}, invalid: quote_enums.CostComparison("__invalid__")},
+		{name: "quoteenum.CustomPriceReason", valid: []stringEnum{quote_enums.CustomPriceReasonQuickSale, quote_enums.CustomPriceReasonSoonExpiry, quote_enums.CustomPriceReasonDamaged}, invalid: quote_enums.CustomPriceReason("__invalid__")},
 	})
 }

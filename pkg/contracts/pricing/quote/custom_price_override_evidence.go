@@ -6,16 +6,22 @@ import (
 	"time"
 )
 
-// CustomPriceOverrideEvidence freezes a cashier-entered tax-inclusive unit
-// amount together with the actor, the mandatory reason, the approved price it
-// replaced, and the cost comparison recorded at the time.
+// CustomPriceOverrideEvidence freezes a tax-inclusive custom unit amount,
+// entered at POS or resolved from an approved scoped customization, together
+// with its actor, mandatory reason, replaced approved price and cost evidence.
 type CustomPriceOverrideEvidence struct {
 	ActorUserID string `json:"actor_user_id"`
 	Reason      string `json:"reason"`
+	// ReasonCode categorizes the customization without replacing the
+	// mandatory human explanation in Reason. The optional code and revision
+	// identify the approved custom-price definition frozen at checkout.
+	ReasonCode          quote_enums.CustomPriceReason `json:"reason_code,omitempty"`
+	CustomPriceCode     string                        `json:"custom_price_code,omitempty"`
+	CustomPriceRevision *int64                        `json:"custom_price_revision,omitempty"`
 	// SourceApprovedPrice is the approved price the override replaced.
 	SourceApprovedPrice money.Money `json:"source_approved_price"`
-	// OverrideGrossAmount is the tax-inclusive unit amount the cashier
-	// entered. Tax is extracted from it rather than added to it.
+	// OverrideGrossAmount is the tax-inclusive custom unit amount. Tax is
+	// extracted from it rather than added to it, regardless of its source.
 	OverrideGrossAmount money.Money                `json:"override_gross_amount"`
 	CostComparison      quote_enums.CostComparison `json:"cost_comparison"`
 	ComparedCost        *money.Money               `json:"compared_cost,omitempty"`

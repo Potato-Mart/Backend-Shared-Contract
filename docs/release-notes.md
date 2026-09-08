@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v33.1.0` | 2026-09-08 | Minor | Additive selling-price display and customization evidence, explicit barcode JSON fixtures, private procurement source allocations and locks, and separate net-goods valuation snapshots/movements. Preserves `/v33` and all existing price-book, checkout, and carrying-cost meanings. |
 | `v33.0.0` | 2026-08-30 | Major | Domain-ownership restructure: moves the module path to `/v33`, preserves every exported v32 contract and enum at one reviewed destination, aligns audit/privacy evidence, and normalizes event envelopes. Consumer adoption remains external. |
 | `v32.0.0` | 2026-08-26 | Major | Hard V32 cut: moves the module path to `/v32`, converts workforce and buyer-portal permission keys to service-owned open typed codes, reshapes the reward catalog and redemption records around extensible benefit and outcome arms, adds commerce evidence, and publishes a money-free price invalidation fact. Service adoption remains external. |
 | `v31.0.1` | 2026-08-25 | Patch | Retains the Go 1.26.7 baseline and removes active historical compatibility scaffolding without changing the `/v31` contract surface. |
@@ -130,6 +131,72 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
 
+## v33.1.0 (2026-09-08) - Selling Price and Procurement Evidence
+
+### Additive shared models
+
+- `SellingPrice` adds an optional customer-safe display block for regular and
+  effective unit prices, an optional approved compare-at, exact comparison-unit
+  evidence, and localized offer conditions with validity windows. Existing
+  `unit_price`, market, channel, audience, tax, and time fields retain their
+  meaning. The display block does not expose supplier costs or administrative
+  pricing evidence.
+- Comparison-unit data is independent of checkout snapshots. Missing comparison
+  amounts remain absent; an exemption is explicit. Conditional BOGO, quantity,
+  group, and inventory offers do not imply an unconditional lower unit price.
+- Custom-price override evidence adds optional categorized reason and stable
+  customization code/revision while preserving actor, human reason, overridden
+  gross amount, source approved price, cost comparison, and timestamp.
+- `CODE_128`, `EAN_13`, and `UPC_A` remain existing barcode formats. New JSON
+  fixtures preserve their explicit symbology, package identity, and leading
+  zeros in both authoritative assignments and customer-safe projections.
+- Private acquisition-cost evidence adds a manual lock and frozen source
+  references. Procurement additions identify invoice receipt-line allocations,
+  accepted net-goods amounts, purchase-order item links, and invoice
+  cancellation evidence. Optional purchase-order net-goods evidence supports
+  provisional valuation without inferring the tax basis of legacy amounts.
+- New net-goods valuation snapshots and movements distinguish valued,
+  provisional, and unvalued stock, remaining-stock corrections, consumed
+  variance, rounding reconciliation, and immutable source/reversal evidence.
+  This metric excludes all tax, freight, and duty. Existing carrying-cost
+  models keep their published meaning and are not reinterpreted.
+
+### Ownership and compatibility
+
+- The module path stays `/v33`; additions on existing records are optional.
+  No existing exported model, field, enum value, or event version is removed.
+- Pricing remains authoritative for PriceBook/PriceEntry, promotion and
+  customization calculations, tax, and frozen checkout PriceSnapshots. Supply
+  owns catalogue composition, inventory eligibility, procurement, and
+  electronic shelf-label integration. Supplier acquisition cost is private
+  purchase evidence and must never be used as a customer compare-at price.
+- Calculations, validation, authorization, workflows, provider payloads,
+  scheduling, persistence, and API DTOs remain service-owned. This release
+  supplies models, not live pricing, valuation, or hardware functionality.
+
+### Consumer action and release boundary
+
+- Pin `github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.1.0` only after the
+  protected-main release workflow publishes the reviewed annotated tag and
+  matching GitHub release. Run consumer gates with `GOWORK=off` so local
+  workspace resolution cannot substitute an unreleased contract.
+- Consumers of the new display block must respect its context, validity,
+  conditional-offer and unit-price exemption evidence. Older readers may
+  continue using the unchanged fields and must tolerate additive JSON members.
+- Procurement consumers must preserve absent versus zero amounts and frozen
+  source allocations. Net-goods valuation and supplier purchase cost are
+  private administrative evidence, separate from customer price display.
+- Backend adoption and generated HTTP contracts are subsequent service work.
+  Frontend adoption, scheduling configuration, and vendor/device verification
+  are separate activation gates; this model release does not claim them.
+
+### Verification
+
+- Focused JSON shape, legacy-absence, round-trip, privacy, source-allocation,
+  comparison-unit, customization, and barcode fixtures accompany the models.
+- Release alignment, the reviewed exported-model manifest, the model-only
+  boundary, and the standalone contract gate remain required before release.
+
 ## v33.0.0 (2026-08-30) - Domain-Ownership Restructure
 
 ### Breaking contract
@@ -156,9 +223,9 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 - Update module requirements and imports from `/v32` to `/v33` only after the
   annotated `v33.0.0` tag exists. Consumer migrations are external to this
   repository and are not performed or verified here.
-- This feature branch deliberately has no tag, push, pull request, merge, or
-  deployment. Protected-main release automation creates the release tag after a
-  later merge.
+- The reviewed release was published as the annotated `v33.0.0` tag and matching
+  GitHub release. Backend adoption and deployment are separate from this model
+  publication.
 
 ## v32.0.0 (2026-08-26) - Contract Convergence
 

@@ -71,6 +71,7 @@ func TestSellingPriceExcludesPriceBookAdministration(t *testing.T) {
 		"ValidFrom":        {json: "valid_from", typeOf: reflect.TypeOf(time.Time{})},
 		"ValidUntil":       {json: "valid_until,omitempty", typeOf: reflect.TypeOf((*time.Time)(nil))},
 		"AsOf":             {json: "as_of", typeOf: reflect.TypeOf(time.Time{})},
+		"Display":          {json: "display,omitempty", typeOf: reflect.TypeOf((*pricebook.SellingPriceDisplay)(nil))},
 	})
 }
 
