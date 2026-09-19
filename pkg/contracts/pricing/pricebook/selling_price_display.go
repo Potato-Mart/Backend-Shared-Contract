@@ -21,4 +21,5 @@ type SellingPriceDisplay struct {
 	// unconditional lower effective or comparison-unit price.
 	UnitPricePerMeasure *SellingUnitPriceDisplay  `json:"unit_price_per_measure,omitempty"`
 	PromotionDisplays   []SellingPromotionDisplay `json:"promotions,omitempty"`
+	Offers              []SellingPriceOffer       `json:"offers,omitempty"`
 }

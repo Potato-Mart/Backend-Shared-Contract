@@ -2,6 +2,7 @@ package pricebook
 
 import (
 	"encoding/json"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -35,6 +36,71 @@ func TestPriceBookOwnsCurrencyChannelAudienceAndPolicies(t *testing.T) {
 		if !strings.Contains(string(payload), want) {
 			t.Fatalf("PriceBook JSON = %s, want %s", payload, want)
 		}
+	}
+}
+
+func TestPackagePriceEntryKeepsPackageAmountSeparateFromBaseUnitPrice(t *testing.T) {
+	validFrom := time.Date(2026, 9, 20, 0, 0, 0, 0, time.UTC)
+	validUntil := validFrom.Add(30 * 24 * time.Hour)
+	sourceRevision := int64(12)
+	value := PackagePriceEntry{
+		ID: "package_entry_1", PriceBookCode: "book_au_pos", SKUCode: "A00125",
+		PackageOptionCode: "CASE_12", PackageAmount: money.Money{AmountMinor: 2999, Currency: "AUD"},
+		Status: pricebook_enums.PriceEntryStatusDraft, Derivation: pricebook_enums.PriceDerivationManual,
+		ValidFrom: validFrom, ValidUntil: &validUntil, SourceBaseCostRevision: &sourceRevision, Revision: 3,
+	}
+
+	payload, err := json.Marshal(value)
+	if err != nil {
+		t.Fatalf("marshal package price entry: %v", err)
+	}
+	for _, want := range []string{
+		`"package_option_code":"CASE_12"`,
+		`"package_amount":{"amount_minor":2999,"currency":"AUD"}`,
+		`"source_base_cost_revision":12`,
+	} {
+		if !strings.Contains(string(payload), want) {
+			t.Fatalf("PackagePriceEntry JSON = %s, want %s", payload, want)
+		}
+	}
+	if strings.Contains(string(payload), `"amount":`) {
+		t.Fatalf("package amount must not serialize as a base-unit PriceEntry amount: %s", payload)
+	}
+
+	var decoded PackagePriceEntry
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal package price entry: %v", err)
+	}
+	if !reflect.DeepEqual(value, decoded) {
+		t.Fatalf("package price entry changed after round trip: %+v", decoded)
+	}
+}
+
+func TestMembershipTierPriceBookAssignmentDefaultsPublicOfferToFalse(t *testing.T) {
+	validFrom := time.Date(2026, 9, 20, 0, 0, 0, 0, time.UTC)
+	value := MembershipTierPriceBookAssignment{
+		ID: "tier_assignment_1", MarketCode: "AU-VIC", Channel: commerce_enums.OrderTypePOS,
+		MembershipTierKey: "gold", PriceBookCode: "AU_VIC_GOLD_POS",
+		Status: pricebook_enums.PriceBookStatusActive, ValidFrom: validFrom, Revision: 2,
+	}
+	payload, err := json.Marshal(value)
+	if err != nil {
+		t.Fatalf("marshal membership tier assignment: %v", err)
+	}
+	for _, want := range []string{
+		`"membership_tier_key":"gold"`, `"price_book_code":"AU_VIC_GOLD_POS"`,
+		`"public_offer_enabled":false`,
+	} {
+		if !strings.Contains(string(payload), want) {
+			t.Fatalf("MembershipTierPriceBookAssignment JSON = %s, want %s", payload, want)
+		}
+	}
+	var decoded MembershipTierPriceBookAssignment
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal membership tier assignment: %v", err)
+	}
+	if !reflect.DeepEqual(value, decoded) || decoded.PublicOfferEnabled {
+		t.Fatalf("membership tier assignment changed or opted in publicly: %+v", decoded)
 	}
 }
 

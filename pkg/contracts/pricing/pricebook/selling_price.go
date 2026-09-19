@@ -13,16 +13,17 @@ import (
 // published with a SellingProduct. It deliberately omits price-book identity,
 // revision, approval, derivation, source cost, and promotion calculations.
 type SellingPrice struct {
-	UnitPrice        money.Money                       `json:"unit_price"`
-	CurrencyExponent money.CurrencyExponent            `json:"currency_exponent"`
-	MarketCode       string                            `json:"market_code"`
-	Channel          commerce_enums.OrderType          `json:"channel"`
-	Audience         market_enums.PriceAudience        `json:"audience"`
-	PriceVisibility  pricebook_enums.PriceVisibility   `json:"price_visibility"`
-	TaxInclusion     pricebook_enums.PriceTaxInclusion `json:"tax_inclusion"`
-	ValidFrom        time.Time                         `json:"valid_from"`
-	ValidUntil       *time.Time                        `json:"valid_until,omitempty"`
-	AsOf             time.Time                         `json:"as_of"`
+	UnitPrice         money.Money                       `json:"unit_price"`
+	CurrencyExponent  money.CurrencyExponent            `json:"currency_exponent"`
+	MarketCode        string                            `json:"market_code"`
+	Channel           commerce_enums.OrderType          `json:"channel"`
+	Audience          market_enums.PriceAudience        `json:"audience"`
+	MembershipTierKey string                            `json:"membership_tier_key,omitempty"`
+	PriceVisibility   pricebook_enums.PriceVisibility   `json:"price_visibility"`
+	TaxInclusion      pricebook_enums.PriceTaxInclusion `json:"tax_inclusion"`
+	ValidFrom         time.Time                         `json:"valid_from"`
+	ValidUntil        *time.Time                        `json:"valid_until,omitempty"`
+	AsOf              time.Time                         `json:"as_of"`
 	// Display is optional customer-facing price evidence resolved for the
 	// same market, channel, audience, unit, tax basis, and instant. Pricing
 	// owns consistency with UnitPrice and the validity of this projection.

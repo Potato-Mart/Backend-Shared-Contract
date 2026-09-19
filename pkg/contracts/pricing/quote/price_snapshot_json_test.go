@@ -2,6 +2,7 @@ package quote
 
 import (
 	"encoding/json"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -49,6 +50,55 @@ func TestTaxSnapshotKeepsTheRateExactAsAFraction(t *testing.T) {
 		if strings.Contains(string(payload), "0.0909") || strings.Contains(string(payload), "0.09") {
 			t.Fatalf("superseded decimal tax factor must not appear: %s", payload)
 		}
+	}
+}
+
+func TestPriceSnapshotPackageAndMembershipProvenanceIsOptionalAndRoundTrips(t *testing.T) {
+	legacy, err := json.Marshal(PriceSnapshot{})
+	if err != nil {
+		t.Fatalf("marshal legacy price snapshot: %v", err)
+	}
+	for _, optional := range []string{
+		"package_price_entry_id", "package_price_entry_revision", "package_list_amount",
+		"membership_tier_price_book_assignment_id", "membership_tier_price_book_assignment_revision",
+		"membership_tier_key",
+	} {
+		if strings.Contains(string(legacy), `"`+optional+`"`) {
+			t.Fatalf("legacy PriceSnapshot unexpectedly includes %s: %s", optional, legacy)
+		}
+	}
+
+	packageListAmount := money.Money{AmountMinor: 3600, Currency: "AUD"}
+	value := PriceSnapshot{
+		QuoteID: "quote_1", LineID: "line_1", SKUCode: "A00125", MarketCode: "AU-VIC",
+		PriceBookCode: "AU_VIC_GOLD_POS", PriceBookRevision: 4,
+		PriceEntryID: "entry_1", PriceEntryRevision: 7,
+		PackagePriceEntryID: "package_entry_1", PackagePriceEntryRevision: 3,
+		PackageListAmount:                         &packageListAmount,
+		MembershipTierPriceBookAssignmentID:       "tier_assignment_1",
+		MembershipTierPriceBookAssignmentRevision: 2,
+		MembershipTierKey:                         "gold",
+	}
+	payload, err := json.Marshal(value)
+	if err != nil {
+		t.Fatalf("marshal package/member price snapshot: %v", err)
+	}
+	for _, want := range []string{
+		`"package_price_entry_id":"package_entry_1"`, `"package_price_entry_revision":3`,
+		`"package_list_amount":{"amount_minor":3600,"currency":"AUD"}`,
+		`"membership_tier_price_book_assignment_id":"tier_assignment_1"`,
+		`"membership_tier_price_book_assignment_revision":2`, `"membership_tier_key":"gold"`,
+	} {
+		if !strings.Contains(string(payload), want) {
+			t.Fatalf("PriceSnapshot JSON = %s, want %s", payload, want)
+		}
+	}
+	var decoded PriceSnapshot
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal package/member price snapshot: %v", err)
+	}
+	if !reflect.DeepEqual(value, decoded) {
+		t.Fatalf("price snapshot provenance changed after round trip: %+v", decoded)
 	}
 }
 

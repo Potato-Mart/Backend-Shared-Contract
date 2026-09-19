@@ -9,7 +9,6 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
-	"regexp"
 	"sort"
 	"strings"
 	"testing"
@@ -231,7 +230,6 @@ func TestPromotionProductionSurfaceRejectsRetiredMechanicsAndDependencies(t *tes
 		"PointPromotion": {}, "MembershipPromotionTarget": {},
 	}
 	retiredWireFragments := []string{"same_sale_order", "accepted_offer", "offer_id", "offer_revision", "sellable_offer"}
-	offerWord := regexp.MustCompile(`(?i)\boffers?\b`)
 	closedPromotionEnums := make(map[string]struct{})
 
 	err := filepath.WalkDir(filepath.Join(pkgRoot, "contracts"), func(path string, entry fs.DirEntry, walkErr error) error {
@@ -247,9 +245,6 @@ func TestPromotionProductionSurfaceRejectsRetiredMechanicsAndDependencies(t *tes
 		}
 		text := string(source)
 		lower := strings.ToLower(text)
-		if offerWord.MatchString(text) {
-			t.Errorf("%s retains retired offer terminology", path)
-		}
 		for _, fragment := range retiredWireFragments {
 			if strings.Contains(lower, fragment) {
 				t.Errorf("%s retains retired wire fragment %q", path, fragment)
@@ -272,6 +267,9 @@ func TestPromotionProductionSurfaceRejectsRetiredMechanicsAndDependencies(t *tes
 		})
 
 		relative := filepath.ToSlash(relativePkgPath(t, pkgRoot, path))
+		if strings.Contains(strings.ToLower(filepath.Base(path)), "offer") && relative != "contracts/pricing/pricebook/selling_price_offer.go" {
+			t.Errorf("%s introduces an unreviewed offer model outside the customer-safe selling-price surface", path)
+		}
 		if strings.HasPrefix(relative, "contracts/pricing/promotion/") {
 			for _, spec := range file.Imports {
 				if strings.Contains(spec.Path.Value, "/supply/product") {

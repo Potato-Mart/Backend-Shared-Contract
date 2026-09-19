@@ -61,18 +61,43 @@ func TestSellingProductPublishesOnlyRenderCompleteCommercialData(t *testing.T) {
 
 func TestSellingPriceExcludesPriceBookAdministration(t *testing.T) {
 	assertExactFields(t, reflect.TypeOf(pricebook.SellingPrice{}), map[string]canonicalProductField{
-		"UnitPrice":        {json: "unit_price", typeOf: reflect.TypeOf(money.Money{})},
-		"CurrencyExponent": {json: "currency_exponent", typeOf: reflect.TypeOf(money.CurrencyExponent{})},
-		"MarketCode":       {json: "market_code", typeOf: reflect.TypeOf("")},
-		"Channel":          {json: "channel", typeOf: reflect.TypeOf(commerce_enums.OrderType(""))},
-		"Audience":         {json: "audience", typeOf: reflect.TypeOf(market_enums.PriceAudience(""))},
-		"PriceVisibility":  {json: "price_visibility", typeOf: reflect.TypeOf(pricebook_enums.PriceVisibility(""))},
-		"TaxInclusion":     {json: "tax_inclusion", typeOf: reflect.TypeOf(pricebook_enums.PriceTaxInclusion(""))},
-		"ValidFrom":        {json: "valid_from", typeOf: reflect.TypeOf(time.Time{})},
-		"ValidUntil":       {json: "valid_until,omitempty", typeOf: reflect.TypeOf((*time.Time)(nil))},
-		"AsOf":             {json: "as_of", typeOf: reflect.TypeOf(time.Time{})},
-		"Display":          {json: "display,omitempty", typeOf: reflect.TypeOf((*pricebook.SellingPriceDisplay)(nil))},
+		"UnitPrice":         {json: "unit_price", typeOf: reflect.TypeOf(money.Money{})},
+		"CurrencyExponent":  {json: "currency_exponent", typeOf: reflect.TypeOf(money.CurrencyExponent{})},
+		"MarketCode":        {json: "market_code", typeOf: reflect.TypeOf("")},
+		"Channel":           {json: "channel", typeOf: reflect.TypeOf(commerce_enums.OrderType(""))},
+		"Audience":          {json: "audience", typeOf: reflect.TypeOf(market_enums.PriceAudience(""))},
+		"MembershipTierKey": {json: "membership_tier_key,omitempty", typeOf: reflect.TypeOf("")},
+		"PriceVisibility":   {json: "price_visibility", typeOf: reflect.TypeOf(pricebook_enums.PriceVisibility(""))},
+		"TaxInclusion":      {json: "tax_inclusion", typeOf: reflect.TypeOf(pricebook_enums.PriceTaxInclusion(""))},
+		"ValidFrom":         {json: "valid_from", typeOf: reflect.TypeOf(time.Time{})},
+		"ValidUntil":        {json: "valid_until,omitempty", typeOf: reflect.TypeOf((*time.Time)(nil))},
+		"AsOf":              {json: "as_of", typeOf: reflect.TypeOf(time.Time{})},
+		"Display":           {json: "display,omitempty", typeOf: reflect.TypeOf((*pricebook.SellingPriceDisplay)(nil))},
 	})
+}
+
+func TestSellingPriceOfferExcludesAdministrativeAndQualificationIdentity(t *testing.T) {
+	model := reflect.TypeOf(pricebook.SellingPriceOffer{})
+	for _, required := range []string{
+		"PackageOptionCode", "MembershipTierKey", "BaseUnits", "RegularAmount",
+		"EffectiveAmount", "CompareAtAmount", "Messages", "Conditions",
+		"Conditional", "PromotionDisplays", "ValidFrom", "ValidUntil",
+	} {
+		if _, ok := model.FieldByName(required); !ok {
+			t.Errorf("SellingPriceOffer missing customer-safe field %s", required)
+		}
+	}
+	for _, forbidden := range []string{
+		"ID", "PriceBookCode", "PriceBookRevision", "PriceEntryID", "PriceEntryRevision",
+		"PackagePriceEntryID", "PackagePriceEntryRevision",
+		"MembershipTierPriceBookAssignmentID", "MembershipTierPriceBookAssignmentRevision",
+		"CustomerNumber", "AccountID", "Approval", "Rejection", "Withdrawal",
+		"CreatedAt", "CreatedBy", "UpdatedAt", "UpdatedBy",
+	} {
+		if _, ok := model.FieldByName(forbidden); ok {
+			t.Errorf("SellingPriceOffer exposes private or administrative field %s", forbidden)
+		}
+	}
 }
 
 func TestPricebookNeverImportsParentProductPackage(t *testing.T) {
