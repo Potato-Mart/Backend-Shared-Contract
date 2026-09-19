@@ -24,11 +24,17 @@ type PriceSnapshot struct {
 	PriceBookCode string `json:"price_book_code"`
 	// PriceBookRevision and PriceEntryRevision pin the exact price
 	// definitions that resolved. A newer revision requires a re-quote.
-	PriceBookRevision  int64                      `json:"price_book_revision"`
-	PriceEntryID       string                     `json:"price_entry_id"`
-	PriceEntryRevision int64                      `json:"price_entry_revision"`
-	Channel            commerce_enums.OrderType   `json:"channel"`
-	Audience           market_enums.PriceAudience `json:"audience"`
+	PriceBookRevision                         int64                      `json:"price_book_revision"`
+	PriceEntryID                              string                     `json:"price_entry_id"`
+	PriceEntryRevision                        int64                      `json:"price_entry_revision"`
+	PackagePriceEntryID                       string                     `json:"package_price_entry_id,omitempty"`
+	PackagePriceEntryRevision                 int64                      `json:"package_price_entry_revision,omitempty"`
+	PackageListAmount                         *money.Money               `json:"package_list_amount,omitempty"`
+	MembershipTierPriceBookAssignmentID       string                     `json:"membership_tier_price_book_assignment_id,omitempty"`
+	MembershipTierPriceBookAssignmentRevision int64                      `json:"membership_tier_price_book_assignment_revision,omitempty"`
+	MembershipTierKey                         string                     `json:"membership_tier_key,omitempty"`
+	Channel                                   commerce_enums.OrderType   `json:"channel"`
+	Audience                                  market_enums.PriceAudience `json:"audience"`
 
 	BaseUnits          int64                                `json:"base_units"`
 	PackageComposition packaging.PackageCompositionSnapshot `json:"package_composition"`

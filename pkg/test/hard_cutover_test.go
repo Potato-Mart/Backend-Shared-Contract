@@ -809,7 +809,6 @@ func TestProductionModelsRejectRetiredPromotionOfferAndImportComplianceTerms(t *
 		"MediaReference",
 		"OfferID",
 		"OfferRevision",
-		"Offers",
 		"PreorderPolicy",
 		"ProductBarcodeAssignmentSnapshot",
 		"ProductPackageOptionSnapshot",

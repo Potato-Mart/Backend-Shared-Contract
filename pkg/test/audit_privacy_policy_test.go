@@ -9,8 +9,8 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/retail"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/group"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/retail"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/wholesale"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/identity/access"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/identity/account"
@@ -24,6 +24,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/settlement"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/coupon"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/pricebook"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/balance"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/giftcard"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/ledger"
@@ -41,8 +42,8 @@ import (
 )
 
 type typePolicy struct {
-	model           reflect.Type
-	requireAudit    bool
+	model            reflect.Type
+	requireAudit     bool
 	requireProtected bool
 }
 
@@ -51,50 +52,52 @@ type typePolicy struct {
 // It is intentionally explicit: a new root must be reviewed instead of
 // inheriting audit or privacy metadata by package convention.
 var v33TypePolicyRegistry = map[string]typePolicy{
-	"notification preference": {reflect.TypeOf(preference.NotificationPreferences{}), true, true},
-	"payment":                 {reflect.TypeOf(payment.Payment{}), true, true},
-	"outbound shipment":       {reflect.TypeOf(fulfilment.OutboundShipment{}), true, true},
-	"merchant legal profile":  {reflect.TypeOf(merchant.MerchantLegalProfile{}), true, true},
-	"settlement":              {reflect.TypeOf(settlement.Settlement{}), true, true},
-	"brand":                   {reflect.TypeOf(classification.Brand{}), true, false},
-	"stock location":          {reflect.TypeOf(warehouse.StockLocation{}), true, false},
-	"wish proposal":           {reflect.TypeOf(wish.WishProposal{}), true, false},
-	"wish candidate":          {reflect.TypeOf(wish.WishCandidate{}), true, false},
-	"wish ballot":             {reflect.TypeOf(wish.WishBallot{}), true, false},
-	"checkout reservation":    {reflect.TypeOf(reservation.CheckoutBenefitReservation{}), true, true},
-	"point reservation":       {reflect.TypeOf(reservation.PointReservation{}), true, true},
-	"coupon assignment":       {reflect.TypeOf(coupon.CouponAssignment{}), true, true},
-	"reward redemption":       {reflect.TypeOf(reward.RewardRedemption{}), true, true},
-	"shipping zone":           {reflect.TypeOf(shipping.Zone{}), true, false},
-	"shipping rate":           {reflect.TypeOf(shipping.Rate{}), true, false},
-	"arrival blacklist":       {reflect.TypeOf(shipping.ShippingArrivalBlacklist{}), true, false},
-	"SKU demand forecast":     {reflect.TypeOf(forecasting.SKUDemandForecast{}), true, false},
-	"retail customer":         {reflect.TypeOf(retail.RetailCustomer{}), true, true},
-	"group manager application": {reflect.TypeOf(group.GroupOrderManagerApplication{}), true, true},
-	"wholesale organisation":  {reflect.TypeOf(wholesale.WholesaleOrganisation{}), true, true},
-	"wholesale application":   {reflect.TypeOf(wholesale.WholesaleApplication{}), true, true},
-	"organisation access":     {reflect.TypeOf(wholesale.OrganisationAccess{}), true, true},
-	"user account":            {reflect.TypeOf(account.UserAccount{}), true, true},
-	"retail account profile":  {reflect.TypeOf(account.RetailCustomerAccountProfile{}), true, true},
-	"wholesale account profile": {reflect.TypeOf(account.WholesaleCustomerAccountProfile{}), true, true},
-	"user profile":            {reflect.TypeOf(account.UserProfile{}), true, true},
-	"auth identity":           {reflect.TypeOf(account.AuthIdentity{}), true, true},
-	"portal access":           {reflect.TypeOf(access.PortalAccess{}), true, true},
-	"role assignment":         {reflect.TypeOf(authorisation.RoleAssignment{}), true, true},
-	"membership account":      {reflect.TypeOf(membership.MembershipAccount{}), true, true},
-	"customer wallet":         {reflect.TypeOf(balance.CustomerWallet{}), false, true},
-	"login session":           {reflect.TypeOf(access.LoginSession{}), false, true},
-	"user device":             {reflect.TypeOf(account.UserDevice{}), false, true},
-	"qualifying spend ledger": {reflect.TypeOf(membership.QualifyingSpendLedgerEntry{}), false, true},
-	"point ledger":            {reflect.TypeOf(ledger.PointLedgerEntry{}), false, true},
-	"gift card transaction":   {reflect.TypeOf(giftcard.GiftCardTransaction{}), false, true},
-	"carrying cost movement":  {reflect.TypeOf(procurement.CarryingCostMovement{}), false, true},
-	"stock movement":          {reflect.TypeOf(inventory.StockMovement{}), false, true},
-	"cash movement":           {reflect.TypeOf(register.CashMovement{}), false, true},
-	"receipt snapshot":        {reflect.TypeOf(receipt.ReceiptSnapshot{}), false, true},
-	"register session":        {reflect.TypeOf(register.RegisterSession{}), true, true},
-	"published review":        {reflect.TypeOf(review.PublishedReview{}), false, false},
-	"preference event":        {reflect.TypeOf(notificationevent.NotificationPreferencesChangedEvent{}), false, false},
+	"notification preference":               {reflect.TypeOf(preference.NotificationPreferences{}), true, true},
+	"payment":                               {reflect.TypeOf(payment.Payment{}), true, true},
+	"outbound shipment":                     {reflect.TypeOf(fulfilment.OutboundShipment{}), true, true},
+	"merchant legal profile":                {reflect.TypeOf(merchant.MerchantLegalProfile{}), true, true},
+	"settlement":                            {reflect.TypeOf(settlement.Settlement{}), true, true},
+	"brand":                                 {reflect.TypeOf(classification.Brand{}), true, false},
+	"stock location":                        {reflect.TypeOf(warehouse.StockLocation{}), true, false},
+	"wish proposal":                         {reflect.TypeOf(wish.WishProposal{}), true, false},
+	"wish candidate":                        {reflect.TypeOf(wish.WishCandidate{}), true, false},
+	"wish ballot":                           {reflect.TypeOf(wish.WishBallot{}), true, false},
+	"checkout reservation":                  {reflect.TypeOf(reservation.CheckoutBenefitReservation{}), true, true},
+	"point reservation":                     {reflect.TypeOf(reservation.PointReservation{}), true, true},
+	"coupon assignment":                     {reflect.TypeOf(coupon.CouponAssignment{}), true, true},
+	"reward redemption":                     {reflect.TypeOf(reward.RewardRedemption{}), true, true},
+	"shipping zone":                         {reflect.TypeOf(shipping.Zone{}), true, false},
+	"shipping rate":                         {reflect.TypeOf(shipping.Rate{}), true, false},
+	"arrival blacklist":                     {reflect.TypeOf(shipping.ShippingArrivalBlacklist{}), true, false},
+	"SKU demand forecast":                   {reflect.TypeOf(forecasting.SKUDemandForecast{}), true, false},
+	"retail customer":                       {reflect.TypeOf(retail.RetailCustomer{}), true, true},
+	"group manager application":             {reflect.TypeOf(group.GroupOrderManagerApplication{}), true, true},
+	"wholesale organisation":                {reflect.TypeOf(wholesale.WholesaleOrganisation{}), true, true},
+	"wholesale application":                 {reflect.TypeOf(wholesale.WholesaleApplication{}), true, true},
+	"organisation access":                   {reflect.TypeOf(wholesale.OrganisationAccess{}), true, true},
+	"user account":                          {reflect.TypeOf(account.UserAccount{}), true, true},
+	"retail account profile":                {reflect.TypeOf(account.RetailCustomerAccountProfile{}), true, true},
+	"wholesale account profile":             {reflect.TypeOf(account.WholesaleCustomerAccountProfile{}), true, true},
+	"user profile":                          {reflect.TypeOf(account.UserProfile{}), true, true},
+	"auth identity":                         {reflect.TypeOf(account.AuthIdentity{}), true, true},
+	"portal access":                         {reflect.TypeOf(access.PortalAccess{}), true, true},
+	"role assignment":                       {reflect.TypeOf(authorisation.RoleAssignment{}), true, true},
+	"membership account":                    {reflect.TypeOf(membership.MembershipAccount{}), true, true},
+	"package price entry":                   {reflect.TypeOf(pricebook.PackagePriceEntry{}), true, false},
+	"membership tier price-book assignment": {reflect.TypeOf(pricebook.MembershipTierPriceBookAssignment{}), true, false},
+	"customer wallet":                       {reflect.TypeOf(balance.CustomerWallet{}), false, true},
+	"login session":                         {reflect.TypeOf(access.LoginSession{}), false, true},
+	"user device":                           {reflect.TypeOf(account.UserDevice{}), false, true},
+	"qualifying spend ledger":               {reflect.TypeOf(membership.QualifyingSpendLedgerEntry{}), false, true},
+	"point ledger":                          {reflect.TypeOf(ledger.PointLedgerEntry{}), false, true},
+	"gift card transaction":                 {reflect.TypeOf(giftcard.GiftCardTransaction{}), false, true},
+	"carrying cost movement":                {reflect.TypeOf(procurement.CarryingCostMovement{}), false, true},
+	"stock movement":                        {reflect.TypeOf(inventory.StockMovement{}), false, true},
+	"cash movement":                         {reflect.TypeOf(register.CashMovement{}), false, true},
+	"receipt snapshot":                      {reflect.TypeOf(receipt.ReceiptSnapshot{}), false, true},
+	"register session":                      {reflect.TypeOf(register.RegisterSession{}), true, true},
+	"published review":                      {reflect.TypeOf(review.PublishedReview{}), false, false},
+	"preference event":                      {reflect.TypeOf(notificationevent.NotificationPreferencesChangedEvent{}), false, false},
 }
 
 func TestV33AuditAndPrivacyTypePolicy(t *testing.T) {

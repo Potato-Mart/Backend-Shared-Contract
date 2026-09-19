@@ -14,7 +14,7 @@ workflows.
 ## Latest Version
 
 ```text
-v33.1.0
+v33.2.0
 github.com/Potato-Mart/Backend-Shared-Contract/v33
 ```
 
@@ -26,18 +26,19 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.1.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.2.0
 ```
 
 Import packages from the same `/v33` module path.
 
-The v33.1.0 additions describe customer-safe regular/effective price display,
-measure-based comparison prices, categorized customization evidence, and
-private procurement sources and net-goods valuation. Supplier acquisition
-cost is not a customer compare-at price. Existing price-book, checkout,
-barcode, and carrying-cost contracts retain their meaning. These are model
-additions; runtime pricing, invoice, valuation, and electronic shelf-label
-behavior belongs to consuming services and is not implemented by this module.
+The v33.2.0 additions describe independently priced package options,
+membership-tier price-book assignments, customer-safe conditional price
+offers, and optional package/member provenance in frozen quote snapshots.
+Existing base-unit price entries, guest selling prices, promotion records,
+checkout evidence, and v33.1 display fields retain their meaning. These are
+model additions; price resolution, membership qualification, ambiguity
+handling, persistence, API routes, and electronic shelf-label behavior belong
+to consuming services and are not implemented by this module.
 
 ## Package Layout
 

@@ -655,7 +655,7 @@ var v32ContractPreservationManifest = map[string]string{
 
 const expectedV32ContractPreservationCount = 634
 
-var v33MigrationMappingRow = regexp.MustCompile("(?m)^\\| `([^`]+)` \\| `([^`]+)` \\| `([^`]+)` \\| `([^`]+)` \\|$")
+var v33MigrationMappingRow = regexp.MustCompile("(?m)^\\| `([^`]+)` \\| `([^`]+)` \\| `([^`]+)` \\| `([^`]+)` \\|\\r?$")
 
 func TestV32ContractPreservationManifest(t *testing.T) {
 	if got := len(v32ContractPreservationManifest); got != expectedV32ContractPreservationCount {

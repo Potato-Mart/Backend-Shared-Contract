@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v33.2.0` | 2026-09-20 | Minor | Adds package-specific price entries, membership-tier price-book assignments, customer-safe conditional selling-price offers, and optional package/member quote provenance while preserving `/v33` and legacy JSON when the new fields are absent. |
 | `v33.1.0` | 2026-09-08 | Minor | Additive selling-price display and customization evidence, explicit barcode JSON fixtures, private procurement source allocations and locks, and separate net-goods valuation snapshots/movements. Preserves `/v33` and all existing price-book, checkout, and carrying-cost meanings. |
 | `v33.0.0` | 2026-08-30 | Major | Domain-ownership restructure: moves the module path to `/v33`, preserves every exported v32 contract and enum at one reviewed destination, aligns audit/privacy evidence, and normalizes event envelopes. Consumer adoption remains external. |
 | `v32.0.0` | 2026-08-26 | Major | Hard V32 cut: moves the module path to `/v32`, converts workforce and buyer-portal permission keys to service-owned open typed codes, reshapes the reward catalog and redemption records around extensible benefit and outcome arms, adds commerce evidence, and publishes a money-free price invalidation fact. Service adoption remains external. |
@@ -130,6 +131,77 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v33.2.0 (2026-09-20) - Package and Membership Price Variants
+
+### Additive shared models
+
+- `PackagePriceEntry` records one independently priced immutable package option
+  for a SKU and price book. `package_amount` buys exactly one package and is
+  deliberately separate from the existing base-unit `PriceEntry.amount`.
+  Status, derivation, validity, approval/rejection/withdrawal evidence,
+  revision, source-cost revision, and audit fields follow the existing price
+  entry lifecycle shape.
+- `MembershipTierPriceBookAssignment` binds a membership tier key to one price
+  book within a market and channel. `public_offer_enabled` is required in JSON
+  and defaults to false in the Go zero value, so member amounts are not
+  implicitly approved for public display.
+- `SellingPriceOffer` provides customer-safe package or membership targets,
+  explicit base-unit quantity, regular/effective/optional compare-at amounts,
+  localized messages and conditions, conditional status, promotion display
+  evidence, and validity. `SellingPriceDisplay.offers` is optional, and the
+  existing guest effective price remains the enclosing selling price.
+- `SellingPrice.membership_tier_key` is optional resolved context. It does not
+  carry customer identity or prove membership qualification.
+- `PriceSnapshot` adds optional package-price-entry and membership-tier
+  assignment identifiers/revisions, package list amount, and tier key. The
+  additions freeze provenance when those definitions participate in a quote;
+  legacy snapshots omit every new member.
+
+### Ownership and compatibility
+
+- The module path stays `/v33`; this is an additive minor release. Existing
+  exported models, fields, enum values, event versions, and required JSON
+  members remain unchanged. New members on existing records use `omitempty`,
+  preserving legacy JSON when absent.
+- Pricing owns resolution, ambiguity rejection, member/package combination,
+  promotion stacking, qualification, authorization, persistence, and API
+  behavior. The shared module provides data models only. Supply continues to
+  own immutable package-option codes and electronic shelf-label integration.
+- Public selling-price offers contain no price-book administration, internal
+  entry or assignment identity, customer/account identity, approval actor, or
+  audit metadata. Private quote snapshots may retain the identifiers and
+  revisions required for transaction evidence.
+
+### Consumer action and policy handoff
+
+- Pin `github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.2.0` only after the
+  protected-main release workflow publishes the reviewed annotated tag and
+  matching GitHub release. Use `GOWORK=off` for release-parity consumer gates.
+- Pricing service adoption must treat an exact member price as replacing that
+  tier's general percentage discount for the SKU. A tier-assigned book may
+  supply package pricing, while promotions continue to follow their existing
+  stacking rules and exclusive customizations remain exclusive.
+- Public projections and electronic shelf labels may show numeric member
+  offers only when the resolved assignment explicitly enables them and the
+  customer-facing conditions are present. A member offer does not replace the
+  guest effective price.
+- Pricing must reject multiple equally applicable entries rather than silently
+  choosing the cheapest. Membership qualification must come from trusted
+  backend account state; clients must not assert it from the optional tier key.
+- Backend routes, request/response DTOs, persistence, validation, calculations,
+  generated HTTP contracts, frontend controls, and device behavior are
+  subsequent owner-repository work and are not activated by this release.
+
+### Verification
+
+- Exact JSON and round-trip fixtures cover package prices, tier assignments,
+  conditional offers, and quote provenance. Legacy-absence tests prove the
+  new optional fields do not change prior selling-price or quote JSON.
+- Privacy tests keep public offers free of administrative and customer
+  identity, while audit-policy tests classify the new mutable pricing roots.
+- Release alignment, reviewed exported-model digest, model-only boundary,
+  preservation manifest, and standalone contract tests remain required.
 
 ## v33.1.0 (2026-09-08) - Selling Price and Procurement Evidence
 
