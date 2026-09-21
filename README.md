@@ -14,7 +14,7 @@ workflows.
 ## Latest Version
 
 ```text
-v33.2.0
+v33.3.0
 github.com/Potato-Mart/Backend-Shared-Contract/v33
 ```
 
@@ -26,19 +26,19 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.2.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.3.0
 ```
 
 Import packages from the same `/v33` module path.
 
-The v33.2.0 additions describe independently priced package options,
-membership-tier price-book assignments, customer-safe conditional price
-offers, and optional package/member provenance in frozen quote snapshots.
-Existing base-unit price entries, guest selling prices, promotion records,
-checkout evidence, and v33.1 display fields retain their meaning. These are
-model additions; price resolution, membership qualification, ambiguity
-handling, persistence, API routes, and electronic shelf-label behavior belong
-to consuming services and are not implemented by this module.
+The v33.3.0 additions describe country-scoped notification template definitions,
+immutable publications and bindings, reviewed localized email/SMS/push content,
+typed placeholders, and constrained email blocks and style tokens. Existing
+delivery, marketing, localization, Identity and pricing shapes are unchanged.
+See the [notification template model](docs/notification-template-model.md) for
+wire semantics, reusable fixtures and consumer requirements. Validation,
+country authorization, translation, rendering, persistence and send workflows
+belong to Notification and are not implemented by this module.
 
 ## Package Layout
 
@@ -63,7 +63,7 @@ to consuming services and are not implemented by this module.
   owned, while delivery intent, rates, schedules, and order projections remain
   under Orders.
 - Notification uses the singular `notification` root with `core`, `email`,
-  `sms`, `push`, `preference`, and `delivery` packages. Pub/Sub uses
+  `sms`, `push`, `preference`, `delivery`, and `template` packages. Pub/Sub uses
   `pubsub/envelope`, `pubsub/routing`, and producer-owned payload packages.
 - Cross-domain catalogue and commercial links use immutable business codes:
   `sku_code`, `market_code`, `price_book_code`, `tax_category_code`, brand,

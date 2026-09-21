@@ -1,0 +1,945 @@
+[
+  {
+    "template": {
+      "id": "au-fixture-template",
+      "country_code": "AU",
+      "code": "order-update",
+      "name": [
+        {
+          "language": "en",
+          "name": "Order update"
+        }
+      ],
+      "active": true,
+      "revision": 7,
+      "content": {
+        "schema_version": 1,
+        "channel": "email",
+        "source_language": "en",
+        "source_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "placeholders": [
+          {
+            "key": "customer.given_name",
+            "value_type": "text",
+            "sensitive": true
+          },
+          {
+            "key": "order.url",
+            "value_type": "url",
+            "sensitive": false
+          }
+        ],
+        "variants": [
+          {
+            "language": "en",
+            "email": {
+              "subject": "Order update",
+              "preview_text": "Your order has an update",
+              "blocks": [
+                {
+                  "id": "title",
+                  "kind": "heading",
+                  "text": "Order update",
+                  "level": 1
+                },
+                {
+                  "id": "greeting",
+                  "kind": "paragraph",
+                  "text": "Hello {{customer.given_name}}",
+                  "style": {
+                    "alignment": "start",
+                    "spacing": "normal"
+                  }
+                },
+                {
+                  "id": "order-detail",
+                  "kind": "system_section",
+                  "section_code": "order_summary"
+                },
+                {
+                  "id": "action",
+                  "kind": "button",
+                  "text": "View order",
+                  "action_url": "{{order.url}}"
+                },
+                {
+                  "id": "logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-logo",
+                    "url": "https://assets.example.invalid/logo.png"
+                  },
+                  "alt_text": "Potato Mart"
+                },
+                {
+                  "id": "decorative-logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-decoration"
+                  },
+                  "alt_text": ""
+                },
+                {
+                  "id": "separator",
+                  "kind": "divider"
+                }
+              ]
+            },
+            "origin": "authored"
+          },
+          {
+            "language": "zh-TW",
+            "email": {
+              "subject": "訂單更新",
+              "preview_text": "您的訂單有新消息",
+              "blocks": [
+                {
+                  "id": "title",
+                  "kind": "heading",
+                  "text": "訂單更新",
+                  "level": 1
+                },
+                {
+                  "id": "greeting",
+                  "kind": "paragraph",
+                  "text": "您好，{{customer.given_name}}",
+                  "style": {
+                    "alignment": "start",
+                    "spacing": "normal"
+                  }
+                },
+                {
+                  "id": "order-detail",
+                  "kind": "system_section",
+                  "section_code": "order_summary"
+                },
+                {
+                  "id": "action",
+                  "kind": "button",
+                  "text": "查看訂單",
+                  "action_url": "{{order.url}}"
+                },
+                {
+                  "id": "logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-logo",
+                    "url": "https://assets.example.invalid/logo.png"
+                  },
+                  "alt_text": "土豆商城"
+                },
+                {
+                  "id": "decorative-logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-decoration"
+                  },
+                  "alt_text": ""
+                },
+                {
+                  "id": "separator",
+                  "kind": "divider"
+                }
+              ]
+            },
+            "origin": "translated",
+            "review": {
+              "source_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+              "target_fingerprint": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+              "reviewed_at": "2026-09-22T00:00:00Z",
+              "reviewed_by": "fixture-reviewer"
+            }
+          },
+          {
+            "language": "zh-CN",
+            "email": {
+              "subject": "订单更新",
+              "preview_text": "您的订单有新消息",
+              "blocks": [
+                {
+                  "id": "title",
+                  "kind": "heading",
+                  "text": "订单更新",
+                  "level": 1
+                },
+                {
+                  "id": "greeting",
+                  "kind": "paragraph",
+                  "text": "您好，{{customer.given_name}}",
+                  "style": {
+                    "alignment": "start",
+                    "spacing": "normal"
+                  }
+                },
+                {
+                  "id": "order-detail",
+                  "kind": "system_section",
+                  "section_code": "order_summary"
+                },
+                {
+                  "id": "action",
+                  "kind": "button",
+                  "text": "查看订单",
+                  "action_url": "{{order.url}}"
+                },
+                {
+                  "id": "logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-logo",
+                    "url": "https://assets.example.invalid/logo.png"
+                  },
+                  "alt_text": "土豆商城"
+                },
+                {
+                  "id": "decorative-logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-decoration"
+                  },
+                  "alt_text": ""
+                },
+                {
+                  "id": "separator",
+                  "kind": "divider"
+                }
+              ]
+            },
+            "origin": "translated",
+            "review": {
+              "source_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+              "target_fingerprint": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+              "reviewed_at": "2026-09-22T00:00:00Z",
+              "reviewed_by": "fixture-reviewer"
+            }
+          }
+        ],
+        "email_theme": {
+          "background_color": "#F4F4F4",
+          "content_color": "#FFFFFF",
+          "text_color": "#111111",
+          "accent_color": "#225533",
+          "font_family": "sans",
+          "text_size": "normal",
+          "spacing": "normal",
+          "button_shape": "rounded"
+        }
+      },
+      "created_at": "2026-09-21T00:00:00Z",
+      "updated_at": "2026-09-22T00:00:00Z"
+    },
+    "version": {
+      "country_code": "AU",
+      "template_code": "order-update",
+      "published_version": 2,
+      "source_revision": 5,
+      "content": {
+        "schema_version": 1,
+        "channel": "email",
+        "source_language": "en",
+        "source_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+        "placeholders": [
+          {
+            "key": "customer.given_name",
+            "value_type": "text",
+            "sensitive": true
+          },
+          {
+            "key": "order.url",
+            "value_type": "url",
+            "sensitive": false
+          }
+        ],
+        "variants": [
+          {
+            "language": "en",
+            "email": {
+              "subject": "Order update",
+              "preview_text": "Your order has an update",
+              "blocks": [
+                {
+                  "id": "title",
+                  "kind": "heading",
+                  "text": "Order update",
+                  "level": 1
+                },
+                {
+                  "id": "greeting",
+                  "kind": "paragraph",
+                  "text": "Hello {{customer.given_name}}",
+                  "style": {
+                    "alignment": "start",
+                    "spacing": "normal"
+                  }
+                },
+                {
+                  "id": "order-detail",
+                  "kind": "system_section",
+                  "section_code": "order_summary"
+                },
+                {
+                  "id": "action",
+                  "kind": "button",
+                  "text": "View order",
+                  "action_url": "{{order.url}}"
+                },
+                {
+                  "id": "logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-logo",
+                    "url": "https://assets.example.invalid/logo.png"
+                  },
+                  "alt_text": "Potato Mart"
+                },
+                {
+                  "id": "decorative-logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-decoration"
+                  },
+                  "alt_text": ""
+                },
+                {
+                  "id": "separator",
+                  "kind": "divider"
+                }
+              ]
+            },
+            "origin": "authored"
+          },
+          {
+            "language": "zh-TW",
+            "email": {
+              "subject": "訂單更新",
+              "preview_text": "您的訂單有新消息",
+              "blocks": [
+                {
+                  "id": "title",
+                  "kind": "heading",
+                  "text": "訂單更新",
+                  "level": 1
+                },
+                {
+                  "id": "greeting",
+                  "kind": "paragraph",
+                  "text": "您好，{{customer.given_name}}",
+                  "style": {
+                    "alignment": "start",
+                    "spacing": "normal"
+                  }
+                },
+                {
+                  "id": "order-detail",
+                  "kind": "system_section",
+                  "section_code": "order_summary"
+                },
+                {
+                  "id": "action",
+                  "kind": "button",
+                  "text": "查看訂單",
+                  "action_url": "{{order.url}}"
+                },
+                {
+                  "id": "logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-logo",
+                    "url": "https://assets.example.invalid/logo.png"
+                  },
+                  "alt_text": "土豆商城"
+                },
+                {
+                  "id": "decorative-logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-decoration"
+                  },
+                  "alt_text": ""
+                },
+                {
+                  "id": "separator",
+                  "kind": "divider"
+                }
+              ]
+            },
+            "origin": "translated",
+            "review": {
+              "source_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+              "target_fingerprint": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+              "reviewed_at": "2026-09-22T00:00:00Z",
+              "reviewed_by": "fixture-reviewer"
+            }
+          },
+          {
+            "language": "zh-CN",
+            "email": {
+              "subject": "订单更新",
+              "preview_text": "您的订单有新消息",
+              "blocks": [
+                {
+                  "id": "title",
+                  "kind": "heading",
+                  "text": "订单更新",
+                  "level": 1
+                },
+                {
+                  "id": "greeting",
+                  "kind": "paragraph",
+                  "text": "您好，{{customer.given_name}}",
+                  "style": {
+                    "alignment": "start",
+                    "spacing": "normal"
+                  }
+                },
+                {
+                  "id": "order-detail",
+                  "kind": "system_section",
+                  "section_code": "order_summary"
+                },
+                {
+                  "id": "action",
+                  "kind": "button",
+                  "text": "查看订单",
+                  "action_url": "{{order.url}}"
+                },
+                {
+                  "id": "logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-logo",
+                    "url": "https://assets.example.invalid/logo.png"
+                  },
+                  "alt_text": "土豆商城"
+                },
+                {
+                  "id": "decorative-logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-decoration"
+                  },
+                  "alt_text": ""
+                },
+                {
+                  "id": "separator",
+                  "kind": "divider"
+                }
+              ]
+            },
+            "origin": "translated",
+            "review": {
+              "source_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+              "target_fingerprint": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+              "reviewed_at": "2026-09-22T00:00:00Z",
+              "reviewed_by": "fixture-reviewer"
+            }
+          }
+        ],
+        "email_theme": {
+          "background_color": "#F4F4F4",
+          "content_color": "#FFFFFF",
+          "text_color": "#111111",
+          "accent_color": "#225533",
+          "font_family": "sans",
+          "text_size": "normal",
+          "spacing": "normal",
+          "button_shape": "rounded"
+        }
+      },
+      "published_at": "2026-09-22T00:00:00Z",
+      "published_by": "fixture-publisher"
+    },
+    "reference": {
+      "country_code": "AU",
+      "template_code": "order-update",
+      "published_version": 2
+    },
+    "binding": {
+      "id": "au-fixture-binding",
+      "country_code": "AU",
+      "topic_code": "order-update",
+      "channel": "email",
+      "template": {
+        "country_code": "AU",
+        "template_code": "order-update",
+        "published_version": 2
+      },
+      "active": true,
+      "revision": 3,
+      "created_at": "2026-09-21T00:00:00Z",
+      "updated_at": "2026-09-22T00:00:00Z"
+    }
+  },
+  {
+    "template": {
+      "id": "tw-fixture-template",
+      "country_code": "TW",
+      "code": "order-update",
+      "name": [
+        {
+          "language": "en",
+          "name": "Order update"
+        }
+      ],
+      "active": true,
+      "revision": 7,
+      "content": {
+        "schema_version": 1,
+        "channel": "email",
+        "source_language": "en",
+        "source_fingerprint": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "placeholders": [
+          {
+            "key": "customer.given_name",
+            "value_type": "text",
+            "sensitive": true
+          },
+          {
+            "key": "order.url",
+            "value_type": "url",
+            "sensitive": false
+          }
+        ],
+        "variants": [
+          {
+            "language": "en",
+            "email": {
+              "subject": "Order update",
+              "preview_text": "Your order has an update",
+              "blocks": [
+                {
+                  "id": "title",
+                  "kind": "heading",
+                  "text": "Order update",
+                  "level": 1
+                },
+                {
+                  "id": "greeting",
+                  "kind": "paragraph",
+                  "text": "Hello {{customer.given_name}}",
+                  "style": {
+                    "alignment": "start",
+                    "spacing": "normal"
+                  }
+                },
+                {
+                  "id": "order-detail",
+                  "kind": "system_section",
+                  "section_code": "order_summary"
+                },
+                {
+                  "id": "action",
+                  "kind": "button",
+                  "text": "View order",
+                  "action_url": "{{order.url}}"
+                },
+                {
+                  "id": "logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-logo",
+                    "url": "https://assets.example.invalid/logo.png"
+                  },
+                  "alt_text": "Potato Mart"
+                },
+                {
+                  "id": "decorative-logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-decoration"
+                  },
+                  "alt_text": ""
+                },
+                {
+                  "id": "separator",
+                  "kind": "divider"
+                }
+              ]
+            },
+            "origin": "authored"
+          },
+          {
+            "language": "zh-TW",
+            "email": {
+              "subject": "訂單更新",
+              "preview_text": "您的訂單有新消息",
+              "blocks": [
+                {
+                  "id": "title",
+                  "kind": "heading",
+                  "text": "訂單更新",
+                  "level": 1
+                },
+                {
+                  "id": "greeting",
+                  "kind": "paragraph",
+                  "text": "您好，{{customer.given_name}}",
+                  "style": {
+                    "alignment": "start",
+                    "spacing": "normal"
+                  }
+                },
+                {
+                  "id": "order-detail",
+                  "kind": "system_section",
+                  "section_code": "order_summary"
+                },
+                {
+                  "id": "action",
+                  "kind": "button",
+                  "text": "查看訂單",
+                  "action_url": "{{order.url}}"
+                },
+                {
+                  "id": "logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-logo",
+                    "url": "https://assets.example.invalid/logo.png"
+                  },
+                  "alt_text": "土豆商城"
+                },
+                {
+                  "id": "decorative-logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-decoration"
+                  },
+                  "alt_text": ""
+                },
+                {
+                  "id": "separator",
+                  "kind": "divider"
+                }
+              ]
+            },
+            "origin": "translated",
+            "review": {
+              "source_fingerprint": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "target_fingerprint": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "reviewed_at": "2026-09-22T00:00:00Z",
+              "reviewed_by": "fixture-reviewer"
+            }
+          },
+          {
+            "language": "zh-CN",
+            "email": {
+              "subject": "订单更新",
+              "preview_text": "您的订单有新消息",
+              "blocks": [
+                {
+                  "id": "title",
+                  "kind": "heading",
+                  "text": "订单更新",
+                  "level": 1
+                },
+                {
+                  "id": "greeting",
+                  "kind": "paragraph",
+                  "text": "您好，{{customer.given_name}}",
+                  "style": {
+                    "alignment": "start",
+                    "spacing": "normal"
+                  }
+                },
+                {
+                  "id": "order-detail",
+                  "kind": "system_section",
+                  "section_code": "order_summary"
+                },
+                {
+                  "id": "action",
+                  "kind": "button",
+                  "text": "查看订单",
+                  "action_url": "{{order.url}}"
+                },
+                {
+                  "id": "logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-logo",
+                    "url": "https://assets.example.invalid/logo.png"
+                  },
+                  "alt_text": "土豆商城"
+                },
+                {
+                  "id": "decorative-logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-decoration"
+                  },
+                  "alt_text": ""
+                },
+                {
+                  "id": "separator",
+                  "kind": "divider"
+                }
+              ]
+            },
+            "origin": "translated",
+            "review": {
+              "source_fingerprint": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "target_fingerprint": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "reviewed_at": "2026-09-22T00:00:00Z",
+              "reviewed_by": "fixture-reviewer"
+            }
+          }
+        ],
+        "email_theme": {
+          "background_color": "#F4F4F4",
+          "content_color": "#FFFFFF",
+          "text_color": "#111111",
+          "accent_color": "#225533",
+          "font_family": "sans",
+          "text_size": "normal",
+          "spacing": "normal",
+          "button_shape": "rounded"
+        }
+      },
+      "created_at": "2026-09-21T00:00:00Z",
+      "updated_at": "2026-09-22T00:00:00Z"
+    },
+    "version": {
+      "country_code": "TW",
+      "template_code": "order-update",
+      "published_version": 2,
+      "source_revision": 5,
+      "content": {
+        "schema_version": 1,
+        "channel": "email",
+        "source_language": "en",
+        "source_fingerprint": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "placeholders": [
+          {
+            "key": "customer.given_name",
+            "value_type": "text",
+            "sensitive": true
+          },
+          {
+            "key": "order.url",
+            "value_type": "url",
+            "sensitive": false
+          }
+        ],
+        "variants": [
+          {
+            "language": "en",
+            "email": {
+              "subject": "Order update",
+              "preview_text": "Your order has an update",
+              "blocks": [
+                {
+                  "id": "title",
+                  "kind": "heading",
+                  "text": "Order update",
+                  "level": 1
+                },
+                {
+                  "id": "greeting",
+                  "kind": "paragraph",
+                  "text": "Hello {{customer.given_name}}",
+                  "style": {
+                    "alignment": "start",
+                    "spacing": "normal"
+                  }
+                },
+                {
+                  "id": "order-detail",
+                  "kind": "system_section",
+                  "section_code": "order_summary"
+                },
+                {
+                  "id": "action",
+                  "kind": "button",
+                  "text": "View order",
+                  "action_url": "{{order.url}}"
+                },
+                {
+                  "id": "logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-logo",
+                    "url": "https://assets.example.invalid/logo.png"
+                  },
+                  "alt_text": "Potato Mart"
+                },
+                {
+                  "id": "decorative-logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-decoration"
+                  },
+                  "alt_text": ""
+                },
+                {
+                  "id": "separator",
+                  "kind": "divider"
+                }
+              ]
+            },
+            "origin": "authored"
+          },
+          {
+            "language": "zh-TW",
+            "email": {
+              "subject": "訂單更新",
+              "preview_text": "您的訂單有新消息",
+              "blocks": [
+                {
+                  "id": "title",
+                  "kind": "heading",
+                  "text": "訂單更新",
+                  "level": 1
+                },
+                {
+                  "id": "greeting",
+                  "kind": "paragraph",
+                  "text": "您好，{{customer.given_name}}",
+                  "style": {
+                    "alignment": "start",
+                    "spacing": "normal"
+                  }
+                },
+                {
+                  "id": "order-detail",
+                  "kind": "system_section",
+                  "section_code": "order_summary"
+                },
+                {
+                  "id": "action",
+                  "kind": "button",
+                  "text": "查看訂單",
+                  "action_url": "{{order.url}}"
+                },
+                {
+                  "id": "logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-logo",
+                    "url": "https://assets.example.invalid/logo.png"
+                  },
+                  "alt_text": "土豆商城"
+                },
+                {
+                  "id": "decorative-logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-decoration"
+                  },
+                  "alt_text": ""
+                },
+                {
+                  "id": "separator",
+                  "kind": "divider"
+                }
+              ]
+            },
+            "origin": "translated",
+            "review": {
+              "source_fingerprint": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "target_fingerprint": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "reviewed_at": "2026-09-22T00:00:00Z",
+              "reviewed_by": "fixture-reviewer"
+            }
+          },
+          {
+            "language": "zh-CN",
+            "email": {
+              "subject": "订单更新",
+              "preview_text": "您的订单有新消息",
+              "blocks": [
+                {
+                  "id": "title",
+                  "kind": "heading",
+                  "text": "订单更新",
+                  "level": 1
+                },
+                {
+                  "id": "greeting",
+                  "kind": "paragraph",
+                  "text": "您好，{{customer.given_name}}",
+                  "style": {
+                    "alignment": "start",
+                    "spacing": "normal"
+                  }
+                },
+                {
+                  "id": "order-detail",
+                  "kind": "system_section",
+                  "section_code": "order_summary"
+                },
+                {
+                  "id": "action",
+                  "kind": "button",
+                  "text": "查看订单",
+                  "action_url": "{{order.url}}"
+                },
+                {
+                  "id": "logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-logo",
+                    "url": "https://assets.example.invalid/logo.png"
+                  },
+                  "alt_text": "土豆商城"
+                },
+                {
+                  "id": "decorative-logo",
+                  "kind": "image",
+                  "media": {
+                    "code": "fixture-decoration"
+                  },
+                  "alt_text": ""
+                },
+                {
+                  "id": "separator",
+                  "kind": "divider"
+                }
+              ]
+            },
+            "origin": "translated",
+            "review": {
+              "source_fingerprint": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+              "target_fingerprint": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+              "reviewed_at": "2026-09-22T00:00:00Z",
+              "reviewed_by": "fixture-reviewer"
+            }
+          }
+        ],
+        "email_theme": {
+          "background_color": "#F4F4F4",
+          "content_color": "#FFFFFF",
+          "text_color": "#111111",
+          "accent_color": "#225533",
+          "font_family": "sans",
+          "text_size": "normal",
+          "spacing": "normal",
+          "button_shape": "rounded"
+        }
+      },
+      "published_at": "2026-09-22T00:00:00Z",
+      "published_by": "fixture-publisher"
+    },
+    "reference": {
+      "country_code": "TW",
+      "template_code": "order-update",
+      "published_version": 2
+    },
+    "binding": {
+      "id": "tw-fixture-binding",
+      "country_code": "TW",
+      "topic_code": "order-update",
+      "channel": "email",
+      "template": {
+        "country_code": "TW",
+        "template_code": "order-update",
+        "published_version": 2
+      },
+      "active": true,
+      "revision": 3,
+      "created_at": "2026-09-21T00:00:00Z",
+      "updated_at": "2026-09-22T00:00:00Z",
+      "purpose_code": "fixture-purpose"
+    }
+  }
+]

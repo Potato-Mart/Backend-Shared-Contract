@@ -16,6 +16,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/identity/account"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/identity/authorisation"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notification/preference"
+	notificationtemplate "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notification/template"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/shipping"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/merchant"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/payment"
@@ -52,6 +53,10 @@ type typePolicy struct {
 // It is intentionally explicit: a new root must be reviewed instead of
 // inheriting audit or privacy metadata by package convention.
 var v33TypePolicyRegistry = map[string]typePolicy{
+	"notification template":                 {reflect.TypeOf(notificationtemplate.NotificationTemplate{}), true, false},
+	"notification template binding":         {reflect.TypeOf(notificationtemplate.NotificationTemplateBinding{}), true, false},
+	"notification template version":         {reflect.TypeOf(notificationtemplate.NotificationTemplateVersion{}), false, false},
+	"translation review":                    {reflect.TypeOf(notificationtemplate.TranslationReview{}), false, false},
 	"notification preference":               {reflect.TypeOf(preference.NotificationPreferences{}), true, true},
 	"payment":                               {reflect.TypeOf(payment.Payment{}), true, true},
 	"outbound shipment":                     {reflect.TypeOf(fulfilment.OutboundShipment{}), true, true},

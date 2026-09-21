@@ -33,7 +33,7 @@ claim v33 consumer verification.
 | Orders | `orders/cart`, `orders/order`, `orders/group_order`, `orders/fulfilment`, `orders/shipping`, `orders/buyer`, `orders/subscription` |
 | Payments | `payments/payment`, `provider`, `merchant`, `receipt`, `register`, `settlement`, `terminal` |
 | Pricing | `pricing/pricebook`, `quote`, `promotion`, `benefit`, `coupon`, `membership`, `market`, `special`, and `pricing/wallet/*` |
-| Notification | `notification/core`, `email`, `sms`, `push`, `preference`, `delivery` |
+| Notification | `notification/core`, `email`, `sms`, `push`, `preference`, `delivery`, `template` (added in v33.3) |
 | Insights and Marketing | `insights/analytics`, `insights/sales`, `insights/customer`; `marketing/campaign`, `marketing/audience`, `marketing/message` |
 | Supply | `supply/catalogue/{classification,product,listing,review,wish,favourite}`, `inventory`, `warehouse`, `procurement`, `compliance`, `fulfilment`, `forecasting` |
 | Pub/Sub | `pubsub/envelope`, `pubsub/routing`, and producer-owned `orders`, `payments`, `supply`, `customers`, `pricing`, and `notification` payload packages |

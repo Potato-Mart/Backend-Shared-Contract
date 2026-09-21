@@ -35,6 +35,7 @@ var expectedEnumPackages = []string{
 	"contracts/marketing/campaign/campaign_enums",
 	"contracts/marketing/message/message_enums",
 	"contracts/notification/core/notification_enums",
+	"contracts/notification/template/template_enums",
 	"contracts/orders/order/order_enums",
 	"contracts/orders/group_order/group_order_enums",
 	"contracts/orders/subscription/subscription_enums",
