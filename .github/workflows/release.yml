@@ -4,6 +4,25 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - '*.md'
+      - '**/*.md'
+      - '*.markdown'
+      - '**/*.markdown'
+      - '*.rst'
+      - '**/*.rst'
+      - '*.adoc'
+      - '**/*.adoc'
+      - '*.asciidoc'
+      - '**/*.asciidoc'
+      - 'README'
+      - 'README.*'
+      - '**/README'
+      - '**/README.*'
+      - 'doc/**'
+      - '**/doc/**'
+      - 'docs/**'
+      - '**/docs/**'
   workflow_dispatch:
     inputs:
       version:
