@@ -1,0 +1,1016 @@
+[
+  {
+    "name": "email/en",
+    "content": {
+      "schema_version": 1,
+      "channel": "email",
+      "source_language": "en",
+      "source_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "placeholders": [
+        {
+          "key": "customer.given_name",
+          "value_type": "text",
+          "sensitive": true
+        },
+        {
+          "key": "order.url",
+          "value_type": "url",
+          "sensitive": false
+        }
+      ],
+      "variants": [
+        {
+          "language": "en",
+          "email": {
+            "subject": "Order update",
+            "preview_text": "Your order has an update",
+            "blocks": [
+              {
+                "id": "title",
+                "kind": "heading",
+                "text": "Order update",
+                "level": 1
+              },
+              {
+                "id": "greeting",
+                "kind": "paragraph",
+                "text": "Hello {{customer.given_name}}",
+                "style": {
+                  "alignment": "start",
+                  "spacing": "normal"
+                }
+              },
+              {
+                "id": "order-detail",
+                "kind": "system_section",
+                "section_code": "order_summary"
+              },
+              {
+                "id": "action",
+                "kind": "button",
+                "text": "View order",
+                "action_url": "{{order.url}}"
+              },
+              {
+                "id": "logo",
+                "kind": "image",
+                "media": {
+                  "code": "fixture-logo",
+                  "url": "https://assets.example.invalid/logo.png"
+                },
+                "alt_text": "Potato Mart"
+              },
+              {
+                "id": "decorative-logo",
+                "kind": "image",
+                "media": {
+                  "code": "fixture-decoration"
+                },
+                "alt_text": ""
+              },
+              {
+                "id": "separator",
+                "kind": "divider"
+              }
+            ]
+          },
+          "origin": "authored"
+        },
+        {
+          "language": "zh-TW",
+          "email": {
+            "subject": "訂單更新",
+            "preview_text": "您的訂單有新消息",
+            "blocks": [
+              {
+                "id": "title",
+                "kind": "heading",
+                "text": "訂單更新",
+                "level": 1
+              },
+              {
+                "id": "greeting",
+                "kind": "paragraph",
+                "text": "您好，{{customer.given_name}}",
+                "style": {
+                  "alignment": "start",
+                  "spacing": "normal"
+                }
+              },
+              {
+                "id": "order-detail",
+                "kind": "system_section",
+                "section_code": "order_summary"
+              },
+              {
+                "id": "action",
+                "kind": "button",
+                "text": "查看訂單",
+                "action_url": "{{order.url}}"
+              },
+              {
+                "id": "logo",
+                "kind": "image",
+                "media": {
+                  "code": "fixture-logo",
+                  "url": "https://assets.example.invalid/logo.png"
+                },
+                "alt_text": "土豆商城"
+              },
+              {
+                "id": "decorative-logo",
+                "kind": "image",
+                "media": {
+                  "code": "fixture-decoration"
+                },
+                "alt_text": ""
+              },
+              {
+                "id": "separator",
+                "kind": "divider"
+              }
+            ]
+          },
+          "origin": "translated",
+          "review": {
+            "source_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "target_fingerprint": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+            "reviewed_at": "2026-09-22T00:00:00Z",
+            "reviewed_by": "fixture-reviewer"
+          }
+        },
+        {
+          "language": "zh-CN",
+          "email": {
+            "subject": "订单更新",
+            "preview_text": "您的订单有新消息",
+            "blocks": [
+              {
+                "id": "title",
+                "kind": "heading",
+                "text": "订单更新",
+                "level": 1
+              },
+              {
+                "id": "greeting",
+                "kind": "paragraph",
+                "text": "您好，{{customer.given_name}}",
+                "style": {
+                  "alignment": "start",
+                  "spacing": "normal"
+                }
+              },
+              {
+                "id": "order-detail",
+                "kind": "system_section",
+                "section_code": "order_summary"
+              },
+              {
+                "id": "action",
+                "kind": "button",
+                "text": "查看订单",
+                "action_url": "{{order.url}}"
+              },
+              {
+                "id": "logo",
+                "kind": "image",
+                "media": {
+                  "code": "fixture-logo",
+                  "url": "https://assets.example.invalid/logo.png"
+                },
+                "alt_text": "土豆商城"
+              },
+              {
+                "id": "decorative-logo",
+                "kind": "image",
+                "media": {
+                  "code": "fixture-decoration"
+                },
+                "alt_text": ""
+              },
+              {
+                "id": "separator",
+                "kind": "divider"
+              }
+            ]
+          },
+          "origin": "translated",
+          "review": {
+            "source_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "target_fingerprint": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+            "reviewed_at": "2026-09-22T00:00:00Z",
+            "reviewed_by": "fixture-reviewer"
+          }
+        }
+      ],
+      "email_theme": {
+        "background_color": "#F4F4F4",
+        "content_color": "#FFFFFF",
+        "text_color": "#111111",
+        "accent_color": "#225533",
+        "font_family": "sans",
+        "text_size": "normal",
+        "spacing": "normal",
+        "button_shape": "rounded"
+      }
+    }
+  },
+  {
+    "name": "email/zh-TW",
+    "content": {
+      "schema_version": 1,
+      "channel": "email",
+      "source_language": "zh-TW",
+      "source_fingerprint": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "placeholders": [
+        {
+          "key": "customer.given_name",
+          "value_type": "text",
+          "sensitive": true
+        },
+        {
+          "key": "order.url",
+          "value_type": "url",
+          "sensitive": false
+        }
+      ],
+      "variants": [
+        {
+          "language": "en",
+          "email": {
+            "subject": "Order update",
+            "preview_text": "Your order has an update",
+            "blocks": [
+              {
+                "id": "title",
+                "kind": "heading",
+                "text": "Order update",
+                "level": 1
+              },
+              {
+                "id": "greeting",
+                "kind": "paragraph",
+                "text": "Hello {{customer.given_name}}",
+                "style": {
+                  "alignment": "start",
+                  "spacing": "normal"
+                }
+              },
+              {
+                "id": "order-detail",
+                "kind": "system_section",
+                "section_code": "order_summary"
+              },
+              {
+                "id": "action",
+                "kind": "button",
+                "text": "View order",
+                "action_url": "{{order.url}}"
+              },
+              {
+                "id": "logo",
+                "kind": "image",
+                "media": {
+                  "code": "fixture-logo",
+                  "url": "https://assets.example.invalid/logo.png"
+                },
+                "alt_text": "Potato Mart"
+              },
+              {
+                "id": "decorative-logo",
+                "kind": "image",
+                "media": {
+                  "code": "fixture-decoration"
+                },
+                "alt_text": ""
+              },
+              {
+                "id": "separator",
+                "kind": "divider"
+              }
+            ]
+          },
+          "origin": "translated",
+          "review": {
+            "source_fingerprint": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+            "target_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "reviewed_at": "2026-09-22T00:00:00Z",
+            "reviewed_by": "fixture-reviewer"
+          }
+        },
+        {
+          "language": "zh-TW",
+          "email": {
+            "subject": "訂單更新",
+            "preview_text": "您的訂單有新消息",
+            "blocks": [
+              {
+                "id": "title",
+                "kind": "heading",
+                "text": "訂單更新",
+                "level": 1
+              },
+              {
+                "id": "greeting",
+                "kind": "paragraph",
+                "text": "您好，{{customer.given_name}}",
+                "style": {
+                  "alignment": "start",
+                  "spacing": "normal"
+                }
+              },
+              {
+                "id": "order-detail",
+                "kind": "system_section",
+                "section_code": "order_summary"
+              },
+              {
+                "id": "action",
+                "kind": "button",
+                "text": "查看訂單",
+                "action_url": "{{order.url}}"
+              },
+              {
+                "id": "logo",
+                "kind": "image",
+                "media": {
+                  "code": "fixture-logo",
+                  "url": "https://assets.example.invalid/logo.png"
+                },
+                "alt_text": "土豆商城"
+              },
+              {
+                "id": "decorative-logo",
+                "kind": "image",
+                "media": {
+                  "code": "fixture-decoration"
+                },
+                "alt_text": ""
+              },
+              {
+                "id": "separator",
+                "kind": "divider"
+              }
+            ]
+          },
+          "origin": "authored"
+        },
+        {
+          "language": "zh-CN",
+          "email": {
+            "subject": "订单更新",
+            "preview_text": "您的订单有新消息",
+            "blocks": [
+              {
+                "id": "title",
+                "kind": "heading",
+                "text": "订单更新",
+                "level": 1
+              },
+              {
+                "id": "greeting",
+                "kind": "paragraph",
+                "text": "您好，{{customer.given_name}}",
+                "style": {
+                  "alignment": "start",
+                  "spacing": "normal"
+                }
+              },
+              {
+                "id": "order-detail",
+                "kind": "system_section",
+                "section_code": "order_summary"
+              },
+              {
+                "id": "action",
+                "kind": "button",
+                "text": "查看订单",
+                "action_url": "{{order.url}}"
+              },
+              {
+                "id": "logo",
+                "kind": "image",
+                "media": {
+                  "code": "fixture-logo",
+                  "url": "https://assets.example.invalid/logo.png"
+                },
+                "alt_text": "土豆商城"
+              },
+              {
+                "id": "decorative-logo",
+                "kind": "image",
+                "media": {
+                  "code": "fixture-decoration"
+                },
+                "alt_text": ""
+              },
+              {
+                "id": "separator",
+                "kind": "divider"
+              }
+            ]
+          },
+          "origin": "translated",
+          "review": {
+            "source_fingerprint": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+            "target_fingerprint": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+            "reviewed_at": "2026-09-22T00:00:00Z",
+            "reviewed_by": "fixture-reviewer"
+          }
+        }
+      ],
+      "email_theme": {
+        "background_color": "#F4F4F4",
+        "content_color": "#FFFFFF",
+        "text_color": "#111111",
+        "accent_color": "#225533",
+        "font_family": "sans",
+        "text_size": "normal",
+        "spacing": "normal",
+        "button_shape": "rounded"
+      }
+    }
+  },
+  {
+    "name": "email/zh-CN",
+    "content": {
+      "schema_version": 1,
+      "channel": "email",
+      "source_language": "zh-CN",
+      "source_fingerprint": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "placeholders": [
+        {
+          "key": "customer.given_name",
+          "value_type": "text",
+          "sensitive": true
+        },
+        {
+          "key": "order.url",
+          "value_type": "url",
+          "sensitive": false
+        }
+      ],
+      "variants": [
+        {
+          "language": "en",
+          "email": {
+            "subject": "Order update",
+            "preview_text": "Your order has an update",
+            "blocks": [
+              {
+                "id": "title",
+                "kind": "heading",
+                "text": "Order update",
+                "level": 1
+              },
+              {
+                "id": "greeting",
+                "kind": "paragraph",
+                "text": "Hello {{customer.given_name}}",
+                "style": {
+                  "alignment": "start",
+                  "spacing": "normal"
+                }
+              },
+              {
+                "id": "order-detail",
+                "kind": "system_section",
+                "section_code": "order_summary"
+              },
+              {
+                "id": "action",
+                "kind": "button",
+                "text": "View order",
+                "action_url": "{{order.url}}"
+              },
+              {
+                "id": "logo",
+                "kind": "image",
+                "media": {
+                  "code": "fixture-logo",
+                  "url": "https://assets.example.invalid/logo.png"
+                },
+                "alt_text": "Potato Mart"
+              },
+              {
+                "id": "decorative-logo",
+                "kind": "image",
+                "media": {
+                  "code": "fixture-decoration"
+                },
+                "alt_text": ""
+              },
+              {
+                "id": "separator",
+                "kind": "divider"
+              }
+            ]
+          },
+          "origin": "translated",
+          "review": {
+            "source_fingerprint": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+            "target_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "reviewed_at": "2026-09-22T00:00:00Z",
+            "reviewed_by": "fixture-reviewer"
+          }
+        },
+        {
+          "language": "zh-TW",
+          "email": {
+            "subject": "訂單更新",
+            "preview_text": "您的訂單有新消息",
+            "blocks": [
+              {
+                "id": "title",
+                "kind": "heading",
+                "text": "訂單更新",
+                "level": 1
+              },
+              {
+                "id": "greeting",
+                "kind": "paragraph",
+                "text": "您好，{{customer.given_name}}",
+                "style": {
+                  "alignment": "start",
+                  "spacing": "normal"
+                }
+              },
+              {
+                "id": "order-detail",
+                "kind": "system_section",
+                "section_code": "order_summary"
+              },
+              {
+                "id": "action",
+                "kind": "button",
+                "text": "查看訂單",
+                "action_url": "{{order.url}}"
+              },
+              {
+                "id": "logo",
+                "kind": "image",
+                "media": {
+                  "code": "fixture-logo",
+                  "url": "https://assets.example.invalid/logo.png"
+                },
+                "alt_text": "土豆商城"
+              },
+              {
+                "id": "decorative-logo",
+                "kind": "image",
+                "media": {
+                  "code": "fixture-decoration"
+                },
+                "alt_text": ""
+              },
+              {
+                "id": "separator",
+                "kind": "divider"
+              }
+            ]
+          },
+          "origin": "translated",
+          "review": {
+            "source_fingerprint": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+            "target_fingerprint": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+            "reviewed_at": "2026-09-22T00:00:00Z",
+            "reviewed_by": "fixture-reviewer"
+          }
+        },
+        {
+          "language": "zh-CN",
+          "email": {
+            "subject": "订单更新",
+            "preview_text": "您的订单有新消息",
+            "blocks": [
+              {
+                "id": "title",
+                "kind": "heading",
+                "text": "订单更新",
+                "level": 1
+              },
+              {
+                "id": "greeting",
+                "kind": "paragraph",
+                "text": "您好，{{customer.given_name}}",
+                "style": {
+                  "alignment": "start",
+                  "spacing": "normal"
+                }
+              },
+              {
+                "id": "order-detail",
+                "kind": "system_section",
+                "section_code": "order_summary"
+              },
+              {
+                "id": "action",
+                "kind": "button",
+                "text": "查看订单",
+                "action_url": "{{order.url}}"
+              },
+              {
+                "id": "logo",
+                "kind": "image",
+                "media": {
+                  "code": "fixture-logo",
+                  "url": "https://assets.example.invalid/logo.png"
+                },
+                "alt_text": "土豆商城"
+              },
+              {
+                "id": "decorative-logo",
+                "kind": "image",
+                "media": {
+                  "code": "fixture-decoration"
+                },
+                "alt_text": ""
+              },
+              {
+                "id": "separator",
+                "kind": "divider"
+              }
+            ]
+          },
+          "origin": "authored"
+        }
+      ],
+      "email_theme": {
+        "background_color": "#F4F4F4",
+        "content_color": "#FFFFFF",
+        "text_color": "#111111",
+        "accent_color": "#225533",
+        "font_family": "sans",
+        "text_size": "normal",
+        "spacing": "normal",
+        "button_shape": "rounded"
+      }
+    }
+  },
+  {
+    "name": "sms/en",
+    "content": {
+      "schema_version": 1,
+      "channel": "sms",
+      "source_language": "en",
+      "source_fingerprint": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "placeholders": [
+        {
+          "key": "customer.given_name",
+          "value_type": "text",
+          "sensitive": true
+        }
+      ],
+      "variants": [
+        {
+          "language": "en",
+          "sms": {
+            "body": "Hello {{customer.given_name}}"
+          },
+          "origin": "authored"
+        },
+        {
+          "language": "zh-TW",
+          "sms": {
+            "body": "您好，{{customer.given_name}}"
+          },
+          "origin": "translated",
+          "review": {
+            "source_fingerprint": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+            "target_fingerprint": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+            "reviewed_at": "2026-09-22T00:00:00Z",
+            "reviewed_by": "fixture-reviewer"
+          }
+        },
+        {
+          "language": "zh-CN",
+          "sms": {
+            "body": "您好，{{customer.given_name}}"
+          },
+          "origin": "translated",
+          "review": {
+            "source_fingerprint": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+            "target_fingerprint": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+            "reviewed_at": "2026-09-22T00:00:00Z",
+            "reviewed_by": "fixture-reviewer"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "sms/zh-TW",
+    "content": {
+      "schema_version": 1,
+      "channel": "sms",
+      "source_language": "zh-TW",
+      "source_fingerprint": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "placeholders": [
+        {
+          "key": "customer.given_name",
+          "value_type": "text",
+          "sensitive": true
+        }
+      ],
+      "variants": [
+        {
+          "language": "en",
+          "sms": {
+            "body": "Hello {{customer.given_name}}"
+          },
+          "origin": "translated",
+          "review": {
+            "source_fingerprint": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+            "target_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "reviewed_at": "2026-09-22T00:00:00Z",
+            "reviewed_by": "fixture-reviewer"
+          }
+        },
+        {
+          "language": "zh-TW",
+          "sms": {
+            "body": "您好，{{customer.given_name}}"
+          },
+          "origin": "authored"
+        },
+        {
+          "language": "zh-CN",
+          "sms": {
+            "body": "您好，{{customer.given_name}}"
+          },
+          "origin": "translated",
+          "review": {
+            "source_fingerprint": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+            "target_fingerprint": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+            "reviewed_at": "2026-09-22T00:00:00Z",
+            "reviewed_by": "fixture-reviewer"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "sms/zh-CN",
+    "content": {
+      "schema_version": 1,
+      "channel": "sms",
+      "source_language": "zh-CN",
+      "source_fingerprint": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+      "placeholders": [
+        {
+          "key": "customer.given_name",
+          "value_type": "text",
+          "sensitive": true
+        }
+      ],
+      "variants": [
+        {
+          "language": "en",
+          "sms": {
+            "body": "Hello {{customer.given_name}}"
+          },
+          "origin": "translated",
+          "review": {
+            "source_fingerprint": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+            "target_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "reviewed_at": "2026-09-22T00:00:00Z",
+            "reviewed_by": "fixture-reviewer"
+          }
+        },
+        {
+          "language": "zh-TW",
+          "sms": {
+            "body": "您好，{{customer.given_name}}"
+          },
+          "origin": "translated",
+          "review": {
+            "source_fingerprint": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+            "target_fingerprint": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+            "reviewed_at": "2026-09-22T00:00:00Z",
+            "reviewed_by": "fixture-reviewer"
+          }
+        },
+        {
+          "language": "zh-CN",
+          "sms": {
+            "body": "您好，{{customer.given_name}}"
+          },
+          "origin": "authored"
+        }
+      ]
+    }
+  },
+  {
+    "name": "push/en",
+    "content": {
+      "schema_version": 1,
+      "channel": "push",
+      "source_language": "en",
+      "source_fingerprint": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "placeholders": [
+        {
+          "key": "customer.given_name",
+          "value_type": "text",
+          "sensitive": true
+        },
+        {
+          "key": "order.url",
+          "value_type": "url",
+          "sensitive": false
+        }
+      ],
+      "variants": [
+        {
+          "language": "en",
+          "push": {
+            "title": "Order update",
+            "body": "Hello {{customer.given_name}}",
+            "action_url": "{{order.url}}",
+            "image": {
+              "code": "fixture-logo"
+            }
+          },
+          "origin": "authored"
+        },
+        {
+          "language": "zh-TW",
+          "push": {
+            "title": "訂單更新",
+            "body": "您好，{{customer.given_name}}",
+            "action_url": "{{order.url}}",
+            "image": {
+              "code": "fixture-logo"
+            }
+          },
+          "origin": "translated",
+          "review": {
+            "source_fingerprint": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+            "target_fingerprint": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+            "reviewed_at": "2026-09-22T00:00:00Z",
+            "reviewed_by": "fixture-reviewer"
+          }
+        },
+        {
+          "language": "zh-CN",
+          "push": {
+            "title": "订单更新",
+            "body": "您好，{{customer.given_name}}",
+            "action_url": "{{order.url}}",
+            "image": {
+              "code": "fixture-logo"
+            }
+          },
+          "origin": "translated",
+          "review": {
+            "source_fingerprint": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+            "target_fingerprint": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+            "reviewed_at": "2026-09-22T00:00:00Z",
+            "reviewed_by": "fixture-reviewer"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "push/zh-TW",
+    "content": {
+      "schema_version": 1,
+      "channel": "push",
+      "source_language": "zh-TW",
+      "source_fingerprint": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+      "placeholders": [
+        {
+          "key": "customer.given_name",
+          "value_type": "text",
+          "sensitive": true
+        },
+        {
+          "key": "order.url",
+          "value_type": "url",
+          "sensitive": false
+        }
+      ],
+      "variants": [
+        {
+          "language": "en",
+          "push": {
+            "title": "Order update",
+            "body": "Hello {{customer.given_name}}",
+            "action_url": "{{order.url}}",
+            "image": {
+              "code": "fixture-logo"
+            }
+          },
+          "origin": "translated",
+          "review": {
+            "source_fingerprint": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+            "target_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "reviewed_at": "2026-09-22T00:00:00Z",
+            "reviewed_by": "fixture-reviewer"
+          }
+        },
+        {
+          "language": "zh-TW",
+          "push": {
+            "title": "訂單更新",
+            "body": "您好，{{customer.given_name}}",
+            "action_url": "{{order.url}}",
+            "image": {
+              "code": "fixture-logo"
+            }
+          },
+          "origin": "authored"
+        },
+        {
+          "language": "zh-CN",
+          "push": {
+            "title": "订单更新",
+            "body": "您好，{{customer.given_name}}",
+            "action_url": "{{order.url}}",
+            "image": {
+              "code": "fixture-logo"
+            }
+          },
+          "origin": "translated",
+          "review": {
+            "source_fingerprint": "sha256:8888888888888888888888888888888888888888888888888888888888888888",
+            "target_fingerprint": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+            "reviewed_at": "2026-09-22T00:00:00Z",
+            "reviewed_by": "fixture-reviewer"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "name": "push/zh-CN",
+    "content": {
+      "schema_version": 1,
+      "channel": "push",
+      "source_language": "zh-CN",
+      "source_fingerprint": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+      "placeholders": [
+        {
+          "key": "customer.given_name",
+          "value_type": "text",
+          "sensitive": true
+        },
+        {
+          "key": "order.url",
+          "value_type": "url",
+          "sensitive": false
+        }
+      ],
+      "variants": [
+        {
+          "language": "en",
+          "push": {
+            "title": "Order update",
+            "body": "Hello {{customer.given_name}}",
+            "action_url": "{{order.url}}",
+            "image": {
+              "code": "fixture-logo"
+            }
+          },
+          "origin": "translated",
+          "review": {
+            "source_fingerprint": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+            "target_fingerprint": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+            "reviewed_at": "2026-09-22T00:00:00Z",
+            "reviewed_by": "fixture-reviewer"
+          }
+        },
+        {
+          "language": "zh-TW",
+          "push": {
+            "title": "訂單更新",
+            "body": "您好，{{customer.given_name}}",
+            "action_url": "{{order.url}}",
+            "image": {
+              "code": "fixture-logo"
+            }
+          },
+          "origin": "translated",
+          "review": {
+            "source_fingerprint": "sha256:9999999999999999999999999999999999999999999999999999999999999999",
+            "target_fingerprint": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+            "reviewed_at": "2026-09-22T00:00:00Z",
+            "reviewed_by": "fixture-reviewer"
+          }
+        },
+        {
+          "language": "zh-CN",
+          "push": {
+            "title": "订单更新",
+            "body": "您好，{{customer.given_name}}",
+            "action_url": "{{order.url}}",
+            "image": {
+              "code": "fixture-logo"
+            }
+          },
+          "origin": "authored"
+        }
+      ]
+    }
+  }
+]

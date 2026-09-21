@@ -23,6 +23,7 @@ func TestV33DomainOwnershipPackagesArePopulated(t *testing.T) {
 		"contracts/pricing/pricebook", "contracts/pricing/quote", "contracts/pricing/promotion", "contracts/pricing/benefit", "contracts/pricing/coupon", "contracts/pricing/membership", "contracts/pricing/market", "contracts/pricing/special",
 		"contracts/pricing/wallet/balance", "contracts/pricing/wallet/ledger", "contracts/pricing/wallet/points", "contracts/pricing/wallet/giftcard", "contracts/pricing/wallet/reward", "contracts/pricing/wallet/reservation",
 		"contracts/notification/core", "contracts/notification/email", "contracts/notification/sms", "contracts/notification/push", "contracts/notification/preference", "contracts/notification/delivery",
+		"contracts/notification/template", "contracts/notification/template/template_enums",
 		"contracts/insights/analytics", "contracts/insights/sales", "contracts/insights/customer",
 		"contracts/marketing/campaign", "contracts/marketing/audience", "contracts/marketing/message",
 		"contracts/supply/catalogue/classification", "contracts/supply/catalogue/product", "contracts/supply/catalogue/listing", "contracts/supply/catalogue/review", "contracts/supply/catalogue/wish", "contracts/supply/catalogue/favourite",

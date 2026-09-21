@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v33.3.0` | 2026-09-22 | Minor | Adds country-scoped Notification template definitions, immutable publications/references/bindings, reviewed three-language email/SMS/push content, typed placeholders, bounded email blocks/styles and protected system-section references. Preserves existing `/v33` shapes. |
 | `v33.2.0` | 2026-09-20 | Minor | Adds package-specific price entries, membership-tier price-book assignments, customer-safe conditional selling-price offers, and optional package/member quote provenance while preserving `/v33` and legacy JSON when the new fields are absent. |
 | `v33.1.0` | 2026-09-08 | Minor | Additive selling-price display and customization evidence, explicit barcode JSON fixtures, private procurement source allocations and locks, and separate net-goods valuation snapshots/movements. Preserves `/v33` and all existing price-book, checkout, and carrying-cost meanings. |
 | `v33.0.0` | 2026-08-30 | Major | Domain-ownership restructure: moves the module path to `/v33`, preserves every exported v32 contract and enum at one reviewed destination, aligns audit/privacy evidence, and normalizes event envelopes. Consumer adoption remains external. |
@@ -131,6 +132,77 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v33.3.0 (2026-09-22) - Country-Scoped Notification Template Content
+
+### Breaking Contract Changes
+
+- None. The module remains `github.com/Potato-Mart/Backend-Shared-Contract/v33`.
+- Existing delivery content, topic, marketing, country, localization, Identity
+  role/language and event contracts retain their fields and wire values.
+
+### Added
+
+- `notification/template` records for a mutable template definition, immutable
+  published version, pinned reference and country/topic/channel/purpose binding.
+  `country_code` is required on every identity and reference; no value implies
+  global ownership, latest publication or cross-country fallback.
+- A channel-specific authoring document with `en`, `zh-TW` and `zh-CN` variants,
+  any source language, typed placeholder declarations and server-stamped review
+  evidence. Schema version, draft revision, publication version and source/target
+  fingerprints have separate meanings.
+- Constrained email blocks, bounded theme/style tokens and opaque protected
+  `system_section` identifiers. SMS and push reuse existing content values;
+  there is no raw HTML/CSS, recipient/credential data or translation adapter.
+- Stable JSON fixtures for all nine source-language/channel combinations and
+  independently country-qualified template/version/reference/binding records.
+
+### Fixed
+
+- No runtime fixes are claimed. Locale selection, authorization, staleness,
+  translation privacy and rendering behavior remain Notification-owned work.
+
+### Other Changes
+
+- Align release metadata, README, model inventory and audit/privacy policies.
+- Record wire semantics and service-owned enforcement in the
+  [notification template model](notification-template-model.md).
+- Active delivery and marketing contracts remain supported. Superseded backend
+  template paths, adapters, fixtures and documentation are retired by their
+  owner only after consumer migration, parity checks and the rollback window.
+
+### Contract Files Changed
+
+- Added `pkg/contracts/notification/template/*.go` and
+  `pkg/contracts/notification/template/template_enums/*.go`.
+- Added package JSON fixtures/tests and enum coverage; updated package inventory
+  and audit/privacy evidence in `pkg/test`. No existing model source was changed.
+
+### Compatibility Notes
+
+- This is an additive model release, not an API, database or notification
+  deployment. Existing consumers can continue using their current v33 models.
+- Notification must validate the one-of payload, supported schema/channel,
+  countries, complete locales, required protected sections, placeholder rules
+  and fresh server-issued review evidence. Struct tags do not enforce these.
+- Template editing uses the existing role and validated country primitives;
+  all topic/channel editing within an authorized country does not confer
+  publication or send permission. Recipient/campaign market scope stays intact.
+
+### Consumer Action / 使用方動作
+
+1. Wait for actual publication of `v33.3.0`; then confirm the released model
+   and update both backend `go.mod` and CI `contract_version` pins. Backend
+   implementation starts only after this release is available.
+2. Implement Notification-owned APIs, persistence, preview/translation/rendering,
+   authorization and migration tests against the released fields and fixtures.
+   Frontend implementation starts only after completed backend/API handoff.
+3. Pin country, publication and resolved recipient locale at send acceptance;
+   retain sensitive runtime material in the owner's protected mechanisms.
+   Verify rich order, authentication, claim and unsubscribe parity before
+   replacing those existing paths, and remove superseded usage after the
+   agreed rollback window. Do not remove still-consumed shared models in a
+   minor release.
 
 ## v33.2.0 (2026-09-20) - Package and Membership Price Variants
 
