@@ -36,11 +36,17 @@ tree, whose contents are restricted to contract models and enums.
    permission need the required approval; release maintainers may use the
    documented pull-request-only bypass. Do not create or push the version tag
    from the feature branch.
-5. Merging to `main` triggers `.github/workflows/release.yml`. The workflow
-   reruns the contract tests, verifies source-version alignment, creates the
-   immutable annotated tag, and creates or repairs the matching GitHub Release.
-   A manual workflow dispatch from `main` may repair an aligned release; a
-   tag-only push does not trigger the workflow.
+5. A push to `main` that includes a non-documentation change triggers
+   `.github/workflows/release.yml`. The workflow reruns the contract tests,
+   verifies source-version alignment, creates the immutable annotated tag, and
+   creates or repairs the matching GitHub Release. Documentation-only pushes
+   do not start the release workflow. A manual workflow dispatch from `main`
+   may repair an aligned release; a tag-only push does not trigger the workflow.
+
+   The `Test Contract` workflow still reports the required `Go tests` status on
+   every pull request. README-only and documentation-only changes receive a
+   successful status without release-alignment or Go tests; mixed changes run
+   the full gate.
 
 Release-control changes additionally require the review policy in the
 [Git workflow](git-workflow.md#release-maintainers).

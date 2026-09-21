@@ -13,14 +13,21 @@ These rules apply to every commit and push in this repository.
 
 - Use a concise Conventional Commit message: `type(scope): summary`.
 - Mark breaking changes with `!` or a `BREAKING CHANGE` footer.
-- Run the release-alignment gate, contract gate, and `git diff --check` before
-  pushing:
+- For changes that are not documentation-only, run the release-alignment gate,
+  contract gate, and `git diff --check` before pushing:
 
   ```powershell
   .\scripts\powershell\Test-ReleaseAlignment.ps1 -ExpectedVersion vX.Y.Z
   .\scripts\powershell\Test-Contract.ps1
   git diff --check
   ```
+- For documentation-only changes, the local contract gates may be skipped;
+  `git diff --check` remains a quick check for whitespace errors.
+- The required `Go tests` check is reported for every pull request. For
+  documentation-only changes (README files, documentation directories, or
+  Markdown/reStructuredText/AsciiDoc files), it succeeds without running
+  release-alignment or Go tests. Any pull request that also changes a
+  non-documentation file runs the full gate.
 - Push only the feature branch and open a pull request targeting `main`.
 - Resolve review comments and wait for the required `Go tests` check before
   merging.
@@ -47,6 +54,9 @@ an audited exception.
 
 - Do not create or push release tags from a feature branch.
 - Merging to `main` is the release boundary.
+- `Release Contract` runs for `main` pushes that include a non-documentation
+  change. Documentation-only pushes do not start a release run; manual repair
+  from `main` remains available.
 - The release workflow validates the aligned version, creates the immutable
   annotated tag, and publishes the matching GitHub release.
 - Do not use the mutating publish scripts for repository releases.

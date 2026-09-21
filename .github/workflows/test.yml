@@ -1,6 +1,8 @@
 name: Test Contract
 
 on:
+  # Keep this workflow on every PR so the required Go tests status is reported.
+  # The job skips expensive checks when the diff is documentation-only.
   pull_request:
   push:
     branches:
@@ -20,16 +22,78 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Determine whether contract checks should run
+        id: change_scope
+        shell: pwsh
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PUSH_BEFORE_SHA: ${{ github.event.before }}
+          PUSH_SHA: ${{ github.sha }}
+        run: |
+          $runChecks = $true
+          $comparison = $null
+
+          if (
+              $env:EVENT_NAME -eq 'pull_request' -and
+              $env:PR_BASE_SHA -and
+              $env:PR_HEAD_SHA
+          ) {
+              $comparison = "$($env:PR_BASE_SHA)...$($env:PR_HEAD_SHA)"
+          }
+          elseif ($env:EVENT_NAME -eq 'push' -and $env:PUSH_SHA) {
+              if ($env:PUSH_BEFORE_SHA -and $env:PUSH_BEFORE_SHA -notmatch '^0+$') {
+                  $comparison = "$($env:PUSH_BEFORE_SHA)..$($env:PUSH_SHA)"
+              }
+              else {
+                  $parent = (& git rev-parse "$($env:PUSH_SHA)^" 2>$null)
+                  if ($LASTEXITCODE -eq 0 -and $parent) {
+                      $comparison = "$($parent.Trim())..$($env:PUSH_SHA)"
+                  }
+              }
+          }
+
+          if ($comparison) {
+              $changedPaths = @(& git diff --name-only $comparison)
+              if ($LASTEXITCODE -eq 0 -and $changedPaths.Count -gt 0) {
+                  $nonDocumentationPaths = @(
+                      $changedPaths | Where-Object {
+                          $normalizedPath = $_ -replace '\\', '/'
+                          $fileName = $normalizedPath.Split('/')[-1]
+                          $isDocsDirectory = $normalizedPath -match '(?i)(^|/)docs?(/|$)'
+                          $isReadme = $fileName -match '(?i)^README(?:\..*)?$'
+                          $isDocumentationFile = $normalizedPath -match '(?i)\.(md|markdown|rst|adoc|asciidoc)$'
+                          -not ($isDocsDirectory -or $isReadme -or $isDocumentationFile)
+                      }
+                  )
+                  $runChecks = $nonDocumentationPaths.Count -gt 0
+              }
+          }
+
+          $runChecksValue = if ($runChecks) { 'true' } else { 'false' }
+          "run_checks=$runChecksValue" >> $env:GITHUB_OUTPUT
+
+          if ($runChecks) {
+              Write-Host 'Running release alignment and Go contract tests for non-documentation changes.'
+          }
+          else {
+              Write-Host 'Documentation-only change; skipping release alignment and Go contract tests.'
+          }
+
       - name: Validate release alignment
+        if: steps.change_scope.outputs.run_checks == 'true'
         shell: pwsh
         run: ./scripts/powershell/Test-ReleaseAlignment.ps1
 
       - name: Set up Go
+        if: steps.change_scope.outputs.run_checks == 'true'
         uses: actions/setup-go@v7.0.0
         with:
           go-version-file: go.mod
 
       - name: Test contracts
+        if: steps.change_scope.outputs.run_checks == 'true'
         env:
           GOWORK: off
         run: go test -count=1 ./...
