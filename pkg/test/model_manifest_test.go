@@ -223,6 +223,8 @@ var v33ModelPackageManifest = map[string]string{
 	"contracts/supply/compliance":                                    "record",
 	"contracts/supply/compliance/compliance_enums":                   "enum",
 	"contracts/supply/forecasting":                                   "record",
+	"contracts/supply/courier":                                       "record",
+	"contracts/supply/courier/courier_enums":                         "enum",
 	"contracts/supply/forecasting/marketing_enums":                   "enum",
 	"contracts/supply/fulfilment":                                    "record",
 	"contracts/supply/inventory":                                     "record",
@@ -238,9 +240,10 @@ var modelPackageManifest map[string]string
 // service-local DTO, workflow, persistence, provider-diagnostic, migration,
 // and build-metadata surfaces. Field-only changes are locked by JSON-shape and
 // retired-symbol tests instead.
-// Notification authoring records and their leaf enums are additive; existing
-// delivery, marketing, pricing and localization types retain their packages.
-const exportedTypeManifestDigest = "b550ab43dd0249e6147d90b9c185963d5dff23c0e1055f4a72fac4a0561046ad"
+// Courier company/configuration records, frozen delivery selections and their
+// leaf enums are additive;
+// existing delivery, marketing, pricing and localization types retain packages.
+const exportedTypeManifestDigest = "98df2d70d3e9e265894749c81f9159be580f170bb2f4733bb2eb81f70ef0dd44"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

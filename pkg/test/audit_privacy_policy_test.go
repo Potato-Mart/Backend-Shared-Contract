@@ -35,6 +35,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/classification"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/review"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/wish"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/courier"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/forecasting"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/fulfilment"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/inventory"
@@ -53,6 +54,13 @@ type typePolicy struct {
 // It is intentionally explicit: a new root must be reviewed instead of
 // inheriting audit or privacy metadata by package convention.
 var v33TypePolicyRegistry = map[string]typePolicy{
+	"delivery selection":                    {reflect.TypeOf(shipping.DeliverySelection{}), false, false},
+	"delivery company":                      {reflect.TypeOf(courier.DeliveryCompany{}), true, false},
+	"delivery company reference":            {reflect.TypeOf(courier.DeliveryCompanyRef{}), false, false},
+	"delivery connection":                   {reflect.TypeOf(courier.DeliveryConnection{}), false, false},
+	"delivery capabilities":                 {reflect.TypeOf(courier.DeliveryCapabilities{}), false, false},
+	"delivery service area":                 {reflect.TypeOf(courier.DeliveryServiceArea{}), false, false},
+	"delivery service window":               {reflect.TypeOf(courier.DeliveryServiceWindow{}), false, false},
 	"notification template":                 {reflect.TypeOf(notificationtemplate.NotificationTemplate{}), true, false},
 	"notification template binding":         {reflect.TypeOf(notificationtemplate.NotificationTemplateBinding{}), true, false},
 	"notification template version":         {reflect.TypeOf(notificationtemplate.NotificationTemplateVersion{}), false, false},
