@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
 )
@@ -13,12 +14,17 @@ func TestUserProfileJSONIncludesObjectMediaAvatarWhenPresent(t *testing.T) {
 	body, err := json.Marshal(UserProfile{
 		ID:          "usr_1",
 		Email:       "customer@example.test",
+		Phone:       "+61400111222",
 		DisplayName: "Customer",
 		Avatar: &security.ObjectMedia{
 			Code: "med_avatar",
 			URL:  "https://cdn.example.test/avatar.png",
 		},
 		Active: true,
+		PhoneVerifiedAt: func() *time.Time {
+			verifiedAt := time.Date(2026, time.September, 23, 0, 0, 0, 0, time.UTC)
+			return &verifiedAt
+		}(),
 	})
 	if err != nil {
 		t.Fatalf("marshal user profile: %v", err)
@@ -26,6 +32,11 @@ func TestUserProfileJSONIncludesObjectMediaAvatarWhenPresent(t *testing.T) {
 	text := string(body)
 	if !strings.Contains(text, `"avatar":{"code":"med_avatar","url":"https://cdn.example.test/avatar.png"}`) {
 		t.Fatalf("UserProfile JSON = %s, want nested object_media avatar", text)
+	}
+	for _, expected := range []string{`"phone":"+61400111222"`, `"phone_verified_at":"2026-09-23T00:00:00Z"`} {
+		if !strings.Contains(text, expected) {
+			t.Fatalf("UserProfile JSON = %s, want %s", text, expected)
+		}
 	}
 	for _, retired := range []string{"avatar_media_code", "avatar_url"} {
 		if strings.Contains(text, retired) {
@@ -60,5 +71,10 @@ func TestUserProfileJSONOmitsEmptyObjectMediaAvatar(t *testing.T) {
 	text := string(body)
 	if strings.Contains(text, "avatar") {
 		t.Fatalf("empty avatar should be omitted, got %s", text)
+	}
+	for _, optional := range []string{"phone", "phone_verified_at"} {
+		if strings.Contains(text, optional) {
+			t.Fatalf("empty %s should be omitted, got %s", optional, text)
+		}
 	}
 }

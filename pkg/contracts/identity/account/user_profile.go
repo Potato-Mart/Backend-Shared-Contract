@@ -13,8 +13,12 @@ import (
 // as password hashes and refresh token material never appear here —
 // they live only inside the service that manages identity.
 type UserProfile struct {
-	ID                 string                    `json:"id"`
-	Email              string                    `json:"email"`
+	ID    string `json:"id"`
+	Email string `json:"email"`
+	// Phone is the Identity-owned canonical E.164 value. An empty value means
+	// that no phone has been registered; normalization and verification policy
+	// remain owned by Identity.
+	Phone              string                    `json:"phone,omitempty"`
 	DisplayName        string                    `json:"display_name,omitempty"`
 	Avatar             *security.ObjectMedia     `json:"avatar,omitempty"`
 	Active             bool                      `json:"active"`
@@ -23,6 +27,9 @@ type UserProfile struct {
 	PrimaryAccountType account_enums.AccountType `json:"primary_account_type,omitempty"`
 	MFAEnabled         bool                      `json:"mfa_enabled,omitempty"`
 	EmailVerified      bool                      `json:"email_verified"`
+	// PhoneVerifiedAt is nil until Phone has been verified. Identity clears it
+	// when the canonical phone value changes.
+	PhoneVerifiedAt *time.Time `json:"phone_verified_at,omitempty"`
 	// GeoScope is the workforce principal's geographic grant. It is absent
 	// on customer profiles and on workforce profiles whose scope has not
 	// been assigned yet; consumers fail closed on an absent scope rather

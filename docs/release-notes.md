@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v33.4.0` | 2026-09-23 | Minor | Adds the optional canonical Identity `phone` and `phone_verified_at` user-profile fields for E.164 phone verification. Preserves the `/v33` module path and leaves Orders-owned priced-cart and gift-recipient-delivery API DTOs unchanged. |
 | `v33.3.0` | 2026-09-22 | Minor | Adds country-scoped Notification template definitions, immutable publications/references/bindings, reviewed three-language email/SMS/push content, typed placeholders, bounded email blocks/styles and protected system-section references. Preserves existing `/v33` shapes. |
 | `v33.2.0` | 2026-09-20 | Minor | Adds package-specific price entries, membership-tier price-book assignments, customer-safe conditional selling-price offers, and optional package/member quote provenance while preserving `/v33` and legacy JSON when the new fields are absent. |
 | `v33.1.0` | 2026-09-08 | Minor | Additive selling-price display and customization evidence, explicit barcode JSON fixtures, private procurement source allocations and locks, and separate net-goods valuation snapshots/movements. Preserves `/v33` and all existing price-book, checkout, and carrying-cost meanings. |
@@ -132,6 +133,49 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v33.4.0 (2026-09-23) - Identity Phone Verification Projection
+
+### Breaking Contract Changes
+
+- None. The module remains `github.com/Potato-Mart/Backend-Shared-Contract/v33`.
+- Existing user-profile fields and wire values retain their previous meanings.
+
+### Added
+
+- `identity/account.UserProfile.Phone` as the optional canonical E.164 phone
+  value, serialized as `phone` when present.
+- `identity/account.UserProfile.PhoneVerifiedAt` as the optional nullable
+  verification timestamp, serialized as `phone_verified_at` when present.
+- The timestamp is absent until Identity verifies the canonical phone and is
+  cleared by Identity when that value changes. Normalization, verification
+  policy, challenge delivery, and resend behavior remain service-owned.
+
+### Fixed
+
+- None. This release only adds the shared identity projection needed by the
+  phone-verification rollout.
+
+### Other Changes
+
+- The P1 priced-cart preview and P5 gift-recipient-delivery status were audited
+  and remain Orders-owned API DTOs; no shared contract fields were added for
+  either flow.
+
+### Contract Files Changed
+
+- `pkg/contracts/identity/account/user_profile.go`
+- `pkg/contracts/identity/account/user_profile_json_test.go`
+- `README.md`
+- `go.mod`
+
+### Compatibility Notes
+
+- This is an additive minor release. Existing consumers may continue omitting
+  both fields; consumers that adopt them must tolerate their absence.
+- Backend-Identity owns E.164 normalization and the verification lifecycle.
+  No HTTP routes, challenge payloads, provider behavior, persistence schema, or
+  resend workflow are defined in Shared Contract.
 
 ## v33.3.0 (2026-09-22) - Country-Scoped Notification Template Content
 
