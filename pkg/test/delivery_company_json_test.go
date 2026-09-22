@@ -48,7 +48,7 @@ func TestDeliveryLegacyJSONRemainsUnchanged(t *testing.T) {
 }
 
 func TestDeliverySelectionSurvivesOrdersToSupplyHandoff(t *testing.T) {
-	const wire = `{"delivery_company":{"code":"melbourne-fleet","name":"Local delivery","integration":"detrack","revision":7},"schedule_code":"daytime","schedule_revision":12,"slot_id":"opaque-slot","date":"2026-10-05","start_at":"2026-10-04T20:00:00Z","end_at":"2026-10-05T07:00:00Z","timezone":"Australia/Melbourne","source":"configured_schedule"}`
+	const wire = `{"delivery_company":{"code":"melbourne-fleet","name":"Local delivery","integration":"api","adapter":"detrack","revision":7},"schedule_code":"daytime","schedule_revision":12,"slot_id":"opaque-slot","date":"2026-10-05","start_at":"2026-10-04T20:00:00Z","end_at":"2026-10-05T07:00:00Z","timezone":"Australia/Melbourne","source":"configured_schedule"}`
 	var selection shipping.DeliverySelection
 	if err := json.Unmarshal([]byte(wire), &selection); err != nil {
 		t.Fatal(err)
@@ -90,7 +90,7 @@ func TestCourierExplicitCoverageWireShape(t *testing.T) {
 		assertDeliveryJSON(t, area, wire)
 	}
 	// Adapter identifiers are open, independently of the stable company code.
-	const reference = `{"code":"new-fleet","name":"Future carrier","integration":"future-adapter","revision":2}`
+	const reference = `{"code":"new-fleet","name":"Future carrier","integration":"api","adapter":"future-adapter","revision":2}`
 	var ref courier.DeliveryCompanyRef
 	if err := json.Unmarshal([]byte(reference), &ref); err != nil {
 		t.Fatal(err)
@@ -98,12 +98,57 @@ func TestCourierExplicitCoverageWireShape(t *testing.T) {
 	assertDeliveryJSON(t, ref, reference)
 }
 
+func TestCourierIntegrationModeAndAdapterCompatibility(t *testing.T) {
+	for _, mode := range []string{"api", "manual"} {
+		t.Run(mode, func(t *testing.T) {
+			legacy := `{"code":"legacy-company","name":"Legacy","integration":"` + mode + `","revision":1}`
+			var ref courier.DeliveryCompanyRef
+			if err := json.Unmarshal([]byte(legacy), &ref); err != nil {
+				t.Fatal(err)
+			}
+			assertDeliveryJSON(t, ref, legacy)
+			var company courier.DeliveryCompany
+			if err := json.Unmarshal([]byte(legacy), &company); err != nil {
+				t.Fatal(err)
+			}
+			data, err := json.Marshal(company)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var fields map[string]json.RawMessage
+			if err := json.Unmarshal(data, &fields); err != nil {
+				t.Fatal(err)
+			}
+			if _, ok := fields["adapter"]; ok {
+				t.Fatal("legacy record gained inferred adapter")
+			}
+			if string(fields["integration"]) != `"`+mode+`"` {
+				t.Fatal("legacy integration mode changed")
+			}
+		})
+	}
+	for _, code := range []string{"melbourne-one", "melbourne-two"} {
+		company := courier.DeliveryCompany{Code: code, Integration: "api", Adapter: "detrack"}
+		data, err := json.Marshal(company)
+		if err != nil {
+			t.Fatal(err)
+		}
+		var received courier.DeliveryCompany
+		if err := json.Unmarshal(data, &received); err != nil {
+			t.Fatal(err)
+		}
+		if received.Code != code || received.Integration != "api" || received.Adapter != "detrack" {
+			t.Fatalf("instance/mode/adapter identity conflated: %+v", received)
+		}
+	}
+}
+
 func TestCourierConnectionAndCustomerReferenceStaySeparate(t *testing.T) {
-	company := courier.DeliveryCompany{Code: "fleet", Name: "Fleet", Integration: "future-adapter", Revision: 3,
+	company := courier.DeliveryCompany{Code: "fleet", Name: "Fleet", Integration: "api", Adapter: "future-adapter", Revision: 3,
 		Connection: &courier.DeliveryConnection{CredentialConfigured: true, Health: courier_enums.DeliveryConnectionHealthHealthy}}
 	assertDeliveryJSON(t, company.Connection, `{"credential_configured":true,"health":"healthy"}`)
-	ref := courier.DeliveryCompanyRef{Code: company.Code, Name: company.Name, Integration: company.Integration, Revision: company.Revision}
-	assertDeliveryJSON(t, ref, `{"code":"fleet","name":"Fleet","integration":"future-adapter","revision":3}`)
+	ref := courier.DeliveryCompanyRef{Code: company.Code, Name: company.Name, Integration: company.Integration, Adapter: company.Adapter, Revision: company.Revision}
+	assertDeliveryJSON(t, ref, `{"code":"fleet","name":"Fleet","integration":"api","adapter":"future-adapter","revision":3}`)
 	// An explicit reviewed key set prevents accidental secret/diagnostic fields
 	// from entering the shared connection projection, even with omitempty.
 	connectionType := reflect.TypeOf(courier.DeliveryConnection{})
@@ -129,7 +174,7 @@ func TestDeliveryFeesAndOfferMetadata(t *testing.T) {
 	}
 	expires := time.Date(2026, 10, 1, 0, 0, 0, 0, time.UTC)
 	for _, source := range []courier_enums.DeliverySlotSource{courier_enums.DeliverySlotSourceConfiguredSchedule, courier_enums.DeliverySlotSourceProvider} {
-		slot := shipping.DeliverySlot{ID: "offer", Source: source, ScheduleCode: "day", ExpiresAt: &expires, Availability: "unavailable", UnavailableReason: "coverage_unknown", DeliveryCompany: &courier.DeliveryCompanyRef{Code: "fleet", Integration: "future", Revision: 4}}
+		slot := shipping.DeliverySlot{ID: "offer", Source: source, ScheduleCode: "day", ExpiresAt: &expires, Availability: "unavailable", UnavailableReason: "coverage_unknown", DeliveryCompany: &courier.DeliveryCompanyRef{Code: "fleet", Integration: "api", Adapter: "future", Revision: 4}}
 		data, err := json.Marshal(slot)
 		if err != nil {
 			t.Fatal(err)

@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v33.6.0` | 2026-09-23 | Minor | Adds optional adapter identifiers to delivery company records/references, preserving existing api/manual integration semantics. Corrects v33.5.0 documentation; use this release for multi-carrier rollout. |
 | `v33.5.0` | 2026-09-23 | Minor | Adds Supply-owned delivery companies, explicit postcode filters, sanitized connection health and configured windows; adds optional company/offer metadata and frozen delivery selections on orders and outbound shipments. Preserves existing carrier meanings and the `/v33` module path. |
 | `v33.4.0` | 2026-09-23 | Minor | Adds the optional canonical Identity `phone` and `phone_verified_at` user-profile fields for E.164 phone verification. Preserves the `/v33` module path and leaves Orders-owned priced-cart and gift-recipient-delivery API DTOs unchanged. |
 | `v33.3.0` | 2026-09-22 | Minor | Adds country-scoped Notification template definitions, immutable publications/references/bindings, reviewed three-language email/SMS/push content, typed placeholders, bounded email blocks/styles and protected system-section references. Preserves existing `/v33` shapes. |
@@ -134,6 +135,50 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v33.6.0 (2026-09-23) - Preserve Integration Mode and Separate Adapter Identity
+
+### Breaking Contract Changes
+
+- None. Existing fields and `/v33` imports remain; `adapter` is optional.
+
+### Added
+
+- `DeliveryCompany.Adapter` and `DeliveryCompanyRef.Adapter` as optional open
+  strings (`adapter,omitempty`) identifying registered backend adapters, such
+  as `detrack` or `bcrc`, independently of a company instance code.
+
+### Fixed
+
+- Corrects v33.5.0 comments, examples and documentation that incorrectly described
+  `integration` as adapter identity. Supply's existing `api`/`manual` meaning is
+  retained, including existing API filters and manually fulfilled records.
+- Frozen delivery selections now carry the resolved adapter in the nested company
+  reference, allowing multiple company instances of a supported adapter.
+
+### Other Changes
+
+- Tests preserve legacy api/manual JSON with absent adapter, round-trip distinct
+  company instances sharing one adapter, and retain adapter identity through the
+  Order-to-Shipment snapshot. Exported type inventory is unchanged.
+
+### Contract Files Changed
+
+- `pkg/contracts/supply/courier/delivery_company.go`
+- `pkg/contracts/supply/courier/delivery_company_ref.go`
+- `pkg/test/delivery_company_json_test.go`
+- `docs/delivery-company-model.md`, `README.md`, `go.mod`
+
+### Compatibility Notes
+
+- Consumer Action: pin `v33.6.0` for this rollout; do not use v33.5.0's incorrect
+  integration-to-adapter mapping. The v33.5.0 tag remains immutable.
+- Missing adapter stays absent on legacy JSON. Supply may explicitly migrate
+  exact legacy api company codes `detrack`/`bcrc` to registered adapters; custom
+  API instance codes require an explicit adapter. Never infer from display name.
+- Manual mode never becomes automatically dispatchable through an adapter value.
+  Backend validation and migration remain service-owned. All coverage, secret,
+  optional-field and frozen-selection requirements from v33.5.0 still apply.
 
 ## v33.5.0 (2026-09-23) - Delivery Company Configuration and Frozen Selection
 
