@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v33.5.0` | 2026-09-23 | Minor | Adds Supply-owned delivery companies, explicit postcode filters, sanitized connection health and configured windows; adds optional company/offer metadata and frozen delivery selections on orders and outbound shipments. Preserves existing carrier meanings and the `/v33` module path. |
 | `v33.4.0` | 2026-09-23 | Minor | Adds the optional canonical Identity `phone` and `phone_verified_at` user-profile fields for E.164 phone verification. Preserves the `/v33` module path and leaves Orders-owned priced-cart and gift-recipient-delivery API DTOs unchanged. |
 | `v33.3.0` | 2026-09-22 | Minor | Adds country-scoped Notification template definitions, immutable publications/references/bindings, reviewed three-language email/SMS/push content, typed placeholders, bounded email blocks/styles and protected system-section references. Preserves existing `/v33` shapes. |
 | `v33.2.0` | 2026-09-20 | Minor | Adds package-specific price entries, membership-tier price-book assignments, customer-safe conditional selling-price offers, and optional package/member quote provenance while preserving `/v33` and legacy JSON when the new fields are absent. |
@@ -133,6 +134,61 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v33.5.0 (2026-09-23) - Delivery Company Configuration and Frozen Selection
+
+### Breaking Contract Changes
+
+- None. The `/v33` module path and existing fields/wire values are unchanged.
+
+### Added
+
+- `supply/courier`: `DeliveryCompany`, `DeliveryCompanyRef`,
+  `DeliveryCapabilities`, `DeliveryConnection`, `DeliveryServiceArea` and
+  `DeliveryServiceWindow`, with a dedicated `courier_enums` leaf package.
+- Explicit country/postcode include/exclude filters, routing priority,
+  provider-coverage requirement, configured recurring windows, lead time,
+  exclusions, optional fixed-point fees and safe connection observations.
+- Optional `delivery_company` on delivery schedules, slots and preferred slots;
+  offer expiry on schedules/slots; slot source, schedule code and unavailable reason.
+- `shipping.DeliverySelection` and optional `delivery_selection` on
+  `orders/order.Order` and `supply/fulfilment.OutboundShipment` preserve the
+  accepted company/config revision, schedule code/revision, slot, local date,
+  UTC start/end, IANA timezone and source across fulfilment.
+
+### Fixed
+
+- Provides the missing shared snapshot needed to retain the selected delivery
+  window across Orders-to-Supply handoff. Services must populate and preserve it.
+
+### Other Changes
+
+- Adds explicit JSON compatibility, frozen-handoff, coverage encoding, fee and
+  enum tests; updates model inventory, layout and audit/privacy policy gates.
+- No actual Melbourne postcode list, BeCool coverage matrix, adapter, secret,
+  API route, booking, retry or dispatch implementation is included.
+
+### Contract Files Changed
+
+- `pkg/contracts/supply/courier/*.go` and `courier_enums/*.go`
+- `pkg/contracts/orders/shipping/delivery_selection.go`, `delivery_schedule.go`,
+  `delivery_slot.go`, `preferred_delivery_slot.go`
+- `pkg/contracts/orders/order/order.go`
+- `pkg/contracts/supply/fulfilment/outbound_shipment.go`
+- `go.mod`, `README.md`, contract tests and model governance registries
+
+### Compatibility Notes
+
+- Consumer Action: pin `v33.5.0`; keep imports on `/v33`. Read the
+  [delivery company model](delivery-company-model.md) before mapping local DTOs.
+- Existing records may omit new pointer/optional fields. Absence is legacy
+  unknown state, never proof of coverage or permission to choose another carrier.
+- Supply's legacy shipment `carrier` remains a company code; Orders' schedule
+  `carrier` and order `outsourced_carrier` retain display-name semantics.
+- Shared models do not replace service-owned API envelopes or validation.
+  Supply keeps credentials and secret references internal; customer offers use
+  `DeliveryCompanyRef`, never the admin company record. Backend rollout must
+  enforce coverage, revisions, expiry, timezone rules and frozen handoff.
 
 ## v33.4.0 (2026-09-23) - Identity Phone Verification Projection
 

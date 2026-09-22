@@ -67,6 +67,8 @@ type Order struct {
 	// OutsourcedCarrier names the third-party delivery company; set only
 	// when DeliveryMethod is outsourced.
 	OutsourcedCarrier string `json:"outsourced_carrier,omitempty"`
+	// DeliverySelection preserves the accepted company and window for Supply.
+	DeliverySelection *shipping.DeliverySelection `json:"delivery_selection,omitempty"`
 
 	// ── Money ─────────────────────────────────────────────────────────
 	Subtotal       money.Money `json:"subtotal"`

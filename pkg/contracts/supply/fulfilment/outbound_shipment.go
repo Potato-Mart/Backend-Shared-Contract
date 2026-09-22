@@ -6,6 +6,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/shipping"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
@@ -26,12 +27,14 @@ type OutboundShipment struct {
 	Containers    []OutboundContainerPlan                `json:"containers,omitempty"`
 	// Carrier is the optional delivery-company code recorded by Supply
 	// (for example detrack, bcrc, aupost).
-	Carrier        string                  `json:"carrier,omitempty"`
-	TrackingNumber string                  `json:"tracking_number,omitempty"`
-	Note           string                  `json:"note,omitempty"`
-	DispatchedAt   *time.Time              `json:"dispatched_at,omitempty"`
-	DeliveredAt    *time.Time              `json:"delivered_at,omitempty"`
-	History        []security.HistoryEntry `json:"history,omitempty"`
+	Carrier string `json:"carrier,omitempty"`
+	// DeliverySelection is copied from the accepted order, not re-routed.
+	DeliverySelection *shipping.DeliverySelection `json:"delivery_selection,omitempty"`
+	TrackingNumber    string                      `json:"tracking_number,omitempty"`
+	Note              string                      `json:"note,omitempty"`
+	DispatchedAt      *time.Time                  `json:"dispatched_at,omitempty"`
+	DeliveredAt       *time.Time                  `json:"delivered_at,omitempty"`
+	History           []security.HistoryEntry     `json:"history,omitempty"`
 	audit.AuditFields
 	security.DataProtectionFields
 }

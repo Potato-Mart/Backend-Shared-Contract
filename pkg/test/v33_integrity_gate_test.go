@@ -28,6 +28,7 @@ func TestV33DomainOwnershipPackagesArePopulated(t *testing.T) {
 		"contracts/marketing/campaign", "contracts/marketing/audience", "contracts/marketing/message",
 		"contracts/supply/catalogue/classification", "contracts/supply/catalogue/product", "contracts/supply/catalogue/listing", "contracts/supply/catalogue/review", "contracts/supply/catalogue/wish", "contracts/supply/catalogue/favourite",
 		"contracts/supply/inventory", "contracts/supply/warehouse", "contracts/supply/procurement", "contracts/supply/compliance", "contracts/supply/fulfilment", "contracts/supply/forecasting",
+		"contracts/supply/courier", "contracts/supply/courier/courier_enums",
 		"contracts/pubsub/envelope", "contracts/pubsub/routing", "contracts/pubsub/orders", "contracts/pubsub/payments", "contracts/pubsub/supply", "contracts/pubsub/customers", "contracts/pubsub/pricing", "contracts/pubsub/notification",
 	}
 	for _, packagePath := range requiredPackages {
