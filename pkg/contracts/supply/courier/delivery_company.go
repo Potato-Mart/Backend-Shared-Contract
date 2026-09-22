@@ -7,13 +7,15 @@ import (
 )
 
 // DeliveryCompany is the Supply-owned, admin-safe delivery company catalogue
-// record. Code identifies an instance; Integration identifies its server-side
-// adapter. Both are open codes. Adding a record does not install an adapter.
+// record. Code identifies an instance; Integration retains the service-owned
+// api/manual mode. Adapter is the separate open server-side adapter identifier.
+// Adding a record does not install an adapter.
 // Revision identifies the entire configuration, including areas and schedules.
 type DeliveryCompany struct {
 	Code                string `json:"code"`
 	Name                string `json:"name"`
 	Integration         string `json:"integration"`
+	Adapter             string `json:"adapter,omitempty"`
 	Enabled             bool   `json:"enabled"`
 	DefaultInstructions string `json:"default_instructions,omitempty"`
 	// DispatchCapable is derived by Supply from adapter support and readiness;

@@ -1,16 +1,18 @@
-# Delivery company model (v33.5.0)
+# Delivery company model (v33.6.0)
 
 This additive release defines shared data for Supply's delivery-company catalogue
 and Orders-to-Supply delivery selection. It contains no postcode defaults,
 provider availability claims, API routes, adapters, booking or routing code.
-Pin `github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.5.0`.
+Pin `github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.6.0`. This release
+corrects v33.5.0's integration/adapter documentation and adds an optional adapter
+field. The immutable v33.5.0 release must not be used as the rollout baseline.
 
 ## Ownership and projections
 
 | Model | Owner / purpose |
 | --- | --- |
-| `supply/courier.DeliveryCompany` | Supply admin catalogue root with audit fields; code, name, integration, enabled, instructions, derived dispatch capability, revision, countries, capabilities, slot source, connection, service areas and schedules. |
-| `DeliveryCompanyRef` | Customer-safe snapshot: `code`, `name`, `integration`, `revision`. No connection, instructions, coverage configuration or credentials. |
+| `supply/courier.DeliveryCompany` | Supply admin catalogue root with audit fields; code, name, integration, adapter, enabled, instructions, derived dispatch capability, revision, countries, capabilities, slot source, connection, service areas and schedules. |
+| `DeliveryCompanyRef` | Customer-safe snapshot: `code`, `name`, `integration`, optional `adapter`, `revision`. No connection, instructions, coverage configuration or credentials. |
 | `DeliveryConnection` | Sanitized backend observations: `credential_configured`, `health`, optional `last_checked_at`. |
 | `DeliveryCapabilities` | Explicit booleans for booking, tracking, proof of delivery, refrigeration, provider coverage, provider slots and configured slots. Support does not imply current availability. |
 | `DeliveryServiceArea` | Country-scoped exact postal filters and priority; independent of depot coverage and delivery area pricing. |
@@ -25,14 +27,23 @@ DTOs. `DispatchCapable`, connection health and configuration revision are derive
 server values, not editable authority flags. Health values are `unknown`,
 `healthy`, `unhealthy`; missing or stale evidence does not mean healthy.
 
-`Code` identifies a company instance; `Integration` identifies a registered
-backend adapter. Both are open strings so admin-created instances and future
-adapters need no new enum. Adding a record does not install an adapter. Supply
-retains its immutable lowercase company-code convention. It must reject or
-disable unknown integrations for dispatch instead of substituting an arbitrary
-adapter. A company revision is positive and increases when its effective routing,
+`Code` identifies a company instance; `Integration` preserves the existing
+service-owned `api` or `manual` mode. `Adapter` is a separate optional open string
+identifying a registered backend adapter, such as `detrack` or `bcrc`. Multiple
+instance codes may select the same adapter. Adding a record does not install an
+adapter. Supply retains its immutable lowercase company-code convention and
+validates supported modes/adapters. Manual mode never gains automatic dispatch
+by supplying an adapter. A company revision is positive and increases when its effective routing,
 connection configuration, capabilities or schedules change. Routine health checks
 need not change configuration revision.
+
+For legacy `api` records missing adapter, only Supply's explicit migration may
+resolve exact known company codes `detrack`/`bcrc` to registered adapters. Custom
+API company codes require an explicit supported adapter; never guess from the
+display name or substitute an arbitrary provider. Missing adapter remains absent
+in legacy JSON, while new API references and frozen selections capture the
+resolved adapter before acceptance. Manual records can omit it. The optional
+wire field preserves compatibility; it does not grant dispatch readiness.
 
 ## Coverage semantics and backend validation
 
@@ -117,7 +128,7 @@ The resulting `DeliverySelection` contains these required fields:
 
 | JSON field | Meaning |
 | --- | --- |
-| `delivery_company` | Safe code/name/integration/config revision snapshot. |
+| `delivery_company` | Safe code/name/integration/adapter/config revision snapshot. |
 | `schedule_code`, `schedule_revision` | Window/provider schedule identity and positive accepted schedule-view revision. |
 | `slot_id` | Opaque dated offer identity, scoped to the accepted company/config and schedule. |
 | `date` | Local delivery calendar date, `YYYY-MM-DD`. |

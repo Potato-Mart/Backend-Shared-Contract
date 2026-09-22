@@ -14,7 +14,7 @@ workflows.
 ## Latest Version
 
 ```text
-v33.5.0
+v33.6.0
 github.com/Potato-Mart/Backend-Shared-Contract/v33
 ```
 
@@ -26,10 +26,15 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.5.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.6.0
 ```
 
 Import packages from the same `/v33` module path.
+
+The v33.6.0 additions preserve the existing `integration` API/manual mode and
+add a separate optional `adapter` identifier to delivery companies and safe
+references. Use v33.6.0 for the multi-carrier rollout; it corrects the v33.5.0
+documentation that confused integration mode with adapter identity.
 
 The v33.5.0 additions describe Supply-owned delivery companies, explicit postal
 coverage filters, safe connection status, configured service windows, and frozen
