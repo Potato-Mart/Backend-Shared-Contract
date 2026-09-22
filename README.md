@@ -14,7 +14,7 @@ workflows.
 ## Latest Version
 
 ```text
-v33.3.0
+v33.4.0
 github.com/Potato-Mart/Backend-Shared-Contract/v33
 ```
 
@@ -26,15 +26,18 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.3.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.4.0
 ```
 
 Import packages from the same `/v33` module path.
 
-The v33.3.0 additions describe country-scoped notification template definitions,
+The v33.4.0 additions describe the canonical Identity E.164 phone projection and
+nullable phone verification timestamp. The v33.3.0 additions describe
+country-scoped notification template definitions,
 immutable publications and bindings, reviewed localized email/SMS/push content,
 typed placeholders, and constrained email blocks and style tokens. Existing
-delivery, marketing, localization, Identity and pricing shapes are unchanged.
+delivery, marketing, localization and pricing shapes are unchanged; Identity
+adds only the fields described above.
 See the [notification template model](docs/notification-template-model.md) for
 wire semantics, reusable fixtures and consumer requirements. Validation,
 country authorization, translation, rendering, persistence and send workflows
