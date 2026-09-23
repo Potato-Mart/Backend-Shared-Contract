@@ -14,7 +14,7 @@ workflows.
 ## Latest Version
 
 ```text
-v33.6.0
+v33.7.0
 github.com/Potato-Mart/Backend-Shared-Contract/v33
 ```
 
@@ -26,10 +26,18 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.6.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.7.0
 ```
 
 Import packages from the same `/v33` module path.
+
+The v33.7.0 additions add trusted publication context to `promotion.changed`
+v3 and an identity-only `coupon.changed` v1 invalidation event. Consumers must
+read promotion.changed v2 and v3 before Pricing emits v3. V3 requires a known
+publication context; v2 payloads omit it and retain their existing handling.
+Campaign-linked benefits use opaque Promotion.ID or Coupon.ID references, not
+redeemable coupon codes. Service validation, storage, publication workflows and
+notification behavior remain backend-owned.
 
 The v33.6.0 additions preserve the existing `integration` API/manual mode and
 add a separate optional `adapter` identifier to delivery companies and safe
@@ -79,10 +87,12 @@ belong to Notification and are not implemented by this module.
 - Notification uses the singular `notification` root with `core`, `email`,
   `sms`, `push`, `preference`, `delivery`, and `template` packages. Pub/Sub uses
   `pubsub/envelope`, `pubsub/routing`, and producer-owned payload packages.
-- Cross-domain catalogue and commercial links use immutable business codes:
-  `sku_code`, `market_code`, `price_book_code`, `tax_category_code`, brand,
-  collection, category-tag, supplier, package-option, and media codes. Root
-  masters retain API `id`; references never use IDs or slugs.
+- Cross-domain catalogue and commercial links generally use immutable business
+  keys: `sku_code`, `market_code`, `price_book_code`, `tax_category_code`,
+  brand, collection, category-tag, supplier, package-option, and media codes.
+  Marketing `BenefitRef.Code` is the explicit exception: it uses the opaque
+  Promotion.ID or Coupon.ID and never a redeemable coupon code. Root masters
+  retain API `id`; other references do not use IDs or slugs.
 - Money is always `{amount_minor, currency}` in minor units with a typed
   `money.CurrencyCode`. `money.CurrencyExponent` is carried alongside because
   not every currency has two decimals.

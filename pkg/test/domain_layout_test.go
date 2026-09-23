@@ -61,6 +61,8 @@ func TestDomainPackageLayout(t *testing.T) {
 		"contracts/pubsub/supply/inventory_lot_received_event.go":                 "supply",
 		"contracts/pubsub/customers/customer_registered_event.go":                 "customers",
 		"contracts/pubsub/pricing/price_changed_event.go":                         "pricing",
+		"contracts/pubsub/pricing/coupon_changed_event.go":                        "pricing",
+		"contracts/pubsub/pricing/promotion_enums/publication_context.go":         "promotion_enums",
 		"contracts/pubsub/notification/notification_preferences_changed_event.go": "notification",
 	}
 

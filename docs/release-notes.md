@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v33.7.0` | 2026-09-24 | Minor | Adds trusted publication context to `promotion.changed` v3 and identity-only `coupon.changed` v1 invalidation. Consumers must dual-read promotion.changed v2/v3 before Pricing emits v3; preserves `/v33`. |
 | `v33.6.0` | 2026-09-23 | Minor | Adds optional adapter identifiers to delivery company records/references, preserving existing api/manual integration semantics. Corrects v33.5.0 documentation; use this release for multi-carrier rollout. |
 | `v33.5.0` | 2026-09-23 | Minor | Adds Supply-owned delivery companies, explicit postcode filters, sanitized connection health and configured windows; adds optional company/offer metadata and frozen delivery selections on orders and outbound shipments. Preserves existing carrier meanings and the `/v33` module path. |
 | `v33.4.0` | 2026-09-23 | Minor | Adds the optional canonical Identity `phone` and `phone_verified_at` user-profile fields for E.164 phone verification. Preserves the `/v33` module path and leaves Orders-owned priced-cart and gift-recipient-delivery API DTOs unchanged. |
@@ -135,6 +136,57 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v33.7.0 (2026-09-24) - Campaign Publication Provenance and Coupon Invalidation
+
+### Breaking Contract Changes
+
+- None. Existing `/v33` imports and fields remain compatible; the promotion
+  event advances from v2 to v3.
+
+### Added
+
+- `PromotionChangedEvent.PublicationContext`, an optional JSON field backed by
+  `PromotionPublicationContext` with `standalone` and
+  `campaign_publish_together` values. The v3 payload requires one of these
+  values. V2 payloads omit the field.
+- `CouponChangedEvent` on `storefront-events` / `coupon.changed` v1. It contains only opaque
+  `Coupon.ID`, revision, `refetch_required`, and `changed_at`; it carries no
+  redeemable code, terms, eligibility rules, customer, or recipient data.
+- Campaign-linked `BenefitRef.Code` semantics: `Promotion.ID` for promotion
+  benefits and `Coupon.ID` for coupon benefits, never the redeemable coupon
+  code. The reference does not grant ownership or eligibility.
+
+### Consumer Action and Compatibility
+
+- Customers and Notification must accept both `promotion.changed` v2 and v3
+  before Pricing starts producing v3. They must validate the v3 publication
+  context. An absent context on v2 retains the consumer's existing behavior;
+  it must not be inferred as `standalone`.
+- Suppress a promotion notice only when `published` is true and v3 context is
+  `campaign_publish_together`. Every unpublish event (`published` false) still
+  drives expiration/invalidation regardless of publication context. Campaign
+  notification ownership and deduplication remain service behavior.
+- Customers may consume `coupon.changed` to refetch the current linked offer
+  state after a coupon lifecycle change. Pricing owns the producer, while
+  consumer handling and any HTTP/API DTOs remain service-owned.
+- `coupon.changed` is additive. Existing event versions are unchanged; event
+  version selection remains in the routed envelope.
+
+### Other Changes
+
+- Adds JSON compatibility, enum, route-registry, layout, and exported-model
+  manifest coverage for the new contracts.
+
+### Contract Files Changed
+
+- `pkg/contracts/pubsub/pricing/promotion_changed_event.go`
+- `pkg/contracts/pubsub/pricing/promotion_enums/publication_context.go`
+- `pkg/contracts/pubsub/pricing/coupon_changed_event.go`
+- `pkg/contracts/pubsub/routing/event_type.go`
+- `pkg/contracts/pricing/benefit/benefit_ref.go`
+- Event JSON and manifest tests, release metadata, README, and v33 migration
+  guidance.
 
 ## v33.6.0 (2026-09-23) - Preserve Integration Mode and Separate Adapter Identity
 

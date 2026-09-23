@@ -206,6 +206,7 @@ var v33ModelPackageManifest = map[string]string{
 	"contracts/pubsub/orders":                                        "record",
 	"contracts/pubsub/payments":                                      "record",
 	"contracts/pubsub/pricing":                                       "record",
+	"contracts/pubsub/pricing/promotion_enums":                       "enum",
 	"contracts/pubsub/routing":                                       "enum",
 	"contracts/pubsub/supply":                                        "record",
 	"contracts/supply/catalogue/classification":                      "record",
@@ -243,7 +244,7 @@ var modelPackageManifest map[string]string
 // Courier company/configuration records, frozen delivery selections and their
 // leaf enums are additive;
 // existing delivery, marketing, pricing and localization types retain packages.
-const exportedTypeManifestDigest = "98df2d70d3e9e265894749c81f9159be580f170bb2f4733bb2eb81f70ef0dd44"
+const exportedTypeManifestDigest = "b60e6b1b38bcf0cc42697562d069aca21c96cb2176a78d0a740ebfbd879a6317"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

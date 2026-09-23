@@ -44,6 +44,7 @@ const (
 	EventTypeProductSalesPerformanceUpdated EventType = "product.sales_performance_updated"
 	EventTypePriceChanged                   EventType = "price.changed"
 	EventTypePromotionChanged               EventType = "promotion.changed"
+	EventTypeCouponChanged                  EventType = "coupon.changed"
 	EventTypeCampaignChanged                EventType = "campaign.changed"
 
 	EventTypeAnalyticsOrderFact   EventType = "analytics.order_fact"
@@ -70,7 +71,7 @@ func (t EventType) IsValid() bool {
 		EventTypeNotificationPreferencesChanged, EventTypeWalletGiftCardIssued,
 		EventTypeCatalogBaseCostChanged, EventTypeCatalogListingChanged,
 		EventTypeProductSalesPerformanceUpdated,
-		EventTypePriceChanged, EventTypePromotionChanged, EventTypeCampaignChanged,
+		EventTypePriceChanged, EventTypePromotionChanged, EventTypeCouponChanged, EventTypeCampaignChanged,
 		EventTypeAnalyticsOrderFact, EventTypeAnalyticsPaymentFact,
 		EventTypeAnalyticsRefundFact:
 		return true

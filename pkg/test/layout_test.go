@@ -40,6 +40,7 @@ var expectedEnumPackages = []string{
 	"contracts/orders/group_order/group_order_enums",
 	"contracts/orders/subscription/subscription_enums",
 	"contracts/payments/register/register_enums",
+	"contracts/pubsub/pricing/promotion_enums",
 	"contracts/orders/shipping/shipping_enums",
 	"contracts/payments/payment/payment_enums",
 	"contracts/payments/settlement/settlement_enums",

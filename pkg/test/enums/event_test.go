@@ -45,6 +45,7 @@ func TestInventoryAndCommerceEventTypes(t *testing.T) {
 				event_enums.EventTypeProductSalesPerformanceUpdated,
 				event_enums.EventTypePriceChanged,
 				event_enums.EventTypePromotionChanged,
+				event_enums.EventTypeCouponChanged,
 				event_enums.EventTypeCampaignChanged,
 				event_enums.EventTypeAnalyticsOrderFact,
 				event_enums.EventTypeAnalyticsPaymentFact,
