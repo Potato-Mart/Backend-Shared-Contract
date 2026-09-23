@@ -2,10 +2,9 @@
 
 ## Status and scope
 
-`v33.0.0` is the Backend Shared Contract v33 line, dated 2026-08-30. This
-branch changes only this repository. It creates no tag, push, pull request,
-merge, deployment, or consumer migration; the annotated release tag is created
-only by the protected-main release workflow after a later merge.
+`v33.0.0` began the Backend Shared Contract v33 line on 2026-08-30. Published
+v33 minor releases retain the `/v33` module path. The protected-main release
+workflow creates each immutable annotated release tag after merge.
 
 Every exported v32 contract and enum has exactly one reviewed v33 destination.
 V33 deletes **no** exported v32 contract or enum, including dormant and
@@ -93,14 +92,20 @@ populated `payments/invoice`, `payments/refund`, or `payments/finance` package.
 | Version | Event types |
 | --- | --- |
 | `v4` | `inventory.lot_received`, `inventory.stock_bucket_changed`, `inventory.package_converted`, `inventory.quality_assessed`, `inventory.reservation_changed`, `inventory.staged`, `inventory.sold`, `inventory.date_mark_threshold_reached`, `stock.location_availability_changed`, `catalog.base_cost_changed`, `catalog.listing_changed`, `analytics.order_fact`, `analytics.refund_fact` |
-| `v3` | `order.paid`, `refund.completed`, `product.sales_performance_updated`, `fulfilment.packing_updated` |
-| `v2` | `campaign.changed`, `promotion.changed`, `fulfilment.shipped`, `fulfilment.delivered`, `fulfilment.completed`, `fulfilment.tracking_updated`, `analytics.payment_fact` |
-| `v1` | `order.created`, `order.status_changed`, `order.cancelled`, `payment.captured`, `payment.failed`, `invoice.issued`, `receipt.generated`, `refund.requested`, `refund.failed`, `customer.registered`, `customer.profile_updated`, `notification.preferences_changed`, `wallet.gift_card_issued`, `price.changed` |
+| `v3` | `order.paid`, `refund.completed`, `product.sales_performance_updated`, `fulfilment.packing_updated`, `promotion.changed` |
+| `v2` | `campaign.changed`, `fulfilment.shipped`, `fulfilment.delivered`, `fulfilment.completed`, `fulfilment.tracking_updated`, `analytics.payment_fact` |
+| `v1` | `order.created`, `order.status_changed`, `order.cancelled`, `payment.captured`, `payment.failed`, `invoice.issued`, `receipt.generated`, `refund.requested`, `refund.failed`, `customer.registered`, `customer.profile_updated`, `notification.preferences_changed`, `wallet.gift_card_issued`, `price.changed`, `coupon.changed` |
 
-The historical event tables in the release notes are retained. Notification's
-existing campaign/promotion version mismatch is recorded as external follow-up
-work; this v33 contract release neither changes that integration nor claims to
-verify it.
+`promotion.changed` v3 adds a required, validated `publication_context` value:
+`standalone` or `campaign_publish_together`. The field is omitted from every v2
+payload, and consumers preserve their existing v2 behavior when it is absent.
+Customers and Notification must accept v2 and v3 before Pricing emits v3; this
+shared contract does not claim downstream rollout verification.
+
+`coupon.changed` v1 carries only opaque `Coupon.ID`, revision, refetch-required
+metadata, and change time. Consumers use it to refetch current Pricing state.
+The contract does not define coupon APIs, persistence, eligibility, or claim
+behavior.
 
 ## Complete reviewed v32 to v33 mapping
 
