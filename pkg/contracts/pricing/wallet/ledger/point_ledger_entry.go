@@ -3,9 +3,9 @@ package ledger
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/points"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/wallet_enums"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pricing/wallet/points"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 // PointLedgerEntry is an immutable customer-wallet points transaction.

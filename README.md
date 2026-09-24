@@ -14,8 +14,8 @@ workflows.
 ## Latest Version
 
 ```text
-v33.8.0
-github.com/Potato-Mart/Backend-Shared-Contract/v33
+v34.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v34
 ```
 
 See [release notes](docs/release-notes.md) for the release history,
@@ -26,10 +26,19 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.8.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v34 v34.0.0
 ```
 
-Import packages from the same `/v33` module path.
+Import packages from the same `/v34` module path.
+
+The v34.0.0 breaking change removes the public provider-discriminator field
+from delivery companies and their safe references. `code` is the sole public
+company identity. The existing `integration` API/manual mode remains, and
+Supply owns company-specific provider registration. `DeliveryCompany` also
+includes a derived, non-sensitive `credential_requirements` value; it is null
+for manual companies or API companies without a registered implementation.
+See the [delivery company model](docs/delivery-company-model.md) for migration
+guidance.
 
 The v33.8.0 additions add optional Orders-owned shipping-zone identity and ISO
 subdivision state codes to courier service areas, plus a standalone privileged
@@ -49,16 +58,14 @@ Campaign-linked benefits use opaque Promotion.ID or Coupon.ID references, not
 redeemable coupon codes. Service validation, storage, publication workflows and
 notification behavior remain backend-owned.
 
-The v33.6.0 additions preserve the existing `integration` API/manual mode and
-add a separate optional `adapter` identifier to delivery companies and safe
-references. Use v33.6.0 for the multi-carrier rollout; it corrects the v33.5.0
-documentation that confused integration mode with adapter identity.
+The v33.6.0 release added provider-discriminator fields while preserving the
+existing `integration` API/manual mode. Those fields are removed in v34.0.0.
 
 The v33.5.0 additions describe Supply-owned delivery companies, explicit postal
 coverage filters, safe connection status, configured service windows, and frozen
 delivery selections carried from Orders to Supply. See the
 [delivery company model](docs/delivery-company-model.md) for migration and
-validation requirements. Routing, credentials, provider adapters and booking
+validation requirements. Provider registration, credentials and booking
 remain backend-owned.
 
 The v33.4.0 additions describe the canonical Identity E.164 phone projection and
@@ -84,7 +91,7 @@ belong to Notification and are not implemented by this module.
 - Identity lives in `identity/{access,account,authorisation}`; customer records
   live in `customers/{retail,wholesale,group,preference}`. Orders, payment,
   pricing, notification, insight, marketing, and supply models use their named
-  v33 domain subpackages. See the complete package map and migration table in
+  v34 domain subpackages. See the complete package map and migration table in
   [the v33 migration guide](docs/v33-migration.md).
 - Catalogue models live in `supply/catalogue/{classification,product,listing,
   review,wish,favourite}`. Marketing retains `marketing/campaign`,

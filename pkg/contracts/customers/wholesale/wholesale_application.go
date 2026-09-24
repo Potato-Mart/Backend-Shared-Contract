@@ -1,12 +1,12 @@
 package wholesale
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/party"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/wholesale/wholesale_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/party"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/catalogue/classification/classification_enums"
 	"time"
 )
 

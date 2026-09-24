@@ -1,13 +1,13 @@
 package receipt
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/merchant"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/payment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/payments/merchant"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/payments/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pricing/promotion"
 	"time"
 )
 

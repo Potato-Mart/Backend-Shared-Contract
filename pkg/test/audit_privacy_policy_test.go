@@ -7,40 +7,40 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/group"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/retail"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/wholesale"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/identity/access"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/identity/account"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/identity/authorisation"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notification/preference"
-	notificationtemplate "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notification/template"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/shipping"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/merchant"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/payment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/receipt"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/register"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/payments/settlement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/coupon"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/pricebook"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/balance"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/giftcard"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/ledger"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/reservation"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/wallet/reward"
-	notificationevent "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pubsub/notification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/review"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/wish"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/courier"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/forecasting"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/fulfilment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/inventory"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/procurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/customers/group"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/customers/retail"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/customers/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/identity/access"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/identity/account"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/identity/authorisation"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/preference"
+	notificationtemplate "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/template"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/payments/merchant"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/payments/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/payments/receipt"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/payments/register"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/payments/settlement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pricing/coupon"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pricing/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pricing/pricebook"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pricing/wallet/balance"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pricing/wallet/giftcard"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pricing/wallet/ledger"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pricing/wallet/reservation"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pricing/wallet/reward"
+	notificationevent "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pubsub/notification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/catalogue/review"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/catalogue/wish"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/courier"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/forecasting"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/procurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/warehouse"
 )
 
 type typePolicy struct {
@@ -49,11 +49,11 @@ type typePolicy struct {
 	requireProtected bool
 }
 
-// v33TypePolicyRegistry is the reviewed policy for mutable persisted roots,
+// v34TypePolicyRegistry is the reviewed policy for mutable persisted roots,
 // PII-bearing records, immutable ledgers, snapshots, projections, and events.
 // It is intentionally explicit: a new root must be reviewed instead of
 // inheriting audit or privacy metadata by package convention.
-var v33TypePolicyRegistry = map[string]typePolicy{
+var v34TypePolicyRegistry = map[string]typePolicy{
 	"delivery selection":         {reflect.TypeOf(shipping.DeliverySelection{}), false, false},
 	"delivery company":           {reflect.TypeOf(courier.DeliveryCompany{}), true, false},
 	"delivery company reference": {reflect.TypeOf(courier.DeliveryCompanyRef{}), false, false},
@@ -117,7 +117,7 @@ var v33TypePolicyRegistry = map[string]typePolicy{
 }
 
 func TestV33AuditAndPrivacyTypePolicy(t *testing.T) {
-	for name, policy := range v33TypePolicyRegistry {
+	for name, policy := range v34TypePolicyRegistry {
 		hasAudit := hasDirectEmbeddedField(policy.model, reflect.TypeOf(audit.AuditFields{}))
 		if hasAudit != policy.requireAudit {
 			t.Errorf("%s AuditFields = %v, want %v", name, hasAudit, policy.requireAudit)

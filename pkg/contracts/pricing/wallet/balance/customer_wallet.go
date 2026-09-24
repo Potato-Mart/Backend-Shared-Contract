@@ -3,7 +3,7 @@ package balance
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
 )
 
 // CustomerWallet is the retail read model of every value instrument held by a

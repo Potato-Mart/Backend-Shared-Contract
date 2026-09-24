@@ -3,9 +3,9 @@ package enums_test
 import (
 	"testing"
 
-	preference_enums "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/preference/preference_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/retail/retail_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/insights/analytics/analytics_enums"
+	preference_enums "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/customers/preference/preference_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/insights/analytics/analytics_enums"
 )
 
 func TestCustomerEnumsValidateKnownValues(t *testing.T) {

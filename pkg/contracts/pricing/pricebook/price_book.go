@@ -8,11 +8,11 @@ package pricebook
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/market/market_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pricing/market/market_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pricing/pricebook/pricebook_enums"
 )
 
 // PriceBook is one pricing context inside exactly one market. It owns the

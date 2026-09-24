@@ -1,25 +1,27 @@
 package courier
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/courier/courier_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/courier/courier_enums"
 )
 
-// DeliveryCompany is the Supply-owned, admin-safe delivery company catalogue
-// record. Code identifies an instance; Integration retains the service-owned
-// api/manual mode. Adapter is the separate open server-side adapter identifier.
-// Adding a record does not install an adapter.
+// DeliveryCompany is the Supply-owned, admin-safe record for one independent
+// delivery company. Code is its immutable identity; Integration retains the
+// service-owned api/manual mode. Supply selects the registered api
+// implementation by Code.
 // Revision identifies the entire configuration, including areas and schedules.
 type DeliveryCompany struct {
-	Code                string `json:"code"`
-	Name                string `json:"name"`
-	Integration         string `json:"integration"`
-	Adapter             string `json:"adapter,omitempty"`
-	Enabled             bool   `json:"enabled"`
-	DefaultInstructions string `json:"default_instructions,omitempty"`
-	// DispatchCapable is derived by Supply from adapter support and readiness;
-	// it is not an editable permission to dispatch.
+	Code        string `json:"code"`
+	Name        string `json:"name"`
+	Integration string `json:"integration"`
+	// CredentialRequirements is derived by Supply and always serialized. Nil
+	// means this is a manual company or has no registered API implementation.
+	CredentialRequirements *DeliveryCredentialRequirements `json:"credential_requirements"`
+	Enabled                bool                            `json:"enabled"`
+	DefaultInstructions    string                          `json:"default_instructions,omitempty"`
+	// DispatchCapable is derived by Supply from company-specific support and
+	// readiness; it is not an editable permission to dispatch.
 	DispatchCapable bool                             `json:"dispatch_capable"`
 	Revision        int64                            `json:"revision"`
 	CountryCodes    []geography.CountryCode          `json:"country_codes"`

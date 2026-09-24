@@ -3,13 +3,13 @@ package order
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/buyer"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/fulfilment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/product"
-	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/packaging"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/orders/buyer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/orders/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/catalogue/product"
+	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/fulfilment"
 )
 
 // OrderItem is the frozen product, package, pricing, and fulfilment state for

@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pubsub/envelope"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pubsub/routing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pubsub/envelope"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pubsub/routing"
 )
 
 func TestEventEnvelopeCarriesTypedRoutingAndDeliveryEvidence(t *testing.T) {

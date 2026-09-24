@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v34.0.0` | 2026-09-24 | Major | Removes the public delivery-company provider discriminator, makes `code` the sole public company identity, adds derived nullable credential requirements, and changes the module path to `/v34`. All consumers must migrate. |
 | `v33.8.0` | 2026-09-24 | Minor | Adds an ID-only Orders shipping-zone reference and ISO subdivision state codes to courier service areas, plus a standalone privileged courier credential value model; deprecates manual courier schedules for new availability while retaining their legacy JSON shape. Preserves `/v33`. |
 | `v33.7.0` | 2026-09-24 | Minor | Adds trusted publication context to `promotion.changed` v3 and identity-only `coupon.changed` v1 invalidation. Consumers must dual-read promotion.changed v2/v3 before Pricing emits v3; preserves `/v33`. |
 | `v33.6.0` | 2026-09-23 | Minor | Adds optional adapter identifiers to delivery company records/references, preserving existing api/manual integration semantics. Corrects v33.5.0 documentation; use this release for multi-carrier rollout. |
@@ -137,6 +138,55 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v34.0.0 (2026-09-24) - Independent Courier Company Identity
+
+### Breaking Contract Changes
+
+- Removes the optional `adapter` JSON field from `courier.DeliveryCompany` and
+  `courier.DeliveryCompanyRef`, including references nested in frozen delivery
+  selections. `code` is the sole public company identity. The existing
+  `integration` mode remains `api` or `manual`.
+- Moves the module path from `/v33` to `/v34`. All Go consumers must update both
+  their module requirement and every Shared Contract import.
+
+### Added
+
+- Adds `DeliveryCompany.credential_requirements` as an always-present,
+  nullable, derived response value. When non-null, its required fields are
+  `api_base_url` and `connection_address_required`. The API URL is a verified
+  public origin/path for the company's registered implementation, not a secret;
+  the boolean says whether Supply's connection-test operation requires an
+  address. Manual companies and API companies without a registered
+  implementation serialize this field as `null`.
+
+### Compatibility and Consumer Action
+
+- Preserve existing company codes exactly. Do not derive them from display
+  names or silently rename/reassign custom codes. Supply selects registered
+  API behavior by company code; unsupported codes remain valid model values but
+  have no registered credential requirements.
+- Standard Go JSON decoding ignores the removed field when reading stored v33
+  JSON, and v34 serialization omits it. Consumers must preserve frozen
+  selections and accepted work by company code; private provider, encrypted
+  credential and history migration belongs to Supply. Coordinate v34 rollout
+  across Orders and Supply before emitting new selections to older consumers.
+- Treat `credential_requirements` as read-only metadata. It is always present
+  in company responses, may be `null`, and is not accepted on create/update
+  operations. Credential secrets remain in the separately authorized
+  `DeliveryProviderCredentials` model.
+- Update dependencies from `github.com/Potato-Mart/Backend-Shared-Contract/v33`
+  to `github.com/Potato-Mart/Backend-Shared-Contract/v34 v34.0.0` and change all
+  import paths before adopting the v34 structs.
+
+### Contract Files Changed
+
+- `go.mod` and Go imports across `pkg/contracts` and `pkg/test`.
+- `pkg/contracts/supply/courier/delivery_company.go`
+- `pkg/contracts/supply/courier/delivery_company_ref.go`
+- `pkg/contracts/supply/courier/delivery_credential_requirements.go`
+- Courier delivery JSON and exported-model manifest tests.
+- `README.md` and `docs/delivery-company-model.md`.
 
 ## v33.8.0 (2026-09-24) - Courier Credentials, Zone References and Live Availability
 

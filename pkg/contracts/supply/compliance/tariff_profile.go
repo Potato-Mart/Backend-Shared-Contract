@@ -1,11 +1,11 @@
 package compliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/temporal"
 
-	compliance_enums "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/compliance/compliance_enums"
+	compliance_enums "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/compliance/compliance_enums"
 )
 
 // TariffProfile is an approved reusable classification for one SKU and

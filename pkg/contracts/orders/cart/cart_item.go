@@ -3,11 +3,11 @@ package cart
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/buyer"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/fulfilment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/product"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/orders/buyer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/orders/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/catalogue/product"
 )
 
 // CartItem is the frozen product and pricing context for one cart line.

@@ -1,13 +1,13 @@
 package retail
 
 import (
-	commonidentity "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/identity"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
+	commonidentity "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/identity"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/preference"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/customers/preference"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/orders/shipping"
 )
 
 // RetailCustomer is the grouped business profile for a retailCustomer
