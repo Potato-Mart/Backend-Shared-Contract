@@ -27,7 +27,9 @@ type DeliveryCompany struct {
 	SlotSource      courier_enums.DeliverySlotSource `json:"slot_source"`
 	Connection      *DeliveryConnection              `json:"connection,omitempty"`
 	ServiceAreas    []DeliveryServiceArea            `json:"service_areas"`
-	Schedules       []DeliveryServiceWindow          `json:"schedules,omitempty"`
+	// Legacy configured windows remain in the JSON shape for compatibility.
+	// New availability and routing decisions must use provider-backed slots.
+	Schedules []DeliveryServiceWindow `json:"schedules,omitempty"`
 
 	audit.AuditFields
 }

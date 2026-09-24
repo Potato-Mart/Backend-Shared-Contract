@@ -244,7 +244,7 @@ var modelPackageManifest map[string]string
 // Courier company/configuration records, frozen delivery selections and their
 // leaf enums are additive;
 // existing delivery, marketing, pricing and localization types retain packages.
-const exportedTypeManifestDigest = "b60e6b1b38bcf0cc42697562d069aca21c96cb2176a78d0a740ebfbd879a6317"
+const exportedTypeManifestDigest = "d3a1533e90a980f658117596fa2877e5f100c597b44902f8cc2288f38c6d9b2c"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

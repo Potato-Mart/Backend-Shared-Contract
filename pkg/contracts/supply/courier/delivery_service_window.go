@@ -6,8 +6,10 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/temporal"
 )
 
-// DeliveryServiceWindow is a configured recurring local-time window, not a
-// provider availability promise. DaysOfWeek uses 0=Sunday through 6=Saturday;
+// DeliveryServiceWindow is the legacy configured recurring local-time window,
+// not a provider availability promise. It is retained for compatibility and is
+// deprecated for new courier availability configuration. DaysOfWeek uses
+// 0=Sunday through 6=Saturday;
 // an empty list supplies no windows. Times are HH:MM in the IANA Timezone.
 // StartTime must precede EndTime on the same day. Empty ServiceAreaCodes applies
 // to all enabled areas in CountryCode. ExcludedDates are local calendar dates.

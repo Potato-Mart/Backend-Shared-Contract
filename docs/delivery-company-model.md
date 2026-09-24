@@ -1,11 +1,9 @@
-# Delivery company model (v33.6.0)
+# Delivery company model (v33.8.0)
 
 This additive release defines shared data for Supply's delivery-company catalogue
 and Orders-to-Supply delivery selection. It contains no postcode defaults,
 provider availability claims, API routes, adapters, booking or routing code.
-Pin `github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.6.0`. This release
-corrects v33.5.0's integration/adapter documentation and adds an optional adapter
-field. The immutable v33.5.0 release must not be used as the rollout baseline.
+Pin `github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.8.0`.
 
 ## Ownership and projections
 
@@ -14,17 +12,22 @@ field. The immutable v33.5.0 release must not be used as the rollout baseline.
 | `supply/courier.DeliveryCompany` | Supply admin catalogue root with audit fields; code, name, integration, adapter, enabled, instructions, derived dispatch capability, revision, countries, capabilities, slot source, connection, service areas and schedules. |
 | `DeliveryCompanyRef` | Customer-safe snapshot: `code`, `name`, `integration`, optional `adapter`, `revision`. No connection, instructions, coverage configuration or credentials. |
 | `DeliveryConnection` | Sanitized backend observations: `credential_configured`, `health`, optional `last_checked_at`. |
+| `DeliveryProviderCredentials` | Standalone privileged values: optional `sign_in_account`, `password`, `api_base_url`, `api_token`. Only an independently authorized credential write or writer-only detail operation may serialize this model. |
 | `DeliveryCapabilities` | Explicit booleans for booking, tracking, proof of delivery, refrigeration, provider coverage, provider slots and configured slots. Support does not imply current availability. |
-| `DeliveryServiceArea` | Country-scoped exact postal filters and priority; independent of depot coverage and delivery area pricing. |
-| `DeliveryServiceWindow` | Recurring configured local-time window; not a claim of provider-returned slots. |
+| `DeliveryServiceArea` | Country-scoped exact postal filters, optional Orders zone ID reference, ISO subdivision state codes and priority; independent of depot coverage and delivery area pricing. |
+| `ShippingZoneRef` | ID-only reference to an Orders-owned `shipping.Zone`; it is not a copied zone snapshot. |
+| `DeliveryServiceWindow` | Legacy recurring configured local-time window retained for JSON compatibility and deprecated for new availability configuration. |
 | `orders/shipping.DeliverySelection` | Immutable accepted choice copied into Order, Supply's local job and OutboundShipment. |
 
-Supply owns credential storage and secret resource/version references entirely
-outside these models. Connection testing returns only sanitized status and time;
-raw diagnostics, credentials, headers and provider payloads must not reach admin
-or customer projections. Credential replacement and test actions use service-owned
-DTOs. `DispatchCapable`, connection health and configuration revision are derived
-server values, not editable authority flags. Health values are `unknown`,
+Supply owns credential authorization, KMS-encrypted/versioned storage, secret
+resource references, rotation and redaction. `DeliveryProviderCredentials` is a
+standalone sensitive value model, never an embedded company or customer field;
+only separately authorized credential write and writer-only detail operations
+may serialize its values. Connection testing returns only sanitized status and
+time; raw diagnostics, credentials, headers and provider payloads must not reach
+general admin or customer projections. `DispatchCapable`, connection health and
+configuration revision are derived server values, not editable authority flags.
+Health values are `unknown`,
 `healthy`, `unhealthy`; missing or stale evidence does not mean healthy.
 
 `Code` identifies a company instance; `Integration` preserves the existing
@@ -50,6 +53,12 @@ wire field preserves compatibility; it does not grant dispatch readiness.
 1. Require an enabled company, enabled area and a destination country present in
    both the company `country_codes` and the area's `country_code`. Empty country
    or service-area lists grant no coverage. Countries are ISO 3166-1 alpha-2.
+   `shipping_zone`, when configured, contains only the Orders zone ID. Supply
+   resolves the current Orders zone before using its active state, country,
+   administrative areas or postcodes; copied names or coverage are not routing
+   authority. `state_codes` uses ISO 3166-2 `geography.SubdivisionCode` values.
+   Legacy areas may omit these optional fields; Supply owns the requirements for
+   new configuration writes and migration.
 2. Normalize postal strings per destination country before exact comparison;
    preserve leading zeros. No numeric ranges, prefix expansion or inferred city
    boundary is implied by the model.
@@ -68,15 +77,13 @@ wire field preserves compatibility; it does not grant dispatch readiness.
    names. Reject duplicate area/window codes and invalid modes at configuration
    writes. Invalid/unknown persisted modes fail closed at reads.
 
-For the requested AU rollout, Detrack uses the admin's explicit Melbourne postal
-include set. BeCool (`bcrc`) excludes that same set and uses either an explicit
-verified include set elsewhere or a provider-checked `all_except` rule. The
-backend must update/validate these complementary boundaries together. It must
-not broaden Detrack to all VIC, allow BeCool into the configured Detrack boundary,
-or cross those boundaries when an adapter fails. No postcode list is supplied
-here because operational coverage must come from approved configuration or a
-genuine provider source. Country-neutral types support later markets; this
-release does not enable any market.
+No authoritative Australian postcode set is supplied by this release. `AU-VIC`
+identifies a subdivision; it does not imply coverage of all Victoria or Melbourne.
+Supply must resolve an active Orders zone and validate its configured postal
+codes before routing. Detrack live slots remain inactive until exact coverage and
+its pre-booking endpoint are verified. BeCool fallback uses its own live Orders
+zone and verified coverage; it must not inherit Detrack's coverage. Country-neutral
+types support later markets; this release does not enable any market.
 
 New or migrated provider records stay disabled/unavailable until explicit,
 verified coverage and connection settings exist. Existing Orders postcode/rate
@@ -86,10 +93,11 @@ backend/DevOps responsibilities; the shared projection exposes none of them.
 
 ## Configured schedules and provider offers
 
-`slot_source` is `none`, `configured_schedule` or `provider`. Configured schedules
-are backend-managed promises subject to coverage and capacity; Detrack integration
-must not present them as provider slot discovery. Provider offers require actual
-provider evidence. `none` supplies no selectable windows.
+`slot_source` retains `none`, `configured_schedule` and `provider` for wire
+compatibility. Manual `schedules` and `DeliveryServiceWindow` are deprecated for
+new availability configuration, but remain readable on existing records.
+Configured windows do not establish live provider availability. Provider offers
+require actual provider evidence; `none` supplies no selectable windows.
 
 Each configured window has a stable `code`, destination `country_code`, optional
 `service_area_codes`, `days_of_week` (0 Sunday through 6 Saturday), `start_time`
@@ -177,5 +185,7 @@ The [official Detrack job fields](https://help.detrack.com/en/articles/6126913-d
 describe postal and delivery-time fields; these are not evidence of selectable
 slot discovery. [BeCool's public site](https://becoolrefrigeratedcouriers.com.au/)
 does not provide a complete postcode coverage matrix for this contract. Provider
-authentication and operational defaults must be configured in the backend, not
-encoded into shared models or copied from credential examples.
+requirements and operational defaults remain Supply-owned. The standalone
+`DeliveryProviderCredentials` type defines only the privileged value shape;
+actual credential values must never be included in source, tests, or
+documentation examples.

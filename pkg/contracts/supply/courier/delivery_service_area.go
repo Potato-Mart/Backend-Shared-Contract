@@ -14,8 +14,12 @@ import (
 // coverage assertion. CountryCode must also appear in the parent CountryCodes.
 // Lower RoutingPriority values rank first; the service rejects ambiguous ties.
 type DeliveryServiceArea struct {
-	Code               string                            `json:"code"`
-	CountryCode        geography.CountryCode             `json:"country_code"`
+	Code        string                `json:"code"`
+	CountryCode geography.CountryCode `json:"country_code"`
+	// ShippingZone identifies an Orders-owned shipping zone by ID only. Supply
+	// resolves the live zone record when checking coverage; it is not a snapshot.
+	ShippingZone       *ShippingZoneRef                  `json:"shipping_zone,omitempty"`
+	StateCodes         []geography.SubdivisionCode       `json:"state_codes,omitempty"`
 	PostalCodeMode     courier_enums.PostalCodeMatchMode `json:"postal_code_mode"`
 	IncludePostalCodes []string                          `json:"include_postal_codes,omitempty"`
 	ExcludePostalCodes []string                          `json:"exclude_postal_codes,omitempty"`
