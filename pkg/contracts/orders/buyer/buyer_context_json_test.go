@@ -3,22 +3,22 @@ package buyer_test
 import (
 	"encoding/json"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/orders/buyer"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/orders/cart"
-	orderfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/orders/fulfilment"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/orders/buyer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/orders/cart"
+	orderfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/orders/fulfilment"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/orders/order"
 
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/commerce/commerce_enums"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/customers/retail/retail_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pricing/market/market_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/catalogue/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pricing/market/market_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/catalogue/product/product_enums"
 )
 
 // TestOrderBuyerAndItemPricingRoundTrip checks the additive buyer/commercial

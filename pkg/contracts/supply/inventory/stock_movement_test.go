@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/packaging/packaging_enums"
-	operations "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/inventory"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/packaging/packaging_enums"
+	operations "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestPackageConversionMovementRoundTrip(t *testing.T) {

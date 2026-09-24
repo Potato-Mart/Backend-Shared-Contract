@@ -3,7 +3,7 @@ package courier
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/courier/courier_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/courier/courier_enums"
 )
 
 // DeliveryConnection carries admin-safe connection evidence only. Credential

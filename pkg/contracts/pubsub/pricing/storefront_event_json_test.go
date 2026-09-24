@@ -6,15 +6,15 @@ import (
 	"testing"
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/localization"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/marketing/campaign"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/marketing/campaign/campaign_enums"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pubsub/pricing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pubsub/pricing/promotion_enums"
-	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pubsub/routing"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/localization"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/marketing/campaign"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/marketing/campaign/campaign_enums"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pubsub/pricing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pubsub/pricing/promotion_enums"
+	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pubsub/routing"
 )
 
 func TestCustomerSafeStorefrontEventsJSON(t *testing.T) {

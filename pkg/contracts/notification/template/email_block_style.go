@@ -1,6 +1,6 @@
 package template
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/template/template_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/template/template_enums"
 
 // EmailBlockStyle is a bounded block presentation override. Omitted tokens
 // inherit the enclosing email theme/renderer defaults. All locales retain the

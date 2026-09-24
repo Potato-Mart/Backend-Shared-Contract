@@ -1,6 +1,6 @@
 package push
 
-import security "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
+import security "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security"
 
 // PushNotification is the provider-neutral authored content for one push
 // notification delivery.

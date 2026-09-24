@@ -1,7 +1,7 @@
 package compliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography"
 )
 
 type RFIInspectionLocation struct {

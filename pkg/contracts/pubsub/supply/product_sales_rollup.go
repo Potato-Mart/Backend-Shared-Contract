@@ -3,7 +3,7 @@ package supply
 import (
 	"time"
 
-	product "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/catalogue/product"
+	product "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/catalogue/product"
 )
 
 // ProductSalesRollup is the product-stats topic payload: per-SKU, per-market

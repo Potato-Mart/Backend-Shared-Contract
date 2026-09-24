@@ -1,6 +1,6 @@
 package notification
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/core/notification_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/core/notification_enums"
 
 // NotificationPreferencesChangedEvent is emitted on customer-events after a
 // centralized notification preference revision is stored. It carries changed

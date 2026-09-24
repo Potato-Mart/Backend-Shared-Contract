@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/insights/analytics/analytics_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/insights/analytics/analytics_enums"
 )
 
 func TestRetailCustomerAnalyticsProfileJSONShape(t *testing.T) {

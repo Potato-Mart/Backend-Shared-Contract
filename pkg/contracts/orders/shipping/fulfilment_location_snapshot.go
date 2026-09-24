@@ -3,9 +3,9 @@ package shipping
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/orders/shipping/shipping_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/orders/shipping/shipping_enums"
 )
 
 // FulfilmentLocationSnapshot freezes the address or depot that resolved a

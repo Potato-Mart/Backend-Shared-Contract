@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/money"
-	notification "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pubsub/pricing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
+	notification "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pubsub/pricing"
 )
 
 func TestGiftCardIssuedEventRoundTrip(t *testing.T) {
