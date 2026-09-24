@@ -1,9 +1,9 @@
 package template
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notification/push"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notification/sms"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notification/template/template_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/push"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/sms"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/template/template_enums"
 )
 
 // LocalizedNotificationContent carries exactly one channel arm matching the

@@ -1,11 +1,11 @@
 package supply
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/inventory"
-	warehouse "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/inventory"
+	warehouse "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/warehouse"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 type InventoryStockBucketChangedEvent struct {

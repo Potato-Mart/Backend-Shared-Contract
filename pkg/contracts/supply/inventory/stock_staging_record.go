@@ -3,8 +3,8 @@ package inventory
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/warehouse"
 )
 
 // StockStagingRecord captures the physical transfer of an allocation into an

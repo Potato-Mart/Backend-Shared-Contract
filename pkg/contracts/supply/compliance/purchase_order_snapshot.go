@@ -3,9 +3,9 @@ package compliance
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/temporal"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/procurement/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/procurement/purchase_enums"
 )
 
 // PurchaseOrderSnapshot freezes the purchase-order header used by a

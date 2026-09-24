@@ -1,6 +1,6 @@
 package forecasting
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/temporal"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/temporal"
 
 // DailyPrediction is one element in SKUDemandForecast.PredictedDaily.
 type DailyPrediction struct {

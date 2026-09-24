@@ -3,8 +3,8 @@ package fulfilment
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/order/order_enums"
-	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/orders/order/order_enums"
+	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/fulfilment"
 )
 
 // OrderPackingProgress is the order-owned packing state shown to both staff

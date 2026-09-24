@@ -1,6 +1,6 @@
 package reward
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/money"
 
 // RewardRedemptionOutcome records what one reward redemption actually issued.
 // Only the arm matching the redeemed reward's type is set: a checkout discount

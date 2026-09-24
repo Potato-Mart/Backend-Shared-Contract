@@ -3,7 +3,7 @@ package review
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/catalogue/review/review_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/catalogue/review/review_enums"
 )
 
 // MyReview is the owner-safe review projection. It intentionally omits the

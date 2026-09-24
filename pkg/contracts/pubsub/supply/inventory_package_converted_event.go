@@ -1,6 +1,6 @@
 package supply
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/packaging"
 
 type InventoryPackageConvertedEvent struct {
 	MovementID                    string                               `json:"movement_id"`

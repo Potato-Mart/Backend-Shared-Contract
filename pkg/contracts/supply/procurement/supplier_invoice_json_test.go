@@ -6,12 +6,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/temporal"
-	purchase "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/procurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/procurement/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/temporal"
+	purchase "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/procurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/procurement/purchase_enums"
 )
 
 func supplierComposition(baseUnits int64) packaging.PackageCompositionSnapshot {

@@ -1,7 +1,7 @@
 package procurement
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/temporal"
 )
 
 // SupplierTaxIdentity is the supplier's own registration evidence recorded on

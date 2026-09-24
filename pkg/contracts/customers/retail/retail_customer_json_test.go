@@ -3,21 +3,21 @@ package retail_test
 import (
 	"encoding/json"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/geography"
 
 	"strings"
 	"testing"
 	"time"
 
-	commonidentity "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/identity"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/preference"
-	preference_enums "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/preference/preference_enums"
-	customers "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/retail"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/retail/retail_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notification/core/notification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/shipping"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pubsub/notification"
+	commonidentity "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/identity"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/customers/preference"
+	preference_enums "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/customers/preference/preference_enums"
+	customers "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/customers/retail"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/core/notification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/orders/shipping"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pubsub/notification"
 )
 
 func TestRetailCustomerJSONShape(t *testing.T) {

@@ -1,8 +1,8 @@
 package template
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/notification/template/template_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/template/template_enums"
 )
 
 // EmailTemplateBlock has a stable document-unique ID and a kind-specific payload:

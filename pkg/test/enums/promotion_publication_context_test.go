@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/pubsub/pricing/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pubsub/pricing/promotion_enums"
 )
 
 func TestPromotionPublicationContextsValidateKnownValues(t *testing.T) {
