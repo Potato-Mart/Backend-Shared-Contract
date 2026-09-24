@@ -3,7 +3,7 @@ package supply
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/packaging"
 )
 
 type InventoryLotReceivedEvent struct {

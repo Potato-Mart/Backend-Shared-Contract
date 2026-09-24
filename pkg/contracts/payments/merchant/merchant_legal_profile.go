@@ -1,12 +1,12 @@
 package merchant
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/party"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/party"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/payments/payment/payment_enums"
 	"time"
 )
 

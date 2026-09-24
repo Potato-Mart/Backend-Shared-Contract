@@ -3,8 +3,8 @@ package procurement
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
 )
 
 // DepotCarryingCost is the exact weighted-average carrying cost for one SKU at

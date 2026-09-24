@@ -1,6 +1,6 @@
 package template
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/core/notification_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/core/notification_enums"
 
 // NotificationContent is one channel's unrendered localized authoring document,
 // reusable by template definitions and Notification-owned manual messages.

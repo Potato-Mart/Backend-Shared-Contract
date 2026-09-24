@@ -13,14 +13,14 @@ import (
 	"testing"
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security"
 
-	payment "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/payments/payment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/payments/provider"
-	settlement "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/payments/settlement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/payments/settlement/settlement_enums"
-	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/payments/terminal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/payments/terminal/terminal_enums"
+	payment "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/payments/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/payments/provider"
+	settlement "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/payments/settlement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/payments/settlement/settlement_enums"
+	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/payments/terminal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/payments/terminal/terminal_enums"
 )
 
 func TestTerminalTransactionJSONRoundTripWithHistory(t *testing.T) {

@@ -3,7 +3,7 @@ package preference
 import (
 	"time"
 
-	retail_enums "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/customers/preference/preference_enums"
+	retail_enums "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/customers/preference/preference_enums"
 )
 
 // RetailCustomerReceiptPreferences groups the customer's receipt format

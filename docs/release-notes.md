@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v35.0.0` | 2026-09-24 | Major | Removes API/manual integration classification from courier company and safe-reference models; preserves open company codes as the sole identity and changes the module path to `/v35`. Consumers must migrate. |
 | `v34.0.0` | 2026-09-24 | Major | Removes the public delivery-company provider discriminator, makes `code` the sole public company identity, adds derived nullable credential requirements, and changes the module path to `/v34`. All consumers must migrate. |
 | `v33.8.0` | 2026-09-24 | Minor | Adds an ID-only Orders shipping-zone reference and ISO subdivision state codes to courier service areas, plus a standalone privileged courier credential value model; deprecates manual courier schedules for new availability while retaining their legacy JSON shape. Preserves `/v33`. |
 | `v33.7.0` | 2026-09-24 | Minor | Adds trusted publication context to `promotion.changed` v3 and identity-only `coupon.changed` v1 invalidation. Consumers must dual-read promotion.changed v2/v3 before Pricing emits v3; preserves `/v33`. |
@@ -138,6 +139,64 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v35.0.0 (2026-09-24) - API-only Courier Company Contract
+
+### Breaking Contract Changes
+
+- Removes the `integration` JSON field from `courier.DeliveryCompany` and
+  `courier.DeliveryCompanyRef`, including references nested in frozen delivery
+  selections. The shared courier model has no API/manual classification or
+  provider selector. The legacy `adapter` field had already been removed in
+  v34 and remains absent.
+- Moves the module path from `/v34` to `/v35`. All Go consumers must update both
+  their module requirement and every Shared Contract import.
+
+### Courier Wire Shape
+
+- `DeliveryCompany` retains its v34 fields except `integration`:
+  `code`, `name`, always-present nullable `credential_requirements`,
+  `enabled`, optional `default_instructions`, derived `dispatch_capable`,
+  `revision`, `country_codes`, `capabilities`, `slot_source`, optional sanitized
+  `connection`, `service_areas`, optional legacy `schedules`, and audit fields.
+- `DeliveryCompanyRef` is exactly `{"code":"future-market-fleet","name":"Future Market Fleet","revision":7}`.
+  It contains no connection, credential requirements, instructions, provider
+  selector, or credentials.
+- Company `code` remains immutable and is an open, extensible string. A code
+  alone does not prove that its exact provider implementation is verified or
+  that the company has coverage, quote/booking support, or live slots.
+- `credential_requirements` remains derived and read-only. It is `null` when
+  that exact code has no verified registered provider descriptor. Null metadata
+  does not define credential-write authorization; that remains service-owned.
+  General lists and customer-safe references remain free of credential values
+  and provider diagnostics.
+
+### Compatibility and Consumer Action
+
+- Preserve existing company codes exactly, including custom and historical
+  values. Do not derive or reassign them from display names or constrain them
+  to the currently registered providers.
+- Standard Go JSON decoding ignores `integration` and the previously removed
+  `adapter` when reading stored v34/v33 snapshots. v35 serialization emits
+  neither field. Each consuming service owns migration or compatibility of
+  accepted historical selections and records.
+- Remove shared-model reads and writes of `integration`, upgrade the module
+  requirement and all imports from `github.com/Potato-Mart/Backend-Shared-Contract/v34`
+  to `github.com/Potato-Mart/Backend-Shared-Contract/v35 v35.0.0`, and update
+  serialized fixtures. Keep `DeliveryCompanyRef` exactly
+  `{"code":string,"name":string,"revision":int64}`.
+- Do not advertise live slots or executable company support solely because a
+  code exists or credentials are configured. The owning backend verifies the
+  exact provider implementation and operational evidence.
+
+### Contract Files Changed
+
+- `go.mod` and all current-major Go imports across `pkg/contracts` and
+  `pkg/test`.
+- `pkg/contracts/supply/courier/delivery_company.go`
+- `pkg/contracts/supply/courier/delivery_company_ref.go`
+- Courier delivery JSON and import-major guard tests.
+- `README.md`, `docs/delivery-company-model.md` and this release note.
 
 ## v34.0.0 (2026-09-24) - Independent Courier Company Identity
 

@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pubsub/pricing"
-	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pubsub/routing"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pubsub/pricing"
+	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pubsub/routing"
 )
 
 func TestPriceChangedEventJSONAndPrivacy(t *testing.T) {

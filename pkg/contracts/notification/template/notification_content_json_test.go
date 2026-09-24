@@ -8,12 +8,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/core/notification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/email"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/push"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/sms"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/template/template_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/core/notification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/email"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/push"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/sms"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/template/template_enums"
 )
 
 // These fixtures pin representation and round trips, not Notification's

@@ -1,16 +1,18 @@
-# Delivery company model (v34.0.0)
+# Delivery company model (v35.0.0)
 
-This release makes each delivery company independent and uses its immutable
-`code` as the sole public identity. It contains no postcode defaults, provider
-availability claims, API routes, provider implementations, booking or routing
-code. Pin `github.com/Potato-Mart/Backend-Shared-Contract/v34 v34.0.0`.
+This release removes courier API/manual classification from the shared model.
+Each courier company's immutable, extensible `code` is its sole public identity.
+A code does not prove that a verified provider implementation, coverage, or live
+availability exists. This model contains no provider implementation, API routes,
+booking or routing code. Pin
+`github.com/Potato-Mart/Backend-Shared-Contract/v35 v35.0.0`.
 
 ## Ownership and projections
 
 | Model | Owner / purpose |
 | --- | --- |
-| `supply/courier.DeliveryCompany` | Supply admin catalogue root with audit fields; code, name, integration, credential requirements, enabled, instructions, derived dispatch capability, revision, countries, capabilities, slot source, connection, service areas and schedules. |
-| `DeliveryCompanyRef` | Customer-safe snapshot: `code`, `name`, `integration`, `revision`. No connection, instructions, coverage configuration or credentials. |
+| `supply/courier.DeliveryCompany` | Supply admin catalogue root with audit fields; code, name, credential requirements, enabled, instructions, derived dispatch capability, revision, countries, capabilities, slot source, connection, service areas and schedules. No API/manual classification or provider selector. |
+| `DeliveryCompanyRef` | Customer-safe snapshot: `code`, `name`, `revision`. No connection, instructions, coverage configuration or credentials. |
 | `DeliveryCredentialRequirements` | Derived, non-sensitive API URL and connection-test address requirement. It is read-only company metadata and is never accepted as a write field. |
 | `DeliveryConnection` | Sanitized backend observations: `credential_configured`, `health`, optional `last_checked_at`. |
 | `DeliveryProviderCredentials` | Standalone privileged values: optional `sign_in_account`, `password`, `api_base_url`, `api_token`. Only an independently authorized credential write or writer-only detail operation may serialize this model. |
@@ -31,32 +33,34 @@ configuration revision are derived server values, not editable authority flags.
 Health values are `unknown`,
 `healthy`, `unhealthy`; missing or stale evidence does not mean healthy.
 
-`DeliveryCompany.CredentialRequirements` is a derived, read-only value that is
-always serialized. It is `null` for manual companies and API companies without a
-registered implementation. When present, `api_base_url` is that implementation's
-verified public API origin/path, and `connection_address_required` indicates
-whether Supply's connection-test operation requires an address. These values
-are not credentials and are not accepted on create/update operations.
+`DeliveryCompany.CredentialRequirements` is derived, read-only metadata that is
+always serialized. It is `null` when the exact company code has no verified
+registered provider implementation. When present, `api_base_url` is that
+implementation's verified public API origin/path, and
+`connection_address_required` indicates whether Supply's connection-test
+operation requires an address. These values are not credentials and are not
+accepted on create/update operations. A non-null value does not claim current
+coverage or live slots.
 
-`Code` is the immutable identity for one independent company; `Integration`
-preserves the existing service-owned `api` or `manual` mode. For `api` companies,
-Supply privately registers and selects company-specific provider behavior by
-`Code`; the shared model has no separate provider identity. Adding a company
-record does not install provider behavior. Supply retains its immutable
-lowercase company-code convention and validates supported modes. Manual mode
-does not gain automatic dispatch merely by being configured. A company revision
+`Code` is the immutable, extensible identity for one independent company. It is
+an open string, not a fixed company list or provider selector, so other markets
+can add company codes. Supply privately registers and selects verified provider
+behavior by the exact `Code`; the shared model contains no provider identity.
+Adding a company record does not install or verify provider behavior and does
+not imply quote, booking, dispatch or live-slot readiness. A company revision
 is positive and increases when its effective routing,
 connection configuration, capabilities or schedules change. Routine health checks
 need not change configuration revision.
 
-The v34 major release removes the optional provider discriminator from
-`DeliveryCompany` and `DeliveryCompanyRef`. A stored v33 JSON object may still
-contain the removed `adapter` key; standard Go JSON decoding ignores that
-unknown key, and v34 serialization omits it. Consumers must preserve the
-existing company `code` and must not derive or rewrite it from the display name.
-`Integration` remains `api` or `manual`. Supply owns migration of its private
-provider state and accepted v33 selections; this shared model does not define
-credential, operation-receipt or provider-storage migration.
+The v35 major release removes `integration` from `DeliveryCompany`,
+`DeliveryCompanyRef` and nested frozen delivery references. The legacy
+`adapter` field was already removed in v34 and remains absent. A stored v34 JSON
+object may contain `integration`; older v33 data may also contain `adapter`.
+Standard Go JSON decoding ignores these unknown fields, and v35 serialization
+omits them. Consumers must preserve the existing company `code` and must not
+derive or rewrite it from the display name. Each service owns migration of
+accepted historical selections and private provider state; this shared model
+does not define credential, operation-receipt or provider-storage migration.
 
 ## Coverage semantics and backend validation
 
@@ -146,7 +150,7 @@ The resulting `DeliverySelection` contains these required fields:
 
 | JSON field | Meaning |
 | --- | --- |
-| `delivery_company` | Safe code/name/integration/config revision snapshot. |
+| `delivery_company` | Safe code/name/config revision snapshot. |
 | `schedule_code`, `schedule_revision` | Window/provider schedule identity and positive accepted schedule-view revision. |
 | `slot_id` | Opaque dated offer identity, scoped to the accepted company/config and schedule. |
 | `date` | Local delivery calendar date, `YYYY-MM-DD`. |
@@ -170,14 +174,21 @@ not itself mark an order physically dispatched.
 - Preserve existing `DeliverySchedule.carrier` and `Order.outsourced_carrier`
   display-name meaning. `OutboundShipment.carrier` remains the company code.
   Use the new reference code for identity; never reassign old scalar meanings.
-- Existing company fields (`code`, `name`, `integration`, `enabled`,
-  `default_instructions`, audit timestamps and `dispatch_capable`) are represented.
-  Supply maps its local records/DTOs deliberately and migrates country, revision,
-  coverage and schedule configuration before enabling new routing.
+- Preserve every existing company `code` exactly; codes are open/extensible and
+  must not be mapped from the display name or restricted to the currently
+  registered providers. Supply maps its local records deliberately. The removed
+  `integration` field is ignored when decoding v34 JSON; legacy v33 data may
+  also contain `adapter`. Both are absent from v35 serialization. Each consuming
+  service owns historical selection compatibility.
+- Supply privately selects a verified provider implementation by exact company
+  code. An unverified code does not establish provider support, quote/booking
+  eligibility or live slots; consumer surfaces must not imply those capabilities.
+  Supply maps country, revision, coverage and schedule configuration before
+  enabling new routing.
 - Orders currently has service-local delivery-option DTOs with different required
   label/fee behavior. Do not blindly alias them to shared models; preserve API
   compatibility through explicit mappings. Frontend types follow backend OpenAPI.
-- `credential_requirements` is always present in v34 company responses but may
+- `credential_requirements` is always present in v35 company responses but may
   be `null`; consumers reading stored v33 company records should treat an absent
   value like `null`. Other legacy optional fields may remain absent. A missing
   selection on a legacy order means unknown; it grants no permission to infer an

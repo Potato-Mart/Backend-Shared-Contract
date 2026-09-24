@@ -1,8 +1,8 @@
 package reservation
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 // VoucherBenefitReservation is an exclusive checkout voucher hold.

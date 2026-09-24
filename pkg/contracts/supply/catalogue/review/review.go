@@ -1,9 +1,9 @@
 package review
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/catalogue/review/review_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/catalogue/review/review_enums"
 )
 
 // Review is the protected internal review record. CustomerNumber is mandatory

@@ -1,7 +1,7 @@
 package buyer
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/customers/retail/retail_enums"
 )
 
 // BuyerContext is the shared, channel-independent description of who is

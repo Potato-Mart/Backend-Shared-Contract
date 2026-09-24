@@ -3,7 +3,7 @@ package shipping
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/courier"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/courier"
 )
 
 // DeliverySchedule is a cart-free, revisioned view of delivery windows for an

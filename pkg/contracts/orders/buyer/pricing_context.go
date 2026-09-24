@@ -1,9 +1,9 @@
 package buyer
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pricing/market/market_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/catalogue/product/product_enums"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pricing/market/market_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/catalogue/product/product_enums"
 )
 
 // PricingContext is the shared commercial pricing context under which a line

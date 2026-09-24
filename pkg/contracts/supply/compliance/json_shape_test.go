@@ -3,18 +3,18 @@ package compliance_test
 import (
 	"encoding/json"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography"
 
-	compliance "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/compliance"
+	compliance "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/compliance"
 
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/temporal"
-	compliance_enums "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/compliance/compliance_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/procurement/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/temporal"
+	compliance_enums "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/compliance/compliance_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/procurement/purchase_enums"
 )
 
 func TestDeclarationAndLabelRoundTripManagedMediaAndMeasurements(t *testing.T) {

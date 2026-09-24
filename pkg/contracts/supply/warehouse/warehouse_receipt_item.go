@@ -3,9 +3,9 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/catalogue/classification/classification_enums"
 )
 
 // WarehouseReceiptItem is one operationally received item.

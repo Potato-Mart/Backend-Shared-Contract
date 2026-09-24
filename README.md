@@ -14,8 +14,8 @@ workflows.
 ## Latest Version
 
 ```text
-v34.0.0
-github.com/Potato-Mart/Backend-Shared-Contract/v34
+v35.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v35
 ```
 
 See [release notes](docs/release-notes.md) for the release history,
@@ -26,19 +26,20 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v34 v34.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v35 v35.0.0
 ```
 
-Import packages from the same `/v34` module path.
+Import packages from the same `/v35` module path.
 
-The v34.0.0 breaking change removes the public provider-discriminator field
-from delivery companies and their safe references. `code` is the sole public
-company identity. The existing `integration` API/manual mode remains, and
-Supply owns company-specific provider registration. `DeliveryCompany` also
-includes a derived, non-sensitive `credential_requirements` value; it is null
-for manual companies or API companies without a registered implementation.
-See the [delivery company model](docs/delivery-company-model.md) for migration
-guidance.
+The v35.0.0 breaking change removes the remaining API/manual `integration`
+classification from `DeliveryCompany` and `DeliveryCompanyRef`. The legacy
+`adapter` field is absent from both shapes; `code` is the sole, open company
+identity and selects any verified Supply provider implementation.
+`DeliveryCompany` retains derived, non-sensitive `credential_requirements`
+metadata, which is null when the exact company code has no verified registered
+provider implementation.
+See the [delivery company model](docs/delivery-company-model.md) for the wire
+shapes and migration guidance.
 
 The v33.8.0 additions add optional Orders-owned shipping-zone identity and ISO
 subdivision state codes to courier service areas, plus a standalone privileged
@@ -46,9 +47,9 @@ subdivision state codes to courier service areas, plus a standalone privileged
 `sign_in_account`, `password`, `api_base_url`, and `api_token`; use it only on
 authorized credential write and writer-only detail operations. Never embed it
 in company, connection, list, or customer models. Encryption, authorization,
-credential versioning, rotation, and redaction remain Supply-owned. Manual
-courier schedules remain readable for compatibility and are deprecated for new
-availability decisions.
+credential versioning, rotation, and redaction remain Supply-owned. Legacy
+configured courier schedules remain readable for compatibility and are
+deprecated for new availability decisions.
 
 The v33.7.0 additions add trusted publication context to `promotion.changed`
 v3 and an identity-only `coupon.changed` v1 invalidation event. Consumers must
@@ -58,8 +59,9 @@ Campaign-linked benefits use opaque Promotion.ID or Coupon.ID references, not
 redeemable coupon codes. Service validation, storage, publication workflows and
 notification behavior remain backend-owned.
 
-The v33.6.0 release added provider-discriminator fields while preserving the
-existing `integration` API/manual mode. Those fields are removed in v34.0.0.
+The v33.6.0 release added optional provider-discriminator fields while preserving
+the then-existing `integration` API/manual mode. v34 removed the discriminator;
+v35 removes the integration classification.
 
 The v33.5.0 additions describe Supply-owned delivery companies, explicit postal
 coverage filters, safe connection status, configured service windows, and frozen
@@ -91,7 +93,7 @@ belong to Notification and are not implemented by this module.
 - Identity lives in `identity/{access,account,authorisation}`; customer records
   live in `customers/{retail,wholesale,group,preference}`. Orders, payment,
   pricing, notification, insight, marketing, and supply models use their named
-  v34 domain subpackages. See the complete package map and migration table in
+  v35 domain subpackages. See the complete package map and migration table in
   [the v33 migration guide](docs/v33-migration.md).
 - Catalogue models live in `supply/catalogue/{classification,product,listing,
   review,wish,favourite}`. Marketing retains `marketing/campaign`,

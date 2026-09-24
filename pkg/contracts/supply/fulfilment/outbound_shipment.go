@@ -3,11 +3,11 @@ package fulfilment
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/geography"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/orders/shipping"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 type OutboundShipment struct {

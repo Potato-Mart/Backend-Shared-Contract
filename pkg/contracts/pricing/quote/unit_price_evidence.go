@@ -1,8 +1,8 @@
 package quote
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
 )
 
 // UnitPriceEvidence is the comparison-unit price shown beside an ordinary

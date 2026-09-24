@@ -1,26 +1,24 @@
 package courier
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/courier/courier_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/courier/courier_enums"
 )
 
 // DeliveryCompany is the Supply-owned, admin-safe record for one independent
-// delivery company. Code is its immutable identity; Integration retains the
-// service-owned api/manual mode. Supply selects the registered api
-// implementation by Code.
+// API delivery company. Code is its immutable identity; Supply selects the
+// registered provider implementation by Code.
 // Revision identifies the entire configuration, including areas and schedules.
 type DeliveryCompany struct {
-	Code        string `json:"code"`
-	Name        string `json:"name"`
-	Integration string `json:"integration"`
+	Code string `json:"code"`
+	Name string `json:"name"`
 	// CredentialRequirements is derived by Supply and always serialized. Nil
-	// means this is a manual company or has no registered API implementation.
+	// means this code has no verified registered provider implementation.
 	CredentialRequirements *DeliveryCredentialRequirements `json:"credential_requirements"`
 	Enabled                bool                            `json:"enabled"`
 	DefaultInstructions    string                          `json:"default_instructions,omitempty"`
-	// DispatchCapable is derived by Supply from company-specific support and
+	// DispatchCapable is derived by Supply from registered support and verified
 	// readiness; it is not an editable permission to dispatch.
 	DispatchCapable bool                             `json:"dispatch_capable"`
 	Revision        int64                            `json:"revision"`

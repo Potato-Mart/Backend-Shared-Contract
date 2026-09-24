@@ -1,8 +1,8 @@
 package delivery
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/metadata"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/metadata"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security"
 )
 
 // SocialMediaNotification is a provider-neutral direct or official-account

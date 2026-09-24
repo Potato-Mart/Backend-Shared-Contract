@@ -3,8 +3,8 @@ package procurement
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security"
 )
 
 // NetGoodsValuationMovement is an immutable private posting to net-goods

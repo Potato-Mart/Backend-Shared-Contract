@@ -1,9 +1,9 @@
 package template
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/core/notification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/core/notification_enums"
 )
 
 // NotificationTemplateBinding records a country/topic/channel/purpose selection

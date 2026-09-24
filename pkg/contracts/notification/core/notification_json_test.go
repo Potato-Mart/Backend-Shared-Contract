@@ -6,17 +6,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/metadata"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/core"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/core/notification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/delivery"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/email"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/preference"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/push"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/notification/sms"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/metadata"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/core"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/core/notification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/delivery"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/email"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/preference"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/push"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/sms"
 )
 
 func TestNotificationPreferencesSupportsBackendDefinedTopicsAndDestinationScopedSocialConsent(t *testing.T) {

@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/money"
-	pos "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/payments/receipt"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
+	pos "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/payments/receipt"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pricing/quote/quote_enums"
 )
 
 func TestCashRoundingSnapshotKeepsConsiderationExact(t *testing.T) {

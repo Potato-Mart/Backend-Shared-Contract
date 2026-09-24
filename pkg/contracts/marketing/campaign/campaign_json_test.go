@@ -5,10 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/marketing/campaign"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/marketing/campaign/campaign_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pricing/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/marketing/campaign"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/marketing/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pricing/benefit"
 )
 
 func TestCampaignUsesOpenNotificationTopicAndPricingBenefitReference(t *testing.T) {

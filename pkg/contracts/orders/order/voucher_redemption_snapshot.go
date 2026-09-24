@@ -3,7 +3,7 @@ package order
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
 )
 
 // VoucherRedemptionSnapshot records the single voucher applied to an order.

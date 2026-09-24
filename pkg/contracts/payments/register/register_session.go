@@ -1,12 +1,12 @@
 package register
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/money"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/temporal"
-	pos_enums "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/payments/register/register_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/temporal"
+	pos_enums "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/payments/register/register_enums"
 	"time"
 )
 

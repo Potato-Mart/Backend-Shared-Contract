@@ -5,17 +5,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/common/packaging/packaging_enums"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/pubsub/supply"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/catalogue/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/catalogue/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/catalogue/product/product_enums"
-	fulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/fulfilment"
-	operations "github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/inventory"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v34/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/packaging/packaging_enums"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pubsub/supply"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/catalogue/product/product_enums"
+	fulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/fulfilment"
+	operations "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestReservationAndStagingJSONShapes(t *testing.T) {
