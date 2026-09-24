@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/customers/retail"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/order"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/orders/shipping"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v33/pkg/contracts/supply/courier"
@@ -79,9 +80,12 @@ func TestDeliverySelectionSurvivesOrdersToSupplyHandoff(t *testing.T) {
 }
 
 func TestCourierExplicitCoverageWireShape(t *testing.T) {
+	// These postal strings exercise JSON shape only; they are not approved
+	// provider coverage or rollout configuration.
 	for _, wire := range []string{
 		`{"code":"configured","country_code":"AU","postal_code_mode":"include_only","include_postal_codes":["0800","3000"],"exclude_postal_codes":["3000"],"routing_priority":10,"enabled":true,"provider_coverage_required":false}`,
 		`{"code":"provider-checked","country_code":"AU","postal_code_mode":"all_except","exclude_postal_codes":["3000"],"routing_priority":20,"enabled":true,"provider_coverage_required":true}`,
+		`{"code":"zone-bound","country_code":"AU","shipping_zone":{"id":"zone_test_1"},"state_codes":["AU-VIC"],"postal_code_mode":"include_only","routing_priority":10,"enabled":true,"provider_coverage_required":false}`,
 	} {
 		var area courier.DeliveryServiceArea
 		if err := json.Unmarshal([]byte(wire), &area); err != nil {
@@ -157,6 +161,62 @@ func TestCourierConnectionAndCustomerReferenceStaySeparate(t *testing.T) {
 	}
 }
 
+func TestCourierProviderCredentialModelHasPrivilegedStandaloneShape(t *testing.T) {
+	modelType := reflect.TypeOf(courier.DeliveryProviderCredentials{})
+	wantFields := []struct {
+		name string
+		json string
+	}{
+		{"SignInAccount", "sign_in_account,omitempty"},
+		{"Password", "password,omitempty"},
+		{"APIBaseURL", "api_base_url,omitempty"},
+		{"APIToken", "api_token,omitempty"},
+	}
+	if modelType.NumField() != len(wantFields) {
+		t.Fatalf("DeliveryProviderCredentials has %d fields, want exactly %d", modelType.NumField(), len(wantFields))
+	}
+	for index, want := range wantFields {
+		field := modelType.Field(index)
+		if field.Name != want.name || field.Type.Kind() != reflect.String || field.Tag.Get("json") != want.json {
+			t.Errorf("DeliveryProviderCredentials field %d = %s %s json:%q, want %s string json:%q", index, field.Name, field.Type, field.Tag.Get("json"), want.name, want.json)
+		}
+	}
+	data, err := json.Marshal(courier.DeliveryProviderCredentials{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(data) != `{}` {
+		t.Fatalf("empty credential value should omit unset fields: %s", data)
+	}
+}
+
+func TestCourierCredentialTypeIsAbsentFromGeneralAndCustomerModels(t *testing.T) {
+	credentialType := reflect.TypeOf(courier.DeliveryProviderCredentials{})
+	models := map[string]reflect.Type{
+		"delivery company":           reflect.TypeOf(courier.DeliveryCompany{}),
+		"delivery company reference": reflect.TypeOf(courier.DeliveryCompanyRef{}),
+		"delivery connection":        reflect.TypeOf(courier.DeliveryConnection{}),
+		"delivery selection":         reflect.TypeOf(shipping.DeliverySelection{}),
+		"retail customer":            reflect.TypeOf(retail.RetailCustomer{}),
+	}
+	for name, model := range models {
+		if containsModelType(model, credentialType, map[reflect.Type]bool{}) {
+			t.Errorf("%s must not embed or contain privileged courier credentials", name)
+		}
+	}
+}
+
+func TestCourierLegacyConfiguredSchedulesRemainReadable(t *testing.T) {
+	const wire = `{"schedules":[{"code":"legacy-day","country_code":"AU","days_of_week":[1],"start_time":"09:00","end_time":"17:00","timezone":"Australia/Melbourne","minimum_lead_time_minutes":0,"enabled":true}]}`
+	var company courier.DeliveryCompany
+	if err := json.Unmarshal([]byte(wire), &company); err != nil {
+		t.Fatal(err)
+	}
+	if len(company.Schedules) != 1 || company.Schedules[0].Code != "legacy-day" {
+		t.Fatalf("legacy schedules were not retained for compatibility: %+v", company.Schedules)
+	}
+}
+
 func TestDeliveryFeesAndOfferMetadata(t *testing.T) {
 	window := courier.DeliveryServiceWindow{Code: "day", CountryCode: "AU", DaysOfWeek: []int{1, 2, 3, 4, 5}, StartTime: "07:00", EndTime: "18:00", Timezone: "Australia/Melbourne", MinimumLeadTimeMinutes: 120, Enabled: true}
 	assertDeliveryJSON(t, window, `{"code":"day","country_code":"AU","days_of_week":[1,2,3,4,5],"start_time":"07:00","end_time":"18:00","timezone":"Australia/Melbourne","minimum_lead_time_minutes":120,"enabled":true}`)
@@ -205,4 +265,28 @@ func assertDeliveryJSON(t *testing.T, model any, want string) {
 	if !reflect.DeepEqual(actual, expected) {
 		t.Fatalf("JSON mismatch\ngot: %s\nwant: %s", got, want)
 	}
+}
+
+func containsModelType(model, target reflect.Type, seen map[reflect.Type]bool) bool {
+	for model.Kind() == reflect.Pointer || model.Kind() == reflect.Slice || model.Kind() == reflect.Array {
+		model = model.Elem()
+	}
+	if model == target {
+		return true
+	}
+	if seen[model] {
+		return false
+	}
+	seen[model] = true
+	switch model.Kind() {
+	case reflect.Struct:
+		for index := 0; index < model.NumField(); index++ {
+			if containsModelType(model.Field(index).Type, target, seen) {
+				return true
+			}
+		}
+	case reflect.Map:
+		return containsModelType(model.Key(), target, seen) || containsModelType(model.Elem(), target, seen)
+	}
+	return false
 }

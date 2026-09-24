@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v33.8.0` | 2026-09-24 | Minor | Adds an ID-only Orders shipping-zone reference and ISO subdivision state codes to courier service areas, plus a standalone privileged courier credential value model; deprecates manual courier schedules for new availability while retaining their legacy JSON shape. Preserves `/v33`. |
 | `v33.7.0` | 2026-09-24 | Minor | Adds trusted publication context to `promotion.changed` v3 and identity-only `coupon.changed` v1 invalidation. Consumers must dual-read promotion.changed v2/v3 before Pricing emits v3; preserves `/v33`. |
 | `v33.6.0` | 2026-09-23 | Minor | Adds optional adapter identifiers to delivery company records/references, preserving existing api/manual integration semantics. Corrects v33.5.0 documentation; use this release for multi-carrier rollout. |
 | `v33.5.0` | 2026-09-23 | Minor | Adds Supply-owned delivery companies, explicit postcode filters, sanitized connection health and configured windows; adds optional company/offer metadata and frozen delivery selections on orders and outbound shipments. Preserves existing carrier meanings and the `/v33` module path. |
@@ -136,6 +137,51 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v33.8.0 (2026-09-24) - Courier Credentials, Zone References and Live Availability
+
+### Breaking Contract Changes
+
+- None. `/v33` is unchanged; the zone and state fields are optional so legacy
+  service-area records retain their wire shape.
+
+### Added
+
+- `DeliveryProviderCredentials`, a standalone privileged value model with
+  optional `sign_in_account`, `password`, `api_base_url`, and `api_token` JSON
+  fields. It is not embedded in company, connection, list, or customer models.
+- `ShippingZoneRef`, an ID-only reference to the Orders-owned shipping zone.
+- Optional `DeliveryServiceArea.shipping_zone` and `state_codes`; state values
+  use ISO 3166-2 `geography.SubdivisionCode` codes.
+
+### Compatibility and Consumer Action
+
+- Supply may use `DeliveryProviderCredentials` only on separately authorized
+  credential write and writer-only detail operations. Credential authorization,
+  KMS-encrypted/versioned persistence, rotation and log redaction remain
+  Supply-owned; never include its values in general company or customer
+  projections.
+- A zone reference carries only the Orders zone ID, not a name or coverage
+  snapshot. Supply resolves the live Orders zone for coverage decisions. The
+  new service-area fields remain absent on legacy JSON; service-owned validation
+  decides which new writes must provide them.
+- No Australian postcode matrix is supplied by this release. `AU-VIC` names a
+  subdivision but does not imply statewide or Melbourne coverage; Supply must
+  rely on live zone data and verified provider coverage.
+- Manual `DeliveryCompany.schedules` and `DeliveryServiceWindow` remain
+  readable for compatibility and are deprecated for new availability. They do
+  not establish live provider availability.
+- No runtime provider, fallback, or packing behavior is implemented by this
+  model-only release.
+
+### Contract Files Changed
+
+- `pkg/contracts/supply/courier/delivery_provider_credentials.go`
+- `pkg/contracts/supply/courier/shipping_zone_ref.go`
+- `pkg/contracts/supply/courier/delivery_service_area.go`
+- `pkg/contracts/supply/courier/delivery_company.go`
+- `pkg/contracts/supply/courier/delivery_service_window.go`
+- Courier JSON, privacy-policy and exported-model manifest tests.
 
 ## v33.7.0 (2026-09-24) - Campaign Publication Provenance and Coupon Invalidation
 

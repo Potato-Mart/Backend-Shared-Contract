@@ -14,7 +14,7 @@ workflows.
 ## Latest Version
 
 ```text
-v33.7.0
+v33.8.0
 github.com/Potato-Mart/Backend-Shared-Contract/v33
 ```
 
@@ -26,10 +26,20 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.7.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v33 v33.8.0
 ```
 
 Import packages from the same `/v33` module path.
+
+The v33.8.0 additions add optional Orders-owned shipping-zone identity and ISO
+subdivision state codes to courier service areas, plus a standalone privileged
+`DeliveryProviderCredentials` value model. Its optional JSON fields are
+`sign_in_account`, `password`, `api_base_url`, and `api_token`; use it only on
+authorized credential write and writer-only detail operations. Never embed it
+in company, connection, list, or customer models. Encryption, authorization,
+credential versioning, rotation, and redaction remain Supply-owned. Manual
+courier schedules remain readable for compatibility and are deprecated for new
+availability decisions.
 
 The v33.7.0 additions add trusted publication context to `promotion.changed`
 v3 and an identity-only `coupon.changed` v1 invalidation event. Consumers must

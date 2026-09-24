@@ -34,7 +34,7 @@ claim v33 consumer verification.
 | Pricing | `pricing/pricebook`, `quote`, `promotion`, `benefit`, `coupon`, `membership`, `market`, `special`, and `pricing/wallet/*` |
 | Notification | `notification/core`, `email`, `sms`, `push`, `preference`, `delivery`, `template` (added in v33.3) |
 | Insights and Marketing | `insights/analytics`, `insights/sales`, `insights/customer`; `marketing/campaign`, `marketing/audience`, `marketing/message` |
-| Supply | `supply/catalogue/{classification,product,listing,review,wish,favourite}`, `inventory`, `warehouse`, `procurement`, `compliance`, `fulfilment`, `forecasting` |
+| Supply | `supply/catalogue/{classification,product,listing,review,wish,favourite}`, `courier`, `inventory`, `warehouse`, `procurement`, `compliance`, `fulfilment`, `forecasting` |
 | Pub/Sub | `pubsub/envelope`, `pubsub/routing`, and producer-owned `orders`, `payments`, `supply`, `customers`, `pricing`, and `notification` payload packages |
 
 `marketing/message` remains intact. The target taxonomy intentionally has no
