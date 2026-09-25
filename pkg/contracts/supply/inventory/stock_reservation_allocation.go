@@ -1,9 +1,9 @@
 package inventory
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/packaging/packaging_enums"
 )
 
 // StockReservationAllocation binds part of a logical reservation to exact

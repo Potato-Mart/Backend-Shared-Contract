@@ -3,8 +3,8 @@ package enums_test
 import (
 	"testing"
 
-	subscription_enums "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/orders/subscription/subscription_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pricing/membership/membership_enums"
+	subscription_enums "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/orders/subscription/subscription_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/pricing/membership/membership_enums"
 )
 
 func TestMembershipEnumsValidateKnownValues(t *testing.T) {

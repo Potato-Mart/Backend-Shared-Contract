@@ -3,10 +3,10 @@ package reward
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/geography"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 // RewardRedemption records a customer's redemption of a Membership reward.

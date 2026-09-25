@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/catalogue/wish/wish_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/catalogue/wish/wish_enums"
 )
 
 func TestWishEnumsValidateKnownValues(t *testing.T) {

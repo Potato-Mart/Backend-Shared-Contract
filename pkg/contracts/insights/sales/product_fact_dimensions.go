@@ -1,9 +1,9 @@
 package sales
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/catalogue/classification/classification_enums"
 )
 
 // ProductFactDimensions is the frozen product, catalogue, and geographic

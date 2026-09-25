@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/customers/retail"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/orders/shipping"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/courier"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/courier/courier_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/customers/retail"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/courier"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/courier/courier_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/fulfilment"
 )
 
 func TestDeliveryLegacyJSONRemainsUnchanged(t *testing.T) {
@@ -84,9 +84,9 @@ func TestCourierExplicitCoverageWireShape(t *testing.T) {
 	// These postal strings exercise JSON shape only; they are not approved
 	// provider coverage or rollout configuration.
 	for _, wire := range []string{
-		`{"code":"configured","country_code":"AU","postal_code_mode":"include_only","include_postal_codes":["0800","3000"],"exclude_postal_codes":["3000"],"routing_priority":10,"enabled":true,"provider_coverage_required":false}`,
-		`{"code":"provider-checked","country_code":"AU","postal_code_mode":"all_except","exclude_postal_codes":["3000"],"routing_priority":20,"enabled":true,"provider_coverage_required":true}`,
-		`{"code":"zone-bound","country_code":"AU","shipping_zone":{"id":"zone_test_1"},"state_codes":["AU-VIC"],"postal_code_mode":"include_only","routing_priority":10,"enabled":true,"provider_coverage_required":false}`,
+		`{"code":"CONFIGURED-ZONE","country_code":"AU","market_code":"market_au","shipping_zone":{"id":"zone_test_1"},"postal_code_mode":"include_only","include_postal_codes":["0800","3000"],"exclude_postal_codes":["3000"],"enabled":true,"provider_coverage_required":false}`,
+		`{"code":"PROVIDER-CHECKED-ZONE","country_code":"AU","market_code":"market_au","shipping_zone":{"id":"zone_test_2"},"postal_code_mode":"all_except","exclude_postal_codes":["3000"],"enabled":true,"provider_coverage_required":true}`,
+		`{"code":"ZONE-BOUND","country_code":"AU","market_code":"market_au_second","shipping_zone":{"id":"zone_test_1"},"state_codes":["AU-VIC"],"postal_code_mode":"include_only","enabled":true,"provider_coverage_required":false}`,
 	} {
 		var area courier.DeliveryServiceArea
 		if err := json.Unmarshal([]byte(wire), &area); err != nil {
@@ -100,6 +100,18 @@ func TestCourierExplicitCoverageWireShape(t *testing.T) {
 		t.Fatal(err)
 	}
 	assertDeliveryJSON(t, ref, reference)
+}
+
+func TestCourierLegacyAreaDoesNotInferMarketOrRetainPriority(t *testing.T) {
+	const legacy = `{"code":"legacy-zone","country_code":"AU","shipping_zone":{"id":"zone_test_1"},"state_codes":["AU-VIC"],"postal_code_mode":"include_only","include_postal_codes":["0800"],"routing_priority":10,"enabled":true,"provider_coverage_required":false}`
+	var area courier.DeliveryServiceArea
+	if err := json.Unmarshal([]byte(legacy), &area); err != nil {
+		t.Fatal(err)
+	}
+	assertDeliveryJSON(t, area, `{"code":"legacy-zone","country_code":"AU","market_code":"","shipping_zone":{"id":"zone_test_1"},"state_codes":["AU-VIC"],"postal_code_mode":"include_only","include_postal_codes":["0800"],"enabled":true,"provider_coverage_required":false}`)
+	if _, found := reflect.TypeOf(area).FieldByName("RoutingPriority"); found {
+		t.Fatal("removed RoutingPriority must not remain as a Go compatibility alias")
+	}
 }
 
 func TestCourierCompanyCodeIgnoresLegacyClassifiers(t *testing.T) {
@@ -197,6 +209,39 @@ func TestCourierCredentialRequirementsAreDerivedAndNullable(t *testing.T) {
 	}
 	if !reflect.DeepEqual(got, requirements) {
 		t.Fatalf("credential requirements changed: got %+v want %+v", got, requirements)
+	}
+}
+
+func TestCourierAuthenticationMethodsContainRequirementsNotValues(t *testing.T) {
+	for _, method := range []string{"api_token", "future_registered_method"} {
+		t.Run(method, func(t *testing.T) {
+			requirements := courier.DeliveryCredentialRequirements{
+				APIBaseURL: "https://provider.example.test/api/v1",
+				AuthenticationMethods: []courier.DeliveryAuthenticationMethodRequirements{{
+					Method: method, RequiredFields: []string{"api_base_url", "api_token"},
+				}},
+			}
+			wire := `{"api_base_url":"https://provider.example.test/api/v1","connection_address_required":false,"authentication_methods":[{"method":"` + method + `","required_fields":["api_base_url","api_token"]}]}`
+			assertDeliveryJSON(t, requirements, wire)
+			var decoded courier.DeliveryCredentialRequirements
+			if err := json.Unmarshal([]byte(wire), &decoded); err != nil {
+				t.Fatal(err)
+			}
+			if !reflect.DeepEqual(requirements, decoded) {
+				t.Fatalf("authentication metadata changed: %+v", decoded)
+			}
+		})
+	}
+	var legacy courier.DeliveryCredentialRequirements
+	if err := json.Unmarshal([]byte(`{"api_base_url":"https://provider.example.test/api/v1","connection_address_required":false}`), &legacy); err != nil {
+		t.Fatal(err)
+	}
+	if len(legacy.AuthenticationMethods) != 0 {
+		t.Fatal("legacy metadata must not invent an authentication method")
+	}
+	methodType := reflect.TypeOf(courier.DeliveryAuthenticationMethodRequirements{})
+	if methodType.NumField() != 2 {
+		t.Fatal("review new authentication metadata fields for credential exposure")
 	}
 }
 

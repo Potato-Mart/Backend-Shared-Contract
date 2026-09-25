@@ -3,10 +3,10 @@ package reservation
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/audit"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pricing/benefit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/pricing/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 // CheckoutBenefitReservation is the durable checkout hold for applied benefits.

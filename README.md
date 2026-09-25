@@ -14,8 +14,8 @@ workflows.
 ## Latest Version
 
 ```text
-v35.2.0
-github.com/Potato-Mart/Backend-Shared-Contract/v35
+v36.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v36
 ```
 
 See [release notes](docs/release-notes.md) for the release history,
@@ -26,10 +26,24 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v35 v35.2.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v36 v36.0.0
 ```
 
-Import packages from the same `/v35` module path.
+Import packages from the same `/v36` module path.
+
+The v36.0.0 release removes courier service-area `routing_priority` and adds
+`market_code` while retaining explicit shipping-zone references. Selecting all
+country zones means materializing the existing active zones, never a wildcard.
+Legacy markets require explicit service-owned mapping. Derived credential
+requirements may advertise `authentication_methods` with method identifiers and
+required field names, never credential values or implied account-login support.
+
+Promotion and coupon controls now share optional `audience` customer-type and
+client-platform restrictions. Missing dimensions remain unrestricted; platform
+is independent of order channel. The offer holds an editable snapshot, not a
+live campaign link. Pricing owns validation and enforcement. Packing models and
+event schemas are unchanged. See the [v36 migration](docs/v36-migration.md) for
+exact shapes, compatibility, and consumer actions.
 
 The additive v35.2.0 release adds `FulfillmentStatusCancelled` with wire value
 `cancelled`. It means no further fulfilment work is scheduled; it does not

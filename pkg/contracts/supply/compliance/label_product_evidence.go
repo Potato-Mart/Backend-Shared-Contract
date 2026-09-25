@@ -3,7 +3,7 @@ package compliance
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/localization"
 )
 
 // LabelProductEvidence freezes only the product facts used to author and

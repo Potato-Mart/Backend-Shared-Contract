@@ -1,6 +1,6 @@
 package sales
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/money"
 
 // OrderItemFact is the immutable product and merchandising snapshot used by
 // sales rollups. Dimension values are canonical identifiers captured at purchase

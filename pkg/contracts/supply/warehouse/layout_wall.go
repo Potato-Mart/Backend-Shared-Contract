@@ -1,7 +1,7 @@
 package warehouse
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geometry"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/geometry"
 )
 
 // LayoutWall is a vertical wall segment used when a depot does not have

@@ -3,9 +3,9 @@ package group
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/audit"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security"
-	wholesale_enums "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/customers/group/group_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/security"
+	wholesale_enums "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/customers/group/group_enums"
 )
 
 type GroupOrderManagerApplication struct {

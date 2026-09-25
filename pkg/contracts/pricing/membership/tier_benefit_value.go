@@ -1,6 +1,6 @@
 package membership
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/money"
 
 // TierBenefitValue carries exactly one value arm for a membership benefit.
 type TierBenefitValue struct {

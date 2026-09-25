@@ -244,8 +244,9 @@ var modelPackageManifest map[string]string
 // Courier company/configuration records, frozen delivery selections and their
 // leaf enums are additive. V35.1 adds order delivery and fulfilment-evidence
 // records in existing packages; delivery, marketing, pricing and localization
-// types retain their package ownership.
-const exportedTypeManifestDigest = "41261f563a6674760b6c1764660666f240e586f92527f673db70c7f80a7c3064"
+// types retain their package ownership. V36 adds only the non-sensitive
+// DeliveryAuthenticationMethodRequirements record in the existing courier package.
+const exportedTypeManifestDigest = "7cacd2d190d52ee32d2c4d3a7376e0810eae37c69d3ac7e4d09718dd136902e8"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

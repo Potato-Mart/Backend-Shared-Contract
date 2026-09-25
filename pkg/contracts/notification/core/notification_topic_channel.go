@@ -1,6 +1,6 @@
 package core
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/core/notification_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/notification/core/notification_enums"
 
 // NotificationTopicChannel declares how a backend-managed topic supports one
 // channel. A social-media channel is never eligible from DefaultEnabled alone:

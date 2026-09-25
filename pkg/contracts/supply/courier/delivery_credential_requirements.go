@@ -7,4 +7,8 @@ package courier
 type DeliveryCredentialRequirements struct {
 	APIBaseURL                string `json:"api_base_url"`
 	ConnectionAddressRequired bool   `json:"connection_address_required"`
+	// AuthenticationMethods advertises only methods supported by the registered
+	// implementation. Missing/empty metadata advertises no method; it does not
+	// imply account/password support or successful authentication.
+	AuthenticationMethods []DeliveryAuthenticationMethodRequirements `json:"authentication_methods,omitempty"`
 }

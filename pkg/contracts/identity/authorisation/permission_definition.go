@@ -1,8 +1,8 @@
 package authorisation
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/identity/authorisation/role_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/identity/authorisation/role_enums"
 )
 
 // PermissionDefinition is the display and risk metadata for one workforce
