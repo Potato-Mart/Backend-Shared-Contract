@@ -14,7 +14,7 @@ workflows.
 ## Latest Version
 
 ```text
-v35.0.0
+v35.1.0
 github.com/Potato-Mart/Backend-Shared-Contract/v35
 ```
 
@@ -26,10 +26,20 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v35 v35.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v35 v35.1.0
 ```
 
 Import packages from the same `/v35` module path.
+
+The additive v35.1.0 contract exposes the current order `delivery_address`
+override without changing the frozen checkout address in
+`fulfilment_location`, adds `supply/fulfilment.OrderAllocationEvidence` for
+linking an order line to its reservation, allocation, picking, and staging
+facts, and adds the optional `PickingList.allocation_fingerprint` used to bind
+ensure/reuse retries to the same frozen allocation set. Routes, readiness
+decisions, edit validation, authorization, and audit persistence remain owned by
+Orders and Supply. Previously issued invoices and shipments keep their captured
+addresses.
 
 The v35.0.0 breaking change removes the remaining API/manual `integration`
 classification from `DeliveryCompany` and `DeliveryCompanyRef`. The legacy

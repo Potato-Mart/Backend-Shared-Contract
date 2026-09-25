@@ -14,8 +14,12 @@ type PickingList struct {
 	Status      warehouse_enums.PickingListStatus `json:"status"`
 	AssignedTo  string                            `json:"assigned_to,omitempty"`
 	Note        string                            `json:"note,omitempty"`
-	Items       []PickingListItem                 `json:"items,omitempty"`
-	History     []security.HistoryEntry           `json:"history,omitempty"`
+	// AllocationFingerprint is a service-owned stable binding to the frozen
+	// allocation set used to create or reuse this list. It excludes mutable
+	// picking and staging progress.
+	AllocationFingerprint string                  `json:"allocation_fingerprint,omitempty"`
+	Items                 []PickingListItem       `json:"items,omitempty"`
+	History               []security.HistoryEntry `json:"history,omitempty"`
 
 	audit.AuditFields
 }

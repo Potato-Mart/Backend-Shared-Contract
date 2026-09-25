@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v35.1.0` | 2026-09-25 | Minor | Adds an editable order delivery-address override while preserving the frozen checkout snapshot, per-allocation reservation/picking/staging evidence, and an optional picking-list allocation fingerprint for safe idempotent reuse. Service routes and readiness policy remain service-owned. |
 | `v35.0.0` | 2026-09-24 | Major | Removes API/manual integration classification from courier company and safe-reference models; preserves open company codes as the sole identity and changes the module path to `/v35`. Consumers must migrate. |
 | `v34.0.0` | 2026-09-24 | Major | Removes the public delivery-company provider discriminator, makes `code` the sole public company identity, adds derived nullable credential requirements, and changes the module path to `/v34`. All consumers must migrate. |
 | `v33.8.0` | 2026-09-24 | Minor | Adds an ID-only Orders shipping-zone reference and ISO subdivision state codes to courier service areas, plus a standalone privileged courier credential value model; deprecates manual courier schedules for new availability while retaining their legacy JSON shape. Preserves `/v33`. |
@@ -139,6 +140,61 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v35.1.0 (2026-09-25) - Admin Fulfilment Evidence and Delivery Address
+
+### Breaking Contract Changes
+
+- None. This release is additive and keeps the `/v35` module path.
+
+### Added
+
+- Adds optional `orders/order.Order.DeliveryAddress` as the current order
+  destination for future fulfilment documents. It does not rewrite
+  `FulfilmentLocationSnapshot.DeliveryAddress`, which remains the captured
+  checkout and eligibility evidence. Consumers may use the override when
+  present and fall back to the frozen snapshot for older orders.
+- Adds `supply/fulfilment.OrderAllocationEvidence` to bind one order item to
+  its exact stock reservation and reservation allocation, with optional
+  picking-allocation and stock-staging records. The model carries evidence
+  facts; Supply continues to own readiness and transition policy.
+- Adds optional `supply/fulfilment.PickingList.AllocationFingerprint` to
+  identify the frozen allocation set used to create or reuse a picking list.
+  The service owns fingerprint calculation and idempotent ensure/reuse
+  behavior; mutable pick and staging progress is not part of this identity.
+
+### Fixed
+
+- None.
+
+### Other Changes
+
+- Orders may persist delivery-address edits in `delivery_address` while
+  preserving the original `fulfilment_location` snapshot. New invoices and
+  shipment records may capture the current override; existing issued records
+  retain the addresses they already captured.
+- Supply may expose `OrderAllocationEvidence` through a service-owned evidence
+  API and use `allocation_fingerprint` to make create-or-reuse retries stable.
+  Packing must continue to require authoritative completed-pick and staged-stock
+  evidence under Supply's service policy.
+- HTTP request/response envelopes, readiness booleans, blockers, input
+  validation, authorization, status-correction rules, and audit persistence
+  remain in their owning services.
+
+### Contract Files Changed
+
+- `pkg/contracts/orders/order/order.go`
+- `pkg/contracts/supply/fulfilment/order_allocation_evidence.go`
+- `pkg/contracts/supply/fulfilment/picking_list.go`
+- Release metadata and documentation.
+
+### Compatibility Notes
+
+- Existing serialized orders and picking lists remain valid when the new
+  optional fields are absent.
+- This release adds no shared correction DTO; Orders can record a privileged
+  fulfilment-status correction through its existing status-history model, with
+  required reason and actor recorded by the owning service.
 
 ## v35.0.0 (2026-09-24) - API-only Courier Company Contract
 
