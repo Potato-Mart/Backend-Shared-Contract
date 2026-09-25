@@ -3,8 +3,8 @@ package listing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // SaleEligibilitySnapshot is the Supply-owned inventory and listing evidence

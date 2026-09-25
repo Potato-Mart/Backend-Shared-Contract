@@ -3,8 +3,8 @@ package pricing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/marketing/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/marketing/campaign/campaign_enums"
 )
 
 // CampaignChangedEvent is the customer-safe storefront-events projection used

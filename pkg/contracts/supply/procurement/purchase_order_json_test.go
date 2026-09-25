@@ -6,17 +6,17 @@ import (
 	"testing"
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/catalogue/product"
-	purchase "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/procurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/catalogue/product"
+	purchase "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/procurement"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/procurement/purchase_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/procurement/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestPurchaseOrderJSONRoundTripWithHistory(t *testing.T) {

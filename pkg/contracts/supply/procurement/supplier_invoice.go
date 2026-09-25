@@ -1,10 +1,10 @@
 package procurement
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/procurement/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/procurement/purchase_enums"
 )
 
 // SupplierInvoice is the authoritative purchase tax record for one supplier

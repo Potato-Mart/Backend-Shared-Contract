@@ -1,9 +1,9 @@
 package template
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/localization"
 )
 
 // NotificationTemplate is a mutable country-owned template definition and its

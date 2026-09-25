@@ -1,11 +1,11 @@
 package warehouse
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geometry"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/geometry"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/catalogue/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // LayoutNode is a single element in the warehouse 3D hierarchy:

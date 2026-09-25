@@ -1,9 +1,9 @@
 package quote
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/pricing/quote/quote_enums"
 )
 
 // TaxSnapshot is the frozen tax evidence for one line. The rate is kept as an

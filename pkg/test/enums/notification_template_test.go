@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/template/template_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/notification/template/template_enums"
 )
 
 func TestNotificationTemplateEnumWireValues(t *testing.T) {

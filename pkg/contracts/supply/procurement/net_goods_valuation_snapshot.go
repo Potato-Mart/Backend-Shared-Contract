@@ -3,7 +3,7 @@ package procurement
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/money"
 )
 
 // NetGoodsValuationSnapshot is Supply's private net-goods valuation advice for

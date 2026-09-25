@@ -1,6 +1,6 @@
 package promotion
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/localization"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/localization"
 
 // PromotionContent contains approved localized customer-facing copy.
 type PromotionContent struct {

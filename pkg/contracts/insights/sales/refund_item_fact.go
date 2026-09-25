@@ -1,6 +1,6 @@
 package sales
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/money"
 
 // RefundItemFact identifies quantities and value reversed by a completed
 // line-level refund. Amount-only refunds intentionally carry no item rows.

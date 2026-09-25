@@ -3,10 +3,10 @@ package core
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/audit"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/core/notification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/delivery"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/notification/core/notification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/notification/delivery"
 )
 
 // Notification is the protected durable aggregate. Customer-facing callers

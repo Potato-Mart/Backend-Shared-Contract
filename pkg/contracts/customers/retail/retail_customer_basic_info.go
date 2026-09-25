@@ -3,9 +3,9 @@ package retail
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/party"
-	preference_enums "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/customers/preference/preference_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/party"
+	preference_enums "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/customers/preference/preference_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/customers/retail/retail_enums"
 )
 
 // RetailCustomerBasicInfo groups stable name, contact, and acquisition fields

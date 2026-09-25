@@ -3,10 +3,10 @@ package delivery
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/core/notification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/email"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/push"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/notification/sms"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/notification/core/notification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/notification/email"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/notification/push"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/notification/sms"
 )
 
 // NotificationDelivery records exactly one channel endpoint and its attempts.

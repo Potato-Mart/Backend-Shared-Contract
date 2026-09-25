@@ -3,13 +3,13 @@ package campaign
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/audit"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/localization"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/marketing/audience"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/marketing/campaign/campaign_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pricing/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/audit"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/localization"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/marketing/audience"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/marketing/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/pricing/benefit"
 )
 
 // Campaign is scheduled, targeted storefront content. BenefitRefs are

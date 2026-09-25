@@ -1,7 +1,7 @@
 package authorisation
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/identity/identity_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/identity/identity_enums"
 	"time"
 )
 

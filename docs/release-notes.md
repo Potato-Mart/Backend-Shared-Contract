@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v36.0.0` | 2026-09-26 | Major | Removes courier routing priority, adds explicit market binding, derived authentication-method requirements, and optional shared promotion/coupon audience. Changes module path to `/v36`; service migration and eligibility enforcement required. |
 | `v35.2.0` | 2026-09-25 | Minor | Adds `FulfillmentStatusCancelled` (`cancelled`) to represent that no further fulfilment work is scheduled while preserving existing fulfilled status and all recorded physical packing, shipment, and item facts. Consumers should accept the new enum before services emit it. |
 | `v35.1.0` | 2026-09-25 | Minor | Adds an editable order delivery-address override while preserving the frozen checkout snapshot, per-allocation reservation/picking/staging evidence, and an optional picking-list allocation fingerprint for safe idempotent reuse. Service routes and readiness policy remain service-owned. |
 | `v35.0.0` | 2026-09-24 | Major | Removes API/manual integration classification from courier company and safe-reference models; preserves open company codes as the sole identity and changes the module path to `/v35`. Consumers must migrate. |
@@ -141,6 +142,66 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v36.0.0 (2026-09-26) - Courier Markets and Offer Audience
+
+### Breaking Contract Changes
+
+- Removes `DeliveryServiceArea.RoutingPriority` / `routing_priority` and moves
+  the Go module/import path from `/v35` to `/v36`.
+- Adds always-serialized `DeliveryServiceArea.MarketCode` / `market_code`.
+  Existing configuration requires explicit service-owned market mapping and
+  validated zone references; missing data grants no wildcard coverage.
+
+### Added
+
+- Optional `PromotionControls.Audience` / `controls.audience` reuses the
+  existing customer-type/platform `audience.Audience` for promotions and
+  coupons. Nil or omitted dimensions remain unrestricted. Order channels are
+  independent; Pricing owns enforcement and campaign compatibility validation.
+- Optional `DeliveryCredentialRequirements.AuthenticationMethods` /
+  `authentication_methods` carries derived, non-sensitive
+  `DeliveryAuthenticationMethodRequirements` records with open `method` and
+  `required_fields` identifiers. No credential values or auth workflow are added.
+
+### Fixed
+
+- Contract documentation no longer describes numeric courier priority as a
+  routing authority. All-country selection uses explicit existing zone rows.
+
+### Other Changes
+
+- Preserves editable offer snapshots, existing product scopes, period
+  optionality, packing/composition facts, frozen selections, and event schemas.
+- Updates the reviewed model manifest for the one new courier metadata record
+  and covers legacy omission, priority removal, independent audience/channel
+  serialization, and credential-free metadata with JSON tests.
+
+### Contract Files Changed
+
+- `pkg/contracts/supply/courier/delivery_service_area.go`
+- `pkg/contracts/supply/courier/delivery_credential_requirements.go`
+- `pkg/contracts/supply/courier/delivery_authentication_method_requirements.go`
+- `pkg/contracts/pricing/promotion/promotion_controls.go`
+- `pkg/contracts/marketing/audience/audience.go` (shared semantics comment)
+- Module imports, contract tests, reviewed manifest, and release documentation.
+
+### Compatibility Notes
+
+- Publish this contract first. Adopting services then update `/v36` imports,
+  `go.mod` and CI pins together and run standalone dependency checks. See
+  [v36 migration](v36-migration.md) for exact shapes and consumer actions.
+- Standard Go JSON ignores legacy priority on reads; v36 never emits it. Keep
+  historical booking replay in service-private compatibility code. Preserve
+  accepted company/selection snapshots and migrate renamed area references.
+- A missing market must not be inferred from country. Optional missing
+  authentication metadata does not establish account-login support. Credential
+  requirement metadata remains Supply-derived and never accepted as authority
+  from clients.
+- Audience fields require trusted platform/buyer context and service-owned
+  evaluator support before eligibility rollout. Campaign edits revalidate
+  compatibility rather than silently rewrite the offer snapshot. Existing
+  unrestricted offers remain unrestricted when audience is absent.
 
 ## v35.2.0 (2026-09-25) - Cancelled Fulfilment Status
 

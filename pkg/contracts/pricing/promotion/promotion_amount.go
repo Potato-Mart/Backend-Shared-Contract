@@ -1,6 +1,6 @@
 package promotion
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/money"
 
 // PromotionAmount is one resolved monetary outcome keyed by an open name.
 type PromotionAmount struct {

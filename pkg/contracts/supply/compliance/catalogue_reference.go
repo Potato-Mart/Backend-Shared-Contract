@@ -3,9 +3,9 @@ package compliance
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/temporal"
 
-	compliance_enums "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/compliance/compliance_enums"
+	compliance_enums "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/compliance/compliance_enums"
 )
 
 // CatalogueReference pins a classification to the exact official catalogue

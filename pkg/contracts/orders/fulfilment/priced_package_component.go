@@ -1,8 +1,8 @@
 package fulfilment
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pricing/quote"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/pricing/quote"
 )
 
 // PricedPackageComponent freezes the immutable Pricing snapshot, requested

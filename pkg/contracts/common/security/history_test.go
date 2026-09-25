@@ -7,13 +7,13 @@ import (
 	"testing"
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security/security_enums"
-	order "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/orders/order"
-	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/payments/terminal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/payments/terminal/terminal_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/security/security_enums"
+	order "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/orders/order"
+	terminal "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/payments/terminal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/payments/terminal/terminal_enums"
 )
 
 func TestHistoryOmittedWhenEmpty(t *testing.T) {

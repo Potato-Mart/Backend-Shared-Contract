@@ -3,9 +3,9 @@ package compliance
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/audit"
 
-	compliance_enums "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/compliance/compliance_enums"
+	compliance_enums "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/compliance/compliance_enums"
 )
 
 // TrademarkEvidence is a cited search result or manually verified record. It

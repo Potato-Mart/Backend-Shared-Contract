@@ -1,11 +1,13 @@
-# Delivery company model (v35.0.0)
+# Delivery company model (v36.0.0)
 
-This release removes courier API/manual classification from the shared model.
+The current model omits courier API/manual classification and routing priority.
 Each courier company's immutable, extensible `code` is its sole public identity.
 A code does not prove that a verified provider implementation, coverage, or live
 availability exists. This model contains no provider implementation, API routes,
 booking or routing code. Pin
-`github.com/Potato-Mart/Backend-Shared-Contract/v35 v35.0.0`.
+`github.com/Potato-Mart/Backend-Shared-Contract/v36 v36.0.0`.
+See [v36 migration](v36-migration.md) for the market and authentication metadata
+changes and the service-owned legacy configuration migration.
 
 ## Ownership and projections
 
@@ -13,11 +15,12 @@ booking or routing code. Pin
 | --- | --- |
 | `supply/courier.DeliveryCompany` | Supply admin catalogue root with audit fields; code, name, credential requirements, enabled, instructions, derived dispatch capability, revision, countries, capabilities, slot source, connection, service areas and schedules. No API/manual classification or provider selector. |
 | `DeliveryCompanyRef` | Customer-safe snapshot: `code`, `name`, `revision`. No connection, instructions, coverage configuration or credentials. |
-| `DeliveryCredentialRequirements` | Derived, non-sensitive API URL and connection-test address requirement. It is read-only company metadata and is never accepted as a write field. |
+| `DeliveryCredentialRequirements` | Derived, non-sensitive API URL, connection-test address requirement, and optional supported authentication methods. It is read-only company metadata and is never accepted as a write field. |
+| `DeliveryAuthenticationMethodRequirements` | Open method identifier and required credential field names, without values or an authentication flow. |
 | `DeliveryConnection` | Sanitized backend observations: `credential_configured`, `health`, optional `last_checked_at`. |
 | `DeliveryProviderCredentials` | Standalone privileged values: optional `sign_in_account`, `password`, `api_base_url`, `api_token`. Only an independently authorized credential write or writer-only detail operation may serialize this model. |
 | `DeliveryCapabilities` | Explicit booleans for booking, tracking, proof of delivery, refrigeration, provider coverage, provider slots and configured slots. Support does not imply current availability. |
-| `DeliveryServiceArea` | Country-scoped exact postal filters, optional Orders zone ID reference, ISO subdivision state codes and priority; independent of depot coverage and delivery area pricing. |
+| `DeliveryServiceArea` | Market/country-scoped exact postal filters, Orders zone ID reference and derived ISO subdivision state codes; independent of depot coverage and delivery area pricing. |
 | `ShippingZoneRef` | ID-only reference to an Orders-owned `shipping.Zone`; it is not a copied zone snapshot. |
 | `DeliveryServiceWindow` | Legacy recurring configured local-time window retained for JSON compatibility and deprecated for new availability configuration. |
 | `orders/shipping.DeliverySelection` | Immutable accepted choice copied into Order, Supply's local job and OutboundShipment. |
@@ -41,6 +44,14 @@ implementation's verified public API origin/path, and
 operation requires an address. These values are not credentials and are not
 accepted on create/update operations. A non-null value does not claim current
 coverage or live slots.
+
+Optional `authentication_methods` advertises the registered implementation's
+supported methods, each with an open `method` identifier (for example
+`api_token`) and `required_fields` names. These contain no credential values.
+An API URL supplied by derived metadata may already satisfy that prerequisite.
+Missing or empty methods make no support claim; older responses may omit them.
+The privileged credential model's account/password fields do not establish an
+account authentication protocol or permission to fall back to one.
 
 `Code` is the immutable, extensible identity for one independent company. It is
 an open string, not a fixed company list or provider selector, so other markets
@@ -67,12 +78,16 @@ does not define credential, operation-receipt or provider-storage migration.
 1. Require an enabled company, enabled area and a destination country present in
    both the company `country_codes` and the area's `country_code`. Empty country
    or service-area lists grant no coverage. Countries are ISO 3166-1 alpha-2.
-   `shipping_zone`, when configured, contains only the Orders zone ID. Supply
+   Require a valid `market_code` whose Pricing-owned country matches the area;
+   legacy missing markets require explicit migration, never country inference.
+   `shipping_zone` contains only the Orders zone ID. Supply
    resolves the current Orders zone before using its active state, country,
    administrative areas or postcodes; copied names or coverage are not routing
-   authority. `state_codes` uses ISO 3166-2 `geography.SubdivisionCode` values.
-   Legacy areas may omit these optional fields; Supply owns the requirements for
-   new configuration writes and migration.
+   authority. `state_codes` is derived from the zone and uses ISO 3166-2
+   `geography.SubdivisionCode` values. Selecting all country zones materializes
+   existing active zone rows; it never grants coverage to future zones. Legacy
+   areas may omit optional references, but missing data grants no wildcard.
+   Supply owns new-write validation and migration.
 2. Normalize postal strings per destination country before exact comparison;
    preserve leading zeros. No numeric ranges, prefix expansion or inferred city
    boundary is implied by the model.
@@ -80,16 +95,18 @@ does not define credential, operation-receipt or provider-storage migration.
    set matches nothing. Exclusions always win, including when the same value is
    included. `all_except` requires an empty include set and
    `provider_coverage_required=true`. It only identifies candidates outside the
-   exclusion set; it is not proof of coverage for an entire country.
+   exclusion set within the resolved zone; it is not proof of coverage for an
+   entire country.
 4. When `provider_coverage_required=true`, authoritative provider coverage must
    also confirm the destination. Unknown, unavailable or failed coverage checks
    do not produce available slots. A verified, administratively maintained exact
    coverage list can instead use `include_only`; its provenance/freshness policy
    remains backend-owned. Provider marketing claims are not a postcode matrix.
-5. Lower `routing_priority` wins among eligible rules. Reject overlapping rules
-   that tie ambiguously; do not rely on array order, map iteration or display
-   names. Reject duplicate area/window codes and invalid modes at configuration
-   writes. Invalid/unknown persisted modes fail closed at reads.
+5. `routing_priority` is removed. Supply validates unambiguous market/zone
+   ownership across enabled slot-capable providers and rejects ambiguous
+   matches; array order, map iteration and display names are not precedence.
+   Reject duplicate area/window codes and invalid modes at configuration writes.
+   Invalid/unknown persisted modes fail closed at reads.
 
 No authoritative Australian postcode set is supplied by this release. `AU-VIC`
 identifies a subdivision; it does not imply coverage of all Victoria or Melbourne.
@@ -188,7 +205,7 @@ not itself mark an order physically dispatched.
 - Orders currently has service-local delivery-option DTOs with different required
   label/fee behavior. Do not blindly alias them to shared models; preserve API
   compatibility through explicit mappings. Frontend types follow backend OpenAPI.
-- `credential_requirements` is always present in v35 company responses but may
+- `credential_requirements` is always present in current company responses but may
   be `null`; consumers reading stored v33 company records should treat an absent
   value like `null`. Other legacy optional fields may remain absent. A missing
   selection on a legacy order means unknown; it grants no permission to infer an
@@ -196,7 +213,7 @@ not itself mark an order physically dispatched.
   legacy completion from new orders requiring a frozen selection.
 - Shared tests cover legacy JSON, explicit postal strings/modes, no implicit enum
   defaults, customer-safe references, nil versus zero fees, offer metadata and
-  Order-to-Shipment snapshot round trips. Runtime coverage, ambiguous priority,
+  Order-to-Shipment snapshot round trips. Runtime coverage, ambiguous ownership,
   stale offers, destination changes, daylight-saving transitions, provider failure,
   configuration retention, retry deduplication and booking-versus-dispatch require
   backend integration tests. Admin must show configured versus provider sources

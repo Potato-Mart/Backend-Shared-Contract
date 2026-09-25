@@ -3,8 +3,8 @@ package security
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/security/security_enums"
 )
 
 // HistoryEntry is a concise, UI-safe timeline record for process visibility.

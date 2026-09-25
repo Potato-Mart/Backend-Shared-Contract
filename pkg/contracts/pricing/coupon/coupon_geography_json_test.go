@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pricing/coupon"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pricing/promotion/promotion_enums"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/pricing/coupon"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 func TestCouponReusesPromotionScopePeriodTermsAndControls(t *testing.T) {
