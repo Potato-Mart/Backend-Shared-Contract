@@ -51,7 +51,12 @@ type Order struct {
 	SourceDevice         SourceDevice                          `json:"source_device,omitempty"`
 
 	// ── Shipping & billing ────────────────────────────────────────────
-	Billing          *party.ContactAddress           `json:"billing,omitempty"`
+	Billing *party.ContactAddress `json:"billing,omitempty"`
+	// DeliveryAddress is the current order destination used for future
+	// fulfilment documents. FulfilmentLocation.DeliveryAddress remains the
+	// immutable checkout and eligibility snapshot; when this override is absent,
+	// consumers may fall back to that snapshot for legacy orders.
+	DeliveryAddress  *party.ContactAddress           `json:"delivery_address,omitempty"`
 	ShippingMethod   shipping_enums.ShippingRateName `json:"shipping_method,omitempty"`
 	ShippingZoneID   string                          `json:"shipping_zone_id,omitempty"`
 	ShippingRateID   string                          `json:"shipping_rate_id,omitempty"`

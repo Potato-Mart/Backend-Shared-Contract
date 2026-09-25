@@ -242,9 +242,10 @@ var modelPackageManifest map[string]string
 // and build-metadata surfaces. Field-only changes are locked by JSON-shape and
 // retired-symbol tests instead.
 // Courier company/configuration records, frozen delivery selections and their
-// leaf enums are additive;
-// existing delivery, marketing, pricing and localization types retain packages.
-const exportedTypeManifestDigest = "c8bd83aed78c6da76551650f2f4a4cae522a0a71dd92172aaf5bdc8e2358cfec"
+// leaf enums are additive. V35.1 adds order delivery and fulfilment-evidence
+// records in existing packages; delivery, marketing, pricing and localization
+// types retain their package ownership.
+const exportedTypeManifestDigest = "41261f563a6674760b6c1764660666f240e586f92527f673db70c7f80a7c3064"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

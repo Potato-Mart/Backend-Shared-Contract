@@ -18,6 +18,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/packaging/packaging_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/common/party"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/orders/order/order_enums"
+	ordershipping "github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/orders/shipping"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/payments/payment/payment_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/pricing/wallet/wallet_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v35/pkg/contracts/supply/catalogue/classification/classification_enums"
@@ -85,6 +86,30 @@ func TestOrderJSONOmitsEmptyHistory(t *testing.T) {
 	}
 	if strings.Contains(string(payload), `"history"`) {
 		t.Fatalf("empty history should be omitted, got %s", payload)
+	}
+}
+
+func TestOrderDeliveryAddressOverrideStaysSeparateFromCheckoutSnapshot(t *testing.T) {
+	order := sales.Order{
+		DeliveryAddress: &party.ContactAddress{Contact: &party.Recipient{Name: "Current destination"}},
+		FulfilmentLocation: ordershipping.FulfilmentLocationSnapshot{
+			DeliveryAddress: &party.ContactAddress{Contact: &party.Recipient{Name: "Checkout destination"}},
+		},
+	}
+
+	payload, err := json.Marshal(order)
+	if err != nil {
+		t.Fatalf("marshal order addresses: %v", err)
+	}
+	var decoded sales.Order
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal order addresses: %v", err)
+	}
+	if decoded.DeliveryAddress == nil || decoded.DeliveryAddress.Contact == nil || decoded.DeliveryAddress.Contact.Name != "Current destination" {
+		t.Fatalf("current delivery-address override did not round-trip: %+v", decoded.DeliveryAddress)
+	}
+	if decoded.FulfilmentLocation.DeliveryAddress == nil || decoded.FulfilmentLocation.DeliveryAddress.Contact == nil || decoded.FulfilmentLocation.DeliveryAddress.Contact.Name != "Checkout destination" {
+		t.Fatalf("frozen checkout delivery address changed: %+v", decoded.FulfilmentLocation.DeliveryAddress)
 	}
 }
 
