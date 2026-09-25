@@ -14,7 +14,7 @@ workflows.
 ## Latest Version
 
 ```text
-v35.1.0
+v35.2.0
 github.com/Potato-Mart/Backend-Shared-Contract/v35
 ```
 
@@ -26,10 +26,16 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v35 v35.1.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v35 v35.2.0
 ```
 
 Import packages from the same `/v35` module path.
+
+The additive v35.2.0 release adds `FulfillmentStatusCancelled` with wire value
+`cancelled`. It means no further fulfilment work is scheduled; it does not
+erase recorded picking, packing, shipment, or item facts and is distinct from
+`fulfilled`. Consumers should accept this value before backend services emit
+it, and should preserve existing physical records when applying the status.
 
 The additive v35.1.0 contract exposes the current order `delivery_address`
 override without changing the frozen checkout address in

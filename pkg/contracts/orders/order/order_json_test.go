@@ -285,6 +285,49 @@ func TestOrderJSONRoundTripsPackingProgress(t *testing.T) {
 	}
 }
 
+func TestCancelledFulfillmentStatusPreservesRecordedPhysicalFacts(t *testing.T) {
+	packedAt := time.Date(2026, 9, 25, 10, 30, 0, 0, time.UTC)
+	composition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 2}
+	order := sales.Order{
+		OrderNumber:       "MAMA260925ABC123",
+		FulfillmentStatus: order_enums.FulfillmentStatusCancelled,
+		PackedAt:          &packedAt,
+		ShippingPackages:  []packaging.PhysicalPackage{{Quantity: 1}},
+		Items: []sales.OrderItem{{
+			ID: "item_1", PickedComposition: composition, PackedComposition: composition,
+		}},
+		Packing: &orderfulfilment.OrderPackingProgress{
+			Status:   order_enums.FulfillmentStatusCancelled,
+			PackedAt: &packedAt,
+			Lines: []supplyfulfilment.PackingLine{{
+				ID: "packing_line_1", OrderItemID: "item_1", SKUCode: "A00001",
+				PickedComposition: composition, PackedComposition: composition,
+			}},
+		},
+	}
+
+	raw, err := json.Marshal(order)
+	if err != nil {
+		t.Fatalf("marshal cancelled order: %v", err)
+	}
+	var decoded sales.Order
+	if err := json.Unmarshal(raw, &decoded); err != nil {
+		t.Fatalf("unmarshal cancelled order: %v", err)
+	}
+	if decoded.FulfillmentStatus != order_enums.FulfillmentStatusCancelled || decoded.Packing == nil || decoded.Packing.Status != order_enums.FulfillmentStatusCancelled {
+		t.Fatalf("cancelled fulfilment status did not round-trip: %+v", decoded)
+	}
+	if decoded.PackedAt == nil || !decoded.PackedAt.Equal(packedAt) || decoded.Packing.PackedAt == nil || !decoded.Packing.PackedAt.Equal(packedAt) {
+		t.Fatalf("recorded packing time was erased: order=%+v packing=%+v", decoded.PackedAt, decoded.Packing.PackedAt)
+	}
+	if len(decoded.Items) != 1 || decoded.Items[0].PickedComposition.TotalBaseUnits != 2 || decoded.Items[0].PackedComposition.TotalBaseUnits != 2 {
+		t.Fatalf("recorded item quantities were erased: %+v", decoded.Items)
+	}
+	if len(decoded.Packing.Lines) != 1 || decoded.Packing.Lines[0].PackedComposition.TotalBaseUnits != 2 || len(decoded.ShippingPackages) != 1 || decoded.ShippingPackages[0].Quantity != 1 {
+		t.Fatalf("recorded packing or shipment package facts were erased: packing=%+v packages=%+v", decoded.Packing, decoded.ShippingPackages)
+	}
+}
+
 func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 	discount := money.Money{AmountMinor: 500, Currency: "AUD"}
 	pointOccurredAt := time.Date(2026, 7, 30, 1, 2, 3, 0, time.UTC)
