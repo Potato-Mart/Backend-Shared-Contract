@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v35.2.0` | 2026-09-25 | Minor | Adds `FulfillmentStatusCancelled` (`cancelled`) to represent that no further fulfilment work is scheduled while preserving existing fulfilled status and all recorded physical packing, shipment, and item facts. Consumers should accept the new enum before services emit it. |
 | `v35.1.0` | 2026-09-25 | Minor | Adds an editable order delivery-address override while preserving the frozen checkout snapshot, per-allocation reservation/picking/staging evidence, and an optional picking-list allocation fingerprint for safe idempotent reuse. Service routes and readiness policy remain service-owned. |
 | `v35.0.0` | 2026-09-24 | Major | Removes API/manual integration classification from courier company and safe-reference models; preserves open company codes as the sole identity and changes the module path to `/v35`. Consumers must migrate. |
 | `v34.0.0` | 2026-09-24 | Major | Removes the public delivery-company provider discriminator, makes `code` the sole public company identity, adds derived nullable credential requirements, and changes the module path to `/v34`. All consumers must migrate. |
@@ -140,6 +141,48 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v35.2.0 (2026-09-25) - Cancelled Fulfilment Status
+
+### Breaking Contract Changes
+
+- None. This additive release keeps the `/v35` module path.
+
+### Added
+
+- Adds `order/order_enums.FulfillmentStatusCancelled` with JSON wire value
+  `"cancelled"`, and includes it in enum validity coverage.
+- Defines this value as no further fulfilment work being scheduled. The status
+  does not erase or contradict already-recorded picked/packed quantities,
+  packing records, shipment records, or order-item facts. It is distinct from
+  `FulfillmentStatusFulfilled`, which remains the historical completed state.
+
+### Fixed
+
+- None.
+
+### Other Changes
+
+- Full-refund policy and the decision to stop unfinished fulfilment remain
+  service-owned. This contract adds only the status value; it does not define
+  refund transitions, work cancellation behavior, or physical-record mutation.
+
+### Contract Files Changed
+
+- `pkg/contracts/orders/order/order_enums/order_fulfillment_status.go`
+- `pkg/contracts/orders/order/order_enums/fulfillment_status_json_test.go`
+- `pkg/contracts/orders/order/order_json_test.go`
+- `pkg/test/enums/order_test.go`
+- Release metadata and documentation.
+
+### Compatibility Notes
+
+- This is a new enum value in the existing `/v35` module. Consumers with
+  exhaustive `FulfillmentStatus` handling should upgrade and accept
+  `"cancelled"` before a service begins emitting it.
+- Existing `"fulfilled"` values and serialized packing, shipment, and item
+  records are unchanged. A cancelled unfinished order may still retain those
+  physical facts for audit and reporting.
 
 ## v35.1.0 (2026-09-25) - Admin Fulfilment Evidence and Delivery Address
 
