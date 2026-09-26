@@ -14,7 +14,7 @@ workflows.
 ## Latest Version
 
 ```text
-v36.0.0
+v36.1.0
 github.com/Potato-Mart/Backend-Shared-Contract/v36
 ```
 
@@ -26,7 +26,7 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v36 v36.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v36 v36.1.0
 ```
 
 Import packages from the same `/v36` module path.
@@ -37,6 +37,15 @@ country zones means materializing the existing active zones, never a wildcard.
 Legacy markets require explicit service-owned mapping. Derived credential
 requirements may advertise `authentication_methods` with method identifiers and
 required field names, never credential values or implied account-login support.
+
+The additive v36.1.0 release adds versioned provider settings and inert typed
+custom metadata to delivery-company records. Provider settings keep JSON value
+types and are validated and interpreted by Supply; custom metadata is not sent
+to provider requests. The privileged credential value model gains a separate
+provider extension envelope. Supply owns explicit replace/remove behavior and
+encrypted persistence. Existing common country and service-area coverage fields
+are unchanged. See the [delivery company model](docs/delivery-company-model.md)
+and [v36 migration](docs/v36-migration.md) for details.
 
 Promotion and coupon controls now share optional `audience` customer-type and
 client-platform restrictions. Missing dimensions remain unrestricted; platform

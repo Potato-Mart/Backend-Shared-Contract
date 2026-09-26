@@ -9,7 +9,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 - This module contains reusable JSON domain entities, records, snapshots, events, value objects, typed enums, and single-value `String`/`IsValid` enum methods only.
 - HTTP/API wire DTOs, response envelopes, command payloads, and backend-specific request/response structs belong in the owning backend service.
 - It must not depend on web frameworks, authentication middleware, runtime service implementations, non-JSON struct tags, or custom codecs.
-- Semantic versioning is enforced. Any removal, rename, JSON shape change, module path change, or incompatible exported type change requires a major version.
+- Semantic versioning is enforced. Removing or renaming existing fields, changing their types or wire meaning, changing package/module paths, or other incompatible changes require a major version. Additive optional fields and new reusable types are minor releases.
 - Consumers should pin a released module tag and review the "Consumer Action / 使用方動作" section before upgrading.
 - Remote release history was reconciled from GitHub tags in `Potato-Mart/Backend-Shared-Contract` on 2026-06-18.
 
@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v36.1.0` | 2026-09-26 | Minor | Adds versioned provider settings and inert typed custom metadata to courier companies, plus a separately privileged provider credential extension envelope. Preserves `/v36`; Supply owns provider validation, credential protection, and update semantics. |
 | `v36.0.0` | 2026-09-26 | Major | Removes courier routing priority, adds explicit market binding, derived authentication-method requirements, and optional shared promotion/coupon audience. Changes module path to `/v36`; service migration and eligibility enforcement required. |
 | `v35.2.0` | 2026-09-25 | Minor | Adds `FulfillmentStatusCancelled` (`cancelled`) to represent that no further fulfilment work is scheduled while preserving existing fulfilled status and all recorded physical packing, shipment, and item facts. Consumers should accept the new enum before services emit it. |
 | `v35.1.0` | 2026-09-25 | Minor | Adds an editable order delivery-address override while preserving the frozen checkout snapshot, per-allocation reservation/picking/staging evidence, and an optional picking-list allocation fingerprint for safe idempotent reuse. Service routes and readiness policy remain service-owned. |
@@ -142,6 +143,54 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v36.1.0 (2026-09-26) - Courier Provider Settings
+
+### Added
+
+- Adds optional `DeliveryCompany.ProviderSettings` / `provider_settings` with a
+  schema version and JSON-typed provider values. The parent company `Code`
+  selects the registered implementation; Supply owns schema registration,
+  validation, and use of recognized keys.
+- Adds optional `DeliveryCompany.CustomMetadata` / `custom_metadata` entries
+  with `key`, open `value_type`, and typed JSON `value`. These entries are
+  non-secret and inert to provider requests.
+- Adds `DeliveryProviderCredentialExtension` / `provider_extension` to the
+  standalone privileged credential value model. Secret inputs remain outside
+  company and connection projections; Supply owns authorization, encryption,
+  replacement/removal behavior, and redaction.
+
+### Other Changes
+
+- Preserves JSON value types and provides JSON round-trip coverage for known and
+  unknown provider keys, custom metadata types, and legacy omission of extensions.
+- Retains the `/v36` module path and all common courier country, service-area,
+  market, and shipping-zone fields.
+
+### Contract Files Changed
+
+- `pkg/contracts/supply/courier/delivery_company.go`
+- `pkg/contracts/supply/courier/delivery_provider_settings.go`
+- `pkg/contracts/supply/courier/delivery_provider_credentials.go`
+- Courier JSON contract tests, reviewed model manifest, and courier migration
+  documentation.
+
+### Compatibility Notes
+
+- Existing consumers may ignore the new optional JSON fields when reading
+  records. Writers that replace a whole company object must preserve extensions
+  they do not understand; Supply update DTOs must distinguish omitted fields
+  (preserve) from explicit replacement/removal. Empty extension values do not
+  implicitly authorize secret deletion.
+- Provider setting keys are versioned by Supply. Unknown values must survive
+  round-trips but must not affect provider requests. Custom metadata is never
+  interpreted as provider configuration.
+- `DeliveryProviderCredentials.ProviderExtension` is sensitive write input, not
+  ciphertext. It must only travel through independently authorized credential
+  operations and must be encrypted by Supply before persistence.
+- Supply owns provider descriptors, validation, API request DTOs, revision/CAS,
+  idempotency, and credential lifecycle. This release does not implement a
+  courier provider adapter or establish provider response schemas.
 
 ## v36.0.0 (2026-09-26) - Courier Markets and Offer Audience
 

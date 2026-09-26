@@ -9,7 +9,8 @@ import (
 // DeliveryCompany is the Supply-owned, admin-safe record for one independent
 // API delivery company. Code is its immutable identity; Supply selects the
 // registered provider implementation by Code.
-// Revision identifies the entire configuration, including areas and schedules.
+// Revision identifies the effective configuration, including areas, schedules,
+// provider settings, custom metadata and Supply-managed credential binding.
 type DeliveryCompany struct {
 	Code string `json:"code"`
 	Name string `json:"name"`
@@ -30,6 +31,17 @@ type DeliveryCompany struct {
 	// Legacy configured windows remain in the JSON shape for compatibility.
 	// New availability and routing decisions must use provider-backed slots.
 	Schedules []DeliveryServiceWindow `json:"schedules,omitempty"`
+	// ProviderSettings carries versioned, non-secret values interpreted only by
+	// the registered implementation for Code. Supply validates and consumes
+	// registered keys; callers must preserve unknown values on read-modify-write.
+	// An omitted field on an update preserves the stored settings; clear behavior
+	// is defined by Supply's update DTO.
+	ProviderSettings *DeliveryProviderSettings `json:"provider_settings,omitempty"`
+	// CustomMetadata is company-owned, non-secret metadata with no provider
+	// execution semantics. Supply must preserve unknown value types and must not
+	// pass these values to provider requests. An omitted update field preserves
+	// stored entries; explicit replacement or removal is service-owned.
+	CustomMetadata []DeliveryCompanyCustomMetadataEntry `json:"custom_metadata,omitempty"`
 
 	audit.AuditFields
 }

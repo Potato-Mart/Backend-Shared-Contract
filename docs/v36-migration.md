@@ -1,6 +1,6 @@
 # v36 contract migration
 
-Pin `github.com/Potato-Mart/Backend-Shared-Contract/v36 v36.0.0` after its
+Pin `github.com/Potato-Mart/Backend-Shared-Contract/v36 v36.1.0` after its
 immutable release is available. Update imports and each adopting service's
 `go.mod` and CI `contract_version` together. A local `go.work` does not prove
 the committed dependency pin; run the owning service's gates with `GOWORK=off`.
@@ -67,6 +67,46 @@ because it has account/password fields. Missing/empty method metadata makes no
 authentication-method claim; older producers may omit it. Do not invent an
 account fallback. Unimplemented company codes retain null credential
 requirements. This release implements no authentication protocol.
+
+## Provider settings and custom metadata (v36.1.0)
+
+`DeliveryCompany` adds optional `provider_settings` and `custom_metadata`
+fields while retaining the `/v36` module path:
+
+```json
+{
+  "provider_settings": {
+    "schema_version": 1,
+    "values": {"client_id": "example-client", "max_options": 12}
+  },
+  "custom_metadata": [
+    {"key": "dispatch_group", "value_type": "string", "value": "north"}
+  ]
+}
+```
+
+Provider values are JSON-typed and versioned by the provider schema registered
+in Supply. The parent `DeliveryCompany.code` selects the provider; no separate
+provider selector is added. Supply validates values and only registered keys
+affect provider requests. Unknown keys must be preserved by round-tripping
+writers and must not be executed by implementations that do not recognize them.
+Custom metadata is a separate non-secret namespace for company-specific values;
+it is inert and is never passed to provider requests. The frontend may present
+both in one Additional settings area, but must keep their semantics distinct.
+
+The standalone privileged `DeliveryProviderCredentials` value adds optional
+`provider_extension` with the same `{schema_version, values}` envelope for
+provider-specific secret inputs. It is not included in `DeliveryCompany`,
+`DeliveryConnection`, lists, or customer projections, and its values are input
+JSON rather than ciphertext. Supply owns descriptors, validation, explicit
+replace/remove DTO semantics, CAS/idempotency, encrypted persistence and
+redaction. Existing fixed credential fields remain valid.
+
+Because the new company fields are optional, legacy readers may ignore them.
+Legacy writers that replace complete objects must preserve unknown extension
+data, or Supply must use omission-preserving merge semantics until those writers
+are upgraded. An absent update field means unchanged; deletion must be explicit.
+The credential write path must not clear an omitted provider extension.
 
 ## Offer audience
 

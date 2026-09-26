@@ -248,21 +248,23 @@ func TestCourierAuthenticationMethodsContainRequirementsNotValues(t *testing.T) 
 func TestCourierProviderCredentialModelHasPrivilegedStandaloneShape(t *testing.T) {
 	modelType := reflect.TypeOf(courier.DeliveryProviderCredentials{})
 	wantFields := []struct {
-		name string
-		json string
+		name   string
+		typeOf reflect.Type
+		json   string
 	}{
-		{"SignInAccount", "sign_in_account,omitempty"},
-		{"Password", "password,omitempty"},
-		{"APIBaseURL", "api_base_url,omitempty"},
-		{"APIToken", "api_token,omitempty"},
+		{"SignInAccount", reflect.TypeOf(""), "sign_in_account,omitempty"},
+		{"Password", reflect.TypeOf(""), "password,omitempty"},
+		{"APIBaseURL", reflect.TypeOf(""), "api_base_url,omitempty"},
+		{"APIToken", reflect.TypeOf(""), "api_token,omitempty"},
+		{"ProviderExtension", reflect.TypeOf((*courier.DeliveryProviderCredentialExtension)(nil)), "provider_extension,omitempty"},
 	}
 	if modelType.NumField() != len(wantFields) {
-		t.Fatalf("DeliveryProviderCredentials has %d fields, want exactly %d", modelType.NumField(), len(wantFields))
+		t.Fatalf("DeliveryProviderCredentials has %d fields, want exactly %d; review added fields for sensitive-value exposure", modelType.NumField(), len(wantFields))
 	}
 	for index, want := range wantFields {
 		field := modelType.Field(index)
-		if field.Name != want.name || field.Type.Kind() != reflect.String || field.Tag.Get("json") != want.json {
-			t.Errorf("DeliveryProviderCredentials field %d = %s %s json:%q, want %s string json:%q", index, field.Name, field.Type, field.Tag.Get("json"), want.name, want.json)
+		if field.Name != want.name || field.Type != want.typeOf || field.Tag.Get("json") != want.json {
+			t.Errorf("DeliveryProviderCredentials field %d = %s %s json:%q, want %s %s json:%q", index, field.Name, field.Type, field.Tag.Get("json"), want.name, want.typeOf, want.json)
 		}
 	}
 	data, err := json.Marshal(courier.DeliveryProviderCredentials{})
@@ -275,7 +277,10 @@ func TestCourierProviderCredentialModelHasPrivilegedStandaloneShape(t *testing.T
 }
 
 func TestCourierCredentialTypeIsAbsentFromGeneralAndCustomerModels(t *testing.T) {
-	credentialType := reflect.TypeOf(courier.DeliveryProviderCredentials{})
+	credentialTypes := []reflect.Type{
+		reflect.TypeOf(courier.DeliveryProviderCredentials{}),
+		reflect.TypeOf(courier.DeliveryProviderCredentialExtension{}),
+	}
 	models := map[string]reflect.Type{
 		"delivery company":           reflect.TypeOf(courier.DeliveryCompany{}),
 		"delivery company reference": reflect.TypeOf(courier.DeliveryCompanyRef{}),
@@ -284,8 +289,10 @@ func TestCourierCredentialTypeIsAbsentFromGeneralAndCustomerModels(t *testing.T)
 		"retail customer":            reflect.TypeOf(retail.RetailCustomer{}),
 	}
 	for name, model := range models {
-		if containsModelType(model, credentialType, map[reflect.Type]bool{}) {
-			t.Errorf("%s must not embed or contain privileged courier credentials", name)
+		for _, credentialType := range credentialTypes {
+			if containsModelType(model, credentialType, map[reflect.Type]bool{}) {
+				t.Errorf("%s must not embed or contain privileged courier credentials", name)
+			}
 		}
 	}
 }
