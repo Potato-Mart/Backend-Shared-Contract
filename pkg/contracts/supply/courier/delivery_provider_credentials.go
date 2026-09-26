@@ -7,8 +7,11 @@ package courier
 // Supply owns authorization, encrypted persistence, versioning, rotation, and
 // log redaction. Services must not persist these values in plaintext.
 type DeliveryProviderCredentials struct {
-	SignInAccount string `json:"sign_in_account,omitempty"`
-	Password      string `json:"password,omitempty"`
-	APIBaseURL    string `json:"api_base_url,omitempty"`
-	APIToken      string `json:"api_token,omitempty"`
+	SignInAccount     string                               `json:"sign_in_account,omitempty"`
+	Password          string                               `json:"password,omitempty"`
+	APIBaseURL        string                               `json:"api_base_url,omitempty"`
+	APIToken          string                               `json:"api_token,omitempty"`
+	// Omission preserves the stored provider extension on partial writes; Supply
+	// owns explicit replacement and removal operations.
+	ProviderExtension *DeliveryProviderCredentialExtension `json:"provider_extension,omitempty"`
 }

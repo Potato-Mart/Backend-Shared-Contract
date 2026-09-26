@@ -1,24 +1,27 @@
-# Delivery company model (v36.0.0)
+# Delivery company model (v36.1.0)
 
 The current model omits courier API/manual classification and routing priority.
 Each courier company's immutable, extensible `code` is its sole public identity.
 A code does not prove that a verified provider implementation, coverage, or live
 availability exists. This model contains no provider implementation, API routes,
 booking or routing code. Pin
-`github.com/Potato-Mart/Backend-Shared-Contract/v36 v36.0.0`.
-See [v36 migration](v36-migration.md) for the market and authentication metadata
-changes and the service-owned legacy configuration migration.
+`github.com/Potato-Mart/Backend-Shared-Contract/v36 v36.1.0`.
+See [v36 migration](v36-migration.md) for the market, authentication metadata,
+provider settings and metadata changes and the service-owned configuration
+migration.
 
 ## Ownership and projections
 
 | Model | Owner / purpose |
 | --- | --- |
-| `supply/courier.DeliveryCompany` | Supply admin catalogue root with audit fields; code, name, credential requirements, enabled, instructions, derived dispatch capability, revision, countries, capabilities, slot source, connection, service areas and schedules. No API/manual classification or provider selector. |
+| `supply/courier.DeliveryCompany` | Supply admin catalogue root with audit fields; code, name, credential requirements, enabled, instructions, derived dispatch capability, revision, countries, capabilities, slot source, connection, service areas, schedules, optional provider settings and inert custom metadata. No API/manual classification or provider selector. |
 | `DeliveryCompanyRef` | Customer-safe snapshot: `code`, `name`, `revision`. No connection, instructions, coverage configuration or credentials. |
 | `DeliveryCredentialRequirements` | Derived, non-sensitive API URL, connection-test address requirement, and optional supported authentication methods. It is read-only company metadata and is never accepted as a write field. |
 | `DeliveryAuthenticationMethodRequirements` | Open method identifier and required credential field names, without values or an authentication flow. |
 | `DeliveryConnection` | Sanitized backend observations: `credential_configured`, `health`, optional `last_checked_at`. |
-| `DeliveryProviderCredentials` | Standalone privileged values: optional `sign_in_account`, `password`, `api_base_url`, `api_token`. Only an independently authorized credential write or writer-only detail operation may serialize this model. |
+| `DeliveryProviderCredentials` | Standalone privileged values: optional `sign_in_account`, `password`, `api_base_url`, `api_token`, and provider-specific credential extension. Only a separately authorized credential operation may serialize these sensitive values. |
+| `DeliveryProviderSettings` | Versioned, non-secret JSON values interpreted only through Supply's registered schema for the parent company code. Unknown keys are preserved but not executed. |
+| `DeliveryCompanyCustomMetadataEntry` | Non-secret `key`, open `value_type`, and typed JSON `value`; custom metadata is inert and is never sent to provider requests. |
 | `DeliveryCapabilities` | Explicit booleans for booking, tracking, proof of delivery, refrigeration, provider coverage, provider slots and configured slots. Support does not imply current availability. |
 | `DeliveryServiceArea` | Market/country-scoped exact postal filters, Orders zone ID reference and derived ISO subdivision state codes; independent of depot coverage and delivery area pricing. |
 | `ShippingZoneRef` | ID-only reference to an Orders-owned `shipping.Zone`; it is not a copied zone snapshot. |
@@ -28,10 +31,11 @@ changes and the service-owned legacy configuration migration.
 Supply owns credential authorization, KMS-encrypted/versioned storage, secret
 resource references, rotation and redaction. `DeliveryProviderCredentials` is a
 standalone sensitive value model, never an embedded company or customer field;
-only separately authorized credential write and writer-only detail operations
-may serialize its values. Connection testing returns only sanitized status and
-time; raw diagnostics, credentials, headers and provider payloads must not reach
-general admin or customer projections. `DispatchCapable`, connection health and
+provider extension values are write-only through independently authorized
+credential operations. The shared envelope contains input values, not
+ciphertext. Connection testing returns only sanitized status and time; raw
+diagnostics, credentials, headers and provider payloads must not reach general
+admin or customer projections. `DispatchCapable`, connection health and
 configuration revision are derived server values, not editable authority flags.
 Health values are `unknown`,
 `healthy`, `unhealthy`; missing or stale evidence does not mean healthy.
@@ -59,9 +63,38 @@ can add company codes. Supply privately registers and selects verified provider
 behavior by the exact `Code`; the shared model contains no provider identity.
 Adding a company record does not install or verify provider behavior and does
 not imply quote, booking, dispatch or live-slot readiness. A company revision
-is positive and increases when its effective routing,
-connection configuration, capabilities or schedules change. Routine health checks
-need not change configuration revision.
+is positive and increases when its effective routing, connection configuration,
+capabilities, schedules, provider settings, custom metadata or Supply-managed
+credential binding changes. Supply owns atomic revision checks and history.
+Routine health checks need not change configuration revision.
+
+## Provider settings and custom metadata
+
+`DeliveryCompany.provider_settings` is optional and has the shape
+`{"schema_version": 1, "values": {"client_id": "example"}}`. Its values
+are typed JSON carried by the shared `metadata.Metadata` value map; the version
+identifies the Supply-registered provider settings schema.
+`DeliveryCompany.Code` selects the implementation and implicitly keys the
+settings envelope. Supply validates settings and only registered, understood
+keys may affect provider requests.
+Unknown keys must survive read-modify-write but remain inert until a compatible
+provider schema recognizes them.
+
+`custom_metadata` is a separate optional array of
+`{"key":"dispatch_group","value_type":"string","value":"north"}`
+entries. It supports company-specific non-secret metadata absent from common
+fields. It is never interpreted as provider configuration or passed to an
+adapter. Consumers should preserve unknown value types and values. Supply owns
+key uniqueness, type validation, size limits and explicit update/removal
+semantics.
+
+Both namespaces may appear under one Additional settings UI, but they are
+separate in storage and semantics. On partial updates, omission preserves the
+stored namespace; explicit replacement or clearing is defined by Supply's
+service-owned request DTOs. Older writers that replace a full record must be
+upgraded or protected by server-side merge behavior before extension data is
+activated. Existing country codes, service areas, market binding and shipping
+zone references retain their v36.0.0 meanings.
 
 The v35 major release removes `integration` from `DeliveryCompany`,
 `DeliveryCompanyRef` and nested frozen delivery references. The legacy
