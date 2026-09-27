@@ -1,7 +1,7 @@
 package compliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography"
 )
 
 type LabelImporter struct {

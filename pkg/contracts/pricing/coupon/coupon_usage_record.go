@@ -1,9 +1,9 @@
 package coupon
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/pricing/benefit"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/benefit"
 	"time"
 )
 

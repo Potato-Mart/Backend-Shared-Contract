@@ -14,8 +14,8 @@ workflows.
 ## Latest Version
 
 ```text
-v36.1.0
-github.com/Potato-Mart/Backend-Shared-Contract/v36
+v37.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v37
 ```
 
 See [release notes](docs/release-notes.md) for the release history,
@@ -26,10 +26,19 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v36 v36.1.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v37 v37.0.0
 ```
 
-Import packages from the same `/v36` module path.
+Import packages from the same `/v37` module path.
+
+The v37.0.0 release removes fixed sign-in account, password, and API token
+fields from the privileged courier credential model while retaining the common
+API base URL and versioned provider extension. It adds package-level frozen
+promotion allocations, an order fulfilment generation shared with picking and
+packing, and the `order.edited` v1 fact for committed product changes. The
+owning services still define HTTP routes, payment adjustment and recheck
+workflow. See the [v37 migration](docs/v37-migration.md) for wire shapes and
+consumer rollout.
 
 The v36.0.0 release removes courier service-area `routing_priority` and adds
 `market_code` while retaining explicit shipping-zone references. Selecting all

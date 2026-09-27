@@ -3,24 +3,24 @@ package order
 import (
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/geography"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/security"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/orders/buyer"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/orders/fulfilment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/orders/group_order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/buyer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/group_order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/shipping"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/orders/shipping/shipping_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/shipping/shipping_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/promotion"
 )
 
 // Buyer describes who is buying, independently of Channel. POS is a
@@ -41,7 +41,12 @@ type Order struct {
 	PaymentStatus     payment_enums.PaymentStatus   `json:"payment_status"`
 	PaymentMethod     payment_enums.PaymentMethod   `json:"payment_method"`
 	FulfillmentStatus order_enums.FulfillmentStatus `json:"fulfillment_status"`
-	Customer          party.PartyRef                `json:"customer"`
+	// FulfillmentGeneration identifies the current requested product composition
+	// for physical work. Orders advances it on a committed product amendment;
+	// older picking and packing evidence remains historical and cannot authorize
+	// shipment of this generation. Zero identifies legacy or unknown evidence.
+	FulfillmentGeneration int64          `json:"fulfillment_generation,omitempty"`
+	Customer              party.PartyRef `json:"customer"`
 
 	Buyer                *buyer.BuyerContext                   `json:"buyer,omitempty"`
 	FulfilmentLocation   shipping.FulfilmentLocationSnapshot   `json:"fulfilment_location"`

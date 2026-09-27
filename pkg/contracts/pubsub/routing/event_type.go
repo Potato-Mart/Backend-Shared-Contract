@@ -9,6 +9,7 @@ const (
 	EventTypeOrderPaid          EventType = "order.paid"
 	EventTypeOrderStatusChanged EventType = "order.status_changed"
 	EventTypeOrderCancelled     EventType = "order.cancelled"
+	EventTypeOrderEdited        EventType = "order.edited"
 	EventTypePaymentCaptured    EventType = "payment.captured"
 	EventTypePaymentFailed      EventType = "payment.failed"
 	EventTypeInvoiceIssued      EventType = "invoice.issued"
@@ -55,7 +56,7 @@ const (
 func (t EventType) IsValid() bool {
 	switch t {
 	case EventTypeOrderCreated, EventTypeOrderPaid, EventTypeOrderStatusChanged,
-		EventTypeOrderCancelled,
+		EventTypeOrderCancelled, EventTypeOrderEdited,
 		EventTypePaymentCaptured, EventTypePaymentFailed, EventTypeInvoiceIssued,
 		EventTypeReceiptGenerated,
 		EventTypeRefundRequested, EventTypeRefundCompleted, EventTypeRefundFailed,

@@ -2,11 +2,12 @@ package promotion
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
 )
 
 func TestPromotionApplicationsFreezeVisibleQualifierTargetRelationships(t *testing.T) {
@@ -34,5 +35,39 @@ func TestPromotionApplicationsFreezeVisibleQualifierTargetRelationships(t *testi
 	}
 	if got[2].PromotionKind != "bundle" || len(got[2].ResolvedQualifierSKUCodes) != 2 || got[2].ReceiptMessages[0].Text != "Potato bundle" {
 		t.Fatalf("bundle relation or approved receipt content changed: %+v", got[2])
+	}
+}
+
+func TestPromotionApplicationPreservesPurchasedPackageAllocation(t *testing.T) {
+	application := PromotionApplication{
+		PromotionID: "promotion_n_for_total", PromotionKind: "n_for_total", RelationID: "relation_1",
+		ResolvedTargetPackageAllocations: []PromotionTargetPackageAllocation{{
+			OrderItemID: "line_1", SKUCode: "POTATO-A", PackageOptionCode: "CASE-12",
+			AppliedPackageCount: 2, GroupOrdinal: 1,
+			DiscountAmount: money.Money{AmountMinor: 250, Currency: "AUD"},
+		}},
+	}
+	encoded, err := json.Marshal(application)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, field := range []string{`"resolved_target_package_allocations"`, `"order_item_id":"line_1"`, `"package_option_code":"CASE-12"`, `"applied_package_count":2`, `"group_ordinal":1`} {
+		if !strings.Contains(string(encoded), field) {
+			t.Errorf("application is missing package evidence %s: %s", field, encoded)
+		}
+	}
+	var decoded PromotionApplication
+	if err := json.Unmarshal(encoded, &decoded); err != nil {
+		t.Fatal(err)
+	}
+	if len(decoded.ResolvedTargetPackageAllocations) != 1 || decoded.ResolvedTargetPackageAllocations[0].DiscountAmount.AmountMinor != 250 {
+		t.Fatalf("package allocation lost: %+v", decoded.ResolvedTargetPackageAllocations)
+	}
+	legacy, err := json.Marshal(PromotionApplication{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(legacy), "resolved_target_package_allocations") {
+		t.Fatalf("legacy application gained empty allocations: %s", legacy)
 	}
 }

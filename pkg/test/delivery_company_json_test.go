@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/customers/retail"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/orders/shipping"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/courier"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/courier/courier_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/customers/retail"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/courier"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/courier/courier_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/fulfilment"
 )
 
 func TestDeliveryLegacyJSONRemainsUnchanged(t *testing.T) {
@@ -252,10 +252,7 @@ func TestCourierProviderCredentialModelHasPrivilegedStandaloneShape(t *testing.T
 		typeOf reflect.Type
 		json   string
 	}{
-		{"SignInAccount", reflect.TypeOf(""), "sign_in_account,omitempty"},
-		{"Password", reflect.TypeOf(""), "password,omitempty"},
 		{"APIBaseURL", reflect.TypeOf(""), "api_base_url,omitempty"},
-		{"APIToken", reflect.TypeOf(""), "api_token,omitempty"},
 		{"ProviderExtension", reflect.TypeOf((*courier.DeliveryProviderCredentialExtension)(nil)), "provider_extension,omitempty"},
 	}
 	if modelType.NumField() != len(wantFields) {
@@ -273,6 +270,17 @@ func TestCourierProviderCredentialModelHasPrivilegedStandaloneShape(t *testing.T
 	}
 	if string(data) != `{}` {
 		t.Fatalf("empty credential value should omit unset fields: %s", data)
+	}
+	var legacy courier.DeliveryProviderCredentials
+	if err := json.Unmarshal([]byte(`{"api_base_url":"https://provider.example.test","sign_in_account":"legacy","password":"legacy","api_token":"legacy"}`), &legacy); err != nil {
+		t.Fatal(err)
+	}
+	data, err = json.Marshal(legacy)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(data) != `{"api_base_url":"https://provider.example.test"}` {
+		t.Fatalf("retired common credentials survived v37 serialization: %s", data)
 	}
 }
 
