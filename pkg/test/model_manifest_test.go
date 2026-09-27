@@ -247,8 +247,9 @@ var modelPackageManifest map[string]string
 // types retain their package ownership. V36.0 adds non-sensitive
 // DeliveryAuthenticationMethodRequirements; V36.1 adds provider settings,
 // custom metadata and privileged provider credential extension records to the
-// existing courier package.
-const exportedTypeManifestDigest = "616f128243f3f449e2bd584e638f42d93ac1112708582aa9ff6ba60e8d333e3e"
+// existing courier package. V37 adds frozen promotion target package allocation
+// and committed order edit payload records in existing owned packages.
+const exportedTypeManifestDigest = "738e7d614b9b519da3ebfef5ae3373d8ff70219ffc3880514b9e3cf81571e4e9"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

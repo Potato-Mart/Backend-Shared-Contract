@@ -1,14 +1,14 @@
-# Delivery company model (v36.1.0)
+# Delivery company model (v37.0.0)
 
 The current model omits courier API/manual classification and routing priority.
 Each courier company's immutable, extensible `code` is its sole public identity.
 A code does not prove that a verified provider implementation, coverage, or live
 availability exists. This model contains no provider implementation, API routes,
 booking or routing code. Pin
-`github.com/Potato-Mart/Backend-Shared-Contract/v36 v36.1.0`.
-See [v36 migration](v36-migration.md) for the market, authentication metadata,
-provider settings and metadata changes and the service-owned configuration
-migration.
+`github.com/Potato-Mart/Backend-Shared-Contract/v37 v37.0.0`.
+See [v37 migration](v37-migration.md) for the credential shape and
+[v36 migration](v36-migration.md) for the earlier market, authentication
+metadata, provider settings and service-owned configuration changes.
 
 ## Ownership and projections
 
@@ -19,7 +19,7 @@ migration.
 | `DeliveryCredentialRequirements` | Derived, non-sensitive API URL, connection-test address requirement, and optional supported authentication methods. It is read-only company metadata and is never accepted as a write field. |
 | `DeliveryAuthenticationMethodRequirements` | Open method identifier and required credential field names, without values or an authentication flow. |
 | `DeliveryConnection` | Sanitized backend observations: `credential_configured`, `health`, optional `last_checked_at`. |
-| `DeliveryProviderCredentials` | Standalone privileged values: optional `sign_in_account`, `password`, `api_base_url`, `api_token`, and provider-specific credential extension. Only a separately authorized credential operation may serialize these sensitive values. |
+| `DeliveryProviderCredentials` | Standalone privileged values: optional common `api_base_url` and provider-specific credential extension. Only a separately authorized credential operation may serialize these sensitive values. |
 | `DeliveryProviderSettings` | Versioned, non-secret JSON values interpreted only through Supply's registered schema for the parent company code. Unknown keys are preserved but not executed. |
 | `DeliveryCompanyCustomMetadataEntry` | Non-secret `key`, open `value_type`, and typed JSON `value`; custom metadata is inert and is never sent to provider requests. |
 | `DeliveryCapabilities` | Explicit booleans for booking, tracking, proof of delivery, refrigeration, provider coverage, provider slots and configured slots. Support does not imply current availability. |
@@ -54,8 +54,10 @@ supported methods, each with an open `method` identifier (for example
 `api_token`) and `required_fields` names. These contain no credential values.
 An API URL supplied by derived metadata may already satisfy that prerequisite.
 Missing or empty methods make no support claim; older responses may omit them.
-The privileged credential model's account/password fields do not establish an
-account authentication protocol or permission to fall back to one.
+The privileged credential model has no common account/password or API-token
+fields. Provider-specific authentication values belong only in the separately
+authorized and encrypted `provider_extension`; metadata does not establish a
+fallback authentication protocol.
 
 `Code` is the immutable, extensible identity for one independent company. It is
 an open string, not a fixed company list or provider selector, so other markets

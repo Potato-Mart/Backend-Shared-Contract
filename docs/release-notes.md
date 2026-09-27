@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v37.0.0` | 2026-09-27 | Major | Removes fixed courier account/password/API-token fields while retaining the API base URL and provider extension; adds frozen purchased-package promotion allocation, fulfilment generation, and `order.edited` v1. Changes the module path to `/v37`; consumers migrate deliberately. |
 | `v36.1.0` | 2026-09-26 | Minor | Adds versioned provider settings and inert typed custom metadata to courier companies, plus a separately privileged provider credential extension envelope. Preserves `/v36`; Supply owns provider validation, credential protection, and update semantics. |
 | `v36.0.0` | 2026-09-26 | Major | Removes courier routing priority, adds explicit market binding, derived authentication-method requirements, and optional shared promotion/coupon audience. Changes module path to `/v36`; service migration and eligibility enforcement required. |
 | `v35.2.0` | 2026-09-25 | Minor | Adds `FulfillmentStatusCancelled` (`cancelled`) to represent that no further fulfilment work is scheduled while preserving existing fulfilled status and all recorded physical packing, shipment, and item facts. Consumers should accept the new enum before services emit it. |
@@ -143,6 +144,76 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v37.0.0 (2026-09-27) - Order Amendment Evidence and Provider Credentials
+
+### Breaking Contract Changes
+
+- Moves the Go module and all contract imports from `/v36` to `/v37`.
+- Removes `DeliveryProviderCredentials.sign_in_account`, `.password`, and
+  `.api_token`. The privileged shared shape retains `api_base_url` and the
+  versioned `provider_extension`; provider authentication values are
+  provider-specific. Supply owns legacy HTTP DTOs, encrypted persisted-value
+  adapters, and any parallel `/v1` and `/v2` courier routes.
+
+### Added
+
+- Adds optional `PromotionApplication.resolved_target_package_allocations`.
+  Each allocation identifies its order item, SKU and package-option code,
+  applied purchased-package count, optional one-based complete-group ordinal,
+  and frozen minor-unit discount. The canonical requested count remains on
+  `OrderItem.components[].requested_package_count` and
+  `requested_composition.components[].package_count`; base-unit or later
+  picked/packed counts do not stand in for purchased packages.
+- Adds optional `fulfillment_generation` to Order, PickingList, and
+  OrderPackingProgress. Orders advances the generation on committed product
+  changes, while Supply retains old picking and packing evidence as history
+  and checks the current generation before dispatch. Zero/absence identifies
+  legacy or unknown evidence, not approval for new physical work.
+- Adds `OrderEditedEvent` with `order.edited` / `event_version` `v1` on the
+  existing `order-events` family. Its stable `edit_id`, previous/new generation,
+  safe previous/revised requested item snapshots, scoped order identity and
+  totals describe a completed edit. Orders owns atomic outbox publication;
+  Supply and Notification own durable deduplication and side effects.
+
+### Fixed
+
+- None.
+
+### Other Changes
+
+- The shared module still contains no HTTP DTOs, pricing evaluation, payment
+  adjustment, courier provider adapter, packing history storage or migration.
+  See [v37 migration](v37-migration.md) for the compatibility order.
+
+### Contract Files Changed
+
+- `go.mod`, internal `/v37` imports and release metadata.
+- Courier credential, promotion application/allocation, order, picking and
+  packing models, `order.edited` payload and event routing.
+- JSON, event-registry, model-manifest and current-major guard tests.
+
+### Compatibility Notes
+
+- Backend consumers update module imports and pins to `/v37 v37.0.0` with
+  their CI contract-version inputs. Existing `/v36` imports remain available
+  from the immutable previous release; module publication does not change
+  deployed HTTP routes or database records.
+- Services that serve legacy courier clients preserve `/v1` requests using
+  service-owned DTOs and adapters; they must retain unknown provider extension
+  keys on old-client writes. No shared compatibility credential fields or
+  data backfill are introduced.
+- Consumers of `order.edited` v1 must be ready and idempotent before Orders
+  emits it. Use `event_id` for delivery deduplication and `edit_id` for the
+  one-notification-per-edit business effect. Compare fulfilment generations
+  before accepting picking, packing or shipment evidence.
+- The existing `fulfilment.packing_updated` event retains its version and
+  meaning. Its nested packing progress may carry the new optional generation
+  only after its consumers tolerate that additive field; old payloads omit it.
+- Pricing owns purchased-package grouping, repeated complete groups, leftover
+  pricing and volume-price exclusivity, including cart-discount allocation.
+  Partially refunded orders use only remaining fully paid eligible packages.
+  Orders and Payments own the difference-only payment workflow.
 
 ## v36.1.0 (2026-09-26) - Courier Provider Settings
 

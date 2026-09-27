@@ -3,9 +3,9 @@ package payments
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/common/money"
-	analytics "github.com/Potato-Mart/Backend-Shared-Contract/v36/pkg/contracts/insights/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
+	analytics "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/insights/sales"
 )
 
 // RefundCompletedEvent is emitted on the refund-events topic when a refund
