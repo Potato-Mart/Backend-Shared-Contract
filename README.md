@@ -14,7 +14,7 @@ workflows.
 ## Latest Version
 
 ```text
-v37.0.0
+v37.1.0
 github.com/Potato-Mart/Backend-Shared-Contract/v37
 ```
 
@@ -26,10 +26,18 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v37 v37.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v37 v37.1.0
 ```
 
 Import packages from the same `/v37` module path.
+
+The v37.1.0 release adds data-only generic courier request configurations for
+connection, shipping-area, and time-slot requests. Each request uses GET or
+POST, a relative endpoint path, and explicit header, query, and JSON-body
+fields. Secret values remain in the separately protected provider extension
+and are referenced by key. The shared module contains no request executor,
+service route DTO, response mapping, or raw test result. See the
+[v37.1 migration](docs/v37.1-migration.md) for wire shapes and consumer actions.
 
 The v37.0.0 release removes fixed sign-in account, password, and API token
 fields from the privileged courier credential model while retaining the common

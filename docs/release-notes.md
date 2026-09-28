@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v37.1.0` | 2026-09-28 | Minor | Adds provider-neutral courier request configuration for connection, shipping-area, and time-slot requests, including GET/POST, relative endpoint paths, header/query/JSON-body fields, and protected credential references. Keeps `/v37`; runtime and API DTOs remain Supply-owned. |
 | `v37.0.0` | 2026-09-27 | Major | Removes fixed courier account/password/API-token fields while retaining the API base URL and provider extension; adds frozen purchased-package promotion allocation, fulfilment generation, and `order.edited` v1. Changes the module path to `/v37`; consumers migrate deliberately. |
 | `v36.1.0` | 2026-09-26 | Minor | Adds versioned provider settings and inert typed custom metadata to courier companies, plus a separately privileged provider credential extension envelope. Preserves `/v36`; Supply owns provider validation, credential protection, and update semantics. |
 | `v36.0.0` | 2026-09-26 | Major | Removes courier routing priority, adds explicit market binding, derived authentication-method requirements, and optional shared promotion/coupon audience. Changes module path to `/v36`; service migration and eligibility enforcement required. |
@@ -144,6 +145,54 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v37.1.0 (2026-09-28) - Generic Courier Request Configuration
+
+### Breaking Contract Changes
+
+- None. The new request configuration types are additive and retain the `/v37`
+  module path. Existing courier company, credential, metadata, and customer-safe
+  reference JSON shapes are unchanged.
+
+### Added
+
+- Adds `DeliveryAPIHTTPMethod` (`GET`, `POST`) and
+  `DeliveryAPIRequestPurpose` (`connection`, `shipping_areas`, `time_slots`).
+- Adds `DeliveryAPIRequestField`, `DeliveryAPIRequestConfiguration`, and
+  `DeliveryAPIRequestConfigurations` as data-only values for the three
+  operator-authored courier requests.
+- Request configurations carry a relative `endpoint_path` resolved by Supply
+  against the existing `DeliveryProviderCredentials.api_base_url`. Header and
+  query entries carry JSON string values; JSON-body entries carry JSON values.
+  Each field uses exactly one of a non-secret `value`, `value_is_null: true`
+  (explicit JSON null in a JSON-body field), or `secret_ref`. The reference
+  names a protected provider-extension credential key. Supply owns one-of and
+  endpoint validation, secret resolution, and execution.
+
+### Fixed
+
+- None.
+
+### Other Changes
+
+- No adapter implementation, request execution, API route DTO, response mapping,
+  or raw test result is added to Shared Contract. Existing
+  `custom_metadata` remains inert and is not repurposed.
+
+### Contract Files Changed
+
+- Courier request-configuration value models and method/purpose enums.
+- JSON round-trip, enum, privacy-policy, and exported-model-manifest coverage.
+- Release metadata and consumer documentation.
+
+### Compatibility Notes
+
+- Consumers remain on `github.com/Potato-Mart/Backend-Shared-Contract/v37` and
+  may pin `v37.1.0` when they adopt these types. No database migration is
+  required by this model-only release. Supply owns configuration persistence,
+  revision checks, credential presence, test/invoke routes, and their raw HTTP
+  status/JSON response DTOs. Shipping-area and time-slot JSON is not normalized
+  into customer-facing delivery slots by this contract.
 
 ## v37.0.0 (2026-09-27) - Order Amendment Evidence and Provider Credentials
 
