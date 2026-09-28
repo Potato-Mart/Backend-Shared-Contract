@@ -248,8 +248,9 @@ var modelPackageManifest map[string]string
 // DeliveryAuthenticationMethodRequirements; V36.1 adds provider settings,
 // custom metadata and privileged provider credential extension records to the
 // existing courier package. V37 adds frozen promotion target package allocation
-// and committed order edit payload records in existing owned packages.
-const exportedTypeManifestDigest = "738e7d614b9b519da3ebfef5ae3373d8ff70219ffc3880514b9e3cf81571e4e9"
+// and committed order edit payload records in existing owned packages. V37.1
+// adds provider-neutral courier request-configuration value models and enums.
+const exportedTypeManifestDigest = "5278e851563e02ebab5cd9b5b74b99fb82d68c7b608a09ff125e5ba408247469"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

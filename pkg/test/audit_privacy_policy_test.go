@@ -54,10 +54,13 @@ type typePolicy struct {
 // It is intentionally explicit: a new root must be reviewed instead of
 // inheriting audit or privacy metadata by package convention.
 var v34TypePolicyRegistry = map[string]typePolicy{
-	"delivery selection":         {reflect.TypeOf(shipping.DeliverySelection{}), false, false},
-	"delivery company":           {reflect.TypeOf(courier.DeliveryCompany{}), true, false},
-	"delivery company reference": {reflect.TypeOf(courier.DeliveryCompanyRef{}), false, false},
-	"delivery connection":        {reflect.TypeOf(courier.DeliveryConnection{}), false, false},
+	"delivery selection":                  {reflect.TypeOf(shipping.DeliverySelection{}), false, false},
+	"delivery company":                    {reflect.TypeOf(courier.DeliveryCompany{}), true, false},
+	"delivery company reference":          {reflect.TypeOf(courier.DeliveryCompanyRef{}), false, false},
+	"delivery connection":                 {reflect.TypeOf(courier.DeliveryConnection{}), false, false},
+	"delivery API request field":          {reflect.TypeOf(courier.DeliveryAPIRequestField{}), false, false},
+	"delivery API request configuration":  {reflect.TypeOf(courier.DeliveryAPIRequestConfiguration{}), false, false},
+	"delivery API request configurations": {reflect.TypeOf(courier.DeliveryAPIRequestConfigurations{}), false, false},
 	// The credential value is transient; Supply protects its stored bundle.
 	"delivery provider credentials":          {reflect.TypeOf(courier.DeliveryProviderCredentials{}), false, false},
 	"delivery provider credential extension": {reflect.TypeOf(courier.DeliveryProviderCredentialExtension{}), false, false},

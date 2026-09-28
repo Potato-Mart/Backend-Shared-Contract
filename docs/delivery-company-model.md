@@ -264,3 +264,23 @@ requirements and operational defaults remain Supply-owned. The standalone
 `DeliveryProviderCredentials` type defines only the privileged value shape;
 actual credential values must never be included in source, tests, or
 documentation examples.
+
+## Manual request configuration (v37.1.0)
+
+`DeliveryAPIRequestConfigurations` is a data-only value for the optional
+`connection`, `shipping_areas`, and `time_slots` requests. Each request has a
+`GET` or `POST` method, an `endpoint_path` relative to the shared
+`DeliveryProviderCredentials.api_base_url`, and key/value field groups for
+headers, query parameters, and a top-level JSON body. No endpoint or field
+values are seeded by this contract.
+
+`DeliveryAPIRequestField.value` carries non-secret, non-null JSON data;
+`value_is_null: true` represents an explicit JSON null in a JSON-body field;
+`secret_ref` names a key in `provider_extension.values` without carrying its
+secret value. Exactly one form is valid. Headers and query values are JSON
+strings; JSON-body values preserve their JSON type. Supply owns field and path
+validation, encryption and secret-presence reporting, saved configuration
+updates, and request execution. Raw HTTP status and JSON responses are
+service-owned test/invoke results, not shared models. This addition does not
+change `custom_metadata`, `provider_settings`, `DeliveryConnection`, or
+customer-safe `DeliveryCompanyRef`.
