@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v38.2.0` | 2026-09-29 | Minor | Adds GiftCardIssuedEventV2 with explicit purchase/reward/refund-replacement source and original credited value; wallet.gift_card_issued advances to v2. Preserves /v38 and legacy purchase-only v1. |
 | `v38.1.0` | 2026-09-29 | Minor | Adds immutable exact/confirmation capture timing evidence and PaymentCapturedEventV2; payment.captured advances to v2. Preserves /v38 and legacy v1 model. |
 | `v38.0.0` | 2026-09-29 | Major | Explicit geographic parent paths; immutable SKU/package/version references; CODE128 product barcodes; localized tiers and managed tier cards; coupon receiving/redemption policies; gift-card customer binding and safe delivery fact. Module `/v38`; coordinated consumer adoption required. |
 | `v37.1.0` | 2026-09-28 | Minor | Adds provider-neutral courier request configuration for connection, shipping-area, and time-slot requests, including GET/POST, relative endpoint paths, header/query/JSON-body fields, and protected credential references. Keeps `/v37`; runtime and API DTOs remain Supply-owned. |
@@ -147,6 +148,14 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v38.2.0 (2026-09-29)
+
+Adds `GiftCardIssuanceSource` and `GiftCardIssuedEventV2` for committed purchase, membership-reward and refund-replacement issuance. Required `issued_value` means original total credited initial value, including applicable purchase bonus; it never asserts buyer charge, refund payment amount or current balance. V2 omits purchase-specific charge/bonus/policy fields and all card codes/PIN/customer/contact material. Notification resolves protected delivery data by immutable issuance ID.
+
+`wallet.gift_card_issued` advances to **v2** on the existing customer-events route. Legacy v1 model/serialization and purchase amount semantics remain unchanged; non-purchase producers must use v2. `notification.gift_card_delivered` remains v1 with the same safe issuance/time shape; source-specific purchase correlation remains Orders-owned. All other event versions, including payment.captured v2, are unchanged.
+
+Consumer Action: align Go/CI pins to v38.2.0; Notification adopts v2 and generalized protected issuance lookup/delivery before Pricing emits purchase/reward/replacement facts. Verify atomic source/card/ledger/credential/outbox creation, dedupe and source-specific delivery. See [gift issuance adoption](v38.2-gift-issuance.md). No service deployment, migration, backfill or database mutation is performed by this release.
 
 ## v38.1.0 (2026-09-29)
 

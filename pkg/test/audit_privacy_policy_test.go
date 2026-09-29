@@ -32,6 +32,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/wallet/reservation"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/wallet/reward"
 	notificationevent "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pubsub/notification"
+	pricingevent "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pubsub/pricing"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/classification"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/review"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/wish"
@@ -54,6 +55,7 @@ type typePolicy struct {
 // It is intentionally explicit: a new root must be reviewed instead of
 // inheriting audit or privacy metadata by package convention.
 var v34TypePolicyRegistry = map[string]typePolicy{
+	"gift card issued event v2":             {reflect.TypeOf(pricingevent.GiftCardIssuedEventV2{}), false, false},
 	"capture confirmation evidence":         {reflect.TypeOf(payment.CaptureConfirmationEvidence{}), false, false},
 	"capture timing evidence":               {reflect.TypeOf(payment.CaptureTimingEvidence{}), false, false},
 	"gift card delivered event":             {reflect.TypeOf(notificationevent.GiftCardDeliveredEvent{}), false, false},

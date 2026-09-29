@@ -48,7 +48,7 @@ var eventTypeVersionRegistry = map[EventType]string{
 	EventTypeCustomerRegistered:             "v1",
 	EventTypeCustomerProfileUpdated:         "v1",
 	EventTypeNotificationPreferencesChanged: "v1",
-	EventTypeWalletGiftCardIssued:           "v1",
+	EventTypeWalletGiftCardIssued:           "v2",
 	EventTypeNotificationGiftCardDelivered:  "v1",
 	EventTypePriceChanged:                   "v1",
 }
@@ -96,7 +96,7 @@ func TestEventTypeVersionRegistryCoversEveryDefinedEventExactlyOnce(t *testing.T
 		EventTypeCustomerRegistered:             "v1",
 		EventTypeCustomerProfileUpdated:         "v1",
 		EventTypeNotificationPreferencesChanged: "v1",
-		EventTypeWalletGiftCardIssued:           "v1",
+		EventTypeWalletGiftCardIssued:           "v2",
 		EventTypeNotificationGiftCardDelivered:  "v1",
 		EventTypePriceChanged:                   "v1",
 	}
