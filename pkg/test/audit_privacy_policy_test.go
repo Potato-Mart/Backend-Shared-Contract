@@ -54,6 +54,8 @@ type typePolicy struct {
 // It is intentionally explicit: a new root must be reviewed instead of
 // inheriting audit or privacy metadata by package convention.
 var v34TypePolicyRegistry = map[string]typePolicy{
+	"capture confirmation evidence":         {reflect.TypeOf(payment.CaptureConfirmationEvidence{}), false, false},
+	"capture timing evidence":               {reflect.TypeOf(payment.CaptureTimingEvidence{}), false, false},
 	"gift card delivered event":             {reflect.TypeOf(notificationevent.GiftCardDeliveredEvent{}), false, false},
 	"coupon receiving tier policy":          {reflect.TypeOf(coupon.ReceivingTierPolicy{}), false, false},
 	"coupon tier restriction":               {reflect.TypeOf(coupon.TierRestriction{}), false, false},
