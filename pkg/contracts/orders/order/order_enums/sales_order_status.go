@@ -14,6 +14,7 @@ const (
 	SalesOrderStatusDelivered  SalesOrderStatus = "delivered"
 	SalesOrderStatusCompleted  SalesOrderStatus = "completed"
 	SalesOrderStatusCancelled  SalesOrderStatus = "cancelled"
+	SalesOrderStatusExpired    SalesOrderStatus = "expired"
 	SalesOrderStatusRefunded   SalesOrderStatus = "refunded"
 )
 
@@ -22,7 +23,7 @@ func (s SalesOrderStatus) IsValid() bool {
 	case SalesOrderStatusPending, SalesOrderStatusConfirmed, SalesOrderStatusPaid,
 		SalesOrderStatusProcessing, SalesOrderStatusPicking, SalesOrderStatusPacked,
 		SalesOrderStatusShipped, SalesOrderStatusDelivered, SalesOrderStatusCompleted,
-		SalesOrderStatusCancelled, SalesOrderStatusRefunded:
+		SalesOrderStatusCancelled, SalesOrderStatusExpired, SalesOrderStatusRefunded:
 		return true
 	default:
 		return false

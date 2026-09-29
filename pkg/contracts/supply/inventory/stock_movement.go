@@ -3,9 +3,9 @@ package inventory
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // StockMovement represents a physical base-unit transfer or state change.
@@ -17,8 +17,8 @@ type StockMovement struct {
 	SourceBucketID                   string                                `json:"source_bucket_id,omitempty"`
 	DestinationBucketID              string                                `json:"destination_bucket_id,omitempty"`
 	LotID                            string                                `json:"lot_id,omitempty"`
-	SourcePackageOptionCode          string                                `json:"source_package_option_code,omitempty"`
-	DestinationPackageOptionCode     string                                `json:"destination_package_option_code,omitempty"`
+	SourcePackageOption              *packaging.PackageOptionRef           `json:"source_package_option,omitempty"`
+	DestinationPackageOption         *packaging.PackageOptionRef           `json:"destination_package_option,omitempty"`
 	BaseUnits                        int64                                 `json:"base_units"`
 	SourcePackageComposition         *packaging.PackageCompositionSnapshot `json:"source_package_composition,omitempty"`
 	DestinationPackageComposition    *packaging.PackageCompositionSnapshot `json:"destination_package_composition,omitempty"`

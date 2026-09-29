@@ -1,6 +1,6 @@
 package courier
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/metadata"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/metadata"
 
 // DeliveryProviderSettings contains versioned, non-secret configuration values
 // for the provider implementation selected by the parent DeliveryCompany.Code.

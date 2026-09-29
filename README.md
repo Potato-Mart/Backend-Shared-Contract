@@ -14,8 +14,8 @@ workflows.
 ## Latest Version
 
 ```text
-v37.1.0
-github.com/Potato-Mart/Backend-Shared-Contract/v37
+v38.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v38
 ```
 
 See [release notes](docs/release-notes.md) for the release history,
@@ -26,10 +26,16 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v37 v37.1.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v38 v38.0.0
 ```
 
-Import packages from the same `/v37` module path.
+Import packages from the same `/v38` module path.
+
+The v38.0.0 major release introduces explicit geographic parent paths, immutable
+SKU/package/version references, CODE128-only product barcodes, localized tier
+labels and managed tier cards, separate coupon receiving/redemption policies,
+and safe gift-card delivery correlation. See [v38 adoption](docs/v38-contract-adoption.md)
+for exact wire shapes, event versions and service-owned rules.
 
 The v37.1.0 release adds data-only generic courier request configurations for
 connection, shipping-area, and time-slot requests. Each request uses GET or

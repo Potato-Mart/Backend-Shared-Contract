@@ -2,21 +2,22 @@ package product
 
 import (
 	"encoding/json"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
 	"reflect"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/market/market_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/pricebook"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/market/market_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/pricebook"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/product/product_enums"
 )
 
 func TestCanonicalProductJSONShape(t *testing.T) {
@@ -33,9 +34,9 @@ func TestCanonicalProductJSONShape(t *testing.T) {
 			CollectionRef: &classification.CollectionRef{Code: "COL0001"},
 			CategoryTags:  []classification.CategoryTagRef{{Code: "TAG0001"}},
 		},
-		PackageOptions: []ProductPackageOption{{Code: "PKG-A00001-EACH", UnitsPerPackage: 1}},
+		PackageOptions: []ProductPackageOption{{Version: 1, Code: "EACH", SKUCode: "A00001", UnitsPerPackage: 1}},
 		BarcodeAssignments: []ProductBarcodeAssignment{{
-			Code: "BAR-A00001", PackageOptionCode: "PKG-A00001-EACH", Value: "A00001", Format: product_enums.BarcodeFormatCode128,
+			Code: "BAR-A00001", PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1}, Value: "A00001", Format: product_enums.BarcodeFormatCode128,
 		}},
 		Supply: &classification.ProductSupply{Suppliers: []classification.ProductSupplierRef{{Code: "SUP0001"}}},
 	}
@@ -43,7 +44,7 @@ func TestCanonicalProductJSONShape(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, want := range []string{`"sku_code":"A00001"`, `"storage_type":"AMBIENT"`, `"name":{"language":"en","name":"Product"}`, `"sku_series_code":"A0"`, `"brands":[{"code":"BRD000001"}]`, `"code":"MED-SHA256"`, `"package_options":[{"code":"PKG-A00001-EACH"`, `"barcode_assignments":[{"code":"BAR-A00001"`} {
+	for _, want := range []string{`"sku_code":"A00001"`, `"storage_type":"AMBIENT"`, `"name":{"language":"en","name":"Product"}`, `"sku_series_code":"A0"`, `"brands":[{"code":"BRD000001"}]`, `"code":"MED-SHA256"`, `"package_options":[{"version":1,"code":"EACH","sku_code":"A00001"`, `"barcode_assignments":[{"code":"BAR-A00001"`} {
 		if !strings.Contains(string(body), want) {
 			t.Fatalf("Product JSON = %s, want %s", body, want)
 		}
@@ -59,14 +60,14 @@ func TestProductOwnsPackageAndBarcodeFacts(t *testing.T) {
 	now := time.Date(2026, 8, 19, 0, 0, 0, 0, time.UTC)
 	value := Product{
 		SKUCode: "A00001", StorageType: classification_enums.StorageAmbient, Status: product_enums.ProductStatusActive,
-		PackageOptions:     []ProductPackageOption{{Code: "PKG-A00001-EACH", UnitsPerPackage: 1, EffectiveFrom: now}},
-		BarcodeAssignments: []ProductBarcodeAssignment{{Code: "BAR-A00001", PackageOptionCode: "PKG-A00001-EACH", Value: "A00001", Format: product_enums.BarcodeFormatCode128, EffectiveFrom: now}},
+		PackageOptions:     []ProductPackageOption{{Version: 1, Code: "EACH", SKUCode: "A00001", UnitsPerPackage: 1, EffectiveFrom: now}},
+		BarcodeAssignments: []ProductBarcodeAssignment{{Code: "BAR-A00001", PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1}, Value: "A00001", Format: product_enums.BarcodeFormatCode128, EffectiveFrom: now}},
 	}
 	body, err := json.Marshal(value)
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, want := range []string{`"sku_code":"A00001"`, `"package_option_code":"PKG-A00001-EACH"`, `"code":"BAR-A00001"`} {
+	for _, want := range []string{`"sku_code":"A00001"`, `"package_option":{"sku_code":"A00001","code":"EACH","version":1}`, `"code":"BAR-A00001"`} {
 		if !strings.Contains(string(body), want) {
 			t.Fatalf("Product JSON = %s, want %s", body, want)
 		}
@@ -98,8 +99,8 @@ func TestSellingProductIsCustomerSafeAndRenderComplete(t *testing.T) {
 				Media: &security.ObjectMedia{Code: "MED-BRAND", URL: "https://cdn.example/brands/potato-mart.png"},
 			}},
 		},
-		PackageOptions:     []SellingProductPackageOption{{Code: "PKG-A00001-EACH", UnitsPerPackage: 1, IsCanonical: true}},
-		BarcodeAssignments: []SellingProductBarcode{{PackageOptionCode: "PKG-A00001-EACH", Value: "1234567890123", Format: product_enums.BarcodeFormatEAN13, IsPrimary: true}},
+		PackageOptions:     []SellingProductPackageOption{{Version: 1, Code: "EACH", SKUCode: "A00001", UnitsPerPackage: 1, IsCanonical: true}},
+		BarcodeAssignments: []SellingProductBarcode{{PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1}, Value: "1234567890123", Format: product_enums.BarcodeFormatCode128, IsPrimary: true}},
 		Price: pricebook.SellingPrice{
 			UnitPrice:        money.Money{AmountMinor: 319, Currency: "AUD"},
 			CurrencyExponent: money.CurrencyExponent{Currency: "AUD", Exponent: 2},

@@ -2,16 +2,17 @@ package pricebook
 
 import (
 	"encoding/json"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
 	"reflect"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/customers/wholesale/wholesale_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/market/market_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/market/market_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/pricebook/pricebook_enums"
 )
 
 func TestPriceBookOwnsCurrencyChannelAudienceAndPolicies(t *testing.T) {
@@ -45,7 +46,7 @@ func TestPackagePriceEntryKeepsPackageAmountSeparateFromBaseUnitPrice(t *testing
 	sourceRevision := int64(12)
 	value := PackagePriceEntry{
 		ID: "package_entry_1", PriceBookCode: "book_au_pos", SKUCode: "A00125",
-		PackageOptionCode: "CASE_12", PackageAmount: money.Money{AmountMinor: 2999, Currency: "AUD"},
+		PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}, PackageAmount: money.Money{AmountMinor: 2999, Currency: "AUD"},
 		Status: pricebook_enums.PriceEntryStatusDraft, Derivation: pricebook_enums.PriceDerivationManual,
 		ValidFrom: validFrom, ValidUntil: &validUntil, SourceBaseCostRevision: &sourceRevision, Revision: 3,
 	}
@@ -55,7 +56,7 @@ func TestPackagePriceEntryKeepsPackageAmountSeparateFromBaseUnitPrice(t *testing
 		t.Fatalf("marshal package price entry: %v", err)
 	}
 	for _, want := range []string{
-		`"package_option_code":"CASE_12"`,
+		`"package_option":{"sku_code":"A00001","code":"CASE6","version":1}`,
 		`"package_amount":{"amount_minor":2999,"currency":"AUD"}`,
 		`"source_base_cost_revision":12`,
 	} {

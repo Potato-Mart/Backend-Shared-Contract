@@ -6,22 +6,22 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging/packaging_enums"
-	fulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/fulfilment"
-	group_order "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/group_order"
-	group_order_enums "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/group_order/group_order_enums"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/quote"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/quote/quote_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/listing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/product"
-	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/fulfilment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging/packaging_enums"
+	fulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/fulfilment"
+	group_order "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/group_order"
+	group_order_enums "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/group_order/group_order_enums"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/quote"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/listing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/product"
+	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {
@@ -43,10 +43,10 @@ func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {
 		TotalBaseUnits:     27,
 		SubstitutionPolicy: sales.LooseSubstitutionPolicySnapshot{Allowed: true, Source: order_enums.LooseSubstitutionPolicySourceBuyerSelected, CapturedAt: now},
 		RequestedComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 27, Components: []packaging.PackageComponentSnapshot{
-			{PackageOptionCode: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24},
-			{PackageOptionCode: "pkg_each", HandlingUnit: packaging_enums.PackageHandlingUnitEach, PackageCount: 3, UnitsPerPackage: 1, BaseUnits: 3},
+			{PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}, HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24},
+			{PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1}, HandlingUnit: packaging_enums.PackageHandlingUnitEach, PackageCount: 3, UnitsPerPackage: 1, BaseUnits: 3},
 		}},
-		Substitutions:  []supplyfulfilment.PackageSubstitutionSnapshot{{ID: "sub_1", RequestedCasePackageOptionCode: "pkg_case_12", RequestedCaseCount: 1, RequestedUnitsPerCase: 12, FulfilledSealedCaseCount: 0, ReplacementEachPackageOptionCode: "pkg_each", ReplacementBaseUnits: 12, LotID: "lot_1", SourceBucketID: "bucket_each_1", ReasonCode: "NO_SEALED_CASE", Operator: "packer_1", CapturedAt: now}},
+		Substitutions:  []supplyfulfilment.PackageSubstitutionSnapshot{{ID: "sub_1", RequestedCasePackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}, RequestedCaseCount: 1, RequestedUnitsPerCase: 12, FulfilledSealedCaseCount: 0, ReplacementEachPackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1}, ReplacementBaseUnits: 12, LotID: "lot_1", SourceBucketID: "bucket_each_1", ReasonCode: "NO_SEALED_CASE", Operator: "packer_1", CapturedAt: now}},
 		DiscountAmount: money.Money{Currency: "AUD"},
 		Total:          money.Money{AmountMinor: 4125, Currency: "AUD"},
 	}
@@ -69,8 +69,8 @@ func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {
 
 func TestGroupOrderFulfilmentJSONUsesOneParentAllocation(t *testing.T) {
 	now := time.Date(2026, 8, 4, 6, 7, 8, 0, time.UTC)
-	composition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 24, Components: []packaging.PackageComponentSnapshot{{PackageOptionCode: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24}}}
-	participantComposition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 12, Components: []packaging.PackageComponentSnapshot{{PackageOptionCode: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 1, UnitsPerPackage: 12, BaseUnits: 12}}}
+	composition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 24, Components: []packaging.PackageComponentSnapshot{{PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}, HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24}}}
+	participantComposition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 12, Components: []packaging.PackageComponentSnapshot{{PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}, HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 1, UnitsPerPackage: 12, BaseUnits: 12}}}
 	zeroComposition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}}
 	casePricing := priceSnapshot("line_case", money.Money{AmountMinor: 1800, Currency: "AUD"}, now)
 	aggregateComponent := fulfilment.PricedPackageComponent{
@@ -86,7 +86,7 @@ func TestGroupOrderFulfilmentJSONUsesOneParentAllocation(t *testing.T) {
 	plan := group_order.GroupOrderFulfilmentPlan{
 		ID: "group_fulfilment_1", GroupOrderCode: "GROUP-1", ParentOrderNumber: "PARENT-1", ParentFulfilmentID: "fulfilment_1",
 		AggregateLines: []group_order.GroupOrderAggregateLine{{
-			ID: "aggregate_1", SKUCode: "sku_a00001", MarketCode: "market_au", PackageOptionCode: "pkg_case_12",
+			ID: "aggregate_1", SKUCode: "sku_a00001", MarketCode: "market_au", PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1},
 			RequestedComposition: composition, AllocatedComposition: composition, ShortageComposition: zeroComposition,
 			ReturnedComposition: participantComposition, RefundedComposition: participantComposition,
 			Components: []fulfilment.PricedPackageComponent{aggregateComponent}, DiscountAmount: money.Money{AmountMinor: 200, Currency: "AUD"},

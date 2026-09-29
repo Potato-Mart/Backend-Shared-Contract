@@ -6,22 +6,22 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging"
-	orders "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pubsub/orders"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
+	orders "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pubsub/orders"
 )
 
 func TestOrderEditedEventCarriesWholeRequestedCompositionAndStableEditIdentity(t *testing.T) {
 	before := orders.OrderEditedItemSnapshot{
 		OrderItemID: "line_1", SKUCode: "POTATO-A", ProductName: "Potatoes",
-		PackageOptionCode: "CASE-12",
+		PackageOption: packaging.PackageOptionRef{SKUCode: "POTATO-A", Code: "CASE12", Version: 1},
 		RequestedComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 36, Components: []packaging.PackageComponentSnapshot{{
-			PackageOptionCode: "CASE-12", PackageCount: 3, UnitsPerPackage: 12, BaseUnits: 36,
+			PackageOption: packaging.PackageOptionRef{SKUCode: "POTATO-A", Code: "CASE12", Version: 1}, PackageCount: 3, UnitsPerPackage: 12, BaseUnits: 36,
 		}}},
 	}
 	after := before
 	after.RequestedComposition = packaging.PackageCompositionSnapshot{TotalBaseUnits: 24, Components: []packaging.PackageComponentSnapshot{{
-		PackageOptionCode: "CASE-12", PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24,
+		PackageOption: packaging.PackageOptionRef{SKUCode: "POTATO-A", Code: "CASE12", Version: 1}, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24,
 	}}}
 	event := orders.OrderEditedEvent{
 		OrderID: "order_1", OrderNumber: "SO-1", EditID: "edit_1",

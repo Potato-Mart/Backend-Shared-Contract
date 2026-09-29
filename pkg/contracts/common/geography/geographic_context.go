@@ -1,18 +1,16 @@
 package geography
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography/geography_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography/geography_enums"
 
 // GeographicContext is the immutable geographic resolution snapshot carried
 // by pricing, eligibility, and order projections.
+// MarketCode remains the authoritative single commercial market. Path records
+// resolved geography and MatchedPath records a matched scope selection.
 type GeographicContext struct {
+	Path               *GeographicPath                         `json:"path,omitempty"`
+	MatchedPath        *GeographicPath                         `json:"matched_path,omitempty"`
 	Source             geography_enums.GeographicContextSource `json:"source"`
 	MarketCode         string                                  `json:"market_code,omitempty"`
-	CountryCode        CountryCode                             `json:"country_code,omitempty"`
-	SubdivisionCode    SubdivisionCode                         `json:"subdivision_code,omitempty"`
-	DepotRegionCode    string                                  `json:"depot_region_code,omitempty"`
-	DepotCode          string                                  `json:"depot_code,omitempty"`
-	MatchedTargetKind  geography_enums.GeographicTargetKind    `json:"matched_target_kind,omitempty"`
-	MatchedTargetCode  string                                  `json:"matched_target_code,omitempty"`
 	ScopeRevision      int64                                   `json:"scope_revision"`
 	RuleRevision       int64                                   `json:"rule_revision"`
 	EvaluationTimezone string                                  `json:"evaluation_timezone"`

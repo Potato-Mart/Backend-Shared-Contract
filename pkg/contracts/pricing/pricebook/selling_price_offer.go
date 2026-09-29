@@ -1,10 +1,11 @@
 package pricebook
 
 import (
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
 )
 
 // SellingPriceOffer is a customer-safe conditional or alternative price
@@ -12,7 +13,7 @@ import (
 // describe qualification; consumers must not use an offer to replace the
 // enclosing guest effective price.
 type SellingPriceOffer struct {
-	PackageOptionCode string                       `json:"package_option_code,omitempty"`
+	PackageOption     *packaging.PackageOptionRef  `json:"package_option,omitempty"`
 	MembershipTierKey string                       `json:"membership_tier_key,omitempty"`
 	BaseUnits         int64                        `json:"base_units"`
 	RegularAmount     money.Money                  `json:"regular_amount"`

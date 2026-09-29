@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging/packaging_enums"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/security"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/order"
-	pos "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/payments/receipt"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging/packaging_enums"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/order"
+	pos "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/payments/receipt"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/product"
 )
 
 func TestReceiptSnapshotJSONUsesCustomerSafeFrozenLines(t *testing.T) {

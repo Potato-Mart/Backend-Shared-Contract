@@ -1,8 +1,8 @@
 package balance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/wallet/points"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/wallet/points"
 )
 
 // CustomerWalletSummary is the customer-safe headline projection of wallet

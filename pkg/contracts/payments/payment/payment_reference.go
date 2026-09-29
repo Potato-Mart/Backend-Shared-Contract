@@ -1,6 +1,6 @@
 package payment
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/payments/provider"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/payments/provider"
 
 type PaymentReference struct {
 	Stripe *provider.StripePaymentReference `json:"stripe,omitempty"`

@@ -3,12 +3,12 @@ package orders
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
 )
 
 // OrderEditedEvent is the completed fact of a committed product amendment on
-// the order-events topic (event_version v1). EditID is the stable business
+// the order-events topic (event_version v2). EditID is the stable business
 // dedupe key for one customer notification. RevisedItems is the whole requested
 // order composition so Supply can invalidate old physical work and recheck the
 // new generation; publication does not itself authorize dispatch or payment.

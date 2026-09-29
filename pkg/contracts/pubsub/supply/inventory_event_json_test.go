@@ -3,16 +3,16 @@ package supply_test
 import (
 	"encoding/json"
 
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pubsub/supply"
-	operations "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/inventory"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pubsub/supply"
+	operations "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse"
 
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestInventoryEventJSONShapes(t *testing.T) {
@@ -40,7 +40,7 @@ func TestInventoryEventJSONShapes(t *testing.T) {
 			name: "bucket changed",
 			value: event.InventoryStockBucketChangedEvent{
 				BucketID: "bucket_case", Location: location, SKUCode: "A00001", LotID: "lot_1",
-				PackageOptionCode: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase,
+				PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}, HandlingUnit: packaging_enums.PackageHandlingUnitCase,
 				Condition: warehouse_enums.InventoryConditionGood, Disposition: warehouse_enums.InventoryDispositionStandardSellable,
 				OnHandBeforeBaseUnits: 12, OnHandAfterBaseUnits: 0, AvailableBeforeBaseUnits: 12,
 				AvailableAfterBaseUnits: 0, Cause: cause, Revision: 3,
@@ -52,7 +52,7 @@ func TestInventoryEventJSONShapes(t *testing.T) {
 			value: event.InventoryPackageConvertedEvent{
 				MovementID: "movement_conversion", SKUCode: "A00001", DepotCode: location.DepotCode, LotID: "lot_1",
 				SourceBucketID: "bucket_case", DestinationBucketID: "bucket_each",
-				SourcePackageOptionCode: "pkg_case_12", DestinationPackageOptionCode: "pkg_each",
+				SourcePackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}, DestinationPackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1},
 				BaseUnits: 12, SourcePackageComposition: caseComposition, DestinationPackageComposition: eachComposition,
 				SourceBucketRevision: 4, DestinationBucketRevision: 2,
 			},
@@ -94,7 +94,7 @@ func TestInventoryEventJSONShapes(t *testing.T) {
 			value: event.InventorySaleCommittedEvent{
 				MovementID: "movement_sale", OrderNumber: "SO-1", DepotCode: location.DepotCode, ReservationID: "reservation_1",
 				AllocationID: "allocation_1", BucketID: "bucket_case", SKUCode: "A00001",
-				LotID: "lot_1", PackageOptionCode: "pkg_case_12", CommittedComposition: caseComposition,
+				LotID: "lot_1", PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}, CommittedComposition: caseComposition,
 				InventoryRevision: 5,
 			},
 			required: []string{"order_number", "depot_code", "allocation_id", "committed_composition", "inventory_revision"},
@@ -138,11 +138,11 @@ func composition(unit packaging_enums.PackageHandlingUnit, optionID string, coun
 	return packaging.PackageCompositionSnapshot{
 		TotalBaseUnits: count * unitsPerPackage,
 		Components: []packaging.PackageComponentSnapshot{{
-			PackageOptionCode: optionID,
-			HandlingUnit:      unit,
-			PackageCount:      count,
-			UnitsPerPackage:   unitsPerPackage,
-			BaseUnits:         count * unitsPerPackage,
+			PackageOption:   packaging.PackageOptionRef{SKUCode: "A00001", Code: optionID, Version: 1},
+			HandlingUnit:    unit,
+			PackageCount:    count,
+			UnitsPerPackage: unitsPerPackage,
+			BaseUnits:       count * unitsPerPackage,
 		}},
 	}
 }

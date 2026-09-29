@@ -7,40 +7,40 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/audit"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/customers/group"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/customers/retail"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/customers/wholesale"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/identity/access"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/identity/account"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/identity/authorisation"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/notification/preference"
-	notificationtemplate "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/notification/template"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/shipping"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/payments/merchant"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/payments/payment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/payments/receipt"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/payments/register"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/payments/settlement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/coupon"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/pricebook"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/wallet/balance"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/wallet/giftcard"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/wallet/ledger"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/wallet/reservation"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/wallet/reward"
-	notificationevent "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pubsub/notification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/review"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/wish"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/courier"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/forecasting"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/fulfilment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/inventory"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/procurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/customers/group"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/customers/retail"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/customers/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/identity/access"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/identity/account"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/identity/authorisation"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/notification/preference"
+	notificationtemplate "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/notification/template"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/payments/merchant"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/payments/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/payments/receipt"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/payments/register"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/payments/settlement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/coupon"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/pricebook"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/wallet/balance"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/wallet/giftcard"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/wallet/ledger"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/wallet/reservation"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/wallet/reward"
+	notificationevent "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pubsub/notification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/review"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/wish"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/courier"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/forecasting"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/procurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse"
 )
 
 type typePolicy struct {
@@ -54,13 +54,18 @@ type typePolicy struct {
 // It is intentionally explicit: a new root must be reviewed instead of
 // inheriting audit or privacy metadata by package convention.
 var v34TypePolicyRegistry = map[string]typePolicy{
-	"delivery selection":                  {reflect.TypeOf(shipping.DeliverySelection{}), false, false},
-	"delivery company":                    {reflect.TypeOf(courier.DeliveryCompany{}), true, false},
-	"delivery company reference":          {reflect.TypeOf(courier.DeliveryCompanyRef{}), false, false},
-	"delivery connection":                 {reflect.TypeOf(courier.DeliveryConnection{}), false, false},
-	"delivery API request field":          {reflect.TypeOf(courier.DeliveryAPIRequestField{}), false, false},
-	"delivery API request configuration":  {reflect.TypeOf(courier.DeliveryAPIRequestConfiguration{}), false, false},
-	"delivery API request configurations": {reflect.TypeOf(courier.DeliveryAPIRequestConfigurations{}), false, false},
+	"gift card delivered event":             {reflect.TypeOf(notificationevent.GiftCardDeliveredEvent{}), false, false},
+	"coupon receiving tier policy":          {reflect.TypeOf(coupon.ReceivingTierPolicy{}), false, false},
+	"coupon tier restriction":               {reflect.TypeOf(coupon.TierRestriction{}), false, false},
+	"coupon profile completion restriction": {reflect.TypeOf(coupon.ProfileCompletionRestriction{}), false, false},
+	"membership tier metadata":              {reflect.TypeOf(membership.MembershipTierMetadataEntry{}), false, false},
+	"delivery selection":                    {reflect.TypeOf(shipping.DeliverySelection{}), false, false},
+	"delivery company":                      {reflect.TypeOf(courier.DeliveryCompany{}), true, false},
+	"delivery company reference":            {reflect.TypeOf(courier.DeliveryCompanyRef{}), false, false},
+	"delivery connection":                   {reflect.TypeOf(courier.DeliveryConnection{}), false, false},
+	"delivery API request field":            {reflect.TypeOf(courier.DeliveryAPIRequestField{}), false, false},
+	"delivery API request configuration":    {reflect.TypeOf(courier.DeliveryAPIRequestConfiguration{}), false, false},
+	"delivery API request configurations":   {reflect.TypeOf(courier.DeliveryAPIRequestConfigurations{}), false, false},
 	// The credential value is transient; Supply protects its stored bundle.
 	"delivery provider credentials":          {reflect.TypeOf(courier.DeliveryProviderCredentials{}), false, false},
 	"delivery provider credential extension": {reflect.TypeOf(courier.DeliveryProviderCredentialExtension{}), false, false},

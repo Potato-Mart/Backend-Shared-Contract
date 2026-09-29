@@ -2,9 +2,10 @@ package promotion
 
 import (
 	"encoding/json"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 func TestPromotionScopeRepresentsPerProductAndCombinedQuantityRequirements(t *testing.T) {
@@ -71,10 +72,10 @@ func TestPromotionScopeRoundTripsCollectionTagAndPackageSelectors(t *testing.T) 
 	value := PromotionScope{
 		MatchMode: promotion_enums.PromotionMatchModeAny,
 		Groups: []PromotionScopeGroup{{
-			MatchMode:          promotion_enums.PromotionMatchModeAll,
-			CollectionCodes:    []string{"collection_root", "collection_seasonal"},
-			CategoryTagCodes:   []string{"tag_potato", "tag_local"},
-			PackageOptionCodes: []string{"pkg_each", "pkg_case"},
+			MatchMode:        promotion_enums.PromotionMatchModeAll,
+			CollectionCodes:  []string{"collection_root", "collection_seasonal"},
+			CategoryTagCodes: []string{"tag_potato", "tag_local"},
+			PackageOptions:   []packaging.PackageOptionRef{packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1}, packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}},
 		}},
 	}
 	body, err := json.Marshal(value)
@@ -86,7 +87,7 @@ func TestPromotionScopeRoundTripsCollectionTagAndPackageSelectors(t *testing.T) 
 		t.Fatalf("unmarshal selector scope: %v", err)
 	}
 	group := got.Groups[0]
-	if len(group.CollectionCodes) != 2 || group.CollectionCodes[1] != "collection_seasonal" || len(group.CategoryTagCodes) != 2 || group.CategoryTagCodes[0] != "tag_potato" || len(group.PackageOptionCodes) != 2 || group.PackageOptionCodes[1] != "pkg_case" {
+	if len(group.CollectionCodes) != 2 || group.CollectionCodes[1] != "collection_seasonal" || len(group.CategoryTagCodes) != 2 || group.CategoryTagCodes[0] != "tag_potato" || len(group.PackageOptions) != 2 || group.PackageOptions[1] != (packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}) {
 		t.Fatalf("collection/tag/package selectors changed: %+v", group)
 	}
 }

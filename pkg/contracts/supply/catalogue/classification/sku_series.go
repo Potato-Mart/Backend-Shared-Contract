@@ -1,9 +1,9 @@
 package classification
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/classification/classification_enums"
 )
 
 // SKUSeries is the catalogue family identified by the immutable two-character

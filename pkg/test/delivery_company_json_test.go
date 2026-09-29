@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/customers/retail"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/shipping"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/courier"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/courier/courier_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/customers/retail"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/courier"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/courier/courier_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/fulfilment"
 )
 
 func TestDeliveryLegacyJSONRemainsUnchanged(t *testing.T) {

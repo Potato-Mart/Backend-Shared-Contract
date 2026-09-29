@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestLotBucketJSONShapes(t *testing.T) {
@@ -30,7 +30,7 @@ func TestLotBucketJSONShapes(t *testing.T) {
 	caseComposition := composition(packaging_enums.PackageHandlingUnitCase, "pkg_case_12", 2, 12)
 	bucketShape := marshalObject(t, warehouse.InventoryStockBucket{
 		ID: "bucket_1", Location: warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01"},
-		SKUCode: "A00001", LotID: "lot_1", PackageOptionCode: "pkg_case_12",
+		SKUCode: "A00001", LotID: "lot_1", PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1},
 		HandlingUnit:       packaging_enums.PackageHandlingUnitCase,
 		Condition:          warehouse_enums.InventoryConditionGood,
 		Disposition:        warehouse_enums.InventoryDispositionStandardSellable,
@@ -46,7 +46,7 @@ func TestLotBucketJSONShapes(t *testing.T) {
 	}
 	unitShape := marshalObject(t, warehouse.InventoryStockUnit{
 		ID: "unit_1", BucketID: "bucket_1", SKUCode: "A00001", LotID: "lot_1",
-		PackageOptionCode: "pkg_each", HandlingUnit: packaging_enums.PackageHandlingUnitEach, BaseUnits: 1,
+		PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1}, HandlingUnit: packaging_enums.PackageHandlingUnitEach, BaseUnits: 1,
 		Condition:     warehouse_enums.InventoryConditionPackagingDamagedMinor,
 		Disposition:   warehouse_enums.InventoryDispositionReducedSellable,
 		UnitLabelCode: "UNIT-1", ClearanceLabelCode: "CLEARANCE-1",
@@ -64,11 +64,11 @@ func composition(unit packaging_enums.PackageHandlingUnit, optionID string, coun
 	return packaging.PackageCompositionSnapshot{
 		TotalBaseUnits: baseUnits,
 		Components: []packaging.PackageComponentSnapshot{{
-			PackageOptionCode: optionID,
-			HandlingUnit:      unit,
-			PackageCount:      count,
-			UnitsPerPackage:   unitsPerPackage,
-			BaseUnits:         baseUnits,
+			PackageOption:   packaging.PackageOptionRef{SKUCode: "A00001", Code: optionID, Version: 1},
+			HandlingUnit:    unit,
+			PackageCount:    count,
+			UnitsPerPackage: unitsPerPackage,
+			BaseUnits:       baseUnits,
 		}},
 	}
 }

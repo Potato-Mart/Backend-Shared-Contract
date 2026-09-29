@@ -37,6 +37,7 @@ const (
 	EventTypeCustomerRegistered             EventType = "customer.registered"
 	EventTypeCustomerProfileUpdated         EventType = "customer.profile_updated"
 	EventTypeNotificationPreferencesChanged EventType = "notification.preferences_changed"
+	EventTypeNotificationGiftCardDelivered  EventType = "notification.gift_card_delivered"
 	EventTypeWalletGiftCardIssued           EventType = "wallet.gift_card_issued"
 
 	EventTypeCatalogBaseCostChanged EventType = "catalog.base_cost_changed"
@@ -69,7 +70,7 @@ func (t EventType) IsValid() bool {
 		EventTypeFulfilmentDelivered, EventTypeFulfilmentCompleted,
 		EventTypeFulfilmentTrackingUpdated,
 		EventTypeCustomerRegistered, EventTypeCustomerProfileUpdated,
-		EventTypeNotificationPreferencesChanged, EventTypeWalletGiftCardIssued,
+		EventTypeNotificationPreferencesChanged, EventTypeWalletGiftCardIssued, EventTypeNotificationGiftCardDelivered,
 		EventTypeCatalogBaseCostChanged, EventTypeCatalogListingChanged,
 		EventTypeProductSalesPerformanceUpdated,
 		EventTypePriceChanged, EventTypePromotionChanged, EventTypeCouponChanged, EventTypeCampaignChanged,

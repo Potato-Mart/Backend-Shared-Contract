@@ -2,6 +2,7 @@ package pkg_test
 
 import (
 	"encoding/json"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -14,18 +15,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	order "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/order"
-	pos "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/payments/receipt"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/promotion/promotion_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/quote"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/quote/quote_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/listing"
-	operations "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/inventory"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	order "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/order"
+	pos "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/payments/receipt"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/quote"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/listing"
+	operations "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestPromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *testing.T) {
@@ -40,11 +41,11 @@ func TestPromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *testing
 				MaximumBaseUnits: &maximum,
 			},
 			{
-				MatchMode:          promotion_enums.PromotionMatchModeAll,
-				CollectionCodes:    []string{"collection-weekly", "collection-seasonal"},
-				CategoryTagCodes:   []string{"tag-organic", "tag-local"},
-				PackageOptionCodes: []string{"package-each", "package-case"},
-				MinimumBaseUnits:   1,
+				MatchMode:        promotion_enums.PromotionMatchModeAll,
+				CollectionCodes:  []string{"collection-weekly", "collection-seasonal"},
+				CategoryTagCodes: []string{"tag-organic", "tag-local"},
+				PackageOptions:   []packaging.PackageOptionRef{packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1}, packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}},
+				MinimumBaseUnits: 1,
 			},
 		},
 	}
@@ -73,7 +74,7 @@ func TestPromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *testing
 	if first := got.Groups[0]; first.MatchMode != promotion_enums.PromotionMatchModeAny || len(first.SKUCodes) != 2 || first.MaximumBaseUnits == nil || *first.MaximumBaseUnits != 12 {
 		t.Fatalf("product quantity-pool group changed: %+v", first)
 	}
-	if second := got.Groups[1]; second.MatchMode != promotion_enums.PromotionMatchModeAll || len(second.CollectionCodes) != 2 || len(second.CategoryTagCodes) != 2 || len(second.PackageOptionCodes) != 2 || second.MaximumBaseUnits != nil {
+	if second := got.Groups[1]; second.MatchMode != promotion_enums.PromotionMatchModeAll || len(second.CollectionCodes) != 2 || len(second.CategoryTagCodes) != 2 || len(second.PackageOptions) != 2 || second.MaximumBaseUnits != nil {
 		t.Fatalf("collection/tag/package group or unlimited maximum changed: %+v", second)
 	}
 }
@@ -206,14 +207,14 @@ func TestCustomerSummariesExposeOnlyFrozenSafePricingFacts(t *testing.T) {
 func TestOperationalCategoryTagEvidenceIsLocationQualified(t *testing.T) {
 	model := reflect.TypeOf(operations.InventoryCategoryTagEvidence{})
 	assertJSONFields(t, model, map[string]string{
-		"SKUCode":           "sku_code",
-		"PackageOptionCode": "package_option_code",
-		"CategoryTag":       "category_tag",
-		"StockLocation":     "stock_location",
-		"Condition":         "condition",
-		"Disposition":       "disposition",
-		"DateMark":          "date_mark,omitempty",
-		"AsOf":              "as_of",
+		"SKUCode":       "sku_code",
+		"PackageOption": "package_option",
+		"CategoryTag":   "category_tag",
+		"StockLocation": "stock_location",
+		"Condition":     "condition",
+		"Disposition":   "disposition",
+		"DateMark":      "date_mark,omitempty",
+		"AsOf":          "as_of",
 	})
 	field, _ := model.FieldByName("StockLocation")
 	if field.Type != reflect.TypeOf(warehouse.StockLocationRef{}) {
@@ -327,7 +328,7 @@ func promotionScopeStructurallyUsable(scope promotion.PromotionScope) bool {
 		if !group.MatchMode.IsValid() {
 			return false
 		}
-		selectorCount := len(group.SKUCodes) + len(group.CollectionCodes) + len(group.CategoryTagCodes) + len(group.PackageOptionCodes)
+		selectorCount := len(group.SKUCodes) + len(group.CollectionCodes) + len(group.CategoryTagCodes) + len(group.PackageOptions)
 		if selectorCount == 0 || group.MinimumBaseUnits < 0 {
 			return false
 		}

@@ -15,6 +15,8 @@ const (
 	ScopeLevelCountry ScopeLevel = "country"
 	// ScopeLevelMarket sees the granted markets only.
 	ScopeLevelMarket ScopeLevel = "market"
+	// ScopeLevelState sees official subdivisions under granted markets.
+	ScopeLevelState ScopeLevel = "state"
 	// ScopeLevelDepot sees the granted depots only.
 	ScopeLevelDepot ScopeLevel = "depot"
 )
@@ -22,7 +24,7 @@ const (
 // IsValid reports whether l is a known ScopeLevel value.
 func (l ScopeLevel) IsValid() bool {
 	switch l {
-	case ScopeLevelGlobal, ScopeLevelCountry, ScopeLevelMarket, ScopeLevelDepot:
+	case ScopeLevelGlobal, ScopeLevelCountry, ScopeLevelMarket, ScopeLevelState, ScopeLevelDepot:
 		return true
 	}
 	return false

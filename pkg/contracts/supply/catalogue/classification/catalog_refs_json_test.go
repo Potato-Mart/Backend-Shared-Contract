@@ -5,9 +5,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/classification"
 )
 
 func TestCatalogReferencesAreCodeOnly(t *testing.T) {

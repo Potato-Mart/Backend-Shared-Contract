@@ -1,6 +1,6 @@
 package procurement
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
 
 // SupplierInvoiceReceiptAllocation is the exact portion of one invoice line
 // attributed to one received item. It records evidence, not a stock movement.

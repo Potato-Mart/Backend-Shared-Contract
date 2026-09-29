@@ -1,8 +1,8 @@
 package procurement
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse"
 )
 
 // PurchaseReceiptItem is one received procurement line.
@@ -14,7 +14,7 @@ type PurchaseReceiptItem struct {
 	// SKUCode is the frozen SKU code captured when the receipt line was recorded.
 	SKUCode             string                               `json:"sku_code"`
 	ProductName         string                               `json:"product_name,omitempty"`
-	PackageOptionCode   string                               `json:"package_option_code"`
+	PackageOption       packaging.PackageOptionRef           `json:"package_option"`
 	LotID               string                               `json:"lot_id"`
 	SupplierLotCode     string                               `json:"supplier_lot_code,omitempty"`
 	ManufacturerLotCode string                               `json:"manufacturer_lot_code,omitempty"`

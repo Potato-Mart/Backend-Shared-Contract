@@ -5,17 +5,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging/packaging_enums"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pubsub/supply"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/product/product_enums"
-	fulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/fulfilment"
-	operations "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/inventory"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging/packaging_enums"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pubsub/supply"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/product/product_enums"
+	fulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/fulfilment"
+	operations "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestReservationAndStagingJSONShapes(t *testing.T) {
@@ -35,7 +35,7 @@ func TestReservationAndStagingJSONShapes(t *testing.T) {
 
 	stagingShape := marshalObject(t, operations.StockStagingRecord{
 		ID: "staging_1", ReservationID: "reservation_1", AllocationID: "allocation_1",
-		OrderNumber: "SO-1", SKUCode: "A00001", PackageOptionCode: "pkg_case_12",
+		OrderNumber: "SO-1", SKUCode: "A00001", PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1},
 		SourceBucketID: "bucket_1", DestinationBucketID: "bucket_stage",
 		SourceLocation:      warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01"},
 		DestinationLocation: warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "SYS-ONLINE-STAGE-AMBIENT"},
@@ -51,18 +51,18 @@ func TestReservationAndStagingJSONShapes(t *testing.T) {
 func TestInventoryCategoryTagEvidenceJSONIsLocationQualified(t *testing.T) {
 	now := time.Date(2026, 8, 9, 7, 8, 9, 0, time.UTC)
 	evidence := operations.InventoryCategoryTagEvidence{
-		SKUCode:           "A00001",
-		PackageOptionCode: "pkg_each",
-		CategoryTag:       classification.CategoryTagRef{Code: "TAG0001"},
-		StockLocation:     warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01-03"},
-		Condition:         warehouse_enums.InventoryConditionGood,
-		Disposition:       warehouse_enums.InventoryDispositionReducedSellable,
-		DateMark:          &warehouse.InventoryDateMark{Kind: warehouse_enums.InventoryDateMarkBestBefore, DateMarkAt: now.Add(48 * time.Hour), Timezone: "Australia/Melbourne"},
-		AsOf:              now,
+		SKUCode:       "A00001",
+		PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1},
+		CategoryTag:   classification.CategoryTagRef{Code: "TAG0001"},
+		StockLocation: warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01-03"},
+		Condition:     warehouse_enums.InventoryConditionGood,
+		Disposition:   warehouse_enums.InventoryDispositionReducedSellable,
+		DateMark:      &warehouse.InventoryDateMark{Kind: warehouse_enums.InventoryDateMarkBestBefore, DateMarkAt: now.Add(48 * time.Hour), Timezone: "Australia/Melbourne"},
+		AsOf:          now,
 	}
 
 	shape := marshalObject(t, evidence)
-	for _, key := range []string{"sku_code", "package_option_code", "category_tag", "stock_location", "condition", "disposition", "date_mark", "as_of"} {
+	for _, key := range []string{"sku_code", "package_option", "category_tag", "stock_location", "condition", "disposition", "date_mark", "as_of"} {
 		if _, ok := shape[key]; !ok {
 			t.Fatalf("inventory category-tag evidence missing %q: %+v", key, shape)
 		}
@@ -79,9 +79,9 @@ func TestPackingPickingAndAvailabilityEventJSONShapes(t *testing.T) {
 	requested := composition(packaging_enums.PackageHandlingUnitCase, "pkg_case_12", 1, 12)
 	replacement := composition(packaging_enums.PackageHandlingUnitEach, "pkg_each", 12, 1)
 	substitution := fulfilment.PackageSubstitutionSnapshot{
-		ID: "sub_1", RequestedCasePackageOptionCode: "pkg_case_12", RequestedCaseCount: 1,
+		ID: "sub_1", RequestedCasePackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}, RequestedCaseCount: 1,
 		RequestedUnitsPerCase: 12, FulfilledSealedCaseCount: 0,
-		ReplacementEachPackageOptionCode: "pkg_each", ReplacementBaseUnits: 12,
+		ReplacementEachPackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1}, ReplacementBaseUnits: 12,
 		LotID: "lot_1", SourceBucketID: "bucket_each", ReasonCode: "NO_SEALED_CASE",
 		Operator: "operator_1", CapturedAt: now,
 	}
@@ -89,7 +89,7 @@ func TestPackingPickingAndAvailabilityEventJSONShapes(t *testing.T) {
 		ID: "container_1", ContainerCode: "OUT-1", StorageType: classification_enums.StorageAmbient,
 		Contents: []fulfilment.OutboundContainerContent{{
 			OrderItemID: "item_1", SKUCode: "A00001", AllocationID: "allocation_1",
-			BucketID: "bucket_each", LotID: "lot_1", PackageOptionCode: "pkg_each",
+			BucketID: "bucket_each", LotID: "lot_1", PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1},
 			PackedComposition: replacement, Substitutions: []fulfilment.PackageSubstitutionSnapshot{substitution},
 		}},
 		UpdatedAt: now,
@@ -222,11 +222,11 @@ func composition(unit packaging_enums.PackageHandlingUnit, optionID string, coun
 	return packaging.PackageCompositionSnapshot{
 		TotalBaseUnits: baseUnits,
 		Components: []packaging.PackageComponentSnapshot{{
-			PackageOptionCode: optionID,
-			HandlingUnit:      unit,
-			PackageCount:      count,
-			UnitsPerPackage:   unitsPerPackage,
-			BaseUnits:         baseUnits,
+			PackageOption:   packaging.PackageOptionRef{SKUCode: "A00001", Code: optionID, Version: 1},
+			HandlingUnit:    unit,
+			PackageCount:    count,
+			UnitsPerPackage: unitsPerPackage,
+			BaseUnits:       baseUnits,
 		}},
 	}
 }

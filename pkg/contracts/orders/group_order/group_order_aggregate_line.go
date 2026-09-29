@@ -1,9 +1,9 @@
 package group_order
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/fulfilment"
 )
 
 // GroupOrderAggregateLine records one parent-owned aggregate package demand
@@ -14,7 +14,7 @@ type GroupOrderAggregateLine struct {
 	MarketCode string `json:"market_code"`
 	// PriceSnapshot evidence for the aggregate line lives on its components;
 	// the line itself carries only identity, composition, and totals.
-	PackageOptionCode    string                               `json:"package_option_code"`
+	PackageOption        packaging.PackageOptionRef           `json:"package_option"`
 	RequestedComposition packaging.PackageCompositionSnapshot `json:"requested_composition"`
 	AllocatedComposition packaging.PackageCompositionSnapshot `json:"allocated_composition"`
 	ShortageComposition  packaging.PackageCompositionSnapshot `json:"shortage_composition"`

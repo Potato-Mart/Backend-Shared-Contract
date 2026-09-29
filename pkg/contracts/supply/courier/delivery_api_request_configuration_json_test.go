@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/courier/courier_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/courier/courier_enums"
 )
 
 func TestDeliveryAPIRequestConfigurationsPreserveManualRequestFields(t *testing.T) {

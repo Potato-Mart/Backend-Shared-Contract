@@ -6,19 +6,19 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/temporal"
-	purchase "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/procurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/procurement/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/temporal"
+	purchase "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/procurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/procurement/purchase_enums"
 )
 
 func supplierComposition(baseUnits int64) packaging.PackageCompositionSnapshot {
 	return packaging.PackageCompositionSnapshot{
 		TotalBaseUnits: baseUnits,
 		Components: []packaging.PackageComponentSnapshot{{
-			PackageOptionCode: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase,
+			PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}, HandlingUnit: packaging_enums.PackageHandlingUnitCase,
 			PackageCount: baseUnits / 12, UnitsPerPackage: 12, BaseUnits: baseUnits,
 		}},
 	}

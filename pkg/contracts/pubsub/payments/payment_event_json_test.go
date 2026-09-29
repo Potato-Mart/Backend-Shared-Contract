@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/payments/payment/payment_enums"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pubsub/payments"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/payments/payment/payment_enums"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pubsub/payments"
 )
 
 func TestReceiptGeneratedEventRoundTrip(t *testing.T) {

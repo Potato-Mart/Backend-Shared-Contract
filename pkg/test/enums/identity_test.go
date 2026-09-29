@@ -3,10 +3,10 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/identity/access/access_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/identity/account/account_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/identity/authorisation/role_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/identity/access/access_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/identity/account/account_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/identity/authorisation/role_enums"
 )
 
 func TestIdentityEnumsValidateKnownValues(t *testing.T) {
@@ -17,7 +17,7 @@ func TestIdentityEnumsValidateKnownValues(t *testing.T) {
 		{name: "securityenum.IdentityDomain", valid: []stringEnum{security_enums.IdentityDomainCustomer, security_enums.IdentityDomainWorkforce, security_enums.IdentityDomainService}, invalid: security_enums.IdentityDomain("__invalid__")},
 		{name: "identityenum.UserPreferredLanguage", valid: []stringEnum{account_enums.PreferredLanguageEnglish, account_enums.PreferredLanguageTraditionalChinese, account_enums.PreferredLanguageSimplifiedChinese}, invalid: account_enums.UserPreferredLanguage("__invalid__")},
 		{name: "roleenum.UserRole", valid: []stringEnum{role_enums.UserRoleSuperAdmin, role_enums.UserRoleCountryAdmin, role_enums.UserRoleDepotManager, role_enums.UserRoleMarketing, role_enums.UserRoleWarehouseManager, role_enums.UserRoleWarehouseOperator}, invalid: role_enums.UserRole("__invalid__")},
-		{name: "accessenum.ScopeLevel", valid: []stringEnum{access_enums.ScopeLevelGlobal, access_enums.ScopeLevelCountry, access_enums.ScopeLevelMarket, access_enums.ScopeLevelDepot}, invalid: access_enums.ScopeLevel("__invalid__")},
+		{name: "accessenum.ScopeLevel", valid: []stringEnum{access_enums.ScopeLevelGlobal, access_enums.ScopeLevelCountry, access_enums.ScopeLevelMarket, access_enums.ScopeLevelState, access_enums.ScopeLevelDepot}, invalid: access_enums.ScopeLevel("__invalid__")},
 	})
 }
 
@@ -81,6 +81,7 @@ func TestWorkforceRoleAndScopeWireValuesAreLocked(t *testing.T) {
 		access_enums.ScopeLevelCountry: "country",
 		access_enums.ScopeLevelMarket:  "market",
 		access_enums.ScopeLevelDepot:   "depot",
+		access_enums.ScopeLevelState:   "state",
 	}
 	for level, wire := range scopes {
 		if got := level.String(); got != wire {

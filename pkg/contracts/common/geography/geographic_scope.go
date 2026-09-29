@@ -1,10 +1,10 @@
 package geography
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography/geography_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography/geography_enums"
 
-// GeographicScope is either explicitly global or an inclusive list of
-// country, subdivision, depot-region, or depot targets.
+// GeographicScope is global with no targets or targeted with one or more
+// independent hierarchy paths. Owning market/currency remain separate facts.
 type GeographicScope struct {
 	Mode    geography_enums.GeographicScopeMode `json:"mode"`
-	Targets []GeographicTarget                  `json:"targets,omitempty"`
+	Targets []GeographicPath                    `json:"targets,omitempty"`
 }

@@ -1,11 +1,12 @@
 package supply
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/inventory"
-	warehouse "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/inventory"
+	warehouse "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 type InventoryStockBucketChangedEvent struct {
@@ -13,7 +14,7 @@ type InventoryStockBucketChangedEvent struct {
 	Location                 warehouse.StockLocationRef           `json:"location"`
 	SKUCode                  string                               `json:"sku_code"`
 	LotID                    string                               `json:"lot_id,omitempty"`
-	PackageOptionCode        string                               `json:"package_option_code"`
+	PackageOption            packaging.PackageOptionRef           `json:"package_option"`
 	HandlingUnit             packaging_enums.PackageHandlingUnit  `json:"handling_unit"`
 	Condition                warehouse_enums.InventoryCondition   `json:"condition"`
 	Disposition              warehouse_enums.InventoryDisposition `json:"disposition"`

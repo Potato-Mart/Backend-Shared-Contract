@@ -2,17 +2,18 @@ package pricebook
 
 import (
 	"encoding/json"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
 	"reflect"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/market/market_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/market/market_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/pricebook/pricebook_enums"
 )
 
 func TestSellingPriceLegacyJSONShapeIsUnchanged(t *testing.T) {
@@ -168,7 +169,7 @@ func TestSellingPriceOfferCarriesPackageMemberAndConditionalDisplayEvidence(t *t
 			RegularUnitPrice:   money.Money{AmountMinor: 300, Currency: "AUD"},
 			EffectiveUnitPrice: money.Money{AmountMinor: 300, Currency: "AUD"},
 			Offers: []SellingPriceOffer{{
-				PackageOptionCode: "CASE_12", MembershipTierKey: "gold", BaseUnits: 12,
+				PackageOption: &packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}, MembershipTierKey: "gold", BaseUnits: 12,
 				RegularAmount:     money.Money{AmountMinor: 3600, Currency: "AUD"},
 				EffectiveAmount:   money.Money{AmountMinor: 2999, Currency: "AUD"},
 				CompareAtAmount:   &compareAt,
@@ -186,7 +187,7 @@ func TestSellingPriceOfferCarriesPackageMemberAndConditionalDisplayEvidence(t *t
 		t.Fatalf("marshal selling price offer: %v", err)
 	}
 	for _, want := range []string{
-		`"membership_tier_key":"gold"`, `"offers":[`, `"package_option_code":"CASE_12"`,
+		`"membership_tier_key":"gold"`, `"offers":[`, `"package_option":{"sku_code":"A00001","code":"CASE6","version":1}`,
 		`"base_units":12`, `"regular_amount":{"amount_minor":3600,"currency":"AUD"}`,
 		`"effective_amount":{"amount_minor":2999,"currency":"AUD"}`,
 		`"compare_at_amount":{"amount_minor":3600,"currency":"AUD"}`,

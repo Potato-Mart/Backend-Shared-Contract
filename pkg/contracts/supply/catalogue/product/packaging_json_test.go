@@ -2,12 +2,13 @@ package product
 
 import (
 	"encoding/json"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/product/product_enums"
 )
 
 func TestPackageAndBarcodeReferencesUseBusinessCodes(t *testing.T) {
@@ -17,7 +18,7 @@ func TestPackageAndBarcodeReferencesUseBusinessCodes(t *testing.T) {
 		Barcode ProductBarcodeAssignment `json:"barcode"`
 	}{
 		Package: ProductPackageOption{Code: "PKG-A00001-EACH", HandlingUnit: packaging_enums.PackageHandlingUnitEach, UnitsPerPackage: 1, EffectiveFrom: now},
-		Barcode: ProductBarcodeAssignment{Code: "BAR-A00001", PackageOptionCode: "PKG-A00001-EACH", Value: "A00001", Format: product_enums.BarcodeFormatCode128, EffectiveFrom: now},
+		Barcode: ProductBarcodeAssignment{Code: "BAR-A00001", PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1}, Value: "A00001", Format: product_enums.BarcodeFormatCode128, EffectiveFrom: now},
 	})
 	if err != nil {
 		t.Fatal(err)

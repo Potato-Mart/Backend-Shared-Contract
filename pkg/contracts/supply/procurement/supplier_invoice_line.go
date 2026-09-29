@@ -1,9 +1,9 @@
 package procurement
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/procurement/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/procurement/purchase_enums"
 )
 
 // SupplierInvoiceLine is one purchased line with its declared tax evidence.
@@ -12,11 +12,11 @@ import (
 type SupplierInvoiceLine struct {
 	ID string `json:"id"`
 	// SKUCode is the frozen SKU code captured when the invoice was recorded.
-	SKUCode           string                               `json:"sku_code"`
-	Description       string                               `json:"description,omitempty"`
-	PackageOptionCode string                               `json:"package_option_code,omitempty"`
-	Composition       packaging.PackageCompositionSnapshot `json:"composition"`
-	BaseUnits         int64                                `json:"base_units"`
+	SKUCode       string                               `json:"sku_code"`
+	Description   string                               `json:"description,omitempty"`
+	PackageOption *packaging.PackageOptionRef          `json:"package_option,omitempty"`
+	Composition   packaging.PackageCompositionSnapshot `json:"composition"`
+	BaseUnits     int64                                `json:"base_units"`
 
 	UnitPrice  money.Money `json:"unit_price"`
 	LineAmount money.Money `json:"line_amount"`
