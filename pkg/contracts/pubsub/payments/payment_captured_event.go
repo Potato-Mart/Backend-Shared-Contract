@@ -10,6 +10,9 @@ import (
 // PaymentCapturedEvent is emitted on the payment-events topic when a payment
 // is captured (online provider webhook, terminal settlement or manual
 // record). AggregateID is the order number.
+// This is the legacy v1 payload and requires a genuinely exact CapturedAt.
+// Sources without exact capture time use PaymentCapturedEventV2; event creation,
+// charge creation and local processing times must not be substituted here.
 type PaymentCapturedEvent struct {
 	PaymentID         string                      `json:"payment_id"`
 	OrderID           string                      `json:"order_id,omitempty"`

@@ -48,12 +48,14 @@ type Payment struct {
 	// outcome stayed unknown after provider status checks.
 	RecoveryDecision payment_enums.RecoveryDecision `json:"recovery_decision,omitempty"`
 
-	PaidAt       *time.Time              `json:"paid_at,omitempty"`
-	RefundedAt   *time.Time              `json:"refunded_at,omitempty"`
-	RefundAmount *money.Money            `json:"refund_amount,omitempty"`
-	RefundReason string                  `json:"refund_reason,omitempty"`
-	Metadata     metadata.Metadata       `json:"metadata,omitempty"`
-	History      []security.HistoryEntry `json:"history,omitempty"`
+	// CaptureTiming preserves provider evidence separately from record PaidAt.
+	CaptureTiming *CaptureTimingEvidence  `json:"capture_timing,omitempty"`
+	PaidAt        *time.Time              `json:"paid_at,omitempty"`
+	RefundedAt    *time.Time              `json:"refunded_at,omitempty"`
+	RefundAmount  *money.Money            `json:"refund_amount,omitempty"`
+	RefundReason  string                  `json:"refund_reason,omitempty"`
+	Metadata      metadata.Metadata       `json:"metadata,omitempty"`
+	History       []security.HistoryEntry `json:"history,omitempty"`
 	audit.AuditFields
 	security.DataProtectionFields
 }

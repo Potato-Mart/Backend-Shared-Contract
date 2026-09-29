@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v38.1.0` | 2026-09-29 | Minor | Adds immutable exact/confirmation capture timing evidence and PaymentCapturedEventV2; payment.captured advances to v2. Preserves /v38 and legacy v1 model. |
 | `v38.0.0` | 2026-09-29 | Major | Explicit geographic parent paths; immutable SKU/package/version references; CODE128 product barcodes; localized tiers and managed tier cards; coupon receiving/redemption policies; gift-card customer binding and safe delivery fact. Module `/v38`; coordinated consumer adoption required. |
 | `v37.1.0` | 2026-09-28 | Minor | Adds provider-neutral courier request configuration for connection, shipping-area, and time-slot requests, including GET/POST, relative endpoint paths, header/query/JSON-body fields, and protected credential references. Keeps `/v37`; runtime and API DTOs remain Supply-owned. |
 | `v37.0.0` | 2026-09-27 | Major | Removes fixed courier account/password/API-token fields while retaining the API base URL and provider extension; adds frozen purchased-package promotion allocation, fulfilment generation, and `order.edited` v1. Changes the module path to `/v37`; consumers migrate deliberately. |
@@ -146,6 +147,14 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v38.1.0 (2026-09-29)
+
+Adds `CaptureTimingEvidence` and `CaptureConfirmationEvidence` with authenticated provider source enums, optional `Payment.capture_timing`, and `PaymentCapturedEventV2`. Exact `captured_at` is optional inside required v2 `capture_timing`; confirmation is an upper bound with provider/source/reference, never exact capture time. A later bound is ambiguous about a gift deadline. Provider timestamp resolution must be accounted for conservatively.
+
+`payment.captured` now uses event_version **v2**. The original `PaymentCapturedEvent` v1 model and its required exact timestamp remain unchanged for compatibility; sources without genuine exact timestamps must use v2. All other event versions remain unchanged. This is an additive Go-module minor release, with an independently versioned breaking event payload. Consumers must support v2 before producers emit it.
+
+Consumer Action: Payments authenticates, persists and publishes immutable evidence; Orders makes deadline/race decisions; Insights/Notification adopt v2. Align module/CI pins to v38.1.0. See [capture timing adoption](v38.1-capture-timing.md) for exact shapes, precision and provider references. No migration, backfill, database mutation or runtime deployment is performed by this release.
 
 ## v38.0.0 (2026-09-29)
 
