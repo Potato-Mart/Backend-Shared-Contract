@@ -14,7 +14,7 @@ workflows.
 ## Latest Version
 
 ```text
-v38.1.0
+v38.2.0
 github.com/Potato-Mart/Backend-Shared-Contract/v38
 ```
 
@@ -26,10 +26,14 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v38 v38.1.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v38 v38.2.0
 ```
 
 Import packages from the same `/v38` module path.
+
+The v38.2.0 release adds explicit purchase, membership-reward and refund-replacement
+gift issuance facts through `GiftCardIssuedEventV2` (`wallet.gift_card_issued` v2).
+See [gift issuance adoption](docs/v38.2-gift-issuance.md).
 
 The v38.1.0 release adds optional exact capture timing and authenticated confirmation
 upper-bound evidence through `PaymentCapturedEventV2` (`payment.captured` v2).

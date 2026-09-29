@@ -8,7 +8,9 @@ import (
 )
 
 // GiftCardIssuedEvent records the stored-value issuance fact after a captured
-// gift-card purchase. Notification services resolve recipient, claim, locale,
+// gift-card purchase. This is the legacy v1 payload; use GiftCardIssuedEventV2
+// for explicit purchase, membership reward or refund-replacement sources.
+// Notification services resolve recipient, claim, locale,
 // and rendered content from protected service-owned data; this event never
 // carries delivery material or customer contact data.
 //
