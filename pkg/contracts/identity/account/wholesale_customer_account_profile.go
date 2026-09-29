@@ -1,8 +1,8 @@
 package account
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/audit"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security"
 )
 
 // WholesaleCustomerAccountProfile contains lightweight wholesale organisation

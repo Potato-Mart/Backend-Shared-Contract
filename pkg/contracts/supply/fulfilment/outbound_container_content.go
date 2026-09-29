@@ -1,7 +1,7 @@
 package fulfilment
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
 )
 
 // OutboundContainerContent identifies inventory packed into one outbound
@@ -12,7 +12,7 @@ type OutboundContainerContent struct {
 	AllocationID      string                               `json:"allocation_id"`
 	BucketID          string                               `json:"bucket_id"`
 	LotID             string                               `json:"lot_id,omitempty"`
-	PackageOptionCode string                               `json:"package_option_code"`
+	PackageOption     packaging.PackageOptionRef           `json:"package_option"`
 	PackedComposition packaging.PackageCompositionSnapshot `json:"packed_composition"`
 	Substitutions     []PackageSubstitutionSnapshot        `json:"substitutions,omitempty"`
 }

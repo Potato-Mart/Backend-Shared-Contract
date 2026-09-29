@@ -1,6 +1,6 @@
 package courier
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/courier/courier_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/courier/courier_enums"
 
 // DeliveryAPIRequestConfiguration is a data-only REST request definition.
 // EndpointPath is relative to DeliveryProviderCredentials.APIBaseURL. Headers

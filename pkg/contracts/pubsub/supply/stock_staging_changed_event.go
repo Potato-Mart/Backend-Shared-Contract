@@ -1,8 +1,8 @@
 package supply
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging"
-	warehouse "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
+	warehouse "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse"
 )
 
 type StockStagingChangedEvent struct {

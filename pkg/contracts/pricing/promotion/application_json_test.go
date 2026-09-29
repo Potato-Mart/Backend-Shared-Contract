@@ -2,12 +2,13 @@ package promotion
 
 import (
 	"encoding/json"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
 )
 
 func TestPromotionApplicationsFreezeVisibleQualifierTargetRelationships(t *testing.T) {
@@ -42,7 +43,7 @@ func TestPromotionApplicationPreservesPurchasedPackageAllocation(t *testing.T) {
 	application := PromotionApplication{
 		PromotionID: "promotion_n_for_total", PromotionKind: "n_for_total", RelationID: "relation_1",
 		ResolvedTargetPackageAllocations: []PromotionTargetPackageAllocation{{
-			OrderItemID: "line_1", SKUCode: "POTATO-A", PackageOptionCode: "CASE-12",
+			OrderItemID: "line_1", SKUCode: "POTATO-A", PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1},
 			AppliedPackageCount: 2, GroupOrdinal: 1,
 			DiscountAmount: money.Money{AmountMinor: 250, Currency: "AUD"},
 		}},
@@ -51,7 +52,7 @@ func TestPromotionApplicationPreservesPurchasedPackageAllocation(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, field := range []string{`"resolved_target_package_allocations"`, `"order_item_id":"line_1"`, `"package_option_code":"CASE-12"`, `"applied_package_count":2`, `"group_ordinal":1`} {
+	for _, field := range []string{`"resolved_target_package_allocations"`, `"order_item_id":"line_1"`, `"package_option":{"sku_code":"A00001","code":"CASE6","version":1}`, `"applied_package_count":2`, `"group_ordinal":1`} {
 		if !strings.Contains(string(encoded), field) {
 			t.Errorf("application is missing package evidence %s: %s", field, encoded)
 		}

@@ -2,29 +2,29 @@ package routing
 
 import "testing"
 
-// eventTypeVersionRegistry is the complete historical payload-version table.
+// eventTypeVersionRegistry is the complete current payload-version table.
 // It is test-only because model packages cannot carry runtime registry state;
 // it locks the externally published event-version history without adding an
 // executable service concern to the shared contracts.
 var eventTypeVersionRegistry = map[EventType]string{
-	EventTypeInventoryLotReceived:              "v4",
-	EventTypeInventoryStockBucketChanged:       "v4",
-	EventTypeInventoryPackageConverted:         "v4",
-	EventTypeInventoryQualityAssessed:          "v4",
-	EventTypeInventoryReservationChanged:       "v4",
-	EventTypeInventoryStaged:                   "v4",
-	EventTypeInventorySold:                     "v4",
+	EventTypeInventoryLotReceived:              "v5",
+	EventTypeInventoryStockBucketChanged:       "v5",
+	EventTypeInventoryPackageConverted:         "v5",
+	EventTypeInventoryQualityAssessed:          "v5",
+	EventTypeInventoryReservationChanged:       "v5",
+	EventTypeInventoryStaged:                   "v5",
+	EventTypeInventorySold:                     "v5",
 	EventTypeInventoryDateMarkThresholdReached: "v4",
 	EventTypeStockLocationAvailabilityChanged:  "v4",
 	EventTypeCatalogBaseCostChanged:            "v4",
 	EventTypeCatalogListingChanged:             "v4",
-	EventTypeAnalyticsOrderFact:                "v4",
-	EventTypeAnalyticsRefundFact:               "v4",
+	EventTypeAnalyticsOrderFact:                "v5",
+	EventTypeAnalyticsRefundFact:               "v5",
 
-	EventTypeOrderPaid:                      "v3",
-	EventTypeRefundCompleted:                "v3",
+	EventTypeOrderPaid:                      "v4",
+	EventTypeRefundCompleted:                "v4",
 	EventTypeProductSalesPerformanceUpdated: "v3",
-	EventTypeFulfilmentPackingUpdated:       "v3",
+	EventTypeFulfilmentPackingUpdated:       "v4",
 
 	EventTypeCampaignChanged:           "v2",
 	EventTypePromotionChanged:          "v3",
@@ -38,7 +38,7 @@ var eventTypeVersionRegistry = map[EventType]string{
 	EventTypeOrderCreated:                   "v1",
 	EventTypeOrderStatusChanged:             "v1",
 	EventTypeOrderCancelled:                 "v1",
-	EventTypeOrderEdited:                    "v1",
+	EventTypeOrderEdited:                    "v2",
 	EventTypePaymentCaptured:                "v1",
 	EventTypePaymentFailed:                  "v1",
 	EventTypeInvoiceIssued:                  "v1",
@@ -49,29 +49,30 @@ var eventTypeVersionRegistry = map[EventType]string{
 	EventTypeCustomerProfileUpdated:         "v1",
 	EventTypeNotificationPreferencesChanged: "v1",
 	EventTypeWalletGiftCardIssued:           "v1",
+	EventTypeNotificationGiftCardDelivered:  "v1",
 	EventTypePriceChanged:                   "v1",
 }
 
 func TestEventTypeVersionRegistryCoversEveryDefinedEventExactlyOnce(t *testing.T) {
 	expected := map[EventType]string{
-		EventTypeInventoryLotReceived:              "v4",
-		EventTypeInventoryStockBucketChanged:       "v4",
-		EventTypeInventoryPackageConverted:         "v4",
-		EventTypeInventoryQualityAssessed:          "v4",
-		EventTypeInventoryReservationChanged:       "v4",
-		EventTypeInventoryStaged:                   "v4",
-		EventTypeInventorySold:                     "v4",
+		EventTypeInventoryLotReceived:              "v5",
+		EventTypeInventoryStockBucketChanged:       "v5",
+		EventTypeInventoryPackageConverted:         "v5",
+		EventTypeInventoryQualityAssessed:          "v5",
+		EventTypeInventoryReservationChanged:       "v5",
+		EventTypeInventoryStaged:                   "v5",
+		EventTypeInventorySold:                     "v5",
 		EventTypeInventoryDateMarkThresholdReached: "v4",
 		EventTypeStockLocationAvailabilityChanged:  "v4",
 		EventTypeCatalogBaseCostChanged:            "v4",
 		EventTypeCatalogListingChanged:             "v4",
-		EventTypeAnalyticsOrderFact:                "v4",
-		EventTypeAnalyticsRefundFact:               "v4",
+		EventTypeAnalyticsOrderFact:                "v5",
+		EventTypeAnalyticsRefundFact:               "v5",
 
-		EventTypeOrderPaid:                      "v3",
-		EventTypeRefundCompleted:                "v3",
+		EventTypeOrderPaid:                      "v4",
+		EventTypeRefundCompleted:                "v4",
 		EventTypeProductSalesPerformanceUpdated: "v3",
-		EventTypeFulfilmentPackingUpdated:       "v3",
+		EventTypeFulfilmentPackingUpdated:       "v4",
 
 		EventTypeCampaignChanged:           "v2",
 		EventTypePromotionChanged:          "v3",
@@ -85,7 +86,7 @@ func TestEventTypeVersionRegistryCoversEveryDefinedEventExactlyOnce(t *testing.T
 		EventTypeOrderCreated:                   "v1",
 		EventTypeOrderStatusChanged:             "v1",
 		EventTypeOrderCancelled:                 "v1",
-		EventTypeOrderEdited:                    "v1",
+		EventTypeOrderEdited:                    "v2",
 		EventTypePaymentCaptured:                "v1",
 		EventTypePaymentFailed:                  "v1",
 		EventTypeInvoiceIssued:                  "v1",
@@ -96,10 +97,11 @@ func TestEventTypeVersionRegistryCoversEveryDefinedEventExactlyOnce(t *testing.T
 		EventTypeCustomerProfileUpdated:         "v1",
 		EventTypeNotificationPreferencesChanged: "v1",
 		EventTypeWalletGiftCardIssued:           "v1",
+		EventTypeNotificationGiftCardDelivered:  "v1",
 		EventTypePriceChanged:                   "v1",
 	}
-	if len(expected) != 40 {
-		t.Fatalf("expected event registry test has %d entries, want 40", len(expected))
+	if len(expected) != 41 {
+		t.Fatalf("expected event registry test has %d entries, want 41", len(expected))
 	}
 	if len(eventTypeVersionRegistry) != len(expected) {
 		t.Fatalf("event registry has %d entries, want %d", len(eventTypeVersionRegistry), len(expected))

@@ -5,12 +5,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/cart"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/shipping"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/shipping/shipping_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/cart"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/shipping/shipping_enums"
 )
 
 func TestCartAndOrderUseFulfilmentLocationSnapshot(t *testing.T) {
@@ -18,10 +18,9 @@ func TestCartAndOrderUseFulfilmentLocationSnapshot(t *testing.T) {
 	location := shipping.FulfilmentLocationSnapshot{
 		Intent: shipping_enums.FulfilmentIntentPickup,
 		GeographicContext: geography.GeographicContext{
-			Source:      geography_enums.GeographicContextSourceFulfilmentDepot,
-			MarketCode:  "mkt_au_vic",
-			CountryCode: "AU",
-			DepotCode:   "AU-VIC-MEL-DC-01",
+			Source:     geography_enums.GeographicContextSourceFulfilmentDepot,
+			MarketCode: "mkt_au_vic",
+			Path:       &geography.GeographicPath{CountryCode: "AU", MarketCode: "mkt_au_vic", StateCode: "AU-VIC", DepotCode: "AU-VIC-MEL-DC-01"},
 		},
 		SelectedDepotCode:   "AU-VIC-MEL-DC-01",
 		LocationFingerprint: "locfp_01",
@@ -59,7 +58,7 @@ func TestCartAndOrderUseFulfilmentLocationSnapshot(t *testing.T) {
 				t.Fatalf("%s missing fulfilment location: %s", name, payload)
 			}
 			context, ok := fulfilment["geographic_context"].(map[string]any)
-			if !ok || context["market_code"] != root["market_code"] || context["country_code"] != root["country_code"] {
+			if !ok || context["market_code"] != root["market_code"] || context["path"].(map[string]any)["country_code"] != root["country_code"] {
 				t.Fatalf("%s does not carry matching market/country resolution: %s", name, payload)
 			}
 		})
@@ -70,19 +69,19 @@ func TestCartAndOrderRequireMarketAndCountryToMatchFulfilmentLocation(t *testing
 	capturedAt := time.Date(2026, 8, 24, 1, 2, 3, 0, time.UTC)
 	location := shipping.FulfilmentLocationSnapshot{
 		Intent:            shipping_enums.FulfilmentIntentPickup,
-		GeographicContext: geography.GeographicContext{MarketCode: "mkt_au_vic", CountryCode: "AU"},
+		GeographicContext: geography.GeographicContext{MarketCode: "mkt_au_vic", Path: &geography.GeographicPath{CountryCode: "AU"}},
 		SelectedDepotCode: "AU-VIC-MEL-DC-01", LocationFingerprint: "locfp_01", CapturedAt: capturedAt,
 	}
 	wrongMarketCart := cart.Cart{MarketCode: "mkt_au_nsw", CountryCode: "AU", FulfilmentLocation: location}
-	if wrongMarketCart.MarketCode == wrongMarketCart.FulfilmentLocation.GeographicContext.MarketCode && wrongMarketCart.CountryCode == wrongMarketCart.FulfilmentLocation.GeographicContext.CountryCode {
+	if wrongMarketCart.MarketCode == wrongMarketCart.FulfilmentLocation.GeographicContext.MarketCode && wrongMarketCart.CountryCode == wrongMarketCart.FulfilmentLocation.GeographicContext.Path.CountryCode {
 		t.Fatal("mismatched cart fixture was classified as consistent")
 	}
 	wrongCountryOrder := order.Order{MarketCode: "mkt_au_vic", CountryCode: "NZ", FulfilmentLocation: location}
-	if wrongCountryOrder.MarketCode == wrongCountryOrder.FulfilmentLocation.GeographicContext.MarketCode && wrongCountryOrder.CountryCode == wrongCountryOrder.FulfilmentLocation.GeographicContext.CountryCode {
+	if wrongCountryOrder.MarketCode == wrongCountryOrder.FulfilmentLocation.GeographicContext.MarketCode && wrongCountryOrder.CountryCode == wrongCountryOrder.FulfilmentLocation.GeographicContext.Path.CountryCode {
 		t.Fatal("mismatched order fixture was classified as consistent")
 	}
 	matchingCart := cart.Cart{MarketCode: "mkt_au_vic", CountryCode: "AU", FulfilmentLocation: location}
-	if matchingCart.MarketCode != matchingCart.FulfilmentLocation.GeographicContext.MarketCode || matchingCart.CountryCode != matchingCart.FulfilmentLocation.GeographicContext.CountryCode {
+	if matchingCart.MarketCode != matchingCart.FulfilmentLocation.GeographicContext.MarketCode || matchingCart.CountryCode != matchingCart.FulfilmentLocation.GeographicContext.Path.CountryCode {
 		t.Fatal("matching cart fixture was classified as inconsistent")
 	}
 }

@@ -3,13 +3,16 @@ package coupon
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/audit"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/benefit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 // CouponAssignment is an owner-specific issuance of a wallet Coupon.
+// CouponID is the immutable entitlement identity; CouponCode is display evidence
+// and must not reset claim eligibility when edited. Issuance idempotency and
+// one-claim enforcement belong to the service.
 type CouponAssignment struct {
 	ID                  string                    `json:"id"`
 	CouponID            string                    `json:"coupon_id"`

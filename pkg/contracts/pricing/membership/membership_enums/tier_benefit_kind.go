@@ -4,16 +4,13 @@ package membership_enums
 type TierBenefitKind string
 
 const (
-	TierBenefitKindQualifyingSpend       TierBenefitKind = "qualifying_spend"
-	TierBenefitKindPointsMultiplier      TierBenefitKind = "points_multiplier"
-	TierBenefitKindDiscountPercent       TierBenefitKind = "discount_percent"
-	TierBenefitKindFreeShippingThreshold TierBenefitKind = "free_shipping_threshold"
-	TierBenefitKindBirthdayBonusPoints   TierBenefitKind = "birthday_bonus_points"
+	TierBenefitKindQualifyingSpend  TierBenefitKind = "qualifying_spend"
+	TierBenefitKindPointsMultiplier TierBenefitKind = "points_multiplier"
 )
 
 func (k TierBenefitKind) IsValid() bool {
 	switch k {
-	case TierBenefitKindQualifyingSpend, TierBenefitKindPointsMultiplier, TierBenefitKindDiscountPercent, TierBenefitKindFreeShippingThreshold, TierBenefitKindBirthdayBonusPoints:
+	case TierBenefitKindQualifyingSpend, TierBenefitKindPointsMultiplier:
 		return true
 	}
 	return false

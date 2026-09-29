@@ -3,11 +3,11 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // InventoryStockBucket is the quantity authority for one package form,
@@ -18,7 +18,7 @@ type InventoryStockBucket struct {
 	Location           StockLocationRef                     `json:"location"`
 	SKUCode            string                               `json:"sku_code"`
 	LotID              string                               `json:"lot_id,omitempty"`
-	PackageOptionCode  string                               `json:"package_option_code"`
+	PackageOption      packaging.PackageOptionRef           `json:"package_option"`
 	HandlingUnit       packaging_enums.PackageHandlingUnit  `json:"handling_unit"`
 	Condition          warehouse_enums.InventoryCondition   `json:"condition"`
 	Disposition        warehouse_enums.InventoryDisposition `json:"disposition"`

@@ -3,16 +3,18 @@ package product
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging/packaging_enums"
 )
 
 // ProductPackageOption identifies one stable physical package configuration.
 // SKUCode must match its enclosing Product when embedded there; it remains on
 // the component so immutable order, POS, and supplier snapshots can identify
 // the product when the component is used independently. A changed case size
-// or measurement receives a new business code.
+// receives its canonical EACH/CASE{units} code. Changed physical specifications
+// create a new immutable Version; references retain SKUCode+Code+Version.
 type ProductPackageOption struct {
+	Version         int64                               `json:"version"`
 	Code            string                              `json:"code"`
 	SKUCode         string                              `json:"sku_code"`
 	HandlingUnit    packaging_enums.PackageHandlingUnit `json:"handling_unit"`

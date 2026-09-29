@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v38.0.0` | 2026-09-29 | Major | Explicit geographic parent paths; immutable SKU/package/version references; CODE128 product barcodes; localized tiers and managed tier cards; coupon receiving/redemption policies; gift-card customer binding and safe delivery fact. Module `/v38`; coordinated consumer adoption required. |
 | `v37.1.0` | 2026-09-28 | Minor | Adds provider-neutral courier request configuration for connection, shipping-area, and time-slot requests, including GET/POST, relative endpoint paths, header/query/JSON-body fields, and protected credential references. Keeps `/v37`; runtime and API DTOs remain Supply-owned. |
 | `v37.0.0` | 2026-09-27 | Major | Removes fixed courier account/password/API-token fields while retaining the API base URL and provider extension; adds frozen purchased-package promotion allocation, fulfilment generation, and `order.edited` v1. Changes the module path to `/v37`; consumers migrate deliberately. |
 | `v36.1.0` | 2026-09-26 | Minor | Adds versioned provider settings and inert typed custom metadata to courier companies, plus a separately privileged provider credential extension envelope. Preserves `/v36`; Supply owns provider validation, credential protection, and update semantics. |
@@ -145,6 +146,49 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v38.0.0 (2026-09-29)
+
+### Breaking contract changes
+
+- Module path is `github.com/Potato-Mart/Backend-Shared-Contract/v38`.
+- `GeographicTarget` is replaced by `GeographicPath`. Target scopes carry independent Country → Market → State → Depot paths; staff scope uses the same path model. Operational depot regions remain separate.
+- `GeographicContext` replaces flat target/resolution fields with optional `path` and `matched_path`; authoritative `market_code` remains separate.
+- Package code strings become `PackageOptionRef` objects carrying required `sku_code`, `code` and `version`. Product package options and public options expose immutable versions. Canonical codes are `EACH` and `CASE{units}`.
+- Product barcode format accepts only `CODE_128`; barcode values remain strings.
+- Membership labels become localized lists; remove tier `is_active`, `discount_percent`, `free_shipping_threshold`, `birthday_bonus_points` and their benefit-kind enum values. Add inert metadata and optional managed `tier_card` references.
+- Coupons expose distribution, visibility, independent receiving tier, redemption tier and profile-completion policy data. Enforcement and defaulting stay Pricing-owned.
+- Gift cards add customer-number binding; `expired` is a sales-order status. PIN/verifier and delivery credentials remain service-owned.
+- `notification.gift_card_delivered` v1 carries only issuance correlation and delivery time. It enables Orders to distinguish issuance from successful delivery; it does not establish deployed routing.
+
+### Event versions
+
+Package references change direct or nested payloads. Producers must emit the versions below only after consumers adopt them.
+
+| Event type | Current version |
+| --- | --- |
+| `inventory.lot_received` | v5 |
+| `inventory.stock_bucket_changed` | v5 |
+| `inventory.package_converted` | v5 |
+| `inventory.quality_assessed` | v5 |
+| `inventory.reservation_changed` | v5 |
+| `inventory.staged` | v5 |
+| `inventory.sold` | v5 |
+| `analytics.order_fact` | v5 |
+| `analytics.refund_fact` | v5 |
+| `order.paid` | v4 |
+| `refund.completed` | v4 |
+| `fulfilment.packing_updated` | v4 |
+| `order.edited` | v2 |
+| `notification.gift_card_delivered` | v1 (new) |
+
+All other registered event versions remain unchanged, including `wallet.gift_card_issued` v1.
+
+### Consumer Action / 使用方動作
+
+Adopt the released module in all eight backend services and align each service's CI pin. Supply, Pricing, Orders and Insights must adopt immutable package references and new affected event versions. Identity adopts staff hierarchy paths; Customers/Pricing adopt managed tier-card and localized tier projections. Pricing owns coupon entitlement and PIN verification; Notification owns delivery facts. Frontend/POS consume owning-service DTOs and regenerated schemas only after Backend gates pass. See [v38 contract adoption](v38-contract-adoption.md) for exact shapes, requiredness and rules.
+
+This release changes models only. It performs no database migration, backfill, reset, deletion, service deployment or consumer rollout.
 
 ## v37.1.0 (2026-09-28) - Generic Courier Request Configuration
 

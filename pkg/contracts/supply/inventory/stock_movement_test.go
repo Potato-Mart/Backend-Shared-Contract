@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging/packaging_enums"
-	operations "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/inventory"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging/packaging_enums"
+	operations "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestPackageConversionMovementRoundTrip(t *testing.T) {
@@ -19,21 +19,21 @@ func TestPackageConversionMovementRoundTrip(t *testing.T) {
 	caseComposition := packaging.PackageCompositionSnapshot{
 		TotalBaseUnits: 12,
 		Components: []packaging.PackageComponentSnapshot{{
-			PackageOptionCode: "pkg_case_12",
-			HandlingUnit:      packaging_enums.PackageHandlingUnitCase,
-			PackageCount:      1,
-			UnitsPerPackage:   12,
-			BaseUnits:         12,
+			PackageOption:   packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1},
+			HandlingUnit:    packaging_enums.PackageHandlingUnitCase,
+			PackageCount:    1,
+			UnitsPerPackage: 12,
+			BaseUnits:       12,
 		}},
 	}
 	eachComposition := packaging.PackageCompositionSnapshot{
 		TotalBaseUnits: 12,
 		Components: []packaging.PackageComponentSnapshot{{
-			PackageOptionCode: "pkg_each",
-			HandlingUnit:      packaging_enums.PackageHandlingUnitEach,
-			PackageCount:      12,
-			UnitsPerPackage:   1,
-			BaseUnits:         12,
+			PackageOption:   packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1},
+			HandlingUnit:    packaging_enums.PackageHandlingUnitEach,
+			PackageCount:    12,
+			UnitsPerPackage: 1,
+			BaseUnits:       12,
 		}},
 	}
 	movement := operations.StockMovement{
@@ -43,8 +43,8 @@ func TestPackageConversionMovementRoundTrip(t *testing.T) {
 		SourceBucketID:                   "bucket_case",
 		DestinationBucketID:              "bucket_each",
 		LotID:                            "lot_1",
-		SourcePackageOptionCode:          "pkg_case_12",
-		DestinationPackageOptionCode:     "pkg_each",
+		SourcePackageOption:              &packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1},
+		DestinationPackageOption:         &packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1},
 		BaseUnits:                        12,
 		SourcePackageComposition:         &caseComposition,
 		DestinationPackageComposition:    &eachComposition,

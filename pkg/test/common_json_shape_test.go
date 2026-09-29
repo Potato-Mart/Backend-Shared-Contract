@@ -5,22 +5,22 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/device"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geometry"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/identity"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/device"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geometry"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/identity"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/temporal"
 )
 
 func TestCommonModelJSONShapesRemainStable(t *testing.T) {
@@ -71,8 +71,8 @@ func TestCommonModelJSONShapesRemainStable(t *testing.T) {
 		{"Dimensions", measurement.Dimensions{WidthMM: 1, LengthMM: 2, HeightMM: 3}, `{"width_mm":1,"length_mm":2,"height_mm":3}`},
 		{"Weight", measurement.Weight{Grams: 500}, `{"grams":500}`},
 		{"PhysicalPackage", packaging.PhysicalPackage{Dimensions: &measurement.Dimensions{WidthMM: 1, LengthMM: 2, HeightMM: 3}, Weight: &measurement.Weight{Grams: 500}}, `{"dimensions":{"width_mm":1,"length_mm":2,"height_mm":3},"weight":{"grams":500}}`},
-		{"PackageComponentSnapshot", packaging.PackageComponentSnapshot{PackageOptionCode: "each", HandlingUnit: packaging_enums.PackageHandlingUnitEach, PackageCount: 1, UnitsPerPackage: 2, BaseUnits: 2}, `{"package_option_code":"each","handling_unit":"EACH","package_count":1,"units_per_package":2,"base_units":2}`},
-		{"PackageCompositionSnapshot", packaging.PackageCompositionSnapshot{TotalBaseUnits: 2, Components: []packaging.PackageComponentSnapshot{{PackageOptionCode: "each", HandlingUnit: packaging_enums.PackageHandlingUnitEach, PackageCount: 1, UnitsPerPackage: 2, BaseUnits: 2}}}, `{"total_base_units":2,"components":[{"package_option_code":"each","handling_unit":"EACH","package_count":1,"units_per_package":2,"base_units":2}]}`},
+		{"PackageComponentSnapshot", packaging.PackageComponentSnapshot{PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE2", Version: 1}, HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 1, UnitsPerPackage: 2, BaseUnits: 2}, `{"package_option":{"sku_code":"A00001","code":"CASE2","version":1},"handling_unit":"CASE","package_count":1,"units_per_package":2,"base_units":2}`},
+		{"PackageCompositionSnapshot", packaging.PackageCompositionSnapshot{TotalBaseUnits: 2, Components: []packaging.PackageComponentSnapshot{{PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE2", Version: 1}, HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 1, UnitsPerPackage: 2, BaseUnits: 2}}}, `{"total_base_units":2,"components":[{"package_option":{"sku_code":"A00001","code":"CASE2","version":1},"handling_unit":"CASE","package_count":1,"units_per_package":2,"base_units":2}]}`},
 		{"Metadata", metadata.Metadata{"source": "fixture", "unchanged": true}, `{"source":"fixture","unchanged":true}`},
 		{"Money", money.Money{AmountMinor: 1234, Currency: "AUD"}, `{"amount_minor":1234,"currency":"AUD"}`},
 	}

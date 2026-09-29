@@ -698,6 +698,13 @@ func TestV32ContractPreservationManifest(t *testing.T) {
 
 	var missing []string
 	for oldKey, destination := range v32ContractPreservationManifest {
+		// v38 replaces the historical scalar target with GeographicPath.
+		if oldKey == "contracts/common/geography.GeographicTarget" {
+			if !present["contracts/common/geography.GeographicPath"] {
+				missing = append(missing, oldKey+" => contracts/common/geography.GeographicPath")
+			}
+			continue
+		}
 		if !present[destination] {
 			missing = append(missing, oldKey+" => "+destination)
 		}

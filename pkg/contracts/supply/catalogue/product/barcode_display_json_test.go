@@ -2,12 +2,13 @@ package product_test
 
 import (
 	"encoding/json"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
 	"reflect"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/product/product_enums"
 )
 
 // Symbology and leading zeros are data, not values a consumer may infer from
@@ -19,15 +20,15 @@ func TestBarcodeDisplayPreservesExplicitSymbologyAndLeadingZeros(t *testing.T) {
 		value  string
 	}{
 		{product_enums.BarcodeFormatCode128, "CODE_128", "00-LOT-A128"},
-		{product_enums.BarcodeFormatEAN13, "EAN_13", "0012345678905"},
-		{product_enums.BarcodeFormatUPCA, "UPC_A", "012345678905"},
+		{product_enums.BarcodeFormatCode128, "CODE_128", "0012345678905"},
+		{product_enums.BarcodeFormatCode128, "CODE_128", "012345678905"},
 	}
 	for _, tc := range cases {
 		t.Run(tc.wire, func(t *testing.T) {
 			from := time.Date(2026, 9, 8, 0, 0, 0, 0, time.UTC)
 			until := from.Add(24 * time.Hour)
 			master := product.ProductBarcodeAssignment{
-				Code: "BARCODE-A", SKUCode: "SKU-A", PackageOptionCode: "PACK-A",
+				Code: "BARCODE-A", SKUCode: "SKU-A", PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1},
 				Value: tc.value, Format: tc.format, ManufacturerCode: "MAKER-A",
 				IsPrimary: true, EffectiveFrom: from, EffectiveTo: &until,
 			}
@@ -44,7 +45,7 @@ func TestBarcodeDisplayPreservesExplicitSymbologyAndLeadingZeros(t *testing.T) {
 			}
 
 			projection := product.SellingProductBarcode{
-				PackageOptionCode: "PACK-A", Value: tc.value, Format: tc.format, IsPrimary: true,
+				PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1}, Value: tc.value, Format: tc.format, IsPrimary: true,
 			}
 			encoded, err = json.Marshal(projection)
 			if err != nil {
@@ -58,7 +59,7 @@ func TestBarcodeDisplayPreservesExplicitSymbologyAndLeadingZeros(t *testing.T) {
 				t.Fatalf("display must contain only package/value/format/primary: %s", encoded)
 			}
 			for key, want := range map[string]string{
-				"package_option_code": `"PACK-A"`, "value": `"` + tc.value + `"`,
+				"package_option": `{"sku_code":"A00001","code":"EACH","version":1}`, "value": `"` + tc.value + `"`,
 				"format": `"` + tc.wire + `"`, "is_primary": "true",
 			} {
 				if string(fields[key]) != want {

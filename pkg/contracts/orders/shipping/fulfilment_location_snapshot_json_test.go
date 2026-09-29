@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/shipping/shipping_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/shipping/shipping_enums"
 )
 
 func TestFulfilmentLocationSnapshotJSONShape(t *testing.T) {
@@ -22,9 +22,9 @@ func TestFulfilmentLocationSnapshotJSONShape(t *testing.T) {
 			},
 		},
 		GeographicContext: geography.GeographicContext{
-			Source:      geography_enums.GeographicContextSourceDeliveryAddress,
-			MarketCode:  "mkt_au_vic",
-			CountryCode: "AU",
+			Source:     geography_enums.GeographicContextSourceDeliveryAddress,
+			MarketCode: "mkt_au_vic",
+			Path:       &geography.GeographicPath{CountryCode: "AU"},
 		},
 		LocationFingerprint: "locfp_01",
 		CapturedAt:          capturedAt,
@@ -69,9 +69,9 @@ func TestFulfilmentLocationSnapshotDigitalOmitsPhysicalLocationAndRetainsEvidenc
 	snapshot := FulfilmentLocationSnapshot{
 		Intent: shipping_enums.FulfilmentIntentDigital,
 		GeographicContext: geography.GeographicContext{
-			Source:      geography_enums.GeographicContextSourceGlobalFallback,
-			MarketCode:  "mkt_au",
-			CountryCode: "AU",
+			Source:     geography_enums.GeographicContextSourceGlobalFallback,
+			MarketCode: "mkt_au",
+			Path:       &geography.GeographicPath{CountryCode: "AU"},
 		},
 		LocationFingerprint: "locfp_digital_01",
 		CapturedAt:          capturedAt,
@@ -105,7 +105,7 @@ func TestFulfilmentLocationSnapshotDigitalOmitsPhysicalLocationAndRetainsEvidenc
 
 func TestFulfilmentLocationSnapshotLocksAddressOrDepotInvariant(t *testing.T) {
 	capturedAt := time.Date(2026, 8, 24, 1, 2, 3, 0, time.UTC)
-	context := geography.GeographicContext{MarketCode: "mkt_au_vic", CountryCode: "AU"}
+	context := geography.GeographicContext{MarketCode: "mkt_au_vic", Path: &geography.GeographicPath{CountryCode: "AU"}}
 	for name, snapshot := range map[string]FulfilmentLocationSnapshot{
 		"delivery-requires-address": {Intent: shipping_enums.FulfilmentIntentDelivery, GeographicContext: context, LocationFingerprint: "locfp_1", CapturedAt: capturedAt},
 		"delivery-forbids-depot":    {Intent: shipping_enums.FulfilmentIntentDelivery, DeliveryAddress: &party.ContactAddress{}, SelectedDepotCode: "AU-VIC-01", GeographicContext: context, LocationFingerprint: "locfp_1", CapturedAt: capturedAt},

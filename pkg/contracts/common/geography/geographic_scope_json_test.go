@@ -4,34 +4,30 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography/geography_enums"
 )
 
 func TestGeographicScopeAndContextJSON(t *testing.T) {
 	scope := GeographicScope{
 		Mode: geography_enums.GeographicScopeModeTargeted,
-		Targets: []GeographicTarget{
-			{Kind: geography_enums.GeographicTargetCountry, Code: "AU"},
-			{Kind: geography_enums.GeographicTargetDepot, Code: "AU-VIC-MEL-DC-01"},
+		Targets: []GeographicPath{
+			{CountryCode: "AU"},
+			{CountryCode: "AU", MarketCode: "mkt_au_vic", StateCode: "AU-VIC", DepotCode: "AU-VIC-MEL-DC-01"},
 		},
 	}
 	payload, err := json.Marshal(scope)
 	if err != nil {
 		t.Fatalf("marshal geographic scope: %v", err)
 	}
-	if string(payload) != `{"mode":"TARGETED","targets":[{"kind":"COUNTRY","code":"AU"},{"kind":"DEPOT","code":"AU-VIC-MEL-DC-01"}]}` {
+	if string(payload) != `{"mode":"TARGETED","targets":[{"country_code":"AU"},{"country_code":"AU","market_code":"mkt_au_vic","state_code":"AU-VIC","depot_code":"AU-VIC-MEL-DC-01"}]}` {
 		t.Fatalf("GeographicScope JSON = %s", payload)
 	}
 
 	context := GeographicContext{
 		Source:             geography_enums.GeographicContextSourceDeliveryAddress,
 		MarketCode:         "mkt_au_vic",
-		CountryCode:        "AU",
-		SubdivisionCode:    "AU-VIC",
-		DepotRegionCode:    "AU-VIC-MEL",
-		DepotCode:          "AU-VIC-MEL-DC-01",
-		MatchedTargetKind:  geography_enums.GeographicTargetDepot,
-		MatchedTargetCode:  "AU-VIC-MEL-DC-01",
+		Path:               &GeographicPath{CountryCode: "AU", MarketCode: "mkt_au_vic", StateCode: "AU-VIC", DepotCode: "AU-VIC-MEL-DC-01"},
+		MatchedPath:        &GeographicPath{CountryCode: "AU", MarketCode: "mkt_au_vic", StateCode: "AU-VIC", DepotCode: "AU-VIC-MEL-DC-01"},
 		ScopeRevision:      7,
 		RuleRevision:       11,
 		EvaluationTimezone: "Australia/Melbourne",
@@ -44,7 +40,7 @@ func TestGeographicScopeAndContextJSON(t *testing.T) {
 	if err := json.Unmarshal(payload, &got); err != nil {
 		t.Fatalf("unmarshal geographic context: %v", err)
 	}
-	for _, key := range []string{"source", "market_code", "country_code", "subdivision_code", "depot_region_code", "depot_code", "matched_target_kind", "matched_target_code", "scope_revision", "rule_revision", "evaluation_timezone"} {
+	for _, key := range []string{"source", "market_code", "path", "matched_path", "scope_revision", "rule_revision", "evaluation_timezone"} {
 		if _, ok := got[key]; !ok {
 			t.Fatalf("GeographicContext JSON missing %q: %s", key, payload)
 		}
@@ -68,7 +64,7 @@ func TestGlobalFallbackGeographicContextOmitsUnresolvedProfileGeography(t *testi
 	if got["source"] != "GLOBAL_FALLBACK" || got["evaluation_timezone"] != "Etc/UTC" {
 		t.Fatalf("global fallback context mismatch: %s", payload)
 	}
-	for _, key := range []string{"country_code", "subdivision_code", "depot_region_code", "depot_code", "matched_target_kind", "matched_target_code"} {
+	for _, key := range []string{"path", "matched_path"} {
 		if _, ok := got[key]; ok {
 			t.Fatalf("global fallback context should omit unresolved %q: %s", key, payload)
 		}

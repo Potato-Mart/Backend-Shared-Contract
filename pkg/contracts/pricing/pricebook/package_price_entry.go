@@ -1,21 +1,22 @@
 package pricebook
 
 import (
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/pricebook/pricebook_enums"
 )
 
 // PackagePriceEntry is one independently priced package option for a SKU in a
 // price book. PackageAmount buys exactly one package identified by the
-// immutable PackageOptionCode; it is not a base-unit PriceEntry amount.
+// immutable PackageOption; it is not a base-unit PriceEntry amount.
 type PackagePriceEntry struct {
 	ID                     string                           `json:"id"`
 	PriceBookCode          string                           `json:"price_book_code"`
 	SKUCode                string                           `json:"sku_code"`
-	PackageOptionCode      string                           `json:"package_option_code"`
+	PackageOption          packaging.PackageOptionRef       `json:"package_option"`
 	PackageAmount          money.Money                      `json:"package_amount"`
 	Status                 pricebook_enums.PriceEntryStatus `json:"status"`
 	Derivation             pricebook_enums.PriceDerivation  `json:"derivation"`

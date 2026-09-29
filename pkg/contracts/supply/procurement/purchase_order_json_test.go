@@ -6,17 +6,17 @@ import (
 	"testing"
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/product"
-	purchase "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/procurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/product"
+	purchase "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/procurement"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/procurement/purchase_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/procurement/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestPurchaseOrderJSONRoundTripWithHistory(t *testing.T) {
@@ -44,13 +44,13 @@ func TestPurchaseOrderJSONRoundTripWithHistory(t *testing.T) {
 					HandlingUnit: packaging_enums.PackageHandlingUnitCase, UnitsPerPackage: 12,
 					IsCanonical: true, IsActive: true, EffectiveFrom: occurredAt,
 				},
-				CapturedAt:        occurredAt,
-				PackageOptionCode: "pkg_case_12",
-				UnitCost:          money.Money{AmountMinor: 2400, Currency: "AUD"},
+				CapturedAt:    occurredAt,
+				PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1},
+				UnitCost:      money.Money{AmountMinor: 2400, Currency: "AUD"},
 				OrderedComposition: packaging.PackageCompositionSnapshot{
 					TotalBaseUnits: 24,
 					Components: []packaging.PackageComponentSnapshot{
-						{PackageOptionCode: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24},
+						{PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}, HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24},
 					},
 				},
 				ReceivedComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}},
@@ -125,7 +125,7 @@ func TestReceiptJSONUsesLotBucketAndPackageComposition(t *testing.T) {
 			{
 				ID:                  "receipt_line_1",
 				SKUCode:             "A00001",
-				PackageOptionCode:   "pkg_case_12",
+				PackageOption:       packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1},
 				LotID:               "lot_1",
 				SupplierLotCode:     "supplier_lot_1",
 				ManufacturerLotCode: "manufacturer_lot_1",
@@ -136,8 +136,8 @@ func TestReceiptJSONUsesLotBucketAndPackageComposition(t *testing.T) {
 					DateMarkAt: dateMarkAt,
 					Timezone:   "Australia/Melbourne",
 				},
-				OrderedComposition:  packaging.PackageCompositionSnapshot{TotalBaseUnits: 24, Components: []packaging.PackageComponentSnapshot{{PackageOptionCode: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24}}},
-				ReceivedComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 24, Components: []packaging.PackageComponentSnapshot{{PackageOptionCode: "pkg_case_12", HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24}}},
+				OrderedComposition:  packaging.PackageCompositionSnapshot{TotalBaseUnits: 24, Components: []packaging.PackageComponentSnapshot{{PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}, HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24}}},
+				ReceivedComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 24, Components: []packaging.PackageComponentSnapshot{{PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}, HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 12, BaseUnits: 24}}},
 				RejectedComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}},
 			},
 		},

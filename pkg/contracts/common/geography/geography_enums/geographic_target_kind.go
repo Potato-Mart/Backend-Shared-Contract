@@ -4,16 +4,16 @@ package geography_enums
 type GeographicTargetKind string
 
 const (
-	GeographicTargetCountry     GeographicTargetKind = "COUNTRY"
-	GeographicTargetSubdivision GeographicTargetKind = "SUBDIVISION"
-	GeographicTargetDepotRegion GeographicTargetKind = "DEPOT_REGION"
-	GeographicTargetDepot       GeographicTargetKind = "DEPOT"
+	GeographicTargetCountry GeographicTargetKind = "COUNTRY"
+	GeographicTargetMarket  GeographicTargetKind = "MARKET"
+	GeographicTargetState   GeographicTargetKind = "STATE"
+	GeographicTargetDepot   GeographicTargetKind = "DEPOT"
 )
 
 func (k GeographicTargetKind) IsValid() bool {
 	switch k {
-	case GeographicTargetCountry, GeographicTargetSubdivision,
-		GeographicTargetDepotRegion, GeographicTargetDepot:
+	case GeographicTargetCountry, GeographicTargetMarket,
+		GeographicTargetState, GeographicTargetDepot:
 		return true
 	default:
 		return false

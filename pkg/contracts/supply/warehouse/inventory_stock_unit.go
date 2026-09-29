@@ -1,10 +1,11 @@
 package warehouse
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // InventoryStockUnit identifies an individually labelled or evidenced stock
@@ -14,7 +15,7 @@ type InventoryStockUnit struct {
 	BucketID           string                               `json:"bucket_id"`
 	SKUCode            string                               `json:"sku_code"`
 	LotID              string                               `json:"lot_id,omitempty"`
-	PackageOptionCode  string                               `json:"package_option_code"`
+	PackageOption      packaging.PackageOptionRef           `json:"package_option"`
 	HandlingUnit       packaging_enums.PackageHandlingUnit  `json:"handling_unit"`
 	BaseUnits          int64                                `json:"base_units"`
 	Condition          warehouse_enums.InventoryCondition   `json:"condition"`

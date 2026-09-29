@@ -5,10 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	orderfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/fulfilment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/order"
-	pubsuborders "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pubsub/orders"
-	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/fulfilment"
+	orderfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/order"
+	pubsuborders "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pubsub/orders"
+	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/fulfilment"
 )
 
 func TestPhysicalWorkCarriesOrderFulfillmentGeneration(t *testing.T) {

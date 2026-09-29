@@ -3,24 +3,30 @@ package giftcard
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/benefit"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 // GiftCard is a stored-value instrument with a re-spendable balance. The
 // GiftCardTransaction ledger is the source of truth for CommittedBalance. Live
 // checkout reservations are summarized by ReservedBalance and subtracted to
 // produce AvailableBalance. It is referenced everywhere by Code (the business
-// key), never by ID.
+// key), never by ID. ID remains the stable internal identity. Code is the single
+// customer-facing claim and POS code: GC followed by exactly 12 decimal digits.
+// PIN verification belongs to the service: exactly four decimal digits, including
+// leading zeros. Neither plaintext PINs nor verifier material belong in this model.
 type GiftCard struct {
-	ID               string           `json:"id"`
-	Code             string           `json:"code"`
+	ID   string `json:"id"`
+	Code string `json:"code"`
+	// CustomerNumber records customer binding after claim or POS redemption.
+	// The service binds the order customer; owned online use needs no PIN.
+	CustomerNumber   string           `json:"customer_number,omitempty"`
 	Owner            benefit.OwnerRef `json:"owner"`
 	CommittedBalance money.Money      `json:"committed_balance"`
 	ReservedBalance  money.Money      `json:"reserved_balance"`

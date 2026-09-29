@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/coupon"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/promotion/promotion_enums"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/coupon"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 func TestCouponReusesPromotionScopePeriodTermsAndControls(t *testing.T) {
@@ -35,7 +35,7 @@ func TestCouponReusesPromotionScopePeriodTermsAndControls(t *testing.T) {
 		Controls: promotion.PromotionControls{
 			GeographicScope: geography.GeographicScope{
 				Mode:    geography_enums.GeographicScopeModeTargeted,
-				Targets: []geography.GeographicTarget{{Kind: geography_enums.GeographicTargetSubdivision, Code: "AU-NSW"}},
+				Targets: []geography.GeographicPath{{CountryCode: "AU", MarketCode: "mkt_au", StateCode: "AU-NSW"}},
 			},
 		},
 	})
@@ -65,9 +65,9 @@ func TestCouponReusesPromotionScopePeriodTermsAndControls(t *testing.T) {
 func TestCouponUsageRecordFreezesGeographicContext(t *testing.T) {
 	now := time.Date(2026, 8, 1, 0, 0, 0, 0, time.UTC)
 	context := geography.GeographicContext{
-		Source:      geography_enums.GeographicContextSourceWholesaleOrganisationProfile,
-		CountryCode: "AU", SubdivisionCode: "AU-VIC", DepotRegionCode: "AU-VIC-MEL",
-		MatchedTargetKind: geography_enums.GeographicTargetSubdivision, MatchedTargetCode: "AU-VIC",
+		Source:        geography_enums.GeographicContextSourceWholesaleOrganisationProfile,
+		Path:          &geography.GeographicPath{CountryCode: "AU", MarketCode: "mkt_au", StateCode: "AU-VIC"},
+		MatchedPath:   &geography.GeographicPath{CountryCode: "AU", MarketCode: "mkt_au", StateCode: "AU-VIC"},
 		ScopeRevision: 5, RuleRevision: 8, EvaluationTimezone: "Australia/Melbourne",
 	}
 	payload, err := json.Marshal(coupon.CouponUsageRecord{
@@ -83,7 +83,7 @@ func TestCouponUsageRecordFreezesGeographicContext(t *testing.T) {
 		t.Fatalf("unmarshal coupon usage: %v", err)
 	}
 	resolved, ok := got["geographic_context"].(map[string]any)
-	if !ok || resolved["source"] != "WHOLESALE_ORGANISATION_PROFILE" || resolved["matched_target_code"] != "AU-VIC" {
+	if !ok || resolved["source"] != "WHOLESALE_ORGANISATION_PROFILE" || resolved["matched_path"].(map[string]any)["state_code"] != "AU-VIC" {
 		t.Fatalf("coupon usage geographic context mismatch: %s", payload)
 	}
 }

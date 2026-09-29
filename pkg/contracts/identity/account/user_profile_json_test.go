@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security"
 )
 
 func TestUserProfileJSONIncludesObjectMediaAvatarWhenPresent(t *testing.T) {

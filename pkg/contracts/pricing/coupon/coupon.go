@@ -1,19 +1,27 @@
 package coupon
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/security"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/coupon/coupon_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/promotion"
 )
 
 // Coupon is a code-based discount that customers enter at checkout.
 // Unlike Promotion (auto-applied rule), a coupon is manually redeemed.
 type Coupon struct {
+	// ID is immutable and identifies entitlement history even if Code changes.
 	ID      string        `json:"id"`
 	Code    string        `json:"code"`
 	Content CouponContent `json:"content"`
+	// Policy defaults, validation, eligibility and periodic issuance are service-owned.
+	Distribution                 coupon_enums.Distribution    `json:"distribution"`
+	Visibility                   coupon_enums.Visibility      `json:"visibility"`
+	ReceivingTier                ReceivingTierPolicy          `json:"receiving_tier"`
+	TierRestriction              TierRestriction              `json:"tier_restriction"`
+	ProfileCompletionRestriction ProfileCompletionRestriction `json:"profile_completion_restriction"`
 
 	Scope    promotion.PromotionScope    `json:"scope"`
 	Period   promotion.PromotionPeriod   `json:"period"`

@@ -1,6 +1,6 @@
 package preference
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/notification/core/notification_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/notification/core/notification_enums"
 
 // NotificationChannelPreference records a topic/channel choice. For social
 // media, DestinationCodes is an explicit allow-list: an empty or absent list

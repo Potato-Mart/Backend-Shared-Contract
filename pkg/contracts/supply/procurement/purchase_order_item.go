@@ -3,11 +3,11 @@ package procurement
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/catalogue/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/product"
 )
 
 // PurchaseOrderItem is one frozen supplier order line.
@@ -19,7 +19,7 @@ type PurchaseOrderItem struct {
 	ProductImage         *security.ObjectMedia                `json:"product_image,omitempty"`
 	ProductPackageOption product.ProductPackageOption         `json:"product_package_option"`
 	CapturedAt           time.Time                            `json:"captured_at"`
-	PackageOptionCode    string                               `json:"package_option_code"`
+	PackageOption        packaging.PackageOptionRef           `json:"package_option"`
 	UnitCost             money.Money                          `json:"unit_cost"`
 	OrderedComposition   packaging.PackageCompositionSnapshot `json:"ordered_composition"`
 	ReceivedComposition  packaging.PackageCompositionSnapshot `json:"received_composition"`

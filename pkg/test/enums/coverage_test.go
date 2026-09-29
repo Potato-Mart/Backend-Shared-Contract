@@ -9,18 +9,18 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/security/security_enums"
-	group_enums "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/customers/group/group_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/customers/wholesale/wholesale_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/marketing/campaign/campaign_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/payments/payment/payment_enums"
-	pos_enums "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/payments/register/register_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/benefit/benefit_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pricing/membership/membership_enums"
-	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/pubsub/routing"
-	insights_marketing_enums "github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/supply/forecasting/marketing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security/security_enums"
+	group_enums "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/customers/group/group_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/marketing/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/payments/payment/payment_enums"
+	pos_enums "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/payments/register/register_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/benefit/benefit_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/membership/membership_enums"
+	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pubsub/routing"
+	insights_marketing_enums "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/forecasting/marketing_enums"
 )
 
 func TestEnumCoverageIncludesEveryStringEnum(t *testing.T) {
@@ -53,7 +53,7 @@ func TestAdditionalEnumValues(t *testing.T) {
 		{name: "benefit.OwnerType", valid: []stringEnum{benefit_enums.OwnerTypeRetailCustomer, benefit_enums.OwnerTypeWholesaleOrganisation}, invalid: benefit_enums.OwnerType("__invalid__")},
 		{name: "membership.QualifyingSpendReason", valid: []stringEnum{membership_enums.QualifyingSpendReasonOrderPaid, membership_enums.QualifyingSpendReasonRefund}, invalid: membership_enums.QualifyingSpendReason("__invalid__")},
 		{name: "membership.TierProgressReason", valid: []stringEnum{membership_enums.TierProgressReasonNoActiveTiers, membership_enums.TierProgressReasonManualQualification, membership_enums.TierProgressReasonUnsupportedMetric, membership_enums.TierProgressReasonCurrencyMismatch, membership_enums.TierProgressReasonMembershipNotAssigned}, invalid: membership_enums.TierProgressReason("__invalid__")},
-		{name: "membership.TierBenefitKind", valid: []stringEnum{membership_enums.TierBenefitKindQualifyingSpend, membership_enums.TierBenefitKindPointsMultiplier, membership_enums.TierBenefitKindDiscountPercent, membership_enums.TierBenefitKindFreeShippingThreshold, membership_enums.TierBenefitKindBirthdayBonusPoints}, invalid: membership_enums.TierBenefitKind("__invalid__")},
+		{name: "membership.TierBenefitKind", valid: []stringEnum{membership_enums.TierBenefitKindQualifyingSpend, membership_enums.TierBenefitKindPointsMultiplier}, invalid: membership_enums.TierBenefitKind("__invalid__")},
 		{name: "event.EventTopic", valid: []stringEnum{event_enums.EventTopicOrderEvents, event_enums.EventTopicPaymentEvents, event_enums.EventTopicRefundEvents, event_enums.EventTopicStockEvents, event_enums.EventTopicFulfilmentEvents, event_enums.EventTopicCustomerEvents, event_enums.EventTopicProductStats, event_enums.EventTopicStorefrontEvents, event_enums.EventTopicCatalogEvents}, invalid: event_enums.EventTopic("__invalid__")},
 		{name: "security.MediaVisibility", valid: []stringEnum{security_enums.MediaVisibilityPublic, security_enums.MediaVisibilityPrivate}, invalid: security_enums.MediaVisibility("__invalid__")},
 		{name: "packaging.PackageHandlingUnit", valid: []stringEnum{packaging_enums.PackageHandlingUnitEach, packaging_enums.PackageHandlingUnitCase}, invalid: packaging_enums.PackageHandlingUnit("__invalid__")},

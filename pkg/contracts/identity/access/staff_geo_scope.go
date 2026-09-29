@@ -1,24 +1,15 @@
 package access
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/common/geography"
-
-	"github.com/Potato-Mart/Backend-Shared-Contract/v37/pkg/contracts/identity/access/access_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography/geography_enums"
 )
 
-// StaffGeoScope is the persisted geographic grant held by one workforce
-// principal. It is never carried by customer principals.
-//
-// Level decides which of the remaining fields are meaningful: global carries
-// none, country carries CountryCode, market carries MarketCodes (and the
-// country they belong to), and depot carries DepotCodes. Depots are the only
-// site identity in the platform, so there is no store code.
-//
-// Each backend resolves and enforces the scope independently; this module
-// only records it.
+// StaffGeoScope records workforce geographic selections. Services validate
+// paths and intersect them with role-derived grants. Selecting GLOBAL never
+// elevates a role; existing global super-admin authority remains role-owned.
+// Customer principals never carry workforce grants.
 type StaffGeoScope struct {
-	Level       access_enums.ScopeLevel `json:"level"`
-	CountryCode geography.CountryCode   `json:"country_code,omitempty"`
-	MarketCodes []string                `json:"market_codes,omitempty"`
-	DepotCodes  []string                `json:"depot_codes,omitempty"`
+	Mode    geography_enums.GeographicScopeMode `json:"mode"`
+	Targets []geography.GeographicPath          `json:"targets,omitempty"`
 }
