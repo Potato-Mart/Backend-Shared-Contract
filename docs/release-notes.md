@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v39.3.0` | 2026-09-30 | Minor | Adds optional native net tier-refund proof projection with explicit quoted/gift-exclusion bases; legacy gross point evidence unchanged. |
 | `v39.2.1` | 2026-09-30 | Patch | Corrects service-owned event-version guidance; no shared wire, model or enum changes. |
 | `v39.2.0` | 2026-09-30 | Minor | Adds optional order.paid quote_fingerprint for lossless opaque Pricing quote revisions; retains numeric revision compatibility. |
 | `v39.1.0` | 2026-09-30 | Minor | Adds optional authoritative customer_status on WalletInstrument without changing lifecycle status. |
@@ -152,6 +153,32 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v39.3.0 (2026-09-30)
+
+### Breaking Contract Changes
+
+None. `/v39` and existing refund fields/wire shapes remain unchanged when proof is absent.
+
+### Added
+
+`pricing/membership.TierRefundProof` and `membership_enums.TierRefundProofBasis` (`quoted_credit`, `excluded_gift_purchase`); optional `RefundCompletedEvent.tier_refund_proof`. Proof requires basis, proof_id/proof_fingerprint, allocation_id/allocation_version/allocation_fingerprint and net_qualifying_spend_reversal Money. Quoted credit requires exact original quote_key/quote_fingerprint (including zero grants); witnessed original gift exclusion requires omitted pair and verified zero Money. AllocationVersion is a positive immutable allocation format/algorithm version, initially 1, never quote revision. All opaque strings compare exactly.
+
+### Fixed
+
+Documents separate NET tier reversal versus existing gross qualifying_spend_reversal earned-point evidence. Missing proof is not verified zero, inferred gift exclusion or nonretail applicability.
+
+### Other Changes
+
+Models only: no hashing, allocation, business validation, routes, grants, preparation/cancellation or ledger code. No historical reconstruction or production activation.
+
+### Contract Files Changed
+
+Pricing membership proof/leaf enum, refund completed event, JSON fixtures/tests, enum tests, exported-type manifest and release/adoption documentation.
+
+### Compatibility Notes
+
+Adopt absence-tolerant readers before emitting proof. Pricing verifies all projected and enclosing identity facts against its immutable native reservation, and atomically consumes it with tier reversal under original-grant cumulative/replay caps. Payments freezes verified proof before external effects; retries retain identical authority and confirmed cancellation/failure uses durable tombstones, never guessed timeout release. Orders supplies protected original classification/quote/unit provenance. These are required service-owned guarantees, not implemented by publication. Unverified amendment/amount-only/batch selections stay blocked until those owner interfaces are implemented and accepted. Guest/wholesale nonapplicability requires protected service evidence and omits proof, not a new shared zero basis. Existing gross point-clawback semantics stay unchanged. Runtime envelope versions remain producer/subscriber-owned; the optional model mandates no event-version bump. See [proof adoption](net-tier-refund-proof.md) for exact fields and fixtures. Source-ticket closure and activation remain owner gates.
 
 ## v39.2.1 (2026-09-30)
 

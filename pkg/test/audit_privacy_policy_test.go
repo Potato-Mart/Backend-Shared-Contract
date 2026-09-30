@@ -63,6 +63,7 @@ var v34TypePolicyRegistry = map[string]typePolicy{
 	"coupon receiving tier policy":          {reflect.TypeOf(coupon.ReceivingTierPolicy{}), false, false},
 	"coupon tier restriction":               {reflect.TypeOf(coupon.TierRestriction{}), false, false},
 	"coupon profile completion restriction": {reflect.TypeOf(coupon.ProfileCompletionRestriction{}), false, false},
+	"tier refund proof":                     {reflect.TypeOf(membership.TierRefundProof{}), false, false},
 	"membership tier metadata":              {reflect.TypeOf(membership.MembershipTierMetadataEntry{}), false, false},
 	"delivery selection":                    {reflect.TypeOf(shipping.DeliverySelection{}), false, false},
 	"tax category":                          {reflect.TypeOf(tax.TaxCategory{}), true, false},
