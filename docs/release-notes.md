@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v39.2.0` | 2026-09-30 | Minor | Adds optional order.paid quote_fingerprint for lossless opaque Pricing quote revisions; retains numeric revision compatibility. |
 | `v39.1.0` | 2026-09-30 | Minor | Adds optional authoritative customer_status on WalletInstrument without changing lifecycle status. |
 | `v39.0.0` | 2026-09-30 | Major | Replaces preset courier models and stored slots with arbitrary configuration; channel-first notification preferences; company arrival rules, expiry holds, tax administration and settlement/fulfilment evidence. |
 | `v38.2.0` | 2026-09-29 | Minor | Adds GiftCardIssuedEventV2 with explicit purchase/reward/refund-replacement source and original credited value; wallet.gift_card_issued advances to v2. Preserves /v38 and legacy purchase-only v1. |
@@ -150,6 +151,32 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v39.2.0 (2026-09-30)
+
+### Breaking Contract Changes
+
+None. `/v39`, OrderPaidEvent and order.paid event_version 2 remain unchanged.
+
+### Added
+
+Optional `OrderPaidEvent.QuoteFingerprint string` with JSON `quote_fingerprint`. Paired with `quote_key`, it carries Pricing's opaque accepted-quote revision exactly. Pricing must verify the pair against its protected quote evidence. No numeric conversion, truncation, or rehashing is allowed.
+
+### Fixed
+
+Corrects v39.0.0 adoption guidance: Pricing's accepted quote revision is an opaque string, not the numeric shared quote_revision. The existing `QuoteRevision int64` and numeric JSON representation are retained unchanged for compatibility and omitted when only fingerprint authority exists. Numeric revision is not a substitute for the opaque fingerprint. If both are present, service-owned verification must establish they reference the same quote and reject conflicts.
+
+### Other Changes
+
+No service changes or production activation. Pricing/Orders own quote binding, payload validation and rollout.
+
+### Contract Files Changed
+
+`pubsub/orders/order_paid_event.go`, adjacent quote JSON fixtures/tests, adoption documentation and release metadata. No exported types added; manifest digest unchanged.
+
+### Compatibility Notes
+
+Absence-tolerant readers can adopt before producers emit the additive field. Existing numeric-only and quote-less JSON remain valid contract shapes but provide no opaque revision authority. Numeric fields are not repurposed. Producers with opaque quote revisions emit quote_key/quote_fingerprint and omit quote_revision. Tests cover legacy omission, unchanged numeric shape, exact opaque string round-trip and coexistence; service owners test mismatch rejection and frozen-quote lookup. [Adoption guidance](configurable-contract-adoption.md) supersedes the historical numeric-pair claim.
 
 ## v39.1.0 (2026-09-30)
 

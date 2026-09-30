@@ -15,8 +15,10 @@ import (
 //
 // Subtotal, DiscountAmount, and Tags are qualification evidence. An empty
 // Subtotal or DiscountAmount currency and a nil Tags slice mean "no evidence",
-// never a zero subtotal, a zero discount, or an untagged order. Consumers must
-// skip qualification for such an event rather than infer a value from AmountPaid.
+// never a zero subtotal, a zero discount, or an untagged order. Without a
+// verified frozen quote, consumers must skip qualification for such an event
+// rather than infer a value from AmountPaid. A verified quote supplies its own
+// authoritative qualification evidence.
 type OrderPaidEvent struct {
 	DeferredPayment *order.DeferredPaymentAuthorization `json:"deferred_payment,omitempty"`
 	OrderID         string                              `json:"order_id"`
@@ -24,12 +26,20 @@ type OrderPaidEvent struct {
 	PaymentID       string                              `json:"payment_id,omitempty"`
 	Method          payment_enums.PaymentMethod         `json:"method,omitempty"`
 	Channel         commerce_enums.OrderType            `json:"channel,omitempty"`
-	// QuoteKey and QuoteRevision identify the accepted frozen checkout quote.
-	// Both are absent for legacy events; Pricing must not infer qualifying goods
-	// spend from AmountPaid, which is settlement evidence, not goods value.
-	QuoteKey      string      `json:"quote_key,omitempty"`
-	QuoteRevision int64       `json:"quote_revision,omitempty"`
-	AmountPaid    money.Money `json:"amount_paid"`
+	// QuoteKey and QuoteFingerprint identify Pricing's accepted frozen checkout
+	// quote. QuoteFingerprint carries its opaque revision exactly, without parsing,
+	// hashing again or numeric conversion. Both are absent for legacy events.
+	// Pricing verifies the pair against protected accepted-quote evidence; absence
+	// or mismatch provides no opaque quote authority. Numeric QuoteRevision is
+	// retained for released compatibility and omitted when only opaque evidence
+	// exists. It is not a substitute for QuoteFingerprint; producers must never
+	// fabricate it from the fingerprint. If both are present, the owning service
+	// must verify they refer to the same quote, not silently choose conflicting
+	// evidence. AmountPaid is settlement evidence, never qualifying goods value.
+	QuoteKey         string      `json:"quote_key,omitempty"`
+	QuoteFingerprint string      `json:"quote_fingerprint,omitempty"`
+	QuoteRevision    int64       `json:"quote_revision,omitempty"`
+	AmountPaid       money.Money `json:"amount_paid"`
 
 	// Subtotal is the merchandise subtotal before any discount is applied.
 	Subtotal money.Money `json:"subtotal"`

@@ -14,7 +14,7 @@ workflows.
 ## Latest Version
 
 ```text
-v39.1.0
+v39.2.0
 github.com/Potato-Mart/Backend-Shared-Contract/v39
 ```
 
@@ -26,10 +26,12 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v39 v39.1.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v39 v39.2.0
 ```
 
 Import packages from the same `/v39` module path.
+
+The v39.2.0 release adds lossless opaque accepted-quote evidence through optional `order.paid.quote_fingerprint`, preserving numeric quote_revision compatibility.
 
 The v39.1.0 release adds optional customer-facing wallet usage status (`available`, `used`, `expired`) independently of lifecycle status.
 
