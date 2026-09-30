@@ -14,7 +14,7 @@ workflows.
 ## Latest Version
 
 ```text
-v39.2.1
+v39.3.0
 github.com/Potato-Mart/Backend-Shared-Contract/v39
 ```
 
@@ -26,10 +26,12 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v39 v39.2.1
+require github.com/Potato-Mart/Backend-Shared-Contract/v39 v39.3.0
 ```
 
 Import packages from the same `/v39` module path.
+
+The v39.3.0 release adds optional Pricing-owned net tier-refund proof projection separately from gross point-clawback evidence. See [net tier-refund proof](docs/net-tier-refund-proof.md); service authority/workflows and production readiness remain owner gates.
 
 The v39.2.1 patch corrects event-version adoption guidance: runtime versions remain service-owned; the optional fingerprint does not cause a version bump.
 

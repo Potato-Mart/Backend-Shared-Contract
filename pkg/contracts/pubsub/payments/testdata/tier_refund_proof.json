@@ -1,0 +1,70 @@
+{
+  "quoted_positive": {
+    "refund_id": "refund-1",
+    "order_number": "ORDER-1",
+    "amount": {
+      "amount_minor": 1100,
+      "currency": "AUD"
+    },
+    "qualifying_spend_reversal": {
+      "amount_minor": 1100,
+      "currency": "AUD"
+    },
+    "tier_refund_proof": {
+      "basis": "quoted_credit",
+      "proof_id": "proof-1",
+      "proof_fingerprint": "pricing-proof-v1:00aF/exact",
+      "allocation_id": "allocation-1",
+      "allocation_version": 1,
+      "allocation_fingerprint": "pricing-allocation-v1:00Bc/exact",
+      "quote_key": "quote-1",
+      "quote_fingerprint": "pricing-quote-v29-1:00De/exact",
+      "net_qualifying_spend_reversal": {
+        "amount_minor": 900,
+        "currency": "AUD"
+      }
+    }
+  },
+  "quoted_zero": {
+    "refund_id": "refund-zero",
+    "order_number": "ORDER-1",
+    "tier_refund_proof": {
+      "basis": "quoted_credit",
+      "proof_id": "proof-zero",
+      "proof_fingerprint": "pricing-proof-v1:zero",
+      "allocation_id": "allocation-1",
+      "allocation_version": 1,
+      "allocation_fingerprint": "pricing-allocation-v1:00Bc/exact",
+      "quote_key": "quote-1",
+      "quote_fingerprint": "pricing-quote-v29-1:00De/exact",
+      "net_qualifying_spend_reversal": {
+        "amount_minor": 0,
+        "currency": "AUD"
+      }
+    }
+  },
+  "gift_zero": {
+    "refund_id": "refund-gift",
+    "order_number": "ORDER-GIFT",
+    "tier_refund_proof": {
+      "basis": "excluded_gift_purchase",
+      "proof_id": "proof-gift",
+      "proof_fingerprint": "pricing-proof-v1:gift",
+      "allocation_id": "excluded-allocation-1",
+      "allocation_version": 1,
+      "allocation_fingerprint": "pricing-allocation-v1:00Bc/exact",
+      "net_qualifying_spend_reversal": {
+        "amount_minor": 0,
+        "currency": "AUD"
+      }
+    }
+  },
+  "legacy": {
+    "refund_id": "legacy-refund",
+    "order_number": "ORDER-1",
+    "qualifying_spend_reversal": {
+      "amount_minor": 1100,
+      "currency": "AUD"
+    }
+  }
+}
