@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v39.1.0` | 2026-09-30 | Minor | Adds optional authoritative customer_status on WalletInstrument without changing lifecycle status. |
 | `v39.0.0` | 2026-09-30 | Major | Replaces preset courier models and stored slots with arbitrary configuration; channel-first notification preferences; company arrival rules, expiry holds, tax administration and settlement/fulfilment evidence. |
 | `v38.2.0` | 2026-09-29 | Minor | Adds GiftCardIssuedEventV2 with explicit purchase/reward/refund-replacement source and original credited value; wallet.gift_card_issued advances to v2. Preserves /v38 and legacy purchase-only v1. |
 | `v38.1.0` | 2026-09-29 | Minor | Adds immutable exact/confirmation capture timing evidence and PaymentCapturedEventV2; payment.captured advances to v2. Preserves /v38 and legacy v1 model. |
@@ -149,6 +150,32 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v39.1.0 (2026-09-30)
+
+### Breaking Contract Changes
+
+None. Module path remains `/v39`.
+
+### Added
+
+Optional `WalletInstrument.customer_status` with typed `WalletInstrumentCustomerStatus`: `available`, `used`, `expired`. Available means ready with remaining use; used means consumed with no remaining use; expired means validity ended. These are customer projections, not checkout authorization. Pricing owns authoritative outcome/use correlation, expiry precedence and eligibility. Lifecycle `status` and `redeemed_at` remain unchanged: REDEEMED can mean points exchanged for an available reward.
+
+### Fixed
+
+Documents that absent customer_status is unknown and cannot be derived from REDEEMED or redeemed_at.
+
+### Other Changes
+
+No service or frontend changes; no record migration, calculation or status mapper added to Shared Contract.
+
+### Contract Files Changed
+
+`pricing/wallet/balance/wallet_instrument.go`, new leaf enum, JSON/enum tests and exported-type manifest.
+
+### Compatibility Notes
+
+Existing JSON omits the new field when unset. Consumers can adopt v39.1.0 before Pricing projects it. Pricing must document whether reward outcome instruments appear separately and how they are used; this contract does not imply duplicate usable entitlement. Executable available/used/expired and legacy fixtures are in `pkg/contracts/pricing/wallet/balance/wallet_instrument_json_test.go`. Backend-Pricing #65 remains open until its service acceptance criteria pass.
 
 ## v39.0.0 (2026-09-30)
 

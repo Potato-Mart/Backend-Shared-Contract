@@ -252,7 +252,7 @@ var modelPackageManifest map[string]string
 // existing courier package. V37 adds frozen promotion target package allocation
 // and committed order edit payload records in existing owned packages. V37.1
 // adds provider-neutral courier request-configuration value models and enums.
-const exportedTypeManifestDigest = "1c1d8f38acffaafec4aa5f87b90b7234d58932efab42d7239fcfbdb3a276440e"
+const exportedTypeManifestDigest = "d4f8f2d12d48a55d3980d42366afd7db75e12f0aa767772b122589030da4bd67"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
