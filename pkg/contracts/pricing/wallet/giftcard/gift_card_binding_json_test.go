@@ -2,7 +2,7 @@ package giftcard_test
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/wallet/giftcard"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/wallet/giftcard"
 	"reflect"
 	"testing"
 )

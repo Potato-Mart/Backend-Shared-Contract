@@ -1,12 +1,10 @@
 package preference
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/notification/core/notification_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/notification/core/notification_enums"
 
-// NotificationChannelPreference records a topic/channel choice. For social
-// media, DestinationCodes is an explicit allow-list: an empty or absent list
-// never means all configured destinations and makes social delivery ineligible.
+// NotificationChannelPreference groups topic choices under a channel. Services preserve mandatory transactional delivery
+// policy, consent and unsubscribe rules independently of these choices.
 type NotificationChannelPreference struct {
-	Channel          notification_enums.NotificationChannel `json:"channel"`
-	Enabled          bool                                   `json:"enabled"`
-	DestinationCodes []string                               `json:"destination_codes,omitempty"`
+	Channel notification_enums.NotificationChannel `json:"channel"`
+	Topics  []NotificationTopicPreference          `json:"topics,omitempty"`
 }

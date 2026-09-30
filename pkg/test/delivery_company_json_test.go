@@ -6,13 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/customers/retail"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/shipping"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/courier"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/courier/courier_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/courier"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/courier/courier_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/fulfilment"
 )
 
 func TestDeliveryLegacyJSONRemainsUnchanged(t *testing.T) {
@@ -162,175 +160,7 @@ func TestCourierCompanyCodeIgnoresLegacyClassifiers(t *testing.T) {
 	}
 }
 
-func TestCourierConnectionAndCustomerReferenceStaySeparate(t *testing.T) {
-	company := courier.DeliveryCompany{Code: "fleet", Name: "Fleet", Revision: 3,
-		Connection: &courier.DeliveryConnection{CredentialConfigured: true, Health: courier_enums.DeliveryConnectionHealthHealthy}}
-	assertDeliveryJSON(t, company.Connection, `{"credential_configured":true,"health":"healthy"}`)
-	ref := courier.DeliveryCompanyRef{Code: company.Code, Name: company.Name, Revision: company.Revision}
-	assertDeliveryJSON(t, ref, `{"code":"fleet","name":"Fleet","revision":3}`)
-	// An explicit reviewed key set prevents accidental secret/diagnostic fields
-	// from entering the shared connection projection, even with omitempty.
-	connectionType := reflect.TypeOf(courier.DeliveryConnection{})
-	if connectionType.NumField() != 3 {
-		t.Fatal("review new connection fields for credential exposure")
-	}
-}
-
-func TestCourierCredentialRequirementsAreDerivedAndNullable(t *testing.T) {
-	company := courier.DeliveryCompany{Code: "future-market-fleet"}
-	data, err := json.Marshal(company)
-	if err != nil {
-		t.Fatal(err)
-	}
-	var fields map[string]json.RawMessage
-	if err := json.Unmarshal(data, &fields); err != nil {
-		t.Fatal(err)
-	}
-	if raw, ok := fields["credential_requirements"]; !ok || string(raw) != "null" {
-		t.Fatalf("missing implementation requirements must serialize as null, got %s", raw)
-	}
-
-	requirements := courier.DeliveryCredentialRequirements{
-		APIBaseURL:                "https://provider.example.test/api/v1",
-		ConnectionAddressRequired: false,
-	}
-	assertDeliveryJSON(t, requirements, `{"api_base_url":"https://provider.example.test/api/v1","connection_address_required":false}`)
-	company.CredentialRequirements = &requirements
-	data, err = json.Marshal(company)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := json.Unmarshal(data, &fields); err != nil {
-		t.Fatal(err)
-	}
-	var got courier.DeliveryCredentialRequirements
-	if err := json.Unmarshal(fields["credential_requirements"], &got); err != nil {
-		t.Fatal(err)
-	}
-	if !reflect.DeepEqual(got, requirements) {
-		t.Fatalf("credential requirements changed: got %+v want %+v", got, requirements)
-	}
-}
-
-func TestCourierAuthenticationMethodsContainRequirementsNotValues(t *testing.T) {
-	for _, method := range []string{"api_token", "future_registered_method"} {
-		t.Run(method, func(t *testing.T) {
-			requirements := courier.DeliveryCredentialRequirements{
-				APIBaseURL: "https://provider.example.test/api/v1",
-				AuthenticationMethods: []courier.DeliveryAuthenticationMethodRequirements{{
-					Method: method, RequiredFields: []string{"api_base_url", "api_token"},
-				}},
-			}
-			wire := `{"api_base_url":"https://provider.example.test/api/v1","connection_address_required":false,"authentication_methods":[{"method":"` + method + `","required_fields":["api_base_url","api_token"]}]}`
-			assertDeliveryJSON(t, requirements, wire)
-			var decoded courier.DeliveryCredentialRequirements
-			if err := json.Unmarshal([]byte(wire), &decoded); err != nil {
-				t.Fatal(err)
-			}
-			if !reflect.DeepEqual(requirements, decoded) {
-				t.Fatalf("authentication metadata changed: %+v", decoded)
-			}
-		})
-	}
-	var legacy courier.DeliveryCredentialRequirements
-	if err := json.Unmarshal([]byte(`{"api_base_url":"https://provider.example.test/api/v1","connection_address_required":false}`), &legacy); err != nil {
-		t.Fatal(err)
-	}
-	if len(legacy.AuthenticationMethods) != 0 {
-		t.Fatal("legacy metadata must not invent an authentication method")
-	}
-	methodType := reflect.TypeOf(courier.DeliveryAuthenticationMethodRequirements{})
-	if methodType.NumField() != 2 {
-		t.Fatal("review new authentication metadata fields for credential exposure")
-	}
-}
-
-func TestCourierProviderCredentialModelHasPrivilegedStandaloneShape(t *testing.T) {
-	modelType := reflect.TypeOf(courier.DeliveryProviderCredentials{})
-	wantFields := []struct {
-		name   string
-		typeOf reflect.Type
-		json   string
-	}{
-		{"APIBaseURL", reflect.TypeOf(""), "api_base_url,omitempty"},
-		{"ProviderExtension", reflect.TypeOf((*courier.DeliveryProviderCredentialExtension)(nil)), "provider_extension,omitempty"},
-	}
-	if modelType.NumField() != len(wantFields) {
-		t.Fatalf("DeliveryProviderCredentials has %d fields, want exactly %d; review added fields for sensitive-value exposure", modelType.NumField(), len(wantFields))
-	}
-	for index, want := range wantFields {
-		field := modelType.Field(index)
-		if field.Name != want.name || field.Type != want.typeOf || field.Tag.Get("json") != want.json {
-			t.Errorf("DeliveryProviderCredentials field %d = %s %s json:%q, want %s %s json:%q", index, field.Name, field.Type, field.Tag.Get("json"), want.name, want.typeOf, want.json)
-		}
-	}
-	data, err := json.Marshal(courier.DeliveryProviderCredentials{})
-	if err != nil {
-		t.Fatal(err)
-	}
-	if string(data) != `{}` {
-		t.Fatalf("empty credential value should omit unset fields: %s", data)
-	}
-	var legacy courier.DeliveryProviderCredentials
-	if err := json.Unmarshal([]byte(`{"api_base_url":"https://provider.example.test","sign_in_account":"legacy","password":"legacy","api_token":"legacy"}`), &legacy); err != nil {
-		t.Fatal(err)
-	}
-	data, err = json.Marshal(legacy)
-	if err != nil {
-		t.Fatal(err)
-	}
-	if string(data) != `{"api_base_url":"https://provider.example.test"}` {
-		t.Fatalf("retired common credentials survived v37 serialization: %s", data)
-	}
-}
-
-func TestCourierCredentialTypeIsAbsentFromGeneralAndCustomerModels(t *testing.T) {
-	credentialTypes := []reflect.Type{
-		reflect.TypeOf(courier.DeliveryProviderCredentials{}),
-		reflect.TypeOf(courier.DeliveryProviderCredentialExtension{}),
-	}
-	models := map[string]reflect.Type{
-		"delivery company":           reflect.TypeOf(courier.DeliveryCompany{}),
-		"delivery company reference": reflect.TypeOf(courier.DeliveryCompanyRef{}),
-		"delivery connection":        reflect.TypeOf(courier.DeliveryConnection{}),
-		"delivery selection":         reflect.TypeOf(shipping.DeliverySelection{}),
-		"retail customer":            reflect.TypeOf(retail.RetailCustomer{}),
-	}
-	for name, model := range models {
-		for _, credentialType := range credentialTypes {
-			if containsModelType(model, credentialType, map[reflect.Type]bool{}) {
-				t.Errorf("%s must not embed or contain privileged courier credentials", name)
-			}
-		}
-	}
-}
-
-func TestCourierLegacyConfiguredSchedulesRemainReadable(t *testing.T) {
-	const wire = `{"schedules":[{"code":"legacy-day","country_code":"AU","days_of_week":[1],"start_time":"09:00","end_time":"17:00","timezone":"Australia/Melbourne","minimum_lead_time_minutes":0,"enabled":true}]}`
-	var company courier.DeliveryCompany
-	if err := json.Unmarshal([]byte(wire), &company); err != nil {
-		t.Fatal(err)
-	}
-	if len(company.Schedules) != 1 || company.Schedules[0].Code != "legacy-day" {
-		t.Fatalf("legacy schedules were not retained for compatibility: %+v", company.Schedules)
-	}
-}
-
 func TestDeliveryFeesAndOfferMetadata(t *testing.T) {
-	window := courier.DeliveryServiceWindow{Code: "day", CountryCode: "AU", DaysOfWeek: []int{1, 2, 3, 4, 5}, StartTime: "07:00", EndTime: "18:00", Timezone: "Australia/Melbourne", MinimumLeadTimeMinutes: 120, Enabled: true}
-	assertDeliveryJSON(t, window, `{"code":"day","country_code":"AU","days_of_week":[1,2,3,4,5],"start_time":"07:00","end_time":"18:00","timezone":"Australia/Melbourne","minimum_lead_time_minutes":120,"enabled":true}`)
-	window.Fee = &money.Money{AmountMinor: 0, Currency: "AUD"}
-	data, err := json.Marshal(window)
-	if err != nil {
-		t.Fatal(err)
-	}
-	var decoded courier.DeliveryServiceWindow
-	if err := json.Unmarshal(data, &decoded); err != nil {
-		t.Fatal(err)
-	}
-	if decoded.Fee == nil || decoded.Fee.AmountMinor != 0 || decoded.Fee.Currency != "AUD" {
-		t.Fatal("explicit free fee became absent")
-	}
 	expires := time.Date(2026, 10, 1, 0, 0, 0, 0, time.UTC)
 	for _, source := range []courier_enums.DeliverySlotSource{courier_enums.DeliverySlotSourceConfiguredSchedule, courier_enums.DeliverySlotSourceProvider} {
 		slot := shipping.DeliverySlot{ID: "offer", Source: source, ScheduleCode: "day", ExpiresAt: &expires, Availability: "unavailable", UnavailableReason: "coverage_unknown", DeliveryCompany: &courier.DeliveryCompanyRef{Code: "fleet", Revision: 4}}

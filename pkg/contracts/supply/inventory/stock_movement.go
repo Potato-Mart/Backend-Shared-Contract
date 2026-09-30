@@ -3,9 +3,9 @@ package inventory
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/packaging"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // StockMovement represents a physical base-unit transfer or state change.

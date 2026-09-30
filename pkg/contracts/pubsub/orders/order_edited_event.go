@@ -1,10 +1,11 @@
 package orders
 
 import (
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/orders/order"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/money"
 )
 
 // OrderEditedEvent is the completed fact of a committed product amendment on
@@ -13,13 +14,14 @@ import (
 // order composition so Supply can invalidate old physical work and recheck the
 // new generation; publication does not itself authorize dispatch or payment.
 type OrderEditedEvent struct {
-	OrderID                       string `json:"order_id"`
-	OrderNumber                   string `json:"order_number"`
-	EditID                        string `json:"edit_id"`
-	PreviousFulfillmentGeneration int64  `json:"previous_fulfillment_generation"`
-	FulfillmentGeneration         int64  `json:"fulfillment_generation"`
-	RetailCustomerNumber          string `json:"retail_customer_number,omitempty"`
-	OrganisationAccessID          string `json:"organisation_access_id,omitempty"`
+	DeferredPayment               *order.DeferredPaymentAuthorization `json:"deferred_payment,omitempty"`
+	OrderID                       string                              `json:"order_id"`
+	OrderNumber                   string                              `json:"order_number"`
+	EditID                        string                              `json:"edit_id"`
+	PreviousFulfillmentGeneration int64                               `json:"previous_fulfillment_generation"`
+	FulfillmentGeneration         int64                               `json:"fulfillment_generation"`
+	RetailCustomerNumber          string                              `json:"retail_customer_number,omitempty"`
+	OrganisationAccessID          string                              `json:"organisation_access_id,omitempty"`
 	// Empty geography provides no scope evidence; consumers persisting a
 	// geographically scoped record must fail closed rather than infer it.
 	MarketCode    string                    `json:"market_code,omitempty"`

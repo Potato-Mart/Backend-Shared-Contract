@@ -3,7 +3,7 @@ package order
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/money"
 )
 
 // GiftCardRedemptionSnapshot records one ordered gift-card allocation applied

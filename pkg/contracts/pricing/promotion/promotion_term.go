@@ -1,7 +1,7 @@
 package promotion
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/money"
 	"time"
 )
 

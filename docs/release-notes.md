@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v39.0.0` | 2026-09-30 | Major | Replaces preset courier models and stored slots with arbitrary configuration; channel-first notification preferences; company arrival rules, expiry holds, tax administration and settlement/fulfilment evidence. |
 | `v38.2.0` | 2026-09-29 | Minor | Adds GiftCardIssuedEventV2 with explicit purchase/reward/refund-replacement source and original credited value; wallet.gift_card_issued advances to v2. Preserves /v38 and legacy purchase-only v1. |
 | `v38.1.0` | 2026-09-29 | Minor | Adds immutable exact/confirmation capture timing evidence and PaymentCapturedEventV2; payment.captured advances to v2. Preserves /v38 and legacy v1 model. |
 | `v38.0.0` | 2026-09-29 | Major | Explicit geographic parent paths; immutable SKU/package/version references; CODE128 product barcodes; localized tiers and managed tier cards; coupon receiving/redemption policies; gift-card customer binding and safe delivery fact. Module `/v38`; coordinated consumer adoption required. |
@@ -148,6 +149,40 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v39.0.0 (2026-09-30)
+
+### Breaking Contract Changes
+
+- Module path becomes `github.com/Potato-Mart/Backend-Shared-Contract/v39`.
+- Courier preset credential, authentication requirements, provider settings, request configuration, connection and service-window models are removed, together with HTTP-method, request-purpose and connection-health enums. DeliveryCompany removes credential_requirements, dispatch_capable, connection, provider_settings, schedules and slot_source. DeliveryCapabilities removes configured_slots. No compatibility aliases remain.
+- DeliveryCompany.configuration is an arbitrary array of key/value/sensitive entries. Supply masks sensitive read values before standard JSON encoding and owns encrypted persistence. Capabilities are admin-authored declarations, not proof of live readiness. APIs must implement the existing normalized protocol; no provider adapters or response-field maps. Available slots remain transient.
+- NotificationPreferences replaces root topics with channels; each channel contains channel/topics, each topic contains topic_code/enabled/destination_codes. There is no channel master toggle. Revisions, mandatory-topic policy, destination consent and unsubscribe semantics remain unchanged.
+- ShippingArrivalRule.delivery_company_code is required; overlap checks are per company.
+
+### Added
+
+- CampaignPlacementAccountBanner (`account_banner`) and StockLocationPurposeExpiryHold (`EXPIRY_HOLD`).
+- Pricing-owned `tax.TaxCategory` and `tax.TaxRule` with revision/audit, rational rate, tax inclusion and effective interval.
+- Optional CustomerTierProgress.tier_progress_basis_points. Existing overall progress and configured current/next thresholds retain their meanings; membership is database-configured.
+- Order.deferred_payment and created/edited/paid event snapshots with actor/authorized_at/reason. Orders authenticates staff and geographic authority; Supply consumes trusted Orders evidence and keeps its own operator/scope checks.
+- Optional OrderPaidEvent.quote_key/quote_revision pair for frozen qualification evidence.
+
+### Fixed
+
+- Documents commercial order totals separately from tender settlement and qualifying goods value.
+
+### Other Changes
+
+- PurchaseReceiptItem already has optional date_mark; no customer receipt inventory field is added. Consent policy/records stay Identity-owned; partial checkout DTOs stay Orders-local.
+
+### Contract Files Changed
+
+- Courier, notification/preference, marketing/campaign enums, orders/order, orders/shipping, pubsub/orders, pricing/membership, pricing/tax, warehouse enums, package/import manifests and JSON tests. All Go imports move to /v39.
+
+### Compatibility Notes
+
+Adopt absence-tolerant readers before emitting additive event evidence. Existing order.created v1, order.edited v2 and order.paid v2 event versions remain unchanged. Quote references are a pair; absence means legacy evidence, not a derived quote. Accepted DeliverySelection/windows remain unchanged, including historical source values. Backend owners upgrade all eight service module/CI pins to this release, regenerate their DTO/OpenAPI consumers, and coordinate courier/notification activation with Admin. No historical migrations or tier seeds are introduced. Contract publication does not prove service or frontend compatibility. Exact fields, formulas and fixtures are in [contract adoption](configurable-contract-adoption.md).
 
 ## v38.2.0 (2026-09-29)
 

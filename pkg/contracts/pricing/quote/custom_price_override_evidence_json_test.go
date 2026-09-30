@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/quote/quote_enums"
 )
 
 func TestCustomPriceOverrideLegacyJSONRemainsUnchanged(t *testing.T) {

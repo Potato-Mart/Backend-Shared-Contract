@@ -3,8 +3,8 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestWarehouseEnumsValidateKnownValues(t *testing.T) {
@@ -28,7 +28,7 @@ func TestWarehouseEnumsValidateKnownValues(t *testing.T) {
 		{name: "warehouseenum.StockReservationStatus", valid: []stringEnum{warehouse_enums.StockReservationStatusReserved, warehouse_enums.StockReservationStatusPartiallyStaged, warehouse_enums.StockReservationStatusStaged, warehouse_enums.StockReservationStatusCommitted, warehouse_enums.StockReservationStatusReleased, warehouse_enums.StockReservationStatusExpired, warehouse_enums.StockReservationStatusCancelled}, invalid: warehouse_enums.StockReservationStatus("__invalid__")},
 		{name: "warehouseenum.StockAvailabilityDirection", valid: []stringEnum{warehouse_enums.StockAvailabilityOutOfStock, warehouse_enums.StockAvailabilityRestocked}, invalid: warehouse_enums.StockAvailabilityDirection("__invalid__")},
 		{name: "warehouseenum.InventoryDateMarkThreshold", valid: []stringEnum{warehouse_enums.InventoryDateMarkThresholdApproaching, warehouse_enums.InventoryDateMarkThresholdReached, warehouse_enums.InventoryDateMarkThresholdPassed}, invalid: warehouse_enums.InventoryDateMarkThreshold("__invalid__")},
-		{name: "warehouseenum.StockLocationPurpose", valid: []stringEnum{warehouse_enums.StockLocationPurposeStandard, warehouse_enums.StockLocationPurposeQualityHold, warehouse_enums.StockLocationPurposeOnlineOrderStaging}, invalid: warehouse_enums.StockLocationPurpose("__invalid__")},
+		{name: "warehouseenum.StockLocationPurpose", valid: []stringEnum{warehouse_enums.StockLocationPurposeExpiryHold, warehouse_enums.StockLocationPurposeStandard, warehouse_enums.StockLocationPurposeQualityHold, warehouse_enums.StockLocationPurposeOnlineOrderStaging}, invalid: warehouse_enums.StockLocationPurpose("__invalid__")},
 		{name: "warehouseenum.StockLocationHandlingMode", valid: []stringEnum{warehouse_enums.StockLocationHandlingEach, warehouse_enums.StockLocationHandlingCase, warehouse_enums.StockLocationHandlingMixed}, invalid: warehouse_enums.StockLocationHandlingMode("__invalid__")},
 		{name: "warehouseenum.StockLocationAccess", valid: []stringEnum{warehouse_enums.StockLocationAccessCustomerAccessible, warehouse_enums.StockLocationAccessStaffOnly}, invalid: warehouse_enums.StockLocationAccess("__invalid__")},
 		{name: "warehouseenum.StockLocationCollectionMode", valid: []stringEnum{warehouse_enums.StockLocationCollectionAllowList, warehouse_enums.StockLocationCollectionUnrestricted}, invalid: warehouse_enums.StockLocationCollectionMode("__invalid__")},

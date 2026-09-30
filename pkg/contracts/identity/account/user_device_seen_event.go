@@ -1,7 +1,7 @@
 package account
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/identity/identity_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/identity/identity_enums"
 	"time"
 )
 
