@@ -86,7 +86,7 @@ func TestConfigurableContractFixtures(t *testing.T) {
 		wire, _ := json.Marshal(legacy)
 		var fields map[string]json.RawMessage
 		_ = json.Unmarshal(wire, &fields)
-		for _, key := range []string{"quote_key", "quote_revision", "deferred_payment", "tier_progress_basis_points"} {
+		for _, key := range []string{"quote_key", "quote_revision", "quote_fingerprint", "deferred_payment", "tier_progress_basis_points"} {
 			if _, ok := fields[key]; ok {
 				t.Fatalf("legacy emits %s", key)
 			}
