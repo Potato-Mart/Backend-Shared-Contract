@@ -14,7 +14,7 @@ workflows.
 ## Latest Version
 
 ```text
-v39.2.0
+v39.2.1
 github.com/Potato-Mart/Backend-Shared-Contract/v39
 ```
 
@@ -26,10 +26,12 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v39 v39.2.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v39 v39.2.1
 ```
 
 Import packages from the same `/v39` module path.
+
+The v39.2.1 patch corrects event-version adoption guidance: runtime versions remain service-owned; the optional fingerprint does not cause a version bump.
 
 The v39.2.0 release adds lossless opaque accepted-quote evidence through optional `order.paid.quote_fingerprint`, preserving numeric quote_revision compatibility.
 

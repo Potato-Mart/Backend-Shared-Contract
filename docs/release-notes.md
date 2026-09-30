@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v39.2.1` | 2026-09-30 | Patch | Corrects service-owned event-version guidance; no shared wire, model or enum changes. |
 | `v39.2.0` | 2026-09-30 | Minor | Adds optional order.paid quote_fingerprint for lossless opaque Pricing quote revisions; retains numeric revision compatibility. |
 | `v39.1.0` | 2026-09-30 | Minor | Adds optional authoritative customer_status on WalletInstrument without changing lifecycle status. |
 | `v39.0.0` | 2026-09-30 | Major | Replaces preset courier models and stored slots with arbitrary configuration; channel-first notification preferences; company arrival rules, expiry holds, tax administration and settlement/fulfilment evidence. |
@@ -152,11 +153,37 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
 
+## v39.2.1 (2026-09-30)
+
+### Breaking Contract Changes
+
+None. Module path remains `/v39`; all model, JSON and enum shapes are identical to v39.2.0.
+
+### Added
+
+None.
+
+### Fixed
+
+Corrects adoption guidance that incorrectly asserted runtime order.paid v2. Pricing's verified `internal/events/schema_version.go` and its tests require `v4`. Runtime envelope versions are owned by producers/subscribers, not inferred from a shared model or old event table. Orders/Pricing preserve their verified v4 boundary; optional quote_fingerprint does not itself cause an event-version bump.
+
+### Other Changes
+
+Published as a patch to preserve the immutable v39.2.0 tag. No runtime deployment or service edits.
+
+### Contract Files Changed
+
+Release metadata, README, release notes and configurable-contract adoption guidance only. No production Go model or test changes.
+
+### Compatibility Notes
+
+Use the service-owned current event versions during rollout. Historical event tables describe previous releases and cannot authorize a current runtime envelope. Pricing has verified the opaque fingerprint seam; cross-service adoption and production activation remain held by their owners until their acceptance checks pass.
+
 ## v39.2.0 (2026-09-30)
 
 ### Breaking Contract Changes
 
-None. `/v39`, OrderPaidEvent and order.paid event_version 2 remain unchanged.
+None. `/v39` and OrderPaidEvent remain unchanged. The optional field does not mandate a runtime event-version bump; producer/subscriber versions are service-owned. The original v2 claim is superseded by the v39.2.1 correction.
 
 ### Added
 
@@ -236,7 +263,7 @@ Existing JSON omits the new field when unset. Consumers can adopt v39.1.0 before
 
 ### Compatibility Notes
 
-Adopt absence-tolerant readers before emitting additive event evidence. Existing order.created v1, order.edited v2 and order.paid v2 event versions remain unchanged. Quote references are a pair; absence means legacy evidence, not a derived quote. Accepted DeliverySelection/windows remain unchanged, including historical source values. Backend owners upgrade all eight service module/CI pins to this release, regenerate their DTO/OpenAPI consumers, and coordinate courier/notification activation with Admin. No historical migrations or tier seeds are introduced. Contract publication does not prove service or frontend compatibility. Exact fields, formulas and fixtures are in [contract adoption](configurable-contract-adoption.md).
+Adopt absence-tolerant readers before emitting additive event evidence. Optional model additions do not mandate runtime event-version changes. Verify service-owned producer/subscriber versions; the original paid-v2 claim is superseded by v39.2.1. Quote references are a pair; absence means legacy evidence, not a derived quote. Accepted DeliverySelection/windows remain unchanged, including historical source values. Backend owners upgrade all eight service module/CI pins to this release, regenerate their DTO/OpenAPI consumers, and coordinate courier/notification activation with Admin. No historical migrations or tier seeds are introduced. Contract publication does not prove service or frontend compatibility. Exact fields, formulas and fixtures are in [contract adoption](configurable-contract-adoption.md).
 
 ## v38.2.0 (2026-09-29)
 
