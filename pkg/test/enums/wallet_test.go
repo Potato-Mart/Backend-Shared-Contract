@@ -9,6 +9,7 @@ import (
 
 func TestWalletEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
+		{name: "wallet customer status", valid: []stringEnum{wallet_enums.WalletInstrumentCustomerStatusAvailable, wallet_enums.WalletInstrumentCustomerStatusUsed, wallet_enums.WalletInstrumentCustomerStatusExpired}, invalid: wallet_enums.WalletInstrumentCustomerStatus("__invalid__")},
 		{name: "walletenum.CouponSource", valid: []stringEnum{wallet_enums.CouponSourceManual, wallet_enums.CouponSourceRFMComeback, wallet_enums.CouponSourceBirthday, wallet_enums.CouponSourceReferral, wallet_enums.CouponSourceSignupBonus, wallet_enums.CouponSourceCampaign}, invalid: wallet_enums.CouponSource("__invalid__")},
 		{name: "walletenum.WalletPassPlatform", valid: []stringEnum{membership_enums.WalletPassPlatformGoogle, membership_enums.WalletPassPlatformApple}, invalid: membership_enums.WalletPassPlatform("__invalid__")},
 		{name: "walletenum.WalletPassBarcodeFormat", valid: []stringEnum{membership_enums.WalletPassBarcodeFormatCode128}, invalid: membership_enums.WalletPassBarcodeFormat("__invalid__")},
