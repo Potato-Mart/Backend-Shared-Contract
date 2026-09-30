@@ -14,8 +14,8 @@ workflows.
 ## Latest Version
 
 ```text
-v38.2.0
-github.com/Potato-Mart/Backend-Shared-Contract/v38
+v39.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v39
 ```
 
 See [release notes](docs/release-notes.md) for the release history,
@@ -26,10 +26,12 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v38 v38.2.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v39 v39.0.0
 ```
 
-Import packages from the same `/v38` module path.
+Import packages from the same `/v39` module path.
+
+The v39.0.0 release replaces courier configuration and notification preferences, adds company-scoped arrival rules, expiry holds, tax models and order settlement/fulfilment evidence. See [contract adoption](docs/configurable-contract-adoption.md).
 
 The v38.2.0 release adds explicit purchase, membership-reward and refund-replacement
 gift issuance facts through `GiftCardIssuedEventV2` (`wallet.gift_card_issued` v2).

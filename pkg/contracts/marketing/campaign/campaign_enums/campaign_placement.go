@@ -4,6 +4,8 @@ package campaign_enums
 type CampaignPlacement string
 
 const (
+	// CampaignPlacementAccountBanner renders below the Account order-status strip.
+	CampaignPlacementAccountBanner  CampaignPlacement = "account_banner"
 	CampaignPlacementTopBanner      CampaignPlacement = "top_banner"
 	CampaignPlacementHomeHero       CampaignPlacement = "home_hero"
 	CampaignPlacementModal          CampaignPlacement = "modal"
@@ -13,7 +15,7 @@ const (
 
 func (p CampaignPlacement) IsValid() bool {
 	switch p {
-	case CampaignPlacementTopBanner, CampaignPlacementHomeHero, CampaignPlacementModal, CampaignPlacementCheckoutNotice, CampaignPlacementProductNotice:
+	case CampaignPlacementAccountBanner, CampaignPlacementTopBanner, CampaignPlacementHomeHero, CampaignPlacementModal, CampaignPlacementCheckoutNotice, CampaignPlacementProductNotice:
 		return true
 	}
 	return false

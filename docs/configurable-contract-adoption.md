@@ -1,0 +1,21 @@
+# Configurable contract adoption
+
+Pin `github.com/Potato-Mart/Backend-Shared-Contract/v39 v39.0.0` in each service and its CI contract-version input. Upgrade readers and regenerate owning-service APIs before activating changed producers. Backend owns all eight service checks and production rollout; Admin owns its consumer checks.
+
+Courier: `DeliveryCompany.configuration[] = {key, value, sensitive}` supports typed JSON values. Supply encrypts sensitive storage and replaces sensitive read values with a mask such as `********` before encoding. Standard encoding/json does not redact values automatically. Privileged writes remain Supply-local DTOs and masked read values must never overwrite secrets. Capabilities are configured flags (`booking`, `tracking`, `proof_of_delivery`, `refrigerated`, `provider_coverage`, `provider_slots`), not live health. Endpoint/key vocabulary is Supply-owned. No connection request, provider adapter, field map, static fallback or available-slot persistence exists. Existing request/schedule/selection protocol remains authoritative and accepted selections remain unchanged.
+
+ShippingArrivalRule requires `delivery_company_code`; evaluate overlaps and availability for exactly that company.
+
+Notification: `channels[{channel, topics:[{topic_code, enabled, destination_codes?}]}]`, with no channel master toggle. Preserve revision concurrency, backend policy defaults for missing choices, `OptOutAllowed=false` mandatory topics, separate destination consents and unsubscribe enforcement. Preference choices do not authorize delivery. The existing preference-change event carries changed identifiers and revision only.
+
+Tier progress uses configured thresholds in minor units, never fixed tier names or thresholds. Existing `progress_basis_points = clamp(floor(qualifying_spend / next_threshold * 10000), 0, 10000)`. At maximum tier it is 10000. Optional `tier_progress_basis_points = clamp(floor((qualifying_spend-current_threshold)/(next_threshold-current_threshold)*10000),0,10000)` with zero as the floor if no current tier. At maximum tier it is 10000; invalid/absent thresholds omit it. `current_tier.qualifying_threshold` already exists and Pricing must populate it from configuration. No calculations execute in this module.
+
+Order commercial amounts: subtotal is goods before promotional discounts; discount_amount is promotion discount, not points/voucher tender. Total is the commercial obligation including shipping, applicable tax, tip and surcharge; inclusive tax must not be added twice. Points, vouchers and gift cards settle that obligation without changing Total. `order.paid.amount_paid` is settlement evidence and must never substitute for qualifying goods value. `quote_key` and positive `quote_revision` are supplied together for the frozen accepted quote; absent legacy references provide no quote authority.
+
+`deferred_payment = {actor, authorized_at, reason?}` on Order and created/edited/paid events is Orders-stamped staff authorization evidence. Absence never authorizes unpaid fulfilment. Supply trusts only authenticated Orders state/events and performs its own operator/geographic checks. The marker does not settle payment or disable ordinary checkout expiry. Events remain created v1, edited v2 and paid v2 because additions are optional.
+
+Tax models under `pricing/tax`: category (`code`, `name`, `is_active`, `revision`, embedded audit); rule (`id`, `tax_category_code`, `market_code`, `rate_numerator`, `rate_denominator`, `inclusion_basis`, `effective_from`, optional `effective_to`, `revision`, embedded audit). Pricing owns positive denominators, revisions, interval validation and calculation. Audit remains flat through existing AuditFields, not a new nested audit object.
+
+`account_banner` supports the storefront Account placement; a campaign may omit benefit refs. `EXPIRY_HOLD` distinguishes expired-stock storage; Supply must exclude blocked expired lots from allocation. PurchaseReceiptItem.date_mark is already optional; do not expose lot evidence in customer ReceiptLine.
+
+Canonical executable fixtures: `pkg/test/testdata/configurable_contract.json` and courier `delivery_company_configuration_json_test.go`. Consent policies remain Identity-owned and partial checkout flags remain Orders DTOs.

@@ -3,7 +3,7 @@ package template
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/geography"
 )
 
 // NotificationTemplateVersion freezes content and its review evidence at

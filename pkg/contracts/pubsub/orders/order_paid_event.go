@@ -1,11 +1,12 @@
 package orders
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
-	analytics "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/insights/sales"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/money"
+	analytics "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/insights/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/payments/payment/payment_enums"
 	"time"
 )
 
@@ -17,12 +18,18 @@ import (
 // never a zero subtotal, a zero discount, or an untagged order. Consumers must
 // skip qualification for such an event rather than infer a value from AmountPaid.
 type OrderPaidEvent struct {
-	OrderID     string                      `json:"order_id"`
-	OrderNumber string                      `json:"order_number"`
-	PaymentID   string                      `json:"payment_id,omitempty"`
-	Method      payment_enums.PaymentMethod `json:"method,omitempty"`
-	Channel     commerce_enums.OrderType    `json:"channel,omitempty"`
-	AmountPaid  money.Money                 `json:"amount_paid"`
+	DeferredPayment *order.DeferredPaymentAuthorization `json:"deferred_payment,omitempty"`
+	OrderID         string                              `json:"order_id"`
+	OrderNumber     string                              `json:"order_number"`
+	PaymentID       string                              `json:"payment_id,omitempty"`
+	Method          payment_enums.PaymentMethod         `json:"method,omitempty"`
+	Channel         commerce_enums.OrderType            `json:"channel,omitempty"`
+	// QuoteKey and QuoteRevision identify the accepted frozen checkout quote.
+	// Both are absent for legacy events; Pricing must not infer qualifying goods
+	// spend from AmountPaid, which is settlement evidence, not goods value.
+	QuoteKey      string      `json:"quote_key,omitempty"`
+	QuoteRevision int64       `json:"quote_revision,omitempty"`
+	AmountPaid    money.Money `json:"amount_paid"`
 
 	// Subtotal is the merchandise subtotal before any discount is applied.
 	Subtotal money.Money `json:"subtotal"`

@@ -1,6 +1,6 @@
 package promotion
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/promotion/promotion_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/promotion/promotion_enums"
 
 // PromotionScope selects canonical products. An unrestricted scope must set
 // Unrestricted to true; an empty restricted scope is invalid. The outer

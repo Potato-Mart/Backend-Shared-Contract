@@ -1,6 +1,6 @@
 package pricebook
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/money"
 
 // SellingPriceDisplay is customer-safe presentation evidence resolved by
 // Pricing. All amounts use the same sellable base unit, currency, and tax basis

@@ -4,6 +4,7 @@ package warehouse_enums
 type StockLocationPurpose string
 
 const (
+	StockLocationPurposeExpiryHold         StockLocationPurpose = "EXPIRY_HOLD"
 	StockLocationPurposeStandard           StockLocationPurpose = "STANDARD"
 	StockLocationPurposeQualityHold        StockLocationPurpose = "QUALITY_HOLD"
 	StockLocationPurposeOnlineOrderStaging StockLocationPurpose = "ONLINE_ORDER_STAGING"
@@ -11,7 +12,7 @@ const (
 
 func (p StockLocationPurpose) IsValid() bool {
 	switch p {
-	case StockLocationPurposeStandard, StockLocationPurposeQualityHold,
+	case StockLocationPurposeExpiryHold, StockLocationPurposeStandard, StockLocationPurposeQualityHold,
 		StockLocationPurposeOnlineOrderStaging:
 		return true
 	}

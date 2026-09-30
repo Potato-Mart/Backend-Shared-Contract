@@ -1,12 +1,12 @@
 package inventory
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/packaging"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // InventoryCategoryTagEvidence records a location-qualified operational tag

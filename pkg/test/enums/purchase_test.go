@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/procurement/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/procurement/purchase_enums"
 )
 
 func TestPurchaseEnumsValidateKnownValues(t *testing.T) {

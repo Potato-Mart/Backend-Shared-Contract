@@ -3,24 +3,24 @@ package order
 import (
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/geography"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/geography"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/buyer"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/fulfilment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/group_order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/orders/buyer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/orders/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/orders/group_order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/orders/shipping"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/shipping/shipping_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/orders/shipping/shipping_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/promotion"
 )
 
 // Buyer describes who is buying, independently of Channel. POS is a
@@ -38,6 +38,7 @@ type Order struct {
 	CountryCode       geography.CountryCode         `json:"country_code,omitempty"`
 	Channel           commerce_enums.OrderType      `json:"channel"`
 	Status            order_enums.SalesOrderStatus  `json:"status"`
+	DeferredPayment   *DeferredPaymentAuthorization `json:"deferred_payment,omitempty"`
 	PaymentStatus     payment_enums.PaymentStatus   `json:"payment_status"`
 	PaymentMethod     payment_enums.PaymentMethod   `json:"payment_method"`
 	FulfillmentStatus order_enums.FulfillmentStatus `json:"fulfillment_status"`
@@ -81,6 +82,10 @@ type Order struct {
 	DeliverySelection *shipping.DeliverySelection `json:"delivery_selection,omitempty"`
 
 	// ── Money ─────────────────────────────────────────────────────────
+	// Subtotal is merchandise before promotion discounts. Total is the commercial
+	// order obligation including shipping, applicable tax, tip and surcharge.
+	// Points, vouchers and gift cards are tenders; they never reduce Total or
+	// become promotion discounts. TaxAmount may already be included in inclusive prices.
 	Subtotal       money.Money `json:"subtotal"`
 	DiscountAmount money.Money `json:"discount_amount"`
 	ShippingAmount money.Money `json:"shipping_amount"`

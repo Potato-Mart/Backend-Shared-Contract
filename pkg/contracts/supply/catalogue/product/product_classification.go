@@ -1,6 +1,6 @@
 package product
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/classification"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/catalogue/classification"
 
 // ProductClassification contains code-only relationships to catalogue
 // masters. SellingProduct resolves them into customer-safe display data.

@@ -3,9 +3,9 @@ package membership
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/money"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/membership/membership_enums"
 )
 
 // CustomerTierProgress is the customer-safe projection of progress toward the
@@ -20,7 +20,10 @@ type CustomerTierProgress struct {
 	CurrentTier              *TierProgressTier                      `json:"current_tier,omitempty"`
 	NextTier                 *TierProgressTier                      `json:"next_tier,omitempty"`
 	RemainingQualifyingSpend *money.Money                           `json:"remaining_qualifying_spend,omitempty"`
-	ProgressBasisPoints      *int                                   `json:"progress_basis_points,omitempty"`
-	IsMaxTier                *bool                                  `json:"is_max_tier,omitempty"`
-	CalculatedAt             time.Time                              `json:"calculated_at"`
+	// ProgressBasisPoints retains floor(spend / next threshold * 10000), clamped to 0..10000; max tier is 10000.
+	// TierProgressBasisPoints is optional within-tier progress, using the configured current threshold as its floor.
+	TierProgressBasisPoints *int      `json:"tier_progress_basis_points,omitempty"`
+	ProgressBasisPoints     *int      `json:"progress_basis_points,omitempty"`
+	IsMaxTier               *bool     `json:"is_max_tier,omitempty"`
+	CalculatedAt            time.Time `json:"calculated_at"`
 }

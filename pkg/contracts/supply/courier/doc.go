@@ -1,7 +1,6 @@
-// Package courier contains Supply-owned delivery company and service-area
-// contracts, customer-safe references, and a standalone privileged credential
-// value model. Credential values must only be used by authorized service
-// operations and must never appear in general company or customer projections.
-// Services own provider registration, encrypted storage, credential access,
-// routing, validation and booking.
+// Package courier contains Supply-owned delivery company configuration and
+// service-area contracts and customer-safe references. Supply owns encryption,
+// sensitive-value masking, privileged access, validation, routing and booking.
+// User-configured APIs implement the normalized delivery protocol; available
+// slot lists are transient and accepted delivery selections remain order-owned.
 package courier

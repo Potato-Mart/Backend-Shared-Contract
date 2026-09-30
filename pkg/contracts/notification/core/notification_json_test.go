@@ -6,17 +6,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/metadata"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/notification/core"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/notification/core/notification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/notification/delivery"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/notification/email"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/notification/preference"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/notification/push"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/notification/sms"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/metadata"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/notification/core"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/notification/core/notification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/notification/delivery"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/notification/email"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/notification/preference"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/notification/push"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/notification/sms"
 )
 
 func TestNotificationPreferencesSupportsBackendDefinedTopicsAndDestinationScopedSocialConsent(t *testing.T) {
@@ -24,12 +24,9 @@ func TestNotificationPreferencesSupportsBackendDefinedTopicsAndDestinationScoped
 	prefs := preference.NotificationPreferences{
 		ID: "notification-preference-1", UserID: "user-1", CustomerNumber: "customer-1", Revision: 7,
 		AuditFields: audit.AuditFields{CreatedAt: changedAt, UpdatedAt: changedAt},
-		Topics: []preference.NotificationTopicPreference{{
-			TopicCode: "seasonal_restock", // backend-created, not a shared enum value.
-			Channels: []preference.NotificationChannelPreference{{
-				Channel: notification_enums.NotificationChannelSocialMedia, Enabled: true,
-				DestinationCodes: []string{"destination-opaque-1"},
-			}},
+		Channels: []preference.NotificationChannelPreference{{
+			Channel: notification_enums.NotificationChannelSocialMedia,
+			Topics:  []preference.NotificationTopicPreference{{TopicCode: "seasonal_restock", Enabled: true, DestinationCodes: []string{"destination-opaque-1"}}},
 		}},
 		Consents: []preference.NotificationChannelConsent{{
 			Channel: notification_enums.NotificationChannelSocialMedia, DestinationCode: "destination-opaque-1", Granted: true,
@@ -128,18 +125,14 @@ func TestNotificationDeliveryOneOfPayloadGoldenAndNegativeCases(t *testing.T) {
 func TestSocialPreferencesRequireDestinationSelectionAndSeparateConsent(t *testing.T) {
 	now := time.Date(2026, 8, 24, 5, 0, 0, 0, time.UTC)
 	emptySelection := preference.NotificationPreferences{
-		UserID: "user-1", Topics: []preference.NotificationTopicPreference{{
-			TopicCode: "campaign_reminder", Channels: []preference.NotificationChannelPreference{{Channel: notification_enums.NotificationChannelSocialMedia, Enabled: true}},
-		}},
+		UserID: "user-1", Channels: []preference.NotificationChannelPreference{{Channel: notification_enums.NotificationChannelSocialMedia, Topics: []preference.NotificationTopicPreference{{TopicCode: "campaign_reminder", Enabled: true}}}},
 	}
-	if len(emptySelection.Topics[0].Channels[0].DestinationCodes) != 0 {
+	if len(emptySelection.Channels[0].Topics[0].DestinationCodes) != 0 {
 		t.Fatal("empty social allow-list fixture is invalid")
 	}
 
 	prefs := preference.NotificationPreferences{
-		UserID: "user-1", Topics: []preference.NotificationTopicPreference{{
-			TopicCode: "campaign_reminder", Channels: []preference.NotificationChannelPreference{{Channel: notification_enums.NotificationChannelSocialMedia, Enabled: true, DestinationCodes: []string{"destination-1", "destination-2"}}},
-		}},
+		UserID: "user-1", Channels: []preference.NotificationChannelPreference{{Channel: notification_enums.NotificationChannelSocialMedia, Topics: []preference.NotificationTopicPreference{{TopicCode: "campaign_reminder", Enabled: true, DestinationCodes: []string{"destination-1", "destination-2"}}}}},
 	}
 	if socialDestinationEnabled(prefs, "campaign_reminder", "destination-1") {
 		t.Fatal("newly selected destination is enabled without separate consent")
@@ -186,15 +179,15 @@ func hasMatchingSinglePayload(delivery delivery.NotificationDelivery) bool {
 
 func socialDestinationEnabled(preferences preference.NotificationPreferences, topicCode, destinationCode string) bool {
 	selected := false
-	for _, topic := range preferences.Topics {
-		if topic.TopicCode != topicCode {
+	for _, channel := range preferences.Channels {
+		if channel.Channel != notification_enums.NotificationChannelSocialMedia {
 			continue
 		}
-		for _, channel := range topic.Channels {
-			if channel.Channel != notification_enums.NotificationChannelSocialMedia || !channel.Enabled {
+		for _, topic := range channel.Topics {
+			if topic.TopicCode != topicCode || !topic.Enabled {
 				continue
 			}
-			for _, code := range channel.DestinationCodes {
+			for _, code := range topic.DestinationCodes {
 				if code == destinationCode {
 					selected = true
 				}

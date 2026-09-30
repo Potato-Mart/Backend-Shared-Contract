@@ -193,6 +193,7 @@ var v33ModelPackageManifest = map[string]string{
 	"contracts/pricing/promotion/promotion_enums":                    "enum",
 	"contracts/pricing/quote":                                        "record",
 	"contracts/pricing/quote/quote_enums":                            "enum",
+	"contracts/pricing/tax":                                          "record",
 	"contracts/pricing/special":                                      "record",
 	"contracts/pricing/wallet/balance":                               "record",
 	"contracts/pricing/wallet/giftcard":                              "record",
@@ -251,7 +252,7 @@ var modelPackageManifest map[string]string
 // existing courier package. V37 adds frozen promotion target package allocation
 // and committed order edit payload records in existing owned packages. V37.1
 // adds provider-neutral courier request-configuration value models and enums.
-const exportedTypeManifestDigest = "0dddfd4790f34012de1e27897025c0528b32be67f8d33d2a0ae9ad7aacf3a92d"
+const exportedTypeManifestDigest = "1c1d8f38acffaafec4aa5f87b90b7234d58932efab42d7239fcfbdb3a276440e"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

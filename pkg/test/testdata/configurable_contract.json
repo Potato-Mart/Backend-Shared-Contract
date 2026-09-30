@@ -1,0 +1,122 @@
+{
+  "preferences": {
+    "id": "prefs-1",
+    "user_id": "user-1",
+    "revision": 7,
+    "channels": [
+      {
+        "channel": "email",
+        "topics": [
+          {
+            "topic_code": "order_update",
+            "enabled": false
+          }
+        ]
+      },
+      {
+        "channel": "social_media",
+        "topics": [
+          {
+            "topic_code": "restock",
+            "enabled": true,
+            "destination_codes": [
+              "destination-1"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "arrival_rule": {
+    "id": "rule-1",
+    "delivery_company_code": "custom-courier",
+    "name": "Morning",
+    "timezone": "Australia/Sydney",
+    "from_dow": 1,
+    "from_time": "09:00",
+    "to_dow": 1,
+    "to_time": "17:00",
+    "arrival_dow": 2,
+    "week_offset": 0,
+    "is_active": true
+  },
+  "deferred_payment": {
+    "actor": {
+      "actor_id": "staff-1",
+      "actor_domain": "workforce",
+      "actor_role": "countryAdmin"
+    },
+    "authorized_at": "2026-09-30T01:00:00Z",
+    "reason": "Staff invoice"
+  },
+  "paid": {
+    "order_id": "order-1",
+    "order_number": "ORD-1",
+    "quote_key": "quote-1",
+    "quote_revision": 4,
+    "amount_paid": {
+      "amount_minor": 1200,
+      "currency": "AUD"
+    },
+    "subtotal": {
+      "amount_minor": 1000,
+      "currency": "AUD"
+    },
+    "discount_amount": {
+      "amount_minor": 100,
+      "currency": "AUD"
+    },
+    "paid_at": "2026-09-30T02:00:00Z",
+    "deferred_payment": {
+      "actor": {
+        "actor_id": "staff-1",
+        "actor_domain": "workforce",
+        "actor_role": "countryAdmin"
+      },
+      "authorized_at": "2026-09-30T01:00:00Z",
+      "reason": "Staff invoice"
+    }
+  },
+  "progress": {
+    "available": true,
+    "current_tier": {
+      "tier_key": "user-configured-a",
+      "qualifying_threshold": {
+        "amount_minor": 10000,
+        "currency": "AUD"
+      }
+    },
+    "next_tier": {
+      "tier_key": "user-configured-b",
+      "qualifying_threshold": {
+        "amount_minor": 30000,
+        "currency": "AUD"
+      }
+    },
+    "progress_basis_points": 6666,
+    "tier_progress_basis_points": 5000,
+    "calculated_at": "2026-09-30T01:00:00Z"
+  },
+  "category": {
+    "code": "GENERAL",
+    "name": "General",
+    "is_active": true,
+    "revision": 2
+  },
+  "rule": {
+    "id": "tax-rule-1",
+    "tax_category_code": "GENERAL",
+    "market_code": "market-au",
+    "rate_numerator": 1,
+    "rate_denominator": 10,
+    "inclusion_basis": "tax_inclusive",
+    "effective_from": "2026-09-30T00:00:00Z",
+    "revision": 3
+  },
+  "campaign": {
+    "placement": "account_banner"
+  },
+  "location": {
+    "purpose": "EXPIRY_HOLD"
+  }
+}

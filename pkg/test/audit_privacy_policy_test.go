@@ -7,41 +7,42 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/audit"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/customers/group"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/customers/retail"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/customers/wholesale"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/identity/access"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/identity/account"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/identity/authorisation"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/notification/preference"
-	notificationtemplate "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/notification/template"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/orders/shipping"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/payments/merchant"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/payments/payment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/payments/receipt"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/payments/register"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/payments/settlement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/coupon"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/pricebook"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/wallet/balance"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/wallet/giftcard"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/wallet/ledger"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/wallet/reservation"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pricing/wallet/reward"
-	notificationevent "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pubsub/notification"
-	pricingevent "github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/pubsub/pricing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/review"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/catalogue/wish"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/courier"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/forecasting"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/fulfilment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/inventory"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/procurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/customers/group"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/customers/retail"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/customers/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/identity/access"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/identity/account"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/identity/authorisation"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/notification/preference"
+	notificationtemplate "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/notification/template"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/payments/merchant"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/payments/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/payments/receipt"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/payments/register"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/payments/settlement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/coupon"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/pricebook"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/tax"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/wallet/balance"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/wallet/giftcard"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/wallet/ledger"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/wallet/reservation"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/wallet/reward"
+	notificationevent "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pubsub/notification"
+	pricingevent "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pubsub/pricing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/catalogue/review"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/catalogue/wish"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/courier"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/forecasting"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/procurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/warehouse"
 )
 
 type typePolicy struct {
@@ -64,71 +65,66 @@ var v34TypePolicyRegistry = map[string]typePolicy{
 	"coupon profile completion restriction": {reflect.TypeOf(coupon.ProfileCompletionRestriction{}), false, false},
 	"membership tier metadata":              {reflect.TypeOf(membership.MembershipTierMetadataEntry{}), false, false},
 	"delivery selection":                    {reflect.TypeOf(shipping.DeliverySelection{}), false, false},
+	"tax category":                          {reflect.TypeOf(tax.TaxCategory{}), true, false},
+	"tax rule":                              {reflect.TypeOf(tax.TaxRule{}), true, false},
+	"delivery configuration":                {reflect.TypeOf(courier.DeliveryCompanyConfigurationEntry{}), false, false},
 	"delivery company":                      {reflect.TypeOf(courier.DeliveryCompany{}), true, false},
 	"delivery company reference":            {reflect.TypeOf(courier.DeliveryCompanyRef{}), false, false},
-	"delivery connection":                   {reflect.TypeOf(courier.DeliveryConnection{}), false, false},
-	"delivery API request field":            {reflect.TypeOf(courier.DeliveryAPIRequestField{}), false, false},
-	"delivery API request configuration":    {reflect.TypeOf(courier.DeliveryAPIRequestConfiguration{}), false, false},
-	"delivery API request configurations":   {reflect.TypeOf(courier.DeliveryAPIRequestConfigurations{}), false, false},
 	// The credential value is transient; Supply protects its stored bundle.
-	"delivery provider credentials":          {reflect.TypeOf(courier.DeliveryProviderCredentials{}), false, false},
-	"delivery provider credential extension": {reflect.TypeOf(courier.DeliveryProviderCredentialExtension{}), false, false},
-	"delivery provider settings":             {reflect.TypeOf(courier.DeliveryProviderSettings{}), false, false},
-	"delivery company custom metadata":       {reflect.TypeOf(courier.DeliveryCompanyCustomMetadataEntry{}), false, false},
-	"delivery capabilities":                  {reflect.TypeOf(courier.DeliveryCapabilities{}), false, false},
-	"delivery service area":                  {reflect.TypeOf(courier.DeliveryServiceArea{}), false, false},
-	"delivery service window":                {reflect.TypeOf(courier.DeliveryServiceWindow{}), false, false},
-	"shipping zone reference":                {reflect.TypeOf(courier.ShippingZoneRef{}), false, false},
-	"notification template":                  {reflect.TypeOf(notificationtemplate.NotificationTemplate{}), true, false},
-	"notification template binding":          {reflect.TypeOf(notificationtemplate.NotificationTemplateBinding{}), true, false},
-	"notification template version":          {reflect.TypeOf(notificationtemplate.NotificationTemplateVersion{}), false, false},
-	"translation review":                     {reflect.TypeOf(notificationtemplate.TranslationReview{}), false, false},
-	"notification preference":                {reflect.TypeOf(preference.NotificationPreferences{}), true, true},
-	"payment":                                {reflect.TypeOf(payment.Payment{}), true, true},
-	"outbound shipment":                      {reflect.TypeOf(fulfilment.OutboundShipment{}), true, true},
-	"merchant legal profile":                 {reflect.TypeOf(merchant.MerchantLegalProfile{}), true, true},
-	"settlement":                             {reflect.TypeOf(settlement.Settlement{}), true, true},
-	"brand":                                  {reflect.TypeOf(classification.Brand{}), true, false},
-	"stock location":                         {reflect.TypeOf(warehouse.StockLocation{}), true, false},
-	"wish proposal":                          {reflect.TypeOf(wish.WishProposal{}), true, false},
-	"wish candidate":                         {reflect.TypeOf(wish.WishCandidate{}), true, false},
-	"wish ballot":                            {reflect.TypeOf(wish.WishBallot{}), true, false},
-	"checkout reservation":                   {reflect.TypeOf(reservation.CheckoutBenefitReservation{}), true, true},
-	"point reservation":                      {reflect.TypeOf(reservation.PointReservation{}), true, true},
-	"coupon assignment":                      {reflect.TypeOf(coupon.CouponAssignment{}), true, true},
-	"reward redemption":                      {reflect.TypeOf(reward.RewardRedemption{}), true, true},
-	"shipping zone":                          {reflect.TypeOf(shipping.Zone{}), true, false},
-	"shipping rate":                          {reflect.TypeOf(shipping.Rate{}), true, false},
-	"arrival blacklist":                      {reflect.TypeOf(shipping.ShippingArrivalBlacklist{}), true, false},
-	"SKU demand forecast":                    {reflect.TypeOf(forecasting.SKUDemandForecast{}), true, false},
-	"retail customer":                        {reflect.TypeOf(retail.RetailCustomer{}), true, true},
-	"group manager application":              {reflect.TypeOf(group.GroupOrderManagerApplication{}), true, true},
-	"wholesale organisation":                 {reflect.TypeOf(wholesale.WholesaleOrganisation{}), true, true},
-	"wholesale application":                  {reflect.TypeOf(wholesale.WholesaleApplication{}), true, true},
-	"organisation access":                    {reflect.TypeOf(wholesale.OrganisationAccess{}), true, true},
-	"user account":                           {reflect.TypeOf(account.UserAccount{}), true, true},
-	"retail account profile":                 {reflect.TypeOf(account.RetailCustomerAccountProfile{}), true, true},
-	"wholesale account profile":              {reflect.TypeOf(account.WholesaleCustomerAccountProfile{}), true, true},
-	"user profile":                           {reflect.TypeOf(account.UserProfile{}), true, true},
-	"auth identity":                          {reflect.TypeOf(account.AuthIdentity{}), true, true},
-	"portal access":                          {reflect.TypeOf(access.PortalAccess{}), true, true},
-	"role assignment":                        {reflect.TypeOf(authorisation.RoleAssignment{}), true, true},
-	"membership account":                     {reflect.TypeOf(membership.MembershipAccount{}), true, true},
-	"package price entry":                    {reflect.TypeOf(pricebook.PackagePriceEntry{}), true, false},
-	"membership tier price-book assignment":  {reflect.TypeOf(pricebook.MembershipTierPriceBookAssignment{}), true, false},
-	"customer wallet":                        {reflect.TypeOf(balance.CustomerWallet{}), false, true},
-	"login session":                          {reflect.TypeOf(access.LoginSession{}), false, true},
-	"user device":                            {reflect.TypeOf(account.UserDevice{}), false, true},
-	"qualifying spend ledger":                {reflect.TypeOf(membership.QualifyingSpendLedgerEntry{}), false, true},
-	"point ledger":                           {reflect.TypeOf(ledger.PointLedgerEntry{}), false, true},
-	"gift card transaction":                  {reflect.TypeOf(giftcard.GiftCardTransaction{}), false, true},
-	"carrying cost movement":                 {reflect.TypeOf(procurement.CarryingCostMovement{}), false, true},
-	"stock movement":                         {reflect.TypeOf(inventory.StockMovement{}), false, true},
-	"cash movement":                          {reflect.TypeOf(register.CashMovement{}), false, true},
-	"receipt snapshot":                       {reflect.TypeOf(receipt.ReceiptSnapshot{}), false, true},
-	"register session":                       {reflect.TypeOf(register.RegisterSession{}), true, true},
-	"published review":                       {reflect.TypeOf(review.PublishedReview{}), false, false},
-	"preference event":                       {reflect.TypeOf(notificationevent.NotificationPreferencesChangedEvent{}), false, false},
+	"delivery company custom metadata":      {reflect.TypeOf(courier.DeliveryCompanyCustomMetadataEntry{}), false, false},
+	"delivery capabilities":                 {reflect.TypeOf(courier.DeliveryCapabilities{}), false, false},
+	"delivery service area":                 {reflect.TypeOf(courier.DeliveryServiceArea{}), false, false},
+	"shipping zone reference":               {reflect.TypeOf(courier.ShippingZoneRef{}), false, false},
+	"notification template":                 {reflect.TypeOf(notificationtemplate.NotificationTemplate{}), true, false},
+	"notification template binding":         {reflect.TypeOf(notificationtemplate.NotificationTemplateBinding{}), true, false},
+	"notification template version":         {reflect.TypeOf(notificationtemplate.NotificationTemplateVersion{}), false, false},
+	"translation review":                    {reflect.TypeOf(notificationtemplate.TranslationReview{}), false, false},
+	"notification preference":               {reflect.TypeOf(preference.NotificationPreferences{}), true, true},
+	"payment":                               {reflect.TypeOf(payment.Payment{}), true, true},
+	"outbound shipment":                     {reflect.TypeOf(fulfilment.OutboundShipment{}), true, true},
+	"merchant legal profile":                {reflect.TypeOf(merchant.MerchantLegalProfile{}), true, true},
+	"settlement":                            {reflect.TypeOf(settlement.Settlement{}), true, true},
+	"brand":                                 {reflect.TypeOf(classification.Brand{}), true, false},
+	"stock location":                        {reflect.TypeOf(warehouse.StockLocation{}), true, false},
+	"wish proposal":                         {reflect.TypeOf(wish.WishProposal{}), true, false},
+	"wish candidate":                        {reflect.TypeOf(wish.WishCandidate{}), true, false},
+	"wish ballot":                           {reflect.TypeOf(wish.WishBallot{}), true, false},
+	"checkout reservation":                  {reflect.TypeOf(reservation.CheckoutBenefitReservation{}), true, true},
+	"point reservation":                     {reflect.TypeOf(reservation.PointReservation{}), true, true},
+	"coupon assignment":                     {reflect.TypeOf(coupon.CouponAssignment{}), true, true},
+	"reward redemption":                     {reflect.TypeOf(reward.RewardRedemption{}), true, true},
+	"shipping zone":                         {reflect.TypeOf(shipping.Zone{}), true, false},
+	"shipping rate":                         {reflect.TypeOf(shipping.Rate{}), true, false},
+	"arrival blacklist":                     {reflect.TypeOf(shipping.ShippingArrivalBlacklist{}), true, false},
+	"SKU demand forecast":                   {reflect.TypeOf(forecasting.SKUDemandForecast{}), true, false},
+	"retail customer":                       {reflect.TypeOf(retail.RetailCustomer{}), true, true},
+	"group manager application":             {reflect.TypeOf(group.GroupOrderManagerApplication{}), true, true},
+	"wholesale organisation":                {reflect.TypeOf(wholesale.WholesaleOrganisation{}), true, true},
+	"wholesale application":                 {reflect.TypeOf(wholesale.WholesaleApplication{}), true, true},
+	"organisation access":                   {reflect.TypeOf(wholesale.OrganisationAccess{}), true, true},
+	"user account":                          {reflect.TypeOf(account.UserAccount{}), true, true},
+	"retail account profile":                {reflect.TypeOf(account.RetailCustomerAccountProfile{}), true, true},
+	"wholesale account profile":             {reflect.TypeOf(account.WholesaleCustomerAccountProfile{}), true, true},
+	"user profile":                          {reflect.TypeOf(account.UserProfile{}), true, true},
+	"auth identity":                         {reflect.TypeOf(account.AuthIdentity{}), true, true},
+	"portal access":                         {reflect.TypeOf(access.PortalAccess{}), true, true},
+	"role assignment":                       {reflect.TypeOf(authorisation.RoleAssignment{}), true, true},
+	"membership account":                    {reflect.TypeOf(membership.MembershipAccount{}), true, true},
+	"package price entry":                   {reflect.TypeOf(pricebook.PackagePriceEntry{}), true, false},
+	"membership tier price-book assignment": {reflect.TypeOf(pricebook.MembershipTierPriceBookAssignment{}), true, false},
+	"customer wallet":                       {reflect.TypeOf(balance.CustomerWallet{}), false, true},
+	"login session":                         {reflect.TypeOf(access.LoginSession{}), false, true},
+	"user device":                           {reflect.TypeOf(account.UserDevice{}), false, true},
+	"qualifying spend ledger":               {reflect.TypeOf(membership.QualifyingSpendLedgerEntry{}), false, true},
+	"point ledger":                          {reflect.TypeOf(ledger.PointLedgerEntry{}), false, true},
+	"gift card transaction":                 {reflect.TypeOf(giftcard.GiftCardTransaction{}), false, true},
+	"carrying cost movement":                {reflect.TypeOf(procurement.CarryingCostMovement{}), false, true},
+	"stock movement":                        {reflect.TypeOf(inventory.StockMovement{}), false, true},
+	"cash movement":                         {reflect.TypeOf(register.CashMovement{}), false, true},
+	"receipt snapshot":                      {reflect.TypeOf(receipt.ReceiptSnapshot{}), false, true},
+	"register session":                      {reflect.TypeOf(register.RegisterSession{}), true, true},
+	"published review":                      {reflect.TypeOf(review.PublishedReview{}), false, false},
+	"preference event":                      {reflect.TypeOf(notificationevent.NotificationPreferencesChangedEvent{}), false, false},
 }
 
 func TestV33AuditAndPrivacyTypePolicy(t *testing.T) {

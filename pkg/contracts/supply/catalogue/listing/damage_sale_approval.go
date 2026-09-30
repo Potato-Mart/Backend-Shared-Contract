@@ -3,7 +3,7 @@ package listing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v38/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // DamageSaleApproval is the explicit quality decision that allows damaged
