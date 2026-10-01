@@ -698,6 +698,21 @@ func TestV32ContractPreservationManifest(t *testing.T) {
 
 	var missing []string
 	for oldKey, destination := range v32ContractPreservationManifest {
+		// v40 reuses the commercial listing models under their sole Pricing owner.
+		// Keep the historical v33 manifest/documentation unchanged and resolve
+		// its destinations against the current major here.
+		switch destination {
+		case "contracts/supply/catalogue/listing.MarketListing":
+			destination = "contracts/pricing/listing.MarketListing"
+		case "contracts/supply/catalogue/listing.SaleRestriction":
+			destination = "contracts/pricing/listing.SaleRestriction"
+		case "contracts/supply/catalogue/listing/listing_enums.MarketListingStatus":
+			destination = "contracts/pricing/listing/listing_enums.MarketListingStatus"
+		case "contracts/supply/catalogue/listing/listing_enums.SaleRestrictionKind":
+			destination = "contracts/pricing/listing/listing_enums.SaleRestrictionKind"
+		case "contracts/pubsub/supply.CatalogListingChangedEvent":
+			destination = "contracts/pubsub/pricing.CatalogListingChangedEvent"
+		}
 		// v38 replaces the historical scalar target with GeographicPath.
 		if oldKey == "contracts/common/geography.GeographicTarget" {
 			if !present["contracts/common/geography.GeographicPath"] {

@@ -3,13 +3,14 @@ package listing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
-// SaleEligibilitySnapshot is the Supply-owned inventory and listing evidence
-// captured for one SKU in one market at quote time. It carries no commercial
-// price: Supply returns evidence and Pricing decides the money.
+// SaleEligibilitySnapshot is the Supply-owned physical inventory evidence
+// captured for one SKU in one market at quote time, referencing Pricing-owned
+// listing revision and tax category. Supply returns stock evidence and Pricing
+// owns commercial eligibility and money.
 //
 // ValidityToken is the opaque handle a caller returns when reserving stock or
 // re-quoting. A stale listing, inventory, or eligibility revision requires a

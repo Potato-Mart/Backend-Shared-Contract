@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pubsub/supply"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pubsub/supply"
 )
 
 func TestFulfilmentPayloadsRelyOnEnvelopeOccurredAt(t *testing.T) {

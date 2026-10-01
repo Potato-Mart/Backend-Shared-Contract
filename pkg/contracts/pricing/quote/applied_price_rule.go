@@ -1,7 +1,7 @@
 package quote
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/money"
 	"time"
 )
 

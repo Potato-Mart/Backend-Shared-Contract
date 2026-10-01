@@ -717,7 +717,7 @@ func remapCutoverTypePolicies(policy map[string]map[string]struct{}) {
 		"supply/classification.BrandRef":              "supply/catalogue/classification.BrandRef",
 		"supply/classification.ProductSupplierRef":    "supply/catalogue/classification.ProductSupplierRef",
 		"supply/classification.SKUSeries":             "supply/catalogue/classification.SKUSeries",
-		"pubsub/event.CatalogListingChangedEvent":     "pubsub/supply.CatalogListingChangedEvent",
+		"pubsub/event.CatalogListingChangedEvent":     "pubsub/pricing.CatalogListingChangedEvent",
 		"supply/listing.SaleEligibilitySnapshot":      "supply/catalogue/listing.SaleEligibilitySnapshot",
 		"insights/analytics.OrderItemFact":            "insights/sales.OrderItemFact",
 		"insights/analytics.RefundItemFact":           "insights/sales.RefundItemFact",
@@ -755,7 +755,7 @@ func remapCutoverTypePolicies(policy map[string]map[string]struct{}) {
 
 func TestGoSourcesContainNoOlderContractImports(t *testing.T) {
 	const contractImportRoot = "github.com/Potato-Mart/Backend-Shared-Contract/"
-	const currentContractImportPrefix = contractImportRoot + "v39/"
+	const currentContractImportPrefix = contractImportRoot + "v40/"
 	pkgRoot := sharedContractPkgRoot(t)
 	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {

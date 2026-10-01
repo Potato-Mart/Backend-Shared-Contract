@@ -1,8 +1,8 @@
 package classification
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/localization"
 )
 
 type CategoryTag struct {

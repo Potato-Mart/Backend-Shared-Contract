@@ -2,10 +2,10 @@ package membership_test
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/membership/membership_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pricing/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/catalogue/classification"
 	"reflect"
 	"testing"
 )

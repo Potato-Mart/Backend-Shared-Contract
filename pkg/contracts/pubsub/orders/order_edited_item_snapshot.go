@@ -1,6 +1,6 @@
 package orders
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/packaging"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/packaging"
 
 // OrderEditedItemSnapshot is the customer-safe requested package composition
 // of one order line before or after a committed product edit. It excludes
