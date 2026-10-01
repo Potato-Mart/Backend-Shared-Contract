@@ -3,7 +3,7 @@ package compliance
 import (
 	"time"
 
-	compliance_enums "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/compliance/compliance_enums"
+	compliance_enums "github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/compliance/compliance_enums"
 )
 
 type RFIExternalEvent struct {

@@ -49,6 +49,20 @@ func TestPricingListingHasOneCanonicalOwner(t *testing.T) {
 					if owner != expected {
 						t.Errorf("%s belongs to %s, found %s", model.Name.Name, expected, owner)
 					}
+					if model.Name.Name == "MarketListing" || model.Name.Name == "CatalogListingChangedEvent" {
+						if record, ok := model.Type.(*ast.StructType); ok {
+							for _, field := range record.Fields.List {
+								for _, name := range field.Names {
+									if name.Name == "DisplayName" || name.Name == "UnitPricingRequired" {
+										t.Errorf("%s restores removed listing field %s", model.Name.Name, name.Name)
+									}
+								}
+								if field.Tag != nil && (strings.Contains(field.Tag.Value, "display_name") || strings.Contains(field.Tag.Value, "unit_pricing_required")) {
+									t.Errorf("%s restores removed listing JSON key %s", model.Name.Name, field.Tag.Value)
+								}
+							}
+						}
+					}
 				}
 			}
 		}

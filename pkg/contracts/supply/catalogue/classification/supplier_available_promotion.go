@@ -1,7 +1,7 @@
 package classification
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/localization"
 )
 
 // SupplierAvailablePromotion is a locale-aware supplier promotion without

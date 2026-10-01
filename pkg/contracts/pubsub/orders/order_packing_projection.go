@@ -3,7 +3,7 @@ package orders
 import (
 	"time"
 
-	order "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/orders/fulfilment"
+	order "github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/orders/fulfilment"
 )
 
 // OrderPackingProjection is the durable packing snapshot shared between

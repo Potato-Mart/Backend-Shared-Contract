@@ -3,7 +3,7 @@ package promotion
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/localization"
 )
 
 // PromotionApplication is the immutable result of applying one promotion

@@ -1,6 +1,6 @@
 package product
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/localization"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/localization"
 
 // ProductLocalization groups secondary per-language display fields.
 type ProductLocalization struct {

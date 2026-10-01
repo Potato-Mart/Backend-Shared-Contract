@@ -3,7 +3,7 @@ package pricing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pricing/listing/listing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/pricing/listing/listing_enums"
 )
 
 // CatalogListingChangedEvent is emitted on the catalog-events topic for every
@@ -23,7 +23,6 @@ type CatalogListingChangedEvent struct {
 	Status         listing_enums.MarketListingStatus `json:"status"`
 
 	TaxCategoryCode        string `json:"tax_category_code"`
-	UnitPricingRequired    bool   `json:"unit_pricing_required"`
 	ExpiryLeadDaysOverride *int32 `json:"expiry_lead_days_override,omitempty"`
 
 	PreviousRevision int64 `json:"previous_revision"`

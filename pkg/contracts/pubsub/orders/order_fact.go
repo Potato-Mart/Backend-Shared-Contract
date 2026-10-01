@@ -3,9 +3,9 @@ package orders
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/money"
-	analytics "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/insights/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/money"
+	analytics "github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/insights/sales"
 )
 
 // OrderFact is the immutable analytical projection of an order event.

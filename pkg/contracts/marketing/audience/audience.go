@@ -1,6 +1,6 @@
 package audience
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/marketing/campaign/campaign_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/marketing/campaign/campaign_enums"
 
 // Audience narrows a campaign or Pricing-owned offer by customer type and
 // client platform. Omitted dimensions are unrestricted. Platform is distinct

@@ -1,23 +1,23 @@
 package pkg_test
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/geography"
 
 	"reflect"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/orders/buyer"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/payments/merchant"
-	pos "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/payments/receipt"
-	pricinglisting "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pricing/listing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pricing/market"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pricing/pricebook"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pricing/quote"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/catalogue/listing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/catalogue/product"
-	operations "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/inventory"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/procurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/orders/buyer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/payments/merchant"
+	pos "github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/payments/receipt"
+	pricinglisting "github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/pricing/listing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/pricing/market"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/pricing/pricebook"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/pricing/quote"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/catalogue/listing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/catalogue/product"
+	operations "github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/procurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/warehouse"
 )
 
 // TestBackendGateModelSurface locks the reusable model primitives needed by
@@ -187,7 +187,6 @@ func TestBackendGateModelSurface(t *testing.T) {
 		"Status":                 "status",
 		"TaxCategoryCode":        "tax_category_code",
 		"ExpiryLeadDaysOverride": "expiry_lead_days_override,omitempty",
-		"UnitPricingRequired":    "unit_pricing_required",
 		"Revision":               "revision",
 	})
 	assertJSONFields(t, reflect.TypeOf(warehouse.DepotMarket{}), map[string]string{

@@ -6,6 +6,7 @@ The current module contains shared models and enums only. Published tags and Git
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v41.0.0` | 2026-10-02 | Major |
 | `v40.0.1` | 2026-10-02 | Patch |
 | `v40.0.0` | 2026-10-01 | Major |
 | `v39.4.0` | 2026-10-01 | Minor |
@@ -141,6 +142,32 @@ The current module contains shared models and enums only. Published tags and Git
 | `v0.1.0` | 2026-04-21 | Pre-release |
 
 
+## v41.0.0 (2026-10-02)
+
+### Breaking Contract Changes
+- Module path is `/v41`.
+- MarketListing no longer contains `display_name` or `unit_pricing_required`; CatalogListingChangedEvent no longer contains `unit_pricing_required`.
+- Restriction kind `age` replaces proof-based `age_verification`.
+- PurchaseOrderItem.UnitCost is optional `*money.Money`, with JSON `unit_cost,omitempty`; its per-base-unit supplier-cost meaning is unchanged.
+
+### Added
+- SaleRestriction has integer `age_years`, strict `age_comparison` (`below`, `above`) and canonical `excluded_delivery_methods`.
+- PurchaseOrderItem.SelectedPackageCost preserves the exact Money cost of one frozen selected package without division into base-unit minor amounts.
+
+### Fixed
+- Product display identity stays catalogue-owned. Retail age policy describes purchase eligibility without proof verification or product visibility filtering.
+
+### Other Changes
+- Strict comparisons allow equality. Age policy is retail-only using saved Customers DOB; guests/missing DOB remain viewable but cannot purchase restricted items. Wholesale bypasses the age rule independently of channel.
+- Quantity-limit, channel-exclusion and prescription semantics are unchanged. Canonical delivery methods remain delivery, pickup and outsourced.
+- Services own DOB/calendar evaluation, validation, supplier-cost basis selection and totals. No routes, DTOs or runtime decisions are added.
+
+### Contract Files Changed
+- Pricing listing records/enums, Pricing listing event, Supply PurchaseOrderItem and their JSON/enum tests.
+- All shared imports use `/v41`; the reviewed model manifest includes AgeComparison.
+
+### Compatibility Notes
+Published prior tags remain immutable. Fields and kind-specific meanings are defined in the current [listing](pricing-listing-model.md) and [procurement cost](procurement-cost-model.md) references. Runtime event versions and deployed behavior remain service-owned.
 ## v40.0.1 (2026-10-02)
 
 ### Breaking Contract Changes

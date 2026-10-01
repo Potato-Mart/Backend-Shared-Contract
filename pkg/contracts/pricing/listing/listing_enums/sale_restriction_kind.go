@@ -6,14 +6,17 @@ package listing_enums
 type SaleRestrictionKind string
 
 const (
-	// SaleRestrictionKindAgeVerification requires proof of age at sale.
-	SaleRestrictionKindAgeVerification SaleRestrictionKind = "age_verification"
+	// SaleRestrictionKindAge restricts retail purchase using saved Customers
+	// DOB and a strict below/above threshold. It never restricts viewing or
+	// wholesale purchase and does not require proof-based age verification.
+	SaleRestrictionKindAge SaleRestrictionKind = "age"
 	// SaleRestrictionKindQuantityLimit caps the quantity one buyer may
 	// purchase.
 	SaleRestrictionKindQuantityLimit SaleRestrictionKind = "quantity_limit"
 	// SaleRestrictionKindChannelExcluded blocks one order channel.
 	SaleRestrictionKindChannelExcluded SaleRestrictionKind = "channel_excluded"
-	// SaleRestrictionKindDeliveryExcluded blocks delivery fulfilment.
+	// SaleRestrictionKindDeliveryExcluded blocks the explicitly listed
+	// canonical delivery methods: delivery, pickup or outsourced.
 	SaleRestrictionKindDeliveryExcluded SaleRestrictionKind = "delivery_excluded"
 	// SaleRestrictionKindPrescription requires an authorised prescription.
 	SaleRestrictionKindPrescription SaleRestrictionKind = "prescription"
@@ -22,7 +25,7 @@ const (
 // IsValid reports whether k is a known SaleRestrictionKind.
 func (k SaleRestrictionKind) IsValid() bool {
 	switch k {
-	case SaleRestrictionKindAgeVerification, SaleRestrictionKindQuantityLimit,
+	case SaleRestrictionKindAge, SaleRestrictionKindQuantityLimit,
 		SaleRestrictionKindChannelExcluded, SaleRestrictionKindDeliveryExcluded,
 		SaleRestrictionKindPrescription:
 		return true
