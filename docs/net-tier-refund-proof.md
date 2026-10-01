@@ -1,6 +1,4 @@
-# Net tier-refund proof adoption
-
-Pin `github.com/Potato-Mart/Backend-Shared-Contract/v39 v39.3.0` and the matching CI pin before dependent source changes. The model release does not supply runtime reader/preparation/release interfaces, grants, deployment, verified lineage or selection authority. Orders, Pricing and Payments agreed the projection; remaining source workflows and cross-service acceptance are held separately.
+# Net tier-refund proof
 
 `RefundCompletedEvent.tier_refund_proof` is optional. Its type is `pricing/membership.TierRefundProof`:
 
@@ -24,12 +22,12 @@ Missing proof is missing/unverified evidence, not zero. Guest/wholesale tier-not
 
 Pricing's immutable native reservation is authority: every projected field and outer refund_id/order/customer/market/currency binding must match. Local lookup supplies independent selection and cumulative/replay verification, so no cumulative amount is duplicated here. Net evidence remains distinct from `qualifying_spend_reversal` (released gross earned-point clawback), `points_to_restore` (redeemed points) and refund settlement `amount`. None is a fallback for missing net authority.
 
-Orders must preserve original accepted version/item/component/package/ordinal lineage and original gift classification prospectively, with no historical reconstruction or SKU/array-position joins. Pricing must verify retained native quote evidence against the protected Orders accepted version, durably seal original net allocation with actual paid credit (including witnessed zero), and retain original-grant lineage across amendments. Newly added units do not inherit credit from repricing. Pricing confirmed its native quote records are durable and insert-only; no new pre-effect pin callback is required merely for quote lifetime. Allocation arithmetic, unit selection and service DTOs remain Pricing/Orders-owned.
+Orders preserves original accepted version/item/component/package/ordinal lineage and original gift classification. Evidence cannot be reconstructed from SKU or array-position joins. Pricing must verify retained native quote evidence against the protected Orders accepted version, durably seal original net allocation with actual paid credit (including witnessed zero), and retain original-grant lineage across amendments. Newly added units do not inherit credit from repricing. Allocation arithmetic, unit selection and service DTOs remain Pricing/Orders-owned.
 
 Payments must durably establish RefundID/request/selection authority before network preparation, call outside retrying database transactions, and freeze returned proof/complete selection before provider, gift/wallet or terminal effects. Ambiguous responses retry identical authority. Native Pricing reservations fence selected original units and cumulative completed/reserved credit against the original grant. Completion consumes proof and writes tier reversal atomically in Pricing; completion time selects its reversal year.
 
 Confirmed pre-dispatch cancellation or final provider failure needs durable RefundID/selection tombstones, including an ambiguous prepare whose proof ID was not recovered. Completed proof cannot release. Timeout, pending/unknown provider status or transport failure never release. These requirements do not publish a route or runtime permission.
 
-Remaining amount-only, edited-order and multi-capture selection/batch assignment designs are service-local and fail closed until independently verified. FullOrderRefund or remaining captured cash alone is not all-unit proof; no cash-proportional unit guess. Model publication does not clear source-ticket or production activation holds. Already-started legacy financial truth is recorded without another provider effect or reconstructed historical net proof.
+FullOrderRefund or remaining captured cash alone is not all-unit proof. Cash-proportional unit guesses do not establish selection authority. Allocation arithmetic, selection DTOs and runtime interfaces remain service-owned.
 
-Fixtures: `pkg/contracts/pubsub/payments/testdata/tier_refund_proof.json` and `tier_refund_proof_json_test.go` show quoted positive/zero, witnessed gift zero and unchanged legacy omission/gross values. Runtime event versions remain owner source authority; this optional addition causes no version bump.
+Fixtures: `pkg/contracts/pubsub/payments/testdata/tier_refund_proof.json` and `tier_refund_proof_json_test.go` show quoted positive/zero, witnessed gift zero and proof omission and gross values. The event version is defined by the owning publisher.
