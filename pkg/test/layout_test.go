@@ -18,6 +18,7 @@ const contractImportPrefix = "github.com/Potato-Mart/Backend-Shared-Contract/v39
 var contractMajorPath = regexp.MustCompile(`github\.com/Potato-Mart/Backend-Shared-Contract/v([0-9]+)/`)
 
 var expectedEnumPackages = []string{
+	"contracts/pricing/listing/listing_enums",
 	"contracts/common/commerce/commerce_enums",
 	"contracts/common/geography/geography_enums",
 	"contracts/common/identity/identity_enums",
