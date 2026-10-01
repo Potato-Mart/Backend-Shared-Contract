@@ -1,6 +1,6 @@
 package benefit
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/localization"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/localization"
 
 // BenefitRef is a customer-safe open reference to a Pricing-owned benefit.
 // Kind and Code are deliberately open so Pricing can introduce benefit

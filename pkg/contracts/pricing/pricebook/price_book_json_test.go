@@ -2,17 +2,17 @@ package pricebook
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/packaging"
 	"reflect"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/customers/wholesale/wholesale_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/market/market_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pricing/market/market_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pricing/pricebook/pricebook_enums"
 )
 
 func TestPriceBookOwnsCurrencyChannelAudienceAndPolicies(t *testing.T) {

@@ -1,8 +1,8 @@
 package forecasting
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/forecasting/marketing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/forecasting/marketing_enums"
 )
 
 // CampaignProductPrediction is a per-product forecast in canonical base units.

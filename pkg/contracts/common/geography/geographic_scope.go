@@ -1,6 +1,6 @@
 package geography
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/geography/geography_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/geography/geography_enums"
 
 // GeographicScope is global with no targets or targeted with one or more
 // independent hierarchy paths. Owning market/currency remain separate facts.

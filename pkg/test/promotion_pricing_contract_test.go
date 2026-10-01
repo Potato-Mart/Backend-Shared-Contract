@@ -2,7 +2,7 @@ package pkg_test
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/packaging"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -15,18 +15,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/money"
-	order "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/orders/order"
-	pos "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/payments/receipt"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/promotion/promotion_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/quote"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/quote/quote_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/catalogue/listing"
-	operations "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/inventory"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/money"
+	order "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/orders/order"
+	pos "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/payments/receipt"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pricing/quote"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/catalogue/listing"
+	operations "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestPromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *testing.T) {

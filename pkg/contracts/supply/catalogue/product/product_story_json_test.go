@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/catalogue/classification"
 )
 
 func TestProductStoryUsesLocalizedNameAndMediaCodes(t *testing.T) {

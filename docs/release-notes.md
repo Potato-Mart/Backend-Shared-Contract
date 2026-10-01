@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v40.0.0` | 2026-10-01 | Major | One canonical Pricing listing model/enums/event; removes duplicate Supply listing definitions and compatibility scaffolding. Module `/v40`; consumers must migrate imports and pins. |
 | `v39.4.0` | 2026-10-01 | Minor | Adds canonical Pricing market-listing models/enums; preserves Supply imports and exact listing wire compatibility. |
 | `v39.3.0` | 2026-09-30 | Minor | Adds optional native net tier-refund proof projection with explicit quoted/gift-exclusion bases; legacy gross point evidence unchanged. |
 | `v39.2.1` | 2026-09-30 | Patch | Corrects service-owned event-version guidance; no shared wire, model or enum changes. |
@@ -154,6 +155,35 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v40.0.0 (2026-10-01)
+
+### Breaking Contract Changes
+- Module path advances from `/v39` to `/v40`. Every adopting service must update all shared-contract imports, `go.mod`, module sums and CI/build metadata together.
+- Removes duplicate `supply/catalogue/listing.MarketListing` and `SaleRestriction`, and the Supply `listing_enums` package. Reuse the sole existing Pricing definitions directly; no aliases, parallel records or compatibility mapping remain.
+- Moves the single `CatalogListingChangedEvent` definition from `pubsub/supply` to `pubsub/pricing`. Its JSON fields, enum values, event type and topic/version semantics do not change.
+
+### Added
+- Ownership regression gate requires exactly one commercial listing model, enum and event definition under Pricing, while preserving Supply stock evidence ownership.
+
+### Fixed
+- Removes the parallel Supply/Pricing model strategy introduced in v39.4.0, following the user's explicit canonical-model correction.
+
+### Other Changes
+- Removes duplicate-model parity scaffolding and moves existing JSON tests to the canonical owner.
+- Historical release notes and already-published v39.4.0 tags/assets remain immutable. Current model manifests and package guards reflect v40; historical v33 preservation evidence resolves its listing destinations to current Pricing ownership.
+
+### Contract Files Changed
+- All shared-model/test imports use `/v40`.
+- Removes Supply `market_listing.go`, `sale_restriction.go` and both listing-enum files; retains the existing Pricing definitions.
+- Moves `pubsub/supply/catalog_listing_changed_event.go` to `pubsub/pricing` and separates its JSON test from Supply base-cost tests.
+- Retains Supply `SaleEligibilitySnapshot`, `DamageSaleApproval`, DepotMarket, catalogue and inventory models without wire changes.
+
+### Compatibility Notes / Consumer Action
+- Supply and Pricing must remove obsolete commercial listing imports and compatibility casts/mapping, using canonical Pricing structs/enums directly. Split imports where physical evidence and commercial listing facts share a file.
+- Orders keeps Supply eligibility evidence but upgrades the module major. Identity, Customers, Payments, Notification and Insights also require coherent module/import/build-pin adoption; service verification is owned by their chats.
+- Service listing ownership, event publication and consumer handling are runtime gates. No listing source-data migration is required by the user; this release does not deploy services or prove completed consumer adoption.
+- See [listing adoption](pricing-listing-adoption.md). No old Go definitions are retained in v40; unchanged JSON supports the existing service wire while owners complete the cutover.
 
 ## v39.4.0 (2026-10-01)
 

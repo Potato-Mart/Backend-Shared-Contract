@@ -1,9 +1,9 @@
 package promotion
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/commerce/commerce_enums"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/marketing/audience"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/commerce/commerce_enums"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/marketing/audience"
 )
 
 // PromotionControls contains reusable application limits and eligibility

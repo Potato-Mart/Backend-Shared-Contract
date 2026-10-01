@@ -1,6 +1,6 @@
 package inventory
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/packaging"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/packaging"
 
 // PackageOptionProductStockSnapshot qualifies product stock by package option.
 type PackageOptionProductStockSnapshot struct {

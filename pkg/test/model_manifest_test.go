@@ -218,7 +218,6 @@ var v33ModelPackageManifest = map[string]string{
 	"contracts/supply/catalogue/favourite":                           "record",
 	"contracts/supply/catalogue/favourite/favourite_enums":           "enum",
 	"contracts/supply/catalogue/listing":                             "record",
-	"contracts/supply/catalogue/listing/listing_enums":               "enum",
 	"contracts/supply/catalogue/product":                             "record",
 	"contracts/supply/catalogue/product/product_enums":               "enum",
 	"contracts/supply/catalogue/review":                              "record",
@@ -255,7 +254,9 @@ var modelPackageManifest map[string]string
 // and committed order edit payload records in existing owned packages. V37.1
 // adds provider-neutral courier request-configuration value models and enums.
 // V39.3 adds Pricing-owned TierRefundProof and its finite basis enum.
-const exportedTypeManifestDigest = "88212cb25c1bf63abd966ffe9de4e2f2564f5026f4bf48e6f2c171818427444b"
+// V40 removes duplicate Supply commercial listing models/enums and places
+// their single event definition under Pricing. Supply stock evidence remains.
+const exportedTypeManifestDigest = "4a6ccb3a356c608a9cc8f147178979ea4d537db29b167e37acf0f41f199dc577"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

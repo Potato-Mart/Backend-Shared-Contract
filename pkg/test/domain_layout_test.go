@@ -44,7 +44,7 @@ func TestDomainPackageLayout(t *testing.T) {
 		"contracts/marketing/message/marketing_message.go":                        "message",
 		"contracts/supply/catalogue/classification/brand.go":                      "classification",
 		"contracts/supply/catalogue/favourite/favourite_list.go":                  "favourite",
-		"contracts/supply/catalogue/listing/market_listing.go":                    "listing",
+		"contracts/pricing/listing/market_listing.go":                             "listing",
 		"contracts/supply/catalogue/product/product.go":                           "product",
 		"contracts/supply/catalogue/review/review.go":                             "review",
 		"contracts/supply/catalogue/wish/wish_proposal.go":                        "wish",

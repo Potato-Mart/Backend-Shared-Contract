@@ -1,13 +1,13 @@
 package membership
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/catalogue/classification"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v39/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pricing/membership/membership_enums"
 )
 
 // MembershipTier defines the qualification and benefit rules for the global
