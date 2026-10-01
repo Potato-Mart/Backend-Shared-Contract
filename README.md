@@ -14,7 +14,7 @@ workflows.
 ## Latest Version
 
 ```text
-v39.3.0
+v39.4.0
 github.com/Potato-Mart/Backend-Shared-Contract/v39
 ```
 
@@ -26,10 +26,12 @@ breaking changes and consumer actions.
 Pin the latest release in the consuming service's `go.mod`:
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v39 v39.3.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v39 v39.4.0
 ```
 
 Import packages from the same `/v39` module path.
+
+The v39.4.0 release adds canonical Pricing market-listing models while retaining Supply import and wire compatibility. See [listing adoption](docs/pricing-listing-adoption.md).
 
 The v39.3.0 release adds optional Pricing-owned net tier-refund proof projection separately from gross point-clawback evidence. See [net tier-refund proof](docs/net-tier-refund-proof.md); service authority/workflows and production readiness remain owner gates.
 

@@ -107,6 +107,8 @@ var v32ModelPackageManifest = map[string]string{
 // Adding an exported type changes the digest below and requires an explicit
 // manifest review instead of silently expanding the contract surface.
 var v33ModelPackageManifest = map[string]string{
+	"contracts/pricing/listing":                                      "record",
+	"contracts/pricing/listing/listing_enums":                        "enum",
 	"contracts/common/audit":                                         "record",
 	"contracts/common/commerce/commerce_enums":                       "enum",
 	"contracts/common/device":                                        "record",
@@ -253,7 +255,7 @@ var modelPackageManifest map[string]string
 // and committed order edit payload records in existing owned packages. V37.1
 // adds provider-neutral courier request-configuration value models and enums.
 // V39.3 adds Pricing-owned TierRefundProof and its finite basis enum.
-const exportedTypeManifestDigest = "819a615fd8e8996d9007eb579ccc42633e7daf2f096774bb9930f2aa60233b57"
+const exportedTypeManifestDigest = "88212cb25c1bf63abd966ffe9de4e2f2564f5026f4bf48e6f2c171818427444b"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

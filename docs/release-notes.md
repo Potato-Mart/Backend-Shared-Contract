@@ -23,6 +23,7 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 
 | Version | Release date | Type | Impact |
 | --- |--------------| --- | --- |
+| `v39.4.0` | 2026-10-01 | Minor | Adds canonical Pricing market-listing models/enums; preserves Supply imports and exact listing wire compatibility. |
 | `v39.3.0` | 2026-09-30 | Minor | Adds optional native net tier-refund proof projection with explicit quoted/gift-exclusion bases; legacy gross point evidence unchanged. |
 | `v39.2.1` | 2026-09-30 | Patch | Corrects service-owned event-version guidance; no shared wire, model or enum changes. |
 | `v39.2.0` | 2026-09-30 | Minor | Adds optional order.paid quote_fingerprint for lossless opaque Pricing quote revisions; retains numeric revision compatibility. |
@@ -153,6 +154,29 @@ Backend-Shared-Contract 是土豆商城後端生態系的共用契約層。本�
 | `v1.1.0` | 2026-04-24   | Minor | Initial complete contract/model set |
 | `v1.0.0` | 2026-04-21   | Major | Initial module baseline |
 | `v0.1.0` | 2026-04-21   | Pre-release | Initial repository seed |
+
+## v39.4.0 (2026-10-01)
+
+### Breaking Contract Changes
+- None. Module remains `/v39`; existing Supply structs/enums and event payloads are unchanged.
+
+### Added
+- Pricing-owned `pricing/listing.MarketListing` and `SaleRestriction`, plus `listing_enums.MarketListingStatus` and `SaleRestrictionKind` with existing wire values.
+- Structural, JSON and enum parity tests for staged service adoption.
+
+### Fixed
+- None.
+
+### Other Changes
+- Reviewed model manifest and enum package inventory include the additive packages.
+
+### Contract Files Changed
+- `pkg/contracts/pricing/listing/market_listing.go`, `sale_restriction.go`, and their `listing_enums` files.
+
+### Compatibility Notes / Consumer Action
+- Upgrade service `go.mod` and CI contract pins to `v39.4.0` before implementation. Pricing and Supply agreed the canonical surface; old Supply listing imports remain frozen compatibility representations, with distinct Go types requiring explicit service-local mapping.
+- SaleEligibilitySnapshot, DamageSaleApproval, DepotMarket, catalogue and inventory evidence remain Supply-owned. Existing CatalogListingChangedEvent is unchanged; runtime cutover, DTOs, routes, authorization and persistence remain service responsibilities.
+- Orders and other existing consumers can retain their current Supply imports. See [listing adoption](pricing-listing-adoption.md) for migration and removal conditions. No runtime deployment or consumer readiness is implied.
 
 ## v39.3.0 (2026-09-30)
 
