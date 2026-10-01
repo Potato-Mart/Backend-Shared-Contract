@@ -6,17 +6,17 @@ import (
 	"testing"
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/catalogue/product"
-	purchase "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/procurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/catalogue/product"
+	purchase "github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/procurement"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/procurement/purchase_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/procurement/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestPurchaseOrderJSONRoundTripWithHistory(t *testing.T) {
@@ -46,7 +46,7 @@ func TestPurchaseOrderJSONRoundTripWithHistory(t *testing.T) {
 				},
 				CapturedAt:    occurredAt,
 				PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1},
-				UnitCost:      money.Money{AmountMinor: 2400, Currency: "AUD"},
+				UnitCost:      &money.Money{AmountMinor: 200, Currency: "AUD"},
 				OrderedComposition: packaging.PackageCompositionSnapshot{
 					TotalBaseUnits: 24,
 					Components: []packaging.PackageComponentSnapshot{

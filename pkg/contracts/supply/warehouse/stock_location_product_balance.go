@@ -3,7 +3,7 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/packaging"
 )
 
 // StockLocationProductBalance is a revisioned quantity projection for one

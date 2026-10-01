@@ -1,11 +1,11 @@
 package product
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/measurement"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/catalogue/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/catalogue/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/catalogue/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/catalogue/product/product_enums"
 )
 
 // Product is the canonical catalogue record for one sellable product identity.

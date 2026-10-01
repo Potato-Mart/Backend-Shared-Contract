@@ -1,6 +1,6 @@
 package campaign
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/marketing/campaign/campaign_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/marketing/campaign/campaign_enums"
 
 // CTADestination is a validated, allowlisted campaign call-to-action route.
 type CTADestination struct {

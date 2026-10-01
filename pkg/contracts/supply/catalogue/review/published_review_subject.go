@@ -1,8 +1,8 @@
 package review
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/catalogue/review/review_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/catalogue/review/review_enums"
 )
 
 // PublishedReviewSubject is a customer-safe review subject. Services must

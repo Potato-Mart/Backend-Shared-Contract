@@ -256,7 +256,8 @@ var modelPackageManifest map[string]string
 // V39.3 adds Pricing-owned TierRefundProof and its finite basis enum.
 // V40 removes duplicate Supply commercial listing models/enums and places
 // their single event definition under Pricing. Supply stock evidence remains.
-const exportedTypeManifestDigest = "4a6ccb3a356c608a9cc8f147178979ea4d537db29b167e37acf0f41f199dc577"
+// V41 adds the strict AgeComparison enum for retail purchase restrictions.
+const exportedTypeManifestDigest = "7404405419da0eaec9bcc28728ec081c3181639d2ddbe671c427e0130b99886c"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

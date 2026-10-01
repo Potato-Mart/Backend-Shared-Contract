@@ -7,10 +7,9 @@ package listing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pricing/listing/listing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/pricing/listing/listing_enums"
 )
 
 // MarketListing links one MarketCode and one SKUCode with a lifecycle, the
@@ -30,16 +29,12 @@ type MarketListing struct {
 	SKUCode     string                            `json:"sku_code"`
 	Status      listing_enums.MarketListingStatus `json:"status"`
 
-	TaxCategoryCode string                       `json:"tax_category_code"`
-	DisplayName     []localization.LocalizedName `json:"display_name,omitempty"`
-	Restrictions    []SaleRestriction            `json:"restrictions,omitempty"`
+	TaxCategoryCode string            `json:"tax_category_code"`
+	Restrictions    []SaleRestriction `json:"restrictions,omitempty"`
 
 	// ExpiryLeadDaysOverride replaces the market's default soon-expiry lead
 	// time for this listing. Nil keeps the market default.
 	ExpiryLeadDaysOverride *int32 `json:"expiry_lead_days_override,omitempty"`
-	// UnitPricingRequired marks a listing that may not be activated without
-	// the SKU's net quantity and standard measure.
-	UnitPricingRequired bool `json:"unit_pricing_required"`
 
 	AvailableFrom  time.Time              `json:"available_from"`
 	AvailableUntil *time.Time             `json:"available_until,omitempty"`

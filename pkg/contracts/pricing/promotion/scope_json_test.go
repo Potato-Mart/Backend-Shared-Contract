@@ -2,10 +2,10 @@ package promotion
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/packaging"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
 func TestPromotionScopeRepresentsPerProductAndCombinedQuantityRequirements(t *testing.T) {

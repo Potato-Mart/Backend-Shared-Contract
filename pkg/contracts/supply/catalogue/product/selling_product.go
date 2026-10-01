@@ -1,9 +1,9 @@
 package product
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/pricing/pricebook"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v40/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/pricing/pricebook"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/catalogue/classification/classification_enums"
 )
 
 // SellingProduct is the customer-safe, market-scoped product projection
