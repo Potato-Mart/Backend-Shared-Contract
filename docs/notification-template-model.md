@@ -44,8 +44,7 @@ other existing enum values are not authoring capabilities in this schema.
 
 Language strings use the existing BCP 47 representation: `en`, `zh-TW`, `zh-CN`.
 Any one can be the source; the other two are translated directly from that
-source. Country is independent of language. Identity's existing preferred-language
-values remain unchanged; Notification maps them explicitly.
+source. Country is independent of language. Notification explicitly maps Identity preferred-language values.
 
 Each variant has exactly one content arm matching the enclosing channel. Email
 uses `EmailTemplateContent`; SMS/push reuse `SMSNotification`/`PushNotification`.
@@ -54,7 +53,7 @@ target origin is `translated`, including human-refined translation. Origin does
 not establish approval. The source has no `review`; both targets require current
 `TranslationReview` evidence. Arrays are non-null; `placeholders` may be empty.
 
-For the first authoring release, completed Save requires all three complete
+Completed Save requires all three complete
 locales and current confirmation of both targets. Incomplete edits stay local;
 Translate returns a nonpersisting proposal and modal Confirm only stages edits.
 Save performs final validation and atomically stamps review. Send/publish remain
@@ -155,7 +154,7 @@ block ID. The renderer owns actual sizes, font stacks, contrast/accessibility
 checks and HTML generation; remote fonts, free CSS and arbitrary style maps
 are not represented.
 
-## Ownership, compatibility and verification
+## Ownership and verification
 
 Existing role/country primitives suffice. Notification implements a template
 capability allowing country admins and marketing staff to edit every topic and
@@ -165,9 +164,7 @@ Superadmin visibility spans countries. Publication/send authorization remains
 separate; market-scoped recipient/campaign permissions do not broaden. Generic
 market filtering must not silently restrict country-level template records.
 
-All additions are under `notification/template` and its leaf enum package.
-Existing delivery, marketing, country, locale and role models are unchanged.
-No shared manual-send snapshot is introduced: the owner pins country, publication,
+Template records live under `notification/template` and its leaf enum package. For manual sends, the owner pins country, publication,
 safe content and resolved locale at acceptance, with credentials handled through
 its protected runtime mechanisms. Provider configuration, APIs, MongoDB mappings,
 hashing and validation are absent from this module.
@@ -178,12 +175,3 @@ publications and bindings. Both live beside the package tests and contain
 synthetic content. Tests lock JSON round trips, presence semantics, country
 references, independent counters, enums, package/audit policy and model boundaries.
 They do not prove authorization, translation, hashing or delivery behavior.
-
-Adoption is sequential: actual Contract publication first; backend confirms the
-released model and both module/CI pins before implementation; completed backend
-API handoff precedes frontend implementation. Rich/security/unsubscribe paths
-retain current behavior until protected-section parity is verified. After each
-consumer cutover and rollback window, the owner removes its superseded paths,
-flags, fixtures and stale docs. This additive release introduces no deprecated
-aliases and removes no still-consumed model. Exported removals require a separate
-major release with consumer evidence.
