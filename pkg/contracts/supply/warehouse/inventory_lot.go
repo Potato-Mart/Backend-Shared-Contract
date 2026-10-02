@@ -3,7 +3,7 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/audit"
 )
 
 // InventoryLot identifies inventory received or manufactured together.

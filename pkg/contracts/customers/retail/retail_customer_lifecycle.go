@@ -3,7 +3,7 @@ package retail
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/customers/retail/retail_enums"
 )
 
 // RetailCustomerLifecycle groups the retail customer profile lifecycle.

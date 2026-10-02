@@ -3,7 +3,7 @@ package fulfilment
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/supply/catalogue/classification/classification_enums"
 )
 
 // OutboundContainerPlan describes one outbound shipping container and its

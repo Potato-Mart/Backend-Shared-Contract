@@ -3,7 +3,7 @@ package retail
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/money"
 )
 
 // RetailCustomerCommerceProfile groups aggregated commerce statistics. Values

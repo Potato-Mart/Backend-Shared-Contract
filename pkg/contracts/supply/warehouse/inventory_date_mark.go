@@ -3,7 +3,7 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // InventoryDateMark is a timezone-qualified date mark attached to a lot.

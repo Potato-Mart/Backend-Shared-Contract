@@ -1,7 +1,7 @@
 package compliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/temporal"
 )
 
 type DeclarationLine struct {

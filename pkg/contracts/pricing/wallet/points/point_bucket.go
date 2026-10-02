@@ -3,7 +3,7 @@ package points
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 // PointBucket is an expiry-aware available points batch.

@@ -1,8 +1,8 @@
 package courier
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/courier/courier_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/supply/courier/courier_enums"
 )
 
 // DeliveryServiceArea is one market- and zone-bound eligibility rule within a

@@ -1,7 +1,7 @@
 package fulfilment
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/supply/inventory"
 )
 
 // OrderAllocationEvidence binds one frozen reservation allocation to its

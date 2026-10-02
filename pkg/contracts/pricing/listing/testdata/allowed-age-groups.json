@@ -1,0 +1,17 @@
+{
+  "threshold_cases": [
+    {"policy":{"kind":"age","age_years":18,"age_comparison":"below"},"allowed_completed_ages":[17],"refused_completed_ages":[18,19]},
+    {"policy":{"kind":"age","age_years":18,"age_comparison":"above"},"allowed_completed_ages":[18,19],"refused_completed_ages":[17]}
+  ],
+  "calendar_cases": [
+    {"dob":"2008-02-29","market_date":"2026-02-28","completed_age":17},
+    {"dob":"2008-02-29","market_date":"2026-03-01","completed_age":18},
+    {"dob":"2008-02-29","market_date":"2028-02-28","completed_age":19},
+    {"dob":"2008-02-29","market_date":"2028-02-29","completed_age":20}
+  ],
+  "applicability_cases": [
+    {"buyer":"retail","usable_saved_dob":false,"can_view":true,"age_rule_allows_purchase":false},
+    {"buyer":"guest","usable_saved_dob":false,"can_view":true,"age_rule_allows_purchase":false},
+    {"buyer":"wholesale","usable_saved_dob":false,"can_view":true,"age_rule_allows_purchase":true}
+  ]
+}

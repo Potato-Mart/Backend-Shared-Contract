@@ -6,6 +6,7 @@ The current module contains shared models and enums only. Published tags and Git
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v42.0.0` | 2026-10-02 | Major |
 | `v41.0.0` | 2026-10-02 | Major |
 | `v40.0.1` | 2026-10-02 | Patch |
 | `v40.0.0` | 2026-10-01 | Major |
@@ -141,6 +142,29 @@ The current module contains shared models and enums only. Published tags and Git
 | `v1.0.0` | 2026-04-21 | Major |
 | `v0.1.0` | 2026-04-21 | Pre-release |
 
+
+## v42.0.0 (2026-10-02)
+
+### Breaking Contract Changes
+- Module path is `/v42`. AgeComparison denotes the allowed group: `below` permits completed age < AgeYears; `above` permits age >= AgeYears. Equality is permitted only by Above.
+- The same age wire names and values had different blocked-group meanings in v41.0.0. v42 policies must be interpreted by v42-aware producers and consumers; v41.0.0 remains immutable.
+
+### Added
+- Shared synthetic acceptance fixtures for ages 17/18/19 at threshold 18, retail/guest/wholesale applicability, and leap/non-leap birthdays.
+
+### Fixed
+- Canonical age semantics now match the confirmed Allowed age group control. A 29 February DOB reaches its birthday on 1 March in non-leap years.
+
+### Other Changes
+- Retail buyers use authenticated saved Customers DOB and the market calendar. Guests and missing/unusable DOB may view but cannot purchase age-restricted products; wholesale bypasses age rules independently of channel.
+- Services own calculations, payload validation and enforcement. No evaluator, routes or service DTOs are added.
+
+### Contract Files Changed
+- Pricing SaleRestriction and AgeComparison comments, current model reference and acceptance fixtures/tests. All shared imports use `/v42`; the model manifest inventory is unchanged.
+
+### Compatibility Notes
+- JSON shape is unchanged from v41; the semantic change requires the `/v42` major and coordinated service/module/CI pins. Thresholds must not be silently adjusted to emulate another major's meaning.
+- Canonical delivery exclusions, quantity/channel/prescription restrictions, listing-field removals and exact selected-package costs are unchanged. Receipt/invoice valuation evidence is unchanged.
 
 ## v41.0.0 (2026-10-02)
 

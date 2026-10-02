@@ -1,6 +1,6 @@
 package settlement
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/money"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/money"
 
 // SettlementTotals is the per-category roll-up reported on settlement
 // or totals receipts. The fields are provider-neutral and stay in minor

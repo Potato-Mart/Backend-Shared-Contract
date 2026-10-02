@@ -1,8 +1,8 @@
 package wholesale
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/money"
 )
 
 // WholesaleFreightPreset defines reusable wholesale freight rules.
