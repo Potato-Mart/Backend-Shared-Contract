@@ -1,8 +1,8 @@
 package access
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/geography/geography_enums"
 )
 
 // StaffGeoScope records workforce geographic selections. Services validate

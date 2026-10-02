@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/pricing/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/pubsub/notification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/pricing/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/pubsub/notification"
 )
 
 func TestV38PackageReferencesPreserveSKUAndPhysicalVersion(t *testing.T) {

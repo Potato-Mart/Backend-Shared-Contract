@@ -1,8 +1,8 @@
 package tax
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/pricing/pricebook/pricebook_enums"
 	"time"
 )
 

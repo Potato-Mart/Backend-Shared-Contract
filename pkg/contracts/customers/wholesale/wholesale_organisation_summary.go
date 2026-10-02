@@ -1,8 +1,8 @@
 package wholesale
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/customers/wholesale/wholesale_enums"
 )
 
 // WholesaleOrganisationSummary is the compact organisation projection carried

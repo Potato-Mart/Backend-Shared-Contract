@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/orders/shipping/shipping_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/pricing/listing/listing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/orders/shipping/shipping_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/pricing/listing/listing_enums"
 )
 
 func TestRetailAgeRestrictionCarriesThresholdWithoutBuyerOrProofData(t *testing.T) {
@@ -40,12 +40,12 @@ func TestRetailAgeRestrictionCarriesThresholdWithoutBuyerOrProofData(t *testing.
 			}
 		}
 	}
-	// There are only strict operators; equality/inclusive operators cannot be
-	// configured. Retail applicability and completed-age evaluation are owner
+	// The closed allowed-group vocabulary has no separate equality operator.
+	// Retail applicability and completed-age evaluation are owner
 	// invariants; this model deliberately contains no DOB evaluator or audience.
 	for _, invalid := range []listing_enums.AgeComparison{"", "equal", "below_or_equal", "above_or_equal", "future"} {
 		if invalid.IsValid() {
-			t.Fatalf("non-strict comparison accepted: %q", invalid)
+			t.Fatalf("unknown allowed-group comparison accepted: %q", invalid)
 		}
 	}
 	if listing_enums.SaleRestrictionKind("age_verification").IsValid() {

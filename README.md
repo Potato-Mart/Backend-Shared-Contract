@@ -5,12 +5,12 @@ Shared Go models and enums for Potato Mart. Backend services own routes, request
 ## Latest version
 
 ```text
-v41.0.0
-github.com/Potato-Mart/Backend-Shared-Contract/v41
+v42.0.0
+github.com/Potato-Mart/Backend-Shared-Contract/v42
 ```
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v41 v41.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v42 v42.0.0
 ```
 
 ## Contract rules
@@ -39,7 +39,7 @@ require github.com/Potato-Mart/Backend-Shared-Contract/v41 v41.0.0
 ## Verification and releases
 
 ```powershell
-./scripts/powershell/Test-ReleaseAlignment.ps1 -ExpectedVersion v41.0.0
+./scripts/powershell/Test-ReleaseAlignment.ps1 -ExpectedVersion v42.0.0
 ./scripts/powershell/Test-Contract.ps1
 git diff --check
 ```

@@ -1,8 +1,8 @@
 package product
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/catalogue/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/supply/catalogue/product/product_enums"
 )
 
 // SellingProductBarcode is a safe barcode projection for an active package

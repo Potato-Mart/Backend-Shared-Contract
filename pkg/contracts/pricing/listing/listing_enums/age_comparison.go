@@ -1,14 +1,14 @@
 package listing_enums
 
-// AgeComparison identifies the strict blocking side of a retail age threshold.
-// Completed age equal to the threshold is allowed for both values. Calendar
+// AgeComparison identifies the allowed group for a retail age threshold.
+// Completed age equal to the threshold is allowed only for Above. Calendar
 // calculation and eligibility decisions belong to services, not this enum.
 type AgeComparison string
 
 const (
-	// AgeComparisonBelow blocks completed age strictly below AgeYears.
+	// AgeComparisonBelow permits completed age strictly below AgeYears.
 	AgeComparisonBelow AgeComparison = "below"
-	// AgeComparisonAbove blocks completed age strictly above AgeYears.
+	// AgeComparisonAbove permits completed age greater than or equal to AgeYears.
 	AgeComparisonAbove AgeComparison = "above"
 )
 

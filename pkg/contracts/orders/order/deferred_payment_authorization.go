@@ -1,7 +1,7 @@
 package order
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/security"
 	"time"
 )
 

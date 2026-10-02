@@ -3,7 +3,7 @@ package pricing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/pricing/listing/listing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/pricing/listing/listing_enums"
 )
 
 // CatalogListingChangedEvent is emitted on the catalog-events topic for every

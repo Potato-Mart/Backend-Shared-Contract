@@ -1,7 +1,7 @@
 package payment
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/payments/payment/payment_enums"
 	"time"
 )
 

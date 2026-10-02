@@ -1,7 +1,7 @@
 package warehouse
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/audit"
 )
 
 // StockLocationAssignment links one product SKU to one depot-qualified

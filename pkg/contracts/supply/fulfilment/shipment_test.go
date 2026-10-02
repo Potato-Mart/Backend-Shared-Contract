@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/audit"
-	shippingcontract "github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/fulfilment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/audit"
+	shippingcontract "github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestOutboundShipmentDeliveredContractRoundTrips(t *testing.T) {

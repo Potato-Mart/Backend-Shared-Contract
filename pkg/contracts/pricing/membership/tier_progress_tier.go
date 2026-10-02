@@ -1,9 +1,9 @@
 package membership
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/supply/catalogue/classification"
 )
 
 // TierProgressTier is the tier summary embedded in customer tier progress.

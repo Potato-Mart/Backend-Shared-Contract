@@ -1,6 +1,6 @@
 package shipping
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v41/pkg/contracts/supply/courier"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/supply/courier"
 
 // PreferredDeliverySlot is the customer's cart-independent display snapshot.
 type PreferredDeliverySlot struct {
