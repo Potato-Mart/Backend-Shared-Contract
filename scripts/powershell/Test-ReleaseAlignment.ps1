@@ -25,7 +25,7 @@ Push-Location $repoRoot
 try {
     $modulePath = Join-Path $repoRoot 'go.mod'
     $readmePath = Join-Path $repoRoot 'README.md'
-    $releaseNotesPath = Join-Path $repoRoot 'docs\release-notes.md'
+    $releaseNotesPath = Join-Path $repoRoot 'docs\development\README.md'
 
     $moduleSource = Get-Content -LiteralPath $modulePath -Raw
     $readmeSource = Get-Content -LiteralPath $readmePath -Raw
@@ -74,12 +74,12 @@ try {
     $releaseIndexEntry = '| `' + $version + '` |'
     Assert-Match (
         $releaseNotesSource.Contains($releaseIndexEntry)
-    ) "docs/release-notes.md does not contain a release-index entry for '$version'."
+    ) "docs/development/README.md does not contain a release-index entry for '$version'."
 
     $releaseHeadingPattern = "(?m)^##\s+$([regex]::Escape($version))(?:\s|\()"
     Assert-Match (
         [regex]::IsMatch($releaseNotesSource, $releaseHeadingPattern)
-    ) "docs/release-notes.md does not contain a detailed heading for '$version'."
+    ) "docs/development/README.md does not contain a detailed heading for '$version'."
 
     & git rev-parse --is-inside-work-tree *> $null
     Assert-Match ($LASTEXITCODE -eq 0) 'Release alignment must run inside the contract Git repository.'
@@ -93,7 +93,7 @@ try {
             $LASTEXITCODE -eq 0 -and $tagType -eq 'tag'
         ) "Existing release tag '$version' must be an annotated tag."
 
-        & git diff --quiet --exit-code "refs/tags/$version" HEAD -- go.mod go.sum README.md docs/release-notes.md pkg
+        & git diff --quiet --exit-code "refs/tags/$version" HEAD -- go.mod go.sum README.md docs/development/README.md pkg
         $diffExitCode = $LASTEXITCODE
         if ($diffExitCode -eq 1) {
             throw "Release payload differs from immutable tag '$version'. Bump contract-release metadata and release notes before changing contract payload."
