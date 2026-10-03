@@ -159,7 +159,7 @@ jobs:
               exit 0
           }
 
-          $releaseNotes = Get-Content -LiteralPath docs/release-notes.md -Raw
+          $releaseNotes = Get-Content -LiteralPath docs/development/README.md -Raw
           $escapedVersion = [regex]::Escape($env:VERSION)
           $sectionPattern = "(?ms)^##\s+$escapedVersion[^\r\n]*\r?\n.*?(?=^##\s+v\d+\.\d+\.\d+|\z)"
           $section = [regex]::Match($releaseNotes, $sectionPattern)

@@ -5,12 +5,12 @@ Shared Go models and enums for Potato Mart. Backend services own routes, request
 ## Latest version
 
 ```text
-v42.0.0
+v42.0.1
 github.com/Potato-Mart/Backend-Shared-Contract/v42
 ```
 
 ```go
-require github.com/Potato-Mart/Backend-Shared-Contract/v42 v42.0.0
+require github.com/Potato-Mart/Backend-Shared-Contract/v42 v42.0.1
 ```
 
 ## Contract rules
@@ -24,26 +24,21 @@ require github.com/Potato-Mart/Backend-Shared-Contract/v42 v42.0.0
 
 ## Model references
 
-- [Pricing listings](docs/pricing-listing-model.md)
-- [Procurement costs](docs/procurement-cost-model.md)
-- [Commercial evidence](docs/commercial-evidence-model.md)
-- [Delivery companies](docs/delivery-company-model.md)
-- [Identity access](docs/identity-access-model.md)
-- [Permission catalogue](docs/permission-catalogue.md)
-- [Notification templates](docs/notification-template-model.md)
-- [Capture timing](docs/capture-timing-model.md)
-- [Gift-card issuance](docs/gift-card-issuance-model.md)
-- [Net tier-refund proof](docs/net-tier-refund-proof.md)
-- [Event payloads](docs/event-model.md)
+Current model and enum definitions live under [pkg/contracts](pkg/contracts/).
+The checked event payload table is in [Development Notes](docs/development/README.md#event-payload-reference).
 
 ## Verification and releases
 
 ```powershell
-./scripts/powershell/Test-ReleaseAlignment.ps1 -ExpectedVersion v42.0.0
+./scripts/powershell/Test-ReleaseAlignment.ps1 -ExpectedVersion v42.0.1
 ./scripts/powershell/Test-Contract.ps1
 git diff --check
 ```
 
 The contract gate runs tests with `GOWORK=off` to verify the declared module. Release metadata is declared in `go.mod`; published tags are immutable.
 
-See [Git workflow](docs/git-workflow.md), [versioning](docs/contract-versioning.md) and [release notes](docs/release-notes.md).
+See [Git Workflow](docs/development/git-workflow.md) and [Development Notes](docs/development/README.md) for versioning and the current release notes.
+
+## Repository documentation
+
+See [Documentation](docs/README.md) for OpenAPI usage, [Git Workflow](docs/development/git-workflow.md), [Package Boundaries](docs/development/package-boundaries.md), and [Development Notes](docs/development/README.md).

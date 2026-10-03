@@ -5,5 +5,5 @@
 //
 // Schema version, mutable draft revision, immutable published version and
 // translation fingerprints describe independent dimensions. See
-// docs/notification-template-model.md for wire semantics and consumer invariants.
+// package types for wire semantics; owning services enforce consumer invariants.
 package template

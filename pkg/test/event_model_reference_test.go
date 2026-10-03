@@ -46,7 +46,7 @@ func TestEventModelReferenceMatchesReviewedPayloadSet(t *testing.T) {
 	section := eventModelReferenceSection(t)
 	matches := eventModelRow.FindAllStringSubmatch(section, -1)
 	if len(matches) == 0 {
-		t.Fatal("docs/event-model.md event payload reference section contains no rows")
+		t.Fatal("docs/development/README.md event payload reference section contains no rows")
 	}
 
 	var payloads []string
@@ -75,7 +75,7 @@ func TestEventModelReferenceMatchesReviewedPayloadSet(t *testing.T) {
 	want := append([]string(nil), documentedEventPayloads...)
 	sort.Strings(want)
 	if strings.Join(got, ",") != strings.Join(want, ",") {
-		t.Fatalf("docs/event-model.md event table payloads =\n  %v\nreviewed set =\n  %v", got, want)
+		t.Fatalf("docs/development/README.md event table payloads =\n  %v\nreviewed set =\n  %v", got, want)
 	}
 }
 
@@ -104,15 +104,15 @@ func TestDocumentedEventPayloadsAreDeclaredRoutedTypes(t *testing.T) {
 
 func eventModelReferenceSection(t *testing.T) string {
 	t.Helper()
-	path := filepath.Join(filepath.Dir(sharedContractPkgRoot(t)), "docs", "event-model.md")
+	path := filepath.Join(filepath.Dir(sharedContractPkgRoot(t)), "docs", "development", "README.md")
 	contents, err := os.ReadFile(path)
 	if err != nil {
-		t.Fatalf("read docs/event-model.md: %v", err)
+		t.Fatalf("read docs/development/README.md: %v", err)
 	}
 	text := string(contents)
 	const heading = "## Event payload reference"
 	if count := strings.Count(text, heading); count != 1 {
-		t.Fatalf("docs/event-model.md has %d %q headings, want exactly one", count, heading)
+		t.Fatalf("docs/development/README.md has %d %q headings, want exactly one", count, heading)
 	}
 	start := strings.Index(text, heading)
 	rest := text[start+len(heading):]

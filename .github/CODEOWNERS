@@ -5,7 +5,6 @@
 /.github/workflows/ @Potato-Mart/release-maintainers
 /go.mod @Potato-Mart/release-maintainers
 /README.md @Potato-Mart/release-maintainers
-/docs/contract-versioning.md @Potato-Mart/release-maintainers
-/docs/git-workflow.md @Potato-Mart/release-maintainers
-/docs/release-notes.md @Potato-Mart/release-maintainers
 /scripts/powershell/Test-ReleaseAlignment.ps1 @Potato-Mart/release-maintainers
+
+/docs/development/ @Potato-Mart/release-maintainers

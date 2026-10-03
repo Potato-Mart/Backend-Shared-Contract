@@ -35,7 +35,7 @@ These rules apply to every commit and push in this repository.
 ## Release Maintainers
 
 The visible `@Potato-Mart/release-maintainers` team owns the release-control
-paths listed in [`.github/CODEOWNERS`](../.github/CODEOWNERS), including release
+paths listed in [`.github/CODEOWNERS`](../../.github/CODEOWNERS), including release
 workflows, version metadata, validation, and release governance documents.
 
 The `main` ruleset must require a pull request, code-owner review, stale-review

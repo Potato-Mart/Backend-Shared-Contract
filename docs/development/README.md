@@ -1,8 +1,10 @@
-# Event models
+# Development Notes
 
-`pkg/contracts/pubsub/envelope.EventEnvelope` contains event identity, type, version, occurrence time, aggregate identity and typed JSON payload evidence. Event payloads live under their owning domain; commercial listing facts are Pricing-owned, while physical inventory facts are Supply-owned.
+Read [Git Workflow](git-workflow.md) for branches, PRs and checks, and [Package Boundaries](package-boundaries.md) for code ownership and dependency direction.
 
-Runtime event versions, publication, authorization, idempotency and delivery are defined by the owning services. A module version or payload table does not prescribe an envelope version.
+## Verification and versioning
+
+Run `./scripts/powershell/Test-ReleaseAlignment.ps1` and `./scripts/powershell/Test-Contract.ps1` from the repository root. Tests run independently with `GOWORK=off`. Release metadata is declared in `go.mod`; module majors follow semantic versioning and published tags remain immutable. Consumers pin released versions in their own repositories.
 
 ## Event payload reference
 
@@ -27,3 +29,16 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | 15 | `CatalogBaseCostChangedEvent` | `catalog.base_cost_changed` | `catalog-events` |
 | 16 | `CatalogListingChangedEvent` | `catalog.listing_changed` | `catalog-events` |
 | 17 | `OrderPackingProjection` | `fulfilment.packing_updated` | `fulfilment-events` |
+
+## Release index
+
+| Version | Release date | Type |
+| --- | --- | --- |
+| `v42.0.1` | 2026-10-04 | Patch |
+| `v42.0.0` | 2026-10-02 | Major |
+
+## v42.0.1 (2026-10-04)
+
+Consolidate repository documentation into OpenAPI status and three development files. Update documentation-dependent tests and release tooling to the surviving paths. Shared production model files and their JSON shapes are unchanged from v42.0.0. The patch metadata preserves immutable release payload checks without rewriting the existing tag.
+
+Historical source and complete release records remain available through published Git tags and GitHub releases.
