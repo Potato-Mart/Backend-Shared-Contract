@@ -3,7 +3,7 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/pricebook/pricebook_enums"
 )
 
 func TestPriceBookEnumsValidateKnownValues(t *testing.T) {

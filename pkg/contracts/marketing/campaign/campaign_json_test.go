@@ -5,16 +5,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/marketing/campaign"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/marketing/campaign/campaign_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/pricing/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/marketing/campaign"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/marketing/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/benefit"
 )
 
 func TestCampaignUsesOpenNotificationTopicAndPricingBenefitReference(t *testing.T) {
 	payload, err := json.Marshal(campaign.Campaign{
 		CampaignCode: "spring-2026", MarketCode: "au", Title: []localization.LocalizedName{{Language: "en-AU", Name: "Spring"}},
-		Placement: campaign_enums.CampaignPlacementHomeHero, Severity: campaign_enums.CampaignSeverityInfo,
+		Placement: campaign_enums.CampaignPlacementHomeBanner, Severity: campaign_enums.CampaignSeverityInfo,
 		Status: campaign_enums.CampaignStatusActive, NotificationTopicCode: "seasonal_offer",
 		BenefitRefs: []benefit.BenefitRef{{Kind: "promotion", Code: "spring-price"}},
 	})

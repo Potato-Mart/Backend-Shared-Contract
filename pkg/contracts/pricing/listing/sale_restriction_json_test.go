@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/orders/shipping/shipping_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/pricing/listing/listing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/orders/shipping/shipping_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/listing/listing_enums"
 )
 
 func TestRetailAgeRestrictionCarriesThresholdWithoutBuyerOrProofData(t *testing.T) {

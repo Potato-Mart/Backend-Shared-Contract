@@ -1,7 +1,7 @@
 package product
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/localization"
 )
 
 // CategorySalesRank records one product's position within one category tag.

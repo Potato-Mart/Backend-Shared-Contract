@@ -34,10 +34,42 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v44.0.0` | 2026-10-06 | Major |
 | `v43.0.1` | 2026-10-06 | Patch |
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v44.0.0 (2026-10-06)
+
+Replace campaign placement vocabulary with four canonical surfaces:
+`announcement_bar` is the thin top header strip; `home_banner` is the web home
+hero or mobile home banner above the collection rail; `account_banner` remains
+the mobile Account banner below the order-status strip; and `home_modal` is the
+initial home-page popup.
+
+Remove the constants and validity support for `top_banner`, `home_hero`,
+`modal`, `checkout_notice` and `product_notice`. There are no aliases, automatic
+conversions, normalization helpers or default placement. Ordinary JSON decoding
+preserves unrecognized strings, including retired values, but `IsValid` rejects
+them. Decoding tolerance does not grant semantic or rendering support.
+
+This breaking release uses
+`github.com/Potato-Mart/Backend-Shared-Contract/v44`. Campaign fields and wire
+names, CTA text/href/typed destinations, benefit references, localization, media,
+targeting, scheduling, lifecycle and audit evidence retain their shapes. The
+forecasting placement field remains a string-valued placement. The
+`CampaignChangedEvent` payload, event type/topic and event version are unchanged;
+the event contains no placement or authored-content field. Fixtures cover all
+four surfaces, invalid legacy/future values and unchanged campaign/event evidence.
+
+This is a Shared-Contract-only cutover. Customers and existing clients still use
+legacy queries and authoring rules. Their adoption must update module and CI
+pins, DTOs, generated OpenAPI, authoring, queries and rendering. Customers must
+review migration of the three renamed surfaces and archive or otherwise review
+checkout/product notices; this release performs no record migration. Pricing
+retains eligibility and benefit authority. Publishing v44 establishes the schema
+without activating runtime adoption or proving live rendering compatibility.
 
 ## v43.0.1 (2026-10-06)
 

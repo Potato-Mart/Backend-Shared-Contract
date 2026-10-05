@@ -1,9 +1,9 @@
 package giftcard
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/money"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/wallet/wallet_enums"
 	"time"
 )
 

@@ -9,15 +9,15 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/payments/payment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/payments/receipt"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/pricing/wallet/giftcard"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/pricing/wallet/reservation"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/pricing/wallet/wallet_enums"
-	events "github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/pubsub/payments"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/payments/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/payments/receipt"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/wallet/giftcard"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/wallet/reservation"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/wallet/wallet_enums"
+	events "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pubsub/payments"
 )
 
 // These containers join existing shared records only for fixture acceptance;

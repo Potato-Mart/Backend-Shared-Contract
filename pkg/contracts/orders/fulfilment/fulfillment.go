@@ -1,7 +1,7 @@
 package fulfilment
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/orders/order/order_enums"
 	"time"
 )
 

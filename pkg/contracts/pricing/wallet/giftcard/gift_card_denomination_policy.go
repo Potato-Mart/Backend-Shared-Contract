@@ -1,9 +1,9 @@
 package giftcard
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/money"
 )
 
 // GiftCardDenominationPolicy is the versioned, server-authored set of purchase

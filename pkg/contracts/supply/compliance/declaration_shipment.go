@@ -1,8 +1,8 @@
 package compliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/temporal"
-	compliance_enums "github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/supply/compliance/compliance_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/temporal"
+	compliance_enums "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/supply/compliance/compliance_enums"
 )
 
 type DeclarationShipment struct {

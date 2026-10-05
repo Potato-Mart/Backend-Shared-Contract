@@ -1,8 +1,8 @@
 package product
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/measurement"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/measurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/packaging/packaging_enums"
 )
 
 // SellingProductPackageOption is an active package option that a customer may

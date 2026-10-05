@@ -2,8 +2,8 @@ package payments
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/payments/payment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/payments/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/payments/payment/payment_enums"
 	"reflect"
 	"testing"
 	"time"

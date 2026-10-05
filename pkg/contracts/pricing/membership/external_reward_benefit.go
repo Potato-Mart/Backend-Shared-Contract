@@ -1,6 +1,6 @@
 package membership
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/localization"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/localization"
 
 // ExternalRewardBenefit configures a reward fulfilled by an external partner
 // system, such as another company's subscription or service. ProviderCode is a

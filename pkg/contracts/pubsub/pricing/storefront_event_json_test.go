@@ -6,15 +6,15 @@ import (
 	"testing"
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/localization"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/marketing/campaign"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/marketing/campaign/campaign_enums"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/pubsub/pricing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/pubsub/pricing/promotion_enums"
-	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/pubsub/routing"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/localization"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/marketing/campaign"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/marketing/campaign/campaign_enums"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pubsub/pricing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pubsub/pricing/promotion_enums"
+	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pubsub/routing"
 )
 
 func TestCustomerSafeStorefrontEventsJSON(t *testing.T) {
@@ -132,7 +132,7 @@ func TestCampaignLinkRevisionCTAAndMediaJSON(t *testing.T) {
 			Type: campaign_enums.CampaignCTADestinationProduct, SKUCode: "SKU-1",
 		},
 		Media:            &security.ObjectMedia{Code: "media_1", URL: "/v1/storefront/campaigns/campaign_1/media"},
-		Placement:        campaign_enums.CampaignPlacementHomeHero,
+		Placement:        campaign_enums.CampaignPlacementHomeBanner,
 		Severity:         campaign_enums.CampaignSeverityInfo,
 		Status:           campaign_enums.CampaignStatusActive,
 		ScheduleTimezone: "Etc/UTC",
