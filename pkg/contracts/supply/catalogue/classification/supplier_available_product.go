@@ -1,8 +1,8 @@
 package classification
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/money"
 )
 
 // SupplierAvailableProduct describes one supplier's terms and identity for a

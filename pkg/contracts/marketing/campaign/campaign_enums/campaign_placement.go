@@ -4,18 +4,21 @@ package campaign_enums
 type CampaignPlacement string
 
 const (
-	// CampaignPlacementAccountBanner renders below the Account order-status strip.
-	CampaignPlacementAccountBanner  CampaignPlacement = "account_banner"
-	CampaignPlacementTopBanner      CampaignPlacement = "top_banner"
-	CampaignPlacementHomeHero       CampaignPlacement = "home_hero"
-	CampaignPlacementModal          CampaignPlacement = "modal"
-	CampaignPlacementCheckoutNotice CampaignPlacement = "checkout_notice"
-	CampaignPlacementProductNotice  CampaignPlacement = "product_notice"
+	// CampaignPlacementAnnouncementBar renders as a thin top header strip.
+	CampaignPlacementAnnouncementBar CampaignPlacement = "announcement_bar"
+	// CampaignPlacementHomeBanner renders as the web home hero or the mobile
+	// home banner above the collection rail.
+	CampaignPlacementHomeBanner CampaignPlacement = "home_banner"
+	// CampaignPlacementAccountBanner renders on mobile Account below the
+	// order-status strip.
+	CampaignPlacementAccountBanner CampaignPlacement = "account_banner"
+	// CampaignPlacementHomeModal renders as the initial home-page popup.
+	CampaignPlacementHomeModal CampaignPlacement = "home_modal"
 )
 
 func (p CampaignPlacement) IsValid() bool {
 	switch p {
-	case CampaignPlacementAccountBanner, CampaignPlacementTopBanner, CampaignPlacementHomeHero, CampaignPlacementModal, CampaignPlacementCheckoutNotice, CampaignPlacementProductNotice:
+	case CampaignPlacementAnnouncementBar, CampaignPlacementHomeBanner, CampaignPlacementAccountBanner, CampaignPlacementHomeModal:
 		return true
 	}
 	return false

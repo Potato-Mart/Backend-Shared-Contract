@@ -6,15 +6,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/pricing/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/pricing/membership/membership_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/pricing/wallet/points"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/wallet/points"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/supply/catalogue/classification"
 )
 
 func TestMembershipSelectedMarketFixturesRoundTrip(t *testing.T) {

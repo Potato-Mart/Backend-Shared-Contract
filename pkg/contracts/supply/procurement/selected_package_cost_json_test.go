@@ -5,10 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/packaging/packaging_enums"
-	purchase "github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/supply/procurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/packaging/packaging_enums"
+	purchase "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/supply/procurement"
 )
 
 func TestSelectedPackageCostPreservesExactMinorUnitsWithoutBaseUnitGuess(t *testing.T) {

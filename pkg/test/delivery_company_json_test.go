@@ -6,11 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/orders/shipping"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/supply/courier"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/supply/courier/courier_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/supply/courier"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/supply/courier/courier_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/supply/fulfilment"
 )
 
 func TestDeliveryLegacyJSONRemainsUnchanged(t *testing.T) {

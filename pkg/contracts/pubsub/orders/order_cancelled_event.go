@@ -1,7 +1,7 @@
 package orders
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/geography"
 	"time"
 )
 

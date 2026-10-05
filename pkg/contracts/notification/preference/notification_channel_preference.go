@@ -1,6 +1,6 @@
 package preference
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/notification/core/notification_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/notification/core/notification_enums"
 
 // NotificationChannelPreference groups topic choices under a channel. Services preserve mandatory transactional delivery
 // policy, consent and unsubscribe rules independently of these choices.

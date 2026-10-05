@@ -2,13 +2,13 @@ package product_test
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/packaging"
 	"reflect"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/supply/catalogue/product"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/supply/catalogue/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/supply/catalogue/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/supply/catalogue/product/product_enums"
 )
 
 // Symbology and leading zeros are data, not values a consumer may infer from

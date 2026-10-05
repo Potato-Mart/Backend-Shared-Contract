@@ -3,10 +3,10 @@ package forecasting
 import (
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/marketing/audience"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/marketing/campaign/campaign_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/supply/forecasting/marketing_enums"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/marketing/audience"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/marketing/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/supply/forecasting/marketing_enums"
 )
 
 // CampaignComparableEvent is historical evidence used to forecast a campaign.
