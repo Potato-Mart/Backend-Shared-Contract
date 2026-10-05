@@ -1,0 +1,813 @@
+{
+  "funding_cases": [
+    {
+      "name": "mixed",
+      "order": {
+        "id": "order-mixed",
+        "order_number": "ORDER-MIXED",
+        "market_code": "AU-VIC",
+        "country_code": "AU",
+        "subtotal": { "amount_minor": 11000, "currency": "AUD" },
+        "discount_amount": { "amount_minor": 999, "currency": "AUD" },
+        "shipping_amount": { "amount_minor": 0, "currency": "AUD" },
+        "tax_amount": { "amount_minor": 0, "currency": "AUD" },
+        "total": { "amount_minor": 10001, "currency": "AUD" },
+        "gift_card_redemptions": [
+          {
+            "gift_card_code": "GC000000000001",
+            "applied_amount": { "amount_minor": 2501, "currency": "AUD" },
+            "reservation_id": "reservation-mixed",
+            "wallet_transaction_id": "wallet-redeem-0",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          },
+          {
+            "gift_card_code": "GC000000000002",
+            "applied_amount": { "amount_minor": 1500, "currency": "AUD" },
+            "reservation_id": "reservation-mixed",
+            "wallet_transaction_id": "wallet-redeem-1",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          }
+        ]
+      },
+      "reservation": {
+        "id": "reservation-mixed",
+        "owner": {
+          "owner_type": "retail_customer",
+          "owner_id": "RC-ACCEPTANCE"
+        },
+        "order_number": "ORDER-MIXED",
+        "status": "committed",
+        "expires_at": "2026-10-06T00:15:00Z",
+        "committed_at": "2026-10-06T00:00:00Z",
+        "gift_cards": [
+          {
+            "gift_card_code": "GC000000000001",
+            "applied_amount": { "amount_minor": 2501, "currency": "AUD" },
+            "refunded_amount": { "amount_minor": 0, "currency": "AUD" },
+            "status": "committed"
+          },
+          {
+            "gift_card_code": "GC000000000002",
+            "applied_amount": { "amount_minor": 1500, "currency": "AUD" },
+            "refunded_amount": { "amount_minor": 0, "currency": "AUD" },
+            "status": "committed"
+          }
+        ]
+      },
+      "payments": [
+        {
+          "id": "pay-gift-0",
+          "order_number": "ORDER-MIXED",
+          "amount": { "amount_minor": 2501, "currency": "AUD" },
+          "method": "gift_card",
+          "status": "completed",
+          "provider": "WALLET",
+          "provider_reference": {
+            "wallet": {
+              "gift_card_code": "GC000000000001",
+              "wallet_transaction_id": "wallet-redeem-0"
+            }
+          },
+          "paid_at": "2026-10-06T00:00:00Z"
+        },
+        {
+          "id": "pay-gift-1",
+          "order_number": "ORDER-MIXED",
+          "amount": { "amount_minor": 1500, "currency": "AUD" },
+          "method": "gift_card",
+          "status": "completed",
+          "provider": "WALLET",
+          "provider_reference": {
+            "wallet": {
+              "gift_card_code": "GC000000000002",
+              "wallet_transaction_id": "wallet-redeem-1"
+            }
+          },
+          "paid_at": "2026-10-06T00:00:00Z"
+        },
+        {
+          "id": "pay-external",
+          "order_number": "ORDER-MIXED",
+          "amount": { "amount_minor": 6000, "currency": "AUD" },
+          "method": "card",
+          "status": "completed",
+          "provider": "STRIPE_ONLINE",
+          "provider_reference": {
+            "stripe": {
+              "payment_intent_id": "pi_acceptance_mixed"
+            }
+          },
+          "paid_at": "2026-10-06T00:00:00Z"
+        }
+      ],
+      "summary": {
+        "order_number": "ORDER-MIXED",
+        "status": "paid",
+        "captured_total": { "amount_minor": 10001, "currency": "AUD" },
+        "refunded_total": { "amount_minor": 0, "currency": "AUD" },
+        "allocations": [
+          {
+            "allocation_id": "pay-gift-0",
+            "kind": "gift_card",
+            "method": "gift_card",
+            "provider": "WALLET",
+            "amount": { "amount_minor": 2501, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          },
+          {
+            "allocation_id": "pay-gift-1",
+            "kind": "gift_card",
+            "method": "gift_card",
+            "provider": "WALLET",
+            "amount": { "amount_minor": 1500, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          },
+          {
+            "allocation_id": "pay-external",
+            "kind": "external_payment",
+            "method": "card",
+            "provider": "STRIPE_ONLINE",
+            "amount": { "amount_minor": 6000, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          }
+        ],
+        "completeness": "complete"
+      },
+      "receipt": {
+        "order_number": "ORDER-MIXED",
+        "market_code": "AU-VIC",
+        "revision": 1,
+        "issued_at": "2026-10-06T00:00:00Z",
+        "document_kind": "receipt",
+        "subtotal": { "amount_minor": 10001, "currency": "AUD" },
+        "tax": { "amount_minor": 0, "currency": "AUD" },
+        "total": { "amount_minor": 10001, "currency": "AUD" },
+        "payment_rows": [
+          {
+            "allocation_id": "pay-gift-0",
+            "kind": "gift_card",
+            "method": "gift_card",
+            "provider": "WALLET",
+            "amount": { "amount_minor": 2501, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          },
+          {
+            "allocation_id": "pay-gift-1",
+            "kind": "gift_card",
+            "method": "gift_card",
+            "provider": "WALLET",
+            "amount": { "amount_minor": 1500, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          },
+          {
+            "allocation_id": "pay-external",
+            "kind": "external_payment",
+            "method": "card",
+            "provider": "STRIPE_ONLINE",
+            "amount": { "amount_minor": 6000, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          }
+        ]
+      },
+      "cards": [
+        {
+          "id": "card-0",
+          "code": "GC000000000001",
+          "customer_number": "RC-ACCEPTANCE",
+          "owner": {
+            "owner_type": "retail_customer",
+            "owner_id": "RC-ACCEPTANCE"
+          },
+          "initial_value": { "amount_minor": 5000, "currency": "AUD" },
+          "committed_balance": { "amount_minor": 2499, "currency": "AUD" },
+          "reserved_balance": { "amount_minor": 0, "currency": "AUD" },
+          "available_balance": { "amount_minor": 2499, "currency": "AUD" },
+          "status": "partially_redeemed",
+          "issued_at": "2026-10-01T00:00:00Z"
+        },
+        {
+          "id": "card-1",
+          "code": "GC000000000002",
+          "customer_number": "RC-ACCEPTANCE",
+          "owner": {
+            "owner_type": "retail_customer",
+            "owner_id": "RC-ACCEPTANCE"
+          },
+          "initial_value": { "amount_minor": 3000, "currency": "AUD" },
+          "committed_balance": { "amount_minor": 1500, "currency": "AUD" },
+          "reserved_balance": { "amount_minor": 0, "currency": "AUD" },
+          "available_balance": { "amount_minor": 1500, "currency": "AUD" },
+          "status": "partially_redeemed",
+          "issued_at": "2026-10-01T00:00:00Z"
+        }
+      ],
+      "transactions": [
+        {
+          "id": "wallet-redeem-0",
+          "gift_card_code": "GC000000000001",
+          "delta": { "amount_minor": -2501, "currency": "AUD" },
+          "balance_after": { "amount_minor": 2499, "currency": "AUD" },
+          "reason": "redeem",
+          "reservation_id": "reservation-mixed",
+          "related_order_number": "ORDER-MIXED",
+          "created_at": "2026-10-06T00:00:00Z"
+        },
+        {
+          "id": "wallet-redeem-1",
+          "gift_card_code": "GC000000000002",
+          "delta": { "amount_minor": -1500, "currency": "AUD" },
+          "balance_after": { "amount_minor": 1500, "currency": "AUD" },
+          "reason": "redeem",
+          "reservation_id": "reservation-mixed",
+          "related_order_number": "ORDER-MIXED",
+          "created_at": "2026-10-06T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "name": "gift_only",
+      "order": {
+        "id": "order-gift_only",
+        "order_number": "ORDER-GIFT_ONLY",
+        "market_code": "AU-VIC",
+        "country_code": "AU",
+        "subtotal": { "amount_minor": 5000, "currency": "AUD" },
+        "discount_amount": { "amount_minor": 999, "currency": "AUD" },
+        "shipping_amount": { "amount_minor": 0, "currency": "AUD" },
+        "tax_amount": { "amount_minor": 0, "currency": "AUD" },
+        "total": { "amount_minor": 4001, "currency": "AUD" },
+        "gift_card_redemptions": [
+          {
+            "gift_card_code": "GC000000000001",
+            "applied_amount": { "amount_minor": 2501, "currency": "AUD" },
+            "reservation_id": "reservation-gift_only",
+            "wallet_transaction_id": "wallet-redeem-0",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          },
+          {
+            "gift_card_code": "GC000000000002",
+            "applied_amount": { "amount_minor": 1500, "currency": "AUD" },
+            "reservation_id": "reservation-gift_only",
+            "wallet_transaction_id": "wallet-redeem-1",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          }
+        ]
+      },
+      "reservation": {
+        "id": "reservation-gift_only",
+        "owner": {
+          "owner_type": "retail_customer",
+          "owner_id": "RC-ACCEPTANCE"
+        },
+        "order_number": "ORDER-GIFT_ONLY",
+        "status": "committed",
+        "expires_at": "2026-10-06T00:15:00Z",
+        "committed_at": "2026-10-06T00:00:00Z",
+        "gift_cards": [
+          {
+            "gift_card_code": "GC000000000001",
+            "applied_amount": { "amount_minor": 2501, "currency": "AUD" },
+            "refunded_amount": { "amount_minor": 0, "currency": "AUD" },
+            "status": "committed"
+          },
+          {
+            "gift_card_code": "GC000000000002",
+            "applied_amount": { "amount_minor": 1500, "currency": "AUD" },
+            "refunded_amount": { "amount_minor": 0, "currency": "AUD" },
+            "status": "committed"
+          }
+        ]
+      },
+      "payments": [
+        {
+          "id": "pay-gift-0",
+          "order_number": "ORDER-GIFT_ONLY",
+          "amount": { "amount_minor": 2501, "currency": "AUD" },
+          "method": "gift_card",
+          "status": "completed",
+          "provider": "WALLET",
+          "provider_reference": {
+            "wallet": {
+              "gift_card_code": "GC000000000001",
+              "wallet_transaction_id": "wallet-redeem-0"
+            }
+          },
+          "paid_at": "2026-10-06T00:00:00Z"
+        },
+        {
+          "id": "pay-gift-1",
+          "order_number": "ORDER-GIFT_ONLY",
+          "amount": { "amount_minor": 1500, "currency": "AUD" },
+          "method": "gift_card",
+          "status": "completed",
+          "provider": "WALLET",
+          "provider_reference": {
+            "wallet": {
+              "gift_card_code": "GC000000000002",
+              "wallet_transaction_id": "wallet-redeem-1"
+            }
+          },
+          "paid_at": "2026-10-06T00:00:00Z"
+        }
+      ],
+      "summary": {
+        "order_number": "ORDER-GIFT_ONLY",
+        "status": "paid",
+        "captured_total": { "amount_minor": 4001, "currency": "AUD" },
+        "refunded_total": { "amount_minor": 0, "currency": "AUD" },
+        "allocations": [
+          {
+            "allocation_id": "pay-gift-0",
+            "kind": "gift_card",
+            "method": "gift_card",
+            "provider": "WALLET",
+            "amount": { "amount_minor": 2501, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          },
+          {
+            "allocation_id": "pay-gift-1",
+            "kind": "gift_card",
+            "method": "gift_card",
+            "provider": "WALLET",
+            "amount": { "amount_minor": 1500, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          }
+        ],
+        "completeness": "complete"
+      },
+      "receipt": {
+        "order_number": "ORDER-GIFT_ONLY",
+        "market_code": "AU-VIC",
+        "revision": 1,
+        "issued_at": "2026-10-06T00:00:00Z",
+        "document_kind": "receipt",
+        "subtotal": { "amount_minor": 4001, "currency": "AUD" },
+        "tax": { "amount_minor": 0, "currency": "AUD" },
+        "total": { "amount_minor": 4001, "currency": "AUD" },
+        "payment_rows": [
+          {
+            "allocation_id": "pay-gift-0",
+            "kind": "gift_card",
+            "method": "gift_card",
+            "provider": "WALLET",
+            "amount": { "amount_minor": 2501, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          },
+          {
+            "allocation_id": "pay-gift-1",
+            "kind": "gift_card",
+            "method": "gift_card",
+            "provider": "WALLET",
+            "amount": { "amount_minor": 1500, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          }
+        ]
+      },
+      "cards": [
+        {
+          "id": "card-0",
+          "code": "GC000000000001",
+          "customer_number": "RC-ACCEPTANCE",
+          "owner": {
+            "owner_type": "retail_customer",
+            "owner_id": "RC-ACCEPTANCE"
+          },
+          "initial_value": { "amount_minor": 5000, "currency": "AUD" },
+          "committed_balance": { "amount_minor": 2499, "currency": "AUD" },
+          "reserved_balance": { "amount_minor": 0, "currency": "AUD" },
+          "available_balance": { "amount_minor": 2499, "currency": "AUD" },
+          "status": "partially_redeemed",
+          "issued_at": "2026-10-01T00:00:00Z"
+        },
+        {
+          "id": "card-1",
+          "code": "GC000000000002",
+          "customer_number": "RC-ACCEPTANCE",
+          "owner": {
+            "owner_type": "retail_customer",
+            "owner_id": "RC-ACCEPTANCE"
+          },
+          "initial_value": { "amount_minor": 3000, "currency": "AUD" },
+          "committed_balance": { "amount_minor": 1500, "currency": "AUD" },
+          "reserved_balance": { "amount_minor": 0, "currency": "AUD" },
+          "available_balance": { "amount_minor": 1500, "currency": "AUD" },
+          "status": "partially_redeemed",
+          "issued_at": "2026-10-01T00:00:00Z"
+        }
+      ],
+      "transactions": [
+        {
+          "id": "wallet-redeem-0",
+          "gift_card_code": "GC000000000001",
+          "delta": { "amount_minor": -2501, "currency": "AUD" },
+          "balance_after": { "amount_minor": 2499, "currency": "AUD" },
+          "reason": "redeem",
+          "reservation_id": "reservation-gift_only",
+          "related_order_number": "ORDER-GIFT_ONLY",
+          "created_at": "2026-10-06T00:00:00Z"
+        },
+        {
+          "id": "wallet-redeem-1",
+          "gift_card_code": "GC000000000002",
+          "delta": { "amount_minor": -1500, "currency": "AUD" },
+          "balance_after": { "amount_minor": 1500, "currency": "AUD" },
+          "reason": "redeem",
+          "reservation_id": "reservation-gift_only",
+          "related_order_number": "ORDER-GIFT_ONLY",
+          "created_at": "2026-10-06T00:00:00Z"
+        }
+      ]
+    },
+    {
+      "name": "external_only",
+      "order": {
+        "id": "order-external_only",
+        "order_number": "ORDER-EXTERNAL_ONLY",
+        "market_code": "AU-VIC",
+        "country_code": "AU",
+        "subtotal": { "amount_minor": 11000, "currency": "AUD" },
+        "discount_amount": { "amount_minor": 999, "currency": "AUD" },
+        "shipping_amount": { "amount_minor": 0, "currency": "AUD" },
+        "tax_amount": { "amount_minor": 0, "currency": "AUD" },
+        "total": { "amount_minor": 10001, "currency": "AUD" }
+      },
+      "reservation": {
+        "id": "reservation-external_only",
+        "owner": {
+          "owner_type": "retail_customer",
+          "owner_id": "RC-ACCEPTANCE"
+        },
+        "order_number": "ORDER-EXTERNAL_ONLY",
+        "status": "committed",
+        "expires_at": "2026-10-06T00:15:00Z",
+        "committed_at": "2026-10-06T00:00:00Z"
+      },
+      "payments": [
+        {
+          "id": "pay-external",
+          "order_number": "ORDER-EXTERNAL_ONLY",
+          "amount": { "amount_minor": 10001, "currency": "AUD" },
+          "method": "card",
+          "status": "completed",
+          "provider": "STRIPE_ONLINE",
+          "provider_reference": {
+            "stripe": {
+              "payment_intent_id": "pi_acceptance_external_only"
+            }
+          },
+          "paid_at": "2026-10-06T00:00:00Z"
+        }
+      ],
+      "summary": {
+        "order_number": "ORDER-EXTERNAL_ONLY",
+        "status": "paid",
+        "captured_total": { "amount_minor": 10001, "currency": "AUD" },
+        "refunded_total": { "amount_minor": 0, "currency": "AUD" },
+        "allocations": [
+          {
+            "allocation_id": "pay-external",
+            "kind": "external_payment",
+            "method": "card",
+            "provider": "STRIPE_ONLINE",
+            "amount": { "amount_minor": 10001, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          }
+        ],
+        "completeness": "complete"
+      },
+      "receipt": {
+        "order_number": "ORDER-EXTERNAL_ONLY",
+        "market_code": "AU-VIC",
+        "revision": 1,
+        "issued_at": "2026-10-06T00:00:00Z",
+        "document_kind": "receipt",
+        "subtotal": { "amount_minor": 10001, "currency": "AUD" },
+        "tax": { "amount_minor": 0, "currency": "AUD" },
+        "total": { "amount_minor": 10001, "currency": "AUD" },
+        "payment_rows": [
+          {
+            "allocation_id": "pay-external",
+            "kind": "external_payment",
+            "method": "card",
+            "provider": "STRIPE_ONLINE",
+            "amount": { "amount_minor": 10001, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          }
+        ]
+      },
+      "cards": [],
+      "transactions": []
+    },
+    {
+      "name": "partial_refund",
+      "order": {
+        "id": "order-partial_refund",
+        "order_number": "ORDER-PARTIAL_REFUND",
+        "market_code": "AU-VIC",
+        "country_code": "AU",
+        "subtotal": { "amount_minor": 11000, "currency": "AUD" },
+        "discount_amount": { "amount_minor": 999, "currency": "AUD" },
+        "shipping_amount": { "amount_minor": 0, "currency": "AUD" },
+        "tax_amount": { "amount_minor": 0, "currency": "AUD" },
+        "total": { "amount_minor": 10001, "currency": "AUD" },
+        "gift_card_redemptions": [
+          {
+            "gift_card_code": "GC000000000001",
+            "applied_amount": { "amount_minor": 2501, "currency": "AUD" },
+            "reservation_id": "reservation-partial_refund",
+            "wallet_transaction_id": "wallet-redeem-0",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          },
+          {
+            "gift_card_code": "GC000000000002",
+            "applied_amount": { "amount_minor": 1500, "currency": "AUD" },
+            "reservation_id": "reservation-partial_refund",
+            "wallet_transaction_id": "wallet-redeem-1",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          }
+        ]
+      },
+      "reservation": {
+        "id": "reservation-partial_refund",
+        "owner": {
+          "owner_type": "retail_customer",
+          "owner_id": "RC-ACCEPTANCE"
+        },
+        "order_number": "ORDER-PARTIAL_REFUND",
+        "status": "partially_refunded",
+        "expires_at": "2026-10-06T00:15:00Z",
+        "committed_at": "2026-10-06T00:00:00Z",
+        "gift_cards": [
+          {
+            "gift_card_code": "GC000000000001",
+            "applied_amount": { "amount_minor": 2501, "currency": "AUD" },
+            "refunded_amount": { "amount_minor": 1, "currency": "AUD" },
+            "status": "partially_refunded"
+          },
+          {
+            "gift_card_code": "GC000000000002",
+            "applied_amount": { "amount_minor": 1500, "currency": "AUD" },
+            "refunded_amount": { "amount_minor": 1500, "currency": "AUD" },
+            "status": "refunded"
+          }
+        ]
+      },
+      "payments": [
+        {
+          "id": "pay-gift-0",
+          "order_number": "ORDER-PARTIAL_REFUND",
+          "amount": { "amount_minor": 2501, "currency": "AUD" },
+          "method": "gift_card",
+          "status": "completed",
+          "provider": "WALLET",
+          "provider_reference": {
+            "wallet": {
+              "gift_card_code": "GC000000000001",
+              "wallet_transaction_id": "wallet-redeem-0"
+            }
+          },
+          "paid_at": "2026-10-06T00:00:00Z",
+          "refund_amount": { "amount_minor": 1, "currency": "AUD" }
+        },
+        {
+          "id": "pay-gift-1",
+          "order_number": "ORDER-PARTIAL_REFUND",
+          "amount": { "amount_minor": 1500, "currency": "AUD" },
+          "method": "gift_card",
+          "status": "refunded",
+          "provider": "WALLET",
+          "provider_reference": {
+            "wallet": {
+              "gift_card_code": "GC000000000002",
+              "wallet_transaction_id": "wallet-redeem-1"
+            }
+          },
+          "paid_at": "2026-10-06T00:00:00Z",
+          "refund_amount": { "amount_minor": 1500, "currency": "AUD" }
+        },
+        {
+          "id": "pay-external",
+          "order_number": "ORDER-PARTIAL_REFUND",
+          "amount": { "amount_minor": 6000, "currency": "AUD" },
+          "method": "card",
+          "status": "refunded",
+          "provider": "STRIPE_ONLINE",
+          "provider_reference": {
+            "stripe": {
+              "payment_intent_id": "pi_acceptance_partial_refund"
+            }
+          },
+          "paid_at": "2026-10-06T00:00:00Z",
+          "refund_amount": { "amount_minor": 6000, "currency": "AUD" }
+        }
+      ],
+      "summary": {
+        "order_number": "ORDER-PARTIAL_REFUND",
+        "status": "partially_refunded",
+        "captured_total": { "amount_minor": 10001, "currency": "AUD" },
+        "refunded_total": { "amount_minor": 7501, "currency": "AUD" },
+        "allocations": [
+          {
+            "allocation_id": "pay-gift-0",
+            "kind": "gift_card",
+            "method": "gift_card",
+            "provider": "WALLET",
+            "amount": { "amount_minor": 2501, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-10-06T00:00:00Z",
+            "refunded_amount": { "amount_minor": 1, "currency": "AUD" }
+          },
+          {
+            "allocation_id": "pay-gift-1",
+            "kind": "gift_card",
+            "method": "gift_card",
+            "provider": "WALLET",
+            "amount": { "amount_minor": 1500, "currency": "AUD" },
+            "status": "refunded",
+            "occurred_at": "2026-10-06T00:00:00Z",
+            "refunded_amount": { "amount_minor": 1500, "currency": "AUD" }
+          },
+          {
+            "allocation_id": "pay-external",
+            "kind": "external_payment",
+            "method": "card",
+            "provider": "STRIPE_ONLINE",
+            "amount": { "amount_minor": 6000, "currency": "AUD" },
+            "status": "refunded",
+            "occurred_at": "2026-10-06T00:00:00Z",
+            "refunded_amount": { "amount_minor": 6000, "currency": "AUD" }
+          }
+        ],
+        "completeness": "complete"
+      },
+      "receipt": {
+        "order_number": "ORDER-PARTIAL_REFUND",
+        "market_code": "AU-VIC",
+        "revision": 1,
+        "issued_at": "2026-10-06T00:00:00Z",
+        "document_kind": "receipt",
+        "subtotal": { "amount_minor": 10001, "currency": "AUD" },
+        "tax": { "amount_minor": 0, "currency": "AUD" },
+        "total": { "amount_minor": 10001, "currency": "AUD" },
+        "payment_rows": [
+          {
+            "allocation_id": "pay-gift-0",
+            "kind": "gift_card",
+            "method": "gift_card",
+            "provider": "WALLET",
+            "amount": { "amount_minor": 2501, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          },
+          {
+            "allocation_id": "pay-gift-1",
+            "kind": "gift_card",
+            "method": "gift_card",
+            "provider": "WALLET",
+            "amount": { "amount_minor": 1500, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          },
+          {
+            "allocation_id": "pay-external",
+            "kind": "external_payment",
+            "method": "card",
+            "provider": "STRIPE_ONLINE",
+            "amount": { "amount_minor": 6000, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-10-06T00:00:00Z"
+          }
+        ]
+      },
+      "cards": [
+        {
+          "id": "card-0",
+          "code": "GC000000000001",
+          "customer_number": "RC-ACCEPTANCE",
+          "owner": {
+            "owner_type": "retail_customer",
+            "owner_id": "RC-ACCEPTANCE"
+          },
+          "initial_value": { "amount_minor": 5000, "currency": "AUD" },
+          "committed_balance": { "amount_minor": 2500, "currency": "AUD" },
+          "reserved_balance": { "amount_minor": 0, "currency": "AUD" },
+          "available_balance": { "amount_minor": 2500, "currency": "AUD" },
+          "status": "partially_redeemed",
+          "issued_at": "2026-10-01T00:00:00Z"
+        },
+        {
+          "id": "card-1",
+          "code": "GC000000000002",
+          "customer_number": "RC-ACCEPTANCE",
+          "owner": {
+            "owner_type": "retail_customer",
+            "owner_id": "RC-ACCEPTANCE"
+          },
+          "initial_value": { "amount_minor": 3000, "currency": "AUD" },
+          "committed_balance": { "amount_minor": 3000, "currency": "AUD" },
+          "reserved_balance": { "amount_minor": 0, "currency": "AUD" },
+          "available_balance": { "amount_minor": 3000, "currency": "AUD" },
+          "status": "active",
+          "issued_at": "2026-10-01T00:00:00Z"
+        }
+      ],
+      "transactions": [
+        {
+          "id": "wallet-redeem-0",
+          "gift_card_code": "GC000000000001",
+          "delta": { "amount_minor": -2501, "currency": "AUD" },
+          "balance_after": { "amount_minor": 2499, "currency": "AUD" },
+          "reason": "redeem",
+          "reservation_id": "reservation-partial_refund",
+          "related_order_number": "ORDER-PARTIAL_REFUND",
+          "created_at": "2026-10-06T00:00:00Z"
+        },
+        {
+          "id": "wallet-redeem-1",
+          "gift_card_code": "GC000000000002",
+          "delta": { "amount_minor": -1500, "currency": "AUD" },
+          "balance_after": { "amount_minor": 1500, "currency": "AUD" },
+          "reason": "redeem",
+          "reservation_id": "reservation-partial_refund",
+          "related_order_number": "ORDER-PARTIAL_REFUND",
+          "created_at": "2026-10-06T00:00:00Z"
+        },
+        {
+          "id": "wallet-refund-1",
+          "gift_card_code": "GC000000000002",
+          "delta": { "amount_minor": 1500, "currency": "AUD" },
+          "balance_after": { "amount_minor": 3000, "currency": "AUD" },
+          "reason": "refund",
+          "reservation_id": "reservation-partial_refund",
+          "related_order_number": "ORDER-PARTIAL_REFUND",
+          "created_at": "2026-10-06T00:05:00Z"
+        },
+        {
+          "id": "wallet-refund-0",
+          "gift_card_code": "GC000000000001",
+          "delta": { "amount_minor": 1, "currency": "AUD" },
+          "balance_after": { "amount_minor": 2500, "currency": "AUD" },
+          "reason": "refund",
+          "reservation_id": "reservation-partial_refund",
+          "related_order_number": "ORDER-PARTIAL_REFUND",
+          "created_at": "2026-10-06T00:05:00Z"
+        }
+      ],
+      "refund": {
+        "refund_id": "refund-mixed",
+        "order_id": "order-partial_refund",
+        "order_number": "ORDER-PARTIAL_REFUND",
+        "payment_id": "pay-external",
+        "amount": { "amount_minor": 7501, "currency": "AUD" },
+        "benefit_reservation_id": "reservation-partial_refund",
+        "gift_card_refund_amount": { "amount_minor": 1501, "currency": "AUD" },
+        "completed_at": "2026-10-06T00:05:00Z"
+      }
+    }
+  ],
+  "refund_optionality": [
+    {
+      "name": "absent",
+      "event": {
+        "refund_id": "refund-absent",
+        "order_number": "ORDER-OPTIONAL",
+        "amount": { "amount_minor": 100, "currency": "AUD" },
+        "completed_at": "2026-10-06T00:05:00Z"
+      }
+    },
+    {
+      "name": "known_zero",
+      "event": {
+        "refund_id": "refund-zero",
+        "order_number": "ORDER-OPTIONAL",
+        "amount": { "amount_minor": 100, "currency": "AUD" },
+        "gift_card_refund_amount": { "amount_minor": 0, "currency": "AUD" },
+        "completed_at": "2026-10-06T00:05:00Z"
+      }
+    },
+    {
+      "name": "positive",
+      "event": {
+        "refund_id": "refund-positive",
+        "order_number": "ORDER-OPTIONAL",
+        "payment_id": "pay-external",
+        "amount": { "amount_minor": 7501, "currency": "AUD" },
+        "gift_card_refund_amount": { "amount_minor": 1501, "currency": "AUD" },
+        "benefit_reservation_id": "reservation-partial_refund",
+        "completed_at": "2026-10-06T00:05:00Z"
+      }
+    }
+  ]
+}

@@ -34,9 +34,28 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v43.0.1` | 2026-10-06 | Patch |
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v43.0.1 (2026-10-06)
+
+Add shared-wire acceptance fixtures for existing gift-card, checkout benefit
+reservation, order, payment, customer allocation, receipt and refund-event
+records. Cover two-card mixed funding, gift-only and external-only funding,
+partial mixed refunds, ordered wallet restoration and absent, known-zero and
+positive refund amounts. Integer minor units, currencies, payment identities,
+wallet references and original receipt funding rows survive JSON round trips.
+Gift funding remains a tender rather than a promotion discount or a reduction
+of the commercial order total.
+
+Production models, enums, JSON names and the `/v43` module path are unchanged.
+Orders, Pricing and Payments retain allocation and refund authority. These
+fixtures establish shared-wire acceptance, not live integration evidence;
+migrations, service DTOs and pins, OpenAPI and client adoption remain outside
+this release. Existing money, currency-exponent, enum and gift-card
+secret-exclusion coverage continues to run in the contract gate.
 
 ## v43.0.0 (2026-10-06)
 
