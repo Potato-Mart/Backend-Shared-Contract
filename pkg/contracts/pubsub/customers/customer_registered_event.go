@@ -3,7 +3,7 @@ package customers
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/customers/retail/retail_enums"
 )
 
 // CustomerRegisteredEvent is emitted on the customer-events topic when a

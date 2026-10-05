@@ -2,13 +2,13 @@ package promotion
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/packaging"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/money"
 )
 
 func TestPromotionApplicationsFreezeVisibleQualifierTargetRelationships(t *testing.T) {

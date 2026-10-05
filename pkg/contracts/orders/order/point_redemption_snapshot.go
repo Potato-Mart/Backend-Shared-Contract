@@ -3,7 +3,7 @@ package order
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/money"
 )
 
 // PointRedemptionSnapshot records a points discount applied to an order without
