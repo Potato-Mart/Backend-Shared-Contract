@@ -11,11 +11,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/orders/cart"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/orders/order"
-	pos "github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/payments/receipt"
-	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/pubsub/routing"
-	purchase "github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/supply/procurement"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/orders/cart"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/orders/order"
+	pos "github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/payments/receipt"
+	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/pubsub/routing"
+	purchase "github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/supply/procurement"
 )
 
 // TestTransactionEvidenceUsesOneImmutableSKUCode keeps one business key on

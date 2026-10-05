@@ -34,8 +34,35 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v43.0.0 (2026-10-06)
+
+Replace `MembershipTier.MarketCode` and `MembershipAccount.MarketCode` with
+`MarketCodes []string`, serialized as `market_codes` without `omitempty`. The
+legacy `market_code` field is removed from these two models; no compatibility
+alias, automatic conversion or data migration is included. Nil lists serialize
+as `null` and empty lists as `[]`; neither grants global availability. Unrelated
+owning and transaction market fields remain singular.
+
+Membership is selected-market scoped within one tier group per country and
+currency. All tiers in the group share its selected markets. Existing
+`country_code` and tier threshold currency describe the group; tier keys remain
+globally unique and account IDs remain retail customer numbers. The market list
+also describes staff geographic access, subject to Pricing-owned role
+permissions. Other tier and account fields retain their existing shapes.
+
+This is a breaking schema release under
+`github.com/Potato-Mart/Backend-Shared-Contract/v43`. Consumers adopt the module
+major and their CI contract-version pins deliberately. Pricing must implement
+nonempty, unique market validation, country/currency and group consistency,
+account participation, selected-market availability and staff scope enforcement.
+It must also establish annual qualification calendar behavior because the
+account no longer carries a singular market timezone anchor. Service DTOs, BSON
+persistence, migrations, OpenAPI and client projections remain consumer-owned;
+publishing this contract does not activate those runtime behaviors.
 
 ## v42.0.1 (2026-10-04)
 

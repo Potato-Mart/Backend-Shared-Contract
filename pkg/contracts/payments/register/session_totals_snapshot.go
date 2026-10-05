@@ -1,8 +1,8 @@
 package register
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/temporal"
 	"time"
 )
 

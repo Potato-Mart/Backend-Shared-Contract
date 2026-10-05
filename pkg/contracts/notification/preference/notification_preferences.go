@@ -1,8 +1,8 @@
 package preference
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/audit"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/security"
 )
 
 // NotificationPreferences is the latest-state preference-centre aggregate,

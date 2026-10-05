@@ -1,8 +1,8 @@
 package membership
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/pricing/membership/membership_enums"
 )
 
 // TierRefundProof is an immutable projection of a Pricing-owned net tier-refund

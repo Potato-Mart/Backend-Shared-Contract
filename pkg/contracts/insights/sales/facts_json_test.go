@@ -6,9 +6,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/insights/analytics"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/supply/forecasting"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/insights/analytics"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/supply/forecasting"
 )
 
 // TestAnalyticsFactsCarryCountryAttribution locks the country a scoped read

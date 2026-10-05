@@ -1,7 +1,7 @@
 package compliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/audit"
 )
 
 // TariffAssessment is the revisioned, purchase-order-specific worksheet. An

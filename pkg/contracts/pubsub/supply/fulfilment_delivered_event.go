@@ -1,6 +1,6 @@
 package supply
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v42/pkg/contracts/common/geography"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v43/pkg/contracts/common/geography"
 
 // FulfilmentDeliveredEvent is emitted on the fulfilment-events topic when a
 // shipment is confirmed delivered.
