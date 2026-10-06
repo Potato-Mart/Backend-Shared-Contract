@@ -34,11 +34,62 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v44.1.0` | 2026-10-06 | Minor |
 | `v44.0.0` | 2026-10-06 | Major |
 | `v43.0.1` | 2026-10-06 | Patch |
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v44.1.0 (2026-10-06)
+
+Add `AuthMethodPIN` with wire value `pin` for reusable staff PIN authentication
+through Identity's authorized POS flow. Existing authentication-method values,
+`LoginSession` fields, identity providers and assurance levels are unchanged.
+The value grants no MFA or assurance upgrade. No barcode authentication-method
+value is introduced.
+
+Add optional `UserProfile.employee_id` as a string, matching the existing
+`AdminAccountProfile.employee_id`. It represents the same Identity-assigned
+eight-digit workforce identifier, preserves leading zeros and is omitted for
+customers and legacy records until assigned. Identity owns generation,
+uniqueness, backfill, persistence and authorized projection. The identifier is
+not a PIN or hash, and authorized profile exposure does not establish secrecy.
+
+This additive model release retains the `/v44` module path. JSON fixtures cover
+PIN and existing session methods, unknown strings, omitted legacy methods,
+unchanged session evidence and employee-ID string/omission semantics. The
+module remains dependency-free and JSON-model-only; BSON mapping and refresh
+preservation tests belong to Identity. No routes, credentials, validators,
+token claims, persistence rules or runtime authentication are added here.
+
+Read-only source inventory on 2026-10-06 found Identity and Customers pinned to
+`/v43 v43.0.0`; Orders, Payments and Pricing to `/v44 v44.0.0`; Supply to
+`/v42 v42.0.0`; Insights to `/v39 v39.0.0`; and Notification to `/v40 v40.0.0`.
+Current service CI declarations have no separate hardcoded contract-version
+input. No unkeyed `UserProfile` construction was found in these services.
+
+Before PIN emission, Identity must deliberately adopt the released module,
+implement its service-owned credential/session behavior and employee-ID
+projection, and retain the original sign-in method through refresh. Admin Web
+must widen its closed authentication-method union, add the profile field and
+localized PIN label, and provide an unknown-method display fallback. Its
+generated browser snapshot must follow Identity's updated API schema. POS
+currently strips unknown profile fields and must explicitly retain employee-ID
+strings when adopting that projection. Customers' ordinary JSON decoding
+tolerates additive fields, but intended employee-ID propagation needs explicit
+mapping updates. Retail Web's closed session union needs review if workforce
+sessions can reach it; retail iOS has an unknown-method fallback and Android
+ignores unknown JSON fields. Wholesale Web has no affected projection, and
+wholesale native repositories remain empty or planning-only.
+
+Consumer repositories were inspected without edits or consumer gate execution.
+These findings establish the scoped schema-publication order, not deployed
+compatibility or PIN readiness. Consumer qualification and Identity admission
+controls must precede new emission. Admin sign-in remains email and password;
+PIN management and POS authentication are separate owning-service/client work.
+Adopting `/v44` from an older major also requires the independent campaign and
+other migration review already described in earlier releases.
 
 ## v44.0.0 (2026-10-06)
 

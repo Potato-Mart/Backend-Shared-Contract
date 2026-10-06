@@ -15,6 +15,10 @@ import (
 type UserProfile struct {
 	ID    string `json:"id"`
 	Email string `json:"email"`
+	// EmployeeID is the Identity-assigned eight-digit workforce identifier,
+	// including leading zeros. It matches AdminAccountProfile.EmployeeID and
+	// is omitted for customers and legacy records until assigned by Identity.
+	EmployeeID string `json:"employee_id,omitempty"`
 	// Phone is the Identity-owned canonical E.164 value. An empty value means
 	// that no phone has been registered; normalization and verification policy
 	// remain owned by Identity.

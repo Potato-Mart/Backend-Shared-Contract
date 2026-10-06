@@ -5,9 +5,11 @@ import "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/
 // AdminAccountProfile contains optional workforce profile data for an
 // adminUser account.
 type AdminAccountProfile struct {
-	ID             string   `json:"id,omitempty"`
-	UserID         string   `json:"user_id"`
-	AccountID      string   `json:"account_id"`
+	ID        string `json:"id,omitempty"`
+	UserID    string `json:"user_id"`
+	AccountID string `json:"account_id"`
+	// EmployeeID is the same Identity-assigned eight-digit workforce identifier
+	// exposed by UserProfile, preserving leading zeros and omitted until assigned.
 	EmployeeID     string   `json:"employee_id,omitempty"`
 	Department     string   `json:"department,omitempty"`
 	JobTitle       string   `json:"job_title,omitempty"`
