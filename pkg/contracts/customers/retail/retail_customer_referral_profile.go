@@ -9,7 +9,7 @@ type RetailCustomerReferralProfile struct {
 	ReferrerCustomerNumber    string     `json:"referrer_customer_number,omitempty"`
 	UsedReferralCodeConfirmed bool       `json:"used_referral_code_confirmed,omitempty"`
 	UsedByCount               int        `json:"used_by_count,omitempty"`
-	RewardVouchersIssued      int        `json:"reward_vouchers_issued,omitempty"`
-	RewardVoucherCodes        []string   `json:"reward_voucher_codes,omitempty"`
+	RewardCouponsIssued       int        `json:"reward_coupons_issued,omitempty"`
+	RewardCouponCodes         []string   `json:"reward_coupon_codes,omitempty"`
 	LastRewardIssuedAt        *time.Time `json:"last_reward_issued_at,omitempty"`
 }

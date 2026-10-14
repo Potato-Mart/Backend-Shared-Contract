@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/membership/membership_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/wallet/points"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/wallet/points"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 func TestMembershipAccountComposesWalletOwnedPointsSummary(t *testing.T) {
@@ -33,12 +33,11 @@ func TestMembershipAccountComposesWalletOwnedPointsSummary(t *testing.T) {
 func TestMembershipPolicyAndRewardCatalogStayInMembership(t *testing.T) {
 	reward := membership.Reward{
 		Code:       "reward-1",
-		Names:      []localization.LocalizedName{{Language: "en", Name: "Free voucher"}},
-		Type:       wallet_enums.RewardTypeVoucher,
+		Names:      []localization.LocalizedName{{Language: "en", Name: "Reward coupon"}},
+		Type:       wallet_enums.RewardTypeCoupon,
 		PointsCost: 100,
 		Benefit: membership.RewardBenefit{
-			VoucherCodePrefix: "RWD",
-			VoucherValue:      &money.Money{AmountMinor: 500, Currency: "AUD"},
+			CouponCode: "RWD",
 		},
 		IsActive: true,
 	}
@@ -49,13 +48,13 @@ func TestMembershipPolicyAndRewardCatalogStayInMembership(t *testing.T) {
 	if err != nil {
 		t.Fatalf("marshal membership policy and reward: %v", err)
 	}
-	if !strings.Contains(string(payload), `"points_per_minor_unit":1`) || !strings.Contains(string(payload), `"type":"VOUCHER"`) {
+	if !strings.Contains(string(payload), `"points_per_minor_unit":1`) || !strings.Contains(string(payload), `"type":"COUPON"`) {
 		t.Fatalf("unexpected membership payload: %s", payload)
 	}
-	if !strings.Contains(string(payload), `"names":[{"language":"en","name":"Free voucher"}]`) {
+	if !strings.Contains(string(payload), `"names":[{"language":"en","name":"Reward coupon"}]`) {
 		t.Fatalf("reward must carry localized names: %s", payload)
 	}
-	if !strings.Contains(string(payload), `"benefit":{"voucher_code_prefix":"RWD","voucher_value":{"amount_minor":500,"currency":"AUD"}}`) {
+	if !strings.Contains(string(payload), `"benefit":{"coupon_code":"RWD"}`) {
 		t.Fatalf("reward must carry its typed benefit arm: %s", payload)
 	}
 	if strings.Contains(string(payload), `"discount_percent"`) {

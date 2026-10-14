@@ -9,18 +9,18 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/security/security_enums"
-	group_enums "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/customers/group/group_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/customers/wholesale/wholesale_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/marketing/campaign/campaign_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/payments/payment/payment_enums"
-	pos_enums "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/payments/register/register_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/benefit/benefit_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/membership/membership_enums"
-	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pubsub/routing"
-	insights_marketing_enums "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/supply/forecasting/marketing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/security/security_enums"
+	group_enums "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/customers/group/group_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/marketing/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/payments/payment/payment_enums"
+	pos_enums "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/payments/register/register_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/benefit/benefit_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/membership/membership_enums"
+	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pubsub/routing"
+	insights_marketing_enums "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/supply/forecasting/marketing_enums"
 )
 
 func TestEnumCoverageIncludesEveryStringEnum(t *testing.T) {
@@ -47,7 +47,7 @@ func TestAdditionalEnumValues(t *testing.T) {
 		{name: "order.CustomerOrderBucket", valid: []stringEnum{order_enums.CustomerOrderBucketCurrent, order_enums.CustomerOrderBucketCompleted, order_enums.CustomerOrderBucketCancelled, order_enums.CustomerOrderBucketRefunded}, invalid: order_enums.CustomerOrderBucket("__invalid__")},
 		{name: "pos.SessionStatus", valid: []stringEnum{pos_enums.SessionStatusOpen, pos_enums.SessionStatusClosed}, invalid: pos_enums.SessionStatus("__invalid__")},
 		{name: "pos.CashMovementKind", valid: []stringEnum{pos_enums.CashMovementKindCashIn, pos_enums.CashMovementKindCashOut, pos_enums.CashMovementKindFloatAdjustment, pos_enums.CashMovementKindDrop}, invalid: pos_enums.CashMovementKind("__invalid__")},
-		{name: "payment.CustomerPaymentAllocationKind", valid: []stringEnum{payment_enums.CustomerPaymentAllocationKindExternalPayment, payment_enums.CustomerPaymentAllocationKindWalletBalance, payment_enums.CustomerPaymentAllocationKindWalletPoints, payment_enums.CustomerPaymentAllocationKindGiftCard, payment_enums.CustomerPaymentAllocationKindVoucher, payment_enums.CustomerPaymentAllocationKindOther}, invalid: payment_enums.CustomerPaymentAllocationKind("__invalid__")},
+		{name: "payment.CustomerPaymentAllocationKind", valid: []stringEnum{payment_enums.CustomerPaymentAllocationKindExternalPayment, payment_enums.CustomerPaymentAllocationKindWalletBalance, payment_enums.CustomerPaymentAllocationKindWalletPoints, payment_enums.CustomerPaymentAllocationKindGiftCard, payment_enums.CustomerPaymentAllocationKindOther}, invalid: payment_enums.CustomerPaymentAllocationKind("__invalid__")},
 		{name: "payment.PaymentCompleteness", valid: []stringEnum{payment_enums.PaymentCompletenessComplete, payment_enums.PaymentCompletenessPartial, payment_enums.PaymentCompletenessUnavailable}, invalid: payment_enums.PaymentCompleteness("__invalid__")},
 		{name: "payment.PaymentSummaryComponent", valid: []stringEnum{payment_enums.PaymentSummaryComponentAllocationHistory, payment_enums.PaymentSummaryComponentPaymentTotals, payment_enums.PaymentSummaryComponentRedemptionTimestamps, payment_enums.PaymentSummaryComponentPointsEarned}, invalid: payment_enums.PaymentSummaryComponent("__invalid__")},
 		{name: "benefit.OwnerType", valid: []stringEnum{benefit_enums.OwnerTypeRetailCustomer, benefit_enums.OwnerTypeWholesaleOrganisation}, invalid: benefit_enums.OwnerType("__invalid__")},

@@ -196,7 +196,6 @@ var v33ModelPackageManifest = map[string]string{
 	"contracts/pricing/quote":                                        "record",
 	"contracts/pricing/quote/quote_enums":                            "enum",
 	"contracts/pricing/tax":                                          "record",
-	"contracts/pricing/special":                                      "record",
 	"contracts/pricing/wallet/balance":                               "record",
 	"contracts/pricing/wallet/giftcard":                              "record",
 	"contracts/pricing/wallet/ledger":                                "record",
@@ -257,7 +256,9 @@ var modelPackageManifest map[string]string
 // V40 removes duplicate Supply commercial listing models/enums and places
 // their single event definition under Pricing. Supply stock evidence remains.
 // V41 adds the strict AgeComparison enum for retail purchase restrictions.
-const exportedTypeManifestDigest = "7404405419da0eaec9bcc28728ec081c3181639d2ddbe671c427e0130b99886c"
+// V45 removes the voucher instrument, status, reservation and order snapshot.
+// Reward tier-issuance fields are retired separately by the V45 field-surface test.
+const exportedTypeManifestDigest = "8865e6cf7f28b0f542643a049195faea2b82fdd1a6f4d6199b3036c974d611ce"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

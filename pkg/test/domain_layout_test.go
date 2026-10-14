@@ -29,7 +29,6 @@ func TestDomainPackageLayout(t *testing.T) {
 		"contracts/payments/receipt/receipt_snapshot.go":                          "receipt",
 		"contracts/payments/register/register.go":                                 "register",
 		"contracts/pricing/coupon/coupon.go":                                      "coupon",
-		"contracts/pricing/special/voucher.go":                                    "special",
 		"contracts/pricing/wallet/balance/customer_wallet.go":                     "balance",
 		"contracts/pricing/wallet/ledger/point_ledger_entry.go":                   "ledger",
 		"contracts/pricing/wallet/points/points_summary.go":                       "points",

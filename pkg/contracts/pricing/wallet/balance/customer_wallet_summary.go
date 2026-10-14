@@ -1,8 +1,8 @@
 package balance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/wallet/points"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/wallet/points"
 )
 
 // CustomerWalletSummary is the customer-safe headline projection of wallet
@@ -13,7 +13,6 @@ type CustomerWalletSummary struct {
 	GiftCardReservedBalanceTotal  money.Money          `json:"gift_card_reserved_balance_total"`
 	GiftCardAvailableBalanceTotal money.Money          `json:"gift_card_available_balance_total"`
 	ActiveGiftCards               int                  `json:"active_gift_cards"`
-	ActiveVouchers                int                  `json:"active_vouchers"`
 	ActiveCoupons                 int                  `json:"active_coupons"`
 	AvailableRewards              int                  `json:"available_rewards"`
 }

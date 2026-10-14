@@ -1,8 +1,8 @@
 package fulfilment
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/supply/warehouse"
 )
 
 type PickingAllocation struct {

@@ -3,8 +3,8 @@ package order
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 // RewardRedemptionSnapshot records a catalog reward applied to an order.
@@ -16,6 +16,5 @@ type RewardRedemptionSnapshot struct {
 	PointsSpent        int                     `json:"points_spent"`
 	DiscountAmount     *money.Money            `json:"discount_amount,omitempty"`
 	SKUCode            string                  `json:"sku_code,omitempty"`
-	VoucherCode        string                  `json:"voucher_code,omitempty"`
 	OccurredAt         *time.Time              `json:"occurred_at,omitempty"`
 }
