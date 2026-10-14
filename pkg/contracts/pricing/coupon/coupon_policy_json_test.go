@@ -58,7 +58,7 @@ func TestReceivingAndRedemptionPoliciesRemainIndependent(t *testing.T) {
 }
 
 func TestCouponPolicyEnumsRejectUnknownValues(t *testing.T) {
-	for _, v := range []coupon_enums.Distribution{coupon_enums.DistributionSelfClaimByCode, coupon_enums.DistributionAssigned, coupon_enums.DistributionAutoMemberClaim} {
+	for _, v := range []coupon_enums.Distribution{coupon_enums.DistributionSelfClaimByCode, coupon_enums.DistributionAssigned, coupon_enums.DistributionReferralAssigned, coupon_enums.DistributionAutoMemberClaim} {
 		if !v.IsValid() || v.String() != string(v) {
 			t.Fatal(v)
 		}
@@ -81,6 +81,51 @@ func TestCouponPolicyEnumsRejectUnknownValues(t *testing.T) {
 	for _, bad := range []string{"", "unknown", "all_tiers"} {
 		if coupon_enums.Distribution(bad).IsValid() || coupon_enums.Visibility(bad).IsValid() || coupon_enums.TierMatch(bad).IsValid() || coupon_enums.TierSpecification(bad).IsValid() {
 			t.Fatal(bad)
+		}
+	}
+}
+
+func TestCouponDistributionWireValuesRemainDistinct(t *testing.T) {
+	for _, tc := range []struct {
+		value coupon_enums.Distribution
+		wire  string
+	}{
+		{coupon_enums.DistributionSelfClaimByCode, "SELF_CLAIM_BY_CODE"},
+		{coupon_enums.DistributionAssigned, "ASSIGNED"},
+		{coupon_enums.DistributionReferralAssigned, "REFERRAL_ASSIGNED"},
+		{coupon_enums.DistributionAutoMemberClaim, "AUTO_MEMBER_CLAIM"},
+	} {
+		t.Run(tc.wire, func(t *testing.T) {
+			record := coupon.Coupon{Distribution: tc.value}
+			payload, err := json.Marshal(record)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var fields map[string]json.RawMessage
+			if err := json.Unmarshal(payload, &fields); err != nil {
+				t.Fatal(err)
+			}
+			if string(fields["distribution"]) != `"`+tc.wire+`"` || tc.value.String() != tc.wire || !tc.value.IsValid() {
+				t.Fatalf("distribution %q has unexpected wire value or validity: %s", tc.value, fields["distribution"])
+			}
+			var decoded coupon.Coupon
+			if err := json.Unmarshal(payload, &decoded); err != nil {
+				t.Fatal(err)
+			}
+			if !reflect.DeepEqual(record, decoded) {
+				t.Fatalf("distribution round trip changed coupon: %#v", decoded)
+			}
+		})
+	}
+	// Ordinary JSON decoding retains unknown strings; service-owned validation
+	// decides whether a value is accepted and must not map it to cohort issuance.
+	for _, value := range []string{"referral_assigned", "REFERRAL_ASSIGNED_UNKNOWN"} {
+		var decoded coupon.Coupon
+		if err := json.Unmarshal([]byte(`{"distribution":"`+value+`"}`), &decoded); err != nil {
+			t.Fatal(err)
+		}
+		if decoded.Distribution.String() != value || decoded.Distribution.IsValid() {
+			t.Fatalf("unknown distribution was accepted or normalized: %q", decoded.Distribution)
 		}
 	}
 }

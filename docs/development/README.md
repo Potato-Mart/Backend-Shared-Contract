@@ -34,6 +34,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v45.1.0` | 2026-10-14 | Minor |
 | `v45.0.0` | 2026-10-14 | Major |
 | `v44.1.0` | 2026-10-06 | Minor |
 | `v44.0.0` | 2026-10-06 | Major |
@@ -41,6 +42,32 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v45.1.0 (2026-10-14)
+
+Add `coupon_enums.DistributionReferralAssigned` with wire value
+`REFERRAL_ASSIGNED` for coupons issued only through qualified referral awards.
+`DistributionAssigned` retains its existing `ASSIGNED` wire value and cohort
+distribution meaning. `SELF_CLAIM_BY_CODE` and `AUTO_MEMBER_CLAIM` remain
+unchanged. This additive enum release retains the `/v45` module path and all
+existing coupon fields.
+
+Pricing owns referral-only issuance, distribution selection, eligibility and
+assignment persistence. Customers owns referral qualification and configured
+coupon selection. Their service behavior and HTTP DTOs remain outside this
+model-only module. The new value must not fall back to cohort assignment,
+self-claim or automatic member distribution.
+
+Publish the immutable release before Pricing and Customers adopt its module
+pin. Pricing API schemas and Admin, storefront and POS enum consumers must
+handle the new value before operators configure referral coupons. Older enum
+validators reject it; ordinary JSON decoding preserves unknown strings without
+validating or normalizing them. Consumer adoption and deployment require their
+own checks and are not established by this release. There is no migration,
+data reset, default coupon or new event payload.
+
+Contract tests lock each existing and new distribution wire value, distinct
+coupon round trips, `IsValid`/`String` behavior and unknown-value preservation.
 
 ## v45.0.0 (2026-10-14)
 
