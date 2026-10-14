@@ -6,14 +6,13 @@ type WalletInstrumentType string
 const (
 	WalletInstrumentTypePoints   WalletInstrumentType = "points"
 	WalletInstrumentTypeGiftCard WalletInstrumentType = "gift_card"
-	WalletInstrumentTypeVoucher  WalletInstrumentType = "voucher"
 	WalletInstrumentTypeCoupon   WalletInstrumentType = "coupon"
 	WalletInstrumentTypeReward   WalletInstrumentType = "reward"
 )
 
 func (t WalletInstrumentType) IsValid() bool {
 	switch t {
-	case WalletInstrumentTypePoints, WalletInstrumentTypeGiftCard, WalletInstrumentTypeVoucher, WalletInstrumentTypeCoupon, WalletInstrumentTypeReward:
+	case WalletInstrumentTypePoints, WalletInstrumentTypeGiftCard, WalletInstrumentTypeCoupon, WalletInstrumentTypeReward:
 		return true
 	}
 	return false

@@ -9,7 +9,6 @@ const (
 	CustomerPaymentAllocationKindWalletBalance   CustomerPaymentAllocationKind = "wallet_balance"
 	CustomerPaymentAllocationKindWalletPoints    CustomerPaymentAllocationKind = "wallet_points"
 	CustomerPaymentAllocationKindGiftCard        CustomerPaymentAllocationKind = "gift_card"
-	CustomerPaymentAllocationKindVoucher         CustomerPaymentAllocationKind = "voucher"
 	CustomerPaymentAllocationKindOther           CustomerPaymentAllocationKind = "other"
 )
 
@@ -17,7 +16,7 @@ func (k CustomerPaymentAllocationKind) IsValid() bool {
 	switch k {
 	case CustomerPaymentAllocationKindExternalPayment, CustomerPaymentAllocationKindWalletBalance,
 		CustomerPaymentAllocationKindWalletPoints, CustomerPaymentAllocationKindGiftCard,
-		CustomerPaymentAllocationKindVoucher, CustomerPaymentAllocationKindOther:
+		CustomerPaymentAllocationKindOther:
 		return true
 	default:
 		return false

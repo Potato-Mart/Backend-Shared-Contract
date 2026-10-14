@@ -1,8 +1,8 @@
-// Package benefit contains ownership models for coupons, vouchers, gift cards,
+// Package benefit contains ownership models for coupons, gift cards,
 // and checkout benefits. Membership ownership remains retail-only.
 package benefit
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/benefit/benefit_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/benefit/benefit_enums"
 
 // OwnerRef is the stable business owner of a non-membership benefit.
 type OwnerRef struct {

@@ -3,10 +3,10 @@ package reservation
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/audit"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/benefit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 // CheckoutBenefitReservation is the durable checkout hold for applied benefits.
@@ -15,7 +15,6 @@ type CheckoutBenefitReservation struct {
 	Owner       benefit.OwnerRef                              `json:"owner"`
 	OrderNumber string                                        `json:"order_number,omitempty"`
 	Coupon      *CouponBenefitReservation                     `json:"coupon,omitempty"`
-	Voucher     *VoucherBenefitReservation                    `json:"voucher,omitempty"`
 	GiftCards   []GiftCardBenefitReservation                  `json:"gift_cards,omitempty"`
 	Status      wallet_enums.CheckoutBenefitReservationStatus `json:"status"`
 	ExpiresAt   time.Time                                     `json:"expires_at"`

@@ -34,12 +34,58 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v45.0.0` | 2026-10-14 | Major |
 | `v44.1.0` | 2026-10-06 | Minor |
 | `v44.0.0` | 2026-10-06 | Major |
 | `v43.0.1` | 2026-10-06 | Patch |
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v45.0.0 (2026-10-14)
+
+Remove vouchers as a supported instrument. Coupons retain their existing
+definitions, assignments and permanent entitlement identity; gift cards, points
+and other reward families retain their models. This breaking release uses
+`github.com/Potato-Mart/Backend-Shared-Contract/v45` with no aliases or conversion
+adapters for the removed instrument.
+
+Remove `special.Voucher`, `reservation.VoucherBenefitReservation`,
+`wallet_enums.VoucherStatus`, and `order.VoucherRedemptionSnapshot`. Remove
+`RewardTypeVoucher`, `WalletInstrumentTypeVoucher` and
+`CustomerPaymentAllocationKindVoucher`; their former wire values are no longer
+valid. Ordinary JSON decoding of string enums does not itself validate them.
+
+Remove `RewardBenefit.voucher_code_prefix` and `voucher_value`,
+`RewardRedemptionOutcome.voucher_code`, `RewardRedemptionSnapshot.voucher_code`,
+`CheckoutBenefitReservation.voucher`, `CustomerWalletSummary.active_vouchers`
+and `Order.voucher_redemption`. Rename referral-profile
+`RewardVouchersIssued` / `reward_vouchers_issued` to
+`RewardCouponsIssued` / `reward_coupons_issued`, and `RewardVoucherCodes` /
+`reward_voucher_codes` to `RewardCouponCodes` / `reward_coupon_codes`.
+The coupon receipt fields retain their integer count and string-list shapes.
+
+Remove `Reward.TriggerTierKey` / `trigger_tier_key` and
+`Reward.IssueOnTierAchievement` / `issue_on_tier_achievement`. Tier gifts use
+automatic coupon distribution and receiving-tier eligibility; they no longer
+use the retired reward-driven issuance configuration. `MinimumTierKey` remains
+the eligibility requirement for a points-redeemable reward.
+
+Pricing and Customers must adopt the released module and implement the matching
+coupon-only service behavior and referral issuance interface. Orders, Payments,
+Admin Web, storefront and POS consumers must remove the retired fields and
+instrument selections before claiming compatibility with the new provider APIs.
+Consumers pinned to an older immutable module remain on that contract until
+they deliberately adopt the new major. Publication alone does not qualify
+runtime rollout or consumer adoption.
+
+This is a fresh-data contract cutover: no data migration, deletion, reset,
+runtime configuration, HTTP DTO, service policy or event workflow is added.
+Issuance eligibility, referral limits, coupon selection, idempotency and
+assignment persistence remain with their authoritative services. Tests cover
+coupon referral JSON, supported and retired enum values, absence of voucher
+production models/fields, retired reward tier-issuance fields, and the deliberate
+historical-manifest removals.
 
 ## v44.1.0 (2026-10-06)
 

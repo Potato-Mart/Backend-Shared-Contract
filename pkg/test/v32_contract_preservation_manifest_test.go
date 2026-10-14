@@ -653,6 +653,16 @@ var v32ContractPreservationManifest = map[string]string{
 
 const expectedV32ContractPreservationCount = 634
 
+// v45RetiredContractDestinations records intentional major-version removals.
+// Preserve the original inventory while preventing an obsolete instrument from
+// being reintroduced to satisfy its historical destination.
+var v45RetiredContractDestinations = map[string]bool{
+	"contracts/orders/order.VoucherRedemptionSnapshot":               true,
+	"contracts/pricing/special.Voucher":                              true,
+	"contracts/pricing/wallet/reservation.VoucherBenefitReservation": true,
+	"contracts/pricing/wallet/wallet_enums.VoucherStatus":            true,
+}
+
 func TestV32ContractPreservationManifest(t *testing.T) {
 	if got := len(v32ContractPreservationManifest); got != expectedV32ContractPreservationCount {
 		t.Fatalf("preservation manifest entries = %d, want %d", got, expectedV32ContractPreservationCount)
@@ -694,6 +704,12 @@ func TestV32ContractPreservationManifest(t *testing.T) {
 
 	var missing []string
 	for oldKey, destination := range v32ContractPreservationManifest {
+		if v45RetiredContractDestinations[destination] {
+			if present[destination] {
+				t.Errorf("v45 retired contract remains: %s", destination)
+			}
+			continue
+		}
 		// v40 reuses the commercial listing models under their sole Pricing owner.
 		// Keep the historical v33 manifest/documentation unchanged and resolve
 		// its destinations against the current major here.

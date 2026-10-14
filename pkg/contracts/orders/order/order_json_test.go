@@ -6,25 +6,25 @@ import (
 	"testing"
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/orders/cart"
-	orderfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/orders/fulfilment"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/orders/cart"
+	orderfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/orders/fulfilment"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/orders/order"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/orders/order/order_enums"
-	ordershipping "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/orders/shipping"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pricing/wallet/wallet_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/supply/catalogue/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/supply/catalogue/product"
-	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/supply/fulfilment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/orders/order/order_enums"
+	ordershipping "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/supply/catalogue/product"
+	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestOrderJSONRoundTripWithHistory(t *testing.T) {
@@ -332,7 +332,6 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 	discount := money.Money{AmountMinor: 500, Currency: "AUD"}
 	pointOccurredAt := time.Date(2026, 7, 30, 1, 2, 3, 0, time.UTC)
 	rewardOccurredAt := pointOccurredAt.Add(time.Second)
-	voucherOccurredAt := pointOccurredAt.Add(2 * time.Second)
 	giftCardOccurredAt := pointOccurredAt.Add(3 * time.Second)
 	order := sales.Order{
 		ID:          "ord_points",
@@ -356,12 +355,6 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 				OccurredAt:         &rewardOccurredAt,
 			},
 		},
-		VoucherRedemption: &sales.VoucherRedemptionSnapshot{
-			VoucherCode:   "VOUCHER-1",
-			AppliedAmount: discount,
-			ReservationID: "benefit_res_1",
-			OccurredAt:    &voucherOccurredAt,
-		},
 		GiftCardRedemptions: []sales.GiftCardRedemptionSnapshot{
 			{
 				GiftCardCode:        "GC-1",
@@ -382,7 +375,7 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 	if err := json.Unmarshal(payload, &got); err != nil {
 		t.Fatalf("unmarshal order JSON: %v", err)
 	}
-	for _, key := range []string{"point_redemption", "reward_redemptions", "voucher_redemption", "gift_card_redemptions"} {
+	for _, key := range []string{"point_redemption", "reward_redemptions", "gift_card_redemptions"} {
 		if _, ok := got[key]; !ok {
 			t.Fatalf("order JSON missing %q: %s", key, payload)
 		}
@@ -396,7 +389,6 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 	for _, timestamp := range []string{
 		`"occurred_at":"2026-07-30T01:02:03Z"`,
 		`"occurred_at":"2026-07-30T01:02:04Z"`,
-		`"occurred_at":"2026-07-30T01:02:05Z"`,
 		`"occurred_at":"2026-07-30T01:02:06Z"`,
 	} {
 		if !strings.Contains(string(payload), timestamp) {

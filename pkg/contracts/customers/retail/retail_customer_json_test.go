@@ -3,21 +3,21 @@ package retail_test
 import (
 	"encoding/json"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/geography"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/geography"
 
 	"strings"
 	"testing"
 	"time"
 
-	commonidentity "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/identity"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/customers/preference"
-	preference_enums "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/customers/preference/preference_enums"
-	customers "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/customers/retail"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/customers/retail/retail_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/notification/core/notification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/orders/shipping"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v44/pkg/contracts/pubsub/notification"
+	commonidentity "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/identity"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/customers/preference"
+	preference_enums "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/customers/preference/preference_enums"
+	customers "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/customers/retail"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/customers/retail/retail_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/notification/core/notification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/orders/shipping"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pubsub/notification"
 )
 
 func TestRetailCustomerJSONShape(t *testing.T) {
@@ -41,8 +41,8 @@ func TestRetailCustomerJSONShape(t *testing.T) {
 			ReferrerCustomerNumber:    "RC-REF",
 			UsedReferralCodeConfirmed: true,
 			UsedByCount:               2,
-			RewardVouchersIssued:      1,
-			RewardVoucherCodes:        []string{"REF-ABC"},
+			RewardCouponsIssued:       1,
+			RewardCouponCodes:         []string{"REF-ABC"},
 		},
 		ProfileCompletion: &customers.RetailCustomerProfileCompletion{
 			Percent:         70,
@@ -111,6 +111,13 @@ func TestRetailCustomerJSONShape(t *testing.T) {
 	}
 	if referral["used_referral_code_confirmed"] != true || referral["used_by_count"].(float64) != 2 {
 		t.Fatalf("RetailCustomer referral did not expose replacement fields: %+v", referral)
+	}
+	if referral["reward_coupons_issued"] != float64(1) || len(referral["reward_coupon_codes"].([]any)) != 1 || referral["reward_coupon_codes"].([]any)[0] != "REF-ABC" {
+		t.Fatalf("RetailCustomer referral lost its coupon receipt fields: %+v", referral)
+	}
+	var decoded customers.RetailCustomer
+	if err := json.Unmarshal(payload, &decoded); err != nil || decoded.Referral == nil || decoded.Referral.RewardCouponsIssued != 1 || len(decoded.Referral.RewardCouponCodes) != 1 || decoded.Referral.RewardCouponCodes[0] != "REF-ABC" {
+		t.Fatalf("RetailCustomer coupon receipts did not round-trip: %+v, %v", decoded.Referral, err)
 	}
 	addresses := got["shipping_addresses"].([]any)
 	address := addresses[0].(map[string]any)

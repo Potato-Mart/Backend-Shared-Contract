@@ -20,7 +20,7 @@ func TestV33DomainOwnershipPackagesArePopulated(t *testing.T) {
 		"contracts/customers/retail", "contracts/customers/wholesale", "contracts/customers/group", "contracts/customers/preference",
 		"contracts/orders/cart", "contracts/orders/order", "contracts/orders/group_order", "contracts/orders/fulfilment", "contracts/orders/shipping", "contracts/orders/buyer", "contracts/orders/subscription",
 		"contracts/payments/payment", "contracts/payments/provider", "contracts/payments/merchant", "contracts/payments/receipt", "contracts/payments/register", "contracts/payments/settlement", "contracts/payments/terminal",
-		"contracts/pricing/pricebook", "contracts/pricing/quote", "contracts/pricing/promotion", "contracts/pricing/benefit", "contracts/pricing/coupon", "contracts/pricing/membership", "contracts/pricing/market", "contracts/pricing/special",
+		"contracts/pricing/pricebook", "contracts/pricing/quote", "contracts/pricing/promotion", "contracts/pricing/benefit", "contracts/pricing/coupon", "contracts/pricing/membership", "contracts/pricing/market",
 		"contracts/pricing/wallet/balance", "contracts/pricing/wallet/ledger", "contracts/pricing/wallet/points", "contracts/pricing/wallet/giftcard", "contracts/pricing/wallet/reward", "contracts/pricing/wallet/reservation",
 		"contracts/notification/core", "contracts/notification/email", "contracts/notification/sms", "contracts/notification/push", "contracts/notification/preference", "contracts/notification/delivery",
 		"contracts/notification/template", "contracts/notification/template/template_enums",
