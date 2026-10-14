@@ -34,6 +34,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v45.2.0` | 2026-10-14 | Minor |
 | `v45.1.0` | 2026-10-14 | Minor |
 | `v45.0.0` | 2026-10-14 | Major |
 | `v44.1.0` | 2026-10-06 | Minor |
@@ -42,6 +43,22 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v45.2.0 (2026-10-14)
+
+Add `held`, `released` and `dropped` point-award states and the optional
+`CustomerPaymentSummary.points_held` integer. Held points are excluded from
+spendable wallet balances; a present zero is distinct from unavailable evidence.
+Existing states remain readable for stored history. Pricing owns preparation,
+calculation and wallet release; Payments owns completion/refund reconciliation.
+Their HTTP DTOs and persistence policy remain service-owned.
+
+Publish before Pricing and Payments adopt the pin. Admin, Orders, storefront
+and POS projections must preserve unknown states and must not treat `held` as
+spendable or `pending` as a known zero. Existing JSON decoding retains unknown
+string states; `IsValid` intentionally rejects unknown values. Owner follow-up
+issues track coordinated consumers; this release does not prove adoption.
+No migration, backfill or event payload change is included.
 
 ## v45.1.0 (2026-10-14)
 

@@ -13,15 +13,17 @@ import (
 // paid: totals, per-source allocations, points earned, and an explicit
 // completeness marker when parts could not be assembled.
 type CustomerPaymentSummary struct {
-	OrderNumber         string                                  `json:"order_number"`
-	Status              payment_enums.PaymentStatus             `json:"status"`
-	Provider            string                                  `json:"provider,omitempty"`
-	ProcessorFee        *money.Money                            `json:"processor_fee,omitempty"`
-	CapturedTotal       *money.Money                            `json:"captured_total,omitempty"`
-	RefundedTotal       *money.Money                            `json:"refunded_total,omitempty"`
-	TotalPaid           *money.Money                            `json:"total_paid,omitempty"`
-	Allocations         []CustomerPaymentAllocation             `json:"allocations,omitempty"`
-	PointsAwardStatus   wallet_enums.PointAwardStatus           `json:"points_award_status,omitempty"`
+	OrderNumber       string                        `json:"order_number"`
+	Status            payment_enums.PaymentStatus   `json:"status"`
+	Provider          string                        `json:"provider,omitempty"`
+	ProcessorFee      *money.Money                  `json:"processor_fee,omitempty"`
+	CapturedTotal     *money.Money                  `json:"captured_total,omitempty"`
+	RefundedTotal     *money.Money                  `json:"refunded_total,omitempty"`
+	TotalPaid         *money.Money                  `json:"total_paid,omitempty"`
+	Allocations       []CustomerPaymentAllocation   `json:"allocations,omitempty"`
+	PointsAwardStatus wallet_enums.PointAwardStatus `json:"points_award_status,omitempty"`
+	// PointsHeld is prepared but excluded from the spendable wallet balance.
+	PointsHeld          *int                                    `json:"points_held,omitempty"`
 	PointsEarned        *int                                    `json:"points_earned,omitempty"`
 	PointsAppliedToDebt *int                                    `json:"points_applied_to_debt,omitempty"`
 	PointsNetCredited   *int                                    `json:"points_net_credited,omitempty"`
