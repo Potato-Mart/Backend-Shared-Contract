@@ -59,13 +59,20 @@ func TestCustomerPaymentSummaryPointAwardStatusesAndKnownZero(t *testing.T) {
 		wallet_enums.PointAwardStatusPending,
 		wallet_enums.PointAwardStatusAwarded,
 		wallet_enums.PointAwardStatusFailed,
+		wallet_enums.PointAwardStatusHeld,
+		wallet_enums.PointAwardStatusReleased,
+		wallet_enums.PointAwardStatusDropped,
 	}
 	zero := 0
 	for _, status := range statuses {
 		status := status
+		if !status.IsValid() {
+			t.Fatalf("invalid supported status: %s", status)
+		}
 		t.Run(status.String(), func(t *testing.T) {
 			payload, err := json.Marshal(sales.CustomerPaymentSummary{
 				PointsAwardStatus:   status,
+				PointsHeld:          &zero,
 				PointsEarned:        &zero,
 				PointsAppliedToDebt: &zero,
 				PointsNetCredited:   &zero,
@@ -76,6 +83,7 @@ func TestCustomerPaymentSummaryPointAwardStatusesAndKnownZero(t *testing.T) {
 			}
 			for _, field := range []string{
 				`"points_award_status":"` + status.String() + `"`,
+				`"points_held":0`,
 				`"points_earned":0`,
 				`"points_applied_to_debt":0`,
 				`"points_net_credited":0`,
@@ -86,5 +94,27 @@ func TestCustomerPaymentSummaryPointAwardStatusesAndKnownZero(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestHeldSummaryPreservesUnknownStatusAndOptionalBalance(t *testing.T) {
+	for _, raw := range []string{`{"points_award_status":"held","points_held":17}`, `{"points_award_status":"future-status","points_held":0}`} {
+		var got sales.CustomerPaymentSummary
+		if err := json.Unmarshal([]byte(raw), &got); err != nil {
+			t.Fatal(err)
+		}
+		if got.PointsHeld == nil || got.PointsEarned != nil {
+			t.Fatalf("held balance lost or inferred earned: %+v", got)
+		}
+		out, err := json.Marshal(got)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !strings.Contains(string(out), `"points_award_status":"`+got.PointsAwardStatus.String()+`"`) {
+			t.Fatal("status normalized")
+		}
+	}
+	if wallet_enums.PointAwardStatus("future-status").IsValid() {
+		t.Fatal("unknown status validated")
 	}
 }
