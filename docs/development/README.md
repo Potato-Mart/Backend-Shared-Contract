@@ -29,11 +29,13 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | 15 | `CatalogBaseCostChangedEvent` | `catalog.base_cost_changed` | `catalog-events` |
 | 16 | `CatalogListingChangedEvent` | `catalog.listing_changed` | `catalog-events` |
 | 17 | `OrderPackingProjection` | `fulfilment.packing_updated` | `fulfilment-events` |
+| 18 | `StockRestockAlertTriggeredEvent` | `stock.restock_alert_triggered` | `stock-events` |
 
 ## Release index
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v45.3.0` | 2026-10-20 | Minor |
 | `v45.2.0` | 2026-10-14 | Minor |
 | `v45.1.0` | 2026-10-14 | Minor |
 | `v45.0.0` | 2026-10-14 | Major |
@@ -43,6 +45,18 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v45.3.0 (2026-10-20)
+
+Add the additive `stock.restock_alert_triggered` v1 event on the existing
+`stock-events` topic, carried by `StockRestockAlertTriggeredEvent`. Supply owns
+restock subscriptions and produces one event per subscriber when a SKU returns
+to stock in a market; `alert_id` is the aggregate and idempotency key and the
+subscription clears when it fires. The payload carries `user_id`,
+`retail_customer_number` and localized `product_name` entries so Notification
+can consume it and send push/inbox copy without a lookup. Orders acknowledges
+it as a peer event on its stock-events subscription. Existing event types and
+payloads are unchanged; no migration is required.
 
 ## v45.2.0 (2026-10-14)
 

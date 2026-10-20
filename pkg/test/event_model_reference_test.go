@@ -34,6 +34,7 @@ var documentedEventPayloads = []string{
 	"RefundCompletedEvent",
 	"RefundFact",
 	"StockLocationAvailabilityChangedEvent",
+	"StockRestockAlertTriggeredEvent",
 	"StockStagingChangedEvent",
 }
 

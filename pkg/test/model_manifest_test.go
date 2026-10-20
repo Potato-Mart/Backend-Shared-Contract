@@ -258,7 +258,8 @@ var modelPackageManifest map[string]string
 // V41 adds the strict AgeComparison enum for retail purchase restrictions.
 // V45 removes the voucher instrument, status, reservation and order snapshot.
 // Reward tier-issuance fields are retired separately by the V45 field-surface test.
-const exportedTypeManifestDigest = "8865e6cf7f28b0f542643a049195faea2b82fdd1a6f4d6199b3036c974d611ce"
+// V45.3 adds the Supply-owned StockRestockAlertTriggeredEvent payload.
+const exportedTypeManifestDigest = "4273e64f27b796cff0101fb8a422df2bbb40608826f9242ce81b7fadafc62ffd"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
