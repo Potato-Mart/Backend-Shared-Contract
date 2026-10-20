@@ -16,6 +16,7 @@ var eventTypeVersionRegistry = map[EventType]string{
 	EventTypeInventorySold:                     "v5",
 	EventTypeInventoryDateMarkThresholdReached: "v4",
 	EventTypeStockLocationAvailabilityChanged:  "v4",
+	EventTypeStockRestockAlertTriggered:        "v1",
 	EventTypeCatalogBaseCostChanged:            "v4",
 	EventTypeCatalogListingChanged:             "v4",
 	EventTypeAnalyticsOrderFact:                "v5",
@@ -64,6 +65,7 @@ func TestEventTypeVersionRegistryCoversEveryDefinedEventExactlyOnce(t *testing.T
 		EventTypeInventorySold:                     "v5",
 		EventTypeInventoryDateMarkThresholdReached: "v4",
 		EventTypeStockLocationAvailabilityChanged:  "v4",
+		EventTypeStockRestockAlertTriggered:        "v1",
 		EventTypeCatalogBaseCostChanged:            "v4",
 		EventTypeCatalogListingChanged:             "v4",
 		EventTypeAnalyticsOrderFact:                "v5",
@@ -100,8 +102,8 @@ func TestEventTypeVersionRegistryCoversEveryDefinedEventExactlyOnce(t *testing.T
 		EventTypeNotificationGiftCardDelivered:  "v1",
 		EventTypePriceChanged:                   "v1",
 	}
-	if len(expected) != 41 {
-		t.Fatalf("expected event registry test has %d entries, want 41", len(expected))
+	if len(expected) != 42 {
+		t.Fatalf("expected event registry test has %d entries, want 42", len(expected))
 	}
 	if len(eventTypeVersionRegistry) != len(expected) {
 		t.Fatalf("event registry has %d entries, want %d", len(eventTypeVersionRegistry), len(expected))
