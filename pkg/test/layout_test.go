@@ -58,6 +58,7 @@ var expectedEnumPackages = []string{
 	"contracts/supply/catalogue/favourite/favourite_enums",
 	"contracts/supply/catalogue/product/product_enums",
 	"contracts/supply/catalogue/review/review_enums",
+	"contracts/supply/catalogue/selection/selection_enums",
 	"contracts/supply/catalogue/wish/wish_enums",
 	"contracts/supply/compliance/compliance_enums",
 	"contracts/supply/courier/courier_enums",

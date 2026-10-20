@@ -221,6 +221,8 @@ var v33ModelPackageManifest = map[string]string{
 	"contracts/supply/catalogue/product/product_enums":               "enum",
 	"contracts/supply/catalogue/review":                              "record",
 	"contracts/supply/catalogue/review/review_enums":                 "enum",
+	"contracts/supply/catalogue/selection":                           "record",
+	"contracts/supply/catalogue/selection/selection_enums":           "enum",
 	"contracts/supply/catalogue/wish":                                "record",
 	"contracts/supply/catalogue/wish/wish_enums":                     "enum",
 	"contracts/supply/compliance":                                    "record",
@@ -259,7 +261,8 @@ var modelPackageManifest map[string]string
 // V45 removes the voucher instrument, status, reservation and order snapshot.
 // Reward tier-issuance fields are retired separately by the V45 field-surface test.
 // V45.3 adds the Supply-owned StockRestockAlertTriggeredEvent payload.
-const exportedTypeManifestDigest = "4273e64f27b796cff0101fb8a422df2bbb40608826f9242ce81b7fadafc62ffd"
+// V45.4 adds Supply-owned ProductSelection records and their leaf enums.
+const exportedTypeManifestDigest = "39418b3a2b5235e15d828a9e282769f88b3124bfede81cd829abf98aa07bf7eb"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

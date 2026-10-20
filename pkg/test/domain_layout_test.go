@@ -46,6 +46,7 @@ func TestDomainPackageLayout(t *testing.T) {
 		"contracts/pricing/listing/market_listing.go":                             "listing",
 		"contracts/supply/catalogue/product/product.go":                           "product",
 		"contracts/supply/catalogue/review/review.go":                             "review",
+		"contracts/supply/catalogue/selection/product_selection.go":               "selection",
 		"contracts/supply/catalogue/wish/wish_proposal.go":                        "wish",
 		"contracts/supply/compliance/manufacturer_declaration.go":                 "compliance",
 		"contracts/supply/forecasting/sku_demand_forecast.go":                     "forecasting",

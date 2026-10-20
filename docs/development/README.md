@@ -35,6 +35,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v45.4.0` | 2026-10-21 | Minor |
 | `v45.3.0` | 2026-10-20 | Minor |
 | `v45.2.0` | 2026-10-14 | Minor |
 | `v45.1.0` | 2026-10-14 | Minor |
@@ -45,6 +46,19 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v45.4.0 (2026-10-21)
+
+Add the additive `pkg/contracts/supply/catalogue/selection` package for curated,
+ordered product lists. `ProductSelection` carries an immutable `code`, a
+public `slug` editable only while `draft`, a `kind` (`badge` or `section`), a
+`status` (`draft`, `published` or `archived`), localized `name` and optional
+`description`, code-only `icon` and `cover` media references, an admin-set
+`display_order` and a `revision` advanced by every successful write.
+`ProductSelectionItem` records membership as `selection_code`, `sku_code` and
+a zero-based `position`. Membership references products by SKU code and is
+independent of collections and category tags. Supply owns persistence,
+validation and APIs. Existing models are unchanged; no migration is required.
 
 ## v45.3.0 (2026-10-20)
 
