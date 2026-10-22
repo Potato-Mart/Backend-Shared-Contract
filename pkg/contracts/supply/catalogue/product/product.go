@@ -24,5 +24,9 @@ type Product struct {
 	BarcodeAssignments []ProductBarcodeAssignment       `json:"barcode_assignments,omitempty"`
 	NetContent         *measurement.NetContent          `json:"net_content,omitempty"`
 	Supply             *classification.ProductSupply    `json:"supply,omitempty"`
-	Administration     *ProductAdministration           `json:"administration,omitempty"`
+	// Revision is advanced by every successful Supply write to the product
+	// document and is the token admin clients echo back as expected_revision.
+	// Zero only appears on documents written before revisions were backfilled.
+	Revision       int64                  `json:"revision"`
+	Administration *ProductAdministration `json:"administration,omitempty"`
 }

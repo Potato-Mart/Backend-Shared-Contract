@@ -119,6 +119,7 @@ var v33ModelPackageManifest = map[string]string{
 	"contracts/common/identity/identity_enums":                       "enum",
 	"contracts/common/localization":                                  "record",
 	"contracts/common/measurement":                                   "record",
+	"contracts/common/measurement/measurement_enums":                 "enum",
 	"contracts/common/metadata":                                      "record",
 	"contracts/common/money":                                         "record",
 	"contracts/common/packaging":                                     "record",
@@ -262,7 +263,8 @@ var modelPackageManifest map[string]string
 // Reward tier-issuance fields are retired separately by the V45 field-surface test.
 // V45.3 adds the Supply-owned StockRestockAlertTriggeredEvent payload.
 // V45.4 adds Supply-owned ProductSelection records and their leaf enums.
-const exportedTypeManifestDigest = "39418b3a2b5235e15d828a9e282769f88b3124bfede81cd829abf98aa07bf7eb"
+// V45.5 adds the NetContentUnit leaf enum beside the open MeasurementUnit.
+const exportedTypeManifestDigest = "87e75df523449dc6a74f352bb3fe21039ee16cb58ace89354638d8eff49f4c9c"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
