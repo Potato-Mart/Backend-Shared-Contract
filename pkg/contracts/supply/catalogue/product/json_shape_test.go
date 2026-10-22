@@ -44,7 +44,7 @@ func TestCanonicalProductJSONShape(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, want := range []string{`"sku_code":"A00001"`, `"storage_type":"AMBIENT"`, `"name":{"language":"en","name":"Product"}`, `"sku_series_code":"A0"`, `"brands":[{"code":"BRD000001"}]`, `"code":"MED-SHA256"`, `"package_options":[{"version":1,"code":"EACH","sku_code":"A00001"`, `"barcode_assignments":[{"code":"BAR-A00001"`} {
+	for _, want := range []string{`"sku_code":"A00001"`, `"storage_type":"AMBIENT"`, `"name":{"language":"en","name":"Product"}`, `"sku_series_code":"A0"`, `"brands":[{"code":"BRD000001"}]`, `"code":"MED-SHA256"`, `"package_options":[{"version":1,"code":"EACH","sku_code":"A00001"`, `"barcode_assignments":[{"code":"BAR-A00001"`, `"revision":0`} {
 		if !strings.Contains(string(body), want) {
 			t.Fatalf("Product JSON = %s, want %s", body, want)
 		}

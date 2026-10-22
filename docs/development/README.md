@@ -35,6 +35,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v45.5.0` | 2026-10-22 | Minor |
 | `v45.4.0` | 2026-10-21 | Minor |
 | `v45.3.0` | 2026-10-20 | Minor |
 | `v45.2.0` | 2026-10-14 | Minor |
@@ -46,6 +47,18 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v45.5.0 (2026-10-22)
+
+Add the additive `revision` field to `product.Product`. Supply advances it on
+every successful write to the stored product document and admin clients echo
+it back as an `expected_revision` precondition; `0` only appears on documents
+written before Supply backfills its own store. Add the additive leaf enum
+`measurement_enums.NetContentUnit` (`g`, `kg`, `mL`, `L`, `m`, `ea`) that
+publishes the closed net-content unit vocabulary Supply enforces; both measures
+of one net content declaration must share a dimension (mass, volume, length
+or count). `measurement.MeasurementUnit` remains an open string. Existing
+models are otherwise unchanged; no consumer migration is required.
 
 ## v45.4.0 (2026-10-21)
 
