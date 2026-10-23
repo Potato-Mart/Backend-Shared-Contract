@@ -1,15 +1,17 @@
 package coupon
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/benefit"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/benefit"
 	"time"
 )
 
 // CouponUsageRecord is a durable idempotent coupon redemption result.
 type CouponUsageRecord struct {
 	ID                  string                      `json:"id"`
+	CouponID            string                      `json:"coupon_id"`
+	EntitlementID       string                      `json:"entitlement_id"`
 	CouponCode          string                      `json:"coupon_code"`
 	Owner               *benefit.OwnerRef           `json:"owner,omitempty"`
 	RedeemedOrderNumber string                      `json:"redeemed_order_number"`

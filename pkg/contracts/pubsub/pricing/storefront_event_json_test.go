@@ -6,15 +6,11 @@ import (
 	"testing"
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/localization"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/marketing/campaign"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/marketing/campaign/campaign_enums"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pubsub/pricing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pubsub/pricing/promotion_enums"
-	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pubsub/routing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/marketing/campaign/campaign_enums"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pubsub/pricing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pubsub/pricing/promotion_enums"
+	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pubsub/routing"
 )
 
 func TestCustomerSafeStorefrontEventsJSON(t *testing.T) {
@@ -26,8 +22,8 @@ func TestCustomerSafeStorefrontEventsJSON(t *testing.T) {
 			Published: true, Revision: 3, RefetchRequired: true, ChangedAt: now,
 		},
 		event.CampaignChangedEvent{
-			CampaignCode: "winter-sale", PromotionID: "promotion_1",
-			Status: campaign_enums.CampaignStatusActive, IsActive: true,
+			CampaignCode: "winter-sale",
+			Status:       campaign_enums.CampaignStatusPublished, Published: true,
 			ScopeMode: geography_enums.GeographicScopeModeGlobal, ScopeRevision: 5,
 			ActivationRevision: 2, ContentRevision: 5, RefetchRequired: true, ChangedAt: now,
 		},
@@ -124,36 +120,19 @@ func TestCouponChangedEventJSONIsIdentityAndRefetchOnly(t *testing.T) {
 	}
 }
 
-func TestCampaignLinkRevisionCTAAndMediaJSON(t *testing.T) {
-	value := campaign.Campaign{
-		ID: "campaign_1", CampaignCode: "winter-sale", MarketCode: "AU",
-		Title: []localization.LocalizedName{{Language: "en", Name: "Winter sale"}}, CTAHref: "potatomart://product/SKU-1",
-		CTA: &campaign.CTADestination{
-			Type: campaign_enums.CampaignCTADestinationProduct, SKUCode: "SKU-1",
-		},
-		Media:            &security.ObjectMedia{Code: "media_1", URL: "/v1/storefront/campaigns/campaign_1/media"},
-		Placement:        campaign_enums.CampaignPlacementHomeBanner,
-		Severity:         campaign_enums.CampaignSeverityInfo,
-		Status:           campaign_enums.CampaignStatusActive,
-		ScheduleTimezone: "Etc/UTC",
-		GeographicScope:  geography.GeographicScope{Mode: geography_enums.GeographicScopeModeGlobal},
-		Revision:         5, ActivationRevision: 2,
-	}
-	payload, err := json.Marshal(value)
+func TestCampaignChangedV3HasNoRetiredIdentity(t *testing.T) {
+	raw, err := json.Marshal(event.CampaignChangedEvent{CampaignCode: "CAM-1", Published: true, ActivationRevision: 3, Status: campaign_enums.CampaignStatusPublished})
 	if err != nil {
-		t.Fatalf("marshal campaign: %v", err)
+		t.Fatal(err)
 	}
-	for _, field := range []string{`"campaign_code":"winter-sale"`, `"market_code":"AU"`, `"cta_href":"potatomart://product/SKU-1"`, `"cta":{"type":"product","sku_code":"SKU-1"}`, `"media":{"code":"media_1","url":"/v1/storefront/campaigns/campaign_1/media"}`, `"schedule_timezone":"Etc/UTC"`, `"geographic_scope":{"mode":"GLOBAL"}`, `"revision":5`, `"activation_revision":2`} {
-		if !strings.Contains(string(payload), field) {
-			t.Fatalf("campaign missing %s: %s", field, payload)
+	for _, field := range []string{"series_code", "promotion_id", "is_active", "activation_revision"} {
+		if strings.Contains(string(raw), `"`+field+`"`) {
+			t.Fatal(field)
 		}
 	}
-	if strings.Contains(string(payload), `"region"`) {
-		t.Fatalf("campaign retained removed audience region: %s", payload)
-	}
-	for _, retired := range []string{`"media_code"`, `"media_url"`} {
-		if strings.Contains(string(payload), retired) {
-			t.Fatalf("campaign retained retired %s: %s", retired, payload)
+	for _, field := range []string{`"published":true`, `"publication_revision":3`, `"publication_status":"published"`} {
+		if !strings.Contains(string(raw), field) {
+			t.Fatal(field)
 		}
 	}
 }

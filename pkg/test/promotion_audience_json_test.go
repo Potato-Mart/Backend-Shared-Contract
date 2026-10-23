@@ -5,11 +5,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/marketing/audience"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/marketing/campaign/campaign_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/coupon"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/marketing/audience"
+	audienceenum "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/marketing/audience/audience_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/coupon"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/promotion"
 )
 
 func TestPromotionAndCouponAudienceRoundTripWithoutChangingChannels(t *testing.T) {
@@ -20,9 +20,9 @@ func TestPromotionAndCouponAudienceRoundTripWithoutChangingChannels(t *testing.T
 	}{
 		{name: "legacy absent"},
 		{name: "explicit unrestricted", audience: &audience.Audience{}, wire: `{}`},
-		{name: "customer only", audience: &audience.Audience{CustomerType: campaign_enums.CampaignCustomerTypeRetail}, wire: `{"customer_type":"retail"}`},
-		{name: "platform only", audience: &audience.Audience{Platform: campaign_enums.CampaignPlatformMobile}, wire: `{"platform":"mobile"}`},
-		{name: "both dimensions", audience: &audience.Audience{CustomerType: campaign_enums.CampaignCustomerTypeWholesale, Platform: campaign_enums.CampaignPlatformWeb}, wire: `{"customer_type":"wholesale","platform":"web"}`},
+		{name: "customer only", audience: &audience.Audience{CustomerType: audienceenum.CustomerTypeRetail}, wire: `{"customer_type":"retail"}`},
+		{name: "platform only", audience: &audience.Audience{Platform: audienceenum.PlatformMobile}, wire: `{"platform":"mobile"}`},
+		{name: "both dimensions", audience: &audience.Audience{CustomerType: audienceenum.CustomerTypeWholesale, Platform: audienceenum.PlatformWeb}, wire: `{"customer_type":"wholesale","platform":"web"}`},
 	} {
 		t.Run(tc.name, func(t *testing.T) {
 			controls := promotion.PromotionControls{

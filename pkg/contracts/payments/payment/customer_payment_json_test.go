@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/payments/payment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/wallet/wallet_enums"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/payments/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 func TestCustomerPaymentSummaryPointAwardAndDebtRoundTrip(t *testing.T) {

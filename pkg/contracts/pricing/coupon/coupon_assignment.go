@@ -3,10 +3,10 @@ package coupon
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/audit"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/benefit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/benefit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
 // CouponAssignment is an owner-specific issuance of a wallet Coupon.
@@ -20,6 +20,8 @@ type CouponAssignment struct {
 	Owner               benefit.OwnerRef          `json:"owner"`
 	Source              wallet_enums.CouponSource `json:"source"`
 	Status              string                    `json:"status"`
+	UsedCount           int64                     `json:"used_count"`
+	ReservedCount       int64                     `json:"reserved_count"`
 	ExpiresAt           *time.Time                `json:"expires_at,omitempty"`
 	RedeemedAt          *time.Time                `json:"redeemed_at,omitempty"`
 	RedeemedOrderNumber string                    `json:"redeemed_order_number,omitempty"`

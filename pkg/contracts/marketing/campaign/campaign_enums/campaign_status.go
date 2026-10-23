@@ -5,15 +5,14 @@ type CampaignStatus string
 
 const (
 	CampaignStatusDraft     CampaignStatus = "draft"
-	CampaignStatusScheduled CampaignStatus = "scheduled"
-	CampaignStatusActive    CampaignStatus = "active"
-	CampaignStatusCompleted CampaignStatus = "completed"
+	CampaignStatusPublished CampaignStatus = "published"
+	CampaignStatusPaused    CampaignStatus = "paused"
 	CampaignStatusArchived  CampaignStatus = "archived"
 )
 
 func (s CampaignStatus) IsValid() bool {
 	switch s {
-	case CampaignStatusDraft, CampaignStatusScheduled, CampaignStatusActive, CampaignStatusCompleted, CampaignStatusArchived:
+	case CampaignStatusDraft, CampaignStatusPublished, CampaignStatusPaused, CampaignStatusArchived:
 		return true
 	}
 	return false

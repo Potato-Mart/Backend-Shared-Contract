@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-const contractImportPrefix = "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/"
+const contractImportPrefix = "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/"
 
 var contractMajorPath = regexp.MustCompile(`github\.com/Potato-Mart/Backend-Shared-Contract/v([0-9]+)/`)
 
@@ -34,6 +34,7 @@ var expectedEnumPackages = []string{
 	"contracts/identity/authorisation/role_enums",
 	"contracts/insights/analytics/analytics_enums",
 	"contracts/supply/forecasting/marketing_enums",
+	"contracts/marketing/audience/audience_enums",
 	"contracts/marketing/campaign/campaign_enums",
 	"contracts/marketing/message/message_enums",
 	"contracts/notification/core/notification_enums",
@@ -196,7 +197,7 @@ func TestCommonAndEnumPackageLayout(t *testing.T) {
 			violations = append(violations, relativePkgPath(t, pkgRoot, path)+": retired common/shared source path")
 		}
 		for _, match := range contractMajorPath.FindAllStringSubmatch(string(contents), -1) {
-			if match[1] != "45" {
+			if match[1] != "46" {
 				violations = append(violations, relativePkgPath(t, pkgRoot, path)+": non-current shared-contract major source path "+match[0])
 			}
 		}

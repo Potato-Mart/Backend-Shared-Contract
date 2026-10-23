@@ -2,33 +2,51 @@ package campaign_test
 
 import (
 	"encoding/json"
-	"strings"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/marketing/campaign"
+	ce "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/marketing/campaign/campaign_enums"
+	"reflect"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/marketing/campaign"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/marketing/campaign/campaign_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/benefit"
+	audienceenum "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/marketing/audience/audience_enums"
 )
 
-func TestCampaignUsesOpenNotificationTopicAndPricingBenefitReference(t *testing.T) {
-	payload, err := json.Marshal(campaign.Campaign{
-		CampaignCode: "spring-2026", MarketCode: "au", Title: []localization.LocalizedName{{Language: "en-AU", Name: "Spring"}},
-		Placement: campaign_enums.CampaignPlacementHomeBanner, Severity: campaign_enums.CampaignSeverityInfo,
-		Status: campaign_enums.CampaignStatusActive, NotificationTopicCode: "seasonal_offer",
-		BenefitRefs: []benefit.BenefitRef{{Kind: "promotion", Code: "spring-price"}},
-	})
+func TestCampaignV46BoundaryAndRoundTrip(t *testing.T) {
+	c := campaign.Campaign{CampaignCode: "CAM-1", Audience: []ce.CampaignCustomerType{ce.CampaignCustomerTypeRetail, ce.CampaignCustomerTypeWholesale}, Placements: []campaign.Placement{{Position: ce.CampaignPlacementHomeBanner, Platforms: []ce.CampaignPlatform{ce.CampaignPlatformWeb}, Priority: 2}, {Position: ce.CampaignPlacementAccountBanner, Platforms: []ce.CampaignPlatform{ce.CampaignPlatformMobile}, Priority: 9}}, Offers: []campaign.OfferLink{{Kind: "promotion", ID: "PROMO-1", DisplayOrder: 2, Revision: "r7"}}, Status: ce.CampaignStatusDraft}
+	raw, err := json.Marshal(c)
 	if err != nil {
-		t.Fatalf("marshal campaign: %v", err)
+		t.Fatal(err)
 	}
-	for _, expected := range []string{`"campaign_code":"spring-2026"`, `"notification_topic_code":"seasonal_offer"`, `"kind":"promotion"`} {
-		if !strings.Contains(string(payload), expected) {
-			t.Fatalf("campaign missing %s: %s", expected, payload)
+	var decoded campaign.Campaign
+	if err := json.Unmarshal(raw, &decoded); err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(c, decoded) {
+		t.Fatalf("round trip changed model: %+v", decoded)
+	}
+	var fields map[string]json.RawMessage
+	_ = json.Unmarshal(raw, &fields)
+	for _, retired := range []string{"series_code", "placement", "priority", "severity", "message_style", "cta", "cta_text", "cta_href", "notification_topic_code", "benefit_refs", "is_active"} {
+		if _, exists := fields[retired]; exists {
+			t.Fatalf("retired field %s remains", retired)
 		}
 	}
-	for _, forbidden := range []string{`messaging_category`, `promotion_id`} {
-		if strings.Contains(string(payload), forbidden) {
-			t.Fatalf("campaign retained retired field %s: %s", forbidden, payload)
+	if ce.CampaignCustomerType("guest").IsValid() {
+		t.Fatal("guest is not a campaign audience")
+	}
+	if !audienceenum.CustomerTypeGuest.IsValid() {
+		t.Fatal("offer guest semantics must stay separate")
+	}
+	if reflect.TypeOf(audienceenum.CustomerTypeGuest) == reflect.TypeOf(ce.CampaignCustomerTypeRetail) {
+		t.Fatal("campaign and commercial audience share a type")
+	}
+	for _, position := range []ce.CampaignPlacement{"announcement_bar", "home_banner", "account_banner", "home_modal"} {
+		if !position.IsValid() {
+			t.Fatal(position)
+		}
+	}
+	for _, state := range []ce.CampaignStatus{"draft", "published", "paused", "archived"} {
+		if !state.IsValid() {
+			t.Fatal(state)
 		}
 	}
 }

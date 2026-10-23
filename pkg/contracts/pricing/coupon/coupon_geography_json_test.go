@@ -6,16 +6,16 @@ import (
 	"testing"
 	"time"
 
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/coupon"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/promotion/promotion_enums"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/coupon"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
-func TestCouponReusesPromotionScopePeriodTermsAndControls(t *testing.T) {
+func TestCouponReusesPromotionScopeWindowsBenefitAndControls(t *testing.T) {
 	startsAt := time.Date(2026, 8, 9, 0, 0, 0, 0, time.UTC)
 	minimumAmount := money.Money{AmountMinor: 2_000, Currency: "AUD"}
 	payload, err := json.Marshal(coupon.Coupon{
@@ -30,9 +30,7 @@ func TestCouponReusesPromotionScopePeriodTermsAndControls(t *testing.T) {
 				CategoryTagCodes: []string{"tag_potato"},
 			}},
 		},
-		Period: promotion.PromotionPeriod{StartsAt: &startsAt, Timezone: "Australia/Sydney"},
-		Terms:  []promotion.PromotionTerm{{Key: "minimum_order_amount", MoneyValue: &minimumAmount}},
-		Controls: promotion.PromotionControls{
+		RedemptionWindow: promotion.PromotionPeriod{StartsAt: &startsAt, Timezone: "Australia/Sydney"}, MinimumSpend: &minimumAmount, Benefit: coupon.Benefit{}, Controls: promotion.PromotionControls{
 			GeographicScope: geography.GeographicScope{
 				Mode:    geography_enums.GeographicScopeModeTargeted,
 				Targets: []geography.GeographicPath{{CountryCode: "AU", MarketCode: "mkt_au", StateCode: "AU-NSW"}},
@@ -42,7 +40,7 @@ func TestCouponReusesPromotionScopePeriodTermsAndControls(t *testing.T) {
 	if err != nil {
 		t.Fatalf("marshal coupon: %v", err)
 	}
-	for _, want := range []string{`"content":{"names":[{"language":"en","name":"New South Wales savings"}]`, `"scope":{"unrestricted":false`, `"period":{"starts_at":"2026-08-09T00:00:00Z","timezone":"Australia/Sydney"}`, `"terms":[{`, `"controls":{"geographic_scope"`} {
+	for _, want := range []string{`"content":{"names":[{"language":"en","name":"New South Wales savings"}]`, `"scope":{"unrestricted":false`, `"redemption_window":{"starts_at":"2026-08-09T00:00:00Z","timezone":"Australia/Sydney"}`, `"minimum_spend":{`, `"controls":{"geographic_scope"`} {
 		if !strings.Contains(string(payload), want) {
 			t.Fatalf("coupon JSON = %s, want %s", payload, want)
 		}
@@ -57,7 +55,7 @@ func TestCouponReusesPromotionScopePeriodTermsAndControls(t *testing.T) {
 	if err := json.Unmarshal(payload, &got); err != nil {
 		t.Fatalf("unmarshal coupon: %v", err)
 	}
-	if got.Content.Names[0].Name != "New South Wales savings" || got.Content.Descriptions[0].Description != "NSW potato coupon" || got.Scope.Groups[0].CategoryTagCodes[0] != "tag_potato" || got.Period.StartsAt == nil || got.Terms[0].MoneyValue == nil || got.Controls.GeographicScope.Mode != geography_enums.GeographicScopeModeTargeted {
+	if got.Content.Names[0].Name != "New South Wales savings" || got.Content.Descriptions[0].Description != "NSW potato coupon" || got.Scope.Groups[0].CategoryTagCodes[0] != "tag_potato" || got.RedemptionWindow.StartsAt == nil || got.MinimumSpend == nil || got.Controls.GeographicScope.Mode != geography_enums.GeographicScopeModeTargeted {
 		t.Fatalf("coupon reusable promotion fields did not round-trip: %+v", got)
 	}
 }

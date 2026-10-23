@@ -2,19 +2,16 @@ package coupon_test
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/coupon"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/coupon/coupon_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/coupon"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/coupon/coupon_enums"
 	"reflect"
 	"testing"
 )
 
 func TestReceivingAndRedemptionPoliciesRemainIndependent(t *testing.T) {
 	record := coupon.Coupon{
-		Distribution:                 coupon_enums.DistributionAutoMemberClaim,
-		Visibility:                   coupon_enums.VisibilityUnlisted,
-		ReceivingTier:                coupon.ReceivingTierPolicy{Specification: coupon_enums.TierSpecificationSelectedTier, TierKey: "silver", Match: coupon_enums.TierMatchAtOrAbove},
-		TierRestriction:              coupon.TierRestriction{Active: true, TierKey: "gold", Match: coupon_enums.TierMatchExact},
-		ProfileCompletionRestriction: coupon.ProfileCompletionRestriction{Active: true},
+		Acquisition: coupon_enums.AcquisitionAutomatic,
+		Visibility:  coupon_enums.VisibilityUnlisted, ReceivingEligibility: coupon.ReceivingEligibility{Membership: coupon.ReceivingTierPolicy{Specification: coupon_enums.TierSpecificationSelectedTier, TierKey: "silver", Match: coupon_enums.TierMatchAtOrAbove}, Profile: coupon.ProfileCompletionRestriction{Active: true}}, RedemptionEligibility: coupon.RedemptionEligibility{Membership: coupon.TierRestriction{Active: true, TierKey: "gold", Match: coupon_enums.TierMatchExact}},
 	}
 	payload, err := json.Marshal(record)
 	if err != nil {
@@ -25,10 +22,9 @@ func TestReceivingAndRedemptionPoliciesRemainIndependent(t *testing.T) {
 		t.Fatal(err)
 	}
 	for key, want := range map[string]string{
-		"distribution": `"AUTO_MEMBER_CLAIM"`, "visibility": `"UNLISTED"`,
-		"receiving_tier":                 `{"specification":"SELECTED_TIER","tier_key":"silver","match":"AT_OR_ABOVE"}`,
-		"tier_restriction":               `{"active":true,"tier_key":"gold","match":"EXACT"}`,
-		"profile_completion_restriction": `{"active":true}`,
+		"acquisition": `"automatic"`, "visibility": `"unlisted"`,
+		"receiving_eligibility":  `{"membership":{"specification":"SELECTED_TIER","tier_key":"silver","match":"AT_OR_ABOVE"},"profile":{"active":true}}`,
+		"redemption_eligibility": `{"membership":{"active":true,"tier_key":"gold","match":"EXACT"}}`,
 	} {
 		if string(fields[key]) != want {
 			t.Errorf("%s = %s, want %s", key, fields[key], want)
@@ -58,7 +54,7 @@ func TestReceivingAndRedemptionPoliciesRemainIndependent(t *testing.T) {
 }
 
 func TestCouponPolicyEnumsRejectUnknownValues(t *testing.T) {
-	for _, v := range []coupon_enums.Distribution{coupon_enums.DistributionSelfClaimByCode, coupon_enums.DistributionAssigned, coupon_enums.DistributionReferralAssigned, coupon_enums.DistributionAutoMemberClaim} {
+	for _, v := range []coupon_enums.Acquisition{coupon_enums.AcquisitionSelfClaim, coupon_enums.AcquisitionManualAssignment, coupon_enums.AcquisitionReferral, coupon_enums.AcquisitionAutomatic} {
 		if !v.IsValid() || v.String() != string(v) {
 			t.Fatal(v)
 		}
@@ -79,7 +75,7 @@ func TestCouponPolicyEnumsRejectUnknownValues(t *testing.T) {
 		}
 	}
 	for _, bad := range []string{"", "unknown", "all_tiers"} {
-		if coupon_enums.Distribution(bad).IsValid() || coupon_enums.Visibility(bad).IsValid() || coupon_enums.TierMatch(bad).IsValid() || coupon_enums.TierSpecification(bad).IsValid() {
+		if coupon_enums.Acquisition(bad).IsValid() || coupon_enums.Visibility(bad).IsValid() || coupon_enums.TierMatch(bad).IsValid() || coupon_enums.TierSpecification(bad).IsValid() {
 			t.Fatal(bad)
 		}
 	}
@@ -87,16 +83,16 @@ func TestCouponPolicyEnumsRejectUnknownValues(t *testing.T) {
 
 func TestCouponDistributionWireValuesRemainDistinct(t *testing.T) {
 	for _, tc := range []struct {
-		value coupon_enums.Distribution
+		value coupon_enums.Acquisition
 		wire  string
 	}{
-		{coupon_enums.DistributionSelfClaimByCode, "SELF_CLAIM_BY_CODE"},
-		{coupon_enums.DistributionAssigned, "ASSIGNED"},
-		{coupon_enums.DistributionReferralAssigned, "REFERRAL_ASSIGNED"},
-		{coupon_enums.DistributionAutoMemberClaim, "AUTO_MEMBER_CLAIM"},
+		{coupon_enums.AcquisitionSelfClaim, "self_claim"},
+		{coupon_enums.AcquisitionManualAssignment, "manual_assignment"},
+		{coupon_enums.AcquisitionReferral, "referral"},
+		{coupon_enums.AcquisitionAutomatic, "automatic"},
 	} {
 		t.Run(tc.wire, func(t *testing.T) {
-			record := coupon.Coupon{Distribution: tc.value}
+			record := coupon.Coupon{Acquisition: tc.value}
 			payload, err := json.Marshal(record)
 			if err != nil {
 				t.Fatal(err)
@@ -105,8 +101,8 @@ func TestCouponDistributionWireValuesRemainDistinct(t *testing.T) {
 			if err := json.Unmarshal(payload, &fields); err != nil {
 				t.Fatal(err)
 			}
-			if string(fields["distribution"]) != `"`+tc.wire+`"` || tc.value.String() != tc.wire || !tc.value.IsValid() {
-				t.Fatalf("distribution %q has unexpected wire value or validity: %s", tc.value, fields["distribution"])
+			if string(fields["acquisition"]) != `"`+tc.wire+`"` || tc.value.String() != tc.wire || !tc.value.IsValid() {
+				t.Fatalf("distribution %q has unexpected wire value or validity: %s", tc.value, fields["acquisition"])
 			}
 			var decoded coupon.Coupon
 			if err := json.Unmarshal(payload, &decoded); err != nil {
@@ -121,11 +117,11 @@ func TestCouponDistributionWireValuesRemainDistinct(t *testing.T) {
 	// decides whether a value is accepted and must not map it to cohort issuance.
 	for _, value := range []string{"referral_assigned", "REFERRAL_ASSIGNED_UNKNOWN"} {
 		var decoded coupon.Coupon
-		if err := json.Unmarshal([]byte(`{"distribution":"`+value+`"}`), &decoded); err != nil {
+		if err := json.Unmarshal([]byte(`{"acquisition":"`+value+`"}`), &decoded); err != nil {
 			t.Fatal(err)
 		}
-		if decoded.Distribution.String() != value || decoded.Distribution.IsValid() {
-			t.Fatalf("unknown distribution was accepted or normalized: %q", decoded.Distribution)
+		if decoded.Acquisition.String() != value || decoded.Acquisition.IsValid() {
+			t.Fatalf("unknown distribution was accepted or normalized: %q", decoded.Acquisition)
 		}
 	}
 }

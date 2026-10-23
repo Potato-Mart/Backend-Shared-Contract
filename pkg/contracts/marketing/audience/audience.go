@@ -1,11 +1,9 @@
 package audience
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/marketing/campaign/campaign_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/marketing/audience/audience_enums"
 
-// Audience narrows a campaign or Pricing-owned offer by customer type and
-// client platform. Omitted dimensions are unrestricted. Platform is distinct
-// from an order channel; owning services enforce these dimensions consistently.
+// Audience narrows a Pricing-owned offer. Omitted dimensions are unrestricted.
 type Audience struct {
-	CustomerType campaign_enums.CampaignCustomerType `json:"customer_type,omitempty"`
-	Platform     campaign_enums.CampaignPlatform     `json:"platform,omitempty"`
+	CustomerType audience_enums.CustomerType `json:"customer_type,omitempty"`
+	Platform     audience_enums.Platform     `json:"platform,omitempty"`
 }

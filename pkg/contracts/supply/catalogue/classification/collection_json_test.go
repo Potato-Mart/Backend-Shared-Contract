@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/supply/catalogue/classification"
 )
 
 func TestCollectionAndTagsHaveRootSlugsAndCodeOnlyReferences(t *testing.T) {

@@ -35,6 +35,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v46.0.0` | 2026-10-24 | Major |
 | `v45.5.0` | 2026-10-22 | Minor |
 | `v45.4.0` | 2026-10-21 | Minor |
 | `v45.3.0` | 2026-10-20 | Minor |
@@ -47,6 +48,22 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v46.0.0 (2026-10-24)
+
+Campaign and coupon v2 direct cutover (change `campaign-coupon-v2`). The module is now `github.com/Potato-Mart/Backend-Shared-Contract/v46`.
+
+Campaign records support incomplete actor-owned drafts, localized description, canonical owning market and currency, retail/wholesale audience sets, explicit schedule/timezone, multiple independently ordered placements, and typed promotion/coupon identity links. Publication and effective state, revisions and timestamps are server-owned. Singular placement, severity/message style, authored navigation/CTA, series selection and generic benefit references are retired. Campaign audience is independent from offer audience and checkout authentication.
+
+Coupon definitions separate visibility, acquisition mode and automatic cohort policy; receiving eligibility, redemption eligibility, independent/inherited scope and windows; typed benefits, currency-aware minimum spend, entitlement issuance cap and redemption limits. Permanent customer/coupon entitlement identity is separate from usage/reservations. Customers owns authority and orchestration; Pricing owns issuance and redemption policy. HTTP DTOs and routes remain in their services.
+
+`campaign.changed` payload v3 replaces campaign lifecycle fields. Unchanged `coupon.changed` v1 and `promotion.changed` v3 retain their versions. Event versions are independent from this module and HTTP v2.
+
+Release this contract before updating backend module/CI pins. Customers, Pricing, Notification, Supply and Orders deploy as a coordinated replacement, followed by Admin Web and affected POS checkout contracts. New paths use separate storage and do not read or transform pre-cutover records. No migration, backfill, adapters, dual operation or rollback is included. Historical coupon handling, including pre-cutover refund restoration, is outside this release.
+
+All retail/wholesale storefront repositories are excluded. Clients still using retired campaign/coupon APIs may lose those features until separately updated. Pause affected admission and workers, require drained old operations/holds/events, deploy production only, smoke test under held admission, and resume only on success. Failed checks remain paused for correction.
+
+Verification: JSON serialization and enum coverage; campaign/coupon model boundaries; unrelated contract-preservation gates; full `GOWORK=off go test -count=1 ./...` and release alignment.
 
 ## v45.5.0 (2026-10-22)
 
