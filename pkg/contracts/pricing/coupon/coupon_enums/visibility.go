@@ -4,9 +4,12 @@ package coupon_enums
 type Visibility string
 
 const (
-	VisibilityPublic   Visibility = "PUBLIC"
-	VisibilityUnlisted Visibility = "UNLISTED"
+	VisibilityPublic       Visibility = "public"
+	VisibilityCampaignOnly Visibility = "campaign_only"
+	VisibilityUnlisted     Visibility = "unlisted"
 )
 
-func (v Visibility) IsValid() bool  { return v == VisibilityPublic || v == VisibilityUnlisted }
+func (v Visibility) IsValid() bool {
+	return v == VisibilityPublic || v == VisibilityCampaignOnly || v == VisibilityUnlisted
+}
 func (v Visibility) String() string { return string(v) }

@@ -2,9 +2,9 @@ package payments_test
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/membership/membership_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pubsub/payments"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pubsub/payments"
 	"os"
 	"reflect"
 	"testing"

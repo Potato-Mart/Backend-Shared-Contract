@@ -3,9 +3,9 @@ package inventory
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // StockReservation is a logical hold for one product at one depot.

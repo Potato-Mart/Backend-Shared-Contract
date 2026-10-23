@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/security"
 )
 
 func TestOrganisationDetailJSONUsesObjectMediaLogo(t *testing.T) {

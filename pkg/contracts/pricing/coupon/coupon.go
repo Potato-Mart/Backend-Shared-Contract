@@ -1,12 +1,13 @@
 package coupon
 
 import (
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/geography"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/security"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/coupon/coupon_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/coupon/coupon_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/promotion"
 )
 
 // Coupon is a code-based discount that customers enter at checkout.
@@ -17,17 +18,22 @@ type Coupon struct {
 	Code    string        `json:"code"`
 	Content CouponContent `json:"content"`
 	// Policy defaults, validation, eligibility and periodic issuance are service-owned.
-	Distribution                 coupon_enums.Distribution    `json:"distribution"`
-	Visibility                   coupon_enums.Visibility      `json:"visibility"`
-	ReceivingTier                ReceivingTierPolicy          `json:"receiving_tier"`
-	TierRestriction              TierRestriction              `json:"tier_restriction"`
-	ProfileCompletionRestriction ProfileCompletionRestriction `json:"profile_completion_restriction"`
+	Acquisition           coupon_enums.Acquisition     `json:"acquisition"`
+	AutomaticPolicy       coupon_enums.AutomaticPolicy `json:"automatic_policy,omitempty"`
+	Visibility            coupon_enums.Visibility      `json:"visibility"`
+	ReceivingEligibility  ReceivingEligibility         `json:"receiving_eligibility"`
+	RedemptionEligibility RedemptionEligibility        `json:"redemption_eligibility"`
+	AcquisitionWindow     promotion.PromotionPeriod    `json:"acquisition_window"`
+	Inheritance           Inheritance                  `json:"inheritance"`
+	IssuanceLimit         *int64                       `json:"issuance_limit,omitempty"`
+	RedemptionLimits      RedemptionLimits             `json:"redemption_limits"`
 
-	Scope    promotion.PromotionScope    `json:"scope"`
-	Period   promotion.PromotionPeriod   `json:"period"`
-	Terms    []promotion.PromotionTerm   `json:"terms,omitempty"`
-	Controls promotion.PromotionControls `json:"controls"`
-	History  []security.HistoryEntry     `json:"history,omitempty"`
+	Scope            promotion.PromotionScope    `json:"scope"`
+	RedemptionWindow promotion.PromotionPeriod   `json:"redemption_window"`
+	Benefit          Benefit                     `json:"benefit"`
+	MinimumSpend     *money.Money                `json:"minimum_spend,omitempty"`
+	Controls         promotion.PromotionControls `json:"controls"`
+	History          []security.HistoryEntry     `json:"history,omitempty"`
 	// MarketCode and CountryCode are the denormalized owning market and its
 	// country, carried so a geographically scoped staff query is a plain
 	// indexed match.

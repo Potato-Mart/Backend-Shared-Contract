@@ -704,7 +704,7 @@ func TestV32ContractPreservationManifest(t *testing.T) {
 
 	var missing []string
 	for oldKey, destination := range v32ContractPreservationManifest {
-		if v45RetiredContractDestinations[destination] {
+		if v45RetiredContractDestinations[destination] || v46RetiredContractDestinations[destination] {
 			if present[destination] {
 				t.Errorf("v45 retired contract remains: %s", destination)
 			}
@@ -740,4 +740,12 @@ func TestV32ContractPreservationManifest(t *testing.T) {
 	if len(missing) > 0 {
 		t.Fatalf("v32 contracts or enums missing a v33 destination:\n%s", strings.Join(missing, "\n"))
 	}
+}
+
+// Explicit, approved one-way v46 campaign/coupon cutover retirements. This is
+// a test inventory only; production contains no aliases or adapters.
+var v46RetiredContractDestinations = map[string]bool{
+	"contracts/marketing/campaign.CTADestination":                            true,
+	"contracts/marketing/campaign/campaign_enums.CampaignCTADestinationType": true,
+	"contracts/marketing/campaign/campaign_enums.CampaignSeverity":           true,
 }

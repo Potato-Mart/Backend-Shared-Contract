@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/audit"
-	geography "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/audit"
+	geography "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/geography"
 )
 
 func TestZoneUsesTypedGeographicCoverage(t *testing.T) {

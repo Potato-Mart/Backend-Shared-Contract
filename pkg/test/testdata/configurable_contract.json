@@ -114,7 +114,15 @@
     "revision": 3
   },
   "campaign": {
-    "placement": "account_banner"
+    "placements": [
+      {
+        "position": "account_banner",
+        "platforms": [
+          "web"
+        ],
+        "priority": 0
+      }
+    ]
   },
   "location": {
     "purpose": "EXPIRY_HOLD"

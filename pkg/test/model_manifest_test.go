@@ -146,6 +146,7 @@ var v33ModelPackageManifest = map[string]string{
 	"contracts/insights/analytics/analytics_enums":                   "enum",
 	"contracts/insights/customer":                                    "record",
 	"contracts/insights/sales":                                       "record",
+	"contracts/marketing/audience/audience_enums":                    "enum",
 	"contracts/marketing/audience":                                   "record",
 	"contracts/marketing/campaign":                                   "record",
 	"contracts/marketing/campaign/campaign_enums":                    "enum",
@@ -264,7 +265,9 @@ var modelPackageManifest map[string]string
 // V45.3 adds the Supply-owned StockRestockAlertTriggeredEvent payload.
 // V45.4 adds Supply-owned ProductSelection records and their leaf enums.
 // V45.5 adds the NetContentUnit leaf enum beside the open MeasurementUnit.
-const exportedTypeManifestDigest = "87e75df523449dc6a74f352bb3fe21039ee16cb58ace89354638d8eff49f4c9c"
+// V46 replaces campaign presentation, coupon acquisition and entitlement models,
+// separates offer and campaign audience enums, and introduces typed offer links.
+const exportedTypeManifestDigest = "9c4a2811245862bf307ca8f1174898442f9c2574c9c91a4a7e92537e73bf6a48"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

@@ -3,7 +3,7 @@ package compliance
 import (
 	"time"
 
-	compliance_enums "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/supply/compliance/compliance_enums"
+	compliance_enums "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/supply/compliance/compliance_enums"
 )
 
 // ArtifactReference identifies a deterministic generated artifact stored by a

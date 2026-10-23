@@ -9,18 +9,18 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/common/security/security_enums"
-	group_enums "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/customers/group/group_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/customers/wholesale/wholesale_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/marketing/campaign/campaign_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/payments/payment/payment_enums"
-	pos_enums "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/payments/register/register_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/benefit/benefit_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pricing/membership/membership_enums"
-	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/pubsub/routing"
-	insights_marketing_enums "github.com/Potato-Mart/Backend-Shared-Contract/v45/pkg/contracts/supply/forecasting/marketing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/security/security_enums"
+	group_enums "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/customers/group/group_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/marketing/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/payments/payment/payment_enums"
+	pos_enums "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/payments/register/register_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/benefit/benefit_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/membership/membership_enums"
+	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pubsub/routing"
+	insights_marketing_enums "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/supply/forecasting/marketing_enums"
 )
 
 func TestEnumCoverageIncludesEveryStringEnum(t *testing.T) {
@@ -39,7 +39,7 @@ func TestEnumCoverageIncludesEveryStringEnum(t *testing.T) {
 
 func TestAdditionalEnumValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
-		{name: "campaign.CampaignStatus", valid: []stringEnum{campaign_enums.CampaignStatusDraft, campaign_enums.CampaignStatusScheduled, campaign_enums.CampaignStatusActive, campaign_enums.CampaignStatusCompleted, campaign_enums.CampaignStatusArchived}, invalid: campaign_enums.CampaignStatus("__invalid__")},
+		{name: "campaign.CampaignStatus", valid: []stringEnum{campaign_enums.CampaignStatusDraft, campaign_enums.CampaignStatusPublished, campaign_enums.CampaignStatusPaused, campaign_enums.CampaignStatusArchived}, invalid: campaign_enums.CampaignStatus("__invalid__")},
 		{name: "insights.CampaignPredictionStatus", valid: []stringEnum{insights_marketing_enums.CampaignPredictionStatusNotApplicable, insights_marketing_enums.CampaignPredictionStatusReady, insights_marketing_enums.CampaignPredictionStatusWarning}, invalid: insights_marketing_enums.CampaignPredictionStatus("__invalid__")},
 		{name: "insights.CampaignPredictionSource", valid: []stringEnum{insights_marketing_enums.CampaignPredictionSourceSameSeries, insights_marketing_enums.CampaignPredictionSourceSimilarEvent, insights_marketing_enums.CampaignPredictionSourceLast14DaysDoubled}, invalid: insights_marketing_enums.CampaignPredictionSource("__invalid__")},
 		{name: "wholesale.WholesaleApplicationStatus", valid: []stringEnum{wholesale_enums.WholesaleApplicationStatusPending, wholesale_enums.WholesaleApplicationStatusApproved, wholesale_enums.WholesaleApplicationStatusRejected}, invalid: wholesale_enums.WholesaleApplicationStatus("__invalid__")},

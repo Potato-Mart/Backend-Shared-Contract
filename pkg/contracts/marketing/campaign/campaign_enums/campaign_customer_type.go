@@ -4,14 +4,13 @@ package campaign_enums
 type CampaignCustomerType string
 
 const (
-	CampaignCustomerTypeGuest     CampaignCustomerType = "guest"
 	CampaignCustomerTypeRetail    CampaignCustomerType = "retail"
 	CampaignCustomerTypeWholesale CampaignCustomerType = "wholesale"
 )
 
 func (c CampaignCustomerType) IsValid() bool {
 	switch c {
-	case CampaignCustomerTypeGuest, CampaignCustomerTypeRetail, CampaignCustomerTypeWholesale:
+	case CampaignCustomerTypeRetail, CampaignCustomerTypeWholesale:
 		return true
 	}
 	return false
