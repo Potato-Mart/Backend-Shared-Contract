@@ -35,6 +35,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v46.0.1` | 2026-10-27 | Patch |
 | `v46.0.0` | 2026-10-24 | Major |
 | `v45.5.0` | 2026-10-22 | Minor |
 | `v45.4.0` | 2026-10-21 | Minor |
@@ -48,6 +49,14 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v46.0.1 (2026-10-27)
+
+Correct both `campaign.changed` test registry entries to v3, matching the existing payload and Customers publisher. This patch distributes metadata/test corrections only: no event version, payload shape, Go API, module major, or consumer dependency pin changes.
+
+A separate patch release is required because the release guard treats tests and release documentation as immutable release contents. Keep the published v46.0.0 tag unchanged. Existing Customers deployments may continue using v46.0.0; their actual publisher already emits v3.
+
+Verification: independent-module Go tests and release alignment.
 
 ## v46.0.0 (2026-10-24)
 
