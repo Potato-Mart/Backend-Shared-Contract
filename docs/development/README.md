@@ -57,7 +57,7 @@ Campaign records support incomplete actor-owned drafts, localized description, c
 
 Coupon definitions separate visibility, acquisition mode and automatic cohort policy; receiving eligibility, redemption eligibility, independent/inherited scope and windows; typed benefits, currency-aware minimum spend, entitlement issuance cap and redemption limits. Permanent customer/coupon entitlement identity is separate from usage/reservations. Customers owns authority and orchestration; Pricing owns issuance and redemption policy. HTTP DTOs and routes remain in their services.
 
-`campaign.changed` payload v3 replaces campaign lifecycle fields. Unchanged `coupon.changed` v1 and `promotion.changed` v3 retain their versions. Event versions are independent from this module and HTTP v2.
+`campaign.changed` payload v3 replaces campaign lifecycle fields. Its test-only version registry records v3; correcting the former v2 registry entry does not introduce a new payload version or change the wire shape. Unchanged `coupon.changed` v1 and `promotion.changed` v3 retain their versions. Event versions are independent from this module and HTTP v2.
 
 Release this contract before updating backend module/CI pins. Customers, Pricing, Notification, Supply and Orders deploy as a coordinated replacement, followed by Admin Web and affected POS checkout contracts. New paths use separate storage and do not read or transform pre-cutover records. No migration, backfill, adapters, dual operation or rollback is included. Historical coupon handling, including pre-cutover refund restoration, is outside this release.
 

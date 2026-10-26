@@ -27,7 +27,7 @@ var eventTypeVersionRegistry = map[EventType]string{
 	EventTypeProductSalesPerformanceUpdated: "v3",
 	EventTypeFulfilmentPackingUpdated:       "v4",
 
-	EventTypeCampaignChanged:           "v2",
+	EventTypeCampaignChanged:           "v3",
 	EventTypePromotionChanged:          "v3",
 	EventTypeCouponChanged:             "v1",
 	EventTypeFulfilmentShipped:         "v2",
@@ -76,7 +76,7 @@ func TestEventTypeVersionRegistryCoversEveryDefinedEventExactlyOnce(t *testing.T
 		EventTypeProductSalesPerformanceUpdated: "v3",
 		EventTypeFulfilmentPackingUpdated:       "v4",
 
-		EventTypeCampaignChanged:           "v2",
+		EventTypeCampaignChanged:           "v3",
 		EventTypePromotionChanged:          "v3",
 		EventTypeCouponChanged:             "v1",
 		EventTypeFulfilmentShipped:         "v2",
