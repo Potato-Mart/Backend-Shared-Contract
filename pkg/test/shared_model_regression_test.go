@@ -12,7 +12,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pubsub/notification"
 )
 
-func TestV38PackageReferencesPreserveSKUAndPhysicalVersion(t *testing.T) {
+func TestPackageReferencesPreserveSKUAndPhysicalVersion(t *testing.T) {
 	refs := []packaging.PackageOptionRef{
 		{SKUCode: "A00001", Code: "CASE12", Version: 1},
 		{SKUCode: "A00001", Code: "CASE12", Version: 2},
@@ -38,7 +38,7 @@ func TestV38PackageReferencesPreserveSKUAndPhysicalVersion(t *testing.T) {
 	}
 }
 
-func TestV38TierRetiredFieldsStayAbsent(t *testing.T) {
+func TestTierRetiredFieldsStayAbsent(t *testing.T) {
 	model := reflect.TypeOf(membership.MembershipTier{})
 	for _, name := range []string{"IsActive", "DiscountPercent", "FreeShippingThreshold", "BirthdayBonusPoints", "Rank"} {
 		if _, found := model.FieldByName(name); found {
@@ -47,7 +47,7 @@ func TestV38TierRetiredFieldsStayAbsent(t *testing.T) {
 	}
 }
 
-func TestV38GeographicPathKeepsOfficialStateSeparateFromDepotRegion(t *testing.T) {
+func TestGeographicPathKeepsOfficialStateSeparateFromDepotRegion(t *testing.T) {
 	model := reflect.TypeOf(geography.GeographicPath{})
 	for field, tag := range map[string]string{"CountryCode": "country_code", "MarketCode": "market_code,omitempty", "StateCode": "state_code,omitempty", "DepotCode": "depot_code,omitempty"} {
 		value, ok := model.FieldByName(field)
@@ -60,7 +60,7 @@ func TestV38GeographicPathKeepsOfficialStateSeparateFromDepotRegion(t *testing.T
 	}
 }
 
-func TestV38GiftDeliveryFactContainsOnlySafeCorrelation(t *testing.T) {
+func TestGiftDeliveryFactContainsOnlySafeCorrelation(t *testing.T) {
 	fact := notification.GiftCardDeliveredEvent{IssuanceID: "issuance-1", DeliveredAt: time.Date(2026, 9, 29, 0, 0, 0, 0, time.UTC)}
 	data, err := json.Marshal(fact)
 	if err != nil {

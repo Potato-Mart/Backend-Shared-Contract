@@ -663,7 +663,7 @@ var v45RetiredContractDestinations = map[string]bool{
 	"contracts/pricing/wallet/wallet_enums.VoucherStatus":            true,
 }
 
-func TestV32ContractPreservationManifest(t *testing.T) {
+func TestContractPreservationManifest(t *testing.T) {
 	if got := len(v32ContractPreservationManifest); got != expectedV32ContractPreservationCount {
 		t.Fatalf("preservation manifest entries = %d, want %d", got, expectedV32ContractPreservationCount)
 	}

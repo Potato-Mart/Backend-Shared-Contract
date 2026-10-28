@@ -10,10 +10,10 @@ import (
 	"testing"
 )
 
-// TestV33DomainOwnershipPackagesArePopulated locks the reviewed ownership
+// TestDomainOwnershipPackagesArePopulated locks the reviewed ownership
 // taxonomy. Each listed package must contain production Go source; therefore
 // adding an empty taxonomy directory does not create a contract package.
-func TestV33DomainOwnershipPackagesArePopulated(t *testing.T) {
+func TestDomainOwnershipPackagesArePopulated(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	requiredPackages := []string{
 		"contracts/identity/access", "contracts/identity/account", "contracts/identity/authorisation",
@@ -58,10 +58,10 @@ func TestV33DomainOwnershipPackagesArePopulated(t *testing.T) {
 	}
 }
 
-// TestV33ContractImportGraphIsAcyclic provides a source-level ownership gate
+// TestContractImportGraphIsAcyclic provides a source-level ownership gate
 // in addition to Go's compiler check, so an illegal cross-domain cycle has a
 // concise package-path diagnostic.
-func TestV33ContractImportGraphIsAcyclic(t *testing.T) {
+func TestContractImportGraphIsAcyclic(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	contractsRoot := filepath.Join(pkgRoot, "contracts")
 	graph := make(map[string]map[string]struct{})

@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestCouponV2Enums(t *testing.T) {
+func TestCouponEnums(t *testing.T) {
 	for _, tc := range []struct {
 		name    string
 		valid   []stringEnum

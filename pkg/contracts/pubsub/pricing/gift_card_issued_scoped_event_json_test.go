@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-func TestGiftCardIssuedV2SourcesRoundTripWithoutPurchaseAssertions(t *testing.T) {
+func TestGiftCardIssuedSourcesRoundTripWithoutPurchaseAssertions(t *testing.T) {
 	for _, source := range []wallet_enums.GiftCardIssuanceSource{wallet_enums.GiftCardIssuanceSourcePurchase, wallet_enums.GiftCardIssuanceSourceMembershipReward, wallet_enums.GiftCardIssuanceSourceRefundReplacement} {
 		t.Run(source.String(), func(t *testing.T) {
 			fact := pricing.GiftCardIssuedEventV2{IssuanceID: "issuance-1", Source: source, IssuedValue: money.Money{AmountMinor: 5500, Currency: "AUD"}, MarketCode: "market-au", CountryCode: "AU", IssuedAt: time.Date(2026, 9, 29, 0, 0, 0, 0, time.UTC)}
@@ -33,7 +33,7 @@ func TestGiftCardIssuedV2SourcesRoundTripWithoutPurchaseAssertions(t *testing.T)
 	}
 }
 
-func TestGiftCardIssuedV2SafeFieldSurface(t *testing.T) {
+func TestGiftCardIssuedSafeFieldSurface(t *testing.T) {
 	model := reflect.TypeOf(pricing.GiftCardIssuedEventV2{})
 	fields := map[string]string{"IssuanceID": "issuance_id", "Source": "source", "IssuedValue": "issued_value", "MarketCode": "market_code,omitempty", "CountryCode": "country_code,omitempty", "IssuedAt": "issued_at"}
 	if model.NumField() != len(fields) {
@@ -65,7 +65,7 @@ func TestGiftCardIssuedV2SafeFieldSurface(t *testing.T) {
 	}
 }
 
-func TestGiftCardIssuanceV1PurchaseEvidenceRemainsUnchanged(t *testing.T) {
+func TestGiftCardIssuancePurchaseEvidenceRemainsUnchanged(t *testing.T) {
 	issuedAt := time.Date(2026, 9, 29, 0, 0, 0, 0, time.UTC)
 	legacy := pricing.GiftCardIssuedEvent{IssuanceID: "issuance-1", DenominationPolicyVersion: 2, Amount: money.Money{AmountMinor: 5000, Currency: "AUD"}, BonusAmountMinor: 500, IssuedAt: issuedAt}
 	data, err := json.Marshal(legacy)

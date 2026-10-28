@@ -128,7 +128,7 @@ var v34TypePolicyRegistry = map[string]typePolicy{
 	"preference event":                      {reflect.TypeOf(notificationevent.NotificationPreferencesChangedEvent{}), false, false},
 }
 
-func TestV33AuditAndPrivacyTypePolicy(t *testing.T) {
+func TestAuditAndPrivacyTypePolicy(t *testing.T) {
 	for name, policy := range v34TypePolicyRegistry {
 		hasAudit := hasDirectEmbeddedField(policy.model, reflect.TypeOf(audit.AuditFields{}))
 		if hasAudit != policy.requireAudit {
