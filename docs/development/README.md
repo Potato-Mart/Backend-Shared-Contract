@@ -35,6 +35,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v47.1.0` | 2026-10-29 | Minor |
 | `v47.0.0` | 2026-10-29 | Major |
 | `v46.0.1` | 2026-10-27 | Patch |
 | `v46.0.0` | 2026-10-24 | Major |
@@ -50,6 +51,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v47.1.0 (2026-10-29)
+
+Order status history includes the optional verified actor ID, allowing physical task authorization to use the same durable staff identity as the order audit.
 
 ## v47.0.0 (2026-10-29)
 
