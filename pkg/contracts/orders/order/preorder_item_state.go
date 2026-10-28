@@ -1,8 +1,8 @@
 package order
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/orders/order/order_enums"
 	"time"
 )
 

@@ -207,6 +207,12 @@ func TestProductionModelsContainNoRemovedFieldsOrDeprecations(t *testing.T) {
 	)
 
 	removedTypes := stringSet(
+		// V47: picking is an order transition rather than an independent list.
+		"supply/fulfilment.PickingList",
+		"supply/fulfilment.PickingListItem",
+		"supply/fulfilment.PickingAllocation",
+		"supply/warehouse/warehouse_enums.PickingListStatus",
+		"supply/warehouse/warehouse_enums.PickingItemStatus",
 		// A per-register daily session replaces the per-operator POS shift.
 		"orders/pos.RegisterShift",
 		"orders/pos.ShiftTotalsSnapshot",
@@ -755,7 +761,7 @@ func remapCutoverTypePolicies(policy map[string]map[string]struct{}) {
 
 func TestGoSourcesContainNoOlderContractImports(t *testing.T) {
 	const contractImportRoot = "github.com/Potato-Mart/Backend-Shared-Contract/"
-	const currentContractImportPrefix = contractImportRoot + "v46/"
+	const currentContractImportPrefix = contractImportRoot + "v47/"
 	pkgRoot := sharedContractPkgRoot(t)
 	err := filepath.WalkDir(pkgRoot, func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {

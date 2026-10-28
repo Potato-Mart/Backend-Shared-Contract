@@ -3,11 +3,11 @@ package fulfilment
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/geography"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/orders/shipping"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/geography"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 type OutboundShipment struct {
@@ -16,15 +16,14 @@ type OutboundShipment struct {
 	// MarketCode and CountryCode are the denormalized market and country of
 	// the dispatching depot, carried so a geographically scoped staff query
 	// is a plain indexed match.
-	MarketCode    string                                 `json:"market_code,omitempty"`
-	CountryCode   geography.CountryCode                  `json:"country_code,omitempty"`
-	PickingListID string                                 `json:"picking_list_id,omitempty"`
-	OrderNumber   string                                 `json:"order_number"`
-	CustomerName  string                                 `json:"customer_name,omitempty"`
-	Address       *geography.Address                     `json:"address,omitempty"`
-	Operator      string                                 `json:"operator"`
-	Status        warehouse_enums.OutboundShipmentStatus `json:"status"`
-	Containers    []OutboundContainerPlan                `json:"containers,omitempty"`
+	MarketCode   string                                 `json:"market_code,omitempty"`
+	CountryCode  geography.CountryCode                  `json:"country_code,omitempty"`
+	OrderNumber  string                                 `json:"order_number"`
+	CustomerName string                                 `json:"customer_name,omitempty"`
+	Address      *geography.Address                     `json:"address,omitempty"`
+	Operator     string                                 `json:"operator"`
+	Status       warehouse_enums.OutboundShipmentStatus `json:"status"`
+	Containers   []OutboundContainerPlan                `json:"containers,omitempty"`
 	// Carrier is the optional delivery-company code recorded by Supply
 	// (for example detrack, bcrc, aupost).
 	Carrier string `json:"carrier,omitempty"`

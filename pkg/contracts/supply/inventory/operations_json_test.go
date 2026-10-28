@@ -5,17 +5,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/packaging/packaging_enums"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pubsub/supply"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/supply/catalogue/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/supply/catalogue/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/supply/catalogue/product/product_enums"
-	fulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/supply/fulfilment"
-	operations "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/supply/inventory"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/packaging/packaging_enums"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pubsub/supply"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/catalogue/product/product_enums"
+	fulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/fulfilment"
+	operations "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestReservationAndStagingJSONShapes(t *testing.T) {
@@ -74,7 +74,7 @@ func TestInventoryCategoryTagEvidenceJSONIsLocationQualified(t *testing.T) {
 	}
 }
 
-func TestPackingPickingAndAvailabilityEventJSONShapes(t *testing.T) {
+func TestPackingAndAvailabilityEventJSONShapes(t *testing.T) {
 	now := time.Date(2026, 8, 4, 6, 0, 0, 0, time.UTC)
 	requested := composition(packaging_enums.PackageHandlingUnitCase, "pkg_case_12", 1, 12)
 	replacement := composition(packaging_enums.PackageHandlingUnitEach, "pkg_each", 12, 1)
@@ -104,39 +104,14 @@ func TestPackingPickingAndAvailabilityEventJSONShapes(t *testing.T) {
 	lineShape := marshalObject(t, fulfilment.PackingLine{
 		ID: "packing_line_1", OrderItemID: "item_1", SKUCode: "A00001",
 		RequestedComposition: requested, AllocatedComposition: replacement,
-		PickedComposition: replacement, PackedComposition: replacement,
+		PackedComposition:      replacement,
 		SubstitutedComposition: replacement, ReturnedComposition: composition(packaging_enums.PackageHandlingUnitEach, "pkg_each", 0, 1),
 		RefundedComposition: composition(packaging_enums.PackageHandlingUnitEach, "pkg_each", 0, 1),
 		Substitutions:       []fulfilment.PackageSubstitutionSnapshot{substitution},
 	})
-	for _, key := range []string{"requested_composition", "allocated_composition", "picked_composition", "packed_composition", "substituted_composition", "returned_composition", "refunded_composition"} {
+	for _, key := range []string{"requested_composition", "allocated_composition", "packed_composition", "substituted_composition", "returned_composition", "refunded_composition"} {
 		if _, ok := lineShape[key]; !ok {
 			t.Fatalf("packing line JSON missing %q: %+v", key, lineShape)
-		}
-	}
-
-	pickingShape := marshalObject(t, fulfilment.PickingListItem{
-		ID:                     "picking_item_1",
-		PickingListID:          "picking_list_1",
-		OrderItemID:            "item_1",
-		SKUCode:                "A00001",
-		RequestedComposition:   requested,
-		AllocatedComposition:   replacement,
-		PickedComposition:      replacement,
-		PackedComposition:      replacement,
-		SubstitutedComposition: replacement,
-		ReturnedComposition:    composition(packaging_enums.PackageHandlingUnitEach, "pkg_each", 0, 1),
-		RefundedComposition:    composition(packaging_enums.PackageHandlingUnitEach, "pkg_each", 0, 1),
-		Status:                 warehouse_enums.PickingItemStatusComplete,
-		CreatedAt:              now,
-	})
-	for _, key := range []string{"requested_composition", "allocated_composition", "picked_composition", "packed_composition", "substituted_composition", "returned_composition", "refunded_composition"} {
-		compositionShape, ok := pickingShape[key].(map[string]any)
-		if !ok {
-			t.Fatalf("picking line JSON missing composition object %q: %+v", key, pickingShape)
-		}
-		if _, ok := compositionShape["total_base_units"]; !ok {
-			t.Fatalf("picking line composition %q omitted total_base_units: %+v", key, compositionShape)
 		}
 	}
 

@@ -4,9 +4,9 @@
 package compliance
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/audit"
 
-	compliance_enums "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/supply/compliance/compliance_enums"
+	compliance_enums "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/compliance/compliance_enums"
 )
 
 // RevisionMetadata identifies one immutable-or-editable revision and records

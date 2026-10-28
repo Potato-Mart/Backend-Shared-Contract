@@ -3,13 +3,13 @@ package order
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/packaging"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/orders/buyer"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/orders/fulfilment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/supply/catalogue/product"
-	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/packaging"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/orders/buyer"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/orders/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/catalogue/product"
+	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/fulfilment"
 )
 
 // OrderItem is the frozen product, package, pricing, and fulfilment state for
@@ -29,7 +29,6 @@ type OrderItem struct {
 	SubstitutionPolicy   LooseSubstitutionPolicySnapshot                `json:"substitution_policy"`
 	RequestedComposition packaging.PackageCompositionSnapshot           `json:"requested_composition"`
 	AllocatedComposition packaging.PackageCompositionSnapshot           `json:"allocated_composition"`
-	PickedComposition    packaging.PackageCompositionSnapshot           `json:"picked_composition"`
 	PackedComposition    packaging.PackageCompositionSnapshot           `json:"packed_composition"`
 	ReturnedComposition  packaging.PackageCompositionSnapshot           `json:"returned_composition"`
 	RefundedComposition  packaging.PackageCompositionSnapshot           `json:"refunded_composition"`

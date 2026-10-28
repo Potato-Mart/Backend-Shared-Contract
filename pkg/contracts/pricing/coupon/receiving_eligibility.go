@@ -1,6 +1,6 @@
 package coupon
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/geography"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/geography"
 
 type ReceivingEligibility struct {
 	Membership      ReceivingTierPolicy          `json:"membership"`

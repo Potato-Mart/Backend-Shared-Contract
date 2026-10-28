@@ -3,8 +3,8 @@ package delivery
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/notification/core/notification_enums"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/notification/core/notification_enums"
 )
 
 // InAppNotification is the renderable content and read state for one in-app
