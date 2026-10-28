@@ -97,6 +97,8 @@ func TestProductionModelFilesContainOneExportedStruct(t *testing.T) {
 // TestProductionModelFileNamesMatchTheirExportedStruct makes the filename the
 // index: a model file holding exactly one exported struct is named after that
 // struct, so locating a shape never means guessing which topic file holds it.
+// Versioned event types retain their wire identity while using descriptive
+// filenames that do not change when the contract version advances.
 //
 // Leaf enum files are exempt: several group a domain's related enums under a
 // topic name, and the closed-enum gate above already governs them.
@@ -125,6 +127,12 @@ func TestProductionModelFileNamesMatchTheirExportedStruct(t *testing.T) {
 			return nil
 		}
 		want := snakeCaseFileName(structNames[0]) + ".go"
+		switch structNames[0] {
+		case "PaymentCapturedEventV2":
+			want = "payment_captured_timed_event.go"
+		case "GiftCardIssuedEventV2":
+			want = "gift_card_issued_scoped_event.go"
+		}
 		if got := filepath.Base(path); got != want {
 			violations = append(violations, normalized+": file holding "+structNames[0]+" should be named "+want)
 		}

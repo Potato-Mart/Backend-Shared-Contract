@@ -1,8 +1,8 @@
 package promotion
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/packaging"
 )
 
 // PromotionTargetPackageAllocation freezes one order item's purchased package

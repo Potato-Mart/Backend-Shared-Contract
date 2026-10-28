@@ -35,6 +35,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v47.0.0` | 2026-10-29 | Major |
 | `v46.0.1` | 2026-10-27 | Patch |
 | `v46.0.0` | 2026-10-24 | Major |
 | `v45.5.0` | 2026-10-22 | Minor |
@@ -49,6 +50,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v47.0.0 (2026-10-29)
+
+Breaking picking and packing cutover: retire picking lists and item-level picking progress. Orders record picking start and completion; packing records retain order generation, quantities, containers, discrepancies, actors and timestamps. Consumers must upgrade in coordination. The changed `fulfilment.packing_updated` payload uses event version v5; Supply and Orders must cut over together.
 
 ## v46.0.1 (2026-10-27)
 

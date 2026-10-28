@@ -3,8 +3,8 @@ package pricing
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pubsub/pricing/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pubsub/pricing/promotion_enums"
 )
 
 // PromotionChangedEvent is the customer-safe storefront-events projection

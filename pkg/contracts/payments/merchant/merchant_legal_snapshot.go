@@ -1,9 +1,9 @@
 package merchant
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/payments/payment/payment_enums"
 	"time"
 )
 

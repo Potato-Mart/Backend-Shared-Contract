@@ -1,8 +1,8 @@
 package account
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/identity/identity_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/identity/account/account_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/identity/identity_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/identity/account/account_enums"
 )
 
 // UserAccountSummary is the compact account/persona projection returned with

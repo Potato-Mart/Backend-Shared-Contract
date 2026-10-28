@@ -1,6 +1,6 @@
 package tax
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/audit"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/audit"
 
 // TaxCategory is a Pricing-owned configurable tax classification exchanged with admin consumers.
 type TaxCategory struct {

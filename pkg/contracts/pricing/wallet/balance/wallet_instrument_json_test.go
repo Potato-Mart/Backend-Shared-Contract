@@ -2,8 +2,8 @@ package balance_test
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/wallet/balance"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/wallet/balance"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/wallet/wallet_enums"
 	"testing"
 )
 

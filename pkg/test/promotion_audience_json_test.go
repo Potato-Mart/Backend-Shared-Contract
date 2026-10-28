@@ -5,11 +5,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/marketing/audience"
-	audienceenum "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/marketing/audience/audience_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/coupon"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/marketing/audience"
+	audienceenum "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/marketing/audience/audience_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/coupon"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/promotion"
 )
 
 func TestPromotionAndCouponAudienceRoundTripWithoutChangingChannels(t *testing.T) {

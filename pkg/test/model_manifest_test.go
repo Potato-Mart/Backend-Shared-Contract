@@ -267,7 +267,8 @@ var modelPackageManifest map[string]string
 // V45.5 adds the NetContentUnit leaf enum beside the open MeasurementUnit.
 // V46 replaces campaign presentation, coupon acquisition and entitlement models,
 // separates offer and campaign audience enums, and introduces typed offer links.
-const exportedTypeManifestDigest = "9c4a2811245862bf307ca8f1174898442f9c2574c9c91a4a7e92537e73bf6a48"
+// V47 replaces independent picking-list records with an order-based process and packing record.
+const exportedTypeManifestDigest = "15191a8ac2cc6714ff23942d891ec16996405c16dc18d34c50a91e66410d589e"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

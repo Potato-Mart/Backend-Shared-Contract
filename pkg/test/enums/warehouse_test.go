@@ -3,8 +3,8 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/supply/catalogue/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestWarehouseEnumsValidateKnownValues(t *testing.T) {
@@ -18,8 +18,6 @@ func TestWarehouseEnumsValidateKnownValues(t *testing.T) {
 		{name: "warehouseenum.ModelFormat", valid: []stringEnum{warehouse_enums.ModelFormatGLB, warehouse_enums.ModelFormatGLTF, warehouse_enums.ModelFormatOBJ, warehouse_enums.ModelFormatFBX, warehouse_enums.ModelFormatUSDZ}, invalid: warehouse_enums.ModelFormat("__invalid__")},
 		{name: "warehouseenum.OutboundShipmentStatus", valid: []stringEnum{warehouse_enums.OutboundShipmentStatusPacked, warehouse_enums.OutboundShipmentStatusDispatched, warehouse_enums.OutboundShipmentStatusDelivered}, invalid: warehouse_enums.OutboundShipmentStatus("__invalid__")},
 		{name: "warehouseenum.PackingDiscrepancyKind", valid: []stringEnum{warehouse_enums.PackingDiscrepancyKindShortage, warehouse_enums.PackingDiscrepancyKindOverweight, warehouse_enums.PackingDiscrepancyKindDamaged, warehouse_enums.PackingDiscrepancyKindPending}, invalid: warehouse_enums.PackingDiscrepancyKind("__invalid__")},
-		{name: "warehouseenum.PickingItemStatus", valid: []stringEnum{warehouse_enums.PickingItemStatusPending, warehouse_enums.PickingItemStatusPartial, warehouse_enums.PickingItemStatusComplete, warehouse_enums.PickingItemStatusSkipped}, invalid: warehouse_enums.PickingItemStatus("__invalid__")},
-		{name: "warehouseenum.PickingListStatus", valid: []stringEnum{warehouse_enums.PickingListStatusPending, warehouse_enums.PickingListStatusInProgress, warehouse_enums.PickingListStatusComplete, warehouse_enums.PickingListStatusCancelled}, invalid: warehouse_enums.PickingListStatus("__invalid__")},
 		{name: "warehouseenum.ShapeType", valid: []stringEnum{warehouse_enums.ShapeBox, warehouse_enums.ShapeCylinder, warehouse_enums.ShapeSphere, warehouse_enums.ShapePlane, warehouse_enums.ShapeCustom}, invalid: warehouse_enums.ShapeType("__invalid__")},
 		{name: "warehouseenum.StockMovementType", valid: []stringEnum{warehouse_enums.StockMovementTypeReceipt, warehouse_enums.StockMovementTypeTransfer, warehouse_enums.StockMovementTypeStage, warehouse_enums.StockMovementTypeUnstage, warehouse_enums.StockMovementTypePackageConversion, warehouse_enums.StockMovementTypeSaleCommit, warehouse_enums.StockMovementTypeReturn, warehouse_enums.StockMovementTypeQualityHold, warehouse_enums.StockMovementTypeQualityRelease, warehouse_enums.StockMovementTypeQualityReject, warehouse_enums.StockMovementTypeAdjustment, warehouse_enums.StockMovementTypeReturnToVendor, warehouse_enums.StockMovementTypeScrap}, invalid: warehouse_enums.StockMovementType("__invalid__")},
 		{name: "warehouseenum.InventoryDateMarkKind", valid: []stringEnum{warehouse_enums.InventoryDateMarkBestBefore, warehouse_enums.InventoryDateMarkExpiry}, invalid: warehouse_enums.InventoryDateMarkKind("__invalid__")},

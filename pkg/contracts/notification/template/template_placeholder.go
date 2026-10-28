@@ -1,6 +1,6 @@
 package template
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/notification/template/template_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/notification/template/template_enums"
 
 // TemplatePlaceholder declares one required scalar substitution without a value.
 // Schema 1 tokens are {{key}} with keys matching

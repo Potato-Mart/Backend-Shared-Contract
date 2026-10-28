@@ -1,7 +1,7 @@
 package access
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/customers/wholesale/wholesale_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/customers/wholesale/wholesale_enums"
 	"time"
 )
 

@@ -1,6 +1,6 @@
 package template
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/notification/template/template_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/notification/template/template_enums"
 
 // EmailTemplateTheme contains bounded presentation tokens shared by every
 // locale. Colors are #RRGGBB strings. Notification validates colors, resolves

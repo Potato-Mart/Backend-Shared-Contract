@@ -663,7 +663,7 @@ var v45RetiredContractDestinations = map[string]bool{
 	"contracts/pricing/wallet/wallet_enums.VoucherStatus":            true,
 }
 
-func TestV32ContractPreservationManifest(t *testing.T) {
+func TestContractPreservationManifest(t *testing.T) {
 	if got := len(v32ContractPreservationManifest); got != expectedV32ContractPreservationCount {
 		t.Fatalf("preservation manifest entries = %d, want %d", got, expectedV32ContractPreservationCount)
 	}
@@ -704,7 +704,7 @@ func TestV32ContractPreservationManifest(t *testing.T) {
 
 	var missing []string
 	for oldKey, destination := range v32ContractPreservationManifest {
-		if v45RetiredContractDestinations[destination] || v46RetiredContractDestinations[destination] {
+		if v45RetiredContractDestinations[destination] || v46RetiredContractDestinations[destination] || v47RetiredContractDestinations[destination] {
 			if present[destination] {
 				t.Errorf("v45 retired contract remains: %s", destination)
 			}
@@ -748,4 +748,13 @@ var v46RetiredContractDestinations = map[string]bool{
 	"contracts/marketing/campaign.CTADestination":                            true,
 	"contracts/marketing/campaign/campaign_enums.CampaignCTADestinationType": true,
 	"contracts/marketing/campaign/campaign_enums.CampaignSeverity":           true,
+}
+
+// v47 removes independent picking list records and their statuses.
+var v47RetiredContractDestinations = map[string]bool{
+	"contracts/supply/fulfilment.PickingAllocation":                true,
+	"contracts/supply/fulfilment.PickingList":                      true,
+	"contracts/supply/fulfilment.PickingListItem":                  true,
+	"contracts/supply/warehouse/warehouse_enums.PickingItemStatus": true,
+	"contracts/supply/warehouse/warehouse_enums.PickingListStatus": true,
 }

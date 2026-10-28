@@ -2,14 +2,14 @@ package payments
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/payments/payment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/payments/payment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/payments/payment/payment_enums"
 	"reflect"
 	"testing"
 	"time"
 )
 
-func TestCaptureV2PreservesConfirmationWithoutInventingExactTime(t *testing.T) {
+func TestCapturePreservesConfirmationWithoutInventingExactTime(t *testing.T) {
 	bound := time.Date(2026, 9, 29, 3, 0, 1, 0, time.UTC)
 	evidence := payment.CaptureTimingEvidence{Confirmation: &payment.CaptureConfirmationEvidence{
 		UpperBoundAt: bound, Source: payment_enums.CaptureConfirmationSourceProviderEvent, Provider: "stripe", EvidenceReference: "evt_capture_1",
@@ -46,7 +46,7 @@ func TestCaptureV2PreservesConfirmationWithoutInventingExactTime(t *testing.T) {
 	}
 }
 
-func TestCaptureV2KeepsExactTimeDistinctFromLaterConfirmation(t *testing.T) {
+func TestCaptureKeepsExactTimeDistinctFromLaterConfirmation(t *testing.T) {
 	exact := time.Date(2026, 9, 29, 3, 0, 0, 0, time.UTC)
 	bound := exact.Add(20 * time.Minute)
 	evidence := payment.CaptureTimingEvidence{CapturedAt: &exact, Confirmation: &payment.CaptureConfirmationEvidence{
@@ -82,7 +82,7 @@ func TestCaptureV2KeepsExactTimeDistinctFromLaterConfirmation(t *testing.T) {
 	}
 }
 
-func TestCaptureTimingAbsenceAndLegacyV1RemainDistinct(t *testing.T) {
+func TestCaptureTimingAbsenceAndLegacyRemainDistinct(t *testing.T) {
 	data, err := json.Marshal(payment.Payment{})
 	if err != nil {
 		t.Fatal(err)

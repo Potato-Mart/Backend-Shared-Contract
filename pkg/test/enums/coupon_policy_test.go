@@ -1,11 +1,11 @@
 package enums_test
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/coupon/coupon_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/coupon/coupon_enums"
 	"testing"
 )
 
-func TestCouponV2Enums(t *testing.T) {
+func TestCouponEnums(t *testing.T) {
 	for _, tc := range []struct {
 		name    string
 		valid   []stringEnum

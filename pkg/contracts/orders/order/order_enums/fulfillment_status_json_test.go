@@ -10,6 +10,8 @@ func TestFulfillmentStatusWireValuesRoundTrip(t *testing.T) {
 		status   FulfillmentStatus
 		wireJSON string
 	}{
+		{status: FulfillmentStatusPickingInProgress, wireJSON: `"picking_in_progress"`},
+		{status: FulfillmentStatusPickingCompleted, wireJSON: `"picking_completed"`},
 		{status: FulfillmentStatusCancelled, wireJSON: `"cancelled"`},
 		{status: FulfillmentStatusFulfilled, wireJSON: `"fulfilled"`},
 	}

@@ -2,15 +2,15 @@ package campaign_test
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/marketing/campaign"
-	ce "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/marketing/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/marketing/campaign"
+	ce "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/marketing/campaign/campaign_enums"
 	"reflect"
 	"testing"
 
-	audienceenum "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/marketing/audience/audience_enums"
+	audienceenum "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/marketing/audience/audience_enums"
 )
 
-func TestCampaignV46BoundaryAndRoundTrip(t *testing.T) {
+func TestCampaignBoundaryAndRoundTrip(t *testing.T) {
 	c := campaign.Campaign{CampaignCode: "CAM-1", Audience: []ce.CampaignCustomerType{ce.CampaignCustomerTypeRetail, ce.CampaignCustomerTypeWholesale}, Placements: []campaign.Placement{{Position: ce.CampaignPlacementHomeBanner, Platforms: []ce.CampaignPlatform{ce.CampaignPlatformWeb}, Priority: 2}, {Position: ce.CampaignPlacementAccountBanner, Platforms: []ce.CampaignPlatform{ce.CampaignPlatformMobile}, Priority: 9}}, Offers: []campaign.OfferLink{{Kind: "promotion", ID: "PROMO-1", DisplayOrder: 2, Revision: "r7"}}, Status: ce.CampaignStatusDraft}
 	raw, err := json.Marshal(c)
 	if err != nil {

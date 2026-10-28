@@ -8,12 +8,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/membership"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/membership"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/wallet/wallet_enums"
 )
 
-func TestV45RewardHasNoTierIssuanceConfiguration(t *testing.T) {
+func TestRewardHasNoTierIssuanceConfiguration(t *testing.T) {
 	rewardType := reflect.TypeOf(membership.Reward{})
 	for _, field := range []string{"TriggerTierKey", "IssueOnTierAchievement"} {
 		if _, exists := rewardType.FieldByName(field); exists {
@@ -22,7 +22,7 @@ func TestV45RewardHasNoTierIssuanceConfiguration(t *testing.T) {
 	}
 }
 
-func TestV45RejectsRetiredInstrumentKinds(t *testing.T) {
+func TestRejectsRetiredInstrumentKinds(t *testing.T) {
 	if wallet_enums.RewardType("VOUCHER").IsValid() ||
 		wallet_enums.WalletInstrumentType("voucher").IsValid() ||
 		payment_enums.CustomerPaymentAllocationKind("voucher").IsValid() {
@@ -34,7 +34,7 @@ func TestV45RejectsRetiredInstrumentKinds(t *testing.T) {
 	}
 }
 
-func TestV45ProductionContractsHaveNoVoucherSurface(t *testing.T) {
+func TestProductionContractsHaveNoVoucherSurface(t *testing.T) {
 	pkgRoot := sharedContractPkgRoot(t)
 	err := filepath.WalkDir(filepath.Join(pkgRoot, "contracts"), func(path string, entry fs.DirEntry, walkErr error) error {
 		if walkErr != nil {

@@ -6,11 +6,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/common/geography/geography_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/marketing/campaign/campaign_enums"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pubsub/pricing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pubsub/pricing/promotion_enums"
-	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v46/pkg/contracts/pubsub/routing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/geography/geography_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/marketing/campaign/campaign_enums"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pubsub/pricing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pubsub/pricing/promotion_enums"
+	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pubsub/routing"
 )
 
 func TestCustomerSafeStorefrontEventsJSON(t *testing.T) {
@@ -56,7 +56,7 @@ func TestCustomerSafeStorefrontEventsJSON(t *testing.T) {
 	}
 }
 
-func TestPromotionChangedPublicationContextV2AndV3JSON(t *testing.T) {
+func TestPromotionChangedPublicationContextVariantsJSON(t *testing.T) {
 	now := time.Date(2026, 9, 24, 2, 3, 4, 0, time.UTC)
 	legacyV2, err := json.Marshal(event.PromotionChangedEvent{
 		PromotionID: "promotion_1", Published: true, Revision: 4,
@@ -120,7 +120,7 @@ func TestCouponChangedEventJSONIsIdentityAndRefetchOnly(t *testing.T) {
 	}
 }
 
-func TestCampaignChangedV3HasNoRetiredIdentity(t *testing.T) {
+func TestCampaignChangedHasNoRetiredIdentity(t *testing.T) {
 	raw, err := json.Marshal(event.CampaignChangedEvent{CampaignCode: "CAM-1", Published: true, ActivationRevision: 3, Status: campaign_enums.CampaignStatusPublished})
 	if err != nil {
 		t.Fatal(err)
