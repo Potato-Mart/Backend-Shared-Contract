@@ -8,12 +8,12 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/marketing/campaign"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/marketing/campaign/campaign_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/pubsub/envelope"
-	events "github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/pubsub/pricing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/pubsub/routing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/supply/forecasting"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/marketing/campaign"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/marketing/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pubsub/envelope"
+	events "github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pubsub/pricing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pubsub/routing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/forecasting"
 )
 
 // Fixture containers are test-only. Campaign authoring, migration, eligibility

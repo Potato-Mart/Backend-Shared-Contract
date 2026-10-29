@@ -1,8 +1,8 @@
 package account
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/audit"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/security"
 )
 
 // RetailCustomerAccountProfile contains lightweight references for a retail

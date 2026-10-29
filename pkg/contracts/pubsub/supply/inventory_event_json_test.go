@@ -4,17 +4,17 @@ import (
 	"encoding/json"
 	"reflect"
 
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/pubsub/supply"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/pubsub/supply/supply_enums"
-	operations "github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/supply/inventory"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/supply/warehouse"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pubsub/supply"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pubsub/supply/supply_enums"
+	operations "github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/warehouse"
 
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestInventoryEventJSONShapes(t *testing.T) {
@@ -164,16 +164,19 @@ func marshalObject(t *testing.T, value any) map[string]any {
 
 func TestPOSSaleEventMovementEvidenceVariants(t *testing.T) {
 	tests := []struct {
-		name    string
-		variant string
-		cost    supply_enums.POSSaleCostStatus
-		known   *event.POSKnownLotPhysicalEvidence
-		unknown *event.POSUnknownIdentityPhysicalEvidence
-		deficit *event.POSDeficitEvidence
+		name        string
+		variant     string
+		cost        supply_enums.POSSaleCostStatus
+		known       *event.POSKnownLotPhysicalEvidence
+		unknown     *event.POSUnknownIdentityPhysicalEvidence
+		unallocated *operations.UnallocatedNoLotPhysicalEvidence
+		deficit     *event.POSDeficitEvidence
 	}{
 		{name: "known lot valued", variant: "known_lot_physical", cost: supply_enums.POSSaleCostStatusValued, known: &event.POSKnownLotPhysicalEvidence{LotID: "lot-1"}},
 		{name: "known lot unresolved", variant: "known_lot_physical", cost: supply_enums.POSSaleCostStatusUnresolved, known: &event.POSKnownLotPhysicalEvidence{LotID: "lot-1"}},
 		{name: "unidentified return stock", variant: "unknown_identity_physical", cost: supply_enums.POSSaleCostStatusUnresolved, unknown: &event.POSUnknownIdentityPhysicalEvidence{ReturnSources: []operations.UnknownReturnSource{{ReceivingID: "return-1", BaseUnits: 1}, {ReceivingID: "return-2", BaseUnits: 1}}}},
+		{name: "unallocated no lot unresolved", variant: "unallocated_no_lot_physical", cost: supply_enums.POSSaleCostStatusUnresolved, unallocated: &operations.UnallocatedNoLotPhysicalEvidence{SourceBucketID: "bucket-1"}},
+		{name: "unallocated no lot valued", variant: "unallocated_no_lot_physical", cost: supply_enums.POSSaleCostStatusValued, unallocated: &operations.UnallocatedNoLotPhysicalEvidence{SourceBucketID: "bucket-1"}},
 		{name: "unidentified deficit", variant: "deficit", cost: supply_enums.POSSaleCostStatusUnresolved, deficit: &event.POSDeficitEvidence{}},
 		{name: "evidenced lot deficit", variant: "deficit", cost: supply_enums.POSSaleCostStatusUnresolved, deficit: &event.POSDeficitEvidence{LotID: "lot-1"}},
 	}
@@ -184,7 +187,7 @@ func TestPOSSaleEventMovementEvidenceVariants(t *testing.T) {
 				MovementID: "movement-1", DepotCode: "depot-1", LocationCode: "location-1", BucketID: "bucket-1", SKUCode: "A00001",
 				PackageOption:        packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1},
 				CommittedComposition: composition(packaging_enums.PackageHandlingUnitEach, "EACH", 2, 1), BaseUnits: 2, InventoryRevision: 7,
-				CostStatus: tc.cost, KnownLotPhysical: tc.known, UnknownIdentityPhysical: tc.unknown, Deficit: tc.deficit,
+				CostStatus: tc.cost, KnownLotPhysical: tc.known, UnknownIdentityPhysical: tc.unknown, UnallocatedNoLotPhysical: tc.unallocated, Deficit: tc.deficit,
 			}
 			raw, err := json.Marshal(value)
 			if err != nil {
@@ -204,7 +207,7 @@ func TestPOSSaleEventMovementEvidenceVariants(t *testing.T) {
 					t.Errorf("retired/invented %s: %s", name, raw)
 				}
 			}
-			for _, name := range []string{"known_lot_physical", "unknown_identity_physical", "deficit"} {
+			for _, name := range []string{"known_lot_physical", "unknown_identity_physical", "unallocated_no_lot_physical", "deficit"} {
 				if _, ok := fields[name]; ok != (name == tc.variant) {
 					t.Errorf("incorrect variant %s: %s", name, raw)
 				}

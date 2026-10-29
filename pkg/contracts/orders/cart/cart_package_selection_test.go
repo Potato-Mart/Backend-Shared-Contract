@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/packaging"
 )
 
 func TestUnpricedSelectionCarriesNoPriceOrStockClaim(t *testing.T) {

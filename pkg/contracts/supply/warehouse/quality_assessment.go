@@ -3,9 +3,9 @@ package warehouse
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/packaging"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 // QualityAssessment captures an observed condition/disposition decision and

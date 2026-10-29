@@ -1,6 +1,6 @@
 package coupon
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/pricing/coupon/coupon_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pricing/coupon/coupon_enums"
 
 type Inheritance struct {
 	Scope             coupon_enums.InheritanceSource `json:"scope"`

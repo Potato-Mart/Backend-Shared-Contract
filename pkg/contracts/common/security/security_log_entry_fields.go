@@ -3,7 +3,7 @@ package security
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/security/security_enums"
 )
 
 // SecurityLogEntryFields contains the immutable evidence shared by protected

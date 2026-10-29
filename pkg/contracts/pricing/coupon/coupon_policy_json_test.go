@@ -2,8 +2,8 @@ package coupon_test
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/pricing/coupon"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/pricing/coupon/coupon_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pricing/coupon"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pricing/coupon/coupon_enums"
 	"reflect"
 	"testing"
 )
