@@ -271,7 +271,7 @@ var modelPackageManifest map[string]string
 // V48 adds the sale-evidence union and separate backorder and POS merchandise snapshots.
 // Offline sale evidence models are recorded by Orders and Pricing, and the
 // cached-book merchandise evidence belongs to Supply's listing domain.
-const exportedTypeManifestDigest = "888a49896e920e5ad7cec8694eac44cb96ca336784f562742fac6406f908eed7"
+const exportedTypeManifestDigest = "aadf8b1c83a7388ba817234a5f19f8bdefae4fbe036a6ab2e260fc6d71028883"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

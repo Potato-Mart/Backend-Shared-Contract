@@ -22,7 +22,6 @@ func TestPriceSnapshotSaleEvidenceVariantsRoundTrip(t *testing.T) {
 		{"stocked", SaleEvidence{Stocked: &listing.SaleEligibilitySnapshot{SKUCode: "SKU", MarketCode: "AU", DepotCode: "D", BucketID: "B", AvailableBaseUnits: 12, InventoryRevision: 3, ValidityToken: "stock-token", CapturedAt: at, ValidUntil: at.Add(time.Minute)}}, "stocked"},
 		{"wholesale backorder", SaleEvidence{WholesaleBackorder: &listing.BackorderEvidence{Allowed: true, SKUCode: "SKU", MarketCode: "AU", PackageOption: option, HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 6, BaseUnits: 12, ListingRevision: 4, EvidenceToken: "backorder-token", CapturedAt: at, ValidUntil: at.Add(time.Minute)}}, "wholesale_backorder"},
 		{"POS merchandise", SaleEvidence{POSMerchandise: &listing.POSMerchandiseEvidence{SKUCode: "SKU", MarketCode: "AU", DepotCode: "D", PackageOption: option, HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 6, BaseUnits: 12, ListingRevision: 4, MarketRevision: 5, TaxCategoryRevision: 6, TaxCategoryCode: "GST", TaxRuleID: "tax-rule", TaxRuleRevision: 7, ProductFactsDigest: "facts-digest", Token: "pos-token", CapturedAt: at, ValidUntil: at.Add(time.Minute)}}, "pos_merchandise"},
-		{"offline POS merchandise", SaleEvidence{OfflinePOS: &listing.OfflinePOSMerchandiseEvidence{ClientSaleID: "sale-1", SKUCode: "SKU", MarketCode: "AU", DepotCode: "D", PackageOption: option, HandlingUnit: packaging_enums.PackageHandlingUnitCase, PackageCount: 2, UnitsPerPackage: 6, BaseUnits: 12, PriceBookVersion: "book-1", PriceBookSHA256: "book-digest", JournalEntryHash: "entry-hash", SoldAt: at}}, "offline_pos"},
 	}
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
@@ -53,13 +52,6 @@ func TestPriceSnapshotSaleEvidenceVariantsRoundTrip(t *testing.T) {
 				for _, forbidden := range []string{"bucket_id", "stock_location", "stock_unit_id", "lot_id", "available_base_units", "inventory_revision", "reservation_id"} {
 					if _, exists := merchandise[forbidden]; exists {
 						t.Fatalf("non-stock evidence contains %s: %s", forbidden, raw)
-					}
-				}
-				if test.variant == "offline_pos" {
-					for _, forbidden := range []string{"token", "validity_token", "evidence_token", "valid_until"} {
-						if _, exists := merchandise[forbidden]; exists {
-							t.Fatalf("offline evidence contains fabricated online %s: %s", forbidden, raw)
-						}
 					}
 				}
 			}

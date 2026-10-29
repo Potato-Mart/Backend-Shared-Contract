@@ -11,7 +11,7 @@ import (
 
 func TestOfflineUnsupportedPromotionDoesNotInventDifference(t *testing.T) {
 	for _, promotionID := range []string{"promo-1", ""} {
-		want := OfflinePriceReviewFinding{ClientSaleID: "sale-1", LineNumber: 1, SKUCode: "SKU", PromotionID: promotionID, Reason: "unsupported_promotion"}
+		want := OfflinePriceReviewFinding{ClientSaleID: "sale-1", LineID: "line-1", LineNumber: 1, SKUCode: "SKU", PromotionID: promotionID, Reason: "unsupported_promotion"}
 		raw, err := json.Marshal(want)
 		if err != nil {
 			t.Fatal(err)

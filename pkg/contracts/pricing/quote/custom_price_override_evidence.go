@@ -10,6 +10,8 @@ import (
 // CustomPriceOverrideEvidence freezes a tax-inclusive custom unit amount,
 // entered at POS or resolved from an approved scoped customization, together
 // with its actor, mandatory reason, replaced approved price and cost evidence.
+// Historical records may lack the amount or source tax bases. Empty basis
+// values mean unknown and must not be inferred from the current product.
 type CustomPriceOverrideEvidence struct {
 	ActorUserID string `json:"actor_user_id"`
 	Reason      string `json:"reason"`

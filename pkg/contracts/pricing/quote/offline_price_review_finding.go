@@ -8,6 +8,7 @@ import "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/
 // decides when a finding is raised and how it is resolved.
 type OfflinePriceReviewFinding struct {
 	ClientSaleID   string       `json:"client_sale_id"`
+	LineID         string       `json:"line_id"`
 	LineNumber     int64        `json:"line_number"`
 	SKUCode        string       `json:"sku_code"`
 	PromotionID    string       `json:"promotion_id,omitempty"`

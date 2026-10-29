@@ -37,8 +37,8 @@ func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {
 		ProductPackageOption: caseOption,
 		CapturedAt:           now,
 		Components: []fulfilment.PricedPackageComponent{
-			{PriceSnapshot: casePricing, RequestedPackageCount: 2, RequestedBaseUnits: 24, PackagePrice: casePricing.LineTotal, ComponentTotal: money.Money{AmountMinor: 3600, Currency: "AUD"}},
-			{PriceSnapshot: eachPricing, RequestedPackageCount: 3, RequestedBaseUnits: 3, PackagePrice: eachPricing.LineTotal, ComponentTotal: money.Money{AmountMinor: 525, Currency: "AUD"}},
+			{PriceSnapshot: &casePricing, RequestedPackageCount: 2, RequestedBaseUnits: 24, PackagePrice: casePricing.LineTotal, ComponentTotal: money.Money{AmountMinor: 3600, Currency: "AUD"}},
+			{PriceSnapshot: &eachPricing, RequestedPackageCount: 3, RequestedBaseUnits: 3, PackagePrice: eachPricing.LineTotal, ComponentTotal: money.Money{AmountMinor: 525, Currency: "AUD"}},
 		},
 		TotalBaseUnits:     27,
 		SubstitutionPolicy: sales.LooseSubstitutionPolicySnapshot{Allowed: true, Source: order_enums.LooseSubstitutionPolicySourceBuyerSelected, CapturedAt: now},
@@ -74,12 +74,12 @@ func TestGroupOrderFulfilmentJSONUsesOneParentAllocation(t *testing.T) {
 	zeroComposition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}}
 	casePricing := priceSnapshot("line_case", money.Money{AmountMinor: 1800, Currency: "AUD"}, now)
 	aggregateComponent := fulfilment.PricedPackageComponent{
-		PriceSnapshot: casePricing, RequestedPackageCount: 2, RequestedBaseUnits: 24,
+		PriceSnapshot: &casePricing, RequestedPackageCount: 2, RequestedBaseUnits: 24,
 		PackagePrice: money.Money{AmountMinor: 1800, Currency: "AUD"}, TaxAmount: money.Money{AmountMinor: 300, Currency: "AUD"},
 		DiscountAmount: money.Money{AmountMinor: 200, Currency: "AUD"}, ComponentTotal: money.Money{AmountMinor: 3700, Currency: "AUD"},
 	}
 	participantComponent := fulfilment.PricedPackageComponent{
-		PriceSnapshot: casePricing, RequestedPackageCount: 1, RequestedBaseUnits: 12,
+		PriceSnapshot: &casePricing, RequestedPackageCount: 1, RequestedBaseUnits: 12,
 		PackagePrice: money.Money{AmountMinor: 1800, Currency: "AUD"}, TaxAmount: money.Money{AmountMinor: 150, Currency: "AUD"},
 		DiscountAmount: money.Money{AmountMinor: 100, Currency: "AUD"}, ComponentTotal: money.Money{AmountMinor: 1850, Currency: "AUD"},
 	}

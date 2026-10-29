@@ -82,6 +82,17 @@ func TestCustomPriceRevisionDistinguishesMissingFromZero(t *testing.T) {
 	}
 }
 
+func TestHistoricalCustomPriceBasesRemainUnknown(t *testing.T) {
+	raw := `{"actor_user_id":"staff","reason":"recorded reason","source_approved_price":{"amount_minor":800,"currency":"AUD"},"override_gross_amount":{"amount_minor":500,"currency":"AUD"}}`
+	var got CustomPriceOverrideEvidence
+	if err := json.Unmarshal([]byte(raw), &got); err != nil {
+		t.Fatal(err)
+	}
+	if got.SourcePriceBasis != "" || got.OverridePriceBasis != "" || got.SourceTaxInclusion != "" {
+		t.Fatalf("missing historical bases must stay unknown: %+v", got)
+	}
+}
+
 func TestCustomPriceOverridePreservesIndependentAmountBases(t *testing.T) {
 	for _, tc := range []struct {
 		name      string
