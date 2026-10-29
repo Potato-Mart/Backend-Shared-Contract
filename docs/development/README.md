@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v48.1.0` | 2026-10-29 | Minor |
 | `v48.0.1` | 2026-10-29 | Patch |
 | `v48.0.0` | 2026-10-29 | Major |
 | `v47.3.0` | 2026-10-29 | Minor |
@@ -56,6 +57,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v48.1.0 (2026-10-29)
+
+Packing shortages may explicitly record that a missing tracked unit's identity is unidentified. Picking remains an order process without scanning, and this status does not assert a specific unit was picked or sold.
 
 ## v48.0.1 (2026-10-29)
 
