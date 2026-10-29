@@ -3,8 +3,8 @@ package preference
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/notification/core/notification_enums"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/notification/core/notification_enums"
 )
 
 // NotificationChannelConsent is the latest consent state held by the

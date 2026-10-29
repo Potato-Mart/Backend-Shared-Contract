@@ -1,6 +1,6 @@
 package security
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/metadata"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/metadata"
 
 // AuditLogEntry is one immutable record of an administrative action.
 //

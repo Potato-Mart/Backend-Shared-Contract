@@ -2,9 +2,9 @@ package pricing_test
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/wallet/wallet_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pubsub/pricing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pubsub/pricing"
 	"reflect"
 	"testing"
 	"time"

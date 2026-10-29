@@ -6,22 +6,22 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/packaging/packaging_enums"
-	fulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/orders/fulfilment"
-	group_order "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/orders/group_order"
-	group_order_enums "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/orders/group_order/group_order_enums"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/quote"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/quote/quote_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/catalogue/listing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/catalogue/product"
-	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/fulfilment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/packaging/packaging_enums"
+	fulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/orders/fulfilment"
+	group_order "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/orders/group_order"
+	group_order_enums "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/orders/group_order/group_order_enums"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pricing/quote"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/catalogue/listing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/catalogue/product"
+	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {
@@ -37,8 +37,8 @@ func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {
 		ProductPackageOption: caseOption,
 		CapturedAt:           now,
 		Components: []fulfilment.PricedPackageComponent{
-			{PriceSnapshot: casePricing, RequestedPackageCount: 2, RequestedBaseUnits: 24, PackagePrice: casePricing.LineTotal, ComponentTotal: money.Money{AmountMinor: 3600, Currency: "AUD"}},
-			{PriceSnapshot: eachPricing, RequestedPackageCount: 3, RequestedBaseUnits: 3, PackagePrice: eachPricing.LineTotal, ComponentTotal: money.Money{AmountMinor: 525, Currency: "AUD"}},
+			{PriceSnapshot: &casePricing, RequestedPackageCount: 2, RequestedBaseUnits: 24, PackagePrice: casePricing.LineTotal, ComponentTotal: money.Money{AmountMinor: 3600, Currency: "AUD"}},
+			{PriceSnapshot: &eachPricing, RequestedPackageCount: 3, RequestedBaseUnits: 3, PackagePrice: eachPricing.LineTotal, ComponentTotal: money.Money{AmountMinor: 525, Currency: "AUD"}},
 		},
 		TotalBaseUnits:     27,
 		SubstitutionPolicy: sales.LooseSubstitutionPolicySnapshot{Allowed: true, Source: order_enums.LooseSubstitutionPolicySourceBuyerSelected, CapturedAt: now},
@@ -74,12 +74,12 @@ func TestGroupOrderFulfilmentJSONUsesOneParentAllocation(t *testing.T) {
 	zeroComposition := packaging.PackageCompositionSnapshot{TotalBaseUnits: 0, Components: []packaging.PackageComponentSnapshot{}}
 	casePricing := priceSnapshot("line_case", money.Money{AmountMinor: 1800, Currency: "AUD"}, now)
 	aggregateComponent := fulfilment.PricedPackageComponent{
-		PriceSnapshot: casePricing, RequestedPackageCount: 2, RequestedBaseUnits: 24,
+		PriceSnapshot: &casePricing, RequestedPackageCount: 2, RequestedBaseUnits: 24,
 		PackagePrice: money.Money{AmountMinor: 1800, Currency: "AUD"}, TaxAmount: money.Money{AmountMinor: 300, Currency: "AUD"},
 		DiscountAmount: money.Money{AmountMinor: 200, Currency: "AUD"}, ComponentTotal: money.Money{AmountMinor: 3700, Currency: "AUD"},
 	}
 	participantComponent := fulfilment.PricedPackageComponent{
-		PriceSnapshot: casePricing, RequestedPackageCount: 1, RequestedBaseUnits: 12,
+		PriceSnapshot: &casePricing, RequestedPackageCount: 1, RequestedBaseUnits: 12,
 		PackagePrice: money.Money{AmountMinor: 1800, Currency: "AUD"}, TaxAmount: money.Money{AmountMinor: 150, Currency: "AUD"},
 		DiscountAmount: money.Money{AmountMinor: 100, Currency: "AUD"}, ComponentTotal: money.Money{AmountMinor: 1850, Currency: "AUD"},
 	}
@@ -170,7 +170,7 @@ func priceSnapshot(lineID string, price money.Money, capturedAt time.Time) quote
 			Mode: quote_enums.RoundingModeHalfUp, PriceEnding: pricebook_enums.PriceEndingPolicyNone,
 			Exponent: 2, ExactNumerator: price.AmountMinor, ExactDenominator: 1, RoundedAmount: price,
 		},
-		Eligibility: listing.SaleEligibilitySnapshot{
+		SaleEvidence: quote.SaleEvidence{Stocked: &listing.SaleEligibilitySnapshot{
 			MarketCode: "market_au", SKUCode: "sku_a00001", ListingRevision: 4,
 			TaxCategoryCode: "tax_au_gst", DepotCode: "AU-VIC-MEL-DC-01",
 			StockLocation:      warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01-03"},
@@ -178,7 +178,7 @@ func priceSnapshot(lineID string, price money.Money, capturedAt time.Time) quote
 			Disposition:        warehouse_enums.InventoryDispositionStandardSellable,
 			AvailableBaseUnits: 120, InventoryRevision: 9,
 			ValidityToken: "eligibility_token_1", ValidUntil: capturedAt, CapturedAt: capturedAt,
-		},
+		}},
 		Fingerprint: "fingerprint_" + lineID, CapturedAt: capturedAt,
 	}
 }

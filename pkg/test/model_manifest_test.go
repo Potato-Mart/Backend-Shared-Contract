@@ -268,7 +268,10 @@ var modelPackageManifest map[string]string
 // V46 replaces campaign presentation, coupon acquisition and entitlement models,
 // separates offer and campaign audience enums, and introduces typed offer links.
 // V47 replaces independent picking-list records with an order-based process and packing record.
-const exportedTypeManifestDigest = "0875be4e12b7492084c204092dd09ade7d7c216cad0bba6cdca868cb8828c223"
+// V48 adds the sale-evidence union and separate backorder and POS merchandise snapshots.
+// Offline sale evidence models are recorded by Orders and Pricing, and the
+// cached-book merchandise evidence belongs to Supply's listing domain.
+const exportedTypeManifestDigest = "aadf8b1c83a7388ba817234a5f19f8bdefae4fbe036a6ab2e260fc6d71028883"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

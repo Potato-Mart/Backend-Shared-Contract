@@ -1,7 +1,7 @@
 package payments
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/geography"
 	"time"
 )
 

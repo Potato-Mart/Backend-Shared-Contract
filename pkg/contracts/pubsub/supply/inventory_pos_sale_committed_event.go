@@ -1,6 +1,6 @@
 package supply
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/packaging"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/packaging"
 
 // InventoryPOSSaleCommittedEvent records one physical or deficit movement from
 // an unreserved POS sale. Deficit movements remain pending cost reconciliation.

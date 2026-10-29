@@ -2,7 +2,7 @@ package pkg_test
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/packaging"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -15,18 +15,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/money"
-	order "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/orders/order"
-	pos "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/payments/receipt"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/promotion"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/promotion/promotion_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/quote"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/quote/quote_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/catalogue/listing"
-	operations "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/inventory"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/money"
+	order "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/orders/order"
+	pos "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/payments/receipt"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pricing/promotion/promotion_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pricing/quote"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/catalogue/listing"
+	operations "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestPromotionScopeGrammarRoundTripsAllSelectorsAndQuantityRanges(t *testing.T) {
@@ -109,7 +109,7 @@ func TestPriceSnapshotFreezesRuleTaxAndEligibilityEvidence(t *testing.T) {
 			Exponent: 2, ExactNumerator: 680, ExactDenominator: 1,
 			RoundedAmount: money.Money{AmountMinor: 680, Currency: "AUD"},
 		},
-		Eligibility: listing.SaleEligibilitySnapshot{
+		SaleEvidence: quote.SaleEvidence{Stocked: &listing.SaleEligibilitySnapshot{
 			MarketCode: "market-au", SKUCode: "sku-potato-a", ListingRevision: 3,
 			TaxCategoryCode: "tax-au-gst", DepotCode: "SYD-01",
 			StockLocation:      warehouse.StockLocationRef{DepotCode: "SYD-01", LocationCode: "A-1"},
@@ -118,7 +118,7 @@ func TestPriceSnapshotFreezesRuleTaxAndEligibilityEvidence(t *testing.T) {
 			AvailableBaseUnits: 40,
 			InventoryRevision:  12,
 			ValidityToken:      "eligibility-token-1", ValidUntil: capturedAt, CapturedAt: capturedAt,
-		},
+		}},
 		Fingerprint: "fingerprint-1", CapturedAt: capturedAt,
 	}
 
@@ -136,8 +136,8 @@ func TestPriceSnapshotFreezesRuleTaxAndEligibilityEvidence(t *testing.T) {
 	if len(got.AppliedRules) != 1 || got.AppliedRules[0].Kind != "group_15" || !got.AppliedRules[0].Exclusive {
 		t.Fatalf("exclusive rule evidence changed: %+v", got.AppliedRules)
 	}
-	if got.Eligibility.ValidityToken != "eligibility-token-1" || got.Eligibility.ListingRevision != 3 {
-		t.Fatalf("eligibility evidence changed: %+v", got.Eligibility)
+	if got.SaleEvidence.Stocked == nil || got.SaleEvidence.Stocked.ValidityToken != "eligibility-token-1" || got.SaleEvidence.Stocked.ListingRevision != 3 {
+		t.Fatalf("eligibility evidence changed: %+v", got.SaleEvidence.Stocked)
 	}
 	if got.CurrencyExponent.Exponent != 2 || got.Currency != "AUD" {
 		t.Fatalf("currency evidence changed: %+v", got.CurrencyExponent)
@@ -191,13 +191,13 @@ func TestCustomerSummariesExposeOnlyFrozenSafePricingFacts(t *testing.T) {
 				t.Errorf("%s is missing frozen customer-safe field %s", model, required)
 			}
 		}
-		for _, forbidden := range []string{"AcceptedPackagePricing", "PackagePricing", "PriceSnapshot", "Eligibility", "Components", "StockLocation", "SourceBucketID", "SourceStockUnitID", "AvailablePackageCount", "AvailableBaseUnits", "InventoryRevision"} {
+		for _, forbidden := range []string{"AcceptedPackagePricing", "PackagePricing", "PriceSnapshot", "Eligibility", "SaleEvidence", "Components", "StockLocation", "SourceBucketID", "SourceStockUnitID", "AvailablePackageCount", "AvailableBaseUnits", "InventoryRevision"} {
 			if _, ok := model.FieldByName(forbidden); ok {
 				t.Errorf("%s exposes internal pricing/inventory field %s", model, forbidden)
 			}
 		}
 		for i := 0; i < model.NumField(); i++ {
-			if model.Field(i).Type == reflect.TypeOf(quote.PriceSnapshot{}) || model.Field(i).Type == reflect.TypeOf(listing.SaleEligibilitySnapshot{}) {
+			if model.Field(i).Type == reflect.TypeOf(quote.PriceSnapshot{}) || model.Field(i).Type == reflect.TypeOf(quote.SaleEvidence{}) || model.Field(i).Type == reflect.TypeOf(listing.SaleEligibilitySnapshot{}) {
 				t.Errorf("%s embeds raw pricing or inventory evidence through field %s", model, model.Field(i).Name)
 			}
 		}

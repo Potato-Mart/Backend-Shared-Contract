@@ -3,7 +3,7 @@ package supply
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/localization"
 )
 
 // StockRestockAlertTriggeredEvent represents one customer's fired restock
