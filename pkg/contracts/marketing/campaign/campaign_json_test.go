@@ -2,12 +2,12 @@ package campaign_test
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/marketing/campaign"
-	ce "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/marketing/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/marketing/campaign"
+	ce "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/marketing/campaign/campaign_enums"
 	"reflect"
 	"testing"
 
-	audienceenum "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/marketing/audience/audience_enums"
+	audienceenum "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/marketing/audience/audience_enums"
 )
 
 func TestCampaignBoundaryAndRoundTrip(t *testing.T) {

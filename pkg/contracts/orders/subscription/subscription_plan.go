@@ -1,9 +1,9 @@
 package subscription
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/money"
 )
 
 // SubscriptionPlan defines a recurring purchase option available through the

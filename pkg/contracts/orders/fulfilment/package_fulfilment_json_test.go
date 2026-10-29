@@ -6,22 +6,22 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/packaging/packaging_enums"
-	fulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/orders/fulfilment"
-	group_order "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/orders/group_order"
-	group_order_enums "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/orders/group_order/group_order_enums"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/orders/order"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/quote"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/quote/quote_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/catalogue/listing"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/catalogue/product"
-	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/fulfilment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/warehouse"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/packaging/packaging_enums"
+	fulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/orders/fulfilment"
+	group_order "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/orders/group_order"
+	group_order_enums "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/orders/group_order/group_order_enums"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pricing/quote"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/catalogue/listing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/catalogue/product"
+	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestRetailOrderItemJSONPreservesMixedCaseAndEachPricing(t *testing.T) {
@@ -170,7 +170,7 @@ func priceSnapshot(lineID string, price money.Money, capturedAt time.Time) quote
 			Mode: quote_enums.RoundingModeHalfUp, PriceEnding: pricebook_enums.PriceEndingPolicyNone,
 			Exponent: 2, ExactNumerator: price.AmountMinor, ExactDenominator: 1, RoundedAmount: price,
 		},
-		Eligibility: listing.SaleEligibilitySnapshot{
+		SaleEvidence: quote.SaleEvidence{Stocked: &listing.SaleEligibilitySnapshot{
 			MarketCode: "market_au", SKUCode: "sku_a00001", ListingRevision: 4,
 			TaxCategoryCode: "tax_au_gst", DepotCode: "AU-VIC-MEL-DC-01",
 			StockLocation:      warehouse.StockLocationRef{DepotCode: "AU-VIC-MEL-DC-01", LocationCode: "A-01-03"},
@@ -178,7 +178,7 @@ func priceSnapshot(lineID string, price money.Money, capturedAt time.Time) quote
 			Disposition:        warehouse_enums.InventoryDispositionStandardSellable,
 			AvailableBaseUnits: 120, InventoryRevision: 9,
 			ValidityToken: "eligibility_token_1", ValidUntil: capturedAt, CapturedAt: capturedAt,
-		},
+		}},
 		Fingerprint: "fingerprint_" + lineID, CapturedAt: capturedAt,
 	}
 }

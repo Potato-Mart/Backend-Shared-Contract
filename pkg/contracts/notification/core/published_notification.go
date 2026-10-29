@@ -3,8 +3,8 @@ package core
 import (
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/notification/core/notification_enums"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/notification/core/notification_enums"
 )
 
 // PublishedNotification is the customer-safe in-app inbox projection. It

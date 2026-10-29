@@ -7,11 +7,10 @@ package quote
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pricing/market/market_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/supply/catalogue/listing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pricing/market/market_enums"
 )
 
 // PriceSnapshot is the immutable commercial evidence for one priced line. It
@@ -53,9 +52,9 @@ type PriceSnapshot struct {
 	UnitPrice      *UnitPriceEvidence           `json:"unit_price,omitempty"`
 	CustomOverride *CustomPriceOverrideEvidence `json:"custom_override,omitempty"`
 
-	// Eligibility is the Supply-owned listing and inventory evidence the
-	// price was resolved against.
-	Eligibility listing.SaleEligibilitySnapshot `json:"eligibility"`
+	// SaleEvidence identifies the single Supply evidence basis used for the
+	// priced line. Transaction owners must reject missing or multiple variants.
+	SaleEvidence SaleEvidence `json:"sale_evidence"`
 
 	// Fingerprint is the Pricing-owned immutable identity of the resolved
 	// quote inputs and outputs.

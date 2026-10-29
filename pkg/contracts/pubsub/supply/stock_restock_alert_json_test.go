@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/common/localization"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v47/pkg/contracts/pubsub/supply"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/localization"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pubsub/supply"
 )
 
 func TestStockRestockAlertTriggeredEventJSONShape(t *testing.T) {

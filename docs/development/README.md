@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v48.0.0` | 2026-10-29 | Major |
 | `v47.3.0` | 2026-10-29 | Minor |
 | `v47.2.0` | 2026-10-29 | Minor |
 | `v47.1.0` | 2026-10-29 | Minor |
@@ -54,6 +55,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v48.0.0 (2026-10-29)
+
+Price snapshots replace the former `eligibility` field with `sale_evidence`, whose stocked, wholesale-backorder and POS-merchandise variants carry distinct Supply evidence. Producers and consumers must require exactly one appropriate variant and revalidate its owner evidence; POS merchandise does not assert physical stock. This breaking change uses module path `/v48` and requires coordinated consumer upgrades. It does not define offline-sale journal evidence.
 
 ## v47.3.0 (2026-10-29)
 
