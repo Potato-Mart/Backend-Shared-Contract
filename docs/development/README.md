@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v49.1.0` | 2026-10-29 | Minor |
 | `v49.0.0` | 2026-10-29 | Major |
 | `v48.0.1` | 2026-10-29 | Patch |
 | `v48.0.0` | 2026-10-29 | Major |
@@ -57,6 +58,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v49.1.0 (2026-10-29)
+
+Add an unpriced POS cart package selection with immutable package identity and quantity. It is not a quote, stock claim or sale authorization; Orders must obtain Pricing and Supply evidence before finalizing the sale.
 
 ## v49.0.0 (2026-10-29)
 
