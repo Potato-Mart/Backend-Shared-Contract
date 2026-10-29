@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/pricing/quote/quote_enums"
 )
 
 func TestCustomPriceOverrideJSONPreservesPriceBases(t *testing.T) {

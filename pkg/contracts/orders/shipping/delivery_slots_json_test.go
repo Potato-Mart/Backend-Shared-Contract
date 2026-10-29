@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/orders/shipping"
 )
 
 func TestDeliveryScheduleJSONShape(t *testing.T) {

@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v51.0.0` | 2026-10-29 | Major |
 | `v50.0.0` | 2026-10-29 | Major |
 | `v49.1.0` | 2026-10-29 | Minor |
 | `v49.0.0` | 2026-10-29 | Major |
@@ -59,6 +60,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v51.0.0 (2026-10-29)
+
+Reservation allocations and `inventory.sold` carry explicit known-lot, unknown-return or unallocated no-lot physical evidence. An unallocated no-lot variant binds the actual original allocation bucket and never invents a receipt or unit identity. Unknown-return source IDs and quantities are scoped to each allocation or movement; Supply verifies their ownership and cumulative consumption. The sale event explicitly distinguishes verified valuation from unresolved cost. No online deficit is represented as a sale: shortages are released through the reservation/packing workflow. The event uses version v6 and requires coordinated producer and consumer upgrades. The POS sale event and packing model are unchanged.
 
 ## v50.0.0 (2026-10-29)
 
