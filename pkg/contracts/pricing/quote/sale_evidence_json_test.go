@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/catalogue/listing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/catalogue/listing"
 )
 
 func TestPriceSnapshotSaleEvidenceVariantsRoundTrip(t *testing.T) {

@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pubsub/routing"
+	event_enums "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pubsub/routing"
 )
 
 // documentedEventPayloads is the reviewed payload set in the current event reference.

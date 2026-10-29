@@ -1,7 +1,7 @@
 package enums_test
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pricing/coupon/coupon_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pricing/coupon/coupon_enums"
 	"testing"
 )
 

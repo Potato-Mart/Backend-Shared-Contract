@@ -6,8 +6,8 @@ package procurement
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/money"
 )
 
 // BaseAcquisitionCost is the current tax-exclusive acquisition cost for one

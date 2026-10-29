@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/money"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pubsub/supply"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/money"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pubsub/supply"
 )
 
 func TestCatalogBaseCostChangedEventJSONShape(t *testing.T) {

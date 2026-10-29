@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/catalogue/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/catalogue/product"
 )
 
 func TestSellingProductPriceGraphExcludesPrivateEvidence(t *testing.T) {

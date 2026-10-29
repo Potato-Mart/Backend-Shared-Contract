@@ -11,9 +11,13 @@ func TestFulfillmentStatusWireValuesRoundTrip(t *testing.T) {
 		wireJSON string
 	}{
 		{status: FulfillmentStatusPickingInProgress, wireJSON: `"picking_in_progress"`},
-		{status: FulfillmentStatusPickingCompleted, wireJSON: `"picking_completed"`},
 		{status: FulfillmentStatusCancelled, wireJSON: `"cancelled"`},
 		{status: FulfillmentStatusFulfilled, wireJSON: `"fulfilled"`},
+	}
+	for _, removed := range []FulfillmentStatus{"picking_completed", "partial"} {
+		if removed.IsValid() {
+			t.Fatalf("removed status %q is valid", removed)
+		}
 	}
 	for _, tc := range cases {
 		t.Run(string(tc.status), func(t *testing.T) {

@@ -7,10 +7,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/payments/merchant"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pricing/pricebook"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/payments/merchant"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pricing/pricebook"
 )
 
 func TestOfflineJournalPreservesActualSaleAndIssuerEvidence(t *testing.T) {
