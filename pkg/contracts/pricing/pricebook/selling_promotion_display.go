@@ -4,7 +4,6 @@ import (
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pricing/pricebook/pricebook_enums"
 )
 
@@ -18,7 +17,7 @@ type SellingPromotionDisplay struct {
 	// PromotionID is the corresponding customer-visible storefront promotion.
 	// It is omitted when the display does not originate from that catalogue.
 	PromotionID             string                                        `json:"promotion_id,omitempty"`
-	DiscountType            *pricebook_enums.SellingPromotionDiscountType `json:"discount_type,omitempty"`
+	DiscountKind            *pricebook_enums.SellingPromotionDiscountType `json:"discount_type,omitempty"`
 	DiscountValue           *SellingPromotionDiscountValue                `json:"discount_value,omitempty"`
 	Kind                    string                                        `json:"kind"`
 	Messages                []localization.LocalizedText                  `json:"messages,omitempty"`
@@ -27,12 +26,4 @@ type SellingPromotionDisplay struct {
 	AppliedToEffectivePrice bool                                          `json:"applied_to_effective_price"`
 	ValidFrom               *time.Time                                    `json:"valid_from,omitempty"`
 	ValidUntil              *time.Time                                    `json:"valid_until,omitempty"`
-}
-
-// SellingPromotionDiscountValue carries the authored customer-visible value.
-// Percent discounts use BasisPoints; monetary discounts and fixed prices use
-// Amount. The publishing service owns eligibility and validates the variant.
-type SellingPromotionDiscountValue struct {
-	BasisPoints *int64       `json:"basis_points,omitempty"`
-	Amount      *money.Money `json:"amount,omitempty"`
 }
