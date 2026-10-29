@@ -1,6 +1,6 @@
 package coupon
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pricing/coupon/coupon_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/pricing/coupon/coupon_enums"
 
 // TierRestriction is the redemption-time membership restriction, independent
 // of receiving eligibility. The service validates active tier references.

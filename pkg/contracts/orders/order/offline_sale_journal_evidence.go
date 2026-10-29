@@ -3,9 +3,9 @@ package order
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/payments/merchant"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pricing/pricebook"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/payments/merchant"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/pricing/pricebook"
 )
 
 // OfflineSaleJournalEvidence captures the device's sale and cash provenance
@@ -31,9 +31,7 @@ type OfflineSaleJournalEvidence struct {
 	SessionID            string                             `json:"session_id"`
 	BusinessDate         temporal.Date                      `json:"business_date"`
 	CashierUserID        string                             `json:"cashier_user_id"`
-	CredentialRevision   int64                              `json:"credential_revision"`
-	CredentialIssuedAt   *time.Time                         `json:"credential_issued_at,omitempty"`
-	CredentialExpiresAt  *time.Time                         `json:"credential_expires_at,omitempty"`
+	CashierAuth          OfflineCashierAuth                 `json:"cashier_auth"`
 	SoldAt               time.Time                          `json:"sold_at"`
 	OfflineSince         time.Time                          `json:"offline_since"`
 	Sequence             int64                              `json:"sequence"`

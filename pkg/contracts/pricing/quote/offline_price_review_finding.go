@@ -1,6 +1,6 @@
 package quote
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/money"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/money"
 
 // OfflinePriceReviewFinding records a pricing issue found while reconciling an
 // offline sale. A promotion may be unsupported before a comparable amount is

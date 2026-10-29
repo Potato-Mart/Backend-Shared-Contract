@@ -5,9 +5,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/security/security_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/identity/access"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/identity/authorisation/role_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/security/security_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/identity/access"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/identity/authorisation/role_enums"
 )
 
 func TestPermissionDefinitionJSONUsesTypedWireValues(t *testing.T) {

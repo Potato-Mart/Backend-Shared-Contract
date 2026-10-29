@@ -3,10 +3,10 @@ package quote
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pricing/pricebook"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pricing/quote/quote_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/catalogue/listing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/pricing/pricebook"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/supply/catalogue/listing"
 )
 
 // OfflinePriceSnapshot captures what the till charged for one offline POS

@@ -1,9 +1,9 @@
 package procurement
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/procurement/purchase_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/supply/procurement/purchase_enums"
 )
 
 // SupplierInvoiceLine is one purchased line with its declared tax evidence.

@@ -7,9 +7,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/payments/merchant"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pricing/pricebook"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/payments/merchant"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/pricing/pricebook"
 )
 
 func TestOfflineJournalPreservesActualSaleAndIssuerEvidence(t *testing.T) {
@@ -18,7 +19,7 @@ func TestOfflineJournalPreservesActualSaleAndIssuerEvidence(t *testing.T) {
 	want := OfflineSaleJournalEvidence{
 		ClientSaleID: "sale-1", DeviceKey: "device-1", ReceiptNumber: "TILL-18446744073709551615", ReceiptPrefix: "TILL", ReceiptCounter: "18446744073709551615",
 		MarketCode: "AU", DepotCode: "D", RegisterID: "R", SessionID: "session", BusinessDate: "2026-10-03",
-		CashierUserID: "staff-1", CredentialRevision: 3, SoldAt: sold, OfflineSince: issued,
+		CashierUserID: "staff-1", CashierAuth: OfflineCashierAuth{Kind: order_enums.OfflineCashierAuthKindPIN, CredentialRevision: 3}, SoldAt: sold, OfflineSince: issued,
 		Sequence: 125, JournalSchema: 1, RecordedAt: sold, PreviousHash: "previous", EntryHash: "entry", CanonicalEntryBase64: "e30=",
 		PriceBook:    pricebook.OfflinePriceBookEvidence{Version: "book-1", MarketCode: "AU", StoreCode: "D", PayloadSHA256: "digest", Algorithm: "ed25519", KeyID: "key-1", Signature: "c2ln", IssuedAt: issued, ExpiresAt: issued.Add(24 * time.Hour)},
 		CachedIssuer: merchant.MerchantLegalSnapshot{ProfileID: "issuer", ProfileRevision: 7, MarketCode: "AU", LegalName: "Cached merchant", BusinessNumber: "123", FrozenAt: issued},
@@ -39,6 +40,25 @@ func TestOfflineJournalPreservesActualSaleAndIssuerEvidence(t *testing.T) {
 	}
 	if !reflect.DeepEqual(want, got) {
 		t.Fatalf("offline evidence changed on round trip: %#v", got)
+	}
+}
+
+func TestOfflineCashierAuthenticationVariants(t *testing.T) {
+	for _, tc := range []struct {
+		auth OfflineCashierAuth
+		want string
+	}{
+		{OfflineCashierAuth{Kind: order_enums.OfflineCashierAuthKindPIN, CredentialRevision: 3}, `{"kind":"offline_pin","credential_revision":3}`},
+		{OfflineCashierAuth{Kind: order_enums.OfflineCashierAuthKindPasswordSession, IdentitySessionID: "session-1"}, `{"kind":"password_session","identity_session_id":"session-1"}`},
+	} {
+		raw, err := json.Marshal(tc.auth)
+		if err != nil || string(raw) != tc.want {
+			t.Fatalf("cashier auth = %s, %v", raw, err)
+		}
+		var got OfflineCashierAuth
+		if err := json.Unmarshal(raw, &got); err != nil || got != tc.auth {
+			t.Fatalf("cashier auth round trip: %+v %v", got, err)
+		}
 	}
 }
 

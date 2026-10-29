@@ -3,13 +3,14 @@ package enums_test
 import (
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/commerce/commerce_enums"
-	group_order_enums "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/orders/group_order/group_order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/commerce/commerce_enums"
+	group_order_enums "github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/orders/group_order/group_order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/orders/order/order_enums"
 )
 
 func TestOrderEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
+		{name: "orderenum.OfflineCashierAuthKind", valid: []stringEnum{order_enums.OfflineCashierAuthKindPIN, order_enums.OfflineCashierAuthKindPasswordSession}, invalid: order_enums.OfflineCashierAuthKind("__invalid__")},
 		{name: "orderenum.LooseSubstitutionPolicySource", valid: []stringEnum{order_enums.LooseSubstitutionPolicySourceChannelDefault, order_enums.LooseSubstitutionPolicySourceBuyerSelected, order_enums.LooseSubstitutionPolicySourceGroupManager}, invalid: order_enums.LooseSubstitutionPolicySource("__invalid__")},
 		{name: "orderenum.GroupOrderRole", valid: []stringEnum{group_order_enums.GroupOrderRoleConsolidatedParent, group_order_enums.GroupOrderRoleParticipant}, invalid: group_order_enums.GroupOrderRole("__invalid__")},
 		{name: "orderenum.FulfillmentStatus", valid: []stringEnum{order_enums.FulfillmentStatusUnfulfilled, order_enums.FulfillmentStatusPickingInProgress, order_enums.FulfillmentStatusPickingCompleted, order_enums.FulfillmentStatusPacking, order_enums.FulfillmentStatusPacked, order_enums.FulfillmentStatusPartial, order_enums.FulfillmentStatusFulfilled, order_enums.FulfillmentStatusCancelled}, invalid: order_enums.FulfillmentStatus("__invalid__")},

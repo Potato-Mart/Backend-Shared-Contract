@@ -1,9 +1,9 @@
 package supply
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/packaging"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 type InventoryReservationChangedEvent struct {

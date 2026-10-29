@@ -1,6 +1,6 @@
 package coupon
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/money"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/money"
 
 type Benefit struct {
 	BasisPoints     *int64       `json:"basis_points,omitempty"`

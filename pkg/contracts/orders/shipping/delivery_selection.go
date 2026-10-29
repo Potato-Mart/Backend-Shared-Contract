@@ -3,9 +3,9 @@ package shipping
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/courier"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/courier/courier_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/supply/courier"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/supply/courier/courier_enums"
 )
 
 // DeliverySelection freezes the server-validated delivery choice accepted for

@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/packaging"
-	orders "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/pubsub/orders"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/packaging"
+	orders "github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/pubsub/orders"
 )
 
 func TestOrderEditedEventCarriesWholeRequestedCompositionAndStableEditIdentity(t *testing.T) {
