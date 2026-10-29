@@ -1,6 +1,6 @@
 package supply
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/supply/inventory"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/inventory"
 
 // POSUnknownIdentityPhysicalEvidence identifies physically present stock from
 // recorded returns without claiming a lot, unit identity or valuation. Sources

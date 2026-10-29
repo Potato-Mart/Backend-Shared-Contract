@@ -6,10 +6,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/supply/catalogue/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/supply/catalogue/selection"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/supply/catalogue/selection/selection_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/catalogue/selection"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/catalogue/selection/selection_enums"
 )
 
 func TestProductSelectionJSONShapeAndRoundTrip(t *testing.T) {

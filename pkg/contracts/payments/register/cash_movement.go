@@ -3,9 +3,9 @@ package register
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/money"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/security"
-	pos_enums "github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/payments/register/register_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/security"
+	pos_enums "github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/payments/register/register_enums"
 )
 
 // CashMovement is one cash-drawer movement recorded during a session.

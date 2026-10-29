@@ -3,8 +3,8 @@ package payment
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/payments/payment/payment_enums"
 )
 
 // CustomerPaymentAllocation is one customer-safe row of an order's payment

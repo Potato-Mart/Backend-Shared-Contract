@@ -1,9 +1,9 @@
 package group_order
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/orders/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/orders/fulfilment"
 )
 
 // GroupOrderAggregateLine records one parent-owned aggregate package demand

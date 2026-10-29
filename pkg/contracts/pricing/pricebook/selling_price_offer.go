@@ -1,11 +1,11 @@
 package pricebook
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/packaging"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/money"
 )
 
 // SellingPriceOffer is a customer-safe conditional or alternative price

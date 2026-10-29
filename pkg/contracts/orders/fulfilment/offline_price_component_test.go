@@ -6,15 +6,15 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/orders/fulfilment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/pricing/pricebook"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/pricing/quote"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/pricing/quote/quote_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/supply/catalogue/listing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/orders/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pricing/pricebook"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pricing/quote"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/catalogue/listing"
 )
 
 func TestOfflinePricedComponentHasNoInventedOnlineQuote(t *testing.T) {

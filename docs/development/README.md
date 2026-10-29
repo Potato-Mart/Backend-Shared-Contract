@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v52.0.0` | 2026-10-29 | Major |
 | `v51.0.0` | 2026-10-29 | Major |
 | `v50.0.0` | 2026-10-29 | Major |
 | `v49.1.0` | 2026-10-29 | Minor |
@@ -60,6 +61,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v52.0.0 (2026-10-29)
+
+The `inventory.pos_sale_committed` event uses v3 and adds an unallocated no-lot physical variant with the actual source bucket ID. Physical stock without lot or return identity must not be represented as a deficit or an unidentified return. Its cost is valued only when the actual issue cost is verified; otherwise it remains unresolved. Producers and consumers must validate exactly one evidence variant and upgrade together. The packing model is unchanged.
 
 ## v51.0.0 (2026-10-29)
 

@@ -1,8 +1,8 @@
 package membership
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/pricing/membership/membership_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pricing/membership/membership_enums"
 )
 
 // TierBenefit is one typed, localized membership tier benefit. Exactly one

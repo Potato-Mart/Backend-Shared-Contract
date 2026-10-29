@@ -5,8 +5,8 @@ import (
 
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/customers/wholesale"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/customers/wholesale"
 )
 
 func TestWholesaleTermsJSONShape(t *testing.T) {

@@ -1,8 +1,8 @@
 package wish
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/supply/catalogue/wish/wish_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/catalogue/wish/wish_enums"
 )
 
 // WishProposal is a customer-submitted product idea without customer identity.

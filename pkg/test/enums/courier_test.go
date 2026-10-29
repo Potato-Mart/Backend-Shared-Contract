@@ -1,7 +1,7 @@
 package enums_test
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/supply/courier/courier_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/courier/courier_enums"
 	"testing"
 )
 

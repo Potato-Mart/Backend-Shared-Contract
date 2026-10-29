@@ -3,9 +3,9 @@ package payments
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/money"
-	analytics "github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/insights/sales"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/money"
+	analytics "github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/insights/sales"
 )
 
 // RefundFact is the immutable analytical projection of a refund event.

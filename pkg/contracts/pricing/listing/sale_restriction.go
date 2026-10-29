@@ -1,9 +1,9 @@
 package listing
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/orders/shipping/shipping_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/pricing/listing/listing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/orders/shipping/shipping_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pricing/listing/listing_enums"
 )
 
 // SaleRestriction is one market-specific restriction recorded against a
