@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v50.0.0` | 2026-10-29 | Major |
 | `v49.1.0` | 2026-10-29 | Minor |
 | `v49.0.0` | 2026-10-29 | Major |
 | `v48.0.1` | 2026-10-29 | Patch |
@@ -58,6 +59,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v50.0.0 (2026-10-29)
+
+The `inventory.pos_sale_committed` event is now v2. Each movement carries exactly one known-lot physical, unknown-identity physical, or deficit evidence variant and an explicit valued or unresolved cost status. Unknown physical movements retain return source IDs and quantities; a deficit carries a lot only when evidenced. Supply validates source evidence and cumulative quantities; consumers must reject inconsistent variants and cost statuses. The v1 `is_deficit` and top-level `lot_id` fields are removed. Producers and consumers must upgrade together to module path `/v50`. The packing model is unchanged.
 
 ## v49.1.0 (2026-10-29)
 

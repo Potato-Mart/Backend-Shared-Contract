@@ -5,10 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/packaging"
-	contractfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/supply/fulfilment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/supply/inventory"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/common/packaging"
+	contractfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestOrderAllocationEvidenceRoundTripsAuthoritativeRecords(t *testing.T) {

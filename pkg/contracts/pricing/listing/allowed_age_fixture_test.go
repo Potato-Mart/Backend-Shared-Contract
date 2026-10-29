@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/pricing/listing/listing_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/pricing/listing/listing_enums"
 )
 
 // This locks the shared service acceptance fixture and canonical wire. Services

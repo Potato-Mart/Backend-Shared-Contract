@@ -1,8 +1,8 @@
 package campaign
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/security"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/marketing/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/marketing/campaign/campaign_enums"
 )
 
 // Placement has independent ordering and artwork for one presentation position.
