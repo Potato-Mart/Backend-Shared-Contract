@@ -10,6 +10,7 @@ import (
 // PackingDiscrepancy compares requested and observed package compositions.
 type PackingDiscrepancy struct {
 	ID                   string                                 `json:"id"`
+	OrderItemID          string                                 `json:"order_item_id"`
 	OrderNumber          string                                 `json:"order_number"`
 	OrderDate            time.Time                              `json:"order_date"`
 	CustomerName         string                                 `json:"customer_name,omitempty"`

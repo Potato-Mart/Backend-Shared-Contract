@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v47.3.0` | 2026-10-29 | Minor |
 | `v47.2.0` | 2026-10-29 | Minor |
 | `v47.1.0` | 2026-10-29 | Minor |
 | `v47.0.0` | 2026-10-29 | Major |
@@ -53,6 +54,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v47.3.0 (2026-10-29)
+
+Packing discrepancies identify the affected order item. The `fulfilment.packing_updated` event uses version v6; Supply and Orders must upgrade together and validate item-level evidence.
 
 ## v47.2.0 (2026-10-29)
 
