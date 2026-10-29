@@ -198,7 +198,7 @@ func TestCommonAndEnumPackageLayout(t *testing.T) {
 			violations = append(violations, relativePkgPath(t, pkgRoot, path)+": retired common/shared source path")
 		}
 		for _, match := range contractMajorPath.FindAllStringSubmatch(string(contents), -1) {
-			if match[1] != "51" {
+			if match[1] != "52" {
 				violations = append(violations, relativePkgPath(t, pkgRoot, path)+": non-current shared-contract major source path "+match[0])
 			}
 		}
