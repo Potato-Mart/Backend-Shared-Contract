@@ -5,10 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/common/packaging"
-	contractfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/supply/fulfilment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/supply/inventory"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/packaging"
+	contractfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestOrderAllocationEvidenceRoundTripsAuthoritativeRecords(t *testing.T) {
@@ -22,6 +22,7 @@ func TestOrderAllocationEvidenceRoundTripsAuthoritativeRecords(t *testing.T) {
 		},
 		Allocation: inventory.StockReservationAllocation{
 			ID: "allocation_1", ReservationID: "reservation_1", BucketID: "bucket_1",
+			KnownLotPhysical:     &inventory.KnownLotPhysicalEvidence{LotID: "lot_1"},
 			AllocatedComposition: composition, Revision: 2,
 		},
 		Staging: &inventory.StockStagingRecord{

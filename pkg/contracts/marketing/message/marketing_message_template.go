@@ -1,8 +1,8 @@
 package message
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/marketing/message/message_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/marketing/message/message_enums"
 )
 
 // MarketingMessageTemplate is an immutable, versioned message payload.

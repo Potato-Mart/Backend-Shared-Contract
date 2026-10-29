@@ -4,17 +4,17 @@ import (
 	"encoding/json"
 	"reflect"
 
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/pubsub/supply"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/pubsub/supply/supply_enums"
-	operations "github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/supply/inventory"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/supply/warehouse"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/pubsub/supply"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/pubsub/supply/supply_enums"
+	operations "github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/supply/warehouse"
 
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v51/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestInventoryEventJSONShapes(t *testing.T) {
@@ -96,8 +96,8 @@ func TestInventoryEventJSONShapes(t *testing.T) {
 			value: event.InventorySaleCommittedEvent{
 				MovementID: "movement_sale", OrderNumber: "SO-1", DepotCode: location.DepotCode, ReservationID: "reservation_1",
 				AllocationID: "allocation_1", BucketID: "bucket_case", SKUCode: "A00001",
-				LotID: "lot_1", PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}, CommittedComposition: caseComposition,
-				InventoryRevision: 5,
+				KnownLotPhysical: &operations.KnownLotPhysicalEvidence{LotID: "lot_1"}, PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "CASE6", Version: 1}, CommittedComposition: caseComposition,
+				InventoryRevision: 5, CostStatus: supply_enums.InventorySaleCostStatusValued,
 			},
 			required: []string{"order_number", "depot_code", "allocation_id", "committed_composition", "inventory_revision"},
 		},
@@ -173,7 +173,7 @@ func TestPOSSaleEventMovementEvidenceVariants(t *testing.T) {
 	}{
 		{name: "known lot valued", variant: "known_lot_physical", cost: supply_enums.POSSaleCostStatusValued, known: &event.POSKnownLotPhysicalEvidence{LotID: "lot-1"}},
 		{name: "known lot unresolved", variant: "known_lot_physical", cost: supply_enums.POSSaleCostStatusUnresolved, known: &event.POSKnownLotPhysicalEvidence{LotID: "lot-1"}},
-		{name: "unidentified return stock", variant: "unknown_identity_physical", cost: supply_enums.POSSaleCostStatusUnresolved, unknown: &event.POSUnknownIdentityPhysicalEvidence{ReturnSources: []event.POSUnknownPhysicalReturnSource{{ReceivingID: "return-1", BaseUnits: 1}, {ReceivingID: "return-2", BaseUnits: 1}}}},
+		{name: "unidentified return stock", variant: "unknown_identity_physical", cost: supply_enums.POSSaleCostStatusUnresolved, unknown: &event.POSUnknownIdentityPhysicalEvidence{ReturnSources: []operations.UnknownReturnSource{{ReceivingID: "return-1", BaseUnits: 1}, {ReceivingID: "return-2", BaseUnits: 1}}}},
 		{name: "unidentified deficit", variant: "deficit", cost: supply_enums.POSSaleCostStatusUnresolved, deficit: &event.POSDeficitEvidence{}},
 		{name: "evidenced lot deficit", variant: "deficit", cost: supply_enums.POSSaleCostStatusUnresolved, deficit: &event.POSDeficitEvidence{LotID: "lot-1"}},
 	}
@@ -237,6 +237,57 @@ func TestPOSSaleEventMovementEvidenceVariants(t *testing.T) {
 				if exists != (tc.deficit.LotID != "") {
 					t.Fatalf("deficit lot was not preserved accurately: %s", raw)
 				}
+			}
+		})
+	}
+}
+
+func TestOnlineSalePhysicalEvidenceVariants(t *testing.T) {
+	tests := []struct {
+		name, variant string
+		cost          supply_enums.InventorySaleCostStatus
+		known         *operations.KnownLotPhysicalEvidence
+		unknown       *operations.UnknownReturnPhysicalEvidence
+		unallocated   *operations.UnallocatedNoLotPhysicalEvidence
+	}{
+		{name: "known lot valued", variant: "known_lot_physical", cost: supply_enums.InventorySaleCostStatusValued, known: &operations.KnownLotPhysicalEvidence{LotID: "lot-1", StockUnitIDs: []string{"unit-1", "unit-2"}}},
+		{name: "known lot unresolved", variant: "known_lot_physical", cost: supply_enums.InventorySaleCostStatusUnresolved, known: &operations.KnownLotPhysicalEvidence{LotID: "lot-1"}},
+		{name: "unknown returns", variant: "unknown_identity_physical", cost: supply_enums.InventorySaleCostStatusUnresolved, unknown: &operations.UnknownReturnPhysicalEvidence{ReturnSources: []operations.UnknownReturnSource{{ReceivingID: "return-1", BaseUnits: 1}, {ReceivingID: "return-2", BaseUnits: 1}}}},
+		{name: "unallocated no lot unresolved", variant: "unallocated_no_lot_physical", cost: supply_enums.InventorySaleCostStatusUnresolved, unallocated: &operations.UnallocatedNoLotPhysicalEvidence{SourceBucketID: "original-bucket"}},
+		{name: "unallocated no lot valued", variant: "unallocated_no_lot_physical", cost: supply_enums.InventorySaleCostStatusValued, unallocated: &operations.UnallocatedNoLotPhysicalEvidence{SourceBucketID: "original-bucket"}},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			value := event.InventorySaleCommittedEvent{MovementID: "movement", OrderNumber: "order", DepotCode: "depot", ReservationID: "reservation", AllocationID: "allocation", BucketID: "staged-bucket", SKUCode: "A00001", PackageOption: packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1}, CommittedComposition: composition(packaging_enums.PackageHandlingUnitEach, "EACH", 2, 1), InventoryRevision: 7, CostStatus: tc.cost, KnownLotPhysical: tc.known, UnknownIdentityPhysical: tc.unknown, UnallocatedNoLotPhysical: tc.unallocated}
+			raw, err := json.Marshal(value)
+			if err != nil {
+				t.Fatal(err)
+			}
+			var fields map[string]json.RawMessage
+			if err := json.Unmarshal(raw, &fields); err != nil {
+				t.Fatal(err)
+			}
+			for _, name := range []string{"movement_id", "order_number", "reservation_id", "allocation_id", "bucket_id", "committed_composition", "cost_status", "inventory_revision", tc.variant} {
+				if _, ok := fields[name]; !ok {
+					t.Errorf("missing %s: %s", name, raw)
+				}
+			}
+			for _, name := range []string{"lot_id", "stock_unit_ids", "deficit", "is_deficit"} {
+				if _, ok := fields[name]; ok {
+					t.Errorf("obsolete or invented %s: %s", name, raw)
+				}
+			}
+			for _, name := range []string{"known_lot_physical", "unknown_identity_physical", "unallocated_no_lot_physical"} {
+				if _, ok := fields[name]; ok != (name == tc.variant) {
+					t.Errorf("incorrect variant %s: %s", name, raw)
+				}
+			}
+			var got event.InventorySaleCommittedEvent
+			if err := json.Unmarshal(raw, &got); err != nil {
+				t.Fatal(err)
+			}
+			if !reflect.DeepEqual(value, got) {
+				t.Fatalf("round trip changed evidence: %+v", got)
 			}
 		})
 	}
