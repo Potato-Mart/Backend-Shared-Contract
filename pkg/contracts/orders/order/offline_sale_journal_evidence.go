@@ -3,9 +3,9 @@ package order
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/temporal"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/payments/merchant"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pricing/pricebook"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v54/pkg/contracts/common/temporal"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v54/pkg/contracts/payments/merchant"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v54/pkg/contracts/pricing/pricebook"
 )
 
 // OfflineSaleJournalEvidence captures the device's sale and cash provenance

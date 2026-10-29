@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-const contractImportPrefix = "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/"
+const contractImportPrefix = "github.com/Potato-Mart/Backend-Shared-Contract/v54/pkg/"
 
 var contractMajorPath = regexp.MustCompile(`github\.com/Potato-Mart/Backend-Shared-Contract/v([0-9]+)/`)
 

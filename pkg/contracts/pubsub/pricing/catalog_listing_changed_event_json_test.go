@@ -2,8 +2,8 @@ package pricing_test
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pricing/listing/listing_enums"
-	event "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pubsub/pricing"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v54/pkg/contracts/pricing/listing/listing_enums"
+	event "github.com/Potato-Mart/Backend-Shared-Contract/v54/pkg/contracts/pubsub/pricing"
 	"strings"
 	"testing"
 	"time"

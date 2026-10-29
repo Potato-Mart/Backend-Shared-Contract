@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/orders/order/order_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v54/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v54/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v54/pkg/contracts/supply/fulfilment"
 )
 
 func TestPackingRecordRoundTrip(t *testing.T) {

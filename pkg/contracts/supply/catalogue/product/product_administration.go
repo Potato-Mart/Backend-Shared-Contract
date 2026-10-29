@@ -1,8 +1,8 @@
 package product
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/audit"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v54/pkg/contracts/common/audit"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v54/pkg/contracts/common/security"
 )
 
 // ProductAdministration retains master-data history and audit information.

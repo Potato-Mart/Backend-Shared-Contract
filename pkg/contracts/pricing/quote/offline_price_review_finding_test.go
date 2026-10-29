@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v54/pkg/contracts/common/money"
 )
 
 func TestOfflineUnsupportedPromotionDoesNotInventDifference(t *testing.T) {

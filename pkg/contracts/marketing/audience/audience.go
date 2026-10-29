@@ -1,6 +1,6 @@
 package audience
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/marketing/audience/audience_enums"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v54/pkg/contracts/marketing/audience/audience_enums"
 
 // Audience narrows a Pricing-owned offer. Omitted dimensions are unrestricted.
 type Audience struct {

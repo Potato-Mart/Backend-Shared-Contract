@@ -1,9 +1,9 @@
 package supply
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pubsub/supply/supply_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v54/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v54/pkg/contracts/pubsub/supply/supply_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v54/pkg/contracts/supply/inventory"
 )
 
 // InventoryPOSSaleCommittedEvent records one actual movement from an unreserved

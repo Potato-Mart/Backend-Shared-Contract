@@ -3,7 +3,7 @@ package fulfilment
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/orders/order/order_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v54/pkg/contracts/orders/order/order_enums"
 )
 
 // PackingRecord describes physical packing for a specific order composition.

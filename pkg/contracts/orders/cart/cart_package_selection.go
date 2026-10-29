@@ -1,6 +1,6 @@
 package cart
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/packaging"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v54/pkg/contracts/common/packaging"
 
 // CartPackageSelection identifies the quantity selected before pricing.
 // It does not assert a price, stock availability, or sale eligibility.

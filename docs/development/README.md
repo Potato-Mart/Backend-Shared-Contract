@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v54.0.0` | 2026-10-30 | Major |
 | `v53.0.0` | 2026-10-30 | Major |
 | `v52.0.0` | 2026-10-29 | Major |
 | `v51.0.0` | 2026-10-29 | Major |
@@ -62,6 +63,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v54.0.0 (2026-10-30)
+
+Packing container contents and the `inventory.sold` event can explicitly represent a physically packed tracked quantity whose unit and physical source remain unidentified. Such evidence carries the original order item and reservation allocation, omits physical bucket and lot claims, and keeps cost unresolved. The original allocation is reservation history, not proof of the actual unit or source. Known-source physical variants retain their existing mandatory bucket and revision evidence. The `inventory.sold` and `fulfilment.packing_updated` payload versions advance to v7; producers and consumers must upgrade together. Supply owns the quantity budget, reconciliation and verification of all physical evidence.
 
 ## v53.0.0 (2026-10-30)
 
