@@ -30,6 +30,7 @@ func TestInventoryAndCommerceEventTypes(t *testing.T) {
 				event_enums.EventTypeInventoryReservationChanged,
 				event_enums.EventTypeInventoryStaged,
 				event_enums.EventTypeInventorySold,
+				event_enums.EventTypeInventoryPOSSaleCommitted,
 				event_enums.EventTypeInventoryDateMarkThresholdReached,
 				event_enums.EventTypeStockLocationAvailabilityChanged,
 				event_enums.EventTypeStockRestockAlertTriggered,

@@ -268,7 +268,7 @@ var modelPackageManifest map[string]string
 // V46 replaces campaign presentation, coupon acquisition and entitlement models,
 // separates offer and campaign audience enums, and introduces typed offer links.
 // V47 replaces independent picking-list records with an order-based process and packing record.
-const exportedTypeManifestDigest = "15191a8ac2cc6714ff23942d891ec16996405c16dc18d34c50a91e66410d589e"
+const exportedTypeManifestDigest = "0875be4e12b7492084c204092dd09ade7d7c216cad0bba6cdca868cb8828c223"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
