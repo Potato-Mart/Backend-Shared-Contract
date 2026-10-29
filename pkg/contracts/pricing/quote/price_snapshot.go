@@ -46,10 +46,13 @@ type PriceSnapshot struct {
 	TaxAmount        money.Money            `json:"tax_amount"`
 	LineTotal        money.Money            `json:"line_total"`
 
-	Tax            TaxSnapshot                  `json:"tax"`
-	AppliedRules   []AppliedPriceRule           `json:"applied_rules,omitempty"`
-	Rounding       RoundingEvidence             `json:"rounding"`
-	UnitPrice      *UnitPriceEvidence           `json:"unit_price,omitempty"`
+	Tax          TaxSnapshot        `json:"tax"`
+	AppliedRules []AppliedPriceRule `json:"applied_rules,omitempty"`
+	Rounding     RoundingEvidence   `json:"rounding"`
+	UnitPrice    *UnitPriceEvidence `json:"unit_price,omitempty"`
+	// CustomOverride records a staff-set price separately from applied rule
+	// evidence. Services own the rule that an offline manual override replaces
+	// automatic promotions; the model does not enforce or infer that outcome.
 	CustomOverride *CustomPriceOverrideEvidence `json:"custom_override,omitempty"`
 
 	// SaleEvidence identifies the single Supply evidence basis used for the
