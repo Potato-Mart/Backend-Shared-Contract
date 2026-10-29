@@ -3,8 +3,8 @@ package receipt
 import (
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/pricing/quote/quote_enums"
 )
 
 // CashRoundingSnapshot is the separate settlement evidence recorded when a

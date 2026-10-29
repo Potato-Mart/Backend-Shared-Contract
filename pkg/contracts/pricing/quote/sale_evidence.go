@@ -1,6 +1,6 @@
 package quote
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/supply/catalogue/listing"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v50/pkg/contracts/supply/catalogue/listing"
 
 // SaleEvidence carries exactly one evidence variant for a Pricing quote line.
 // Producers and consumers enforce exclusivity, channel suitability and owner

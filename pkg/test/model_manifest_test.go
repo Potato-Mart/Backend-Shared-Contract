@@ -214,6 +214,7 @@ var v33ModelPackageManifest = map[string]string{
 	"contracts/pubsub/pricing/promotion_enums":                       "enum",
 	"contracts/pubsub/routing":                                       "enum",
 	"contracts/pubsub/supply":                                        "record",
+	"contracts/pubsub/supply/supply_enums":                           "enum",
 	"contracts/supply/catalogue/classification":                      "record",
 	"contracts/supply/catalogue/classification/classification_enums": "enum",
 	"contracts/supply/catalogue/favourite":                           "record",
@@ -271,7 +272,7 @@ var modelPackageManifest map[string]string
 // V48 adds the sale-evidence union and separate backorder and POS merchandise snapshots.
 // Offline sale evidence models are recorded by Orders and Pricing, and the
 // cached-book merchandise evidence belongs to Supply's listing domain.
-const exportedTypeManifestDigest = "ef07b0ece6f2938fb21dc411ea2b25d5a715a27703ee1dfb8b3c54f7ce88eac4"
+const exportedTypeManifestDigest = "3f805095f3cce741f4fee37636153f7d7f6636de53b774a30b34385af7ec417d"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
