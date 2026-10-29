@@ -1,8 +1,8 @@
 package procurement
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/warehouse"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/warehouse"
 )
 
 // PurchaseReceiptItem is one received procurement line.

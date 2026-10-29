@@ -1,9 +1,9 @@
 package quote
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pricing/pricebook/pricebook_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pricing/quote/quote_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pricing/pricebook/pricebook_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pricing/quote/quote_enums"
 )
 
 // OfflineTaxSnapshot records the signed book's tax class and rate, and the

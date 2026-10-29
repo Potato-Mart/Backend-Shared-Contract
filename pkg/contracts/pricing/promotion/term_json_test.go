@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/money"
 )
 
 func TestPromotionTermsUseExactlyOneTypedValueArm(t *testing.T) {

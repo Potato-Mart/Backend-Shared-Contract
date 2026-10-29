@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.0.0` | 2026-10-30 | Major |
 | `v52.0.0` | 2026-10-29 | Major |
 | `v51.0.0` | 2026-10-29 | Major |
 | `v50.0.0` | 2026-10-29 | Major |
@@ -61,6 +62,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.0.0 (2026-10-30)
+
+- Remove the picking-completed and partial fulfilment statuses and the independent picking completion timestamp. Packing records retain missing-item evidence.
 
 ## v52.0.0 (2026-10-29)
 

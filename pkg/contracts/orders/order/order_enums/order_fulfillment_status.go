@@ -5,10 +5,8 @@ type FulfillmentStatus string
 const (
 	FulfillmentStatusUnfulfilled       FulfillmentStatus = "unfulfilled"
 	FulfillmentStatusPickingInProgress FulfillmentStatus = "picking_in_progress"
-	FulfillmentStatusPickingCompleted  FulfillmentStatus = "picking_completed"
 	FulfillmentStatusPacking           FulfillmentStatus = "packing"
 	FulfillmentStatusPacked            FulfillmentStatus = "packed"
-	FulfillmentStatusPartial           FulfillmentStatus = "partial"
 	FulfillmentStatusFulfilled         FulfillmentStatus = "fulfilled"
 	// FulfillmentStatusCancelled means no further fulfilment work is scheduled.
 	// It does not erase recorded picking, packing, shipment, or item facts and is
@@ -19,8 +17,8 @@ const (
 // IsValid reports whether p is a known FulfillmentStatus.
 func (p FulfillmentStatus) IsValid() bool {
 	switch p {
-	case FulfillmentStatusUnfulfilled, FulfillmentStatusPickingInProgress, FulfillmentStatusPickingCompleted, FulfillmentStatusPacking,
-		FulfillmentStatusPacked, FulfillmentStatusPartial, FulfillmentStatusFulfilled,
+	case FulfillmentStatusUnfulfilled, FulfillmentStatusPickingInProgress, FulfillmentStatusPacking,
+		FulfillmentStatusPacked, FulfillmentStatusFulfilled,
 		FulfillmentStatusCancelled:
 		return true
 	}

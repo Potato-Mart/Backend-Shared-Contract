@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/inventory"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/inventory"
 )
 
 func TestReservationAllocationPhysicalEvidenceWire(t *testing.T) {

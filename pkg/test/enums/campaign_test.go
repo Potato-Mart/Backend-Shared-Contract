@@ -1,10 +1,10 @@
 package enums_test
 
 import (
-	ae "github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/marketing/audience/audience_enums"
+	ae "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/marketing/audience/audience_enums"
 	"testing"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/marketing/campaign/campaign_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/marketing/campaign/campaign_enums"
 )
 
 func TestCampaignEnumsValidateKnownValues(t *testing.T) {

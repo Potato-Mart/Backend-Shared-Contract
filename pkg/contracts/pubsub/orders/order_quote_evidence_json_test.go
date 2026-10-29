@@ -2,7 +2,7 @@ package orders_test
 
 import (
 	"encoding/json"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pubsub/orders"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pubsub/orders"
 	"testing"
 )
 

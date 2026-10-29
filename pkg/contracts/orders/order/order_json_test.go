@@ -6,35 +6,33 @@ import (
 	"testing"
 	"time"
 
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/security"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/security"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/orders/cart"
-	orderfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/orders/fulfilment"
-	sales "github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/orders/cart"
+	orderfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/orders/fulfilment"
+	sales "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/orders/order"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/packaging"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/packaging/packaging_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/party"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/orders/order/order_enums"
-	ordershipping "github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/orders/shipping"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/payments/payment/payment_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/pricing/wallet/wallet_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/catalogue/classification/classification_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/catalogue/product"
-	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/fulfilment"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/warehouse/warehouse_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/packaging/packaging_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/orders/order/order_enums"
+	ordershipping "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/payments/payment/payment_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pricing/wallet/wallet_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/catalogue/classification/classification_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/catalogue/product"
+	supplyfulfilment "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestOrderPickingUsesHistoryForActors(t *testing.T) {
 	started := time.Date(2026, 10, 29, 9, 0, 0, 0, time.UTC)
-	completed := started.Add(time.Minute)
-	want := sales.Order{OrderNumber: "ORDER-1", FulfillmentStatus: order_enums.FulfillmentStatusPickingCompleted,
-		PickingStartedAt: &started, PickingCompletedAt: &completed,
+	want := sales.Order{OrderNumber: "ORDER-1", FulfillmentStatus: order_enums.FulfillmentStatusPickingInProgress,
+		PickingStartedAt: &started,
 		History: []security.HistoryEntry{
 			{OccurredAt: started, Type: "picking_started", ActorRef: security.ActorRef{ActorID: "staff-1"}},
-			{OccurredAt: completed, Type: "picking_completed", ActorRef: security.ActorRef{ActorID: "staff-2"}},
 		},
 	}
 	raw, err := json.Marshal(want)
@@ -48,7 +46,7 @@ func TestOrderPickingUsesHistoryForActors(t *testing.T) {
 	if err := json.Unmarshal(raw, &got); err != nil {
 		t.Fatal(err)
 	}
-	if got.FulfillmentStatus != order_enums.FulfillmentStatusPickingCompleted || got.PickingStartedAt == nil || !got.PickingStartedAt.Equal(started) || got.PickingCompletedAt == nil || !got.PickingCompletedAt.Equal(completed) || len(got.History) != 2 || got.History[0].ActorID != "staff-1" || got.History[1].ActorID != "staff-2" {
+	if got.FulfillmentStatus != order_enums.FulfillmentStatusPickingInProgress || got.PickingStartedAt == nil || !got.PickingStartedAt.Equal(started) || len(got.History) != 1 || got.History[0].ActorID != "staff-1" {
 		t.Fatalf("picking status or audit lost on round trip: %+v", got)
 	}
 }

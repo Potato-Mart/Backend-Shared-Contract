@@ -1,10 +1,10 @@
 package selection
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/audit"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/common/localization"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/catalogue/classification"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v52/pkg/contracts/supply/catalogue/selection/selection_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/audit"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/localization"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/catalogue/classification"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/catalogue/selection/selection_enums"
 )
 
 // ProductSelection is a curated, ordered list of products referenced by
