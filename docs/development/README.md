@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v49.0.0` | 2026-10-29 | Major |
 | `v48.0.1` | 2026-10-29 | Patch |
 | `v48.0.0` | 2026-10-29 | Major |
 | `v47.3.0` | 2026-10-29 | Minor |
@@ -56,6 +57,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v49.0.0 (2026-10-29)
+
+Offline sale journal evidence identifies the cashier's authentication as either a device-bound offline PIN credential revision or an authenticated pre-outage password session. Services verify the relevant Identity evidence; the device's claim does not prove a sale time or authentication by itself. The previous standalone credential fields are removed. This breaking release uses module path `/v49` and requires coordinated consumer upgrades. The packing model is unchanged.
 
 ## v48.0.1 (2026-10-29)
 

@@ -1,6 +1,6 @@
 package account
 
-import "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/audit"
+import "github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/audit"
 
 // AdminAccountProfile contains optional workforce profile data for an
 // adminUser account.

@@ -1,10 +1,10 @@
 package product
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/packaging"
 	"time"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/catalogue/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/supply/catalogue/product/product_enums"
 )
 
 // ProductBarcodeAssignment binds one manufacturer barcode to one package

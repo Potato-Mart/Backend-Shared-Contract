@@ -1,10 +1,10 @@
 package orders
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/commerce/commerce_enums"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/geography"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/money"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/commerce/commerce_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/orders/order"
 	"time"
 )
 

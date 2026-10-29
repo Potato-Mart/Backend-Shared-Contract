@@ -1,9 +1,9 @@
 package party
 
 import (
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/metadata"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/money"
-	security "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/metadata"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/money"
+	security "github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/common/security"
 )
 
 // OrganisationDetail contains the shared public and administrative details for

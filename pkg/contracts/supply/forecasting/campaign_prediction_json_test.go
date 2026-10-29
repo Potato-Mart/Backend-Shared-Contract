@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	marketing "github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/forecasting"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v48/pkg/contracts/supply/forecasting/marketing_enums"
+	marketing "github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/supply/forecasting"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v49/pkg/contracts/supply/forecasting/marketing_enums"
 )
 
 func TestInsightsMarketingContainsPredictionNotOperationalCampaign(t *testing.T) {
