@@ -30,11 +30,13 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | 16 | `CatalogListingChangedEvent` | `catalog.listing_changed` | `catalog-events` |
 | 17 | `OrderPackingProjection` | `fulfilment.packing_updated` | `fulfilment-events` |
 | 18 | `StockRestockAlertTriggeredEvent` | `stock.restock_alert_triggered` | `stock-events` |
+| 19 | `InventoryPOSSaleCommittedEvent` | `inventory.pos_sale_committed` | `stock-events` |
 
 ## Release index
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v47.2.0` | 2026-10-29 | Minor |
 | `v47.1.0` | 2026-10-29 | Minor |
 | `v47.0.0` | 2026-10-29 | Major |
 | `v46.0.1` | 2026-10-27 | Patch |
@@ -51,6 +53,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v47.2.0 (2026-10-29)
+
+- Add an unreserved POS inventory movement event that distinguishes physical issues from deficit issues without reservation identities.
 
 ## v47.1.0 (2026-10-29)
 

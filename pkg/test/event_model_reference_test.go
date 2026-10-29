@@ -26,6 +26,7 @@ var documentedEventPayloads = []string{
 	"InventoryQualityAssessedEvent",
 	"InventoryReservationChangedEvent",
 	"InventorySaleCommittedEvent",
+	"InventoryPOSSaleCommittedEvent",
 	"InventoryStockBucketChangedEvent",
 	"OrderFact",
 	"OrderPackingProjection",

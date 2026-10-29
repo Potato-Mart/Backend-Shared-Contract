@@ -159,3 +159,37 @@ func marshalObject(t *testing.T, value any) map[string]any {
 	}
 	return object
 }
+
+func TestPOSSaleEventCarriesRealMovementWithoutReservation(t *testing.T) {
+	for _, deficit := range []bool{false, true} {
+		value := event.InventoryPOSSaleCommittedEvent{
+			SaleID: "sale-1", OrderNumber: "order-1", FulfillmentGeneration: 1, OrderItemID: "item-1",
+			MovementID: "movement-1", DepotCode: "depot-1", LocationCode: "location-1", BucketID: "bucket-1", SKUCode: "A00001",
+			PackageOption:        packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1},
+			CommittedComposition: composition(packaging_enums.PackageHandlingUnitEach, "EACH", 2, 1),
+			BaseUnits:            2, IsDeficit: deficit, InventoryRevision: 7,
+		}
+		raw, err := json.Marshal(value)
+		if err != nil {
+			t.Fatal(err)
+		}
+		var fields map[string]json.RawMessage
+		if err := json.Unmarshal(raw, &fields); err != nil {
+			t.Fatal(err)
+		}
+		for _, name := range []string{"sale_id", "order_number", "fulfillment_generation", "order_item_id", "movement_id", "depot_code", "location_code", "bucket_id", "sku_code", "package_option", "committed_composition", "base_units", "is_deficit", "inventory_revision"} {
+			if _, ok := fields[name]; !ok {
+				t.Errorf("missing %s: %s", name, raw)
+			}
+		}
+		for _, forbidden := range []string{"reservation_id", "allocation_id", "lot_id"} {
+			if _, ok := fields[forbidden]; ok {
+				t.Errorf("unexpected %s: %s", forbidden, raw)
+			}
+		}
+		var decoded event.InventoryPOSSaleCommittedEvent
+		if err := json.Unmarshal(raw, &decoded); err != nil || decoded.IsDeficit != deficit || decoded.BaseUnits != 2 {
+			t.Fatalf("round trip %+v: %v", decoded, err)
+		}
+	}
+}
