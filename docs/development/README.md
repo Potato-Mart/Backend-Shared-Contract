@@ -58,7 +58,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 ## v48.0.0 (2026-10-29)
 
-Price snapshots replace the former `eligibility` field with `sale_evidence`, whose stocked, wholesale-backorder, POS-merchandise and offline POS variants carry distinct evidence. Producers and consumers must require exactly one appropriate variant and verify its owner evidence; POS merchandise does not assert physical stock. Shared offline evidence records the journal, signed price-book provenance, cash tender, cached merchant identity and price-review findings. This breaking change uses module path `/v48` and requires coordinated consumer upgrades.
+Price snapshots replace the former `eligibility` field with `sale_evidence`, whose stocked, wholesale-backorder, POS-merchandise and offline POS variants carry distinct evidence. Producers and consumers must require exactly one appropriate variant and verify its owner evidence; POS merchandise does not assert physical stock. Shared offline evidence records the journal, signed price-book provenance, cash tender, cached merchant identity and price-review findings. Custom-price evidence identifies the original and override quantity bases and the original tax-inclusion basis. This breaking change uses module path `/v48` and requires coordinated consumer upgrades.
 
 ## v47.3.0 (2026-10-29)
 
