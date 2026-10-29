@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.1.0` | 2026-10-30 | Minor |
 | `v53.0.0` | 2026-10-30 | Major |
 | `v52.0.0` | 2026-10-29 | Major |
 | `v51.0.0` | 2026-10-29 | Major |
@@ -62,6 +63,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.1.0 (2026-10-30)
+
+Selling-price promotion displays may identify the corresponding storefront promotion and carry an optional typed percentage, amount-off or fixed-price value. The additions are optional and preserve existing JSON fields; services remain responsible for eligibility and value validation. Pricing and Supply must adopt the released contract before those values reach storefront consumers.
 
 ## v53.0.0 (2026-10-30)
 

@@ -1,0 +1,28 @@
+name: Contract CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Go tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-go@v7.0.0
+        with:
+          go-version-file: go.mod
+      - name: Check release alignment
+        shell: pwsh
+        run: ./scripts/powershell/Test-ReleaseAlignment.ps1
+      - name: Test contracts
+        shell: pwsh
+        run: ./scripts/powershell/Test-Contract.ps1
+      - name: Check whitespace
+        run: git diff --check

@@ -8,6 +8,7 @@ import (
 
 func TestPriceBookEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
+		{name: "pricebookenum.SellingPromotionDiscountType", valid: []stringEnum{pricebook_enums.SellingPromotionDiscountTypePercentOff, pricebook_enums.SellingPromotionDiscountTypeAmountOff, pricebook_enums.SellingPromotionDiscountTypeFixedPrice}, invalid: pricebook_enums.SellingPromotionDiscountType("__invalid__")},
 		{name: "pricebookenum.PriceBookStatus", valid: []stringEnum{pricebook_enums.PriceBookStatusDraft, pricebook_enums.PriceBookStatusActive, pricebook_enums.PriceBookStatusInactive, pricebook_enums.PriceBookStatusArchived}, invalid: pricebook_enums.PriceBookStatus("__invalid__")},
 		{name: "pricebookenum.PriceEntryStatus", valid: []stringEnum{pricebook_enums.PriceEntryStatusDraft, pricebook_enums.PriceEntryStatusPendingApproval, pricebook_enums.PriceEntryStatusApproved, pricebook_enums.PriceEntryStatusRejected, pricebook_enums.PriceEntryStatusSuperseded, pricebook_enums.PriceEntryStatusWithdrawn, pricebook_enums.PriceEntryStatusExpired}, invalid: pricebook_enums.PriceEntryStatus("__invalid__")},
 		{name: "pricebookenum.PriceTaxInclusion", valid: []stringEnum{pricebook_enums.PriceTaxInclusionInclusive, pricebook_enums.PriceTaxInclusionExclusive}, invalid: pricebook_enums.PriceTaxInclusion("__invalid__")},

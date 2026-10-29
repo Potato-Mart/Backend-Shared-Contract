@@ -16,6 +16,32 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pricing/pricebook/pricebook_enums"
 )
 
+func TestSellingPromotionDisplayDiscountVariantsAndOmissions(t *testing.T) {
+	assertSellingJSON(t, SellingPromotionDisplay{Kind: "bogo", Conditional: true},
+		`{"kind":"bogo","conditional":true,"applied_to_effective_price":false}`)
+	percent := pricebook_enums.SellingPromotionDiscountTypePercentOff
+	points := int64(2000)
+	assertSellingJSON(t, SellingPromotionDisplay{Kind: "product_discount", PromotionID: "promotion-1", DiscountKind: &percent, DiscountValue: &SellingPromotionDiscountValue{BasisPoints: &points}, AppliedToEffectivePrice: true},
+		`{"kind":"product_discount","promotion_id":"promotion-1","discount_type":"percent_off","discount_value":{"basis_points":2000},"conditional":false,"applied_to_effective_price":true}`)
+	for _, tc := range []struct {
+		kind pricebook_enums.SellingPromotionDiscountType
+		want string
+	}{
+		{pricebook_enums.SellingPromotionDiscountTypeAmountOff, `{"kind":"product_discount","promotion_id":"promotion-2","discount_type":"amount_off","discount_value":{"amount":{"amount_minor":100,"currency":"AUD"}},"conditional":true,"applied_to_effective_price":false}`},
+		{pricebook_enums.SellingPromotionDiscountTypeFixedPrice, `{"kind":"product_discount","promotion_id":"promotion-2","discount_type":"fixed_price","discount_value":{"amount":{"amount_minor":100,"currency":"AUD"}},"conditional":true,"applied_to_effective_price":false}`},
+	} {
+		value := SellingPromotionDisplay{Kind: "product_discount", PromotionID: "promotion-2", DiscountKind: &tc.kind, DiscountValue: &SellingPromotionDiscountValue{Amount: &money.Money{AmountMinor: 100, Currency: "AUD"}}, Conditional: true}
+		payload := assertSellingJSON(t, value, tc.want)
+		var decoded SellingPromotionDisplay
+		if err := json.Unmarshal(payload, &decoded); err != nil || !reflect.DeepEqual(value, decoded) {
+			t.Fatalf("%s round trip: %+v %v", tc.kind, decoded, err)
+		}
+	}
+	zero := int64(0)
+	assertSellingJSON(t, SellingPromotionDiscountValue{BasisPoints: &zero}, `{"basis_points":0}`)
+	assertSellingJSON(t, SellingPromotionDiscountValue{Amount: &money.Money{Currency: "AUD"}}, `{"amount":{"amount_minor":0,"currency":"AUD"}}`)
+}
+
 func TestSellingPriceLegacyJSONShapeIsUnchanged(t *testing.T) {
 	instant := time.Date(2026, 9, 8, 0, 0, 0, 0, time.UTC)
 	value := SellingPrice{
