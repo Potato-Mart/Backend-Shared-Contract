@@ -7,8 +7,10 @@ import (
 
 // PricedPackageComponent freezes evidence, quantity, and commercial totals
 // for one CASE or EACH component. Exactly one snapshot is supplied: the
-// Pricing-owned online quote or the journaled offline POS price. Transaction
-// owners enforce this choice and reconcile the common frozen totals.
+// Pricing-owned online quote or the journaled offline POS price. An Orders-owned
+// digital gift face-value instrument uses a synthetic PriceSnapshot, not a
+// Pricing quote; Orders verifies its purchase identity and classification.
+// Transaction owners enforce this choice and reconcile the common totals.
 type PricedPackageComponent struct {
 	PriceSnapshot         *quote.PriceSnapshot        `json:"price_snapshot,omitempty"`
 	OfflinePriceSnapshot  *quote.OfflinePriceSnapshot `json:"offline_price_snapshot,omitempty"`

@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v48.0.1` | 2026-10-29 | Patch |
 | `v48.0.0` | 2026-10-29 | Major |
 | `v47.3.0` | 2026-10-29 | Minor |
 | `v47.2.0` | 2026-10-29 | Minor |
@@ -55,6 +56,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v48.0.1 (2026-10-29)
+
+Clarify that Orders' verified digital gift face-value instrument is not a Pricing quote or stock sale and its synthetic snapshot has no Supply sale-evidence variant. Pricing quote lines continue to require exactly one appropriate variant.
 
 ## v48.0.0 (2026-10-29)
 

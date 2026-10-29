@@ -55,8 +55,10 @@ type PriceSnapshot struct {
 	// automatic promotions; the model does not enforce or infer that outcome.
 	CustomOverride *CustomPriceOverrideEvidence `json:"custom_override,omitempty"`
 
-	// SaleEvidence identifies the single Supply evidence basis used for the
-	// priced line. Transaction owners must reject missing or multiple variants.
+	// SaleEvidence identifies the single Supply evidence basis used for a
+	// Pricing quote line. Transaction owners reject missing or multiple variants
+	// except for a verified Orders-owned digital gift face-value instrument,
+	// which is not a Pricing quote or a stock sale and has no Supply evidence.
 	SaleEvidence SaleEvidence `json:"sale_evidence"`
 
 	// Fingerprint is the Pricing-owned immutable identity of the resolved
