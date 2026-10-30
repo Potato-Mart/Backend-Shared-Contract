@@ -107,6 +107,7 @@ var v32ModelPackageManifest = map[string]string{
 // Adding an exported type changes the digest below and requires an explicit
 // manifest review instead of silently expanding the contract surface.
 var v33ModelPackageManifest = map[string]string{
+	"contracts/orders/possettlement":                                 "record",
 	"contracts/pricing/listing":                                      "record",
 	"contracts/pricing/listing/listing_enums":                        "enum",
 	"contracts/common/audit":                                         "record",
@@ -278,7 +279,8 @@ var modelPackageManifest map[string]string
 // V53.3 adds unit-level source and retained amendment adjustment evidence.
 // V53.6 adds versioned all-line and tax-group administrative evidence.
 // V53.7 adds ordered promotion stage, group, rounding, and lineage evidence.
-const exportedTypeManifestDigest = "47e05471fa8bba2fa1da97e7a1557a96912f2df6b468d9d82925ab5479513037"
+// V53.9 adds promotion manifests and POS obligation/tender/terminal evidence.
+const exportedTypeManifestDigest = "ee1caed9f507f34774987e7bad7ad0073dc1b49f02fe5503073601e2fbd27dd6"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

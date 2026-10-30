@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.9.0` | 2026-10-30 | Minor |
 | `v53.8.0` | 2026-10-30 | Minor |
 | `v53.7.0` | 2026-10-30 | Minor |
 | `v53.6.0` | 2026-10-30 | Minor |
@@ -70,6 +71,21 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.9.0 (2026-10-30)
+
+Adds Pricing-owned candidate manifests, complete settlement and rounding peer
+evidence, grouped net events, stage audits, and retained root-manifest lineage.
+Absent optional fields preserve historical quote JSON. Evidence identifiers
+are authenticated through the immutable Pricing owner, not inferred from totals.
+
+Adds model-only POS settlement obligations, original tender identities,
+order-scoped refund barriers, durable hold observations, and terminal settlement
+or abort evidence. These records do not authorize inventory mutation or release
+holds on their own. Orders, Supply, Payments, and Pricing must implement and
+qualify the corresponding owner verification and fencing before activation.
+Transport APIs, canonical digest execution, persistence and workflow behavior
+remain service-owned. Existing service APIs and event payloads are unchanged.
 
 ## v53.8.0 (2026-10-30)
 
