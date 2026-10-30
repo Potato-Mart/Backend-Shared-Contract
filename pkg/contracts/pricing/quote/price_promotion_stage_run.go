@@ -55,13 +55,6 @@ import (
 // authoritative quote fingerprint, enforce bounded counts, and fail closed
 // if any proof is unavailable. This is not a refund allocation policy.
 type PricePromotionStageRun struct {
-	// ManifestID and RequirementIndex are required together for negotiated
-	// candidate-manifest proof. Their omission preserves existing v1 bytes.
-	ManifestID       string `json:"manifest_id,omitempty"`
-	RequirementIndex int32  `json:"requirement_index,omitempty"`
-	// SubstageOrdinal identifies an actual transition within a stage. It is
-	// required for manifest proof; peers may use different substages.
-	SubstageOrdinal          *int32                            `json:"substage_ordinal,omitempty"`
 	PromotionID              string                            `json:"promotion_id"`
 	PromotionRevision        int64                             `json:"promotion_revision"`
 	StageOrdinal             int32                             `json:"stage_ordinal"`
