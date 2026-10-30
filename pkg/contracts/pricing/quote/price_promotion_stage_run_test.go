@@ -56,3 +56,20 @@ func TestMixedAdminPredecessorEvidenceIsAdditive(t *testing.T) {
 		t.Fatalf("predecessor evidence lost: %+v %v", out, err)
 	}
 }
+
+func TestSettledDifferenceEvidenceIsAdditive(t *testing.T) {
+	legacy, err := json.Marshal(PricePromotionStageRun{})
+	if err != nil || strings.Contains(string(legacy), "contribution_proof_mode") || strings.Contains(string(legacy), "settled_unit_contribution") {
+		t.Fatalf("legacy stage changed: %s %v", legacy, err)
+	}
+	amount := money.Money{Currency: "AUD", AmountMinor: 100}
+	in := PricePromotionStageRun{ContributionProofMode: "settled_difference_v1", SettledUnitContribution: &amount}
+	raw, err := json.Marshal(in)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var out PricePromotionStageRun
+	if err := json.Unmarshal(raw, &out); err != nil || out.ContributionProofMode != in.ContributionProofMode || out.SettledUnitContribution == nil || *out.SettledUnitContribution != amount {
+		t.Fatalf("contribution evidence lost: %+v %v", out, err)
+	}
+}
