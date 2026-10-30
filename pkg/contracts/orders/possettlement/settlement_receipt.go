@@ -1,5 +1,7 @@
 package possettlement
 
+import "time"
+
 // SettlementReceipt binds Supply's complete atomic outcome to the immutable
 // obligation. ReceiptSHA256 identifies the full owner-held reservation, direct
 // movement, deficit and valuation evidence, not merely these locator fields.

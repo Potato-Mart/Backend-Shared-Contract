@@ -1,5 +1,7 @@
 package possettlement
 
+import "time"
+
 // AbortEvidence is Supply's durable tombstone excluding settlement of this
 // exact obligation. It does not prove financial hold release, physical return
 // of handed-over goods, or cancellation of a different sale or generation.

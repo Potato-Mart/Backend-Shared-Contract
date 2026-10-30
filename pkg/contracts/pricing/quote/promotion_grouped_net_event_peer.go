@@ -1,5 +1,7 @@
 package quote
 
+import "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/money"
+
 // PromotionGroupedNetEventPeer records the actual original rounded line net,
 // chosen units and floor result. FloorNumerator is the exact nonnegative
 // product as a canonical decimal integer string, because two int64 inputs may

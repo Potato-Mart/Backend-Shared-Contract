@@ -1,5 +1,7 @@
 package quote
 
+import "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/money"
+
 // PromotionGroupedNetEvent freezes the actual grouped scorer operation, not a
 // fabricated PromotionApplication or per-package allocation. Version 1 modes
 // are bogo_floor_v1 and bundle_floor_largest_remainder_v1. The owner binds
