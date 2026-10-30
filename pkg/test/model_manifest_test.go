@@ -276,7 +276,8 @@ var modelPackageManifest map[string]string
 // discount-kind enum; the existing promotion display only gains optional fields.
 // V53.2 adds Pricing-owned quote source and promotion allocation evidence.
 // V53.3 adds unit-level source and retained amendment adjustment evidence.
-const exportedTypeManifestDigest = "537f90aba2634bdbec41dd3f8a51100f17439fc05d0f78052e910ad362456821"
+// V53.6 adds versioned all-line and tax-group administrative evidence.
+const exportedTypeManifestDigest = "4e4d1d6c1cc8fe0cc188a2261c887d4437461481f401c8cc6c24bb14b956d415"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
