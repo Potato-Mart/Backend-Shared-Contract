@@ -278,7 +278,8 @@ var modelPackageManifest map[string]string
 // V53.3 adds unit-level source and retained amendment adjustment evidence.
 // V53.6 adds versioned all-line and tax-group administrative evidence.
 // V53.7 adds ordered promotion stage, group, rounding, and lineage evidence.
-const exportedTypeManifestDigest = "47e05471fa8bba2fa1da97e7a1557a96912f2df6b468d9d82925ab5479513037"
+// V53.9 adds the separate mixed gift-card and cash rounding record.
+const exportedTypeManifestDigest = "4e908563d963e9e0e757e5b52d95e1645e2947dcf9adaf80099089954e0b5f15"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
