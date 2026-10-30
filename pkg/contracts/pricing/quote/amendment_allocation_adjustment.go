@@ -23,6 +23,20 @@ import (
 // the proportional target from it and the selected ordinals, verify every delta
 // and reject overlapping selections or negative adjusted totals. Arithmetic
 // equality to a caller-supplied target alone is not authority to adjust money.
+// PhysicalRoundingProof, when set to "inherited_predecessor_v1", means
+// retained source and unit amounts preserve the predecessor's physical
+// rounding rather than rerounding the new line. Unit range ordinals are
+// rebased; exact inputs, amounts, awards and original tie identities remain
+// bound to the selected predecessor ordinals. When clipping a unit run, its
+// inherited first rank and original-ordinal tie key advance by the clipped
+// offset. Source consideration, source tax and target-promotion aggregate
+// proofs sum the inherited unit exact values and rounded amounts; their rank
+// is zero, tie key empty, and remainder applied is rounded sum minus floor of
+// the exact sum (which may be negative or greater than one). They make no
+// fresh largest-remainder claim. Consumers must authenticate and recursively
+// validate the immutable predecessor and every selected unit before accepting
+// this mode; the signed accounting deltas remain separate. An omitted mode
+// preserves the legacy rounding semantics.
 type AmendmentAllocationAdjustment struct {
 	Version                           int32                      `json:"version"`
 	SourceVersionID                   string                     `json:"source_version_id"`
@@ -32,6 +46,7 @@ type AmendmentAllocationAdjustment struct {
 	SourceQuoteRevision               string                     `json:"source_quote_revision"`
 	SourceQuoteFingerprint            string                     `json:"source_quote_fingerprint"`
 	SourceLineID                      string                     `json:"source_line_id"`
+	PhysicalRoundingProof             string                     `json:"physical_rounding_proof,omitempty"`
 	PackageOption                     packaging.PackageOptionRef `json:"package_option"`
 	PackageCount                      int64                      `json:"package_count"`
 	UnitsPerPackage                   int64                      `json:"units_per_package"`

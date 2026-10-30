@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.5.0` | 2026-10-30 | Minor |
 | `v53.4.0` | 2026-10-30 | Minor |
 | `v53.3.0` | 2026-10-30 | Minor |
 | `v53.2.0` | 2026-10-30 | Minor |
@@ -66,6 +67,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.5.0 (2026-10-30)
+
+Mixed-source amendments may identify predecessor-authenticated inherited physical rounding evidence. Consumers must validate the immutable predecessor and selected unit lineage; aggregate sentinels describe sums of retained physical pennies, while signed accounting adjustments remain separate. Existing JSON is unchanged when the mode is absent.
 
 ## v53.4.0 (2026-10-30)
 

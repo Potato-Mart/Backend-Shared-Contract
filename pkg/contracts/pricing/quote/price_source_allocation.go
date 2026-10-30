@@ -22,6 +22,9 @@ import "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/
 // consideration evidence. A range's tax is computed from its own exact
 // consideration, inclusion basis and tax rule. The range LineTotal is its
 // allocated consideration plus allocated tax only for an exclusive source.
+// Retained amendments using inherited_predecessor_v1 instead use the bound
+// predecessor unit sums and the non-ranking aggregate sentinel described by
+// AmendmentAllocationAdjustment; they do not reround the physical units.
 type PriceSourceAllocation struct {
 	FirstUnit                 int64                      `json:"first_unit"`
 	BaseUnits                 int64                      `json:"base_units"`
