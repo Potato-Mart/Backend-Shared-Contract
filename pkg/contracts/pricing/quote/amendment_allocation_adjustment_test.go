@@ -25,11 +25,19 @@ func TestAmendmentAllocationAdjustmentJSON(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	if strings.Contains(string(raw), `"first_source_unit"`) {
+		t.Fatal("absent legacy tax anchor changed JSON")
+	}
+	legacy.AmendmentAllocationAdjustment.TaxAdjustments[0].FirstSourceUnit = 42
+	raw, err = json.Marshal(legacy)
+	if err != nil {
+		t.Fatal(err)
+	}
 	var got PriceSnapshot
 	if err := json.Unmarshal(raw, &got); err != nil {
 		t.Fatal(err)
 	}
-	if got.AmendmentAllocationAdjustment == nil || got.AmendmentAllocationAdjustment.LineTotalDelta.AmountMinor != 400 || got.AmendmentAllocationAdjustment.DiscountAmountDelta.AmountMinor != -10 || len(got.AmendmentAllocationAdjustment.TaxAdjustments) != 1 || got.AmendmentAllocationAdjustment.TaxAdjustments[0].TargetTaxRounding.TieBreakKey != "tax-group" || len(got.SourceAllocations) != 1 || len(got.SourceAllocations[0].UnitAllocations) != 1 || got.SourceAllocations[0].UnitAllocations[0].UnitLineTotal.AmountMinor != 100 || got.SourceAllocations[0].UnitAllocations[0].UnitTaxRounding.ExactDenominator != 22 || len(got.SourceAllocations[0].PromotionAllocations) != 1 || got.SourceAllocations[0].PromotionAllocations[0].ReductionRounding == nil || got.SourceAllocations[0].PromotionAllocations[0].ReductionRounding.ExactDenominator != 2 {
+	if got.AmendmentAllocationAdjustment == nil || got.AmendmentAllocationAdjustment.LineTotalDelta.AmountMinor != 400 || got.AmendmentAllocationAdjustment.DiscountAmountDelta.AmountMinor != -10 || len(got.AmendmentAllocationAdjustment.TaxAdjustments) != 1 || got.AmendmentAllocationAdjustment.TaxAdjustments[0].FirstSourceUnit != 42 || got.AmendmentAllocationAdjustment.TaxAdjustments[0].TargetTaxRounding.TieBreakKey != "tax-group" || len(got.SourceAllocations) != 1 || len(got.SourceAllocations[0].UnitAllocations) != 1 || got.SourceAllocations[0].UnitAllocations[0].UnitLineTotal.AmountMinor != 100 || got.SourceAllocations[0].UnitAllocations[0].UnitTaxRounding.ExactDenominator != 22 || len(got.SourceAllocations[0].PromotionAllocations) != 1 || got.SourceAllocations[0].PromotionAllocations[0].ReductionRounding == nil || got.SourceAllocations[0].PromotionAllocations[0].ReductionRounding.ExactDenominator != 2 {
 		t.Fatalf("unit or adjustment evidence lost: %+v", got)
 	}
 }

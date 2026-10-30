@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.4.0` | 2026-10-30 | Minor |
 | `v53.3.0` | 2026-10-30 | Minor |
 | `v53.2.0` | 2026-10-30 | Minor |
 | `v53.1.0` | 2026-10-30 | Minor |
@@ -65,6 +66,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.4.0 (2026-10-30)
+
+Mixed-source amendment tax adjustments can retain the original one-based source-unit tie-break anchor, including for a treatment with no physically retained unit. The optional field preserves existing JSON. Consumers must authenticate the anchor against predecessor evidence before accepting repeated amendments.
 
 ## v53.3.0 (2026-10-30)
 
