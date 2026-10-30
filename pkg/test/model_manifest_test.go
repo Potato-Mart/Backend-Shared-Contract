@@ -274,7 +274,8 @@ var modelPackageManifest map[string]string
 // cached-book merchandise evidence belongs to Supply's listing domain.
 // V53.1 adds the Pricing-owned selling-promotion discount value and its leaf
 // discount-kind enum; the existing promotion display only gains optional fields.
-const exportedTypeManifestDigest = "16431e662688a8eb3e119266902a4c1ac0240388dbd2a27c5668c947eeb9fc64"
+// V53.2 adds Pricing-owned quote source and promotion allocation evidence.
+const exportedTypeManifestDigest = "930d15417562f506ea43734a18ad98a67091888d54ee194da25b804492cdae06"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
