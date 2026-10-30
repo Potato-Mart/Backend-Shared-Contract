@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.2.0` | 2026-10-30 | Minor |
 | `v53.1.0` | 2026-10-30 | Minor |
 | `v53.0.0` | 2026-10-30 | Major |
 | `v52.0.0` | 2026-10-29 | Major |
@@ -63,6 +64,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.2.0 (2026-10-30)
+
+Price snapshots can optionally describe a versioned mixed-source allocation with frozen per-range price, promotion, rounding and tax evidence. The legacy single-source JSON remains unchanged when these fields are absent. Consumers must explicitly negotiate support and preserve the allocation evidence before a provider emits a mixed-source snapshot; transaction and refund services retain ownership of their existing policies.
 
 ## v53.1.0 (2026-10-30)
 

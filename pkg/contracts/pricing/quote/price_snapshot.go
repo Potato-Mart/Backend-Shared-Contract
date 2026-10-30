@@ -55,6 +55,17 @@ type PriceSnapshot struct {
 	// automatic promotions; the model does not enforce or infer that outcome.
 	CustomOverride *CustomPriceOverrideEvidence `json:"custom_override,omitempty"`
 
+	// SourceAllocationVersion and SourceAllocations are present together for a
+	// mixed-source line, after the consumer explicitly opts into that version.
+	// Version 1 uses contiguous source ranges ordered by FirstUnit. The ranges
+	// cover all BaseUnits exactly once. Each range is the authoritative source
+	// for its price and tax; the line money fields are reconciled aggregates.
+	// The legacy scalar source fields identify the first range only and must
+	// not be interpreted as the source of every unit of a mixed-source line.
+	// Omitting both fields retains single-source and historical semantics.
+	SourceAllocationVersion int32                   `json:"source_allocation_version,omitempty"`
+	SourceAllocations       []PriceSourceAllocation `json:"source_allocations,omitempty"`
+
 	// SaleEvidence identifies the single Supply evidence basis used for a
 	// Pricing quote line. Transaction owners reject missing or multiple variants
 	// except for a verified Orders-owned digital gift face-value instrument,
