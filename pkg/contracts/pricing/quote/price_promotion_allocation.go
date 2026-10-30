@@ -16,4 +16,7 @@ type PricePromotionAllocation struct {
 	BaseUnits         int64       `json:"base_units"`
 	GroupOrdinal      int64       `json:"group_ordinal,omitempty"`
 	ReductionAmount   money.Money `json:"reduction_amount"`
+	// ReductionRounding preserves the exact group reduction for v2 source
+	// evidence. It is absent on historical v1 allocations.
+	ReductionRounding *RoundingEvidence `json:"reduction_rounding,omitempty"`
 }
