@@ -275,7 +275,8 @@ var modelPackageManifest map[string]string
 // V53.1 adds the Pricing-owned selling-promotion discount value and its leaf
 // discount-kind enum; the existing promotion display only gains optional fields.
 // V53.2 adds Pricing-owned quote source and promotion allocation evidence.
-const exportedTypeManifestDigest = "930d15417562f506ea43734a18ad98a67091888d54ee194da25b804492cdae06"
+// V53.3 adds unit-level source and retained amendment adjustment evidence.
+const exportedTypeManifestDigest = "537f90aba2634bdbec41dd3f8a51100f17439fc05d0f78052e910ad362456821"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

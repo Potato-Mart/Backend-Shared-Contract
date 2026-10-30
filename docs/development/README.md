@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.3.0` | 2026-10-30 | Minor |
 | `v53.2.0` | 2026-10-30 | Minor |
 | `v53.1.0` | 2026-10-30 | Minor |
 | `v53.0.0` | 2026-10-30 | Major |
@@ -64,6 +65,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.3.0 (2026-10-30)
+
+Mixed-source price evidence may carry versioned per-unit money runs and a separately bound, signed accounting adjustment for retained amendments. The fields are optional and preserve existing JSON when absent. Services must negotiate the new format, validate predecessor selections and arithmetic, and persist its evidence before emitting or accepting it. Existing transaction and refund allocation policies remain service-owned.
 
 ## v53.2.0 (2026-10-30)
 

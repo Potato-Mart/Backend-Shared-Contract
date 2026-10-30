@@ -42,4 +42,9 @@ type PriceSourceAllocation struct {
 	LineTotal                 money.Money                `json:"line_total"`
 	AppliedRules              []AppliedPriceRule         `json:"applied_rules,omitempty"`
 	PromotionAllocations      []PricePromotionAllocation `json:"promotion_allocations,omitempty"`
+	// UnitAllocationVersion 1 identifies compressed homogeneous per-unit
+	// money runs covering this source range. Omitted unit allocations mean
+	// that partial unit economics have not been established.
+	UnitAllocationVersion int32                 `json:"unit_allocation_version,omitempty"`
+	UnitAllocations       []PriceUnitAllocation `json:"unit_allocations,omitempty"`
 }
