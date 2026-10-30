@@ -59,12 +59,17 @@ type PriceSnapshot struct {
 	// mixed-source line, after the consumer explicitly opts into that version.
 	// Version 1 uses contiguous source ranges ordered by FirstUnit. The ranges
 	// cover all BaseUnits exactly once. Each range is the authoritative source
-	// for its price and tax; the line money fields are reconciled aggregates.
+	// for its price and tax; without an adjustment, the line money fields are
+	// their reconciled aggregates. Version 2 additionally carries exact unit
+	// allocations and may carry a separately evidenced proportional adjustment
+	// on a retained amendment, in which case source sums plus the adjustment
+	// reconcile to the line money fields.
 	// The legacy scalar source fields identify the first range only and must
 	// not be interpreted as the source of every unit of a mixed-source line.
 	// Omitting both fields retains single-source and historical semantics.
-	SourceAllocationVersion int32                   `json:"source_allocation_version,omitempty"`
-	SourceAllocations       []PriceSourceAllocation `json:"source_allocations,omitempty"`
+	SourceAllocationVersion       int32                          `json:"source_allocation_version,omitempty"`
+	SourceAllocations             []PriceSourceAllocation        `json:"source_allocations,omitempty"`
+	AmendmentAllocationAdjustment *AmendmentAllocationAdjustment `json:"amendment_allocation_adjustment,omitempty"`
 
 	// SaleEvidence identifies the single Supply evidence basis used for a
 	// Pricing quote line. Transaction owners reject missing or multiple variants
