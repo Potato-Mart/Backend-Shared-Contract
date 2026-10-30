@@ -15,6 +15,9 @@ import "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/
 // first unit and subsequent units have consecutive ranks in ordinal order.
 // For a retained amendment these ordinals are rebased to the new line; its
 // predecessor binding records the native selection they originated from.
+// An amendment with physical_rounding_proof inherited_predecessor_v1 preserves
+// predecessor ranks, awards and original-ordinal tie keys instead of computing
+// new ones; its predecessor-bound validator verifies the inherited evidence.
 type PriceUnitAllocation struct {
 	FirstUnit                 int64            `json:"first_unit"`
 	BaseUnits                 int64            `json:"base_units"`
