@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.6.0` | 2026-10-30 | Minor |
 | `v53.5.0` | 2026-10-30 | Minor |
 | `v53.4.0` | 2026-10-30 | Minor |
 | `v53.3.0` | 2026-10-30 | Minor |
@@ -67,6 +68,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.6.0 (2026-10-30)
+
+Mixed-source amendments may bind a complete global administrative-discount witness and per-line tax-group carry and allocation proofs. Consumers must persist the authoritative priced-line and discount wrappers, authenticate each predecessor, and independently verify all-line allocation, bucket arithmetic and the global witness hash. The fields are additive and do not change legacy JSON when absent.
 
 ## v53.5.0 (2026-10-30)
 

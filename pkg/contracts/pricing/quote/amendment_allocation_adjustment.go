@@ -47,6 +47,7 @@ type AmendmentAllocationAdjustment struct {
 	SourceQuoteFingerprint            string                     `json:"source_quote_fingerprint"`
 	SourceLineID                      string                     `json:"source_line_id"`
 	PhysicalRoundingProof             string                     `json:"physical_rounding_proof,omitempty"`
+	AdminDiscountWitness              *MixedAdminLineWitness     `json:"admin_discount_witness,omitempty"`
 	PackageOption                     packaging.PackageOptionRef `json:"package_option"`
 	PackageCount                      int64                      `json:"package_count"`
 	UnitsPerPackage                   int64                      `json:"units_per_package"`
