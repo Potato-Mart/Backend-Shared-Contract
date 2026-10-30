@@ -71,6 +71,15 @@ type PriceSnapshot struct {
 	SourceAllocations             []PriceSourceAllocation        `json:"source_allocations,omitempty"`
 	AmendmentAllocationAdjustment *AmendmentAllocationAdjustment `json:"amendment_allocation_adjustment,omitempty"`
 
+	// AdminDiscountWitness is for a newly added mixed-source amendment line.
+	// A retained line uses AmendmentAllocationAdjustment.AdminDiscountWitness;
+	// both locations must never be present on the same line.
+	AdminDiscountWitness *MixedAdminLineWitness `json:"admin_discount_witness,omitempty"`
+	// PromotionStageVersion and PromotionStages provide negotiated ordered
+	// participant evidence. Omitting both preserves historical quote bytes.
+	PromotionStageVersion int32                    `json:"promotion_stage_version,omitempty"`
+	PromotionStages       []PricePromotionStageRun `json:"promotion_stages,omitempty"`
+
 	// SaleEvidence identifies the single Supply evidence basis used for a
 	// Pricing quote line. Transaction owners reject missing or multiple variants
 	// except for a verified Orders-owned digital gift face-value instrument,

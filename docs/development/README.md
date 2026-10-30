@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.7.0` | 2026-10-30 | Minor |
 | `v53.6.0` | 2026-10-30 | Minor |
 | `v53.5.0` | 2026-10-30 | Minor |
 | `v53.4.0` | 2026-10-30 | Minor |
@@ -68,6 +69,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.7.0 (2026-10-30)
+
+Mixed-source quotes may carry negotiated ordered promotion-stage evidence, and added amendment lines may carry a separately bound administrative discount witness. Version 2 global witnesses bind the authenticated predecessor administrative wrapper. These optional fields preserve legacy JSON; consumers must verify complete source, group, rounding, and predecessor proofs before use. Refund policy remains transaction-owned.
 
 ## v53.6.0 (2026-10-30)
 
