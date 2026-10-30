@@ -22,19 +22,30 @@ import "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/
 // preserved array order, UTC millisecond timestamps); a nil wrapper is JSON
 // null and is distinct from present zero or empty evidence. These wrapper
 // hashes are computed before the global witness hash and quote revision.
+// Version 2 additionally binds PredecessorEvidenceSource (creation,
+// prior_witness or pricing_lookup) and PredecessorAdministrativeDiscountHash.
+// The hash uses the same canonical encoding, including null. A pricing_lookup
+// is permitted only after authenticating the exact immutable predecessor quote;
+// the verified nullable wrapper is persisted with the transaction witness.
+// Prior-witness and creation modes must likewise prove their predecessor state.
 type MixedAdminDiscountWitness struct {
-	Version                    int32                    `json:"version"`
-	Operation                  string                   `json:"operation"`
-	SourceVersionID            string                   `json:"source_version_id"`
-	SourceQuoteKey             string                   `json:"source_quote_key"`
-	SourceQuoteRevision        string                   `json:"source_quote_revision"`
-	EditID                     string                   `json:"edit_id"`
-	PricedLinesHash            string                   `json:"priced_lines_hash"`
-	AdministrativeDiscountHash string                   `json:"administrative_discount_hash"`
-	ActorID                    string                   `json:"actor_id,omitempty"`
-	Reason                     string                   `json:"reason,omitempty"`
-	PreviousDesired            money.Money              `json:"previous_desired"`
-	CurrentDesired             money.Money              `json:"current_desired"`
-	PreAdminTotal              money.Money              `json:"pre_admin_total"`
-	Lines                      []MixedAdminDiscountLine `json:"lines"`
+	Version                    int32  `json:"version"`
+	Operation                  string `json:"operation"`
+	SourceVersionID            string `json:"source_version_id"`
+	SourceQuoteKey             string `json:"source_quote_key"`
+	SourceQuoteRevision        string `json:"source_quote_revision"`
+	EditID                     string `json:"edit_id"`
+	PricedLinesHash            string `json:"priced_lines_hash"`
+	AdministrativeDiscountHash string `json:"administrative_discount_hash"`
+	// Version 2 requires a source discriminator and the canonical hash of the
+	// exact nullable predecessor wrapper. Version 1 omits both fields.
+	PredecessorEvidenceSource             string `json:"predecessor_evidence_source,omitempty"`
+	PredecessorAdministrativeDiscountHash string `json:"predecessor_administrative_discount_hash,omitempty"`
+
+	ActorID         string                   `json:"actor_id,omitempty"`
+	Reason          string                   `json:"reason,omitempty"`
+	PreviousDesired money.Money              `json:"previous_desired"`
+	CurrentDesired  money.Money              `json:"current_desired"`
+	PreAdminTotal   money.Money              `json:"pre_admin_total"`
+	Lines           []MixedAdminDiscountLine `json:"lines"`
 }

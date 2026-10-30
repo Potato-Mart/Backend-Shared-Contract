@@ -277,7 +277,8 @@ var modelPackageManifest map[string]string
 // V53.2 adds Pricing-owned quote source and promotion allocation evidence.
 // V53.3 adds unit-level source and retained amendment adjustment evidence.
 // V53.6 adds versioned all-line and tax-group administrative evidence.
-const exportedTypeManifestDigest = "4e4d1d6c1cc8fe0cc188a2261c887d4437461481f401c8cc6c24bb14b956d415"
+// V53.7 adds ordered promotion stage, group, rounding, and lineage evidence.
+const exportedTypeManifestDigest = "47e05471fa8bba2fa1da97e7a1557a96912f2df6b468d9d82925ab5479513037"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
