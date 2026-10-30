@@ -28,10 +28,14 @@ import (
 // SettledUnitRounding proves SettledAfterUnit. A stated SettledBeforeUnit must
 // equal the authenticated previous stage's settled after value or an
 // independently proved original source price. Rounding can make settled after
-// differ from exact AfterUnit. Contribution
-// rounding is optional only when no unit contribution is asserted. Consumers
-// that need per-promotion unit attribution must require it together with the
-// complete peer set, stable rank, tie key and award, and reject unproven cases.
+// differ from exact AfterUnit. For settled_difference_v1, SettledUnitContribution is the independently
+// authenticated same-unit settled-before less settled-after, nonnegative and
+// in the same currency and exponent. Complete peers, group and root ordinals
+// must reconcile to the authoritative application and quote discount without
+// double counting; qualifier-only roles contribute zero. Retained amendments
+// authenticate predecessor proofs without rerounding. Unknown or missing modes
+// fail closed when attribution is required. Legacy contribution rounding
+// evidence remains independent and requires complete peers and ranks.
 // SettledRoundingPool and ContributionRoundingPool bind distinct original
 // populations and totals; neither substitutes for the other or for complete
 // peer evidence. SettledAwardEligible explicitly states whether this run can
@@ -75,6 +79,8 @@ type PricePromotionStageRun struct {
 	SettledUnitRounding      *RoundingEvidence                 `json:"settled_unit_rounding,omitempty"`
 	SettledAwardEligible     *bool                             `json:"settled_award_eligible,omitempty"`
 	SettledLockStage         *int32                            `json:"settled_lock_stage,omitempty"`
+	ContributionProofMode    string                            `json:"contribution_proof_mode,omitempty"`
+	SettledUnitContribution  *money.Money                      `json:"settled_unit_contribution,omitempty"`
 	ContributionRoundingPool *PromotionStageRoundingPool       `json:"contribution_rounding_pool,omitempty"`
 	UnitContributionRounding *RoundingEvidence                 `json:"unit_contribution_rounding,omitempty"`
 	Lineage                  *PromotionStageLineage            `json:"lineage,omitempty"`
