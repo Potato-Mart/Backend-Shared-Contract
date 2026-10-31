@@ -19,6 +19,9 @@ import (
 func TestSellingPromotionDisplayDiscountVariantsAndOmissions(t *testing.T) {
 	assertSellingJSON(t, SellingPromotionDisplay{Kind: "bogo", Conditional: true},
 		`{"kind":"bogo","conditional":true,"applied_to_effective_price":false}`)
+	required := int64(2)
+	assertSellingJSON(t, SellingPromotionDisplay{Kind: "bogo", Conditional: true, RequiredQuantity: &required, MemberSKUCodes: []string{"POTATO-A"}, MemberSeriesKeys: []string{"series-a"}},
+		`{"kind":"bogo","conditional":true,"applied_to_effective_price":false,"required_quantity":2,"member_sku_codes":["POTATO-A"],"member_series_keys":["series-a"]}`)
 	percent := pricebook_enums.SellingPromotionDiscountTypePercentOff
 	points := int64(2000)
 	assertSellingJSON(t, SellingPromotionDisplay{Kind: "product_discount", PromotionID: "promotion-1", DiscountKind: &percent, DiscountValue: &SellingPromotionDiscountValue{BasisPoints: &points}, AppliedToEffectivePrice: true},

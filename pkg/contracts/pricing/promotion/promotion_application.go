@@ -25,7 +25,9 @@ type PromotionApplication struct {
 	// fully paid eligible quantity, never base units or later picked/packed
 	// substitutions.
 	ResolvedTargetPackageAllocations []PromotionTargetPackageAllocation `json:"resolved_target_package_allocations,omitempty"`
-	DisplayMessages                  []localization.LocalizedText       `json:"display_messages,omitempty"`
-	ReceiptMessages                  []localization.LocalizedText       `json:"receipt_messages,omitempty"`
-	AppliedAt                        time.Time                          `json:"applied_at"`
+	// Names repeat approved promotion copy and are omitted when it has none.
+	Names           []localization.LocalizedName `json:"names,omitempty"`
+	DisplayMessages []localization.LocalizedText `json:"display_messages,omitempty"`
+	ReceiptMessages []localization.LocalizedText `json:"receipt_messages,omitempty"`
+	AppliedAt       time.Time                    `json:"applied_at"`
 }

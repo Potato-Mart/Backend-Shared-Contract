@@ -26,4 +26,9 @@ type SellingPromotionDisplay struct {
 	AppliedToEffectivePrice bool                                          `json:"applied_to_effective_price"`
 	ValidFrom               *time.Time                                    `json:"valid_from,omitempty"`
 	ValidUntil              *time.Time                                    `json:"valid_until,omitempty"`
+	// RequiredQuantity, MemberSKUCodes and MemberSeriesKeys describe what
+	// qualifies a conditional promotion. They are display facts, not rules.
+	RequiredQuantity *int64   `json:"required_quantity,omitempty"`
+	MemberSKUCodes   []string `json:"member_sku_codes,omitempty"`
+	MemberSeriesKeys []string `json:"member_series_keys,omitempty"`
 }

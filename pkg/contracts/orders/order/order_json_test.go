@@ -113,6 +113,25 @@ func TestOrderJSONOmitsEmptyHistory(t *testing.T) {
 	}
 }
 
+func TestOrderJSONKeepsPromotionSavingsOptional(t *testing.T) {
+	payload, err := json.Marshal(sales.Order{ID: "ord_1"})
+	if err != nil {
+		t.Fatalf("marshal order: %v", err)
+	}
+	if strings.Contains(string(payload), `"promotion_savings"`) {
+		t.Fatalf("empty promotion savings should be omitted, got %s", payload)
+	}
+
+	var decoded sales.Order
+	body := `{"id":"ord_1","promotion_savings":[{"promotion_id":"prm_1","promotion_revision":2,"promotion_kind":"bogo","line_id":"line_1","discount_amount":{"amount_minor":250,"currency":"AUD"}}]}`
+	if err := json.Unmarshal([]byte(body), &decoded); err != nil {
+		t.Fatalf("unmarshal order: %v", err)
+	}
+	if len(decoded.PromotionSavings) != 1 || decoded.PromotionSavings[0].LineID != "line_1" || decoded.PromotionSavings[0].DiscountAmount.AmountMinor != 250 {
+		t.Fatalf("promotion savings changed: %+v", decoded.PromotionSavings)
+	}
+}
+
 func TestOrderDeliveryAddressOverrideStaysSeparateFromCheckoutSnapshot(t *testing.T) {
 	order := sales.Order{
 		DeliveryAddress: &party.ContactAddress{Contact: &party.Recipient{Name: "Current destination"}},

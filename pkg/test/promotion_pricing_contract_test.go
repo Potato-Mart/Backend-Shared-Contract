@@ -311,7 +311,7 @@ func TestPromotionProductionSurfaceRejectsRetiredMechanicsAndDependencies(t *tes
 		enumNames = append(enumNames, name)
 	}
 	sort.Strings(enumNames)
-	wantEnums := []string{"PromotionMatchMode", "PromotionStatus"}
+	wantEnums := []string{"PromotionMatchMode", "PromotionProgressStatus", "PromotionStatus"}
 	if !reflect.DeepEqual(enumNames, wantEnums) {
 		t.Fatalf("closed promotion enums = %v, want only %v", enumNames, wantEnums)
 	}
