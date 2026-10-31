@@ -278,7 +278,9 @@ var modelPackageManifest map[string]string
 // V53.3 adds unit-level source and retained amendment adjustment evidence.
 // V53.6 adds versioned all-line and tax-group administrative evidence.
 // V53.7 adds ordered promotion stage, group, rounding, and lineage evidence.
-const exportedTypeManifestDigest = "47e05471fa8bba2fa1da97e7a1557a96912f2df6b468d9d82925ab5479513037"
+// V53.9 adds promotion saving and cart progress evidence and its leaf status
+// enum; existing promotion, display, and order models only gain optional fields.
+const exportedTypeManifestDigest = "a9e6457a75e4b1b2daa0dd28bf3c7d9f8c325f58d4bc05b20a7b6ede6246b632"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
