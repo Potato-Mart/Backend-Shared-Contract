@@ -103,7 +103,7 @@ type Order struct {
 	CouponCode            string                           `json:"coupon_code,omitempty"`
 	PromotionApplications []promotion.PromotionApplication `json:"promotion_applications"`
 	PromotionSavings      []promotion.PromotionSaving      `json:"promotion_savings,omitempty"`
-	PointRedemption      *PointRedemptionSnapshot         `json:"point_redemption,omitempty"`
+	PointRedemption       *PointRedemptionSnapshot         `json:"point_redemption,omitempty"`
 	RewardRedemptions     []RewardRedemptionSnapshot       `json:"reward_redemptions,omitempty"`
 	GiftCardRedemptions   []GiftCardRedemptionSnapshot     `json:"gift_card_redemptions,omitempty"`
 	TrackingNumber        string                           `json:"tracking_number,omitempty"`
