@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.11.0` | 2026-11-01 | Minor |
 | `v53.10.0` | 2026-11-01 | Minor |
 | `v53.9.0` | 2026-11-01 | Minor |
 | `v53.8.0` | 2026-10-30 | Minor |
@@ -72,6 +73,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.11.0 (2026-11-01)
+
+`SellingPromotionDisplay` gains optional `terms` (`SellingPromotionTerms`), and `SellingPriceOffer.promotions` gains it through the same type, so POS and storefront displays can show the deal itself: `qualifier_base_units`, `gift_base_units`, `base_units_per_award`, `minimum_order_amount`, `addon_package_price`, `bundle_package_price`, `discount_basis_points`, `discount_amount`, `fixed_package_price`, `maximum_applications_per_customer`, `group_package_count` and `gift_tiers` (`SellingPromotionGiftTerms`). `qualifier_base_units` counts paid units only; the free units are extra, so a same-SKU Buy 1 get 1 is qualifier 1, gift 1. `base_units_per_award` is how many units the cart needs to earn one award: qualifier plus gift on a same-SKU BOGO (Buy 1 get 1 = 2, Buy 2 get 1 = 3), and the qualifier alone on a cross-SKU BOGO. Clients use it rather than deriving it. These are display facts, never executable rules, and they carry no rule ids, priorities, stacking or usage counts. All additions are omitted when absent, so existing JSON is unchanged and no data migration is needed. Consumers that decode these models strictly must accept the new field before a producer sends it.
 
 ## v53.10.0 (2026-11-01)
 
