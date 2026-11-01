@@ -22,6 +22,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/catalogue/classification/classification_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/catalogue/product"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/catalogue/product/product_enums"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/warehouse"
 )
 
 type canonicalProductField struct {
@@ -56,6 +57,7 @@ func TestSellingProductPublishesOnlyRenderCompleteCommercialData(t *testing.T) {
 		"PackageOptions":     {json: "package_options", typeOf: reflect.TypeOf([]product.SellingProductPackageOption{})},
 		"BarcodeAssignments": {json: "barcode_assignments,omitempty", typeOf: reflect.TypeOf([]product.SellingProductBarcode{})},
 		"NetContent":         {json: "net_content,omitempty", typeOf: reflect.TypeOf((*measurement.NetContent)(nil))},
+		"ExpiryDate":         {json: "expiry_date,omitempty", typeOf: reflect.TypeOf((*warehouse.InventoryDateMark)(nil))},
 		"Price":              {json: "price", typeOf: reflect.TypeOf(pricebook.SellingPrice{})},
 	})
 }

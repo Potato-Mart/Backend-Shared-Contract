@@ -36,7 +36,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
-| `v53.9.0` | 2026-10-31 | Minor |
+| `v53.12.0` | 2026-11-01 | Minor |
+| `v53.11.0` | 2026-11-01 | Minor |
+| `v53.10.0` | 2026-11-01 | Minor |
+| `v53.9.0` | 2026-11-01 | Minor |
 | `v53.8.0` | 2026-10-30 | Minor |
 | `v53.7.0` | 2026-10-30 | Minor |
 | `v53.6.0` | 2026-10-30 | Minor |
@@ -72,9 +75,21 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
 
-## v53.9.0 (2026-10-31)
+## v53.12.0 (2026-11-01)
 
 Receipt evidence can separately describe a gift-card and residual-cash sale, including its exact residual and market rounding adjustment. It is mutually exclusive with the existing all-cash snapshot, which retains its meaning. The new record does not cover points or other tender splits. Orders, Payments and all affected consumers must adopt and validate the new evidence before it is emitted; this model does not activate a checkout or change refund behavior.
+
+## v53.11.0 (2026-11-01)
+
+`SellingPromotionDisplay` gains optional `terms` (`SellingPromotionTerms`), and `SellingPriceOffer.promotions` gains it through the same type, so POS and storefront displays can show the deal itself: `qualifier_base_units`, `gift_base_units`, `base_units_per_award`, `minimum_order_amount`, `addon_package_price`, `bundle_package_price`, `discount_basis_points`, `discount_amount`, `fixed_package_price`, `maximum_applications_per_customer`, `group_package_count` and `gift_tiers` (`SellingPromotionGiftTerms`). `qualifier_base_units` counts paid units only; the free units are extra, so a same-SKU Buy 1 get 1 is qualifier 1, gift 1. `base_units_per_award` is how many units the cart needs to earn one award: qualifier plus gift on a same-SKU BOGO (Buy 1 get 1 = 2, Buy 2 get 1 = 3), and the qualifier alone on a cross-SKU BOGO. Clients use it rather than deriving it. These are display facts, never executable rules, and they carry no rule ids, priorities, stacking or usage counts. All additions are omitted when absent, so existing JSON is unchanged and no data migration is needed. Consumers that decode these models strictly must accept the new field before a producer sends it.
+
+## v53.10.0 (2026-11-01)
+
+`SellingProduct` gains optional `expiry_date`, reusing `warehouse.InventoryDateMark` (`kind`, `date_mark_at`, `timezone`) so storefront, app and POS product displays can show a best-before or use-by date. `kind` uses the existing `InventoryDateMarkKind` enum: `BEST_BEFORE` for quality dates and `EXPIRY` for use-by or safety dates. The field is display-only and is omitted when absent, so existing JSON is unchanged and no data migration is needed. The owning backend chooses which lot's date mark to show; `SaleEligibilitySnapshot` remains the quote-time stock evidence. Consumers that decode `SellingProduct` strictly must accept the new field before a producer sends it.
+
+## v53.9.0 (2026-11-01)
+
+Pricing can attribute savings to promotions and report how far a cart is from one, using `PromotionSaving`, `PromotionProgress`, `PromotionMissingQualifier` and the closed `PromotionProgressStatus` enum. `PromotionApplication` gains optional `names`, `SellingPromotionDisplay` gains optional `required_quantity`, `member_sku_codes` and `member_series_keys`, and `Order` gains optional `promotion_savings`. All additions are omitted when absent, so existing JSON is unchanged. `potential_saving` is indicative: stock, limits and other offers may change it. Consumers that decode these models strictly must accept the new fields before a producer sends them.
 
 ## v53.8.0 (2026-10-30)
 

@@ -278,8 +278,12 @@ var modelPackageManifest map[string]string
 // V53.3 adds unit-level source and retained amendment adjustment evidence.
 // V53.6 adds versioned all-line and tax-group administrative evidence.
 // V53.7 adds ordered promotion stage, group, rounding, and lineage evidence.
-// V53.9 adds the separate mixed gift-card and cash rounding record.
-const exportedTypeManifestDigest = "4e908563d963e9e0e757e5b52d95e1645e2947dcf9adaf80099089954e0b5f15"
+// V53.9 adds promotion saving and cart progress evidence and its leaf status
+// enum; existing promotion, display, and order models only gain optional fields.
+// V53.11 adds Pricing-owned customer-safe selling-promotion terms and gift tier
+// terms; the existing promotion display only gains an optional field.
+// V53.12 adds the separate mixed gift-card and cash rounding record.
+const exportedTypeManifestDigest = "55abead3047daba067ee50114f5a5c0d3da4bd2f6f35fe7e75ea6276157a12d6"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
