@@ -105,3 +105,47 @@ func TestPackingDiscrepancyWithdrawalsRoundTrip(t *testing.T) {
 		t.Fatalf("empty withdrawals must be omitted: %s", raw)
 	}
 }
+
+// A reinstate entry re-records previously withdrawn units as missing again.
+// withdrawn_base_units stays positive; the method gives the direction.
+func TestPackingDiscrepancyReinstateRestoresRemainingShortage(t *testing.T) {
+	recordedAt := time.Date(2026, 11, 1, 9, 0, 0, 0, time.UTC)
+	discrepancy := fulfilment.PackingDiscrepancy{
+		ID: "shortage-3", OrderItemID: "item-1", SKUCode: "SKU-1",
+		Kind:                 warehouse_enums.PackingDiscrepancyKindShortage,
+		RequestedComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 6},
+		ObservedComposition:  packaging.PackageCompositionSnapshot{TotalBaseUnits: 2},
+		RecordedAt:           recordedAt,
+		Withdrawals: []fulfilment.PackingDiscrepancyWithdrawal{
+			{WithdrawnBaseUnits: 3, Method: warehouse_enums.PackingDiscrepancyWithdrawalMethodScan, WithdrawnBy: "staff-1", WithdrawnAt: recordedAt.Add(time.Minute)},
+			{WithdrawnBaseUnits: 1, Method: warehouse_enums.PackingDiscrepancyWithdrawalMethodCommand, WithdrawnBy: "staff-1", WithdrawnAt: recordedAt.Add(2 * time.Minute)},
+			{WithdrawnBaseUnits: 2, Method: warehouse_enums.PackingDiscrepancyWithdrawalMethodReinstate, WithdrawnBy: "staff-2", WithdrawnAt: recordedAt.Add(3 * time.Minute)},
+		},
+	}
+	raw, err := json.Marshal(discrepancy)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(raw), `{"withdrawn_base_units":2,"method":"reinstate","withdrawn_by":"staff-2","withdrawn_at":"2026-11-01T09:03:00Z"}`) {
+		t.Fatalf("reinstate wire shape changed: %s", raw)
+	}
+	var got fulfilment.PackingDiscrepancy
+	if err := json.Unmarshal(raw, &got); err != nil {
+		t.Fatal(err)
+	}
+	remaining := got.RequestedComposition.TotalBaseUnits - got.ObservedComposition.TotalBaseUnits
+	for _, entry := range got.Withdrawals {
+		if !entry.Method.IsValid() || entry.WithdrawnBaseUnits <= 0 {
+			t.Fatalf("withdrawal entry must have a valid method and positive units: %+v", entry)
+		}
+		switch entry.Method {
+		case warehouse_enums.PackingDiscrepancyWithdrawalMethodReinstate:
+			remaining += entry.WithdrawnBaseUnits
+		default:
+			remaining -= entry.WithdrawnBaseUnits
+		}
+	}
+	if remaining != 2 {
+		t.Fatalf("remaining shortage base units = %d, want 2", remaining)
+	}
+}

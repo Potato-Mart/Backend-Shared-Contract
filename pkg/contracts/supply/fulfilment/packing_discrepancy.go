@@ -13,7 +13,8 @@ import (
 // contract does not restrict them to a discrepancy kind. A shortage's recorded
 // base units are requested_composition.total_base_units minus
 // observed_composition.total_base_units; its remaining base units are the
-// recorded base units minus the sum of withdrawals[].withdrawn_base_units.
+// recorded base units minus the withdrawn_base_units of command and scan
+// withdrawals plus the withdrawn_base_units of reinstate entries.
 // Withdrawals are append-only evidence and do not rewrite the compositions.
 type PackingDiscrepancy struct {
 	ID                   string                                 `json:"id"`
