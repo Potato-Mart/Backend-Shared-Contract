@@ -37,6 +37,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.15.0` | 2026-11-01 | Minor |
 | `v53.14.0` | 2026-11-01 | Minor |
 | `v53.13.0` | 2026-11-01 | Minor |
 | `v53.12.0` | 2026-11-01 | Minor |
@@ -77,6 +78,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.15.0 (2026-11-01)
+
+`Order` gains optional `production_date` (`temporal.Date`), the depot intake (production) date that Orders computes at order time from its preparation rules; Supply uses it when booking the carrier. `CarrierBookingSummary` gains the values actually sent to the carrier in the latest booking, after any retry edits, written back onto the shipment: optional `delivery_date`, `intake_date`, `time_window` (`CarrierBookingTimeWindow`, wall-clock times in the delivery (recipient's) timezone), `box_count`, `delivery_type` and `instructions`. An absent value was not sent; a present empty `delivery_type` or `instructions` was sent empty. `PackingDiscrepancyWithdrawalMethod` gains `reinstate`: a reinstate entry re-records previously withdrawn units that never arrived as missing again. `withdrawn_base_units` stays positive for every method, so a shortage's remaining base units are its recorded base units minus the `command` and `scan` withdrawals plus the `reinstate` entries. All additions are omitted when absent, so existing JSON is unchanged and no data migration is needed. Consumers that decode these models or the withdrawal method strictly must accept the new fields and value before a producer sends them; consumers that compute remaining shortages must add reinstate entries back rather than subtracting them.
 
 ## v53.14.0 (2026-11-01)
 

@@ -166,3 +166,28 @@ func TestCarrierBookingTimeWindowMayBeOneSided(t *testing.T) {
 		t.Fatalf("start-only window JSON = %s, want %s", encoded, want)
 	}
 }
+
+// The summary carries the values actually sent in the latest booking.
+func TestCarrierBookingSummaryCarriesBookedValues(t *testing.T) {
+	const fixture = `{"attempt_id":"cba_5","outcome":"booked","carrier_reference":"JOB-456","outcome_at":"2026-11-01T10:00:00Z","delivery_date":"2026-11-03","intake_date":"2026-11-02","time_window":{"from_time":"09:00","to_time":"12:00"},"box_count":2,"delivery_type":"Home delivery","instructions":""}`
+	var summary CarrierBookingSummary
+	if err := json.Unmarshal([]byte(fixture), &summary); err != nil {
+		t.Fatal(err)
+	}
+	if summary.DeliveryDate == nil || *summary.DeliveryDate != "2026-11-03" || summary.IntakeDate == nil || *summary.IntakeDate != "2026-11-02" {
+		t.Fatalf("booked dates lost: %+v", summary)
+	}
+	if summary.TimeWindow == nil || summary.TimeWindow.FromTime == nil || *summary.TimeWindow.FromTime != "09:00" || summary.TimeWindow.ToTime == nil || *summary.TimeWindow.ToTime != "12:00" {
+		t.Fatalf("booked window lost: %+v", summary.TimeWindow)
+	}
+	if summary.BoxCount == nil || *summary.BoxCount != 2 || summary.DeliveryType == nil || *summary.DeliveryType != "Home delivery" || summary.Instructions == nil || *summary.Instructions != "" {
+		t.Fatalf("booked values lost: %+v", summary)
+	}
+	encoded, err := json.Marshal(summary)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(encoded) != fixture {
+		t.Fatalf("summary JSON = %s, want %s", encoded, fixture)
+	}
+}

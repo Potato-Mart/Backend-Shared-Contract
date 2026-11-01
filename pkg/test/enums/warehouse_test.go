@@ -18,7 +18,7 @@ func TestWarehouseEnumsValidateKnownValues(t *testing.T) {
 		{name: "warehouseenum.ModelFormat", valid: []stringEnum{warehouse_enums.ModelFormatGLB, warehouse_enums.ModelFormatGLTF, warehouse_enums.ModelFormatOBJ, warehouse_enums.ModelFormatFBX, warehouse_enums.ModelFormatUSDZ}, invalid: warehouse_enums.ModelFormat("__invalid__")},
 		{name: "warehouseenum.OutboundShipmentStatus", valid: []stringEnum{warehouse_enums.OutboundShipmentStatusPacked, warehouse_enums.OutboundShipmentStatusDispatched, warehouse_enums.OutboundShipmentStatusDelivered}, invalid: warehouse_enums.OutboundShipmentStatus("__invalid__")},
 		{name: "warehouseenum.PackingDiscrepancyKind", valid: []stringEnum{warehouse_enums.PackingDiscrepancyKindShortage, warehouse_enums.PackingDiscrepancyKindOverweight, warehouse_enums.PackingDiscrepancyKindDamaged, warehouse_enums.PackingDiscrepancyKindPending}, invalid: warehouse_enums.PackingDiscrepancyKind("__invalid__")},
-		{name: "warehouseenum.PackingDiscrepancyWithdrawalMethod", valid: []stringEnum{warehouse_enums.PackingDiscrepancyWithdrawalMethodCommand, warehouse_enums.PackingDiscrepancyWithdrawalMethodScan}, invalid: warehouse_enums.PackingDiscrepancyWithdrawalMethod("__invalid__")},
+		{name: "warehouseenum.PackingDiscrepancyWithdrawalMethod", valid: []stringEnum{warehouse_enums.PackingDiscrepancyWithdrawalMethodCommand, warehouse_enums.PackingDiscrepancyWithdrawalMethodScan, warehouse_enums.PackingDiscrepancyWithdrawalMethodReinstate}, invalid: warehouse_enums.PackingDiscrepancyWithdrawalMethod("__invalid__")},
 		{name: "warehouseenum.ShapeType", valid: []stringEnum{warehouse_enums.ShapeBox, warehouse_enums.ShapeCylinder, warehouse_enums.ShapeSphere, warehouse_enums.ShapePlane, warehouse_enums.ShapeCustom}, invalid: warehouse_enums.ShapeType("__invalid__")},
 		{name: "warehouseenum.StockMovementType", valid: []stringEnum{warehouse_enums.StockMovementTypeReceipt, warehouse_enums.StockMovementTypeTransfer, warehouse_enums.StockMovementTypeStage, warehouse_enums.StockMovementTypeUnstage, warehouse_enums.StockMovementTypePackageConversion, warehouse_enums.StockMovementTypeSaleCommit, warehouse_enums.StockMovementTypeReturn, warehouse_enums.StockMovementTypeQualityHold, warehouse_enums.StockMovementTypeQualityRelease, warehouse_enums.StockMovementTypeQualityReject, warehouse_enums.StockMovementTypeAdjustment, warehouse_enums.StockMovementTypeReturnToVendor, warehouse_enums.StockMovementTypeScrap, warehouse_enums.StockMovementTypeLotReassignment}, invalid: warehouse_enums.StockMovementType("__invalid__")},
 		{name: "warehouseenum.InventoryDateMarkKind", valid: []stringEnum{warehouse_enums.InventoryDateMarkBestBefore, warehouse_enums.InventoryDateMarkExpiry}, invalid: warehouse_enums.InventoryDateMarkKind("__invalid__")},
@@ -36,4 +36,16 @@ func TestWarehouseEnumsValidateKnownValues(t *testing.T) {
 		{name: "warehouseenum.WMSDraftStatus", valid: []stringEnum{warehouse_enums.WMSDraftStatusDraft, warehouse_enums.WMSDraftStatusSubmitted, warehouse_enums.WMSDraftStatusCancelled}, invalid: warehouse_enums.WMSDraftStatus("__invalid__")},
 		{name: "warehouseenum.WMSDraftType", valid: []stringEnum{warehouse_enums.WMSDraftTypeInbound, warehouse_enums.WMSDraftTypeOutbound}, invalid: warehouse_enums.WMSDraftType("__invalid__")},
 	})
+}
+
+func TestPackingDiscrepancyWithdrawalMethodWireValuesAreStable(t *testing.T) {
+	for value, want := range map[warehouse_enums.PackingDiscrepancyWithdrawalMethod]string{
+		warehouse_enums.PackingDiscrepancyWithdrawalMethodCommand:   "command",
+		warehouse_enums.PackingDiscrepancyWithdrawalMethodScan:      "scan",
+		warehouse_enums.PackingDiscrepancyWithdrawalMethodReinstate: "reinstate",
+	} {
+		if got := value.String(); got != want {
+			t.Errorf("PackingDiscrepancyWithdrawalMethod wire value = %q, want %q", got, want)
+		}
+	}
 }

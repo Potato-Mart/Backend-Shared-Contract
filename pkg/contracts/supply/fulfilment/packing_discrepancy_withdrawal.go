@@ -7,8 +7,10 @@ import (
 )
 
 // PackingDiscrepancyWithdrawal records base units withdrawn from a recorded
-// packing discrepancy, either by an explicit staff action or by a later scan.
-// WithdrawnBaseUnits is positive. WithdrawnBy is required.
+// packing discrepancy, either by an explicit staff action (command) or by a
+// later scan (scan). A reinstate entry re-records previously withdrawn units
+// that never arrived as missing again. WithdrawnBaseUnits is positive for
+// every method; Method alone gives the direction. WithdrawnBy is required.
 type PackingDiscrepancyWithdrawal struct {
 	WithdrawnBaseUnits int64                                              `json:"withdrawn_base_units"`
 	Method             warehouse_enums.PackingDiscrepancyWithdrawalMethod `json:"method"`

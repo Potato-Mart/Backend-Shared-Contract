@@ -17,6 +17,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/packaging"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/packaging/packaging_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/temporal"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/orders/order/order_enums"
 	ordershipping "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/orders/shipping"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/payments/payment/payment_enums"
@@ -436,5 +437,30 @@ func TestOrderJSONSnapshotsMembershipRedemptions(t *testing.T) {
 		if !strings.Contains(string(payload), timestamp) {
 			t.Fatalf("redemption commit timestamp missing %s: %s", timestamp, payload)
 		}
+	}
+}
+
+func TestOrderJSONKeepsProductionDateOptional(t *testing.T) {
+	raw, err := json.Marshal(sales.Order{OrderNumber: "ORDER-1"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(raw), `"production_date"`) {
+		t.Fatalf("absent production date must be omitted: %s", raw)
+	}
+	productionDate := temporal.Date("2026-11-02")
+	raw, err = json.Marshal(sales.Order{OrderNumber: "ORDER-2", ProductionDate: &productionDate})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(raw), `"production_date":"2026-11-02"`) {
+		t.Fatalf("production date wire shape changed: %s", raw)
+	}
+	var decoded sales.Order
+	if err := json.Unmarshal(raw, &decoded); err != nil {
+		t.Fatal(err)
+	}
+	if decoded.ProductionDate == nil || *decoded.ProductionDate != productionDate {
+		t.Fatalf("production date did not round-trip: %+v", decoded.ProductionDate)
 	}
 }

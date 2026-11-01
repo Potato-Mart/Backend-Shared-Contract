@@ -80,6 +80,10 @@ type Order struct {
 	OutsourcedCarrier string `json:"outsourced_carrier,omitempty"`
 	// DeliverySelection preserves the accepted company and window for Supply.
 	DeliverySelection *shipping.DeliverySelection `json:"delivery_selection,omitempty"`
+	// ProductionDate is the depot intake (production) date, computed by
+	// Orders at order time from its preparation rules. Supply uses it when
+	// booking the carrier. It is absent when Orders has not computed one.
+	ProductionDate *temporal.Date `json:"production_date,omitempty"`
 
 	// ── Money ─────────────────────────────────────────────────────────
 	// Subtotal is merchandise before promotion discounts. Total is the commercial
