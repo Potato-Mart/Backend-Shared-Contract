@@ -31,4 +31,7 @@ type SellingPromotionDisplay struct {
 	RequiredQuantity *int64   `json:"required_quantity,omitempty"`
 	MemberSKUCodes   []string `json:"member_sku_codes,omitempty"`
 	MemberSeriesKeys []string `json:"member_series_keys,omitempty"`
+	// Terms states the customer-safe deal terms. It is omitted when the
+	// promotion has none. These are display facts, not rules.
+	Terms *SellingPromotionTerms `json:"terms,omitempty"`
 }

@@ -280,7 +280,9 @@ var modelPackageManifest map[string]string
 // V53.7 adds ordered promotion stage, group, rounding, and lineage evidence.
 // V53.9 adds promotion saving and cart progress evidence and its leaf status
 // enum; existing promotion, display, and order models only gain optional fields.
-const exportedTypeManifestDigest = "a9e6457a75e4b1b2daa0dd28bf3c7d9f8c325f58d4bc05b20a7b6ede6246b632"
+// V53.11 adds Pricing-owned customer-safe selling-promotion terms and gift tier
+// terms; the existing promotion display only gains an optional field.
+const exportedTypeManifestDigest = "03d17197059a96d0543c5af1b5817df0d8d4438cc2b1a7443f76c21e97c21fe8"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
