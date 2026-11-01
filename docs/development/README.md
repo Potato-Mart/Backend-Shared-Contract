@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.10.0` | 2026-11-01 | Minor |
 | `v53.9.0` | 2026-11-01 | Minor |
 | `v53.8.0` | 2026-10-30 | Minor |
 | `v53.7.0` | 2026-10-30 | Minor |
@@ -71,6 +72,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.10.0 (2026-11-01)
+
+`SellingProduct` gains optional `expiry_date`, reusing `warehouse.InventoryDateMark` (`kind`, `date_mark_at`, `timezone`) so storefront, app and POS product displays can show a best-before or use-by date. `kind` uses the existing `InventoryDateMarkKind` enum: `BEST_BEFORE` for quality dates and `EXPIRY` for use-by or safety dates. The field is display-only and is omitted when absent, so existing JSON is unchanged and no data migration is needed. The owning backend chooses which lot's date mark to show; `SaleEligibilitySnapshot` remains the quote-time stock evidence. Consumers that decode `SellingProduct` strictly must accept the new field before a producer sends it.
 
 ## v53.9.0 (2026-11-01)
 
