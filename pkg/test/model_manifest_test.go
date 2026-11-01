@@ -282,7 +282,8 @@ var modelPackageManifest map[string]string
 // enum; existing promotion, display, and order models only gain optional fields.
 // V53.11 adds Pricing-owned customer-safe selling-promotion terms and gift tier
 // terms; the existing promotion display only gains an optional field.
-const exportedTypeManifestDigest = "03d17197059a96d0543c5af1b5817df0d8d4438cc2b1a7443f76c21e97c21fe8"
+// V53.12 adds the separate mixed gift-card and cash rounding record.
+const exportedTypeManifestDigest = "55abead3047daba067ee50114f5a5c0d3da4bd2f6f35fe7e75ea6276157a12d6"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

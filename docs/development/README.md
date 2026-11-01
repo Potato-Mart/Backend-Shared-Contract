@@ -36,6 +36,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.12.0` | 2026-11-01 | Minor |
 | `v53.11.0` | 2026-11-01 | Minor |
 | `v53.10.0` | 2026-11-01 | Minor |
 | `v53.9.0` | 2026-11-01 | Minor |
@@ -73,6 +74,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.12.0 (2026-11-01)
+
+Receipt evidence can separately describe a gift-card and residual-cash sale, including its exact residual and market rounding adjustment. It is mutually exclusive with the existing all-cash snapshot, which retains its meaning. The new record does not cover points or other tender splits. Orders, Payments and all affected consumers must adopt and validate the new evidence before it is emitted; this model does not activate a checkout or change refund behavior.
 
 ## v53.11.0 (2026-11-01)
 
