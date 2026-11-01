@@ -2,6 +2,7 @@ package fulfilment_test
 
 import (
 	"encoding/json"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -9,6 +10,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/packaging"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/orders/order/order_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/fulfilment"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
 func TestPackingRecordRoundTrip(t *testing.T) {
@@ -52,5 +54,54 @@ func TestPackingDiscrepancyCarriesOrderItemIdentity(t *testing.T) {
 	}
 	if len(decoded) != 2 || decoded[0].OrderItemID != "item-1" || decoded[1].OrderItemID != "item-2" || decoded[0].SKUCode != decoded[1].SKUCode {
 		t.Fatalf("discrepancy line identity lost: %+v", decoded)
+	}
+}
+
+// A shortage's remaining base units are its recorded base units minus the sum
+// of its withdrawals.
+func TestPackingDiscrepancyWithdrawalsRoundTrip(t *testing.T) {
+	recordedAt := time.Date(2026, 11, 1, 9, 0, 0, 0, time.UTC)
+	want := fulfilment.PackingDiscrepancy{
+		ID: "shortage-1", OrderItemID: "item-1", SKUCode: "SKU-1",
+		Kind:                 warehouse_enums.PackingDiscrepancyKindShortage,
+		RequestedComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 5},
+		ObservedComposition:  packaging.PackageCompositionSnapshot{TotalBaseUnits: 1},
+		RecordedAt:           recordedAt,
+		Withdrawals: []fulfilment.PackingDiscrepancyWithdrawal{
+			{WithdrawnBaseUnits: 1, Method: warehouse_enums.PackingDiscrepancyWithdrawalMethodCommand, WithdrawnBy: "staff-1", WithdrawnAt: recordedAt.Add(time.Minute)},
+			{WithdrawnBaseUnits: 2, Method: warehouse_enums.PackingDiscrepancyWithdrawalMethodScan, WithdrawnBy: "staff-2", WithdrawnAt: recordedAt.Add(2 * time.Minute)},
+		},
+	}
+	raw, err := json.Marshal(want)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(raw), `"withdrawals":[{"withdrawn_base_units":1,"method":"command","withdrawn_by":"staff-1","withdrawn_at":"2026-11-01T09:01:00Z"},{"withdrawn_base_units":2,"method":"scan","withdrawn_by":"staff-2","withdrawn_at":"2026-11-01T09:02:00Z"}]`) {
+		t.Fatalf("withdrawals wire shape changed: %s", raw)
+	}
+	var got fulfilment.PackingDiscrepancy
+	if err := json.Unmarshal(raw, &got); err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(got.Withdrawals, want.Withdrawals) {
+		t.Fatalf("withdrawals lost: %+v", got.Withdrawals)
+	}
+	remaining := got.RequestedComposition.TotalBaseUnits - got.ObservedComposition.TotalBaseUnits
+	for _, withdrawal := range got.Withdrawals {
+		if !withdrawal.Method.IsValid() {
+			t.Fatalf("withdrawal method %q must validate", withdrawal.Method)
+		}
+		remaining -= withdrawal.WithdrawnBaseUnits
+	}
+	if remaining != 1 {
+		t.Fatalf("remaining shortage base units = %d, want 1", remaining)
+	}
+
+	raw, err = json.Marshal(fulfilment.PackingDiscrepancy{ID: "shortage-2"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(raw), "withdrawals") {
+		t.Fatalf("empty withdrawals must be omitted: %s", raw)
 	}
 }

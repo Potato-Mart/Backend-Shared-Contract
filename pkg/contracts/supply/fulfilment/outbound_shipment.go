@@ -5,11 +5,18 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/geography"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/party"
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/security"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/orders/shipping"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/courier"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
+// OutboundShipment is one Supply dispatch unit for an order.
+//
+// Recipient is the delivery contact handed to the carrier; CustomerName keeps
+// its meaning. Recipient and Address are personal data: a shipment carrying
+// either must set ContainsPII in its DataProtectionFields.
 type OutboundShipment struct {
 	ID        string `json:"id"`
 	DepotCode string `json:"depot_code"`
@@ -21,6 +28,7 @@ type OutboundShipment struct {
 	OrderNumber  string                                 `json:"order_number"`
 	CustomerName string                                 `json:"customer_name,omitempty"`
 	Address      *geography.Address                     `json:"address,omitempty"`
+	Recipient    *party.Recipient                       `json:"recipient,omitempty"`
 	Operator     string                                 `json:"operator"`
 	Status       warehouse_enums.OutboundShipmentStatus `json:"status"`
 	Containers   []OutboundContainerPlan                `json:"containers,omitempty"`
@@ -34,6 +42,10 @@ type OutboundShipment struct {
 	DispatchedAt      *time.Time                  `json:"dispatched_at,omitempty"`
 	DeliveredAt       *time.Time                  `json:"delivered_at,omitempty"`
 	History           []security.HistoryEntry     `json:"history,omitempty"`
+	// LatestCarrierBooking summarizes the order's latest
+	// CarrierBookingAttempt. One attempt covers all of the order's shipments,
+	// so every shipment it lists carries the same summary.
+	LatestCarrierBooking *courier.CarrierBookingSummary `json:"latest_carrier_booking,omitempty"`
 	audit.AuditFields
 	security.DataProtectionFields
 }

@@ -284,7 +284,10 @@ var modelPackageManifest map[string]string
 // terms; the existing promotion display only gains an optional field.
 // V53.12 adds the separate mixed gift-card and cash rounding record.
 // V53.13 adds the Supply-owned CatalogProductStatusChangedEvent payload.
-const exportedTypeManifestDigest = "c754e74339647e0b9ac47c81f6e78d5cc79a7e83702303020b941d7267d21ba9"
+// V53.14 adds Supply-owned carrier booking attempt, summary, edits, time window
+// and redacted request summary records with outcome and error-code leaf enums,
+// and the packing discrepancy withdrawal record with its method leaf enum.
+const exportedTypeManifestDigest = "a6254c067bd3c9e87177e2a58873556963d9ba892284b51f9f7cc2d802ac6b59"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

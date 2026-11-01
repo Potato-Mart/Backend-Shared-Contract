@@ -3,4 +3,6 @@
 // sensitive-value masking, privileged access, validation, routing and booking.
 // User-configured APIs implement the normalized delivery protocol; available
 // slot lists are transient and accepted delivery selections remain order-owned.
+// Carrier booking attempts record Supply's per-order booking outcomes with
+// mapped, provider-neutral error codes and redacted request summaries.
 package courier
