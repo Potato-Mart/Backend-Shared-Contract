@@ -287,7 +287,8 @@ var modelPackageManifest map[string]string
 // V53.14 adds Supply-owned carrier booking attempt, summary, edits, time window
 // and redacted request summary records with outcome and error-code leaf enums,
 // and the packing discrepancy withdrawal record with its method leaf enum.
-const exportedTypeManifestDigest = "a6254c067bd3c9e87177e2a58873556963d9ba892284b51f9f7cc2d802ac6b59"
+// V53.16 adds the Payments-owned refund alternative event and line records.
+const exportedTypeManifestDigest = "a321e7d52572edabcbdcdaf008d9c4efbfe60102afb417f9381569ed0d5b79aa"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

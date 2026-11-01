@@ -23,6 +23,7 @@ func TestInventoryAndCommerceEventTypes(t *testing.T) {
 				event_enums.EventTypeRefundRequested,
 				event_enums.EventTypeRefundCompleted,
 				event_enums.EventTypeRefundFailed,
+				event_enums.EventTypeRefundAlternativeOffered,
 				event_enums.EventTypeInventoryLotReceived,
 				event_enums.EventTypeInventoryStockBucketChanged,
 				event_enums.EventTypeInventoryPackageConverted,

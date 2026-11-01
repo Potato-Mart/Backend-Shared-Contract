@@ -17,6 +17,9 @@ const (
 	EventTypeRefundRequested    EventType = "refund.requested"
 	EventTypeRefundCompleted    EventType = "refund.completed"
 	EventTypeRefundFailed       EventType = "refund.failed"
+	// EventTypeRefundAlternativeOffered announces a staff alternative offer on
+	// a pending refund request, before any refund is executed.
+	EventTypeRefundAlternativeOffered EventType = "refund.alternative_offered"
 
 	EventTypeInventoryLotReceived              EventType = "inventory.lot_received"
 	EventTypeInventoryStockBucketChanged       EventType = "inventory.stock_bucket_changed"
@@ -63,7 +66,7 @@ func (t EventType) IsValid() bool {
 		EventTypeOrderCancelled, EventTypeOrderEdited,
 		EventTypePaymentCaptured, EventTypePaymentFailed, EventTypeInvoiceIssued,
 		EventTypeReceiptGenerated,
-		EventTypeRefundRequested, EventTypeRefundCompleted, EventTypeRefundFailed,
+		EventTypeRefundRequested, EventTypeRefundCompleted, EventTypeRefundFailed, EventTypeRefundAlternativeOffered,
 		EventTypeInventoryLotReceived, EventTypeInventoryStockBucketChanged,
 		EventTypeInventoryPackageConverted, EventTypeInventoryQualityAssessed,
 		EventTypeInventoryReservationChanged, EventTypeInventoryStaged,

@@ -1,0 +1,23 @@
+{
+  "refund_request_id": "rr_1",
+  "proposal_revision": 2,
+  "order_number": "CUSTOM-0042/A",
+  "retail_customer_number": "RCABCDEF",
+  "locale": "zh-TW",
+  "lines": [
+    {
+      "original_line_ref": "line-1",
+      "original_sku_code": "SKU-1",
+      "alternative_sku_code": "SKU-2",
+      "alternative_name": "Alternative",
+      "quantity": 2,
+      "unit_price": {"amount_minor": 450, "currency": "AUD"}
+    }
+  ],
+  "original_payable": {"amount_minor": 1000, "currency": "AUD"},
+  "proposed_payable": {"amount_minor": 900, "currency": "AUD"},
+  "contact_note": "Reply to the store",
+  "market_code": "AU",
+  "offered_by": "staff-1",
+  "offered_at": "2026-11-01T01:02:03Z"
+}
