@@ -87,3 +87,45 @@ func TestPackageConversionMovementRoundTrip(t *testing.T) {
 		t.Fatalf("conversion base-unit totals differ: %+v", decoded)
 	}
 }
+
+func TestLotReassignmentMovementRoundTrip(t *testing.T) {
+	occurredAt := time.Date(2026, 11, 1, 9, 30, 0, 0, time.UTC)
+	each := packaging.PackageOptionRef{SKUCode: "A00001", Code: "EACH", Version: 1}
+	movement := operations.StockMovement{
+		ID:                       "mov_2",
+		SKUCode:                  "A00001",
+		Type:                     warehouse_enums.StockMovementTypeLotReassignment,
+		SourceBucketID:           "bucket_lot_1",
+		DestinationBucketID:      "bucket_lot_2",
+		LotID:                    "lot_1",
+		SourcePackageOption:      &each,
+		DestinationPackageOption: &each,
+		BaseUnits:                3,
+		PerformedBy:              "operator_1",
+		OccurredAt:               occurredAt,
+	}
+
+	payload, err := json.Marshal(movement)
+	if err != nil {
+		t.Fatalf("marshal lot reassignment movement: %v", err)
+	}
+	if !strings.Contains(string(payload), `"type":"LOT_REASSIGNMENT"`) {
+		t.Fatalf("lot reassignment wire value changed: %s", payload)
+	}
+
+	var decoded operations.StockMovement
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal lot reassignment movement: %v", err)
+	}
+	if decoded.Type != warehouse_enums.StockMovementTypeLotReassignment || !decoded.Type.IsValid() || decoded.BaseUnits != 3 {
+		t.Fatalf("lot reassignment identity did not round-trip: %+v", decoded)
+	}
+	// lot_id is the source lot; the destination lot is identified through
+	// destination_bucket_id.
+	if decoded.SourceBucketID != "bucket_lot_1" || decoded.DestinationBucketID != "bucket_lot_2" || decoded.LotID != "lot_1" {
+		t.Fatalf("lot reassignment buckets and source lot did not round-trip: %+v", decoded)
+	}
+	if decoded.SourcePackageOption == nil || decoded.DestinationPackageOption == nil || *decoded.SourcePackageOption != *decoded.DestinationPackageOption {
+		t.Fatalf("lot reassignment must keep the package grain: %+v", decoded)
+	}
+}

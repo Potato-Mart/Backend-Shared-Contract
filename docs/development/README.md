@@ -31,11 +31,13 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | 17 | `OrderPackingProjection` | `fulfilment.packing_updated` | `fulfilment-events` |
 | 18 | `StockRestockAlertTriggeredEvent` | `stock.restock_alert_triggered` | `stock-events` |
 | 19 | `InventoryPOSSaleCommittedEvent` | `inventory.pos_sale_committed` | `stock-events` |
+| 20 | `CatalogProductStatusChangedEvent` | `catalog.product_status_changed` | `catalog-events` |
 
 ## Release index
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.13.0` | 2026-11-01 | Minor |
 | `v53.12.0` | 2026-11-01 | Minor |
 | `v53.11.0` | 2026-11-01 | Minor |
 | `v53.10.0` | 2026-11-01 | Minor |
@@ -74,6 +76,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.13.0 (2026-11-01)
+
+Supply can publish `catalog.product_status_changed` v1 on the existing `catalog-events` topic, carried by `CatalogProductStatusChangedEvent` (`sku_code`, optional `previous_status`, `status`, `previous_revision`, `revision`, `changed_at` and optional `changed_by`). The statuses use the existing `ProductStatus` enum; `previous_status` is omitted on a product's first status write. `revision` is the product revision produced by the status write and `previous_revision` the revision it replaced; consumers apply the event only when it is newer than the revision they hold. The event describes admin lifecycle state only, not stock availability or a market listing status. `StockMovementType` gains `LOT_REASSIGNMENT`: one movement that moves base units from one lot's bucket to another lot's bucket at the same location and package grain. It is value-neutral; the source lot's unit cost carries across. `StockMovement` gains no fields: `lot_id` is the source lot and the destination lot is identified through `destination_bucket_id`. Existing event types, payloads, movement types and JSON are unchanged, and no data migration is needed. Consumers that validate event types or movement types strictly must accept the new values before Supply emits them.
 
 ## v53.12.0 (2026-11-01)
 

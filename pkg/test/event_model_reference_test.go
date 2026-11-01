@@ -20,6 +20,7 @@ import (
 var documentedEventPayloads = []string{
 	"CatalogBaseCostChangedEvent",
 	"CatalogListingChangedEvent",
+	"CatalogProductStatusChangedEvent",
 	"InventoryDateMarkThresholdEvent",
 	"InventoryLotReceivedEvent",
 	"InventoryPackageConvertedEvent",

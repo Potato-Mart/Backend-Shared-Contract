@@ -46,6 +46,7 @@ func TestInventoryAndCommerceEventTypes(t *testing.T) {
 				event_enums.EventTypeNotificationGiftCardDelivered,
 				event_enums.EventTypeCatalogBaseCostChanged,
 				event_enums.EventTypeCatalogListingChanged,
+				event_enums.EventTypeCatalogProductStatusChanged,
 				event_enums.EventTypeProductSalesPerformanceUpdated,
 				event_enums.EventTypePriceChanged,
 				event_enums.EventTypePromotionChanged,
@@ -71,6 +72,9 @@ func TestInventoryAndCommerceEventTypes(t *testing.T) {
 	}
 	if got := event_enums.EventTypeCatalogListingChanged.String(); got != "catalog.listing_changed" {
 		t.Fatalf("catalog listing event type = %q", got)
+	}
+	if got := event_enums.EventTypeCatalogProductStatusChanged.String(); got != "catalog.product_status_changed" {
+		t.Fatalf("catalog product status event type = %q", got)
 	}
 	if got := event_enums.EventTopicCatalogEvents.String(); got != "catalog-events" || !event_enums.EventTopicCatalogEvents.IsValid() {
 		t.Fatalf("catalog topic = %q", got)
