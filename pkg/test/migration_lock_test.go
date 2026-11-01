@@ -47,6 +47,7 @@ func TestCatalogEventTopologyIsDeclared(t *testing.T) {
 	for _, eventType := range []event_enums.EventType{
 		event_enums.EventTypeCatalogBaseCostChanged,
 		event_enums.EventTypeCatalogListingChanged,
+		event_enums.EventTypeCatalogProductStatusChanged,
 	} {
 		if !eventType.IsValid() {
 			t.Fatalf("catalog event type %q must validate", eventType)

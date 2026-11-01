@@ -283,7 +283,8 @@ var modelPackageManifest map[string]string
 // V53.11 adds Pricing-owned customer-safe selling-promotion terms and gift tier
 // terms; the existing promotion display only gains an optional field.
 // V53.12 adds the separate mixed gift-card and cash rounding record.
-const exportedTypeManifestDigest = "55abead3047daba067ee50114f5a5c0d3da4bd2f6f35fe7e75ea6276157a12d6"
+// V53.13 adds the Supply-owned CatalogProductStatusChangedEvent payload.
+const exportedTypeManifestDigest = "c754e74339647e0b9ac47c81f6e78d5cc79a7e83702303020b941d7267d21ba9"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
