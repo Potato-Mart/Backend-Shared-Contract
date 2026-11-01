@@ -288,7 +288,7 @@ var modelPackageManifest map[string]string
 // and redacted request summary records with outcome and error-code leaf enums,
 // and the packing discrepancy withdrawal record with its method leaf enum.
 // V53.16 adds the Payments-owned refund alternative event and line records.
-const exportedTypeManifestDigest = "a321e7d52572edabcbdcdaf008d9c4efbfe60102afb417f9381569ed0d5b79aa"
+const exportedTypeManifestDigest = "db6ad15d84a8fac2211e6a557997287d29601af7385285225db85c90f3e83938"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

@@ -37,6 +37,9 @@ type SaleEligibilitySnapshot struct {
 
 	AvailableBaseUnits int64 `json:"available_base_units"`
 	InventoryRevision  int64 `json:"inventory_revision"`
+	// POSDeficit is present only when a POS line is eligible with a deficit
+	// at a depot that has a POS deficit location. It is omitted otherwise.
+	POSDeficit *POSDeficitEligibility `json:"pos_deficit,omitempty"`
 
 	ValidityToken string    `json:"validity_token"`
 	ValidUntil    time.Time `json:"valid_until"`

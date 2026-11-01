@@ -37,6 +37,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.17.0` | 2026-11-01 | Minor |
 | `v53.16.0` | 2026-11-01 | Minor |
 | `v53.15.0` | 2026-11-01 | Minor |
 | `v53.14.0` | 2026-11-01 | Minor |
@@ -79,6 +80,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.17.0 (2026-11-01)
+
+`SaleEligibilitySnapshot` gains optional `pos_deficit` (`POSDeficitEligibility`: `deficit_location_code`, `package_option`, `handling_unit`, `units_per_package`, `short_package_count`, `short_base_units`). Supply sets it only when a POS line is eligible with a deficit at a depot that has a configured POS deficit location; the short quantity is booked against that location when the sale settles. It asserts neither a reservation nor future stock, and the snapshot's `validity_token` still governs revalidation. `SaleEvidence` gains the optional `non_stock` variant (`NonStockSaleEvidence`: `sku_code`, `market_code`, optional `depot_code`, `open_price`, `package_option`, `handling_unit`, `package_count`, `units_per_package`, `base_units`, `listing_revision`, `evidence_token`, `valid_until`, `captured_at`), mirroring the wholesale backorder evidence, for SKUs sold without physical inventory such as the open-price placeholders `OPEN0001` to `OPEN0020`. A non-stock line never reserves, stages or settles stock; `open_price` marks a placeholder whose price is entered at sale time. Exactly one `SaleEvidence` variant is still required. All additions are omitted when absent, so existing JSON is unchanged and no data migration is needed. Consumers that decode these models strictly must accept the new fields before Supply sends them.
 
 ## v53.16.0 (2026-11-01)
 

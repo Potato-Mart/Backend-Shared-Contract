@@ -8,9 +8,12 @@ import "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/
 // the separate offline snapshot rather than pretending to have an online quote.
 // An Orders-owned digital gift purchase is a separate face-value instrument,
 // not a Pricing quote or a stock sale. Its synthetic snapshot has no variant;
-// Orders must establish its purchase identity and digital classification.
+// Orders must establish its purchase identity and digital classification. A
+// non-stock SKU, such as an open-price placeholder, uses the non-stock variant
+// and never reserves, stages or settles stock.
 type SaleEvidence struct {
 	Stocked            *listing.SaleEligibilitySnapshot `json:"stocked,omitempty"`
 	WholesaleBackorder *listing.BackorderEvidence       `json:"wholesale_backorder,omitempty"`
 	POSMerchandise     *listing.POSMerchandiseEvidence  `json:"pos_merchandise,omitempty"`
+	NonStock           *listing.NonStockSaleEvidence    `json:"non_stock,omitempty"`
 }

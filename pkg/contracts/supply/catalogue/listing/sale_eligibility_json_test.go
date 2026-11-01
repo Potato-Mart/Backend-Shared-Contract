@@ -6,6 +6,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/packaging/packaging_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/warehouse"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/warehouse/warehouse_enums"
 )
@@ -57,5 +59,41 @@ func TestSaleEligibilitySnapshotIsEvidenceOnly(t *testing.T) {
 	}
 	if decoded.DamageApproval == nil || decoded.DamageApproval.Tier != warehouse_enums.DamageSaleTier50 {
 		t.Fatalf("damage approval did not round-trip: %+v", decoded.DamageApproval)
+	}
+}
+
+func TestSaleEligibilitySnapshotPOSDeficitIsOptional(t *testing.T) {
+	plain, err := json.Marshal(SaleEligibilitySnapshot{SKUCode: "sku_a00001"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(plain), `"pos_deficit"`) {
+		t.Fatalf("absent POS deficit must be omitted: %s", plain)
+	}
+
+	value := SaleEligibilitySnapshot{
+		SKUCode: "sku_a00001", DepotCode: "AU-VIC-MEL-DC-01", AvailableBaseUnits: 4,
+		POSDeficit: &POSDeficitEligibility{
+			DeficitLocationCode: "POS-DEFICIT",
+			PackageOption:       packaging.PackageOptionRef{SKUCode: "sku_a00001", Code: "CASE6", Version: 1},
+			HandlingUnit:        packaging_enums.PackageHandlingUnitCase,
+			UnitsPerPackage:     6, ShortPackageCount: 1, ShortBaseUnits: 2,
+		},
+	}
+	payload, err := json.Marshal(value)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, want := range []string{`"pos_deficit":{"deficit_location_code":"POS-DEFICIT"`, `"short_package_count":1`, `"short_base_units":2`} {
+		if !strings.Contains(string(payload), want) {
+			t.Fatalf("SaleEligibilitySnapshot JSON = %s, want %s", payload, want)
+		}
+	}
+	var decoded SaleEligibilitySnapshot
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatal(err)
+	}
+	if decoded.POSDeficit == nil || *decoded.POSDeficit != *value.POSDeficit {
+		t.Fatalf("POS deficit did not round-trip: %+v", decoded.POSDeficit)
 	}
 }
