@@ -37,6 +37,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.16.0` | 2026-11-01 | Minor |
 | `v53.15.0` | 2026-11-01 | Minor |
 | `v53.14.0` | 2026-11-01 | Minor |
 | `v53.13.0` | 2026-11-01 | Minor |
@@ -78,6 +79,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.16.0 (2026-11-01)
+
+Payments can publish `refund.alternative_offered` v1 on the existing `refund-events` topic, carried by `RefundAlternativeEvent` (`refund_request_id`, `proposal_revision`, opaque `order_number`, optional `customer_id` and `retail_customer_number`, optional `locale`, `lines` of `RefundAlternativeLine` (`original_line_ref`, optional `original_sku_code`, `alternative_sku_code`, optional `alternative_name`, `quantity`, `unit_price`), `original_payable` and `proposed_payable` in one currency, optional `contact_note`, optional `market_code` and `country_code`, optional `offered_by`, and `offered_at`). It is published when staff record an alternative on a pending refund request, before any refund is executed, and never announces money movement. One event is published per revision; consumers treat a lower revision for the same request as obsolete and suppress its queued delivery. Staff record the customer response; there is no customer acceptance endpoint. Stock is not reserved by the proposal. Existing event types, payloads and JSON are unchanged and no data migration is needed. Every refund-events subscriber must handle or explicitly acknowledge the new type before Payments emits it; Payments keeps emission behind a configuration switch until then.
 
 ## v53.15.0 (2026-11-01)
 
