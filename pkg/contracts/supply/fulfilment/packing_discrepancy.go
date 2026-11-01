@@ -8,6 +8,13 @@ import (
 )
 
 // PackingDiscrepancy compares requested and observed package compositions.
+//
+// Withdrawals record base units later withdrawn from the discrepancy; the
+// contract does not restrict them to a discrepancy kind. A shortage's recorded
+// base units are requested_composition.total_base_units minus
+// observed_composition.total_base_units; its remaining base units are the
+// recorded base units minus the sum of withdrawals[].withdrawn_base_units.
+// Withdrawals are append-only evidence and do not rewrite the compositions.
 type PackingDiscrepancy struct {
 	ID                   string                                 `json:"id"`
 	OrderItemID          string                                 `json:"order_item_id"`
@@ -25,4 +32,5 @@ type PackingDiscrepancy struct {
 	DamageHandling       warehouse_enums.PackingDamageHandling  `json:"damage_handling,omitempty"`
 	RecordedAt           time.Time                              `json:"recorded_at"`
 	RecordedBy           string                                 `json:"recorded_by,omitempty"`
+	Withdrawals          []PackingDiscrepancyWithdrawal         `json:"withdrawals,omitempty"`
 }
