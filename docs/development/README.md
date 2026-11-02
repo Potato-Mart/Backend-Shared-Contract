@@ -37,6 +37,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.18.0` | 2026-11-03 | Minor |
 | `v53.17.0` | 2026-11-01 | Minor |
 | `v53.16.0` | 2026-11-01 | Minor |
 | `v53.15.0` | 2026-11-01 | Minor |
@@ -80,6 +81,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.18.0 (2026-11-03)
+
+`PaymentReference` gains optional `bank_transfer` (`BankTransferPaymentReference`), the staff confirmation of a payment the customer made by bank transfer at the till: optional `payer_reference`, optional `customer` (`BankTransferCustomer`: the embedded `PartyRef` fields `id`, `code`, `name`, `phone`, `email`, plus optional `customer_number`), `transfer_amount`, `confirmation_status`, optional `evidence` (`BankTransferEvidence`: `code`, `mime_type`, `sha256`, `captured_at`, `captured_by`), `confirmed_at` and `confirmed_by`. `confirmation_status` uses the new `BankTransferConfirmationStatus` enum (`confirmed_full`, `confirmed_partial`). Both values complete the payment for the full amount due; `confirmed_partial` flags a transfer whose evidence did not show the full amount so finance can follow it up, and never leaves a balance outstanding. Evidence `code` is the Payments-owned media code of a private stored object that Payments verified by size and SHA-256 when it was finalized; clients obtain short-lived download URLs from Payments and never receive public URLs. The evidence key is `code`, not the retired `media_code`. `RegisterSession` gains optional `sequence`: a register has at most one OPEN session at a time and may run several sequential sessions per business date, numbered from 1, so (`register_id`, `business_date`, `sequence`) is the session's natural key. Records written before this release omit `sequence` and are the first session of their business date; Payments backfills `sequence` 1 for them. All additions are omitted when absent, so existing JSON is unchanged. Consumers that decode these models or the enum strictly must accept the new fields and values before Payments sends them, and consumers that assumed one session per register per business date must key sessions by id or by the new natural key.
 
 ## v53.17.0 (2026-11-01)
 

@@ -10,6 +10,7 @@ import (
 
 func TestPaymentEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
+		{name: "paymentenum.BankTransferConfirmationStatus", valid: []stringEnum{payment_enums.BankTransferConfirmationStatusConfirmedFull, payment_enums.BankTransferConfirmationStatusConfirmedPartial}, invalid: payment_enums.BankTransferConfirmationStatus("__invalid__")},
 		{name: "paymentenum.BusinessNumberScheme", valid: []stringEnum{payment_enums.BusinessNumberSchemeABN, payment_enums.BusinessNumberSchemeACN, payment_enums.BusinessNumberSchemeNZBN, payment_enums.BusinessNumberSchemeUEN, payment_enums.BusinessNumberSchemeVAT, payment_enums.BusinessNumberSchemeEIN, payment_enums.BusinessNumberSchemeOther}, invalid: payment_enums.BusinessNumberScheme("__invalid__")},
 		{name: "paymentenum.TaxRegistrationStatus", valid: []stringEnum{payment_enums.TaxRegistrationStatusRegistered, payment_enums.TaxRegistrationStatusNotRegistered, payment_enums.TaxRegistrationStatusUnknown}, invalid: payment_enums.TaxRegistrationStatus("__invalid__")},
 		{name: "paymentenum.MerchantProfileStatus", valid: []stringEnum{payment_enums.MerchantProfileStatusDraft, payment_enums.MerchantProfileStatusActive, payment_enums.MerchantProfileStatusInactive}, invalid: payment_enums.MerchantProfileStatus("__invalid__")},

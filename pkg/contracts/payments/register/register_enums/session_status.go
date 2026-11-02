@@ -1,6 +1,6 @@
 package register_enums
 
-// SessionStatus is the lifecycle state of a register's daily trading session.
+// SessionStatus is the lifecycle state of a register trading session.
 type SessionStatus string
 
 const (
