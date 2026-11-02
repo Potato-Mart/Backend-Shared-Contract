@@ -3,7 +3,8 @@ package payment
 import "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/payments/provider"
 
 type PaymentReference struct {
-	Stripe *provider.StripePaymentReference `json:"stripe,omitempty"`
-	Mx51   *provider.Mx51PaymentReference   `json:"mx51,omitempty"`
-	Wallet *provider.WalletPaymentReference `json:"wallet,omitempty"`
+	Stripe       *provider.StripePaymentReference       `json:"stripe,omitempty"`
+	Mx51         *provider.Mx51PaymentReference         `json:"mx51,omitempty"`
+	Wallet       *provider.WalletPaymentReference       `json:"wallet,omitempty"`
+	BankTransfer *provider.BankTransferPaymentReference `json:"bank_transfer,omitempty"`
 }

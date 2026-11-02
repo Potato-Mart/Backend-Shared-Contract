@@ -10,14 +10,18 @@ import (
 	"time"
 )
 
-// RegisterSession is the single trading session one register runs for one
-// business day, from open to close-out.
+// RegisterSession is one trading session a register runs, from open to
+// close-out.
 //
 // A session belongs to the register, not to an operator: every operator
-// working that register on that business date shares the same session, and
-// every workforce rank with POS access may open, manage, and close it. One
-// register therefore has at most one session per business date, and
-// (register_id, business_date) is the record's natural key.
+// working that register shares the open session, and every workforce rank with
+// POS access may open, manage, and close it. A register has at most one OPEN
+// session at a time, and may run several sequential sessions per business
+// date: a new session can open only after the previous one closed. Sequence
+// numbers a register's sessions within one business date from 1, so
+// (register_id, business_date, sequence) is the record's natural key. Records
+// written before sequential sessions omit sequence and are the first session
+// of their business date.
 type RegisterSession struct {
 	ID           string                  `json:"id"`
 	RegisterID   string                  `json:"register_id"`
@@ -26,6 +30,7 @@ type RegisterSession struct {
 	MarketCode   string                  `json:"market_code,omitempty"`
 	CountryCode  geography.CountryCode   `json:"country_code,omitempty"`
 	BusinessDate temporal.Date           `json:"business_date"`
+	Sequence     int64                   `json:"sequence,omitempty"`
 	Status       pos_enums.SessionStatus `json:"status"`
 
 	OpenedAt       time.Time  `json:"opened_at"`
