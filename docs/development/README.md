@@ -37,6 +37,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.19.0` | 2026-11-03 | Minor |
 | `v53.18.0` | 2026-11-03 | Minor |
 | `v53.17.0` | 2026-11-01 | Minor |
 | `v53.16.0` | 2026-11-01 | Minor |
@@ -81,6 +82,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.19.0 (2026-11-03)
+
+`Campaign` gains optional `card_media` (`security.ObjectMedia`: `code`, optional `url`), placed after `media`: the campaign's 9:16 portrait artwork for the iOS and Android apps' Home "Featured campaigns" cards. It is campaign-level, not a placement, and is independent of `media`, the 16:9 cover; apps fall back to `media` when `card_media` is absent. Customers stores and serves it, Admin-Web uploads it and the apps read it. `CampaignChangedEvent` is unchanged and, like `media`, never carries it; consumers refetch the campaign. The field is omitted when absent, so existing JSON is unchanged and no data migration is needed. Consumers that decode `Campaign` strictly must accept the new field before Customers sends it.
 
 ## v53.18.0 (2026-11-03)
 

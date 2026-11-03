@@ -62,6 +62,15 @@ func TestCampaignPlacementCanonicalRecords(t *testing.T) {
 			if c.Campaign.CampaignCode != c.Comparable.CampaignCode || c.Campaign.Revision != 13 || c.Campaign.ActivationRevision != 5 {
 				t.Fatal("identity or revisions drifted")
 			}
+			// card_media is campaign-level portrait artwork, independent of
+			// placement media; only the home_banner fixture authors it.
+			if c.Name == "home_banner" {
+				if c.Campaign.CardMedia == nil || c.Campaign.CardMedia.Code != "media-campaign-card" || c.Campaign.Media == nil || c.Campaign.CardMedia.Code == c.Campaign.Media.Code {
+					t.Fatal("campaign card media lost or merged with the cover media")
+				}
+			} else if c.Campaign.CardMedia != nil {
+				t.Fatal("campaign without card media gained one")
+			}
 		})
 	}
 }
@@ -106,7 +115,7 @@ func TestCampaignPlacementEventCompatibility(t *testing.T) {
 				t.Fatal("campaign event lost identity, activation, revision or refetch evidence")
 			}
 			object := campaignPlacementRawObject(t, wire)
-			for _, forbidden := range []string{"placement", "title", "message", "cta", "cta_href", "cta_text", "media", "targets", "audience", "benefit_refs", "provider", "recipient", "customer_number"} {
+			for _, forbidden := range []string{"placement", "title", "message", "cta", "cta_href", "cta_text", "media", "card_media", "targets", "audience", "benefit_refs", "provider", "recipient", "customer_number"} {
 				if _, present := object[forbidden]; present {
 					t.Fatalf("customer-safe campaign event exposed %s", forbidden)
 				}

@@ -12,14 +12,18 @@ import (
 // Campaign permits incomplete authored drafts. Customers owns publication and
 // effective-state evaluation; Pricing owns commercial decisions.
 type Campaign struct {
-	ID                 string                                `json:"id,omitempty"`
-	CampaignCode       string                                `json:"campaign_code"`
-	MarketCode         string                                `json:"market_code,omitempty"`
-	CountryCode        geography.CountryCode                 `json:"country_code,omitempty"`
-	CurrencyCode       string                                `json:"currency_code,omitempty"`
-	Title              []localization.LocalizedName          `json:"title,omitempty"`
-	Description        []localization.LocalizedText          `json:"description,omitempty"`
-	Media              *security.ObjectMedia                 `json:"media,omitempty"`
+	ID           string                       `json:"id,omitempty"`
+	CampaignCode string                       `json:"campaign_code"`
+	MarketCode   string                       `json:"market_code,omitempty"`
+	CountryCode  geography.CountryCode        `json:"country_code,omitempty"`
+	CurrencyCode string                       `json:"currency_code,omitempty"`
+	Title        []localization.LocalizedName `json:"title,omitempty"`
+	Description  []localization.LocalizedText `json:"description,omitempty"`
+	Media        *security.ObjectMedia        `json:"media,omitempty"`
+	// CardMedia is the campaign's 9:16 portrait artwork for the apps' Home
+	// campaign cards. It is optional and campaign-level, not a placement; apps
+	// fall back to Media (the 16:9 cover) when it is absent.
+	CardMedia          *security.ObjectMedia                 `json:"card_media,omitempty"`
 	Placements         []Placement                           `json:"placements"`
 	Offers             []OfferLink                           `json:"offers"`
 	Published          bool                                  `json:"published"`
