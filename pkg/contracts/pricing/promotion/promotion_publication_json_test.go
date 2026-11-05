@@ -82,7 +82,15 @@ func TestPromotionPublicationKeepsRequiredFieldsAndOmitsAbsentOptionalFields(t *
 }
 
 func TestPromotionPublicationCarriesNoRulesTermsUsageOrCustomerData(t *testing.T) {
-	encoded, err := json.Marshal(PromotionPublication{})
+	raw, err := os.ReadFile("testdata/promotion_publication.json")
+	if err != nil {
+		t.Fatalf("read fixture: %v", err)
+	}
+	var populated PromotionPublication
+	if err := json.Unmarshal(raw, &populated); err != nil {
+		t.Fatalf("unmarshal fixture: %v", err)
+	}
+	encoded, err := json.Marshal(populated)
 	if err != nil {
 		t.Fatalf("marshal: %v", err)
 	}
