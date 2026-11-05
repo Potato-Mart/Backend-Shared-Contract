@@ -291,7 +291,8 @@ var modelPackageManifest map[string]string
 // V53.18 adds the Payments-owned bank-transfer payment reference, customer and
 // evidence records with the confirmation-status leaf enum; the payment
 // reference and register session only gain optional fields.
-const exportedTypeManifestDigest = "f7a463a74657cb88f1baffa634a9b106fc2d2a669fc3f87168e76611a17dcccd"
+// V53.20 adds the Pricing-owned customer-safe PromotionPublication read record.
+const exportedTypeManifestDigest = "cc0f5444cea1f762db23ac7dddf8565ca413d9ccc418cc8ecbff37b3effdb4ae"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
