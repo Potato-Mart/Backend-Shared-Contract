@@ -37,6 +37,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.20.0` | 2026-11-05 | Minor |
 | `v53.19.0` | 2026-11-03 | Minor |
 | `v53.18.0` | 2026-11-03 | Minor |
 | `v53.17.0` | 2026-11-01 | Minor |
@@ -82,6 +83,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.20.0 (2026-11-05)
+
+`PromotionPublication` (`pricing/promotion`) is new: Pricing's canonical, customer-safe publication state for one promotion, observed at `observed_at`. It carries `promotion_id`, `published`, `revision` and `observed_at`, plus optional `market_code`, `campaign_code`, `audience` (`marketing/audience.Audience`), `starts_at`, `ends_at` and `timezone`. `revision` equals `Promotion.revision` and the `revision` of the `promotion.changed` event (`PromotionChangedEvent`) for the same publication. `published` is the promotion's lifecycle publication state after campaign applicability, so a promotion whose linked campaign is not applicable reads as unpublished. `starts_at` and `ends_at` are the effective UTC window, start inclusive and end exclusive; an absent bound is unbounded on that side, and `timezone` is the scheduling timezone for display only. The record never carries promotion rules, terms, usage counters or customer data. It lets consumers such as Notification read a promotion by ID and confirm that a `PromotionChangedEvent` is still current and unexpired before bulk fan-out (Potato-Mart/Backend-Notification#94); Pricing owns the read route. The change is additive: no existing model, event or enum changes, and no data migration is needed.
 
 ## v53.19.0 (2026-11-03)
 

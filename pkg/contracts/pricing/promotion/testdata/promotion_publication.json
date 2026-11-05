@@ -1,0 +1,12 @@
+{
+  "promotion_id": "prm_weekend",
+  "published": true,
+  "revision": 7,
+  "market_code": "market_au",
+  "campaign_code": "CAM-SPRING",
+  "audience": {"customer_type": "retail", "platform": "mobile"},
+  "starts_at": "2026-11-06T00:00:00Z",
+  "ends_at": "2026-11-09T00:00:00Z",
+  "timezone": "Australia/Sydney",
+  "observed_at": "2026-11-05T01:02:03Z"
+}
