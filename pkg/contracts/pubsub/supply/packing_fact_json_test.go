@@ -16,7 +16,7 @@ func TestPackingFactJSONRoundTripsStageLinesAndStorageTotals(t *testing.T) {
 	started := time.Date(2026, 11, 6, 1, 0, 0, 0, time.UTC)
 	completed := started.Add(4 * time.Minute)
 	fact := event.PackingFact{
-		FactID: "packing:SO-1:0:AMBIENT_CHILLED", OrderNumber: "SO-1", FulfillmentGeneration: 2, ReopenCycle: 0,
+		FactID: "packing:SO-1:2:0:AMBIENT_CHILLED", OrderNumber: "SO-1", FulfillmentGeneration: 2, ReopenCycle: 0,
 		MarketCode: "MEL", DepotCode: "MAMA", Stage: supply_enums.PackingStageGroupAmbientChilled,
 		PackedBy: "staff_1", StartedAt: &started, CompletedAt: &completed, PackedAt: completed.Add(time.Minute),
 		PackageCount: 2,
@@ -34,7 +34,7 @@ func TestPackingFactJSONRoundTripsStageLinesAndStorageTotals(t *testing.T) {
 		t.Fatalf("marshal packing fact: %v", err)
 	}
 	for _, want := range []string{
-		`"fact_id":"packing:SO-1:0:AMBIENT_CHILLED"`, `"reopen_cycle":0`, `"stage":"AMBIENT_CHILLED"`,
+		`"fact_id":"packing:SO-1:2:0:AMBIENT_CHILLED"`, `"reopen_cycle":0`, `"stage":"AMBIENT_CHILLED"`,
 		`"started_at":"2026-11-06T01:00:00Z"`, `"storage_type":"CHILLED"`, `"total_base_units":24`, `"package_count":2`,
 	} {
 		if !strings.Contains(string(payload), want) {

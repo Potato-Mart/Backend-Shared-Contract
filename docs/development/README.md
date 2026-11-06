@@ -39,6 +39,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.24.1` | 2026-11-07 | Patch |
 | `v53.24.0` | 2026-11-06 | Minor |
 | `v53.23.0` | 2026-11-06 | Minor |
 | `v53.22.0` | 2026-11-06 | Minor |
@@ -89,6 +90,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.24.1 (2026-11-07)
+
+The `PackingFact` (`analytics.packing_fact`) FactID now includes the fulfilment generation: `packing:{order_number}:{fulfillment_generation}:{reopen_cycle}:{stage}` (Potato-Mart/Backend-Supply#298). An order edit starts a new fulfilment generation whose re-pack can reuse the same reopen cycle, so the v53.24.0 format could give two different facts the same FactID. Supply has not published the fact yet, so no stored fact changes. Only the documentation and its example change: no field, type, event version or enum changes, and no data migration is needed.
 
 ## v53.24.0 (2026-11-06)
 
