@@ -13,15 +13,18 @@ import (
 // on merchandise only, and returns quote.CartManualDiscountEvidence.
 //
 // Exactly one requested value is present for Mode: PercentBasisPoints for
-// percent (10000 is 100%), Amount for amount, and TargetTotal for set_total.
+// percent (10000 is 100%), RequestedAmount for amount, and TargetTotal for
+// set_total.
 // Amounts are gross, tax-inclusive merchandise values.
 type CartManualDiscountSelection struct {
 	Mode               quote_enums.ManualDiscountMode `json:"mode"`
 	PercentBasisPoints *int64                         `json:"percent_basis_points,omitempty"`
-	Amount             *money.Money                   `json:"amount,omitempty"`
+	RequestedAmount    *money.Money                   `json:"requested_amount,omitempty"`
 	TargetTotal        *money.Money                   `json:"target_total,omitempty"`
-	ReasonCode         string                         `json:"reason_code"`
-	Reason             string                         `json:"reason,omitempty"`
+	// ReasonCode is a deliberately free-form, service-validated code, not an
+	// enum: POS reasons are owner-configured and change without a release.
+	ReasonCode string `json:"reason_code"`
+	Reason     string `json:"reason,omitempty"`
 	// ActorUserID is the staff member who set the discount; Orders checks
 	// their authority before keeping or forwarding the selection.
 	ActorUserID string    `json:"actor_user_id"`

@@ -22,12 +22,12 @@ func TestCartManualDiscountSelectionFixtureRoundTrip(t *testing.T) {
 		t.Fatalf("unmarshal fixture: %v", err)
 	}
 	want := CartManualDiscountSelection{
-		Mode:        quote_enums.ManualDiscountModeAmount,
-		Amount:      &money.Money{AmountMinor: 300, Currency: "AUD"},
-		ReasonCode:  "staff_discretion",
-		Reason:      "Dented tin on shelf",
-		ActorUserID: "cashier_1",
-		SetAt:       time.Date(2026, 11, 6, 2, 0, 0, 0, time.UTC),
+		Mode:            quote_enums.ManualDiscountModeAmount,
+		RequestedAmount: &money.Money{AmountMinor: 300, Currency: "AUD"},
+		ReasonCode:      "staff_discretion",
+		Reason:          "Dented tin on shelf",
+		ActorUserID:     "cashier_1",
+		SetAt:           time.Date(2026, 11, 6, 2, 0, 0, 0, time.UTC),
 	}
 	if !reflect.DeepEqual(decoded, want) {
 		t.Fatalf("fixture decoded to %+v, want %+v", decoded, want)
@@ -36,7 +36,7 @@ func TestCartManualDiscountSelectionFixtureRoundTrip(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	wantJSON := `"manual_discount":{"mode":"amount","amount":{"amount_minor":300,"currency":"AUD"},"reason_code":"staff_discretion","reason":"Dented tin on shelf","actor_user_id":"cashier_1","set_at":"2026-11-06T02:00:00Z"}`
+	wantJSON := `"manual_discount":{"mode":"amount","requested_amount":{"amount_minor":300,"currency":"AUD"},"reason_code":"staff_discretion","reason":"Dented tin on shelf","actor_user_id":"cashier_1","set_at":"2026-11-06T02:00:00Z"}`
 	if !strings.Contains(string(encoded), wantJSON) {
 		t.Fatalf("cart JSON = %s, want %s", encoded, wantJSON)
 	}

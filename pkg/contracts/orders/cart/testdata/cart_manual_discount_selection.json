@@ -1,6 +1,6 @@
 {
   "mode": "amount",
-  "amount": {"amount_minor": 300, "currency": "AUD"},
+  "requested_amount": {"amount_minor": 300, "currency": "AUD"},
   "reason_code": "staff_discretion",
   "reason": "Dented tin on shelf",
   "actor_user_id": "cashier_1",

@@ -34,6 +34,8 @@ type CartManualDiscountEvidence struct {
 	// pre-discount basis before this discount applied, when there was one.
 	CouponCode   string       `json:"coupon_code,omitempty"`
 	CouponAmount *money.Money `json:"coupon_amount,omitempty"`
+	// ReasonCode is deliberately a free-form, service-validated string, not
+	// an enum, because POS discount reasons are owner-configured.
 	// ReasonCode categorizes the discount; Reason is the optional human
 	// explanation. ActorUserID is the staff member who set the discount.
 	ReasonCode  string    `json:"reason_code"`
