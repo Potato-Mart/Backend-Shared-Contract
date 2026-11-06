@@ -56,7 +56,8 @@ type PriceSnapshot struct {
 	CustomOverride *CustomPriceOverrideEvidence `json:"custom_override,omitempty"`
 	// ManualDiscount is this line's share of a cart-level manual discount
 	// (CartManualDiscountEvidence), allocated by Pricing after promotions and
-	// the coupon. The line's TaxAmount and LineTotal are net of it. Omitted
+	// the coupon. The line's TaxAmount and LineTotal are net of it and its
+	// DiscountAmount includes it. Omitted
 	// when the cart had no manual discount, preserving historical bytes.
 	ManualDiscount *ManualDiscountLineAllocation `json:"manual_discount,omitempty"`
 
