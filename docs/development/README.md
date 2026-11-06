@@ -32,11 +32,14 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | 18 | `StockRestockAlertTriggeredEvent` | `stock.restock_alert_triggered` | `stock-events` |
 | 19 | `InventoryPOSSaleCommittedEvent` | `inventory.pos_sale_committed` | `stock-events` |
 | 20 | `CatalogProductStatusChangedEvent` | `catalog.product_status_changed` | `catalog-events` |
+| 21 | `PackingFact` | `analytics.packing_fact` | `fulfilment-events` |
+| 22 | `PickingFact` | `analytics.picking_fact` | `order-events` |
 
 ## Release index
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.24.0` | 2026-11-06 | Minor |
 | `v53.23.0` | 2026-11-06 | Minor |
 | `v53.22.0` | 2026-11-06 | Minor |
 | `v53.21.0` | 2026-11-06 | Minor |
@@ -86,6 +89,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.24.0 (2026-11-06)
+
+Fulfilment analytics facts and the retired workforce role keys (Potato-Mart/Backend-Supply#298, Potato-Mart/Backend-Supply#288, Potato-Mart/Backend-Shared-Contract#147 part 1). `analytics.packing_fact` (`PackingFact`, `pubsub/supply`) is Supply's immutable fact for one packing stage of one packing cycle, published on `fulfilment-events` when an order is marked packed: `fact_id` (`packing:{order_number}:{reopen_cycle}:{stage}`), `order_number`, `fulfillment_generation`, `reopen_cycle`, optional `market_code` and `depot_code`, `stage` (`PackingStageGroup`, new in `pubsub/supply/supply_enums`: `AMBIENT_CHILLED`, `FROZEN`), optional `packed_by`, optional server-time `started_at` (first scan of the stage in the cycle) and `completed_at` (first label print in the cycle), `packed_at`, `package_count`, `lines` (`PackingFactLine`: `order_item_id`, `sku_code`, `storage_type`, `total_base_units`) and `storage_totals` (`PackingFactStorageTotal`: `storage_type`, `total_base_units`, `line_count`), which keeps ambient and chilled units of the shared stage apart. A reopen starts a new cycle and so new facts; a consumer counts the latest cycle of an order. `analytics.picking_fact` (`PickingFact`, `pubsub/orders`) is Orders' immutable fact for one order's picking in one fulfilment generation, published on `order-events` when packing starts: `fact_id` (`picking:{order_number}:{fulfillment_generation}`), `order_number`, `fulfillment_generation`, optional `market_code`, `depot_code` and `buyer_type`, optional `picking_started_at` (picking list printed), `picking_completed_at` (packing started), `lines` (`PickingFactLine`: `order_item_id`, `sku_code`, `ordered_base_units`, `picked_base_units`, `shortage_base_units`) and optional `pickers` (`PickingFactPicker`: `role`, `picker_subject`, optional `started_at` and `completed_at`, optional `lines` of `PickingFactPickerLine`), present only for PDA picking assignments. Both event types are registered at `v1`. `RetiredUserRole` (`identity/authorisation/role_enums`) is new and lists the workforce role keys retired before the six-rank model (`admin`, `warehouse`, `cashier`, `sales`, `customer`), mirroring Identity's owner-defined role deny list; its `IsValid` reports that a key IS retired, so a backend accepts an owner-defined control-portal role key only when it is not. The `RoleCode` documentation now says control-portal keys are built-in or owner-defined. The change is additive: no existing model, event or enum value changes, and no data migration is needed. Consumers that reject unknown event types on `fulfilment-events` or `order-events` must acknowledge or handle the new types before their producers publish them.
 
 ## v53.23.0 (2026-11-06)
 

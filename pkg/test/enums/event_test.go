@@ -56,6 +56,8 @@ func TestInventoryAndCommerceEventTypes(t *testing.T) {
 				event_enums.EventTypeAnalyticsOrderFact,
 				event_enums.EventTypeAnalyticsPaymentFact,
 				event_enums.EventTypeAnalyticsRefundFact,
+				event_enums.EventTypeAnalyticsPackingFact,
+				event_enums.EventTypeAnalyticsPickingFact,
 			},
 			invalid: event_enums.EventType("__invalid__"),
 		},

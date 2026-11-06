@@ -295,7 +295,10 @@ var modelPackageManifest map[string]string
 // V53.23 adds the Pricing-owned cart manual discount evidence, its line
 // allocation and mode leaf enum, the Orders cart selection and the
 // actor-free receipt line; existing models only gain optional fields.
-const exportedTypeManifestDigest = "fbdaab366d424783baec52f55f2657a77c553dcbdd5f41f5d90a0f544836f808"
+// V53.24 adds the retired workforce role-key leaf enum, the Supply-owned
+// packing fact with its line, storage-total and stage-group leaf enum, and the
+// Orders-owned picking fact with its line, picker and picker-line records.
+const exportedTypeManifestDigest = "15818481bc32515816193bf13e60ec856e75969b676d2e9fc1c35ae17556b6e1"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

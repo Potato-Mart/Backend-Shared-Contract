@@ -58,6 +58,11 @@ const (
 	EventTypeAnalyticsOrderFact   EventType = "analytics.order_fact"
 	EventTypeAnalyticsPaymentFact EventType = "analytics.payment_fact"
 	EventTypeAnalyticsRefundFact  EventType = "analytics.refund_fact"
+	// EventTypeAnalyticsPackingFact is Supply's immutable per-stage packing
+	// fact on fulfilment-events; EventTypeAnalyticsPickingFact is Orders'
+	// immutable per-generation picking fact on order-events.
+	EventTypeAnalyticsPackingFact EventType = "analytics.packing_fact"
+	EventTypeAnalyticsPickingFact EventType = "analytics.picking_fact"
 )
 
 func (t EventType) IsValid() bool {
@@ -82,7 +87,8 @@ func (t EventType) IsValid() bool {
 		EventTypeProductSalesPerformanceUpdated,
 		EventTypePriceChanged, EventTypePromotionChanged, EventTypeCouponChanged, EventTypeCampaignChanged,
 		EventTypeAnalyticsOrderFact, EventTypeAnalyticsPaymentFact,
-		EventTypeAnalyticsRefundFact:
+		EventTypeAnalyticsRefundFact, EventTypeAnalyticsPackingFact,
+		EventTypeAnalyticsPickingFact:
 		return true
 	default:
 		return false
