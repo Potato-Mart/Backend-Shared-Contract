@@ -13,6 +13,12 @@ import (
 // it does not apply to the relation or could not be established.
 //
 // PotentialSaving is indicative: stock, limits and other offers may change it.
+//
+// GiftOptions and GiftDecision are present only for gift-type relations
+// (spend_gift, addon_purchase, bogo). GiftOptions names every SKU the relation
+// can award as its gift or add-on; a till offers exactly these and never
+// guesses from catalogue displays. GiftDecision says whether staff must accept
+// or decline the gift and how many gift base units the relation allows.
 type PromotionProgress struct {
 	PromotionID       string                                  `json:"promotion_id"`
 	PromotionRevision int64                                   `json:"promotion_revision"`
@@ -27,4 +33,6 @@ type PromotionProgress struct {
 	MissingQualifiers []PromotionMissingQualifier             `json:"missing_qualifiers,omitempty"`
 	SpendMissing      *money.Money                            `json:"spend_missing,omitempty"`
 	PotentialSaving   *money.Money                            `json:"potential_saving,omitempty"`
+	GiftOptions       []PromotionGiftOption                   `json:"gift_options,omitempty"`
+	GiftDecision      *PromotionGiftDecision                  `json:"gift_decision,omitempty"`
 }

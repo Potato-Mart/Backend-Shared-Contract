@@ -39,6 +39,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.25.0` | 2026-11-07 | Minor |
 | `v53.24.1` | 2026-11-07 | Patch |
 | `v53.24.0` | 2026-11-06 | Minor |
 | `v53.23.0` | 2026-11-06 | Minor |
@@ -90,6 +91,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.25.0 (2026-11-07)
+
+POS gift candidates and legacy gift card migration (Potato-Mart/Backend-Pricing#289, Potato-Mart/Backend-Pricing#307). `PromotionProgress` (`pricing/promotion`) gains optional `gift_options` and `gift_decision`, present only for gift-type relations (`spend_gift`, `addon_purchase`, `bogo`), so a till offers exactly the SKUs Pricing can award instead of guessing from catalogue displays. `PromotionGiftOption` is new: `sku_code`, optional `package_option` (`common/packaging.PackageOptionRef`, the authored package the gift is given in), `max_base_units` and optional `unit_price` (the per-package add-on price; omitted for a free gift). `PromotionGiftDecision` is new: `requires_staff_decision` (staff must accept or decline the gift) and `max_gift_base_units`. `GiftCardIssuanceSource` (`pricing/wallet/wallet_enums`) gains `legacy_migration`: stored value carried over from the retired point-of-sale system, which is neither a purchase here nor value the business gave away; it appears on `wallet.gift_card_issued` (`GiftCardIssuedScopedEvent`). The change is additive: new fields are omitted when absent and no data migration is needed. Consumers that check `GiftCardIssuanceSource.IsValid()` (Notification, Orders) must accept `legacy_migration` before Pricing issues a migrated card, and consumers that decode `PromotionProgress` into this type must take this version to pass the new fields through.
 
 ## v53.24.1 (2026-11-07)
 
