@@ -298,7 +298,10 @@ var modelPackageManifest map[string]string
 // V53.24 adds the retired workforce role-key leaf enum, the Supply-owned
 // packing fact with its line, storage-total and stage-group leaf enum, and the
 // Orders-owned picking fact with its line, picker and picker-line records.
-const exportedTypeManifestDigest = "15818481bc32515816193bf13e60ec856e75969b676d2e9fc1c35ae17556b6e1"
+// V53.25 adds the Pricing-owned promotion gift option and gift decision
+// records; PromotionProgress and the issuance-source enum only gain optional
+// fields and a value.
+const exportedTypeManifestDigest = "7fc573f2ab303c60e1fe9874fedc2df7af73ca8f9670a74aafd240ee5c491bcf"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

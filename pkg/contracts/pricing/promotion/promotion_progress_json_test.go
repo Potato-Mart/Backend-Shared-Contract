@@ -7,6 +7,7 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/localization"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/packaging"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pricing/promotion/promotion_enums"
 )
 
@@ -102,5 +103,50 @@ func TestPromotionApplicationNamesAreOptional(t *testing.T) {
 	}
 	if len(got.Names) != 1 || got.Names[0].Name != "Two for one" {
 		t.Fatalf("application names changed: %+v", got)
+	}
+}
+
+func TestPromotionProgressRoundTripsGiftOptions(t *testing.T) {
+	progress := PromotionProgress{
+		PromotionID: "prm_gift", PromotionRevision: 2, PromotionKind: "spend_gift", RelationID: "rel_gift",
+		Status: promotion_enums.PromotionProgressStatusNear, LineIDs: []string{"line_1"},
+		GiftOptions: []PromotionGiftOption{{
+			SKUCode:       "GIFT-A",
+			PackageOption: &packaging.PackageOptionRef{SKUCode: "GIFT-A", Code: "EACH", Version: 1},
+			MaxBaseUnits:  1,
+		}, {
+			SKUCode: "ADDON-B", MaxBaseUnits: 2, UnitPrice: &money.Money{AmountMinor: 199, Currency: "AUD"},
+		}},
+		GiftDecision: &PromotionGiftDecision{RequiresStaffDecision: true, MaxGiftBaseUnits: 1},
+	}
+	body, err := json.Marshal(progress)
+	if err != nil {
+		t.Fatalf("marshal progress: %v", err)
+	}
+	for _, field := range []string{`"gift_options":[`, `"package_option":{"sku_code":"GIFT-A","code":"EACH","version":1}`, `"max_base_units":2`, `"unit_price":{`, `"gift_decision":{"requires_staff_decision":true,"max_gift_base_units":1}`} {
+		if !strings.Contains(string(body), field) {
+			t.Fatalf("gift evidence missing %s: %s", field, body)
+		}
+	}
+	if strings.Count(string(body), `"unit_price"`) != 1 || strings.Count(string(body), `"package_option"`) != 1 {
+		t.Fatalf("absent gift option fields must be omitted: %s", body)
+	}
+	var got PromotionProgress
+	if err := json.Unmarshal(body, &got); err != nil {
+		t.Fatalf("unmarshal progress: %v", err)
+	}
+	if len(got.GiftOptions) != 2 || got.GiftOptions[0].PackageOption.Code != "EACH" || got.GiftOptions[1].UnitPrice.AmountMinor != 199 ||
+		got.GiftDecision == nil || !got.GiftDecision.RequiresStaffDecision || got.GiftDecision.MaxGiftBaseUnits != 1 {
+		t.Fatalf("gift evidence changed: %+v", got)
+	}
+
+	plain, err := json.Marshal(PromotionProgress{PromotionID: "prm_open", PromotionKind: "discount", RelationID: "rel", LineIDs: []string{}})
+	if err != nil {
+		t.Fatalf("marshal plain progress: %v", err)
+	}
+	for _, field := range []string{`"gift_options"`, `"gift_decision"`} {
+		if strings.Contains(string(plain), field) {
+			t.Fatalf("non-gift progress exposed %s: %s", field, plain)
+		}
 	}
 }
