@@ -18,8 +18,11 @@ import (
 // warehouseOperator). System roles cannot be deleted but their permissions
 // can be tweaked by a superAdmin.
 //
-// Rank is the built-in hierarchy position, 1 (superAdmin) through 6
-// (warehouseOperator). It is omitted on custom roles, which carry no rank.
+// Rank is the role's hierarchy position; a lower number is more privileged.
+// Built-in roles hold 1 (superAdmin) through 6 (warehouseOperator). An
+// owner-defined custom role carries the rank its owner assigned (2 or
+// higher), which Backend-Identity stores and enforces. Rank is omitted only
+// for a legacy custom role written without one.
 type Role struct {
 	Key                         RoleCode        `json:"key"`
 	Label                       string          `json:"label"`
