@@ -10,12 +10,15 @@ const (
 	// ProductSelectionKindSection is a selection presented as a product
 	// section rail.
 	ProductSelectionKindSection ProductSelectionKind = "section"
+	// ProductSelectionKindShowcase is a selection presented as one of the
+	// storefront Home theme boxes, ordered by display order.
+	ProductSelectionKindShowcase ProductSelectionKind = "showcase"
 )
 
 // IsValid reports whether k is a known ProductSelectionKind.
 func (k ProductSelectionKind) IsValid() bool {
 	switch k {
-	case ProductSelectionKindBadge, ProductSelectionKindSection:
+	case ProductSelectionKindBadge, ProductSelectionKindSection, ProductSelectionKindShowcase:
 		return true
 	}
 	return false

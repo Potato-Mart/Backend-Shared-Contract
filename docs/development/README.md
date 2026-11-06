@@ -37,6 +37,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.21.0` | 2026-11-06 | Minor |
 | `v53.20.0` | 2026-11-05 | Minor |
 | `v53.19.0` | 2026-11-03 | Minor |
 | `v53.18.0` | 2026-11-03 | Minor |
@@ -83,6 +84,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.21.0 (2026-11-06)
+
+`ProductSelectionKind` gains `showcase`: a product selection presented as one of the storefront Home theme boxes, ordered by `display_order` (Potato-Mart/Backend-Supply#282). Supply serves it like `section` (published only, a cover and at least one product to publish, no icon). The change is additive: no model, event or existing enum value changes, and no data migration is needed. Consumers that decode `ProductSelectionKind` strictly must accept the new value before Supply serves it.
 
 ## v53.20.0 (2026-11-05)
 

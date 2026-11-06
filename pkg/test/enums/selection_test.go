@@ -8,7 +8,7 @@ import (
 
 func TestSelectionEnumsValidateKnownValues(t *testing.T) {
 	assertStringEnums(t, []enumCase{
-		{name: "selectionenum.ProductSelectionKind", valid: []stringEnum{selection_enums.ProductSelectionKindBadge, selection_enums.ProductSelectionKindSection}, invalid: selection_enums.ProductSelectionKind("__invalid__")},
+		{name: "selectionenum.ProductSelectionKind", valid: []stringEnum{selection_enums.ProductSelectionKindBadge, selection_enums.ProductSelectionKindSection, selection_enums.ProductSelectionKindShowcase}, invalid: selection_enums.ProductSelectionKind("__invalid__")},
 		{name: "selectionenum.ProductSelectionStatus", valid: []stringEnum{selection_enums.ProductSelectionStatusDraft, selection_enums.ProductSelectionStatusPublished, selection_enums.ProductSelectionStatusArchived}, invalid: selection_enums.ProductSelectionStatus("__invalid__")},
 	})
 }
