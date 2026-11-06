@@ -16,5 +16,10 @@ type SessionTotalsSnapshot struct {
 	MethodTotals      []MethodTotal `json:"method_totals,omitempty"`
 	RefundTotal       money.Money   `json:"refund_total"`
 	CashMovementTotal money.Money   `json:"cash_movement_total"`
-	GeneratedAt       time.Time     `json:"generated_at"`
+	// ManualDiscountTotal and ManualDiscountCount summarize the cart-level
+	// manual discounts on the session's sales. Both are omitted when the
+	// session had none or the report predates them.
+	ManualDiscountTotal *money.Money `json:"manual_discount_total,omitempty"`
+	ManualDiscountCount int64        `json:"manual_discount_count,omitempty"`
+	GeneratedAt         time.Time    `json:"generated_at"`
 }

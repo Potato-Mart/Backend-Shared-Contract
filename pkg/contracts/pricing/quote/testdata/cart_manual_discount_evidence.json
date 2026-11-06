@@ -1,0 +1,13 @@
+{
+  "mode": "percent",
+  "percent_basis_points": 1000,
+  "pre_discount_total": {"amount_minor": 4500, "currency": "AUD"},
+  "applied_amount": {"amount_minor": 450, "currency": "AUD"},
+  "applied_tax": {"amount_minor": 41, "currency": "AUD"},
+  "coupon_code": "SPRING5",
+  "coupon_amount": {"amount_minor": 500, "currency": "AUD"},
+  "reason_code": "staff_discretion",
+  "reason": "Regular customer goodwill",
+  "actor_user_id": "cashier_1",
+  "applied_at": "2026-11-06T02:03:04Z"
+}

@@ -61,7 +61,7 @@ func TestPriceSnapshotPackageAndMembershipProvenanceIsOptionalAndRoundTrips(t *t
 	for _, optional := range []string{
 		"package_price_entry_id", "package_price_entry_revision", "package_list_amount",
 		"membership_tier_price_book_assignment_id", "membership_tier_price_book_assignment_revision",
-		"membership_tier_key",
+		"membership_tier_key", "manual_discount",
 	} {
 		if strings.Contains(string(legacy), `"`+optional+`"`) {
 			t.Fatalf("legacy PriceSnapshot unexpectedly includes %s: %s", optional, legacy)

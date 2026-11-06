@@ -21,6 +21,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/orders/shipping/shipping_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/payments/payment/payment_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pricing/promotion"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pricing/quote"
 )
 
 // Buyer describes who is buying, independently of Channel. POS is a
@@ -92,8 +93,14 @@ type Order struct {
 	// become promotion discounts. TaxAmount may already be included in inclusive prices.
 	Subtotal       money.Money `json:"subtotal"`
 	DiscountAmount money.Money `json:"discount_amount"`
-	ShippingAmount money.Money `json:"shipping_amount"`
-	TaxAmount      money.Money `json:"tax_amount"`
+	// ManualDiscount is Pricing's evidence of a cart-level manual discount,
+	// frozen from the accepted quote. It applies to merchandise after
+	// promotions and the coupon, never to shipping; Pricing has already
+	// allocated it onto the item price snapshots and tax. Omitted when the
+	// order had no manual discount.
+	ManualDiscount *quote.CartManualDiscountEvidence `json:"manual_discount,omitempty"`
+	ShippingAmount money.Money                       `json:"shipping_amount"`
+	TaxAmount      money.Money                       `json:"tax_amount"`
 	// TipAmount and SurchargeAmount surface card-terminal-applied
 	// extras. They are part of the customer-paid total and must appear
 	// on tax invoices.

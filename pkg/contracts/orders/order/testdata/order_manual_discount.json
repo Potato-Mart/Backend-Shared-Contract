@@ -1,0 +1,16 @@
+{
+  "order_number": "SO-1",
+  "discount_amount": {"amount_minor": 500, "currency": "AUD"},
+  "manual_discount": {
+    "mode": "set_total",
+    "target_total": {"amount_minor": 4000, "currency": "AUD"},
+    "pre_discount_total": {"amount_minor": 4500, "currency": "AUD"},
+    "applied_amount": {"amount_minor": 500, "currency": "AUD"},
+    "applied_tax": {"amount_minor": 45, "currency": "AUD"},
+    "coupon_code": "SPRING5",
+    "coupon_amount": {"amount_minor": 500, "currency": "AUD"},
+    "reason_code": "price_match",
+    "actor_user_id": "cashier_1",
+    "applied_at": "2026-11-06T02:03:04Z"
+  }
+}

@@ -14,5 +14,6 @@ func TestQuoteEnumsValidateKnownValues(t *testing.T) {
 		{name: "quoteenum.CostComparison", valid: []stringEnum{quote_enums.CostComparisonBelowCost, quote_enums.CostComparisonAtOrAboveCost, quote_enums.CostComparisonUnavailable}, invalid: quote_enums.CostComparison("__invalid__")},
 		{name: "quoteenum.PriceAmountBasis", valid: []stringEnum{quote_enums.PriceAmountBasisBaseUnit, quote_enums.PriceAmountBasisPackage}, invalid: quote_enums.PriceAmountBasis("__invalid__")},
 		{name: "quoteenum.CustomPriceReason", valid: []stringEnum{quote_enums.CustomPriceReasonQuickSale, quote_enums.CustomPriceReasonSoonExpiry, quote_enums.CustomPriceReasonDamaged}, invalid: quote_enums.CustomPriceReason("__invalid__")},
+		{name: "quoteenum.ManualDiscountMode", valid: []stringEnum{quote_enums.ManualDiscountModePercent, quote_enums.ManualDiscountModeAmount, quote_enums.ManualDiscountModeSetTotal}, invalid: quote_enums.ManualDiscountMode("__invalid__")},
 	})
 }
