@@ -10,10 +10,13 @@ import (
 // one packing cycle (analytics.packing_fact on fulfilment-events). Supply
 // emits one fact per stage when the order is marked packed.
 //
-// FactID is "packing:{order_number}:{reopen_cycle}:{stage}". Reopening an
-// order starts a new cycle, so a re-pack produces new facts rather than a
-// changed one; a consumer counts only the latest cycle of an order and keeps
-// earlier cycles as history. The same FactID always carries the same content.
+// FactID is
+// "packing:{order_number}:{fulfillment_generation}:{reopen_cycle}:{stage}".
+// Reopening an order starts a new cycle and an order edit starts a new
+// fulfilment generation, so a re-pack produces new facts rather than a changed
+// one; a consumer counts only the latest generation and cycle of an order and
+// keeps earlier ones as history. The same FactID always carries the same
+// content.
 //
 // Times are server times. StartedAt is the first scan of a line in the stage
 // during the cycle; CompletedAt is the stage's first label print in the cycle.
