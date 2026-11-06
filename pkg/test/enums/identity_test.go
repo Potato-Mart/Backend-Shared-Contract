@@ -17,6 +17,7 @@ func TestIdentityEnumsValidateKnownValues(t *testing.T) {
 		{name: "securityenum.IdentityDomain", valid: []stringEnum{security_enums.IdentityDomainCustomer, security_enums.IdentityDomainWorkforce, security_enums.IdentityDomainService}, invalid: security_enums.IdentityDomain("__invalid__")},
 		{name: "identityenum.UserPreferredLanguage", valid: []stringEnum{account_enums.PreferredLanguageEnglish, account_enums.PreferredLanguageTraditionalChinese, account_enums.PreferredLanguageSimplifiedChinese}, invalid: account_enums.UserPreferredLanguage("__invalid__")},
 		{name: "roleenum.UserRole", valid: []stringEnum{role_enums.UserRoleSuperAdmin, role_enums.UserRoleCountryAdmin, role_enums.UserRoleDepotManager, role_enums.UserRoleMarketing, role_enums.UserRoleWarehouseManager, role_enums.UserRoleWarehouseOperator}, invalid: role_enums.UserRole("__invalid__")},
+		{name: "roleenum.RetiredUserRole", valid: []stringEnum{role_enums.RetiredUserRoleAdmin, role_enums.RetiredUserRoleWarehouse, role_enums.RetiredUserRoleCashier, role_enums.RetiredUserRoleSales, role_enums.RetiredUserRoleCustomer}, invalid: role_enums.RetiredUserRole("warehouseOperator")},
 		{name: "accessenum.ScopeLevel", valid: []stringEnum{access_enums.ScopeLevelGlobal, access_enums.ScopeLevelCountry, access_enums.ScopeLevelMarket, access_enums.ScopeLevelState, access_enums.ScopeLevelDepot}, invalid: access_enums.ScopeLevel("__invalid__")},
 	})
 }
@@ -73,6 +74,33 @@ func TestWorkforceRoleAndScopeWireValuesAreLocked(t *testing.T) {
 	} {
 		if role_enums.UserRole(retired).IsValid() {
 			t.Errorf("retired role %q still validates", retired)
+		}
+	}
+
+	// RetiredUserRole mirrors Identity's owner-defined role deny list: a
+	// custom role key is accepted only when it is not one of these. None of
+	// them may ever become a built-in rank again.
+	retiredKeys := map[role_enums.RetiredUserRole]string{
+		role_enums.RetiredUserRoleAdmin:     "admin",
+		role_enums.RetiredUserRoleWarehouse: "warehouse",
+		role_enums.RetiredUserRoleCashier:   "cashier",
+		role_enums.RetiredUserRoleSales:     "sales",
+		role_enums.RetiredUserRoleCustomer:  "customer",
+	}
+	for key, wire := range retiredKeys {
+		if string(key) != wire || !key.IsValid() {
+			t.Errorf("retired role key %q drifted from %q", key, wire)
+		}
+		if role_enums.UserRole(wire).IsValid() {
+			t.Errorf("retired role key %q is also a built-in rank", wire)
+		}
+	}
+	for _, rank := range []role_enums.UserRole{
+		role_enums.UserRoleSuperAdmin, role_enums.UserRoleCountryAdmin, role_enums.UserRoleDepotManager,
+		role_enums.UserRoleMarketing, role_enums.UserRoleWarehouseManager, role_enums.UserRoleWarehouseOperator,
+	} {
+		if role_enums.RetiredUserRole(rank).IsValid() {
+			t.Errorf("built-in rank %q is listed as retired", rank)
 		}
 	}
 

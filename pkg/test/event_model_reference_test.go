@@ -32,6 +32,8 @@ var documentedEventPayloads = []string{
 	"OrderFact",
 	"OrderPackingProjection",
 	"OrderPaidEvent",
+	"PackingFact",
+	"PickingFact",
 	"ProductSalesRollup",
 	"RefundCompletedEvent",
 	"RefundFact",
