@@ -37,6 +37,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.22.0` | 2026-11-06 | Minor |
 | `v53.21.0` | 2026-11-06 | Minor |
 | `v53.20.0` | 2026-11-05 | Minor |
 | `v53.19.0` | 2026-11-03 | Minor |
@@ -84,6 +85,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.22.0 (2026-11-06)
+
+`Role.Rank` (`identity/authorisation`) now carries a custom role's rank (Potato-Mart/Backend-Shared-Contract#144). Built-in roles keep 1 (`superAdmin`) through 6 (`warehouseOperator`); an owner-defined custom role carries the rank its owner assigned, 2 or higher, which Backend-Identity requires on create, keeps strictly below the creator's rank, stores and enforces (Potato-Mart/Backend-Identity#152). A lower rank is more privileged. `rank` is omitted only for a legacy custom role written without one. The contract stays model-only and Identity owns the validation. Only the field's documentation changes: its type, JSON name and `omitempty` are unchanged, no other model, event or enum changes, and no data migration is needed. Consumers that assumed custom roles never carry `rank` must accept it once Identity returns it.
 
 ## v53.21.0 (2026-11-06)
 
