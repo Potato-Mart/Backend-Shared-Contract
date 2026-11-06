@@ -292,7 +292,10 @@ var modelPackageManifest map[string]string
 // evidence records with the confirmation-status leaf enum; the payment
 // reference and register session only gain optional fields.
 // V53.20 adds the Pricing-owned customer-safe PromotionPublication read record.
-const exportedTypeManifestDigest = "cc0f5444cea1f762db23ac7dddf8565ca413d9ccc418cc8ecbff37b3effdb4ae"
+// V53.23 adds the Pricing-owned cart manual discount evidence, its line
+// allocation and mode leaf enum, the Orders cart selection and the
+// actor-free receipt line; existing models only gain optional fields.
+const exportedTypeManifestDigest = "fbdaab366d424783baec52f55f2657a77c553dcbdd5f41f5d90a0f544836f808"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

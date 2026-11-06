@@ -36,6 +36,9 @@ type ReceiptSnapshot struct {
 	Total                 money.Money                         `json:"total"`
 	PaymentRows           []payment.CustomerPaymentAllocation `json:"payment_rows,omitempty"`
 	PromotionApplications []promotion.PromotionApplication    `json:"promotion_applications"`
+	// ManualDiscount is present only when the sale carried a cart-level
+	// manual discount; it is shown once with its reason.
+	ManualDiscount *ReceiptManualDiscount `json:"manual_discount,omitempty"`
 	// CashRounding is present only when the sale was tendered entirely in
 	// cash. Lines, Subtotal, Tax, and Total always stay at exact minor
 	// units.

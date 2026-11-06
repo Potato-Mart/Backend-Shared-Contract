@@ -54,6 +54,11 @@ type PriceSnapshot struct {
 	// evidence. Services own the rule that an offline manual override replaces
 	// automatic promotions; the model does not enforce or infer that outcome.
 	CustomOverride *CustomPriceOverrideEvidence `json:"custom_override,omitempty"`
+	// ManualDiscount is this line's share of a cart-level manual discount
+	// (CartManualDiscountEvidence), allocated by Pricing after promotions and
+	// the coupon. The line's TaxAmount and LineTotal are net of it. Omitted
+	// when the cart had no manual discount, preserving historical bytes.
+	ManualDiscount *ManualDiscountLineAllocation `json:"manual_discount,omitempty"`
 
 	// SourceAllocationVersion and SourceAllocations are present together for a
 	// mixed-source line, after the consumer explicitly opts into that version.

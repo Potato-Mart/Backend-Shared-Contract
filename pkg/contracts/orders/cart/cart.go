@@ -34,6 +34,7 @@ type Cart struct {
 	FulfilmentLocation shipping.FulfilmentLocationSnapshot `json:"fulfilment_location"`
 	Items              []CartItem                          `json:"items"`
 	CouponCode         string                              `json:"coupon_code,omitempty"`
+	ManualDiscount     *CartManualDiscountSelection        `json:"manual_discount,omitempty"`
 	Subtotal           money.Money                         `json:"subtotal"`
 	ExpiresAt          time.Time                           `json:"expires_at"`
 
