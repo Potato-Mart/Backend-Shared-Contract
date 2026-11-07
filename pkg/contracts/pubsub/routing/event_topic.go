@@ -1,8 +1,10 @@
 package routing
 
 // EventTopic identifies a Potato Mart Pub/Sub topic. Domain-fact topics are
-// aggregate-family scoped; storefront-events carries only customer-safe
-// invalidation facts. Every subscriber owns its own subscription and DLQ.
+// aggregate-family scoped; storefront-events carries customer-safe
+// invalidation facts and Pricing's membership tier changes, which name the
+// customer but no spend or contact data. Every subscriber owns its own
+// subscription and DLQ.
 type EventTopic string
 
 const (

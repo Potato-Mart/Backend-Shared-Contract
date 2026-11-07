@@ -54,6 +54,9 @@ const (
 	EventTypePromotionChanged               EventType = "promotion.changed"
 	EventTypeCouponChanged                  EventType = "coupon.changed"
 	EventTypeCampaignChanged                EventType = "campaign.changed"
+	// EventTypeMembershipTierChanged is Pricing's per-customer effective
+	// membership tier change on storefront-events, consumed by Customers.
+	EventTypeMembershipTierChanged EventType = "membership.tier_changed"
 
 	EventTypeAnalyticsOrderFact   EventType = "analytics.order_fact"
 	EventTypeAnalyticsPaymentFact EventType = "analytics.payment_fact"
@@ -86,6 +89,7 @@ func (t EventType) IsValid() bool {
 		EventTypeCatalogProductStatusChanged,
 		EventTypeProductSalesPerformanceUpdated,
 		EventTypePriceChanged, EventTypePromotionChanged, EventTypeCouponChanged, EventTypeCampaignChanged,
+		EventTypeMembershipTierChanged,
 		EventTypeAnalyticsOrderFact, EventTypeAnalyticsPaymentFact,
 		EventTypeAnalyticsRefundFact, EventTypeAnalyticsPackingFact,
 		EventTypeAnalyticsPickingFact:

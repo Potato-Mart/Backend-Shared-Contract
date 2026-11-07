@@ -34,11 +34,13 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | 20 | `CatalogProductStatusChangedEvent` | `catalog.product_status_changed` | `catalog-events` |
 | 21 | `PackingFact` | `analytics.packing_fact` | `fulfilment-events` |
 | 22 | `PickingFact` | `analytics.picking_fact` | `order-events` |
+| 23 | `MembershipTierChangedEvent` | `membership.tier_changed` | `storefront-events` |
 
 ## Release index
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.26.0` | 2026-11-07 | Minor |
 | `v53.25.1` | 2026-11-07 | Patch |
 | `v53.25.0` | 2026-11-07 | Minor |
 | `v53.24.1` | 2026-11-07 | Patch |
@@ -92,6 +94,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.26.0 (2026-11-07)
+
+Membership tier change event (Potato-Mart/Backend-Pricing#326). `membership.tier_changed` (`MembershipTierChangedEvent`, `pubsub/pricing`) is Pricing's fact that a customer's effective membership tier changed, published on the existing `storefront-events` topic beside `promotion.changed` and `coupon.changed`, and consumed by Customers for its tier projection. The event type is registered at `v1`, and the envelope AggregateID is the customer number. Fields: `customer_number` and `country_code` (`geography.CountryCode`, the country membership tier group), both required; `tier_key` and `previous_tier_key`, always present and `null` when the customer has, or had, no effective tier; `revision`, which starts at 1 and increases monotonically per customer, so a consumer ignores a delivery whose revision is not greater than the one it stored; `reason`; and `changed_at` (UTC). `MembershipTierChangeReason` (`pricing/membership/membership_enums`) is new, with `spend`, `refund`, `assignment`, `enrolment` and `reconcile`. The fact carries no spend, money, points, benefits, actor or contact data. Pricing owns qualification and validation. The `EventTopic` documentation now says `storefront-events` also carries membership tier changes, which name the customer. The change is additive: no existing model, event or enum value changes, and no data migration is needed. Consumers that reject unknown event types on `storefront-events` (Customers, Notification, Pricing) must acknowledge or handle `membership.tier_changed` before Pricing publishes it.
 
 ## v53.25.1 (2026-11-07)
 

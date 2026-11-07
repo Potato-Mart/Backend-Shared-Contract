@@ -301,7 +301,9 @@ var modelPackageManifest map[string]string
 // V53.25 adds the Pricing-owned promotion gift option and gift decision
 // records; PromotionProgress and the issuance-source enum only gain optional
 // fields and a value.
-const exportedTypeManifestDigest = "7fc573f2ab303c60e1fe9874fedc2df7af73ca8f9670a74aafd240ee5c491bcf"
+// V53.26 adds the Pricing-owned MembershipTierChangedEvent payload and its
+// tier-change reason leaf enum.
+const exportedTypeManifestDigest = "3a5ef4d1acbe96480efc0934c7abbc595274f3a3c07e7d68648df67b8f15af1e"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
