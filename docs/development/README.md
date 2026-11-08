@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.28.0` | 2026-11-09 | Minor |
 | `v53.27.0` | 2026-11-09 | Minor |
 | `v53.26.0` | 2026-11-07 | Minor |
 | `v53.25.1` | 2026-11-07 | Patch |
@@ -95,6 +96,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.28.0 (2026-11-09)
+
+Supporting-depot receiving locations by storage type (Potato-Mart/Backend-Supply supporting-depot effort). A supporting depot can hold ambient, chilled and frozen stock, so one receiving location per link would put frozen stock in an ambient location. `DepotSupportLink.receiving_location_code` (added in v53.27.0 and never adopted by any service) is replaced by `receiving_locations`, a list of `DepotSupportReceivingLocation` (`supply/warehouse`) with `storage_type` (`classification_enums.StorageType`: `AMBIENT`, `CHILLED`, `FROZEN`) and `location_code`, the standard shop location that receives stock of that storage type. Supply validates that each location is a standard location at the shop with the matching storage type and that a storage type appears at most once, and never moves supporting-depot stock of a storage type that has no receiving location. No service consumed v53.27.0's `receiving_location_code`, so no data migration is needed; adopt v53.28.0 instead of v53.27.0.
 
 ## v53.27.0 (2026-11-09)
 
