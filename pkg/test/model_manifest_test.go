@@ -303,7 +303,8 @@ var modelPackageManifest map[string]string
 // fields and a value.
 // V53.26 adds the Pricing-owned MembershipTierChangedEvent payload and its
 // tier-change reason leaf enum.
-const exportedTypeManifestDigest = "3a5ef4d1acbe96480efc0934c7abbc595274f3a3c07e7d68648df67b8f15af1e"
+// V53.27 adds the Supply-owned DepotSupportLink and ShopRefillLevel records.
+const exportedTypeManifestDigest = "cb4245f1f1a24f7f24b9c8e133b1eefc9ac36ba0719eb963ec9c565ab5597efe"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
