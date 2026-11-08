@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.27.0` | 2026-11-09 | Minor |
 | `v53.26.0` | 2026-11-07 | Minor |
 | `v53.25.1` | 2026-11-07 | Patch |
 | `v53.25.0` | 2026-11-07 | Minor |
@@ -94,6 +95,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.27.0 (2026-11-09)
+
+Supporting depots and shop refill levels (Potato-Mart/Backend-Supply supporting-depot effort). `DepotSupportLink` (`supply/warehouse`) marks one depot as a supporting depot of one shop depot inside one market: `shop_depot_code`, `support_depot_code`, `market_code`, `priority` (ascending, the lowest value is used first, unlike coverage-rule priority), `receiving_location_code` (the shop location that receives stock moved from the supporting depot), `is_active`, `effective_from`, optional `effective_to`, and the shared audit fields. A shop may have any number of supporting depots and a supporting depot may support several shops; both depots must service the market. A supporting depot has no customers of its own, so Supply offers its sellable stock only through the shops it supports and keeps Orders, Pricing and Payments seeing the shop depot. `ShopRefillLevel` (`supply/warehouse`) is the min/max policy for one product at one shop depot in base units: `shop_depot_code`, `sku_code`, `min_base_units`, `max_base_units`, `is_active`, and the shared audit fields; Supply refills the shop from its supporting depots in whole cases when free stock falls below the minimum. Supply owns validation, ordering, persistence and the stock movements. The change is additive: no existing model, event or enum value changes, and no data migration is needed. Consumers need no action until they read the new records through Supply's admin API.
 
 ## v53.26.0 (2026-11-07)
 
