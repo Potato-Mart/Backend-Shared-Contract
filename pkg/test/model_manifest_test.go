@@ -306,7 +306,10 @@ var modelPackageManifest map[string]string
 // V53.27 adds the Supply-owned DepotSupportLink and ShopRefillLevel records.
 // V53.28 adds the DepotSupportReceivingLocation record (one shop receiving
 // location per storage type on a support link).
-const exportedTypeManifestDigest = "9b8bcbe99b2af46c9b4f1339ef9b32529affebacfc6bea53fa97dffc93fe5b6f"
+// V53.29 adds the location-only LocationStorageType leaf enum (MIXED is
+// reserved for the system goods pool); the reversal status, movement type and
+// PurchaseReceipt fields are values and optional fields only.
+const exportedTypeManifestDigest = "29531b91fb65802bd0f402befd12dd6188e27314ec46bb41549dcbd77cbbc646"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

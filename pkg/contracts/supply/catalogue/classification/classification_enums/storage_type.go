@@ -1,7 +1,8 @@
 package classification_enums
 
 // StorageType classifies the physical storage conditions required by a
-// catalogue product, SKU, package, or warehouse location.
+// catalogue product, SKU or package. Warehouse locations use
+// warehouse_enums.LocationStorageType, which adds the location-only MIXED.
 type StorageType string
 
 const (

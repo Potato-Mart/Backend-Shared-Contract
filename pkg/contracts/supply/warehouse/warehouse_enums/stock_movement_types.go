@@ -25,6 +25,11 @@ const (
 	// the source lot; the destination lot is identified through
 	// destination_bucket_id. No additional movement fields are used.
 	StockMovementTypeLotReassignment StockMovementType = "LOT_REASSIGNMENT"
+	// StockMovementTypeReceiptReversal removes base units booked by a
+	// confirmed purchase receipt that is being reversed. On a StockMovement,
+	// source_bucket_id is the bucket the units leave, purchase_receipt_id is
+	// the reversed receipt, and there is no destination.
+	StockMovementTypeReceiptReversal StockMovementType = "RECEIPT_REVERSAL"
 )
 
 // IsValid reports whether t is a known StockMovementType.
@@ -36,7 +41,8 @@ func (t StockMovementType) IsValid() bool {
 		StockMovementTypeReturn, StockMovementTypeQualityHold,
 		StockMovementTypeQualityRelease, StockMovementTypeQualityReject,
 		StockMovementTypeAdjustment, StockMovementTypeReturnToVendor,
-		StockMovementTypeScrap, StockMovementTypeLotReassignment:
+		StockMovementTypeScrap, StockMovementTypeLotReassignment,
+		StockMovementTypeReceiptReversal:
 		return true
 	}
 	return false
