@@ -24,6 +24,9 @@ type PurchaseReceipt struct {
 	Status              purchase_enums.PurchaseReceiptStatus `json:"status"`
 	ReceivedAt          *time.Time                           `json:"received_at,omitempty"`
 	ConfirmedAt         *time.Time                           `json:"confirmed_at,omitempty"`
+	ReversedAt          *time.Time                           `json:"reversed_at,omitempty"`
+	ReversedBy          string                               `json:"reversed_by,omitempty"`
+	ReversalReason      string                               `json:"reversal_reason,omitempty"`
 	Note                string                               `json:"note,omitempty"`
 	Items               []PurchaseReceiptItem                `json:"items"`
 	History             []security.HistoryEntry              `json:"history,omitempty"`

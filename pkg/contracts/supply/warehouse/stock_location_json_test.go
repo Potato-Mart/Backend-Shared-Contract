@@ -3,7 +3,6 @@ package warehouse_test
 import (
 	"encoding/json"
 
-	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/catalogue/classification/classification_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/catalogue/product"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/warehouse"
 
@@ -20,7 +19,7 @@ func TestStockLocationAndBalanceJSONShapes(t *testing.T) {
 	location := warehouse.StockLocation{
 		ID: "location_1", DepotCode: "AU-VIC-MEL-DC-01",
 		LocationCode:    "SYS-ONLINE-STAGE-FROZEN",
-		StorageType:     classification_enums.StorageFrozen,
+		StorageType:     warehouse_enums.LocationStorageFrozen,
 		Purpose:         warehouse_enums.StockLocationPurposeOnlineOrderStaging,
 		HandlingMode:    warehouse_enums.StockLocationHandlingMixed,
 		Access:          warehouse_enums.StockLocationAccessStaffOnly,
@@ -100,4 +99,30 @@ func marshalStockLocationObject(t *testing.T, value any) map[string]any {
 		t.Fatalf("unmarshal %T JSON: %v", value, err)
 	}
 	return shape
+}
+
+func TestStockLocationMixedStorageRoundTrip(t *testing.T) {
+	pool := warehouse.StockLocation{
+		ID: "location_pool", DepotCode: "A7", LocationCode: "SYS-GOODS-POOL",
+		StorageType:     warehouse_enums.LocationStorageMixed,
+		Purpose:         warehouse_enums.StockLocationPurposeStandard,
+		HandlingMode:    warehouse_enums.StockLocationHandlingMixed,
+		Access:          warehouse_enums.StockLocationAccessStaffOnly,
+		CollectionMode:  warehouse_enums.StockLocationCollectionUnrestricted,
+		IsSystemManaged: true, IsActive: true,
+	}
+	raw, err := json.Marshal(pool)
+	if err != nil {
+		t.Fatalf("marshal pool: %v", err)
+	}
+	var back warehouse.StockLocation
+	if err := json.Unmarshal(raw, &back); err != nil {
+		t.Fatalf("unmarshal pool: %v", err)
+	}
+	if back.StorageType != warehouse_enums.LocationStorageMixed || !back.StorageType.IsValid() {
+		t.Fatalf("storage_type = %q, want MIXED", back.StorageType)
+	}
+	if got := marshalStockLocationObject(t, pool)["storage_type"]; got != "MIXED" {
+		t.Fatalf("storage_type JSON = %v, want MIXED", got)
+	}
 }

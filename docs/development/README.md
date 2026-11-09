@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.29.0` | 2026-11-10 | Minor |
 | `v53.28.0` | 2026-11-09 | Minor |
 | `v53.27.0` | 2026-11-09 | Minor |
 | `v53.26.0` | 2026-11-07 | Minor |
@@ -96,6 +97,15 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.29.0 (2026-11-10)
+
+Location storage type with a goods pool, and purchase-receipt reversal values (Potato-Mart/Backend-Supply#320–#330 and the goods-pool effort).
+
+- **Location storage type.** `warehouse.StockLocation.storage_type` is now `warehouse_enums.LocationStorageType` (`AMBIENT`, `CHILLED`, `FROZEN`, `MIXED`). The first three share their wire values with `classification_enums.StorageType`, so stored data and JSON are unchanged. `MIXED` is location-only: Supply reserves it for its system goods pool (`SYS-GOODS-POOL`, "received, not put away yet"), which accepts stock of any product storage type. Products, SKUs, packages, receipt lines, containers and support-link receiving locations keep `classification_enums.StorageType`, so a product can never be `MIXED`. Go consumers that assign a `classification_enums.StorageType` to `StockLocation.StorageType` must convert; no other service reads the field.
+- **Receipt reversal (adopted by Supply in a later release).** `purchase_enums.PurchaseReceiptStatusReversed` (`REVERSED`), `warehouse_enums.InboundReceiptStatusReversed` (`reversed`), `warehouse_enums.StockMovementTypeReceiptReversal` (`RECEIPT_REVERSAL`), and optional `PurchaseReceipt.reversed_at`, `reversed_by` and `reversal_reason`. Only Supply's reversal command sets these values.
+
+No data migration is needed.
 
 ## v53.28.0 (2026-11-09)
 

@@ -3,7 +3,6 @@ package warehouse
 import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/geometry"
-	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/catalogue/classification/classification_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
@@ -13,7 +12,7 @@ type StockLocation struct {
 	DepotCode             string                                      `json:"depot_code"`
 	LocationCode          string                                      `json:"location_code"`
 	Name                  string                                      `json:"name,omitempty"`
-	StorageType           classification_enums.StorageType            `json:"storage_type"`
+	StorageType           warehouse_enums.LocationStorageType         `json:"storage_type"`
 	Purpose               warehouse_enums.StockLocationPurpose        `json:"purpose"`
 	HandlingMode          warehouse_enums.StockLocationHandlingMode   `json:"handling_mode"`
 	Access                warehouse_enums.StockLocationAccess         `json:"access"`
