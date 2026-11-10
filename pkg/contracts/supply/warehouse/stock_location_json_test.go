@@ -126,3 +126,25 @@ func TestStockLocationMixedStorageRoundTrip(t *testing.T) {
 		t.Fatalf("storage_type JSON = %v, want MIXED", got)
 	}
 }
+
+func TestStockLocationCapacityAndCategoryAreOptional(t *testing.T) {
+	bare := marshalStockLocationObject(t, warehouse.StockLocation{ID: "location_1"})
+	for _, key := range []string{"capacity_cartons", "category"} {
+		if _, ok := bare[key]; ok {
+			t.Fatalf("empty %s must be omitted: %+v", key, bare)
+		}
+	}
+
+	capacity := 24
+	raw, err := json.Marshal(warehouse.StockLocation{ID: "location_1", CapacityCartons: &capacity, Category: "飲料區"})
+	if err != nil {
+		t.Fatalf("marshal location: %v", err)
+	}
+	var back warehouse.StockLocation
+	if err := json.Unmarshal(raw, &back); err != nil {
+		t.Fatalf("unmarshal location: %v", err)
+	}
+	if back.CapacityCartons == nil || *back.CapacityCartons != 24 || back.Category != "飲料區" {
+		t.Fatalf("capacity or category did not round-trip: %s", raw)
+	}
+}

@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.30.0` | 2026-11-11 | Minor |
 | `v53.29.0` | 2026-11-10 | Minor |
 | `v53.28.0` | 2026-11-09 | Minor |
 | `v53.27.0` | 2026-11-09 | Minor |
@@ -97,6 +98,18 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.30.0 (2026-11-11)
+
+Optional fields for Supply's handheld arrival, location and draft work. Every addition is optional and omitted when empty, so stored data and JSON are unchanged until Supply writes them.
+
+- **Location capacity and area.** `warehouse.StockLocation.capacity_cartons` (whole-case capacity; absent means unlimited, a set value is at least 1) and `category` (short free-text area label, for example "飲料區").
+- **Warehouse arrival confirmation.** `PurchaseOrder.warehouse_confirmed_at` and `warehouse_confirmed_by` record that the warehouse acknowledged the order's physical arrival. The acknowledgement has no stock effect and is distinct from `confirmed_at`, the supplier confirmation.
+- **Case plan.** `PurchaseOrderItem.case_plan` is a list of `PurchaseOrderCasePlanEntry` (`supply/procurement`) with `depot_code` (blank means the order's depot), `location_code` and `cartons` (at least 1): the pre-arrival plan of how many cartons of the line go to which case location.
+- **Draft item expiry month and move.** `WMSDraftItem.expiry_month` (`YYYY-MM`, operator-entered, used to pick a lot; distinct from `observed_date_mark`) and `move`, a `WMSDraftItemMove` (`supply/warehouse`) with `key` (fixed idempotency code assigned on first submit), `step` (`warehouse_enums.WMSDraftItemMoveStep`: `PENDING`, `MOVED`, `DONE`) and `request` (the body sent to the stock transfer or package conversion route, carried as open `metadata.Metadata`; the contract does not describe its keys).
+- **Origin lot.** `InventoryLot.origin_lot_id` is set on a lot split off from a received lot at put-away, so receipt, purchase-order, supplier and cost linkage can be traced to the origin lot.
+
+Supply owns validation of these fields. No data migration is needed.
 
 ## v53.29.0 (2026-11-10)
 

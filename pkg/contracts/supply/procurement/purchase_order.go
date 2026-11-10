@@ -39,6 +39,11 @@ type PurchaseOrder struct {
 	Note         string                  `json:"note,omitempty"`
 	InternalNote string                  `json:"internal_note,omitempty"`
 	History      []security.HistoryEntry `json:"history,omitempty"`
+	// WarehouseConfirmedAt and WarehouseConfirmedBy record that the warehouse
+	// acknowledged the order's physical arrival. The acknowledgement has no
+	// stock effect and is distinct from ConfirmedAt, the supplier confirmation.
+	WarehouseConfirmedAt *time.Time `json:"warehouse_confirmed_at,omitempty"`
+	WarehouseConfirmedBy string     `json:"warehouse_confirmed_by,omitempty"`
 
 	audit.AuditFields
 }

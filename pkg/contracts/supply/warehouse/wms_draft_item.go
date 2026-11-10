@@ -18,4 +18,10 @@ type WMSDraftItem struct {
 	Location         StockLocationRef                     `json:"location"`
 	Composition      packaging.PackageCompositionSnapshot `json:"composition"`
 	ObservedDateMark *InventoryDateMark                   `json:"observed_date_mark,omitempty"`
+	// ExpiryMonth is the operator-entered expiry month (YYYY-MM) used to pick
+	// a lot. It is distinct from ObservedDateMark.
+	ExpiryMonth string `json:"expiry_month,omitempty"`
+	// Move is the stock move this draft item submits, kept so a retried
+	// submit repeats the same request.
+	Move *WMSDraftItemMove `json:"move,omitempty"`
 }

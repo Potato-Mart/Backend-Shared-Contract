@@ -41,4 +41,7 @@ type PurchaseOrderItem struct {
 	// valuation; absent evidence does not imply LineTotal has this basis.
 	NetGoodsAmount *money.Money `json:"net_goods_amount,omitempty"`
 	Note           string       `json:"note,omitempty"`
+	// CasePlan is the pre-arrival plan of how many cartons of this line go to
+	// which case location. It has no stock effect.
+	CasePlan []PurchaseOrderCasePlanEntry `json:"case_plan,omitempty"`
 }

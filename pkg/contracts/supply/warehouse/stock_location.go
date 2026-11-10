@@ -25,6 +25,12 @@ type StockLocation struct {
 	Size                  *geometry.Size3D                            `json:"size,omitempty"`
 	Shape                 warehouse_enums.ShapeType                   `json:"shape,omitempty"`
 	Color                 string                                      `json:"color,omitempty"`
+	// Category is a short free-text area label for the location, for example
+	// "飲料區". It is a display grouping only.
+	Category string `json:"category,omitempty"`
+	// CapacityCartons is the whole-case capacity of the location. Nil means
+	// unlimited; a set value is at least 1.
+	CapacityCartons *int `json:"capacity_cartons,omitempty"`
 
 	audit.AuditFields
 }
