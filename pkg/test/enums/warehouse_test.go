@@ -35,6 +35,7 @@ func TestWarehouseEnumsValidateKnownValues(t *testing.T) {
 		{name: "warehouseenum.StorageType", valid: []stringEnum{classification_enums.StorageAmbient, classification_enums.StorageChilled, classification_enums.StorageFrozen}, invalid: classification_enums.StorageType("DRY")},
 		{name: "warehouseenum.LocationStorageType", valid: []stringEnum{warehouse_enums.LocationStorageAmbient, warehouse_enums.LocationStorageChilled, warehouse_enums.LocationStorageFrozen, warehouse_enums.LocationStorageMixed}, invalid: warehouse_enums.LocationStorageType("DRY")},
 		{name: "warehouseenum.WMSDraftStatus", valid: []stringEnum{warehouse_enums.WMSDraftStatusDraft, warehouse_enums.WMSDraftStatusSubmitted, warehouse_enums.WMSDraftStatusCancelled}, invalid: warehouse_enums.WMSDraftStatus("__invalid__")},
+		{name: "warehouseenum.WMSDraftItemMoveStep", valid: []stringEnum{warehouse_enums.WMSDraftItemMoveStepPending, warehouse_enums.WMSDraftItemMoveStepMoved, warehouse_enums.WMSDraftItemMoveStepDone}, invalid: warehouse_enums.WMSDraftItemMoveStep("__invalid__")},
 		{name: "warehouseenum.WMSDraftType", valid: []stringEnum{warehouse_enums.WMSDraftTypeInbound, warehouse_enums.WMSDraftTypeOutbound}, invalid: warehouse_enums.WMSDraftType("__invalid__")},
 	})
 }

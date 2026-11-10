@@ -15,6 +15,10 @@ type InventoryLot struct {
 	ReceivedAt          time.Time          `json:"received_at"`
 	ManufacturedAt      *time.Time         `json:"manufactured_at,omitempty"`
 	DateMark            *InventoryDateMark `json:"date_mark,omitempty"`
+	// OriginLotID is set on a lot split off from a received lot at put-away,
+	// so receipt, purchase-order, supplier and cost linkage can be traced to
+	// the origin lot.
+	OriginLotID string `json:"origin_lot_id,omitempty"`
 
 	audit.AuditFields
 }

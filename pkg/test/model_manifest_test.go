@@ -309,7 +309,10 @@ var modelPackageManifest map[string]string
 // V53.29 adds the location-only LocationStorageType leaf enum (MIXED is
 // reserved for the system goods pool); the reversal status, movement type and
 // PurchaseReceipt fields are values and optional fields only.
-const exportedTypeManifestDigest = "29531b91fb65802bd0f402befd12dd6188e27314ec46bb41549dcbd77cbbc646"
+// V53.30 adds the PurchaseOrderCasePlanEntry and WMSDraftItemMove records and
+// the WMSDraftItemMoveStep leaf enum; existing location, purchase order,
+// draft item and lot models only gain optional fields.
+const exportedTypeManifestDigest = "938488c9803a4bad10553ef583f5d1aacddd6186b45d0ea584a031c9c4430c67"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
