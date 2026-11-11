@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.31.0` | 2026-11-11 | Minor |
 | `v53.30.0` | 2026-11-11 | Minor |
 | `v53.29.0` | 2026-11-10 | Minor |
 | `v53.28.0` | 2026-11-09 | Minor |
@@ -98,6 +99,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.31.0 (2026-11-11)
+
+`wholesale.OrganisationAccess` can represent a staff-managed member before they have a user account. It serializes `staff_managed` when true and omits an empty `user_id`. Linked grants keep serializing their user ID. Consumers should treat a missing user ID and an empty user ID alike. The access ID and billing account ID remain present before and after linking. [Backend-Customers #190](https://github.com/Potato-Mart/Backend-Customers/issues/190)
 
 ## v53.30.0 (2026-11-11)
 

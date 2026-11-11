@@ -10,14 +10,15 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/customers/wholesale/wholesale_enums"
 )
 
-// OrganisationAccess links a user account/persona to a wholesale organisation
-// and carries the organisation-scoped role key plus the person's team profile.
+// OrganisationAccess carries a wholesale organisation's role grant and team
+// profile, with an optional link to a user account.
 // At most one active access per organisation should be marked primary.
 type OrganisationAccess struct {
 	ID                        string                                   `json:"id"`
 	WholesaleOrganisationCode string                                   `json:"wholesale_organisation_code"`
-	UserID                    string                                   `json:"user_id"`
+	UserID                    string                                   `json:"user_id,omitempty"`
 	AccountID                 string                                   `json:"account_id"`
+	StaffManaged              bool                                     `json:"staff_managed,omitempty"`
 	RoleKey                   wholesale_enums.WholesaleBuyerRole       `json:"role_key"`
 	Status                    wholesale_enums.OrganisationAccessStatus `json:"status"`
 	Name                      party.PersonName                         `json:"name,omitempty"`

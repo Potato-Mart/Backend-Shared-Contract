@@ -2,14 +2,12 @@ package wholesale_test
 
 import (
 	"encoding/json"
-
-	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/customers/wholesale"
-
 	"testing"
 	"time"
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/customers/wholesale"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/customers/wholesale/wholesale_enums"
 )
 
@@ -49,6 +47,9 @@ func TestOrganisationAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *test
 	if _, ok := got["invitation"]; !ok {
 		t.Fatalf("OrganisationAccess JSON missing nested invitation: %s", payload)
 	}
+	if _, ok := got["staff_managed"]; ok {
+		t.Fatalf("linked access should omit staff_managed: %s", payload)
+	}
 	for _, key := range []string{"membership_id", "invited_by", "invited_at", "revoked_by", "revoked_at"} {
 		if _, ok := got[key]; ok {
 			t.Fatalf("OrganisationAccess JSON should not include retired or flat key %q: %s", key, payload)
@@ -61,5 +62,35 @@ func TestOrganisationAccessJSONGroupsLifecycleAndKeepsCoreFieldsTopLevel(t *test
 	}
 	if decoded.Invitation == nil || decoded.Invitation.By != "admin_1" || decoded.JoinedAt == nil || !decoded.JoinedAt.Equal(joinedAt) {
 		t.Fatalf("organisation access lifecycle did not round-trip: %+v", decoded)
+	}
+}
+
+func TestOrganisationAccessJSONStaffManagedWithoutUser(t *testing.T) {
+	access := wholesale.OrganisationAccess{
+		ID:                        "access_1",
+		WholesaleOrganisationCode: "org_1",
+		AccountID:                 "acct_1",
+		StaffManaged:              true,
+		RoleKey:                   wholesale_enums.WholesaleBuyerRoleBuyer,
+		Status:                    wholesale_enums.OrganisationAccessStatusActive,
+		Name:                      party.PersonName{DisplayName: "A Buyer"},
+	}
+	payload, err := json.Marshal(access)
+	if err != nil {
+		t.Fatalf("marshal staff-managed access: %v", err)
+	}
+	var fields map[string]json.RawMessage
+	if err := json.Unmarshal(payload, &fields); err != nil {
+		t.Fatalf("unmarshal access fields: %v", err)
+	}
+	if _, ok := fields["user_id"]; ok {
+		t.Fatalf("unlinked access should omit user_id: %s", payload)
+	}
+	var decoded wholesale.OrganisationAccess
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal staff-managed access: %v", err)
+	}
+	if !decoded.StaffManaged || decoded.UserID != "" || decoded.ID != access.ID || decoded.AccountID != access.AccountID {
+		t.Fatalf("staff-managed access did not round-trip: %+v", decoded)
 	}
 }
