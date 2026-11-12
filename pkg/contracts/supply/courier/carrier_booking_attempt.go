@@ -23,6 +23,9 @@ import (
 // values staff changed before this attempt. Sandbox marks an attempt sent to
 // the carrier's test environment; it never books a real job.
 //
+// Supersession is set when staff switch the order to another carrier after
+// this attempt; the attempt's Outcome is left as recorded.
+//
 // ResolvedAt is set when the attempt leaves pending. AuditFields track the
 // record's own creation and updates. The record may contain personal data in
 // edits, error text and the request summary; Supply labels it through
@@ -44,6 +47,7 @@ type CarrierBookingAttempt struct {
 	AttemptedBy      string                                `json:"attempted_by"`
 	AttemptedAt      time.Time                             `json:"attempted_at"`
 	ResolvedAt       *time.Time                            `json:"resolved_at,omitempty"`
+	Supersession     *CarrierBookingSupersession           `json:"supersession,omitempty"`
 	audit.AuditFields
 	security.DataProtectionFields
 }
