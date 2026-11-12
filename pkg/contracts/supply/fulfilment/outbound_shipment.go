@@ -46,6 +46,10 @@ type OutboundShipment struct {
 	// CarrierBookingAttempt. One attempt covers all of the order's shipments,
 	// so every shipment it lists carries the same summary.
 	LatestCarrierBooking *courier.CarrierBookingSummary `json:"latest_carrier_booking,omitempty"`
+	// Warnings lists non-blocking conditions staff must see, such as a
+	// carrier booking that still needs manual cancellation or an unpaid
+	// order. Supply fills them on read; they never block dispatch.
+	Warnings []ShipmentWarning `json:"warnings,omitempty"`
 	audit.AuditFields
 	security.DataProtectionFields
 }

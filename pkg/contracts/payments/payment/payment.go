@@ -56,6 +56,9 @@ type Payment struct {
 	RefundReason  string                  `json:"refund_reason,omitempty"`
 	Metadata      metadata.Metadata       `json:"metadata,omitempty"`
 	History       []security.HistoryEntry `json:"history,omitempty"`
+	// Correction is set once staff correct the payment's amount or method in
+	// place; absent means the payment was never corrected.
+	Correction *PaymentCorrectionSummary `json:"correction,omitempty"`
 	audit.AuditFields
 	security.DataProtectionFields
 }

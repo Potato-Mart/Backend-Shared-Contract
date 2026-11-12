@@ -312,7 +312,14 @@ var modelPackageManifest map[string]string
 // V53.30 adds the PurchaseOrderCasePlanEntry and WMSDraftItemMove records and
 // the WMSDraftItemMoveStep leaf enum; existing location, purchase order,
 // draft item and lot models only gain optional fields.
-const exportedTypeManifestDigest = "938488c9803a4bad10553ef583f5d1aacddd6186b45d0ea584a031c9c4430c67"
+// V53.32 adds the Supply-owned CarrierManualAction, CarrierBookingSupersession
+// and ShipmentWarning records, the Payments-owned PaymentCorrectionSummary
+// record, and the StatusHistoryKind, PaymentCorrectionWarning,
+// ShipmentWarningCode, CarrierManualActionKind, CarrierManualActionStatus,
+// CarrierCancellationOutcome and InventoryLotReceivedCause leaf enums; order
+// status history, payment, shipment, booking attempt and lot-received event
+// models only gain optional fields.
+const exportedTypeManifestDigest = "6b6825f0ef0c2b6fa7e40bac3de198b82ad79d36486793c5706c517af25647a0"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

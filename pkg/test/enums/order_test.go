@@ -19,5 +19,6 @@ func TestOrderEnumsValidateKnownValues(t *testing.T) {
 		{name: "orderenum.PreorderAllocationStatus", valid: []stringEnum{order_enums.PreorderAllocationStatusWaitingForStock, order_enums.PreorderAllocationStatusPartiallyAllocated, order_enums.PreorderAllocationStatusStockAllocated}, invalid: order_enums.PreorderAllocationStatus("__invalid__")},
 		{name: "orderenum.FulfillmentReadiness", valid: []stringEnum{order_enums.FulfillmentReadinessReady, order_enums.FulfillmentReadinessWaitingForPreorderStock}, invalid: order_enums.FulfillmentReadiness("__invalid__")},
 		{name: "orderenum.SalesOrderStatus", valid: []stringEnum{order_enums.SalesOrderStatusPending, order_enums.SalesOrderStatusConfirmed, order_enums.SalesOrderStatusPaid, order_enums.SalesOrderStatusProcessing, order_enums.SalesOrderStatusPicking, order_enums.SalesOrderStatusPacked, order_enums.SalesOrderStatusShipped, order_enums.SalesOrderStatusDelivered, order_enums.SalesOrderStatusCompleted, order_enums.SalesOrderStatusCancelled, order_enums.SalesOrderStatusRefunded}, invalid: order_enums.SalesOrderStatus("__invalid__")},
+		{name: "orderenum.StatusHistoryKind", valid: []stringEnum{order_enums.StatusHistoryKindOverride, order_enums.StatusHistoryKindPaymentCorrection}, invalid: order_enums.StatusHistoryKind("__invalid__")},
 	})
 }

@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.32.0` | 2026-11-12 | Minor |
 | `v53.31.0` | 2026-11-11 | Minor |
 | `v53.30.0` | 2026-11-11 | Minor |
 | `v53.29.0` | 2026-11-10 | Minor |
@@ -99,6 +100,20 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.32.0 (2026-11-12)
+
+Optional fields and records for staff order overrides, payment corrections, unblocked warehouse shipping, carrier switching and lot repair. Every addition is optional and omitted when empty, so stored data and JSON are unchanged until a service writes them.
+
+- **Order status history.** `order.StatusHistory` gains `kind` (`order_enums.StatusHistoryKind`: `override`, `payment_correction`; empty for an ordinary transition), `reason_code` (open, service-owned code, for example `PAYMENT_CORRECTION`) and `changes`, a list of `security.HistoryChange` (`field`, `from_value`, `to_value`) with the before and after values the entry applied.
+- **Staff delivery override.** `courier_enums.DeliverySlotSourceStaffOverride` (`staff_override`) marks a delivery selection staff replaced on an existing order.
+- **Payment correction.** `payment.Payment.correction` is a `PaymentCorrectionSummary` with `count`, `last_corrected_at`, `last_corrected_by` (`security.ActorRef`), `original_amount`, `original_method` and `warnings` (`payment_enums.PaymentCorrectionWarning`: `gateway_amount_unchanged`, `terminal_amount_unchanged`, `wallet_ledger_unchanged`). A correction changes only the Payments record; the warnings name the systems staff must reconcile separately.
+- **Shipment warnings.** `fulfilment.OutboundShipment.warnings` is a list of `ShipmentWarning` with `code` (`warehouse_enums.ShipmentWarningCode`: `carrier_cancellation_required`, `order_unpaid`), `message`, `manual_action_id`, `carrier_code`, `carrier_reference` and `created_at`. Warnings never block dispatch.
+- **Carrier manual actions.** New `courier.CarrierManualAction` records carrier-side work staff must do by hand after a carrier switch: order, shipments, depot scope, `kind` (`courier_enums.CarrierManualActionKind`: `cancel_booking`), `status` (`courier_enums.CarrierManualActionStatus`: `open`, `resolved`), the booking's company and carrier reference, the source attempt, `cause` (`courier_enums.CarrierCancellationOutcome`), the cancel error, the switch reason and replacement company, and the resolution.
+- **Booking supersession.** `courier.CarrierBookingAttempt.supersession` is a `CarrierBookingSupersession` with `at`, `by`, `reason`, `replacement_company`, `cancellation_outcome` (`courier_enums.CarrierCancellationOutcome`: `cancelled`, `already_cancelled`, `not_configured`, `failed`, `unreachable`) and `manual_action_id`. The attempt keeps its own outcome; no booking outcome value is added.
+- **Lot received cause.** `InventoryLotReceivedEvent` gains `cause` (`supply_enums.InventoryLotReceivedCause`: `receipt`, `lot_split`, `lot_reassignment`, `count_gain`, `pos_add_back`) and `origin_lot_id`. An absent cause comes from an older publisher and means a receipt.
+
+Orders, Payments and Supply own validation of these fields. No data migration is needed.
 
 ## v53.31.0 (2026-11-11)
 
