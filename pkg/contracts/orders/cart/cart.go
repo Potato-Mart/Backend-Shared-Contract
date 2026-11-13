@@ -35,8 +35,12 @@ type Cart struct {
 	Items              []CartItem                          `json:"items"`
 	CouponCode         string                              `json:"coupon_code,omitempty"`
 	ManualDiscount     *CartManualDiscountSelection        `json:"manual_discount,omitempty"`
-	Subtotal           money.Money                         `json:"subtotal"`
-	ExpiresAt          time.Time                           `json:"expires_at"`
+	// GiftCardIssues are the gift cards being sold on a till cart, one per
+	// line. They are not Items: Orders turns each into a face-value order line
+	// at settlement. Omitted when the cart sells no gift card.
+	GiftCardIssues []CartGiftCardIssueLine `json:"gift_card_issues,omitempty"`
+	Subtotal       money.Money             `json:"subtotal"`
+	ExpiresAt      time.Time               `json:"expires_at"`
 
 	audit.AuditFields
 }

@@ -117,14 +117,19 @@ type Order struct {
 	PointRedemption       *PointRedemptionSnapshot         `json:"point_redemption,omitempty"`
 	RewardRedemptions     []RewardRedemptionSnapshot       `json:"reward_redemptions,omitempty"`
 	GiftCardRedemptions   []GiftCardRedemptionSnapshot     `json:"gift_card_redemptions,omitempty"`
-	TrackingNumber        string                           `json:"tracking_number,omitempty"`
-	TrackingURL           string                           `json:"tracking_url,omitempty"`
-	Packing               *fulfilment.OrderPackingProgress `json:"packing,omitempty"`
-	PackingRevision       int64                            `json:"packing_revision,omitempty"`
-	FulfillmentReadiness  order_enums.FulfillmentReadiness `json:"fulfillment_readiness"`
-	CustomerNote          string                           `json:"customer_note,omitempty"`
-	InternalNote          string                           `json:"internal_note,omitempty"`
-	Tags                  []string                         `json:"tags,omitempty"`
+	// GiftCardIssues are the gift cards this order sold (till sales only),
+	// one per sold card. Each names the OrderItem that carries its face
+	// value; such an item is face value, outside the tax scope, moves no
+	// stock and earns no points. Omitted when the order sold no gift card.
+	GiftCardIssues       []OrderGiftCardIssue             `json:"gift_card_issues,omitempty"`
+	TrackingNumber       string                           `json:"tracking_number,omitempty"`
+	TrackingURL          string                           `json:"tracking_url,omitempty"`
+	Packing              *fulfilment.OrderPackingProgress `json:"packing,omitempty"`
+	PackingRevision      int64                            `json:"packing_revision,omitempty"`
+	FulfillmentReadiness order_enums.FulfillmentReadiness `json:"fulfillment_readiness"`
+	CustomerNote         string                           `json:"customer_note,omitempty"`
+	InternalNote         string                           `json:"internal_note,omitempty"`
+	Tags                 []string                         `json:"tags,omitempty"`
 
 	// ── Lifecycle timestamps ──────────────────────────────────────────
 	ConfirmedAt      *time.Time `json:"confirmed_at,omitempty"`

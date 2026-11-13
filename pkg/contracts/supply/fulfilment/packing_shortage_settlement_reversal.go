@@ -14,15 +14,34 @@ import (
 // written off for WriteOffKeptReason (for example counted_since: the location
 // was counted after the write-off). RefundedButShipped marks units packed
 // after their refund had completed.
+//
+// WriteOffBeyondReleaseRestoredBaseUnits are units of the settlement's
+// WrittenOffBeyondReleaseBaseUnits put back on hand by this reversal. Supply
+// restores them only on the reversal that completes the settlement (the one
+// after which no units remain settled); earlier partial reversals leave the
+// field absent. They are not part of WriteOffRestoredBaseUnits, and their
+// movements are also listed in WriteOffReversalMovementIDs. The field is
+// absent when none were restored.
+//
+// On the reversal that completes the settlement, the beyond-release units
+// kept written off are the settlement's WrittenOffBeyondReleaseBaseUnits
+// minus this reversal's WriteOffBeyondReleaseRestoredBaseUnits (for example
+// their location was counted since, or the settlement was made after
+// mark-packed). They are not counted in WriteOffKeptBaseUnits;
+// WriteOffKeptReason, when set, explains why they were kept.
+//
+// Cause refund_request_closed is a station refund request that Payments
+// rejected or cancelled after it was settled.
 type PackingShortageSettlementReversal struct {
-	BaseUnits                   int64                                                  `json:"base_units"`
-	Cause                       warehouse_enums.PackingShortageSettlementReversalCause `json:"cause"`
-	ReleasedBaseUnits           int64                                                  `json:"released_base_units,omitempty"`
-	WriteOffRestoredBaseUnits   int64                                                  `json:"write_off_restored_base_units,omitempty"`
-	WriteOffKeptBaseUnits       int64                                                  `json:"write_off_kept_base_units,omitempty"`
-	WriteOffKeptReason          string                                                 `json:"write_off_kept_reason,omitempty"`
-	WriteOffReversalMovementIDs []string                                               `json:"write_off_reversal_movement_ids,omitempty"`
-	RefundedButShipped          bool                                                   `json:"refunded_but_shipped,omitempty"`
-	ReversedBy                  string                                                 `json:"reversed_by"`
-	ReversedAt                  time.Time                                              `json:"reversed_at"`
+	BaseUnits                              int64                                                  `json:"base_units"`
+	Cause                                  warehouse_enums.PackingShortageSettlementReversalCause `json:"cause"`
+	ReleasedBaseUnits                      int64                                                  `json:"released_base_units,omitempty"`
+	WriteOffRestoredBaseUnits              int64                                                  `json:"write_off_restored_base_units,omitempty"`
+	WriteOffKeptBaseUnits                  int64                                                  `json:"write_off_kept_base_units,omitempty"`
+	WriteOffKeptReason                     string                                                 `json:"write_off_kept_reason,omitempty"`
+	WriteOffBeyondReleaseRestoredBaseUnits int64                                                  `json:"write_off_beyond_release_restored_base_units,omitempty"`
+	WriteOffReversalMovementIDs            []string                                               `json:"write_off_reversal_movement_ids,omitempty"`
+	RefundedButShipped                     bool                                                   `json:"refunded_but_shipped,omitempty"`
+	ReversedBy                             string                                                 `json:"reversed_by"`
+	ReversedAt                             time.Time                                              `json:"reversed_at"`
 }

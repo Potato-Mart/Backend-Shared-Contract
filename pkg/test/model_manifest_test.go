@@ -327,7 +327,15 @@ var modelPackageManifest map[string]string
 // V53.35 adds the Supply-owned MarketSalePolicy record, the
 // PastDateMarkNotice value and the SellPastDateMarkPolicy and
 // SellPastDateMarkOverride leaf enums.
-const exportedTypeManifestDigest = "d11616304b4309e90ef90b31d1b78366a083614d806e7330d3d7c9a53bf6d815"
+// V53.36 adds the Orders-owned CartGiftCardIssueLine and OrderGiftCardIssue
+// records with the GiftCardIssueStatus leaf enum, the Payments-owned
+// RefundRequestClosedEvent payload and RefundGiftCardReversal record, and the
+// Supply-owned PurchaseReceiptItemReversal and PurchaseOrderItemReplacement
+// records with the PurchaseOrderItemReplacementReason leaf enum; Cart, Order,
+// the refund events, the packing shortage settlement records and the purchase
+// order and receipt lines only gain optional fields, and existing enums only
+// gain values.
+const exportedTypeManifestDigest = "498f7bfb98dfeac9cb69468061b1fa6d21a8a526e8f435ba5c9511c874b6ceb2"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

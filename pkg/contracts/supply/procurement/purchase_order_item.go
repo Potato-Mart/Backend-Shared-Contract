@@ -12,6 +12,16 @@ import (
 )
 
 // PurchaseOrderItem is one frozen supplier order line.
+//
+// Part or all of a line's outstanding quantity can be replaced by a new line
+// for another product or pack, for example when the wrong product was
+// ordered. ReplacedComposition is the total replaced so far and Replacements
+// lists each replacement, oldest first; both are absent on a line never
+// replaced. The line's outstanding quantity is
+// outstanding = ordered - received - replaced, that is OrderedComposition
+// minus ReceivedComposition minus ReplacedComposition (absent counts as zero).
+// ReplacesItemID is set on a line created by a replacement and names the line
+// it replaces.
 type PurchaseOrderItem struct {
 	ID string `json:"id,omitempty"`
 	// SKUCode is the frozen SKU code captured when the purchase line was raised.
@@ -49,5 +59,8 @@ type PurchaseOrderItem struct {
 	// line to carry, known before arrival. It only informs receiving: the
 	// date mark of the stock is the one recorded on the receipt line. Nil
 	// means none was given.
-	ExpectedDateMark *warehouse.InventoryDateMark `json:"expected_date_mark,omitempty"`
+	ExpectedDateMark    *warehouse.InventoryDateMark          `json:"expected_date_mark,omitempty"`
+	ReplacedComposition *packaging.PackageCompositionSnapshot `json:"replaced_composition,omitempty"`
+	ReplacesItemID      string                                `json:"replaces_item_id,omitempty"`
+	Replacements        []PurchaseOrderItemReplacement        `json:"replacements,omitempty"`
 }

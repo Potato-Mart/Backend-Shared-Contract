@@ -14,6 +14,21 @@ func TestPurchaseEnumsValidateKnownValues(t *testing.T) {
 		{name: "purchaseenum.InputTaxClaimStatus", valid: []stringEnum{purchase_enums.InputTaxClaimStatusClaimable, purchase_enums.InputTaxClaimStatusNotClaimable, purchase_enums.InputTaxClaimStatusInsufficientEvidence, purchase_enums.InputTaxClaimStatusPendingReview}, invalid: purchase_enums.InputTaxClaimStatus("__invalid__")},
 		{name: "purchaseenum.SupplierInvoiceStatus", valid: []stringEnum{purchase_enums.SupplierInvoiceStatusDraft, purchase_enums.SupplierInvoiceStatusBlocked, purchase_enums.SupplierInvoiceStatusConfirmed, purchase_enums.SupplierInvoiceStatusDisputed, purchase_enums.SupplierInvoiceStatusCancelled}, invalid: purchase_enums.SupplierInvoiceStatus("__invalid__")},
 		{name: "purchaseenum.PurchaseOrderStatus", valid: []stringEnum{purchase_enums.PurchaseOrderStatusDraft, purchase_enums.PurchaseOrderStatusSubmitted, purchase_enums.PurchaseOrderStatusConfirmed, purchase_enums.PurchaseOrderStatusPartiallyReceived, purchase_enums.PurchaseOrderStatusReceived, purchase_enums.PurchaseOrderStatusCancelled, purchase_enums.PurchaseOrderStatusRefunded}, invalid: purchase_enums.PurchaseOrderStatus("__invalid__")},
-		{name: "purchaseenum.PurchaseReceiptStatus", valid: []stringEnum{purchase_enums.PurchaseReceiptStatusDraft, purchase_enums.PurchaseReceiptStatusConfirmed, purchase_enums.PurchaseReceiptStatusReversed}, invalid: purchase_enums.PurchaseReceiptStatus("__invalid__")},
+		{name: "purchaseenum.PurchaseReceiptStatus", valid: []stringEnum{purchase_enums.PurchaseReceiptStatusDraft, purchase_enums.PurchaseReceiptStatusConfirmed, purchase_enums.PurchaseReceiptStatusReversed, purchase_enums.PurchaseReceiptStatusPartiallyReversed}, invalid: purchase_enums.PurchaseReceiptStatus("__invalid__")},
+		{name: "purchaseenum.PurchaseOrderItemReplacementReason", valid: []stringEnum{purchase_enums.PurchaseOrderItemReplacementReasonWrongProductOrdered, purchase_enums.PurchaseOrderItemReplacementReasonWrongProductReceived, purchase_enums.PurchaseOrderItemReplacementReasonSupplierSubstitution, purchase_enums.PurchaseOrderItemReplacementReasonOther}, invalid: purchase_enums.PurchaseOrderItemReplacementReason("__invalid__")},
 	})
+}
+
+func TestPurchaseReversalAndReplacementWireValuesAreStable(t *testing.T) {
+	for value, want := range map[string]string{
+		purchase_enums.PurchaseReceiptStatusPartiallyReversed.String():                 "PARTIALLY_REVERSED",
+		purchase_enums.PurchaseOrderItemReplacementReasonWrongProductOrdered.String():  "WRONG_PRODUCT_ORDERED",
+		purchase_enums.PurchaseOrderItemReplacementReasonWrongProductReceived.String(): "WRONG_PRODUCT_RECEIVED",
+		purchase_enums.PurchaseOrderItemReplacementReasonSupplierSubstitution.String(): "SUPPLIER_SUBSTITUTION",
+		purchase_enums.PurchaseOrderItemReplacementReasonOther.String():                "OTHER",
+	} {
+		if value != want {
+			t.Errorf("purchase wire value = %q, want %q", value, want)
+		}
+	}
 }
