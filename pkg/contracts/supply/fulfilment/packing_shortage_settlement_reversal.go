@@ -7,7 +7,8 @@ import (
 )
 
 // PackingShortageSettlementReversal records settled units taken back by a
-// later packing write. ReleasedBaseUnits of them had been released from the
+// later packing write, or by a newer refund request settled for the same
+// units (cause superseded). ReleasedBaseUnits of them had been released from the
 // stock hold. WriteOffRestoredBaseUnits were put back on hand by the
 // movements in WriteOffReversalMovementIDs; WriteOffKeptBaseUnits stayed
 // written off for WriteOffKeptReason (for example counted_since: the location
