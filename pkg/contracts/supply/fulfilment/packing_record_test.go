@@ -149,3 +149,69 @@ func TestPackingDiscrepancyReinstateRestoresRemainingShortage(t *testing.T) {
 		t.Fatalf("remaining shortage base units = %d, want 2", remaining)
 	}
 }
+
+// A settlement records the stock outcome of refunded shortage units without
+// changing the discrepancy kind or its remaining base units.
+func TestPackingDiscrepancySettlementsRoundTrip(t *testing.T) {
+	settledAt := time.Date(2026, 11, 13, 9, 0, 0, 0, time.UTC)
+	before, after := int64(-1), int64(0)
+	want := fulfilment.PackingDiscrepancy{
+		ID: "shortage-1", OrderItemID: "item-1", SKUCode: "SKU-1",
+		Kind:                 warehouse_enums.PackingDiscrepancyKindShortage,
+		RequestedComposition: packaging.PackageCompositionSnapshot{TotalBaseUnits: 2},
+		RecordedAt:           settledAt.Add(-time.Hour),
+		Settlements: []fulfilment.PackingShortageSettlement{{
+			ID: "settlement-1", Reason: warehouse_enums.PackingShortageSettlementReasonNoStock, RefundRequestID: "refund-request-1",
+			BaseUnits: 2, SettledBaseUnits: 2, Status: warehouse_enums.PackingShortageSettlementStatusApplied,
+			ReleasedBaseUnits: 2, WrittenOffBaseUnits: 1, WriteOffMovementIDs: []string{"movement-1"},
+			DepotAvailableBeforeBaseUnits: &before, DepotAvailableAfterBaseUnits: &after,
+			SettledBy: "staff-1", SettledAt: settledAt, ReversedBaseUnits: 1, ReleasedReversedBaseUnits: 1,
+			Reversals: []fulfilment.PackingShortageSettlementReversal{{
+				BaseUnits: 1, Cause: warehouse_enums.PackingShortageSettlementReversalCauseScan, ReleasedBaseUnits: 1,
+				WriteOffRestoredBaseUnits: 1, WriteOffReversalMovementIDs: []string{"movement-2"},
+				ReversedBy: "staff-2", ReversedAt: settledAt.Add(time.Minute),
+			}},
+		}},
+	}
+	raw, err := json.Marshal(want)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, fragment := range []string{
+		`"kind":"shortage"`,
+		`"settlements":[{"id":"settlement-1","reason":"no_stock","refund_request_id":"refund-request-1","base_units":2,"settled_base_units":2,"status":"applied","released_base_units":2,"written_off_base_units":1,"write_off_movement_ids":["movement-1"],"depot_available_before_base_units":-1,"depot_available_after_base_units":0,"settled_by":"staff-1","settled_at":"2026-11-13T09:00:00Z","reversed_base_units":1,"released_reversed_base_units":1,`,
+		`"reversals":[{"base_units":1,"cause":"scan","released_base_units":1,"write_off_restored_base_units":1,"write_off_reversal_movement_ids":["movement-2"],"reversed_by":"staff-2","reversed_at":"2026-11-13T09:01:00Z"}]`,
+	} {
+		if !strings.Contains(string(raw), fragment) {
+			t.Fatalf("settlement wire shape changed: missing %s in %s", fragment, raw)
+		}
+	}
+	var got fulfilment.PackingDiscrepancy
+	if err := json.Unmarshal(raw, &got); err != nil {
+		t.Fatal(err)
+	}
+	if !reflect.DeepEqual(got.Settlements, want.Settlements) {
+		t.Fatalf("settlements lost: %+v", got.Settlements)
+	}
+	settlement := got.Settlements[0]
+	if !settlement.Reason.IsValid() || !settlement.Status.IsValid() || !settlement.Reversals[0].Cause.IsValid() {
+		t.Fatalf("settlement enums must validate: %+v", settlement)
+	}
+
+	// A deferred settlement carries its zero stock figures and no optional
+	// evidence; a discrepancy without settlements omits the list.
+	raw, err = json.Marshal(fulfilment.PackingShortageSettlement{ID: "settlement-2", Reason: warehouse_enums.PackingShortageSettlementReasonOverweight, RefundRequestID: "refund-request-2", BaseUnits: 1, SettledBaseUnits: 1, Status: warehouse_enums.PackingShortageSettlementStatusDeferred, DeferredReason: "tracked_units", SettledBy: "staff-1", SettledAt: settledAt})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(raw) != `{"id":"settlement-2","reason":"overweight","refund_request_id":"refund-request-2","base_units":1,"settled_base_units":1,"status":"deferred","deferred_reason":"tracked_units","released_base_units":0,"written_off_base_units":0,"settled_by":"staff-1","settled_at":"2026-11-13T09:00:00Z"}` {
+		t.Fatalf("deferred settlement wire shape changed: %s", raw)
+	}
+	raw, err = json.Marshal(fulfilment.PackingDiscrepancy{ID: "shortage-2"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(raw), "settlements") {
+		t.Fatalf("an empty settlements list must be omitted: %s", raw)
+	}
+}

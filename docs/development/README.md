@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.34.0` | 2026-11-13 | Minor |
 | `v53.33.0` | 2026-11-13 | Minor |
 | `v53.32.0` | 2026-11-12 | Minor |
 | `v53.31.0` | 2026-11-11 | Minor |
@@ -101,6 +102,16 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.34.0 (2026-11-13)
+
+A recorded packing shortage can carry what Supply did to stock when the packing station refunded its units ([Backend-Supply #417](https://github.com/Potato-Mart/Backend-Supply/issues/417)). The addition is optional and omitted when empty, so stored data and JSON are unchanged until Supply writes it.
+
+- **Settlement reason.** `warehouse_enums.PackingShortageSettlementReason`: `no_stock` (the goods are not there: the hold is released and stock the books still show is written off) and `overweight` (the goods are there but were not shipped: the hold is released).
+- **Settlement record.** `fulfilment.PackingDiscrepancy.settlements` is a list of `PackingShortageSettlement`: `id`, `reason`, `refund_request_id`, `base_units` (sent by the station), `settled_base_units` (counted against the remaining shortage), `status` (`warehouse_enums.PackingShortageSettlementStatus`: `applied`, `deferred`, `reversed`), `deferred_reason`, `released_base_units`, `written_off_base_units`, `write_off_movement_ids`, `depot_available_before_base_units`, `depot_available_after_base_units`, `packed_at_settlement`, `settled_by`, `settled_at`, `reversed_base_units`, `released_reversed_base_units` and `reversals`.
+- **Reversal.** `PackingShortageSettlementReversal` records settled units a later packing write took back: `base_units`, `cause` (`warehouse_enums.PackingShortageSettlementReversalCause`: `withdrawal`, `scan`, `progress`, `superseded`), `released_base_units`, `write_off_restored_base_units`, `write_off_kept_base_units`, `write_off_kept_reason`, `write_off_reversal_movement_ids`, `refunded_but_shipped`, `reversed_by` and `reversed_at`.
+
+The discrepancy keeps kind `shortage`, and its compositions, withdrawals and remaining base units are unchanged: the units still settled (`settled_base_units` minus `reversed_base_units`) never exceed the remaining shortage. Supply owns validation. Consumers that compare discrepancies must not treat `settlements` as part of a shortage's identity. No data migration is needed.
 
 ## v53.33.0 (2026-11-13)
 

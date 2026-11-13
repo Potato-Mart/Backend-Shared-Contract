@@ -319,7 +319,12 @@ var modelPackageManifest map[string]string
 // CarrierCancellationOutcome and InventoryLotReceivedCause leaf enums; order
 // status history, payment, shipment, booking attempt and lot-received event
 // models only gain optional fields.
-const exportedTypeManifestDigest = "6b6825f0ef0c2b6fa7e40bac3de198b82ad79d36486793c5706c517af25647a0"
+// V53.34 adds the Supply-owned PackingShortageSettlement and
+// PackingShortageSettlementReversal records and the
+// PackingShortageSettlementReason, PackingShortageSettlementStatus and
+// PackingShortageSettlementReversalCause leaf enums; PackingDiscrepancy only
+// gains the optional settlements list.
+const exportedTypeManifestDigest = "9eb2368d0152c759ab003bdc5b677fdb6bf9e8b3aa9171470b5db8f5e8eec70c"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

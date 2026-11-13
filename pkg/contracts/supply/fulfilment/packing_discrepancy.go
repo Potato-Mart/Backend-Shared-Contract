@@ -16,6 +16,10 @@ import (
 // recorded base units minus the withdrawn_base_units of command and scan
 // withdrawals plus the withdrawn_base_units of reinstate entries.
 // Withdrawals are append-only evidence and do not rewrite the compositions.
+//
+// Settlements record what Supply did to stock for the units of a shortage the
+// packing station refunded (no stock or overweight). They do not change the
+// kind, the compositions or the remaining base units.
 type PackingDiscrepancy struct {
 	ID                   string                                 `json:"id"`
 	OrderItemID          string                                 `json:"order_item_id"`
@@ -34,4 +38,5 @@ type PackingDiscrepancy struct {
 	RecordedAt           time.Time                              `json:"recorded_at"`
 	RecordedBy           string                                 `json:"recorded_by,omitempty"`
 	Withdrawals          []PackingDiscrepancyWithdrawal         `json:"withdrawals,omitempty"`
+	Settlements          []PackingShortageSettlement            `json:"settlements,omitempty"`
 }
