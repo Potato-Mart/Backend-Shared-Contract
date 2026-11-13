@@ -8,6 +8,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/packaging"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/catalogue/product"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/warehouse"
 )
 
 // PurchaseOrderItem is one frozen supplier order line.
@@ -44,4 +45,9 @@ type PurchaseOrderItem struct {
 	// CasePlan is the pre-arrival plan of how many cartons of this line go to
 	// which case location. It has no stock effect.
 	CasePlan []PurchaseOrderCasePlanEntry `json:"case_plan,omitempty"`
+	// ExpectedDateMark is the date mark the buyer expects the goods of this
+	// line to carry, known before arrival. It only informs receiving: the
+	// date mark of the stock is the one recorded on the receipt line. Nil
+	// means none was given.
+	ExpectedDateMark *warehouse.InventoryDateMark `json:"expected_date_mark,omitempty"`
 }

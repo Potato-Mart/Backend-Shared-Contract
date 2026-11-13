@@ -2,6 +2,7 @@ package procurement_test
 
 import (
 	"encoding/json"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -169,5 +170,53 @@ func TestPurchaseReceiptItemLotCodesAreOptional(t *testing.T) {
 		if strings.Contains(string(payload), field) {
 			t.Fatalf("empty receipt item retained optional %s: %s", field, payload)
 		}
+	}
+}
+
+func TestPurchaseOrderItemExpectedDateMarkRoundTrip(t *testing.T) {
+	bare, err := json.Marshal(purchase.PurchaseOrderItem{SKUCode: "A00001"})
+	if err != nil {
+		t.Fatalf("marshal bare item: %v", err)
+	}
+	if strings.Contains(string(bare), `"expected_date_mark"`) {
+		t.Fatalf("empty expected_date_mark must be omitted: %s", bare)
+	}
+	var old purchase.PurchaseOrderItem
+	if err := json.Unmarshal(bare, &old); err != nil {
+		t.Fatalf("unmarshal bare item: %v", err)
+	}
+	if old.ExpectedDateMark != nil {
+		t.Fatalf("an item stored without expected_date_mark must decode nil: %+v", old.ExpectedDateMark)
+	}
+
+	// The first instant of 1 December 2026 in Melbourne (UTC+11).
+	mark := &warehouse.InventoryDateMark{
+		Kind:       warehouse_enums.InventoryDateMarkBestBefore,
+		DateMarkAt: time.Date(2026, 11, 30, 13, 0, 0, 0, time.UTC),
+		Timezone:   "Australia/Melbourne",
+	}
+	raw, err := json.Marshal(purchase.PurchaseOrderItem{SKUCode: "A00001", ExpectedDateMark: mark})
+	if err != nil {
+		t.Fatalf("marshal item: %v", err)
+	}
+	want := `"expected_date_mark":{"kind":"BEST_BEFORE","date_mark_at":"2026-11-30T13:00:00Z","timezone":"Australia/Melbourne"}`
+	if !strings.Contains(string(raw), want) {
+		t.Fatalf("item JSON missing %s: %s", want, raw)
+	}
+	var back purchase.PurchaseOrderItem
+	if err := json.Unmarshal(raw, &back); err != nil {
+		t.Fatalf("unmarshal item: %v", err)
+	}
+	if !reflect.DeepEqual(back.ExpectedDateMark, mark) {
+		t.Fatalf("expected date mark did not round-trip: %s", raw)
+	}
+
+	// The receipt line carries the same type under its own key.
+	receiptLine, err := json.Marshal(purchase.PurchaseReceiptItem{DateMark: mark})
+	if err != nil {
+		t.Fatalf("marshal receipt item: %v", err)
+	}
+	if !strings.Contains(string(receiptLine), strings.Replace(want, "expected_date_mark", "date_mark", 1)) {
+		t.Fatalf("receipt line date mark differs in shape from the expected one: %s", receiptLine)
 	}
 }
