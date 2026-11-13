@@ -24,6 +24,7 @@ func TestInventoryAndCommerceEventTypes(t *testing.T) {
 				event_enums.EventTypeRefundCompleted,
 				event_enums.EventTypeRefundFailed,
 				event_enums.EventTypeRefundAlternativeOffered,
+				event_enums.EventTypeRefundRequestClosed,
 				event_enums.EventTypeInventoryLotReceived,
 				event_enums.EventTypeInventoryStockBucketChanged,
 				event_enums.EventTypeInventoryPackageConverted,
@@ -70,6 +71,12 @@ func TestInventoryAndCommerceEventTypes(t *testing.T) {
 		if retired.IsValid() {
 			t.Fatalf("retired event type %q must not validate", retired)
 		}
+	}
+	if got := event_enums.EventTypeRefundRequestClosed.String(); got != "refund.request_closed" {
+		t.Fatalf("refund request closed event type = %q", got)
+	}
+	if got := event_enums.EventTopicRefundEvents.String(); got != "refund-events" || !event_enums.EventTopicRefundEvents.IsValid() {
+		t.Fatalf("refund topic = %q", got)
 	}
 	if got := event_enums.EventTypeCatalogBaseCostChanged.String(); got != "catalog.base_cost_changed" {
 		t.Fatalf("catalog base cost event type = %q", got)

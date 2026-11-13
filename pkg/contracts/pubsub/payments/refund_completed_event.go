@@ -35,6 +35,11 @@ type RefundCompletedEvent struct {
 	TierRefundProof *membership.TierRefundProof `json:"tier_refund_proof,omitempty"`
 	PointsToRestore int                         `json:"points_to_restore,omitempty"`
 	FullOrderRefund bool                        `json:"full_order_refund,omitempty"`
+	// GiftCardReversals lists the sold gift cards this refund reversed, one
+	// per refunded gift-card line. It is omitted when the refund covered no
+	// sold gift card. It is not GiftCardRefundAmount, which is money put back
+	// on gift cards used to pay.
+	GiftCardReversals []RefundGiftCardReversal `json:"gift_card_reversals,omitempty"`
 	// MarketCode and CountryCode are the denormalized geography the event
 	// belongs to. Empty values provide no geographic evidence; a consumer
 	// that persists a geographically scoped record must fail closed rather

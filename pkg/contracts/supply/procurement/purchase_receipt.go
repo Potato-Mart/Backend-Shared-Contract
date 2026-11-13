@@ -12,6 +12,11 @@ import (
 
 // PurchaseReceipt is the supplier-facing receipt root. Reference is retained
 // unchanged because its historical meaning is not source-proven.
+//
+// ReversedAt, ReversedBy and ReversalReason describe the reversal that
+// completed the receipt (status REVERSED). A partial reversal leaves them
+// empty and the receipt PARTIALLY_REVERSED; its details are recorded per line
+// on PurchaseReceiptItem.ReversedComposition and PurchaseReceiptItem.Reversals.
 type PurchaseReceipt struct {
 	ID                  string                               `json:"id"`
 	PurchaseOrderNumber string                               `json:"purchase_order_number,omitempty"`

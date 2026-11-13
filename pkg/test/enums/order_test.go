@@ -20,5 +20,20 @@ func TestOrderEnumsValidateKnownValues(t *testing.T) {
 		{name: "orderenum.FulfillmentReadiness", valid: []stringEnum{order_enums.FulfillmentReadinessReady, order_enums.FulfillmentReadinessWaitingForPreorderStock}, invalid: order_enums.FulfillmentReadiness("__invalid__")},
 		{name: "orderenum.SalesOrderStatus", valid: []stringEnum{order_enums.SalesOrderStatusPending, order_enums.SalesOrderStatusConfirmed, order_enums.SalesOrderStatusPaid, order_enums.SalesOrderStatusProcessing, order_enums.SalesOrderStatusPicking, order_enums.SalesOrderStatusPacked, order_enums.SalesOrderStatusShipped, order_enums.SalesOrderStatusDelivered, order_enums.SalesOrderStatusCompleted, order_enums.SalesOrderStatusCancelled, order_enums.SalesOrderStatusRefunded}, invalid: order_enums.SalesOrderStatus("__invalid__")},
 		{name: "orderenum.StatusHistoryKind", valid: []stringEnum{order_enums.StatusHistoryKindOverride, order_enums.StatusHistoryKindPaymentCorrection}, invalid: order_enums.StatusHistoryKind("__invalid__")},
+		{name: "orderenum.GiftCardIssueStatus", valid: []stringEnum{order_enums.GiftCardIssueStatusPending, order_enums.GiftCardIssueStatusIssued, order_enums.GiftCardIssueStatusFailed, order_enums.GiftCardIssueStatusReversalPending, order_enums.GiftCardIssueStatusReversed}, invalid: order_enums.GiftCardIssueStatus("__invalid__")},
 	})
+}
+
+func TestGiftCardIssueStatusWireValuesAreStable(t *testing.T) {
+	for value, want := range map[order_enums.GiftCardIssueStatus]string{
+		order_enums.GiftCardIssueStatusPending:         "pending",
+		order_enums.GiftCardIssueStatusIssued:          "issued",
+		order_enums.GiftCardIssueStatusFailed:          "failed",
+		order_enums.GiftCardIssueStatusReversalPending: "reversal_pending",
+		order_enums.GiftCardIssueStatusReversed:        "reversed",
+	} {
+		if got := value.String(); got != want {
+			t.Errorf("GiftCardIssueStatus wire value = %q, want %q", got, want)
+		}
+	}
 }

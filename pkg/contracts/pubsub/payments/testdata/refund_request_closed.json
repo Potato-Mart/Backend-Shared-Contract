@@ -1,0 +1,12 @@
+{
+  "refund_request_id": "rr_42",
+  "order_number": "CUSTOM-0042/A",
+  "status": "rejected",
+  "station": true,
+  "discrepancy_id": "shortage-1",
+  "item_ids": ["item-1", "item-2"],
+  "closed_by": "staff-1",
+  "closed_at": "2026-11-14T01:02:03Z",
+  "market_code": "AU",
+  "country_code": "AU"
+}

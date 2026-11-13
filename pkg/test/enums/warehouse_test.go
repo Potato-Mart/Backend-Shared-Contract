@@ -22,7 +22,7 @@ func TestWarehouseEnumsValidateKnownValues(t *testing.T) {
 		{name: "warehouseenum.PackingDiscrepancyWithdrawalMethod", valid: []stringEnum{warehouse_enums.PackingDiscrepancyWithdrawalMethodCommand, warehouse_enums.PackingDiscrepancyWithdrawalMethodScan, warehouse_enums.PackingDiscrepancyWithdrawalMethodReinstate}, invalid: warehouse_enums.PackingDiscrepancyWithdrawalMethod("__invalid__")},
 		{name: "warehouseenum.PackingShortageSettlementReason", valid: []stringEnum{warehouse_enums.PackingShortageSettlementReasonNoStock, warehouse_enums.PackingShortageSettlementReasonOverweight}, invalid: warehouse_enums.PackingShortageSettlementReason("__invalid__")},
 		{name: "warehouseenum.PackingShortageSettlementStatus", valid: []stringEnum{warehouse_enums.PackingShortageSettlementStatusApplied, warehouse_enums.PackingShortageSettlementStatusDeferred, warehouse_enums.PackingShortageSettlementStatusReversed}, invalid: warehouse_enums.PackingShortageSettlementStatus("__invalid__")},
-		{name: "warehouseenum.PackingShortageSettlementReversalCause", valid: []stringEnum{warehouse_enums.PackingShortageSettlementReversalCauseWithdrawal, warehouse_enums.PackingShortageSettlementReversalCauseScan, warehouse_enums.PackingShortageSettlementReversalCauseProgress, warehouse_enums.PackingShortageSettlementReversalCauseSuperseded}, invalid: warehouse_enums.PackingShortageSettlementReversalCause("__invalid__")},
+		{name: "warehouseenum.PackingShortageSettlementReversalCause", valid: []stringEnum{warehouse_enums.PackingShortageSettlementReversalCauseWithdrawal, warehouse_enums.PackingShortageSettlementReversalCauseScan, warehouse_enums.PackingShortageSettlementReversalCauseProgress, warehouse_enums.PackingShortageSettlementReversalCauseSuperseded, warehouse_enums.PackingShortageSettlementReversalCauseRefundRequestClosed}, invalid: warehouse_enums.PackingShortageSettlementReversalCause("__invalid__")},
 		{name: "warehouseenum.ShapeType", valid: []stringEnum{warehouse_enums.ShapeBox, warehouse_enums.ShapeCylinder, warehouse_enums.ShapeSphere, warehouse_enums.ShapePlane, warehouse_enums.ShapeCustom}, invalid: warehouse_enums.ShapeType("__invalid__")},
 		{name: "warehouseenum.StockMovementType", valid: []stringEnum{warehouse_enums.StockMovementTypeReceipt, warehouse_enums.StockMovementTypeTransfer, warehouse_enums.StockMovementTypeStage, warehouse_enums.StockMovementTypeUnstage, warehouse_enums.StockMovementTypePackageConversion, warehouse_enums.StockMovementTypeSaleCommit, warehouse_enums.StockMovementTypeReturn, warehouse_enums.StockMovementTypeQualityHold, warehouse_enums.StockMovementTypeQualityRelease, warehouse_enums.StockMovementTypeQualityReject, warehouse_enums.StockMovementTypeAdjustment, warehouse_enums.StockMovementTypeReturnToVendor, warehouse_enums.StockMovementTypeScrap, warehouse_enums.StockMovementTypeLotReassignment, warehouse_enums.StockMovementTypeReceiptReversal}, invalid: warehouse_enums.StockMovementType("__invalid__")},
 		{name: "warehouseenum.SellPastDateMarkPolicy", valid: []stringEnum{warehouse_enums.SellPastDateMarkNone, warehouse_enums.SellPastDateMarkBestBefore, warehouse_enums.SellPastDateMarkBestBeforeAndExpiry}, invalid: warehouse_enums.SellPastDateMarkPolicy("__invalid__")},
@@ -77,15 +77,16 @@ func TestPackingDiscrepancyWithdrawalMethodWireValuesAreStable(t *testing.T) {
 
 func TestPackingShortageSettlementWireValuesAreStable(t *testing.T) {
 	for value, want := range map[string]string{
-		warehouse_enums.PackingShortageSettlementReasonNoStock.String():           "no_stock",
-		warehouse_enums.PackingShortageSettlementReasonOverweight.String():        "overweight",
-		warehouse_enums.PackingShortageSettlementStatusApplied.String():           "applied",
-		warehouse_enums.PackingShortageSettlementStatusDeferred.String():          "deferred",
-		warehouse_enums.PackingShortageSettlementStatusReversed.String():          "reversed",
-		warehouse_enums.PackingShortageSettlementReversalCauseWithdrawal.String(): "withdrawal",
-		warehouse_enums.PackingShortageSettlementReversalCauseScan.String():       "scan",
-		warehouse_enums.PackingShortageSettlementReversalCauseProgress.String():   "progress",
-		warehouse_enums.PackingShortageSettlementReversalCauseSuperseded.String(): "superseded",
+		warehouse_enums.PackingShortageSettlementReasonNoStock.String():                    "no_stock",
+		warehouse_enums.PackingShortageSettlementReasonOverweight.String():                 "overweight",
+		warehouse_enums.PackingShortageSettlementStatusApplied.String():                    "applied",
+		warehouse_enums.PackingShortageSettlementStatusDeferred.String():                   "deferred",
+		warehouse_enums.PackingShortageSettlementStatusReversed.String():                   "reversed",
+		warehouse_enums.PackingShortageSettlementReversalCauseWithdrawal.String():          "withdrawal",
+		warehouse_enums.PackingShortageSettlementReversalCauseScan.String():                "scan",
+		warehouse_enums.PackingShortageSettlementReversalCauseProgress.String():            "progress",
+		warehouse_enums.PackingShortageSettlementReversalCauseSuperseded.String():          "superseded",
+		warehouse_enums.PackingShortageSettlementReversalCauseRefundRequestClosed.String(): "refund_request_closed",
 	} {
 		if value != want {
 			t.Errorf("packing shortage settlement wire value = %q, want %q", value, want)
