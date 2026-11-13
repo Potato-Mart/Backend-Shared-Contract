@@ -111,7 +111,7 @@ Supply can sell stock that is at or past its date mark, by policy. The owner dec
 - **Policy.** `warehouse_enums.SellPastDateMarkPolicy`: `none`, `best_before`, `best_before_and_expiry`. It is the market default and the resolved value for one product in one market.
 - **Product override.** `warehouse_enums.SellPastDateMarkOverride`: `inherit`, `none`, `best_before`, `best_before_and_expiry`. Supply stores it on its product record as `sell_past_date_mark`; absent means `inherit`.
 - **Market policy.** `warehouse.MarketSalePolicy`: `market_code`, `sell_past_date_mark`, `stored` (false when the market has no saved policy and the value is Supply's default), `revision`, `history` and the audit fields.
-- **Warning.** `warehouse.PastDateMarkNotice`: `kind`, `date_mark_at` and `timezone` of the earliest date mark already passed in the stock offered, and `past_date_base_units` where a quantity was requested. Supply returns it as `past_date_mark` and omits it when no past-date stock is involved. It is information for a warning, never a refusal.
+- **Warning.** `warehouse.PastDateMarkNotice`: `kind`, `date_mark_at` and `timezone` of the earliest date mark already passed in the stock offered, and `past_date_base_units` where a quantity was requested. Supply returns it as `past_date_mark` and omits it when no past-date stock is involved. `product.SellingProduct` gains the optional `past_date_mark`. It is information for a warning, never a refusal.
 
 Supply owns the default, the resolution order and validation.
 

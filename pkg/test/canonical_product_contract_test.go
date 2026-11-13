@@ -58,6 +58,7 @@ func TestSellingProductPublishesOnlyRenderCompleteCommercialData(t *testing.T) {
 		"BarcodeAssignments": {json: "barcode_assignments,omitempty", typeOf: reflect.TypeOf([]product.SellingProductBarcode{})},
 		"NetContent":         {json: "net_content,omitempty", typeOf: reflect.TypeOf((*measurement.NetContent)(nil))},
 		"ExpiryDate":         {json: "expiry_date,omitempty", typeOf: reflect.TypeOf((*warehouse.InventoryDateMark)(nil))},
+		"PastDateMark":       {json: "past_date_mark,omitempty", typeOf: reflect.TypeOf((*warehouse.PastDateMarkNotice)(nil))},
 		"Price":              {json: "price", typeOf: reflect.TypeOf(pricebook.SellingPrice{})},
 	})
 }
