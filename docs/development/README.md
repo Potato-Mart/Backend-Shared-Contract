@@ -41,6 +41,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | Version | Release date | Type |
 | --- | --- | --- |
 | `v53.34.0` | 2026-11-13 | Minor |
+| `v53.33.0` | 2026-11-13 | Minor |
 | `v53.32.0` | 2026-11-12 | Minor |
 | `v53.31.0` | 2026-11-11 | Minor |
 | `v53.30.0` | 2026-11-11 | Minor |
@@ -111,6 +112,12 @@ A recorded packing shortage can carry what Supply did to stock when the packing 
 - **Reversal.** `PackingShortageSettlementReversal` records settled units a later packing write took back: `base_units`, `cause` (`warehouse_enums.PackingShortageSettlementReversalCause`: `withdrawal`, `scan`, `progress`), `released_base_units`, `write_off_restored_base_units`, `write_off_kept_base_units`, `write_off_kept_reason`, `write_off_reversal_movement_ids`, `refunded_but_shipped`, `reversed_by` and `reversed_at`.
 
 The discrepancy keeps kind `shortage`, and its compositions, withdrawals and remaining base units are unchanged: the units still settled (`settled_base_units` minus `reversed_base_units`) never exceed the remaining shortage. Supply owns validation. Consumers that compare discrepancies must not treat `settlements` as part of a shortage's identity. No data migration is needed.
+
+## v53.33.0 (2026-11-13)
+
+`PurchaseOrderItem.expected_date_mark` is the date mark the buyer expects the goods of a purchase-order line to carry, known before arrival. It is a `warehouse.InventoryDateMark` (`kind`, `date_mark_at`, `timezone`), the same type as `PurchaseReceiptItem.date_mark`, and is omitted when not given. It only informs receiving: the date mark of the stock is still the one recorded on the receipt line, and a receipt line keeps its own value when the expected one changes later. [Backend-Supply #414](https://github.com/Potato-Mart/Backend-Supply/issues/414)
+
+Supply owns validation of the field. No data migration is needed.
 
 ## v53.32.0 (2026-11-12)
 
