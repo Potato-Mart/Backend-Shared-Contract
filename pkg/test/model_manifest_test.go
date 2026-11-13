@@ -324,7 +324,10 @@ var modelPackageManifest map[string]string
 // PackingShortageSettlementReason, PackingShortageSettlementStatus and
 // PackingShortageSettlementReversalCause leaf enums; PackingDiscrepancy only
 // gains the optional settlements list.
-const exportedTypeManifestDigest = "9eb2368d0152c759ab003bdc5b677fdb6bf9e8b3aa9171470b5db8f5e8eec70c"
+// V53.35 adds the Supply-owned MarketSalePolicy record, the
+// PastDateMarkNotice value and the SellPastDateMarkPolicy and
+// SellPastDateMarkOverride leaf enums.
+const exportedTypeManifestDigest = "d11616304b4309e90ef90b31d1b78366a083614d806e7330d3d7c9a53bf6d815"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

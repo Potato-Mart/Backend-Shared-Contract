@@ -34,5 +34,8 @@ type SellingProduct struct {
 	BarcodeAssignments []SellingProductBarcode          `json:"barcode_assignments,omitempty"`
 	NetContent         *measurement.NetContent          `json:"net_content,omitempty"`
 	ExpiryDate         *warehouse.InventoryDateMark     `json:"expiry_date,omitempty"`
-	Price              pricebook.SellingPrice           `json:"price"`
+	// PastDateMark warns that the stock offered includes units at or past
+	// their date mark. Omitted when it does not. Information only.
+	PastDateMark *warehouse.PastDateMarkNotice `json:"past_date_mark,omitempty"`
+	Price        pricebook.SellingPrice        `json:"price"`
 }
