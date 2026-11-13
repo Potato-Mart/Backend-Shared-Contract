@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.35.0` | 2026-11-13 | Minor |
 | `v53.34.0` | 2026-11-13 | Minor |
 | `v53.33.0` | 2026-11-13 | Minor |
 | `v53.32.0` | 2026-11-12 | Minor |
@@ -102,6 +103,17 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.35.0 (2026-11-13)
+
+Supply can sell stock that is at or past its date mark, by policy. The owner decided on 2026-11-13 that such stock is sellable on every platform by default, for both `BEST_BEFORE` and `EXPIRY` marks, with a warning only; the policy exists to turn that off per market or per product. Everything here is additive and optional. No data migration is needed.
+
+- **Policy.** `warehouse_enums.SellPastDateMarkPolicy`: `none`, `best_before`, `best_before_and_expiry`. It is the market default and the resolved value for one product in one market.
+- **Product override.** `warehouse_enums.SellPastDateMarkOverride`: `inherit`, `none`, `best_before`, `best_before_and_expiry`. Supply stores it on its product record as `sell_past_date_mark`; absent means `inherit`.
+- **Market policy.** `warehouse.MarketSalePolicy`: `market_code`, `sell_past_date_mark`, `stored` (false when the market has no saved policy and the value is Supply's default), `revision`, `history` and the audit fields.
+- **Warning.** `warehouse.PastDateMarkNotice`: `kind`, `date_mark_at` and `timezone` of the earliest date mark already passed in the stock offered, and `past_date_base_units` where a quantity was requested. Supply returns it as `past_date_mark` and omits it when no past-date stock is involved. It is information for a warning, never a refusal.
+
+Supply owns the default, the resolution order and validation.
 
 ## v53.34.0 (2026-11-13)
 

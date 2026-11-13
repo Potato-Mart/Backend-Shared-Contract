@@ -25,6 +25,8 @@ func TestWarehouseEnumsValidateKnownValues(t *testing.T) {
 		{name: "warehouseenum.PackingShortageSettlementReversalCause", valid: []stringEnum{warehouse_enums.PackingShortageSettlementReversalCauseWithdrawal, warehouse_enums.PackingShortageSettlementReversalCauseScan, warehouse_enums.PackingShortageSettlementReversalCauseProgress, warehouse_enums.PackingShortageSettlementReversalCauseSuperseded}, invalid: warehouse_enums.PackingShortageSettlementReversalCause("__invalid__")},
 		{name: "warehouseenum.ShapeType", valid: []stringEnum{warehouse_enums.ShapeBox, warehouse_enums.ShapeCylinder, warehouse_enums.ShapeSphere, warehouse_enums.ShapePlane, warehouse_enums.ShapeCustom}, invalid: warehouse_enums.ShapeType("__invalid__")},
 		{name: "warehouseenum.StockMovementType", valid: []stringEnum{warehouse_enums.StockMovementTypeReceipt, warehouse_enums.StockMovementTypeTransfer, warehouse_enums.StockMovementTypeStage, warehouse_enums.StockMovementTypeUnstage, warehouse_enums.StockMovementTypePackageConversion, warehouse_enums.StockMovementTypeSaleCommit, warehouse_enums.StockMovementTypeReturn, warehouse_enums.StockMovementTypeQualityHold, warehouse_enums.StockMovementTypeQualityRelease, warehouse_enums.StockMovementTypeQualityReject, warehouse_enums.StockMovementTypeAdjustment, warehouse_enums.StockMovementTypeReturnToVendor, warehouse_enums.StockMovementTypeScrap, warehouse_enums.StockMovementTypeLotReassignment, warehouse_enums.StockMovementTypeReceiptReversal}, invalid: warehouse_enums.StockMovementType("__invalid__")},
+		{name: "warehouseenum.SellPastDateMarkPolicy", valid: []stringEnum{warehouse_enums.SellPastDateMarkNone, warehouse_enums.SellPastDateMarkBestBefore, warehouse_enums.SellPastDateMarkBestBeforeAndExpiry}, invalid: warehouse_enums.SellPastDateMarkPolicy("__invalid__")},
+		{name: "warehouseenum.SellPastDateMarkOverride", valid: []stringEnum{warehouse_enums.SellPastDateMarkOverrideInherit, warehouse_enums.SellPastDateMarkOverrideNone, warehouse_enums.SellPastDateMarkOverrideBestBefore, warehouse_enums.SellPastDateMarkOverrideBestBeforeAndExpiry}, invalid: warehouse_enums.SellPastDateMarkOverride("__invalid__")},
 		{name: "warehouseenum.InventoryDateMarkKind", valid: []stringEnum{warehouse_enums.InventoryDateMarkBestBefore, warehouse_enums.InventoryDateMarkExpiry}, invalid: warehouse_enums.InventoryDateMarkKind("__invalid__")},
 		{name: "warehouseenum.InventoryCondition", valid: []stringEnum{warehouse_enums.InventoryConditionGood, warehouse_enums.InventoryConditionPackagingDamagedMinor, warehouse_enums.InventoryConditionPackagingDamagedMajor, warehouse_enums.InventoryConditionProductDamaged, warehouse_enums.InventoryConditionOpened, warehouse_enums.InventoryConditionContaminated, warehouse_enums.InventoryConditionSpoiled}, invalid: warehouse_enums.InventoryCondition("__invalid__")},
 		{name: "warehouseenum.InventoryDisposition", valid: []stringEnum{warehouse_enums.InventoryDispositionStandardSellable, warehouse_enums.InventoryDispositionReducedSellable, warehouse_enums.InventoryDispositionQualityHold, warehouse_enums.InventoryDispositionQuarantined, warehouse_enums.InventoryDispositionBlocked, warehouse_enums.InventoryDispositionRecalled, warehouse_enums.InventoryDispositionReturnToVendor, warehouse_enums.InventoryDispositionScrap}, invalid: warehouse_enums.InventoryDisposition("__invalid__")},
@@ -87,6 +89,20 @@ func TestPackingShortageSettlementWireValuesAreStable(t *testing.T) {
 	} {
 		if value != want {
 			t.Errorf("packing shortage settlement wire value = %q, want %q", value, want)
+		}
+	}
+}
+
+func TestSellPastDateMarkWireValuesAreStable(t *testing.T) {
+	for value, want := range map[string]string{
+		warehouse_enums.SellPastDateMarkNone.String():                        "none",
+		warehouse_enums.SellPastDateMarkBestBefore.String():                  "best_before",
+		warehouse_enums.SellPastDateMarkBestBeforeAndExpiry.String():         "best_before_and_expiry",
+		warehouse_enums.SellPastDateMarkOverrideInherit.String():             "inherit",
+		warehouse_enums.SellPastDateMarkOverrideBestBeforeAndExpiry.String(): "best_before_and_expiry",
+	} {
+		if value != want {
+			t.Errorf("sell past date mark wire value = %q, want %q", value, want)
 		}
 	}
 }
