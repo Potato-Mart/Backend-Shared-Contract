@@ -21,16 +21,18 @@ import (
 // signed available figure of the product in the depot before and after; they
 // are absent when no stock was read.
 //
-// A no_stock settlement takes the order depot's own available figure to
-// min(0, before+released). When the released units alone do not get it
-// there, Supply writes off further free units the depot's other counted
-// sellable stock still shows (or books them on the no-lot deficit); those
-// units are WrittenOffBeyondReleaseBaseUnits and are not part of
-// WrittenOffBaseUnits. Their movements are also listed in
-// WriteOffMovementIDs. They come back only when the whole settlement is
-// reversed (see PackingShortageSettlementReversal). The field is absent on
-// settlements recorded before v53.36.0 and when nothing beyond the release
-// was written off.
+// When the order depot's own available figure before the settlement is zero
+// or more, a no_stock settlement takes it to min(0, before+released),
+// writing off free units beyond the release from the depot's other sellable
+// buckets (or booking them on the no-lot deficit); supporting depots are
+// never written off. When that figure is negative, the existing pooled rule
+// applies and nothing is written off beyond the release. The units written
+// off beyond the release are WrittenOffBeyondReleaseBaseUnits and are not
+// part of WrittenOffBaseUnits. Their movements are also listed in
+// WriteOffMovementIDs. Only the reversal that completes the settlement
+// restores them (see PackingShortageSettlementReversal). The field is absent
+// on settlements recorded before v53.36.0 and when nothing beyond the
+// release was written off.
 //
 // A deferred settlement released nothing from the hold: DeferredReason says
 // why the hold was kept. A deferred no_stock settlement may still carry

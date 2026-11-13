@@ -16,10 +16,19 @@ import (
 // after their refund had completed.
 //
 // WriteOffBeyondReleaseRestoredBaseUnits are units of the settlement's
-// WrittenOffBeyondReleaseBaseUnits put back on hand by this reversal; Supply
-// restores them only when the whole settlement is reversed. They are not part
-// of WriteOffRestoredBaseUnits, and their movements are also listed in
-// WriteOffReversalMovementIDs. The field is absent when none were restored.
+// WrittenOffBeyondReleaseBaseUnits put back on hand by this reversal. Supply
+// restores them only on the reversal that completes the settlement (the one
+// after which no units remain settled); earlier partial reversals leave the
+// field absent. They are not part of WriteOffRestoredBaseUnits, and their
+// movements are also listed in WriteOffReversalMovementIDs. The field is
+// absent when none were restored.
+//
+// On the reversal that completes the settlement, the beyond-release units
+// kept written off are the settlement's WrittenOffBeyondReleaseBaseUnits
+// minus this reversal's WriteOffBeyondReleaseRestoredBaseUnits (for example
+// their location was counted since, or the settlement was made after
+// mark-packed). They are not counted in WriteOffKeptBaseUnits;
+// WriteOffKeptReason, when set, explains why they were kept.
 //
 // Cause refund_request_closed is a station refund request that Payments
 // rejected or cancelled after it was settled.
