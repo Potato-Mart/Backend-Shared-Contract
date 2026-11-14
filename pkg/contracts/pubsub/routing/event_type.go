@@ -24,6 +24,11 @@ const (
 	// refund request was rejected or cancelled without any refund being
 	// executed. Its payload is payments.RefundRequestClosedEvent.
 	EventTypeRefundRequestClosed EventType = "refund.request_closed"
+	// EventTypePaymentPartRecorded announces, on payment-events, that one
+	// part of a POS split-tender order was captured. Its payload is
+	// payments.PaymentPartRecordedEvent. payment.captured still means the
+	// order is fully paid.
+	EventTypePaymentPartRecorded EventType = "payment.part_recorded"
 
 	EventTypeInventoryLotReceived              EventType = "inventory.lot_received"
 	EventTypeInventoryStockBucketChanged       EventType = "inventory.stock_bucket_changed"
@@ -79,7 +84,7 @@ func (t EventType) IsValid() bool {
 		EventTypePaymentCaptured, EventTypePaymentFailed, EventTypeInvoiceIssued,
 		EventTypeReceiptGenerated,
 		EventTypeRefundRequested, EventTypeRefundCompleted, EventTypeRefundFailed, EventTypeRefundAlternativeOffered,
-		EventTypeRefundRequestClosed,
+		EventTypeRefundRequestClosed, EventTypePaymentPartRecorded,
 		EventTypeInventoryLotReceived, EventTypeInventoryStockBucketChanged,
 		EventTypeInventoryPackageConverted, EventTypeInventoryQualityAssessed,
 		EventTypeInventoryReservationChanged, EventTypeInventoryStaged,

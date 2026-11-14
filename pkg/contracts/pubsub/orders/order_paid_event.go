@@ -60,4 +60,10 @@ type OrderPaidEvent struct {
 	DepotCode   string                `json:"depot_code,omitempty"`
 	PaidAt      time.Time             `json:"paid_at"`
 	RequestID   string                `json:"request_id,omitempty"`
+	// Tenders lists, for a POS split-tender order, every captured part of
+	// its tender plan in collection (sequence) order. Method stays the
+	// order's primary external tender (Order.PaymentMethod). Gift-card and
+	// points redemptions are not listed. Omitted when the order was not
+	// split.
+	Tenders []OrderPaidTender `json:"tenders,omitempty"`
 }

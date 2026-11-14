@@ -1,0 +1,13 @@
+{
+  "event_id": "payment_part_recorded:pay-1",
+  "order_number": "POS-1",
+  "payment_id": "pay-1",
+  "method": "eftpos",
+  "provider": "TYRO",
+  "amount": {"amount_minor": 6000, "currency": "AUD"},
+  "tender_key": "tender-key-1",
+  "tender_sequence": 1,
+  "order_settled": false,
+  "amount_remaining": {"amount_minor": 4003, "currency": "AUD"},
+  "occurred_at": "2026-11-15T01:02:03Z"
+}

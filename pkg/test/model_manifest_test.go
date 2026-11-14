@@ -335,7 +335,16 @@ var modelPackageManifest map[string]string
 // the refund events, the packing shortage settlement records and the purchase
 // order and receipt lines only gain optional fields, and existing enums only
 // gain values.
-const exportedTypeManifestDigest = "498f7bfb98dfeac9cb69468061b1fa6d21a8a526e8f435ba5c9511c874b6ceb2"
+// V53.37 adds split tender: the Orders-owned TenderPlanSnapshot and
+// TenderPlanPart records with the TenderPartStatus leaf enum, the
+// Payments-owned SplitTenderCashRoundingSnapshot receipt record, the
+// PaymentPartRecordedEvent payload with the CapturedTender and
+// RefundPaymentAllocation records, and the Orders-owned OrderPaidTender
+// record; Order, Payment, the customer payment allocation and summary, the
+// receipt, the register session totals and the payment.captured, order.paid
+// and refund.completed payloads only gain optional fields, and the event type
+// enum only gains payment.part_recorded.
+const exportedTypeManifestDigest = "518a95a2ce593c9066d1940f5728d2b765e594a250d0c3af434f6dfd84cec83d"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

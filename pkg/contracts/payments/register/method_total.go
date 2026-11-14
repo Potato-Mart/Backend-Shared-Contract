@@ -6,6 +6,11 @@ import (
 )
 
 // MethodTotal is one payment-method line of a session totals snapshot.
+//
+// Amount is the total taken through the method and Count is the number of
+// payments (tender lines) through it, not the number of sales: a POS
+// split-tender sale paid by EFTPOS and cash counts once under each method.
+// SessionTotalsSnapshot.SplitSaleCount counts such sales.
 type MethodTotal struct {
 	Method   payment_enums.PaymentMethod `json:"method"`
 	Provider string                      `json:"provider,omitempty"`

@@ -11,12 +11,14 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/money"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/orders/order"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/orders/order/order_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/payments/payment"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/payments/payment/payment_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/payments/receipt"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pricing/wallet/giftcard"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pricing/wallet/reservation"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pricing/wallet/wallet_enums"
+	orderevents "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pubsub/orders"
 	events "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pubsub/payments"
 )
 
@@ -375,4 +377,288 @@ func assertGiftTenderMoneyPointer(t *testing.T, label string, got *money.Money, 
 		t.Fatalf("%s: missing money pointer", label)
 	}
 	assertGiftTenderMoney(t, label, *got, want)
+}
+
+// splitTenderCase joins the shared records of one POS split-tender sale for
+// fixture acceptance: the order and its tender plan, the payments Payments
+// records per part, the customer summary and receipt, the per-part
+// payment.part_recorded events, and the payment.captured, order.paid and
+// optional refund.completed payloads. Services own the workflow.
+type splitTenderCase struct {
+	Name          string                            `json:"name"`
+	Order         order.Order                       `json:"order"`
+	Payments      []payment.Payment                 `json:"payments"`
+	Summary       payment.CustomerPaymentSummary    `json:"summary"`
+	Receipt       receipt.ReceiptSnapshot           `json:"receipt"`
+	PartsRecorded []events.PaymentPartRecordedEvent `json:"parts_recorded"`
+	Captured      events.PaymentCapturedEventV2     `json:"captured"`
+	Paid          orderevents.OrderPaidEvent        `json:"paid"`
+	Refund        *events.RefundCompletedEvent      `json:"refund,omitempty"`
+}
+
+// TestSplitTenderCompatibility is the split case: cash + EFTPOS with the cash
+// part rounded, and a gift card + two EFTPOS parts with a partial refund.
+func TestSplitTenderCompatibility(t *testing.T) {
+	data, err := os.ReadFile("testdata/split_tender_compatibility.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var fixture struct {
+		SplitCases []splitTenderCase `json:"split_cases"`
+	}
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.DisallowUnknownFields()
+	if err := decoder.Decode(&fixture); err != nil {
+		t.Fatalf("decode shared split tender records: %v", err)
+	}
+	var raw struct {
+		SplitCases []json.RawMessage `json:"split_cases"`
+	}
+	if err := json.Unmarshal(data, &raw); err != nil {
+		t.Fatal(err)
+	}
+	wants := map[string]struct {
+		gift     int64
+		parts    []int64
+		cashPart string
+		refunded int64
+	}{
+		"cash_eftpos":      {parts: []int64{6000, 4003}, cashPart: "part-cash-2"},
+		"gift_card_eftpos": {gift: 2501, parts: []int64{4000, 3500}, refunded: 5501},
+	}
+	if len(fixture.SplitCases) != len(wants) {
+		t.Fatalf("split cases: got %d, want %d", len(fixture.SplitCases), len(wants))
+	}
+	for _, method := range []payment_enums.PaymentMethod{"split", "mixed"} {
+		if method.IsValid() {
+			t.Fatalf("PaymentMethod must stay closed: %q validates", method)
+		}
+	}
+	seen := map[string]bool{}
+	for i, original := range fixture.SplitCases {
+		want, ok := wants[original.Name]
+		if !ok || seen[original.Name] {
+			t.Fatalf("unexpected or duplicate split case %q", original.Name)
+		}
+		seen[original.Name] = true
+		t.Run(original.Name, func(t *testing.T) {
+			c, _ := roundTripGiftTender(t, original, raw.SplitCases[i])
+			if c.Order.TenderPlan == nil || len(c.Order.TenderPlan.Parts) != len(want.parts) {
+				t.Fatal("split sale lost its tender plan")
+			}
+			assertSplitTenderPlan(t, c, want.gift, want.parts)
+			payments := assertSplitTenderPayments(t, c)
+			assertSplitTenderCustomerRows(t, c, payments)
+			assertSplitTenderRounding(t, c, want.cashPart)
+			assertSplitTenderEvents(t, c)
+			assertSplitTenderRefund(t, c, payments, want.refunded)
+		})
+	}
+}
+
+func assertSplitTenderPlan(t *testing.T, c splitTenderCase, gift int64, parts []int64) {
+	t.Helper()
+	plan := c.Order.TenderPlan
+	var giftTotal int64
+	for _, redemption := range c.Order.GiftCardRedemptions {
+		giftTotal += redemption.AppliedAmount.AmountMinor
+	}
+	if giftTotal != gift || c.Order.PointRedemption != nil {
+		t.Fatalf("gift redemptions total %d, want %d and no points", giftTotal, gift)
+	}
+	var sum int64
+	primaryUsed := false
+	for i, part := range plan.Parts {
+		if part.Sequence != i+1 {
+			t.Fatalf("parts must be listed in sequence 1..n: %d at %d", part.Sequence, i)
+		}
+		assertGiftTenderMoney(t, "part amount", part.Amount, parts[i])
+		due := part.Amount.AmountMinor
+		if part.RoundingAdjustment != nil {
+			due += part.RoundingAdjustment.AmountMinor
+		}
+		assertGiftTenderMoney(t, "part amount due", part.AmountDue, due)
+		if part.CashTender != nil && (part.Method != payment_enums.PaymentMethodCash || part.CashTender.AmountDue != part.AmountDue ||
+			part.CashTender.AmountReceived.AmountMinor-part.CashTender.Change.AmountMinor != part.AmountDue.AmountMinor) {
+			t.Fatal("cash evidence must belong to a cash part and reconcile received less change with the amount due")
+		}
+		if !part.Status.IsValid() || part.PaymentID == "" || part.TenderKey == "" || part.PartID == "" {
+			t.Fatalf("collected part %q lost its status, payment or keys", part.PartID)
+		}
+		primaryUsed = primaryUsed || part.Method == c.Order.PaymentMethod
+		sum += part.Amount.AmountMinor
+	}
+	if sum != c.Order.Total.AmountMinor-giftTotal {
+		t.Fatalf("plan parts sum to %d, want the total less gift cards and points %d", sum, c.Order.Total.AmountMinor-giftTotal)
+	}
+	if !c.Order.PaymentMethod.IsValid() || !primaryUsed {
+		t.Fatal("order payment method must stay the primary external tender of the plan")
+	}
+}
+
+// assertSplitTenderPayments checks that every plan part's payment names the
+// part, and returns the payments by ID.
+func assertSplitTenderPayments(t *testing.T, c splitTenderCase) map[string]payment.Payment {
+	t.Helper()
+	byID := make(map[string]payment.Payment, len(c.Payments))
+	for _, p := range c.Payments {
+		if p.OrderNumber != c.Order.OrderNumber || p.PaidAt == nil {
+			t.Fatal("payment lost order identity or capture timestamp")
+		}
+		if p.TenderPartID == "" && (p.Method != payment_enums.PaymentMethodGiftCard || p.TenderPlanID != "" || p.TenderKey != "" || p.TenderSequence != 0) {
+			t.Fatal("only gift-card payments sit outside the tender plan, with no tender fields")
+		}
+		byID[p.ID] = p
+	}
+	for _, part := range c.Order.TenderPlan.Parts {
+		p, ok := byID[part.PaymentID]
+		if !ok || p.TenderPlanID != c.Order.TenderPlan.PlanID || p.TenderPartID != part.PartID || p.TenderKey != part.TenderKey ||
+			p.TenderSequence != part.Sequence || p.Method != part.Method || p.Amount != part.Amount {
+			t.Fatalf("payment %q does not match its tender plan part %q", part.PaymentID, part.PartID)
+		}
+	}
+	if len(c.Payments) != len(c.Order.TenderPlan.Parts)+len(c.Order.GiftCardRedemptions) {
+		t.Fatal("one payment per plan part plus one per gift card")
+	}
+	return byID
+}
+
+func assertSplitTenderCustomerRows(t *testing.T, c splitTenderCase, payments map[string]payment.Payment) {
+	t.Helper()
+	assertGiftTenderMoneyPointer(t, "captured total", c.Summary.CapturedTotal, c.Order.Total.AmountMinor)
+	assertGiftTenderMoneyPointer(t, "amount remaining", c.Summary.AmountRemaining, 0)
+	assertGiftTenderMoney(t, "receipt total", c.Receipt.Total, c.Order.Total.AmountMinor)
+	if len(c.Summary.Allocations) != len(c.Payments) || len(c.Receipt.PaymentRows) != len(c.Payments) {
+		t.Fatal("customer rows must list every payment once")
+	}
+	var captured int64
+	for i, row := range c.Summary.Allocations {
+		receiptRow := c.Receipt.PaymentRows[i]
+		p, ok := payments[row.AllocationID]
+		if !ok || receiptRow.AllocationID != p.ID || row.TenderPartID != p.TenderPartID || receiptRow.TenderPartID != p.TenderPartID ||
+			row.Method != p.Method || row.Amount != p.Amount || receiptRow.Amount != p.Amount {
+			t.Fatalf("customer rows for %q lost the payment or its tender part", row.AllocationID)
+		}
+		if receiptRow.RefundedAmount != nil {
+			t.Fatal("issued receipt must preserve original funding rows")
+		}
+		captured += row.Amount.AmountMinor
+	}
+	if captured != c.Order.Total.AmountMinor {
+		t.Fatal("customer rows do not reconcile to the order total")
+	}
+}
+
+func assertSplitTenderRounding(t *testing.T, c splitTenderCase, cashPart string) {
+	t.Helper()
+	if c.Receipt.CashRounding != nil || c.Receipt.MixedGiftCashRounding != nil {
+		t.Fatal("a split-tender receipt uses only the split-tender rounding record")
+	}
+	rounding := c.Receipt.SplitTenderCashRounding
+	var part *order.TenderPlanPart
+	rounded := 0
+	for i := range c.Order.TenderPlan.Parts {
+		if c.Order.TenderPlan.Parts[i].RoundingAdjustment != nil {
+			rounded++
+			part = &c.Order.TenderPlan.Parts[i]
+		}
+	}
+	if cashPart == "" {
+		if rounding != nil || rounded != 0 {
+			t.Fatal("a split without cash must not record cash rounding")
+		}
+		return
+	}
+	if rounding == nil || rounding.TenderPartID != cashPart || !rounding.Mode.IsValid() || rounding.IncrementMinor <= 0 {
+		t.Fatal("split-tender cash rounding lost its tender part, mode or increment")
+	}
+	if rounded != 1 || part.PartID != cashPart || part.Method != payment_enums.PaymentMethodCash {
+		t.Fatal("exactly the named cash part carries the rounding adjustment")
+	}
+	assertGiftTenderMoney(t, "rounding order total", rounding.OrderTotal, c.Receipt.Total.AmountMinor)
+	assertGiftTenderMoney(t, "rounding non-cash", rounding.NonCashAmount, c.Order.Total.AmountMinor-part.Amount.AmountMinor)
+	assertGiftTenderMoney(t, "rounding exact cash", rounding.ExactCashAmountDue, part.Amount.AmountMinor)
+	assertGiftTenderMoney(t, "rounding adjustment", rounding.RoundingAdjustment, part.RoundingAdjustment.AmountMinor)
+	assertGiftTenderMoney(t, "rounding cash due", rounding.CashAmountDue, part.AmountDue.AmountMinor)
+	if rounding.CashAmountDue.AmountMinor%rounding.IncrementMinor != 0 || rounding.CashAmountDue.AmountMinor <= 0 {
+		t.Fatal("cash due must be positive and land on the increment")
+	}
+}
+
+func assertSplitTenderEvents(t *testing.T, c splitTenderCase) {
+	t.Helper()
+	parts := c.Order.TenderPlan.Parts
+	if len(c.PartsRecorded) != len(parts) {
+		t.Fatal("payment.part_recorded is emitted once per captured part")
+	}
+	remaining := c.Order.Total.AmountMinor
+	for _, redemption := range c.Order.GiftCardRedemptions {
+		remaining -= redemption.AppliedAmount.AmountMinor
+	}
+	for i, recorded := range c.PartsRecorded {
+		part := parts[i]
+		remaining -= part.Amount.AmountMinor
+		if recorded.OrderNumber != c.Order.OrderNumber || recorded.PaymentID != part.PaymentID || recorded.TenderKey != part.TenderKey ||
+			recorded.TenderSequence != part.Sequence || recorded.Method != part.Method || recorded.Amount != part.Amount || recorded.EventID == "" {
+			t.Fatalf("part recorded event %d lost its part identity", i)
+		}
+		assertGiftTenderMoney(t, "amount remaining after part", recorded.AmountRemaining, remaining)
+		if recorded.OrderSettled != (remaining == 0) || recorded.OrderSettled != (i == len(parts)-1) {
+			t.Fatal("only the last part settles the order")
+		}
+	}
+	last := parts[len(parts)-1]
+	assertGiftTenderMoney(t, "captured amount", c.Captured.Amount, c.Order.Total.AmountMinor)
+	if c.Captured.OrderNumber != c.Order.OrderNumber || c.Captured.PaymentID != last.PaymentID || c.Captured.Method != c.Order.PaymentMethod {
+		t.Fatal("payment.captured must name the settling payment and the primary tender")
+	}
+	if c.Paid.OrderNumber != c.Order.OrderNumber || c.Paid.Method != c.Order.PaymentMethod {
+		t.Fatal("order.paid method must stay the primary tender")
+	}
+	if len(c.Captured.Tenders) != len(parts) || len(c.Paid.Tenders) != len(parts) {
+		t.Fatal("captured and paid tenders list every plan part")
+	}
+	for i, part := range parts {
+		captured, paid := c.Captured.Tenders[i], c.Paid.Tenders[i]
+		if captured.PaymentID != part.PaymentID || captured.Method != part.Method || captured.Amount != part.Amount || paid.Method != part.Method || paid.Amount != part.Amount {
+			t.Fatalf("event tender %d differs from its plan part", i)
+		}
+	}
+}
+
+func assertSplitTenderRefund(t *testing.T, c splitTenderCase, payments map[string]payment.Payment, refunded int64) {
+	t.Helper()
+	if refunded == 0 {
+		if c.Refund != nil {
+			t.Fatal("sale fixture unexpectedly contains a refund event")
+		}
+		return
+	}
+	if c.Refund == nil || c.Refund.OrderNumber != c.Order.OrderNumber {
+		t.Fatal("refund lost its order identity")
+	}
+	assertGiftTenderMoney(t, "refund amount", c.Refund.Amount, refunded)
+	assertGiftTenderMoneyPointer(t, "summary refunded total", c.Summary.RefundedTotal, refunded)
+	var giftRefund int64
+	if c.Refund.GiftCardRefundAmount != nil {
+		giftRefund = c.Refund.GiftCardRefundAmount.AmountMinor
+	}
+	var allocated int64
+	for _, allocation := range c.Refund.PaymentAllocations {
+		p, ok := payments[allocation.PaymentID]
+		if !ok || p.TenderPartID == "" || p.Method != allocation.Method || p.RefundAmount == nil || *p.RefundAmount != allocation.Amount || allocation.Amount.AmountMinor > p.Amount.AmountMinor {
+			t.Fatalf("refund allocation %q does not match its split payment", allocation.PaymentID)
+		}
+		allocated += allocation.Amount.AmountMinor
+	}
+	if allocated != refunded-giftRefund {
+		t.Fatalf("refund allocations sum to %d, want the refund less gift-card restoration %d", allocated, refunded-giftRefund)
+	}
+	for _, part := range c.Order.TenderPlan.Parts {
+		p := payments[part.PaymentID]
+		fully := p.RefundAmount != nil && *p.RefundAmount == p.Amount
+		if fully != (part.Status == order_enums.TenderPartStatusRefunded) {
+			t.Fatalf("part %q status %s disagrees with its refund evidence", part.PartID, part.Status)
+		}
+	}
 }

@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.37.0` | 2026-11-15 | Minor |
 | `v53.36.0` | 2026-11-14 | Minor |
 | `v53.35.0` | 2026-11-13 | Minor |
 | `v53.34.0` | 2026-11-13 | Minor |
@@ -104,6 +105,19 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.37.0 (2026-11-15)
+
+Split tender: one POS sale paid with several tenders, as the owner approved on 2026-11-15. Every new field is optional and omitted when empty, every new value is added to an existing enum, and stored data and JSON are unchanged until a service writes the new fields. `PaymentMethod` gains no `split` or `mixed` value: the POS and Insights parse it as a closed enum, and `Order.payment_method` (and `OrderPaidEvent.method`) stays the sale's primary external tender. No data migration is needed.
+
+- **Tender plan (Orders).** `Order.tender_plan` is an `order.TenderPlanSnapshot` (`plan_id`, `revision`, `parts`, and `frozen_at`, which is absent while the plan can still be revised). Each part is an `order.TenderPlanPart`: `part_id`, `tender_key` (the idempotency key the till collects the part under), `sequence`, `method`, `amount` (the exact share of the order the part settles), `amount_due` (what the till collects after cash rounding), optional `rounding_adjustment` (only on the one rounded cash part), `status`, optional `payment_id` and optional `cash_tender` (`OfflineCashTenderEvidence`: amount due, received and change). `order_enums.TenderPartStatus` is `pending`, `in_progress`, `captured`, `declined`, `cancelled` or `refunded`. A plan uses one currency, its sequences are exactly 1..n, and its parts' `amount` sum to `Order.total` less the gift-card redemptions and the points redemption; gift cards and points are never parts.
+- **Payments.** `Payment` gains `tender_plan_id`, `tender_part_id`, `tender_key` and `tender_sequence` for a payment that collected a plan part; its `amount` is then the part's exact `amount`. `CustomerPaymentAllocation.tender_part_id` names the part on summary and receipt rows. `CustomerPaymentSummary.amount_remaining` is the server-side amount the order still owes, at exact minor units (a known zero once paid; absent when not computed).
+- **Receipt rounding.** `ReceiptSnapshot.split_tender_cash_rounding` is a `receipt.SplitTenderCashRoundingSnapshot` (`order_total`, `non_cash_amount`, `exact_cash_amount_due`, `rounding_adjustment`, `cash_amount_due`, `increment_minor`, `mode`, `applied_at`, `tender_part_id`) for a split-tender sale whose cash part is rounded. `exact_cash_amount_due` is `order_total` less `non_cash_amount` (every non-cash part, gift card and points); `cash_amount_due` is that plus `rounding_adjustment` and equals the named part's `amount_due`. A receipt carries at most one of `cash_rounding`, `mixed_gift_cash_rounding` and `split_tender_cash_rounding`; the first two keep their meaning (all cash, and gift cards plus cash).
+- **Per-part event.** `payment.part_recorded` v1 on the existing `payment-events` topic, carried by `payments.PaymentPartRecordedEvent` (`event_id`, `order_number`, `payment_id`, `method`, optional `provider`, `amount`, `tender_key`, `tender_sequence`, `order_settled`, `amount_remaining`, `occurred_at`). Payments emits one for every captured part of a POS split-tender order, the last one included (`order_settled` true, `amount_remaining` zero); Orders projects `partially_paid` from it. `payment.captured` keeps its meaning: it is emitted once, when the order is fully paid, with `amount` equal to the order total. Every `payment-events` subscriber must handle or explicitly acknowledge the new type before Payments emits it. Today Backend-Insights (`operationalTypeBelongsToTopic`) answers HTTP 400 to an unknown `payment-events` type, so Pub/Sub retries and dead-letters it, and Backend-Orders (`validSharedTopicPeerEvent`) accepts only its catalogued peer types; Orders will handle the new type itself. Both must be deployed before the Payments release that emits it. Backend-Notification already acknowledges unknown types.
+- **Tender lists on existing events.** `PaymentCapturedEvent` and `PaymentCapturedEventV2` gain `tenders`, a list of `payments.CapturedTender` (`payment_id`, `method`, optional `provider`, `amount`). `OrderPaidEvent` gains `tenders`, a list of `orders.OrderPaidTender` (`method`, `amount`); `method` stays the primary tender. Both list every captured part of the plan in sequence order, without gift-card or points redemptions, and are omitted when the order was not split. `RefundCompletedEvent.payment_allocations` is a list of `payments.RefundPaymentAllocation` (`payment_id`, `method`, `amount`), one per payment the refund returned money through; money put back on gift cards stays in `gift_card_refund_amount`, so the rows sum to `amount` less that. Event versions are unchanged.
+- **Register totals.** `SessionTotalsSnapshot.split_sale_count` counts the session's split-tender sales. `MethodTotal.count` is documented as counting payments (tender lines), not sales: a split sale counts once under each method it used.
+
+Consumers that decode `Order`, `Payment`, `ReceiptSnapshot` or these events must take this version to see the new fields; older versions drop them silently, so a service must not rewrite a stored record carrying them while on an older version.
 
 ## v53.36.0 (2026-11-14)
 
