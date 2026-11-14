@@ -25,6 +25,7 @@ func TestInventoryAndCommerceEventTypes(t *testing.T) {
 				event_enums.EventTypeRefundFailed,
 				event_enums.EventTypeRefundAlternativeOffered,
 				event_enums.EventTypeRefundRequestClosed,
+				event_enums.EventTypePaymentPartRecorded,
 				event_enums.EventTypeInventoryLotReceived,
 				event_enums.EventTypeInventoryStockBucketChanged,
 				event_enums.EventTypeInventoryPackageConverted,
@@ -77,6 +78,12 @@ func TestInventoryAndCommerceEventTypes(t *testing.T) {
 	}
 	if got := event_enums.EventTopicRefundEvents.String(); got != "refund-events" || !event_enums.EventTopicRefundEvents.IsValid() {
 		t.Fatalf("refund topic = %q", got)
+	}
+	if got := event_enums.EventTypePaymentPartRecorded.String(); got != "payment.part_recorded" {
+		t.Fatalf("payment part recorded event type = %q", got)
+	}
+	if got := event_enums.EventTopicPaymentEvents.String(); got != "payment-events" || !event_enums.EventTopicPaymentEvents.IsValid() {
+		t.Fatalf("payment topic = %q", got)
 	}
 	if got := event_enums.EventTypeCatalogBaseCostChanged.String(); got != "catalog.base_cost_changed" {
 		t.Fatalf("catalog base cost event type = %q", got)

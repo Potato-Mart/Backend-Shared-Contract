@@ -35,6 +35,13 @@ type RefundCompletedEvent struct {
 	TierRefundProof *membership.TierRefundProof `json:"tier_refund_proof,omitempty"`
 	PointsToRestore int                         `json:"points_to_restore,omitempty"`
 	FullOrderRefund bool                        `json:"full_order_refund,omitempty"`
+	// PaymentAllocations splits the refund across the order's payments, one
+	// row per payment the refund returned money through, for example each
+	// part of a POS split tender. Money put back on gift cards used to pay
+	// stays in GiftCardRefundAmount and is not listed, so the rows sum to
+	// Amount less GiftCardRefundAmount (zero when absent). PaymentID keeps
+	// its existing meaning. Omitted when Payments did not record the split.
+	PaymentAllocations []RefundPaymentAllocation `json:"payment_allocations,omitempty"`
 	// GiftCardReversals lists the sold gift cards this refund reversed, one
 	// per refunded gift-card line. It is omitted when the refund covered no
 	// sold gift card. It is not GiftCardRefundAmount, which is money put back

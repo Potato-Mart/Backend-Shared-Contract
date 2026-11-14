@@ -121,7 +121,12 @@ type Order struct {
 	// one per sold card. Each names the OrderItem that carries its face
 	// value; such an item is face value, outside the tax scope, moves no
 	// stock and earns no points. Omitted when the order sold no gift card.
-	GiftCardIssues       []OrderGiftCardIssue             `json:"gift_card_issues,omitempty"`
+	GiftCardIssues []OrderGiftCardIssue `json:"gift_card_issues,omitempty"`
+	// TenderPlan is the split-tender plan of a POS sale paid with several
+	// external tenders: its parts settle Total less GiftCardRedemptions and
+	// PointRedemption. PaymentMethod stays the primary external tender.
+	// Omitted when the sale was not split.
+	TenderPlan           *TenderPlanSnapshot              `json:"tender_plan,omitempty"`
 	TrackingNumber       string                           `json:"tracking_number,omitempty"`
 	TrackingURL          string                           `json:"tracking_url,omitempty"`
 	Packing              *fulfilment.OrderPackingProgress `json:"packing,omitempty"`

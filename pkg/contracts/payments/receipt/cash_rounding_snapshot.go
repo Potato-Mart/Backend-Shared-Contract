@@ -12,8 +12,10 @@ import (
 //
 // The order's consideration and tax stay at exact minor units: rounding is a
 // tender adjustment, never a change to the priced amounts. Electronic tenders
-// remain exact and record no adjustment, and a tender that mixes cash with
-// another method is rejected.
+// remain exact and record no adjustment. A sale that mixes cash with another
+// tender does not use this record: gift cards plus cash use
+// MixedGiftCashRoundingSnapshot, and a POS split tender (a tender plan that
+// includes a cash part) uses SplitTenderCashRoundingSnapshot.
 type CashRoundingSnapshot struct {
 	// ExactAmountDue is the unrounded amount payable, equal to the order
 	// total at exact minor units.

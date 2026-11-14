@@ -1,0 +1,481 @@
+{
+  "split_cases": [
+    {
+      "name": "cash_eftpos",
+      "order": {
+        "id": "order-split-cash",
+        "order_number": "POS-SPLIT-CASH",
+        "market_code": "AU-VIC",
+        "country_code": "AU",
+        "channel": "pos",
+        "payment_status": "paid",
+        "payment_method": "eftpos",
+        "subtotal": { "amount_minor": 10003, "currency": "AUD" },
+        "discount_amount": { "amount_minor": 0, "currency": "AUD" },
+        "shipping_amount": { "amount_minor": 0, "currency": "AUD" },
+        "tax_amount": { "amount_minor": 909, "currency": "AUD" },
+        "total": { "amount_minor": 10003, "currency": "AUD" },
+        "tender_plan": {
+          "plan_id": "plan-cash",
+          "revision": 2,
+          "parts": [
+            {
+              "part_id": "part-cash-1",
+              "tender_key": "tender-cash-1",
+              "sequence": 1,
+              "method": "eftpos",
+              "amount": { "amount_minor": 6000, "currency": "AUD" },
+              "amount_due": { "amount_minor": 6000, "currency": "AUD" },
+              "status": "captured",
+              "payment_id": "pay-cash-1"
+            },
+            {
+              "part_id": "part-cash-2",
+              "tender_key": "tender-cash-2",
+              "sequence": 2,
+              "method": "cash",
+              "amount": { "amount_minor": 4003, "currency": "AUD" },
+              "amount_due": { "amount_minor": 4005, "currency": "AUD" },
+              "rounding_adjustment": { "amount_minor": 2, "currency": "AUD" },
+              "status": "captured",
+              "payment_id": "pay-cash-2",
+              "cash_tender": {
+                "amount_due": { "amount_minor": 4005, "currency": "AUD" },
+                "amount_received": { "amount_minor": 5000, "currency": "AUD" },
+                "change": { "amount_minor": 995, "currency": "AUD" }
+              }
+            }
+          ],
+          "frozen_at": "2026-11-15T01:00:00Z"
+        }
+      },
+      "payments": [
+        {
+          "id": "pay-cash-1",
+          "order_number": "POS-SPLIT-CASH",
+          "amount": { "amount_minor": 6000, "currency": "AUD" },
+          "method": "eftpos",
+          "status": "completed",
+          "provider": "TYRO",
+          "tender_plan_id": "plan-cash",
+          "tender_part_id": "part-cash-1",
+          "tender_key": "tender-cash-1",
+          "tender_sequence": 1,
+          "paid_at": "2026-11-15T01:01:00Z"
+        },
+        {
+          "id": "pay-cash-2",
+          "order_number": "POS-SPLIT-CASH",
+          "amount": { "amount_minor": 4003, "currency": "AUD" },
+          "method": "cash",
+          "status": "completed",
+          "provider": "CASH",
+          "tender_plan_id": "plan-cash",
+          "tender_part_id": "part-cash-2",
+          "tender_key": "tender-cash-2",
+          "tender_sequence": 2,
+          "paid_at": "2026-11-15T01:02:00Z"
+        }
+      ],
+      "summary": {
+        "order_number": "POS-SPLIT-CASH",
+        "status": "paid",
+        "captured_total": { "amount_minor": 10003, "currency": "AUD" },
+        "refunded_total": { "amount_minor": 0, "currency": "AUD" },
+        "amount_remaining": { "amount_minor": 0, "currency": "AUD" },
+        "allocations": [
+          {
+            "allocation_id": "pay-cash-1",
+            "kind": "external_payment",
+            "method": "eftpos",
+            "provider": "TYRO",
+            "amount": { "amount_minor": 6000, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-11-15T01:01:00Z",
+            "tender_part_id": "part-cash-1"
+          },
+          {
+            "allocation_id": "pay-cash-2",
+            "kind": "external_payment",
+            "method": "cash",
+            "provider": "CASH",
+            "amount": { "amount_minor": 4003, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-11-15T01:02:00Z",
+            "tender_part_id": "part-cash-2"
+          }
+        ],
+        "completeness": "complete"
+      },
+      "receipt": {
+        "order_number": "POS-SPLIT-CASH",
+        "market_code": "AU-VIC",
+        "revision": 1,
+        "issued_at": "2026-11-15T01:02:00Z",
+        "document_kind": "receipt",
+        "subtotal": { "amount_minor": 10003, "currency": "AUD" },
+        "tax": { "amount_minor": 909, "currency": "AUD" },
+        "total": { "amount_minor": 10003, "currency": "AUD" },
+        "payment_rows": [
+          {
+            "allocation_id": "pay-cash-1",
+            "kind": "external_payment",
+            "method": "eftpos",
+            "provider": "TYRO",
+            "amount": { "amount_minor": 6000, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-11-15T01:01:00Z",
+            "tender_part_id": "part-cash-1"
+          },
+          {
+            "allocation_id": "pay-cash-2",
+            "kind": "external_payment",
+            "method": "cash",
+            "provider": "CASH",
+            "amount": { "amount_minor": 4003, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-11-15T01:02:00Z",
+            "tender_part_id": "part-cash-2"
+          }
+        ],
+        "split_tender_cash_rounding": {
+          "order_total": { "amount_minor": 10003, "currency": "AUD" },
+          "non_cash_amount": { "amount_minor": 6000, "currency": "AUD" },
+          "exact_cash_amount_due": { "amount_minor": 4003, "currency": "AUD" },
+          "rounding_adjustment": { "amount_minor": 2, "currency": "AUD" },
+          "cash_amount_due": { "amount_minor": 4005, "currency": "AUD" },
+          "increment_minor": 5,
+          "mode": "cash_increment",
+          "applied_at": "2026-11-15T01:00:00Z",
+          "tender_part_id": "part-cash-2"
+        }
+      },
+      "parts_recorded": [
+        {
+          "event_id": "payment_part_recorded:pay-cash-1",
+          "order_number": "POS-SPLIT-CASH",
+          "payment_id": "pay-cash-1",
+          "method": "eftpos",
+          "provider": "TYRO",
+          "amount": { "amount_minor": 6000, "currency": "AUD" },
+          "tender_key": "tender-cash-1",
+          "tender_sequence": 1,
+          "order_settled": false,
+          "amount_remaining": { "amount_minor": 4003, "currency": "AUD" },
+          "occurred_at": "2026-11-15T01:01:00Z"
+        },
+        {
+          "event_id": "payment_part_recorded:pay-cash-2",
+          "order_number": "POS-SPLIT-CASH",
+          "payment_id": "pay-cash-2",
+          "method": "cash",
+          "provider": "CASH",
+          "amount": { "amount_minor": 4003, "currency": "AUD" },
+          "tender_key": "tender-cash-2",
+          "tender_sequence": 2,
+          "order_settled": true,
+          "amount_remaining": { "amount_minor": 0, "currency": "AUD" },
+          "occurred_at": "2026-11-15T01:02:00Z"
+        }
+      ],
+      "captured": {
+        "payment_id": "pay-cash-2",
+        "order_id": "order-split-cash",
+        "order_number": "POS-SPLIT-CASH",
+        "method": "eftpos",
+        "amount": { "amount_minor": 10003, "currency": "AUD" },
+        "capture_timing": {},
+        "tenders": [
+          {
+            "payment_id": "pay-cash-1",
+            "method": "eftpos",
+            "provider": "TYRO",
+            "amount": { "amount_minor": 6000, "currency": "AUD" }
+          },
+          {
+            "payment_id": "pay-cash-2",
+            "method": "cash",
+            "provider": "CASH",
+            "amount": { "amount_minor": 4003, "currency": "AUD" }
+          }
+        ]
+      },
+      "paid": {
+        "order_id": "order-split-cash",
+        "order_number": "POS-SPLIT-CASH",
+        "payment_id": "pay-cash-2",
+        "method": "eftpos",
+        "channel": "pos",
+        "amount_paid": { "amount_minor": 10003, "currency": "AUD" },
+        "subtotal": { "amount_minor": 10003, "currency": "AUD" },
+        "discount_amount": { "amount_minor": 0, "currency": "AUD" },
+        "paid_at": "2026-11-15T01:02:00Z",
+        "tenders": [
+          { "method": "eftpos", "amount": { "amount_minor": 6000, "currency": "AUD" } },
+          { "method": "cash", "amount": { "amount_minor": 4003, "currency": "AUD" } }
+        ]
+      }
+    },
+    {
+      "name": "gift_card_eftpos",
+      "order": {
+        "id": "order-split-gift",
+        "order_number": "POS-SPLIT-GIFT",
+        "market_code": "AU-VIC",
+        "country_code": "AU",
+        "channel": "pos",
+        "payment_status": "partially_refunded",
+        "payment_method": "eftpos",
+        "subtotal": { "amount_minor": 10001, "currency": "AUD" },
+        "discount_amount": { "amount_minor": 0, "currency": "AUD" },
+        "shipping_amount": { "amount_minor": 0, "currency": "AUD" },
+        "tax_amount": { "amount_minor": 909, "currency": "AUD" },
+        "total": { "amount_minor": 10001, "currency": "AUD" },
+        "gift_card_redemptions": [
+          {
+            "gift_card_code": "GC000000000001",
+            "applied_amount": { "amount_minor": 2501, "currency": "AUD" },
+            "reservation_id": "reservation-split-gift",
+            "wallet_transaction_id": "wallet-redeem-0",
+            "occurred_at": "2026-11-15T02:00:00Z"
+          }
+        ],
+        "tender_plan": {
+          "plan_id": "plan-gift",
+          "revision": 1,
+          "parts": [
+            {
+              "part_id": "part-gift-1",
+              "tender_key": "tender-gift-1",
+              "sequence": 1,
+              "method": "eftpos",
+              "amount": { "amount_minor": 4000, "currency": "AUD" },
+              "amount_due": { "amount_minor": 4000, "currency": "AUD" },
+              "status": "captured",
+              "payment_id": "pay-gift-split-1"
+            },
+            {
+              "part_id": "part-gift-2",
+              "tender_key": "tender-gift-2",
+              "sequence": 2,
+              "method": "eftpos",
+              "amount": { "amount_minor": 3500, "currency": "AUD" },
+              "amount_due": { "amount_minor": 3500, "currency": "AUD" },
+              "status": "refunded",
+              "payment_id": "pay-gift-split-2"
+            }
+          ],
+          "frozen_at": "2026-11-15T02:00:00Z"
+        }
+      },
+      "payments": [
+        {
+          "id": "pay-gift-0",
+          "order_number": "POS-SPLIT-GIFT",
+          "amount": { "amount_minor": 2501, "currency": "AUD" },
+          "method": "gift_card",
+          "status": "completed",
+          "provider": "WALLET",
+          "paid_at": "2026-11-15T02:00:00Z",
+          "refund_amount": { "amount_minor": 1501, "currency": "AUD" }
+        },
+        {
+          "id": "pay-gift-split-1",
+          "order_number": "POS-SPLIT-GIFT",
+          "amount": { "amount_minor": 4000, "currency": "AUD" },
+          "method": "eftpos",
+          "status": "completed",
+          "provider": "TYRO",
+          "tender_plan_id": "plan-gift",
+          "tender_part_id": "part-gift-1",
+          "tender_key": "tender-gift-1",
+          "tender_sequence": 1,
+          "paid_at": "2026-11-15T02:01:00Z",
+          "refund_amount": { "amount_minor": 500, "currency": "AUD" }
+        },
+        {
+          "id": "pay-gift-split-2",
+          "order_number": "POS-SPLIT-GIFT",
+          "amount": { "amount_minor": 3500, "currency": "AUD" },
+          "method": "eftpos",
+          "status": "refunded",
+          "provider": "TYRO",
+          "tender_plan_id": "plan-gift",
+          "tender_part_id": "part-gift-2",
+          "tender_key": "tender-gift-2",
+          "tender_sequence": 2,
+          "paid_at": "2026-11-15T02:02:00Z",
+          "refund_amount": { "amount_minor": 3500, "currency": "AUD" }
+        }
+      ],
+      "summary": {
+        "order_number": "POS-SPLIT-GIFT",
+        "status": "partially_refunded",
+        "captured_total": { "amount_minor": 10001, "currency": "AUD" },
+        "refunded_total": { "amount_minor": 5501, "currency": "AUD" },
+        "amount_remaining": { "amount_minor": 0, "currency": "AUD" },
+        "allocations": [
+          {
+            "allocation_id": "pay-gift-0",
+            "kind": "gift_card",
+            "method": "gift_card",
+            "provider": "WALLET",
+            "amount": { "amount_minor": 2501, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-11-15T02:00:00Z",
+            "refunded_amount": { "amount_minor": 1501, "currency": "AUD" }
+          },
+          {
+            "allocation_id": "pay-gift-split-1",
+            "kind": "external_payment",
+            "method": "eftpos",
+            "provider": "TYRO",
+            "amount": { "amount_minor": 4000, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-11-15T02:01:00Z",
+            "refunded_amount": { "amount_minor": 500, "currency": "AUD" },
+            "tender_part_id": "part-gift-1"
+          },
+          {
+            "allocation_id": "pay-gift-split-2",
+            "kind": "external_payment",
+            "method": "eftpos",
+            "provider": "TYRO",
+            "amount": { "amount_minor": 3500, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-11-15T02:02:00Z",
+            "refunded_amount": { "amount_minor": 3500, "currency": "AUD" },
+            "tender_part_id": "part-gift-2"
+          }
+        ],
+        "completeness": "complete"
+      },
+      "receipt": {
+        "order_number": "POS-SPLIT-GIFT",
+        "market_code": "AU-VIC",
+        "revision": 1,
+        "issued_at": "2026-11-15T02:02:00Z",
+        "document_kind": "receipt",
+        "subtotal": { "amount_minor": 10001, "currency": "AUD" },
+        "tax": { "amount_minor": 909, "currency": "AUD" },
+        "total": { "amount_minor": 10001, "currency": "AUD" },
+        "payment_rows": [
+          {
+            "allocation_id": "pay-gift-0",
+            "kind": "gift_card",
+            "method": "gift_card",
+            "provider": "WALLET",
+            "amount": { "amount_minor": 2501, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-11-15T02:00:00Z"
+          },
+          {
+            "allocation_id": "pay-gift-split-1",
+            "kind": "external_payment",
+            "method": "eftpos",
+            "provider": "TYRO",
+            "amount": { "amount_minor": 4000, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-11-15T02:01:00Z",
+            "tender_part_id": "part-gift-1"
+          },
+          {
+            "allocation_id": "pay-gift-split-2",
+            "kind": "external_payment",
+            "method": "eftpos",
+            "provider": "TYRO",
+            "amount": { "amount_minor": 3500, "currency": "AUD" },
+            "status": "completed",
+            "occurred_at": "2026-11-15T02:02:00Z",
+            "tender_part_id": "part-gift-2"
+          }
+        ]
+      },
+      "parts_recorded": [
+        {
+          "event_id": "payment_part_recorded:pay-gift-split-1",
+          "order_number": "POS-SPLIT-GIFT",
+          "payment_id": "pay-gift-split-1",
+          "method": "eftpos",
+          "provider": "TYRO",
+          "amount": { "amount_minor": 4000, "currency": "AUD" },
+          "tender_key": "tender-gift-1",
+          "tender_sequence": 1,
+          "order_settled": false,
+          "amount_remaining": { "amount_minor": 3500, "currency": "AUD" },
+          "occurred_at": "2026-11-15T02:01:00Z"
+        },
+        {
+          "event_id": "payment_part_recorded:pay-gift-split-2",
+          "order_number": "POS-SPLIT-GIFT",
+          "payment_id": "pay-gift-split-2",
+          "method": "eftpos",
+          "provider": "TYRO",
+          "amount": { "amount_minor": 3500, "currency": "AUD" },
+          "tender_key": "tender-gift-2",
+          "tender_sequence": 2,
+          "order_settled": true,
+          "amount_remaining": { "amount_minor": 0, "currency": "AUD" },
+          "occurred_at": "2026-11-15T02:02:00Z"
+        }
+      ],
+      "captured": {
+        "payment_id": "pay-gift-split-2",
+        "order_id": "order-split-gift",
+        "order_number": "POS-SPLIT-GIFT",
+        "method": "eftpos",
+        "amount": { "amount_minor": 10001, "currency": "AUD" },
+        "capture_timing": {},
+        "tenders": [
+          {
+            "payment_id": "pay-gift-split-1",
+            "method": "eftpos",
+            "provider": "TYRO",
+            "amount": { "amount_minor": 4000, "currency": "AUD" }
+          },
+          {
+            "payment_id": "pay-gift-split-2",
+            "method": "eftpos",
+            "provider": "TYRO",
+            "amount": { "amount_minor": 3500, "currency": "AUD" }
+          }
+        ]
+      },
+      "paid": {
+        "order_id": "order-split-gift",
+        "order_number": "POS-SPLIT-GIFT",
+        "payment_id": "pay-gift-split-2",
+        "method": "eftpos",
+        "channel": "pos",
+        "amount_paid": { "amount_minor": 10001, "currency": "AUD" },
+        "subtotal": { "amount_minor": 10001, "currency": "AUD" },
+        "discount_amount": { "amount_minor": 0, "currency": "AUD" },
+        "paid_at": "2026-11-15T02:02:00Z",
+        "tenders": [
+          { "method": "eftpos", "amount": { "amount_minor": 4000, "currency": "AUD" } },
+          { "method": "eftpos", "amount": { "amount_minor": 3500, "currency": "AUD" } }
+        ]
+      },
+      "refund": {
+        "refund_id": "refund-split-gift",
+        "order_id": "order-split-gift",
+        "order_number": "POS-SPLIT-GIFT",
+        "amount": { "amount_minor": 5501, "currency": "AUD" },
+        "gift_card_refund_amount": { "amount_minor": 1501, "currency": "AUD" },
+        "payment_allocations": [
+          {
+            "payment_id": "pay-gift-split-2",
+            "method": "eftpos",
+            "amount": { "amount_minor": 3500, "currency": "AUD" }
+          },
+          {
+            "payment_id": "pay-gift-split-1",
+            "method": "eftpos",
+            "amount": { "amount_minor": 500, "currency": "AUD" }
+          }
+        ],
+        "completed_at": "2026-11-15T03:00:00Z"
+      }
+    }
+  ]
+}

@@ -50,6 +50,7 @@ var eventTypeVersionRegistry = map[EventType]string{
 	EventTypeRefundFailed:                   "v1",
 	EventTypeRefundAlternativeOffered:       "v1",
 	EventTypeRefundRequestClosed:            "v1",
+	EventTypePaymentPartRecorded:            "v1",
 	EventTypeCustomerRegistered:             "v1",
 	EventTypeCustomerProfileUpdated:         "v1",
 	EventTypeNotificationPreferencesChanged: "v1",
@@ -108,6 +109,7 @@ func TestEventTypeVersionRegistryCoversEveryDefinedEventExactlyOnce(t *testing.T
 		EventTypeRefundFailed:                   "v1",
 		EventTypeRefundAlternativeOffered:       "v1",
 		EventTypeRefundRequestClosed:            "v1",
+		EventTypePaymentPartRecorded:            "v1",
 		EventTypeCustomerRegistered:             "v1",
 		EventTypeCustomerProfileUpdated:         "v1",
 		EventTypeNotificationPreferencesChanged: "v1",
@@ -118,8 +120,8 @@ func TestEventTypeVersionRegistryCoversEveryDefinedEventExactlyOnce(t *testing.T
 		EventTypeAnalyticsPickingFact:           "v1",
 		EventTypeMembershipTierChanged:          "v1",
 	}
-	if len(expected) != 49 {
-		t.Fatalf("expected event registry test has %d entries, want 49", len(expected))
+	if len(expected) != 50 {
+		t.Fatalf("expected event registry test has %d entries, want 50", len(expected))
 	}
 	if len(eventTypeVersionRegistry) != len(expected) {
 		t.Fatalf("event registry has %d entries, want %d", len(eventTypeVersionRegistry), len(expected))

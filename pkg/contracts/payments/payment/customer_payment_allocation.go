@@ -9,6 +9,9 @@ import (
 
 // CustomerPaymentAllocation is one customer-safe row of an order's payment
 // composition. It is also the reusable invoice payment-row shape.
+//
+// TenderPartID names the split-tender plan part the row's payment collected
+// (Payment.TenderPartID); it is omitted for rows outside a split tender.
 type CustomerPaymentAllocation struct {
 	AllocationID   string                                      `json:"allocation_id,omitempty"`
 	Kind           payment_enums.CustomerPaymentAllocationKind `json:"kind"`
@@ -19,4 +22,5 @@ type CustomerPaymentAllocation struct {
 	Status         string                                      `json:"status,omitempty"`
 	OccurredAt     time.Time                                   `json:"occurred_at"`
 	RefundedAmount *money.Money                                `json:"refunded_amount,omitempty"`
+	TenderPartID   string                                      `json:"tender_part_id,omitempty"`
 }

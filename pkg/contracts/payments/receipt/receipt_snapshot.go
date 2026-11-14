@@ -43,10 +43,15 @@ type ReceiptSnapshot struct {
 	// cash. Lines, Subtotal, Tax, and Total always stay at exact minor
 	// units.
 	CashRounding *CashRoundingSnapshot `json:"cash_rounding,omitempty"`
-	// MixedGiftCashRounding is distinct from CashRounding: at most one may be
-	// present. Producers must not emit it until all affected consumers can
-	// validate and preserve this evidence.
+	// MixedGiftCashRounding is distinct from CashRounding. Producers must not
+	// emit it until all affected consumers can validate and preserve this
+	// evidence.
 	MixedGiftCashRounding *MixedGiftCashRoundingSnapshot `json:"mixed_gift_cash_rounding,omitempty"`
+	// SplitTenderCashRounding is present only when a POS split-tender sale
+	// rounded its cash part. At most one of CashRounding,
+	// MixedGiftCashRounding and SplitTenderCashRounding is present on a
+	// receipt; the first two keep their meaning.
+	SplitTenderCashRounding *SplitTenderCashRoundingSnapshot `json:"split_tender_cash_rounding,omitempty"`
 
 	security.DataProtectionFields
 }

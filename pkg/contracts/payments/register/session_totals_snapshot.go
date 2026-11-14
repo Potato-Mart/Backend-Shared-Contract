@@ -21,5 +21,10 @@ type SessionTotalsSnapshot struct {
 	// session had none or the report predates them.
 	ManualDiscountTotal *money.Money `json:"manual_discount_total,omitempty"`
 	ManualDiscountCount int64        `json:"manual_discount_count,omitempty"`
-	GeneratedAt         time.Time    `json:"generated_at"`
+	// SplitSaleCount is the number of the session's sales paid with a POS
+	// split tender. Because MethodTotals counts payments, such a sale adds
+	// one to the Count of every method it used. Omitted when the session
+	// had none or the report predates it.
+	SplitSaleCount int64     `json:"split_sale_count,omitempty"`
+	GeneratedAt    time.Time `json:"generated_at"`
 }

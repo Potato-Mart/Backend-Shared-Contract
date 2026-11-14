@@ -21,7 +21,32 @@ func TestOrderEnumsValidateKnownValues(t *testing.T) {
 		{name: "orderenum.SalesOrderStatus", valid: []stringEnum{order_enums.SalesOrderStatusPending, order_enums.SalesOrderStatusConfirmed, order_enums.SalesOrderStatusPaid, order_enums.SalesOrderStatusProcessing, order_enums.SalesOrderStatusPicking, order_enums.SalesOrderStatusPacked, order_enums.SalesOrderStatusShipped, order_enums.SalesOrderStatusDelivered, order_enums.SalesOrderStatusCompleted, order_enums.SalesOrderStatusCancelled, order_enums.SalesOrderStatusRefunded}, invalid: order_enums.SalesOrderStatus("__invalid__")},
 		{name: "orderenum.StatusHistoryKind", valid: []stringEnum{order_enums.StatusHistoryKindOverride, order_enums.StatusHistoryKindPaymentCorrection}, invalid: order_enums.StatusHistoryKind("__invalid__")},
 		{name: "orderenum.GiftCardIssueStatus", valid: []stringEnum{order_enums.GiftCardIssueStatusPending, order_enums.GiftCardIssueStatusIssued, order_enums.GiftCardIssueStatusFailed, order_enums.GiftCardIssueStatusReversalPending, order_enums.GiftCardIssueStatusReversed}, invalid: order_enums.GiftCardIssueStatus("__invalid__")},
+		{name: "orderenum.TenderPartStatus", valid: []stringEnum{order_enums.TenderPartStatusPending, order_enums.TenderPartStatusInProgress, order_enums.TenderPartStatusCaptured, order_enums.TenderPartStatusDeclined, order_enums.TenderPartStatusCancelled, order_enums.TenderPartStatusRefunded}, invalid: order_enums.TenderPartStatus("__invalid__")},
 	})
+}
+
+func TestTenderPartStatusWireValuesAreStable(t *testing.T) {
+	want := map[order_enums.TenderPartStatus]string{
+		order_enums.TenderPartStatusPending:    "pending",
+		order_enums.TenderPartStatusInProgress: "in_progress",
+		order_enums.TenderPartStatusCaptured:   "captured",
+		order_enums.TenderPartStatusDeclined:   "declined",
+		order_enums.TenderPartStatusCancelled:  "cancelled",
+		order_enums.TenderPartStatusRefunded:   "refunded",
+	}
+	if len(want) != 6 {
+		t.Fatalf("TenderPartStatus has %d distinct values, want 6", len(want))
+	}
+	for value, wire := range want {
+		if got := value.String(); got != wire {
+			t.Errorf("TenderPartStatus wire value = %q, want %q", got, wire)
+		}
+	}
+	for _, unknown := range []order_enums.TenderPartStatus{"", "partially_captured", "CAPTURED"} {
+		if unknown.IsValid() {
+			t.Errorf("TenderPartStatus %q must not validate", unknown)
+		}
+	}
 }
 
 func TestGiftCardIssueStatusWireValuesAreStable(t *testing.T) {

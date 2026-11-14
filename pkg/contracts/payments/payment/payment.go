@@ -22,6 +22,16 @@ type Payment struct {
 	Provider          string                            `json:"provider,omitempty"`
 	ProviderReference *PaymentReference                 `json:"provider_reference,omitempty"`
 
+	// TenderPlanID, TenderPartID, TenderKey and TenderSequence link a
+	// payment to the part of a POS split-tender plan it collected
+	// (order.TenderPlanSnapshot.PlanID and the part's PartID, TenderKey and
+	// Sequence). Amount is then the part's exact Amount. All four are absent
+	// on a payment that is not part of a split tender.
+	TenderPlanID   string `json:"tender_plan_id,omitempty"`
+	TenderPartID   string `json:"tender_part_id,omitempty"`
+	TenderKey      string `json:"tender_key,omitempty"`
+	TenderSequence int    `json:"tender_sequence,omitempty"`
+
 	// ProcessorFee and NetAmount are the payment processor's transaction
 	// fee and the settled amount net of that fee (e.g. from the Stripe
 	// balance transaction). Present only when the processor reports them.

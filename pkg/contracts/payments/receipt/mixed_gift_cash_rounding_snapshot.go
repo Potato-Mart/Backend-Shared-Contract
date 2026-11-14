@@ -9,7 +9,9 @@ import (
 
 // MixedGiftCashRoundingSnapshot records cash rounding when the only tender
 // sources are committed gift-card applications and a positive cash remainder.
-// It does not cover point redemptions, electronic tenders, or other splits.
+// It does not cover point redemptions or electronic tenders: a POS split
+// tender (a tender plan that includes a cash part, with or without gift cards
+// or points) uses SplitTenderCashRoundingSnapshot instead.
 // Order consideration and tax remain unchanged.
 //
 // Consumers must verify OrderTotal equals the containing receipt's total, all

@@ -29,4 +29,9 @@ type PaymentCapturedEvent struct {
 	DepotCode   string                `json:"depot_code,omitempty"`
 	CapturedAt  time.Time             `json:"captured_at"`
 	RequestID   string                `json:"request_id,omitempty"`
+	// Tenders lists, for a POS split-tender order, every captured part of
+	// its tender plan in collection (sequence) order. Gift-card and points
+	// redemptions are not listed, so the tenders sum to Amount (the order
+	// total) less those redemptions. Omitted when the order was not split.
+	Tenders []CapturedTender `json:"tenders,omitempty"`
 }
