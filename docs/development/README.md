@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.38.0` | 2026-11-15 | Minor |
 | `v53.37.0` | 2026-11-15 | Minor |
 | `v53.36.0` | 2026-11-14 | Minor |
 | `v53.35.0` | 2026-11-13 | Minor |
@@ -105,6 +106,14 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.38.0 (2026-11-15)
+
+Wallet gift cards tendered by id at the till. A till pays with a gift card bound to the cart's customer by tapping it in that customer's wallet and entering its PIN; it never receives the card's full code, which is a bearer credential. Pricing's POS wallet read gives each gift card an opaque `gift_card_id`, the till sends `{gift_card_id, pin}` instead of `{code, pin}`, and Orders resolves the id to the card through Pricing, scoped to the cart's bound customer. Those request and response DTOs are owned by Pricing and Orders; the only shared model that changes is the order's redemption snapshot. The change is additive: the new field is optional and omitted when empty, and no data migration is needed.
+
+- **Redemption snapshot (Orders).** `order.GiftCardRedemptionSnapshot` (`Order.gift_card_redemptions[]`) gains optional `gift_card_id`, Pricing's opaque wallet gift-card id (1-64 characters, never the code), set only for a card tendered by id. Any copy of such a redemption returned to a till carries the masked code (`GC********1234`, the wallet's `masked_code` format) in `gift_card_code`, never the full code. Redemptions tendered by code omit `gift_card_id` and are unchanged.
+
+Consumers that decode `Order` must take this version to see `gift_card_id`; older versions drop it silently, so a service must not rewrite a stored record carrying it while on an older version.
 
 ## v53.37.0 (2026-11-15)
 
