@@ -6,11 +6,13 @@ type CampaignPlatform string
 const (
 	CampaignPlatformWeb    CampaignPlatform = "web"
 	CampaignPlatformMobile CampaignPlatform = "mobile"
+	// CampaignPlatformPOS is the POS till, including its customer-facing display.
+	CampaignPlatformPOS CampaignPlatform = "pos"
 )
 
 func (p CampaignPlatform) IsValid() bool {
 	switch p {
-	case CampaignPlatformWeb, CampaignPlatformMobile:
+	case CampaignPlatformWeb, CampaignPlatformMobile, CampaignPlatformPOS:
 		return true
 	}
 	return false

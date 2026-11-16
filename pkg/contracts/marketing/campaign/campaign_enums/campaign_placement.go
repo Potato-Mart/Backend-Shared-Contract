@@ -1,6 +1,7 @@
 package campaign_enums
 
-// CampaignPlacement identifies where a campaign renders in a storefront.
+// CampaignPlacement identifies where a campaign renders in a storefront or on
+// a POS customer-facing display.
 type CampaignPlacement string
 
 const (
@@ -14,11 +15,14 @@ const (
 	CampaignPlacementAccountBanner CampaignPlacement = "account_banner"
 	// CampaignPlacementHomeModal renders as the initial home-page popup.
 	CampaignPlacementHomeModal CampaignPlacement = "home_modal"
+	// CampaignPlacementPOSCustomerDisplay renders on the customer-facing screen
+	// of a POS till.
+	CampaignPlacementPOSCustomerDisplay CampaignPlacement = "pos_customer_display"
 )
 
 func (p CampaignPlacement) IsValid() bool {
 	switch p {
-	case CampaignPlacementAnnouncementBar, CampaignPlacementHomeBanner, CampaignPlacementAccountBanner, CampaignPlacementHomeModal:
+	case CampaignPlacementAnnouncementBar, CampaignPlacementHomeBanner, CampaignPlacementAccountBanner, CampaignPlacementHomeModal, CampaignPlacementPOSCustomerDisplay:
 		return true
 	}
 	return false

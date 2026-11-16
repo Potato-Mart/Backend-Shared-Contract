@@ -44,14 +44,20 @@ type campaignPlacementRawFixture struct {
 
 func TestCampaignPlacementCanonicalRecords(t *testing.T) {
 	fixture, raw := loadCampaignPlacementFixture(t)
-	if len(fixture.CanonicalCases) != 4 {
-		t.Fatal("four placement cases required")
+	if len(fixture.CanonicalCases) != 5 {
+		t.Fatal("five placement cases required")
 	}
 	for i, original := range fixture.CanonicalCases {
 		t.Run(original.Name, func(t *testing.T) {
 			c, _ := roundTripCampaignPlacement[campaignPlacementFixtureCase](t, raw.CanonicalCases[i])
 			if len(c.Campaign.Placements) != 1 || string(c.Campaign.Placements[0].Position) != c.Name || !c.Campaign.Placements[0].Position.IsValid() {
 				t.Fatal("placement identity lost")
+			}
+			// The POS customer display is served to the POS platform only; every
+			// canonical case names platforms the contract recognises.
+			platforms := c.Campaign.Placements[0].Platforms
+			if len(platforms) != 1 || !platforms[0].IsValid() || (c.Name == "pos_customer_display") != (platforms[0] == campaign_enums.CampaignPlatformPOS) {
+				t.Fatal("placement platform lost or mismatched")
 			}
 			if !reflect.DeepEqual(c.Campaign.Placements, c.Comparable.Placements) || !reflect.DeepEqual(c.Campaign.Audience, c.Comparable.Audience) {
 				t.Fatal("forecast input drifted")

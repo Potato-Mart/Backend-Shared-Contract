@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.39.0` | 2026-11-16 | Minor |
 | `v53.38.0` | 2026-11-15 | Minor |
 | `v53.37.0` | 2026-11-15 | Minor |
 | `v53.36.0` | 2026-11-14 | Minor |
@@ -106,6 +107,14 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.39.0 (2026-11-16)
+
+Campaigns on the POS customer display ([Backend-Customers #156](https://github.com/Potato-Mart/Backend-Customers/issues/156)). A campaign can be placed on the customer-facing screen of a POS till and targeted at the till as its own platform, separate from the web and mobile storefronts. The POS read that serves those campaigns, its authoring validation and its DTOs are owned by Customers; the only shared change is two enum values. The change is additive: no type, field, JSON name or event changes, existing values keep their meaning, and no data migration is needed.
+
+- **Campaign vocabulary (Customers).** `campaign_enums.CampaignPlacement` gains `pos_customer_display` (`CampaignPlacementPOSCustomerDisplay`), the customer-facing screen of a POS till, next to `announcement_bar`, `home_banner`, `account_banner` and `home_modal`. `campaign_enums.CampaignPlatform` gains `pos` (`CampaignPlatformPOS`), next to `web` and `mobile`. `IsValid` accepts both new values. `audience_enums.Platform`, the offer-audience platform, is a separate enum and is unchanged: it stays `web` or `mobile`.
+
+Ordinary JSON decoding already preserves both strings on any version, but a service that validates with `IsValid` rejects `pos_customer_display` and `pos` until it takes this version, so Customers must take this release before it accepts or serves the new placement. Clients and services that read campaign placements (`Campaign.placements`, and `forecasting.CampaignComparableEvent.placements` in Supply) must tolerate the new strings and ignore a placement or platform they do not render.
 
 ## v53.38.0 (2026-11-15)
 

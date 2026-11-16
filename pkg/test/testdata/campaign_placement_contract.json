@@ -493,6 +493,137 @@
           }
         ]
       }
+    },
+    {
+      "name": "pos_customer_display",
+      "campaign": {
+        "id": "campaign-id-pos_customer_display",
+        "campaign_code": "campaign-pos_customer_display",
+        "market_code": "AU-VIC",
+        "country_code": "AU",
+        "title": [
+          {
+            "language": "en",
+            "name": "Autumn offers"
+          },
+          {
+            "language": "zh-TW",
+            "name": "秋季優惠"
+          },
+          {
+            "language": "ja",
+            "name": "秋の特典"
+          }
+        ],
+        "media": {
+          "code": "media-campaign",
+          "url": "/v1/storefront/campaigns/campaign-id-pos_customer_display/media"
+        },
+        "starts_at": "2026-10-06T00:00:00Z",
+        "ends_at": "2026-11-06T00:00:00Z",
+        "schedule_timezone": "Australia/Sydney",
+        "audience": [
+          "retail"
+        ],
+        "geographic_scope": {
+          "mode": "TARGETED",
+          "targets": [
+            {
+              "country_code": "AU",
+              "market_code": "AU-VIC",
+              "state_code": "AU-VIC",
+              "depot_code": "DEPOT-1"
+            }
+          ]
+        },
+        "targets": {
+          "sku_codes": [
+            "SKU-CAMPAIGN",
+            "SKU-SECOND"
+          ],
+          "categories": [
+            {
+              "collection_code": "collection-autumn",
+              "category_tag_code": "seasonal"
+            }
+          ]
+        },
+        "revision": 13,
+        "created_at": "2026-10-01T00:00:00Z",
+        "created_by": "fixture-editor",
+        "updated_at": "2026-10-06T00:00:00Z",
+        "updated_by": "fixture-editor",
+        "placements": [
+          {
+            "position": "pos_customer_display",
+            "platforms": [
+              "pos"
+            ],
+            "priority": 7
+          }
+        ],
+        "description": [
+          {
+            "language": "en",
+            "text": "See selected offers."
+          },
+          {
+            "language": "zh-TW",
+            "text": "查看精選優惠。"
+          }
+        ],
+        "published": true,
+        "publication_status": "published",
+        "publication_revision": 5,
+        "published_at": "2026-10-06T00:00:00Z",
+        "offers": [
+          {
+            "kind": "promotion",
+            "id": "promotion-autumn",
+            "display_order": 0
+          },
+          {
+            "kind": "coupon",
+            "id": "coupon-autumn",
+            "display_order": 1
+          }
+        ],
+        "effective_status": "live"
+      },
+      "comparable": {
+        "campaign_code": "campaign-pos_customer_display",
+        "match_source": "same_series",
+        "resolved_sku_codes": [
+          "SKU-CAMPAIGN",
+          "SKU-SECOND"
+        ],
+        "starts_at": "2026-10-06T00:00:00Z",
+        "ends_at": "2026-11-06T00:00:00Z",
+        "schedule_timezone": "Australia/Sydney",
+        "audience": [
+          "retail"
+        ],
+        "geographic_scope": {
+          "mode": "TARGETED",
+          "targets": [
+            {
+              "country_code": "AU",
+              "market_code": "AU-VIC",
+              "state_code": "AU-VIC",
+              "depot_code": "DEPOT-1"
+            }
+          ]
+        },
+        "placements": [
+          {
+            "position": "pos_customer_display",
+            "platforms": [
+              "pos"
+            ],
+            "priority": 7
+          }
+        ]
+      }
     }
   ],
   "invalid_placements": [
