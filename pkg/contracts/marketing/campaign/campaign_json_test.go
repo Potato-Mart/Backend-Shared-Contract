@@ -43,9 +43,14 @@ func TestCampaignBoundaryAndRoundTrip(t *testing.T) {
 	if reflect.TypeOf(audienceenum.CustomerTypeGuest) == reflect.TypeOf(ce.CampaignCustomerTypeRetail) {
 		t.Fatal("campaign and commercial audience share a type")
 	}
-	for _, position := range []ce.CampaignPlacement{"announcement_bar", "home_banner", "account_banner", "home_modal"} {
+	for _, position := range []ce.CampaignPlacement{"announcement_bar", "home_banner", "account_banner", "home_modal", "pos_customer_display"} {
 		if !position.IsValid() {
 			t.Fatal(position)
+		}
+	}
+	for _, platform := range []ce.CampaignPlatform{"web", "mobile", "pos"} {
+		if !platform.IsValid() {
+			t.Fatal(platform)
 		}
 	}
 	for _, state := range []ce.CampaignStatus{"draft", "published", "paused", "archived"} {
