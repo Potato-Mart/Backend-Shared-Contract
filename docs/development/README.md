@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.41.0` | 2026-11-17 | Minor |
 | `v53.40.0` | 2026-11-17 | Minor |
 | `v53.39.0` | 2026-11-16 | Minor |
 | `v53.38.0` | 2026-11-15 | Minor |
@@ -108,6 +109,16 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.41.0 (2026-11-17)
+
+Cases assembled from loose units. When no sealed case is on hand, the packing station can make up one case from loose units, possibly from several lots and buckets, and record where every unit came from. The assembly rules and the packing workflow are owned by Supply. The change is additive: one optional field, one record and one leaf enum; existing fields, JSON names and events keep their meaning, and no data migration is needed.
+
+- **Substitution parts (Supply).** `PackageSubstitutionSnapshot` gains optional `parts`, a list of `PackageSubstitutionPart` (`allocation_id`, `bucket_id`, `lot_id`, `base_units`, optional `stock_unit_ids`): the units taken under one stock allocation from one bucket and lot.
+- **Substitution reason (Supply).** `warehouse_enums.PackageSubstitutionReason` names the substitution reason codes: `CASE_SHORTAGE_EXACT_EACH` (the exact loose units from one lot and bucket, named by `lot_id` and `source_bucket_id`) and the new `CASE_ASSEMBLED_FROM_LOOSE`. `reason_code` stays a string on the wire and in Go.
+- **Assembled case.** A `CASE_ASSEMBLED_FROM_LOOSE` snapshot is one case: `requested_case_count` is 1, `replacement_base_units` is the units per case, `lot_id` and `source_bucket_id` are empty, and the parts' `base_units` add up exactly to `replacement_base_units`. Each part needs an allocation id, a bucket id and a lot id with positive units, and no two parts share an allocation id. `parts` is set only for this reason. An assembled case needs no buyer consent. Supply validates these rules; the contract only carries the evidence.
+
+Readers that take the single source from `lot_id` and `source_bucket_id`, or that accept only `CASE_SHORTAGE_EXACT_EACH` (such as the Orders checkout stock receipt), must read `parts` for `CASE_ASSEMBLED_FROM_LOOSE` and accept the new reason before Supply writes it.
 
 ## v53.40.0 (2026-11-17)
 
