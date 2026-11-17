@@ -344,7 +344,10 @@ var modelPackageManifest map[string]string
 // receipt, the register session totals and the payment.captured, order.paid
 // and refund.completed payloads only gain optional fields, and the event type
 // enum only gains payment.part_recorded.
-const exportedTypeManifestDigest = "518a95a2ce593c9066d1940f5728d2b765e594a250d0c3af434f6dfd84cec83d"
+// V53.41 adds the Supply-owned PackageSubstitutionPart record and the
+// PackageSubstitutionReason leaf enum for cases assembled from loose units;
+// PackageSubstitutionSnapshot only gains the optional parts list.
+const exportedTypeManifestDigest = "f3e2a0c476c79f0bb589d83fbbfeae52044d08938e8c4907a1d1728595983330"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
