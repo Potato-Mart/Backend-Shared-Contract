@@ -8,6 +8,10 @@ const (
 	PaymentMethodCash         PaymentMethod = "cash"
 	PaymentMethodQR           PaymentMethod = "qr"
 	PaymentMethodBankTransfer PaymentMethod = "bank_transfer"
+	// PaymentMethodPayID identifies an Australian PayID (Osko) transfer the
+	// customer makes to the business PayID. It is offline: no provider
+	// processes it, and staff record it once the funds arrive.
+	PaymentMethodPayID PaymentMethod = "payid"
 	// PaymentMethodPayTo identifies the Stripe-hosted Australian PayTo flow.
 	PaymentMethodPayTo PaymentMethod = "payto"
 	// PaymentMethodLink preserves Stripe Link as a distinct customer-selected
@@ -31,7 +35,7 @@ const (
 // IsValid reports whether p is a known PaymentMethod.
 func (p PaymentMethod) IsValid() bool {
 	switch p {
-	case PaymentMethodCard, PaymentMethodCash, PaymentMethodQR, PaymentMethodBankTransfer, PaymentMethodPayTo, PaymentMethodLink,
+	case PaymentMethodCard, PaymentMethodCash, PaymentMethodQR, PaymentMethodBankTransfer, PaymentMethodPayID, PaymentMethodPayTo, PaymentMethodLink,
 		PaymentMethodLinePay, PaymentMethodApplePay, PaymentMethodGooglePay, PaymentMethodECPay,
 		PaymentMethodManual, PaymentMethodGiftCard, PaymentMethodEFTPOS, PaymentMethodMOTO, PaymentMethodCashout:
 		return true

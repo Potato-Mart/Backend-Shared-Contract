@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.40.0` | 2026-11-17 | Minor |
 | `v53.39.0` | 2026-11-16 | Minor |
 | `v53.38.0` | 2026-11-15 | Minor |
 | `v53.37.0` | 2026-11-15 | Minor |
@@ -107,6 +108,14 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.40.0 (2026-11-17)
+
+Add PaymentMethodPayID (payid) for staff-recorded PayID payments. Staff can create an order the customer pays by PayID, bank transfer or a manual method, and the order can go to picking while still unpaid. The order and payment DTOs and that workflow are owned by Orders and Payments; the only shared change is one enum value. The change is additive: no type, field, JSON name or event changes, existing values keep their meaning, and no data migration is needed.
+
+- **Payment method (Payments).** `payment_enums.PaymentMethod` gains `payid` (`PaymentMethodPayID`): an Australian PayID (Osko) transfer the customer makes to the business PayID. Like `bank_transfer` and `manual` it is offline: no provider processes it, and staff record it once the funds arrive. It is distinct from `payto`, the Stripe-hosted PayTo flow. `IsValid` accepts the new value.
+
+Ordinary JSON decoding already preserves the string on any version, but a service that validates with `IsValid` rejects `payid` until it takes this version, so Orders and Payments must take this release before they accept or write it. Services and clients that read `PaymentMethod` as a closed set (`Order.payment_method`, `Payment.method`, `OrderPaidEvent.method`, tender lists, register `MethodTotal` rows, Insights reporting, the POS) must tolerate `payid` before any service writes it.
 
 ## v53.39.0 (2026-11-16)
 
