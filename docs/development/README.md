@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.43.0` | 2026-11-19 | Minor |
 | `v53.42.0` | 2026-11-19 | Minor |
 | `v53.41.0` | 2026-11-17 | Minor |
 | `v53.40.0` | 2026-11-17 | Minor |
@@ -110,6 +111,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.43.0 (2026-11-19)
+
+Inventory lots can carry a warehouse-facing lot code, supplier details, purchase order and receipt references, and received base units. These fields are optional for existing lots.
 
 ## v53.42.0 (2026-11-19)
 
