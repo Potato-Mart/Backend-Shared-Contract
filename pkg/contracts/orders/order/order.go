@@ -44,9 +44,10 @@ type Order struct {
 	PaymentMethod     payment_enums.PaymentMethod   `json:"payment_method"`
 	FulfillmentStatus order_enums.FulfillmentStatus `json:"fulfillment_status"`
 	// FulfillmentGeneration identifies the current requested product composition
-	// for physical work. Orders advances it on a committed product amendment;
-	// older picking and packing evidence remains historical and cannot authorize
-	// shipment of this generation. Zero identifies legacy or unknown evidence.
+	// for physical work. Orders advances it when a product amendment requires
+	// a new stock check. A packing shortage reduction can preserve the active
+	// generation and advance the packing revision. Evidence from older
+	// generations cannot authorize shipment. Zero identifies legacy or unknown evidence.
 	FulfillmentGeneration int64          `json:"fulfillment_generation,omitempty"`
 	Customer              party.PartyRef `json:"customer"`
 
