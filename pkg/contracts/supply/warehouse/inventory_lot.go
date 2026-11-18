@@ -8,8 +8,16 @@ import (
 
 // InventoryLot identifies inventory received or manufactured together.
 type InventoryLot struct {
-	ID                  string             `json:"id"`
-	SKUCode             string             `json:"sku_code"`
+	ID      string `json:"id"`
+	SKUCode string `json:"sku_code"`
+	// LotCode is Supply's immutable, unique warehouse-facing lot identifier.
+	// Receipt provenance is inherited by child lots. Unknown facts are omitted.
+	LotCode             string             `json:"lot_code,omitempty"`
+	SupplierCode        string             `json:"supplier_code,omitempty"`
+	SupplierName        string             `json:"supplier_name,omitempty"`
+	PurchaseOrderNumber string             `json:"purchase_order_number,omitempty"`
+	PurchaseReceiptID   string             `json:"purchase_receipt_id,omitempty"`
+	ReceivedBaseUnits   int64              `json:"received_base_units,omitempty"`
 	SupplierLotCode     string             `json:"supplier_lot_code,omitempty"`
 	ManufacturerLotCode string             `json:"manufacturer_lot_code,omitempty"`
 	ReceivedAt          time.Time          `json:"received_at"`
