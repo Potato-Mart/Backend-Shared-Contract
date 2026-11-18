@@ -11,6 +11,8 @@ import (
 // ReasonCode is a warehouse_enums.PackageSubstitutionReason value held as a
 // string. For CASE_SHORTAGE_EXACT_EACH the replacement comes from one lot and
 // one bucket, named by LotID and SourceBucketID, and Parts is empty.
+// PACKING_CASE_BREAK also records loose units at a single destination bucket
+// after a sealed case was opened at the station.
 //
 // For CASE_ASSEMBLED_FROM_LOOSE the snapshot records ONE case made up from
 // loose units, which may come from several lots and buckets:

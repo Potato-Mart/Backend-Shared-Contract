@@ -20,7 +20,7 @@ func TestWarehouseEnumsValidateKnownValues(t *testing.T) {
 		{name: "warehouseenum.ShipmentWarningCode", valid: []stringEnum{warehouse_enums.ShipmentWarningCodeCarrierCancellationRequired, warehouse_enums.ShipmentWarningCodeOrderUnpaid}, invalid: warehouse_enums.ShipmentWarningCode("__invalid__")},
 		{name: "warehouseenum.PackingDiscrepancyKind", valid: []stringEnum{warehouse_enums.PackingDiscrepancyKindShortage, warehouse_enums.PackingDiscrepancyKindOverweight, warehouse_enums.PackingDiscrepancyKindDamaged, warehouse_enums.PackingDiscrepancyKindPending}, invalid: warehouse_enums.PackingDiscrepancyKind("__invalid__")},
 		{name: "warehouseenum.PackingDiscrepancyWithdrawalMethod", valid: []stringEnum{warehouse_enums.PackingDiscrepancyWithdrawalMethodCommand, warehouse_enums.PackingDiscrepancyWithdrawalMethodScan, warehouse_enums.PackingDiscrepancyWithdrawalMethodReinstate}, invalid: warehouse_enums.PackingDiscrepancyWithdrawalMethod("__invalid__")},
-		{name: "warehouseenum.PackageSubstitutionReason", valid: []stringEnum{warehouse_enums.PackageSubstitutionReasonCaseShortageExactEach, warehouse_enums.PackageSubstitutionReasonCaseAssembledFromLoose}, invalid: warehouse_enums.PackageSubstitutionReason("__invalid__")},
+		{name: "warehouseenum.PackageSubstitutionReason", valid: []stringEnum{warehouse_enums.PackageSubstitutionReasonCaseShortageExactEach, warehouse_enums.PackageSubstitutionReasonCaseAssembledFromLoose, warehouse_enums.PackageSubstitutionReasonPackingCaseBreak}, invalid: warehouse_enums.PackageSubstitutionReason("__invalid__")},
 		{name: "warehouseenum.PackingShortageSettlementReason", valid: []stringEnum{warehouse_enums.PackingShortageSettlementReasonNoStock, warehouse_enums.PackingShortageSettlementReasonOverweight}, invalid: warehouse_enums.PackingShortageSettlementReason("__invalid__")},
 		{name: "warehouseenum.PackingShortageSettlementStatus", valid: []stringEnum{warehouse_enums.PackingShortageSettlementStatusApplied, warehouse_enums.PackingShortageSettlementStatusDeferred, warehouse_enums.PackingShortageSettlementStatusReversed}, invalid: warehouse_enums.PackingShortageSettlementStatus("__invalid__")},
 		{name: "warehouseenum.PackingShortageSettlementReversalCause", valid: []stringEnum{warehouse_enums.PackingShortageSettlementReversalCauseWithdrawal, warehouse_enums.PackingShortageSettlementReversalCauseScan, warehouse_enums.PackingShortageSettlementReversalCauseProgress, warehouse_enums.PackingShortageSettlementReversalCauseSuperseded, warehouse_enums.PackingShortageSettlementReversalCauseRefundRequestClosed}, invalid: warehouse_enums.PackingShortageSettlementReversalCause("__invalid__")},
@@ -99,6 +99,7 @@ func TestPackageSubstitutionReasonWireValuesAreStable(t *testing.T) {
 	for value, want := range map[warehouse_enums.PackageSubstitutionReason]string{
 		warehouse_enums.PackageSubstitutionReasonCaseShortageExactEach:  "CASE_SHORTAGE_EXACT_EACH",
 		warehouse_enums.PackageSubstitutionReasonCaseAssembledFromLoose: "CASE_ASSEMBLED_FROM_LOOSE",
+		warehouse_enums.PackageSubstitutionReasonPackingCaseBreak:       "PACKING_CASE_BREAK",
 	} {
 		if got := value.String(); got != want {
 			t.Errorf("PackageSubstitutionReason wire value = %q, want %q", got, want)
