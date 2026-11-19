@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.44.0` | 2026-11-20 | Minor |
 | `v53.43.0` | 2026-11-19 | Minor |
 | `v53.42.0` | 2026-11-19 | Minor |
 | `v53.41.0` | 2026-11-17 | Minor |
@@ -111,6 +112,15 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.44.0 (2026-11-20)
+
+Product barcodes can be switched on and off directly. The change is additive: one optional field on two records; existing fields, JSON names and events keep their meaning, and no data migration is needed.
+
+- **Barcode active flag (Supply).** `ProductBarcodeAssignment` and `SellingProductBarcode` gain optional `is_active`. When it is set, it decides whether the barcode is in use. When it is absent, readers keep using the `effective_from` / `effective_to` window, so stored barcodes need no backfill.
+- **Deprecated for new writes.** `is_primary` and the effective window stay on the wire for existing readers. Supply stops asking staff for them and writes `is_active` instead.
+
+Readers that decide whether a barcode is current (POS scanning, storefront, picking and packing lookups) must honour `is_active` when present before Supply writes it.
 
 ## v53.43.0 (2026-11-19)
 

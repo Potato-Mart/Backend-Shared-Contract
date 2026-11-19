@@ -12,5 +12,6 @@ type SellingProductBarcode struct {
 	PackageOption packaging.PackageOptionRef  `json:"package_option"`
 	Value         string                      `json:"value"`
 	Format        product_enums.BarcodeFormat `json:"format"`
+	IsActive      *bool                       `json:"is_active,omitempty"`
 	IsPrimary     bool                        `json:"is_primary"`
 }
