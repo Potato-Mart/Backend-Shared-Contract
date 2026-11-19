@@ -12,6 +12,10 @@ import (
 // remains for independent catalogued-component and snapshot identity. Barcode
 // values are not product identities and need not be unique across product SKU
 // codes.
+//
+// IsActive, when set, decides whether the barcode is in use. When it is nil,
+// readers fall back to the EffectiveFrom/EffectiveTo window. IsPrimary and
+// the effective window are deprecated for new writes.
 type ProductBarcodeAssignment struct {
 	Code             string                      `json:"code"`
 	SKUCode          string                      `json:"sku_code"`
@@ -19,6 +23,7 @@ type ProductBarcodeAssignment struct {
 	Value            string                      `json:"value"`
 	Format           product_enums.BarcodeFormat `json:"format"`
 	ManufacturerCode string                      `json:"manufacturer_code,omitempty"`
+	IsActive         *bool                       `json:"is_active,omitempty"`
 	IsPrimary        bool                        `json:"is_primary"`
 	EffectiveFrom    time.Time                   `json:"effective_from"`
 	EffectiveTo      *time.Time                  `json:"effective_to,omitempty"`
