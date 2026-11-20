@@ -34,6 +34,9 @@ type SellingProduct struct {
 	BarcodeAssignments []SellingProductBarcode          `json:"barcode_assignments,omitempty"`
 	NetContent         *measurement.NetContent          `json:"net_content,omitempty"`
 	ExpiryDate         *warehouse.InventoryDateMark     `json:"expiry_date,omitempty"`
+	// RegularExpiryDate is the optional display date of the earliest sellable
+	// lot for a regular storefront order, excluding active Quick sale lots.
+	RegularExpiryDate *warehouse.InventoryDateMark `json:"regular_expiry_date,omitempty"`
 	// PastDateMark warns that the stock offered includes units at or past
 	// their date mark. Omitted when it does not. Information only.
 	PastDateMark *warehouse.PastDateMarkNotice `json:"past_date_mark,omitempty"`
