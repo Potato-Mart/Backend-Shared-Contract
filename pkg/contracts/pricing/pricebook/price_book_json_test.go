@@ -143,6 +143,35 @@ func TestPriceEntryIsApprovalGatedAndRevisioned(t *testing.T) {
 	}
 }
 
+func TestScheduledPriceEntriesRoundTrip(t *testing.T) {
+	if got := pricebook_enums.PriceEntryStatusScheduled.String(); got != "scheduled" {
+		t.Fatalf("PriceEntryStatusScheduled = %q, want scheduled", got)
+	}
+	validFrom := time.Date(2026, 12, 1, 0, 0, 0, 0, time.UTC)
+	for _, value := range []any{
+		PriceEntry{ID: "entry_1", Status: pricebook_enums.PriceEntryStatusScheduled, ValidFrom: validFrom},
+		PackagePriceEntry{ID: "package_entry_1", Status: pricebook_enums.PriceEntryStatusScheduled, ValidFrom: validFrom},
+	} {
+		payload, err := json.Marshal(value)
+		if err != nil {
+			t.Fatalf("marshal %T: %v", value, err)
+		}
+		for _, want := range []string{`"status":"scheduled"`, `"valid_from":"2026-12-01T00:00:00Z"`} {
+			if !strings.Contains(string(payload), want) {
+				t.Fatalf("%T JSON = %s, want %s", value, payload, want)
+			}
+		}
+	}
+
+	var decoded PriceEntry
+	if err := json.Unmarshal([]byte(`{"status":"scheduled"}`), &decoded); err != nil {
+		t.Fatalf("unmarshal scheduled price entry: %v", err)
+	}
+	if decoded.Status != pricebook_enums.PriceEntryStatusScheduled || !decoded.Status.IsValid() {
+		t.Fatalf("scheduled status decoded as %q", decoded.Status)
+	}
+}
+
 func TestPriceBookAssignmentPopulatesOnlyItsResolutionLevel(t *testing.T) {
 	organisation, err := json.Marshal(PriceBookAssignment{
 		ID: "assignment_1", MarketCode: "market_au", PriceBookCode: "book_au_supermarket",

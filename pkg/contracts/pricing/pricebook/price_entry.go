@@ -9,6 +9,10 @@ import (
 )
 
 // PriceEntry is one SKU's commercial amount inside one price book.
+//
+// Status follows the price-entry lifecycle; approved is the current price
+// from ValidFrom. scheduled: approved with a future valid_from; becomes
+// current at valid_from, when it supersedes the previously approved entry.
 type PriceEntry struct {
 	ID                     string                           `json:"id"`
 	PriceBookCode          string                           `json:"price_book_code"`

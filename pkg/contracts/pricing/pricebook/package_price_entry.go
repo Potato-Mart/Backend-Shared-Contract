@@ -12,6 +12,10 @@ import (
 // PackagePriceEntry is one independently priced package option for a SKU in a
 // price book. PackageAmount buys exactly one package identified by the
 // immutable PackageOption; it is not a base-unit PriceEntry amount.
+//
+// Status follows the same lifecycle as PriceEntry. scheduled: approved with a
+// future valid_from; becomes current at valid_from, when it supersedes the
+// previously approved package price for the same option.
 type PackagePriceEntry struct {
 	ID                     string                           `json:"id"`
 	PriceBookCode          string                           `json:"price_book_code"`

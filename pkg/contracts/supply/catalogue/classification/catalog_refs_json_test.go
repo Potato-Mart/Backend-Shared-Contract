@@ -17,7 +17,6 @@ func TestCatalogReferencesAreCodeOnly(t *testing.T) {
 		want  string
 	}{
 		{name: "country", value: classification.CountryCodeRef{Code: geography.CountryCode("TW")}, want: `{"code":"TW"}`},
-		{name: "media", value: classification.ObjectMediaRef{Code: "MED-SHA256"}, want: `{"code":"MED-SHA256"}`},
 		{name: "collection", value: classification.CollectionRef{Code: "COL0001"}, want: `{"code":"COL0001"}`},
 		{name: "category tag", value: classification.CategoryTagRef{Code: "TAG0001"}, want: `{"code":"TAG0001"}`},
 		{name: "brand", value: classification.BrandRef{Code: "BRD000001"}, want: `{"code":"BRD000001"}`},
@@ -37,6 +36,37 @@ func TestCatalogReferencesAreCodeOnly(t *testing.T) {
 				t.Fatalf("%s fields = %v, want exactly Code", typ, typ)
 			}
 		})
+	}
+}
+
+func TestObjectMediaRefCarriesOptionalPlacementCopy(t *testing.T) {
+	body, err := json.Marshal(classification.ObjectMediaRef{Code: "MED-SHA256"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if string(body) != `{"code":"MED-SHA256"}` {
+		t.Fatalf("ObjectMediaRef without copy JSON = %s, want code only", body)
+	}
+
+	withCopy := classification.ObjectMediaRef{Code: "MED-SHA256", AltText: "Bag of washed potatoes", Caption: "Washed, 2 kg"}
+	body, err = json.Marshal(withCopy)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := `{"code":"MED-SHA256","alt_text":"Bag of washed potatoes","caption":"Washed, 2 kg"}`; string(body) != want {
+		t.Fatalf("ObjectMediaRef JSON = %s, want %s", body, want)
+	}
+	var decoded classification.ObjectMediaRef
+	if err := json.Unmarshal(body, &decoded); err != nil {
+		t.Fatal(err)
+	}
+	if decoded != withCopy {
+		t.Fatalf("ObjectMediaRef round trip = %+v, want %+v", decoded, withCopy)
+	}
+
+	typ := reflect.TypeOf(classification.ObjectMediaRef{})
+	if typ.NumField() != 3 || typ.Field(0).Name != "Code" || typ.Field(1).Name != "AltText" || typ.Field(2).Name != "Caption" {
+		t.Fatalf("ObjectMediaRef fields = %v, want exactly Code, AltText and Caption", typ)
 	}
 }
 

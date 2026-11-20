@@ -27,8 +27,9 @@ func TestObjectMediaJSONIsSafeRenderProjection(t *testing.T) {
 	}
 
 	typ := reflect.TypeOf(ObjectMedia{})
-	if typ.NumField() != 2 || typ.Field(0).Name != "Code" || typ.Field(1).Name != "URL" {
-		t.Fatalf("ObjectMedia fields = %v, want exactly Code and URL", typ)
+	if typ.NumField() != 4 || typ.Field(0).Name != "Code" || typ.Field(1).Name != "URL" ||
+		typ.Field(2).Name != "AltText" || typ.Field(3).Name != "Caption" {
+		t.Fatalf("ObjectMedia fields = %v, want exactly Code, URL, AltText and Caption", typ)
 	}
 }
 
@@ -39,6 +40,24 @@ func TestObjectMediaOmitsEmptyURL(t *testing.T) {
 	}
 	if string(payload) != `{"code":"media_1"}` {
 		t.Fatalf("ObjectMedia JSON = %s, want code only", payload)
+	}
+}
+
+func TestObjectMediaCarriesOptionalAltTextAndCaption(t *testing.T) {
+	media := ObjectMedia{Code: "media_1", URL: "/media/1", AltText: "Bag of washed potatoes", Caption: "Washed, 2 kg"}
+	payload, err := json.Marshal(media)
+	if err != nil {
+		t.Fatalf("marshal object media with copy: %v", err)
+	}
+	if want := `{"code":"media_1","url":"/media/1","alt_text":"Bag of washed potatoes","caption":"Washed, 2 kg"}`; string(payload) != want {
+		t.Fatalf("ObjectMedia JSON = %s, want %s", payload, want)
+	}
+	var decoded ObjectMedia
+	if err := json.Unmarshal(payload, &decoded); err != nil {
+		t.Fatalf("unmarshal object media with copy: %v", err)
+	}
+	if decoded != media {
+		t.Fatalf("ObjectMedia round trip = %+v, want %+v", decoded, media)
 	}
 }
 

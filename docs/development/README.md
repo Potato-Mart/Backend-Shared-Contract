@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.45.0` | 2026-11-20 | Minor |
 | `v53.44.0` | 2026-11-20 | Minor |
 | `v53.43.0` | 2026-11-19 | Minor |
 | `v53.42.0` | 2026-11-19 | Minor |
@@ -112,6 +113,15 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.45.0 (2026-11-20)
+
+Price entries can be scheduled ahead, and product images can carry alt text and a caption. The change is additive: one enum value and two optional fields on the shared media reference types; existing fields, JSON names and events keep their meaning, and no data migration is needed.
+
+- **Scheduled price status (Pricing).** `PriceEntryStatus` gains `scheduled`: approved with a future `valid_from`; it becomes current at `valid_from`, when it supersedes the previously approved entry. It applies to both `PriceEntry` and `PackagePriceEntry`.
+- **Product image alt text and caption (Supply).** `classification.ObjectMediaRef` (stored on `product.Images` cover, gallery and detail images) and `security.ObjectMedia` (the resolved `SellingProductImages` projection) gain optional `alt_text` and `caption` strings. `alt_text` describes the image for screen readers and failed loads; `caption` is visible text shown with the image. Both are omitted when empty, so existing JSON is unchanged. Other owners of these media types (brands, collections, selections, membership tiers, avatars, logos) leave them empty.
+
+Readers that switch on price-entry status (Supply, Admin-Web) must accept `scheduled` before Pricing writes it. Consumers that decode media strictly must accept the new fields before Supply sends them.
 
 ## v53.44.0 (2026-11-20)
 

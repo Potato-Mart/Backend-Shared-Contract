@@ -4,7 +4,8 @@ import security "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contract
 
 // SellingProductImages is the resolved media projection of the Product image
 // groups. It carries render-safe object media rather than storage records or
-// code-only master references.
+// code-based master references. Each image carries the alt_text and caption
+// stored on the matching Images entry, omitted when empty.
 type SellingProductImages struct {
 	Cover   *security.ObjectMedia  `json:"cover,omitempty"`
 	Gallery []security.ObjectMedia `json:"gallery,omitempty"`
