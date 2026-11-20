@@ -22,7 +22,7 @@ var allowedStructuralDuplicateGroups = []string{
 	"common/geometry.Rotation3|common/geometry.Vector3",
 	"pricing/coupon.CouponContent|supply/catalogue/classification.SupplierAvailablePromotion",
 	"pricing/membership.MembershipTierMetadataEntry|supply/courier.CarrierBookingRequestSummaryEntry",
-	"supply/catalogue/classification.BrandRef|supply/catalogue/classification.CategoryTagRef|supply/catalogue/classification.CollectionRef|supply/catalogue/classification.ObjectMediaRef|supply/catalogue/classification.ProductSupplierRef",
+	"supply/catalogue/classification.BrandRef|supply/catalogue/classification.CategoryTagRef|supply/catalogue/classification.CollectionRef|supply/catalogue/classification.ProductSupplierRef",
 }
 
 func TestProductionStructLayoutsHaveNoUnreviewedDuplicates(t *testing.T) {
