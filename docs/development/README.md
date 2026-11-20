@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.47.0` | 2026-11-20 | Minor |
 | `v53.46.0` | 2026-11-20 | Minor |
 | `v53.45.0` | 2026-11-20 | Minor |
 | `v53.44.0` | 2026-11-20 | Minor |
@@ -114,6 +115,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.47.0 (2026-11-20)
+
+`SellingProduct.regular_expiry_date` adds an optional date mark for the earliest sellable lot for a regular storefront order, excluding lots with active Quick sale offers. It uses the same `InventoryDateMark` shape as `expiry_date`. Supply decides which lots qualify. Existing readers can continue to use `expiry_date`.
 
 ## v53.46.0 (2026-11-20)
 

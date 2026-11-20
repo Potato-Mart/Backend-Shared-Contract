@@ -15,8 +15,8 @@ func TestSellingProductExpiryDateIsOmittedWhenAbsent(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if strings.Contains(string(body), `"expiry_date"`) {
-		t.Fatalf("SellingProduct JSON without a date mark = %s, want expiry_date omitted", body)
+	if strings.Contains(string(body), `"expiry_date"`) || strings.Contains(string(body), `"regular_expiry_date"`) {
+		t.Fatalf("SellingProduct JSON without a date mark = %s, want both date marks omitted", body)
 	}
 
 	legacy := `{"sku_code":"A00001","sku_series_code":"A0","storage_type":"AMBIENT","content":{"name":{"language":"en","name":"Product"}},"classification":{},"package_options":[],"price":{"unit_price":{"amount_minor":319,"currency":"AUD"},"currency_exponent":{"currency":"AUD","exponent":2},"market_code":"AU","channel":"online","audience":"retail","price_visibility":"visible","tax_inclusion":"tax_inclusive","valid_from":"2026-08-24T00:00:00Z","as_of":"2026-08-24T00:00:00Z"}}`
@@ -24,9 +24,41 @@ func TestSellingProductExpiryDateIsOmittedWhenAbsent(t *testing.T) {
 	if err := json.Unmarshal([]byte(legacy), &decoded); err != nil {
 		t.Fatalf("decode legacy SellingProduct: %v", err)
 	}
-	if decoded.SKUCode != "A00001" || decoded.Price.MarketCode != "AU" || decoded.ExpiryDate != nil {
+	if decoded.SKUCode != "A00001" || decoded.Price.MarketCode != "AU" || decoded.ExpiryDate != nil || decoded.RegularExpiryDate != nil {
 		t.Fatalf("legacy SellingProduct decoded as %+v, want SKU and price kept and no expiry date", decoded)
 	}
+}
+
+func TestSellingProductRegularExpiryDateIsIndependent(t *testing.T) {
+	clearance := warehouse.InventoryDateMark{
+		Kind:       warehouse_enums.InventoryDateMarkBestBefore,
+		DateMarkAt: time.Date(2026, 11, 27, 0, 0, 0, 0, time.UTC),
+		Timezone:   "Etc/UTC",
+	}
+	regular := warehouse.InventoryDateMark{
+		Kind:       warehouse_enums.InventoryDateMarkExpiry,
+		DateMarkAt: clearance.DateMarkAt.AddDate(0, 0, 14),
+		Timezone:   "Etc/UTC",
+	}
+	body, err := json.Marshal(SellingProduct{ExpiryDate: &clearance, RegularExpiryDate: &regular})
+	if err != nil {
+		t.Fatal(err)
+	}
+	var decoded struct {
+		ExpiryDate        *warehouse.InventoryDateMark `json:"expiry_date"`
+		RegularExpiryDate *warehouse.InventoryDateMark `json:"regular_expiry_date"`
+	}
+	if err := json.Unmarshal(body, &decoded); err != nil {
+		t.Fatal(err)
+	}
+	checkMark := func(got *warehouse.InventoryDateMark, want warehouse.InventoryDateMark) {
+		t.Helper()
+		if got == nil || got.Kind != want.Kind || !got.DateMarkAt.Equal(want.DateMarkAt) || got.Timezone != want.Timezone {
+			t.Fatalf("decoded date mark = %+v, want %+v", got, want)
+		}
+	}
+	checkMark(decoded.ExpiryDate, clearance)
+	checkMark(decoded.RegularExpiryDate, regular)
 }
 
 func TestSellingProductExpiryDateRoundTripsDateMarkKinds(t *testing.T) {
