@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.46.0` | 2026-11-20 | Minor |
 | `v53.45.0` | 2026-11-20 | Minor |
 | `v53.44.0` | 2026-11-20 | Minor |
 | `v53.43.0` | 2026-11-19 | Minor |
@@ -113,6 +114,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.46.0 (2026-11-20)
+
+Paid order facts can carry optional per-item promotion allocations. Each allocation records its promotion ID, applied package count and discount in the item's currency. Older facts retain their original wire shape. Deploy strict readers before emitting allocations.
 
 ## v53.45.0 (2026-11-20)
 

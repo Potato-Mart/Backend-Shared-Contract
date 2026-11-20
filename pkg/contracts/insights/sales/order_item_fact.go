@@ -11,4 +11,7 @@ type OrderItemFact struct {
 	// bound to the shared ProductFactDimensions.
 	ProductName string      `json:"product_name,omitempty"`
 	Gross       money.Money `json:"gross"`
+	// PromotionAllocations records frozen proportions of this paid line.
+	// Historical facts omit it when the producer lacks allocation evidence.
+	PromotionAllocations []OrderItemPromotionAllocation `json:"promotion_allocations,omitempty"`
 }
