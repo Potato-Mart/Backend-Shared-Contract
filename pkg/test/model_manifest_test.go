@@ -347,7 +347,8 @@ var modelPackageManifest map[string]string
 // V53.41 adds the Supply-owned PackageSubstitutionPart record and the
 // PackageSubstitutionReason leaf enum for cases assembled from loose units;
 // PackageSubstitutionSnapshot only gains the optional parts list.
-const exportedTypeManifestDigest = "f3e2a0c476c79f0bb589d83fbbfeae52044d08938e8c4907a1d1728595983330"
+// V53.46 adds the OrderItemPromotionAllocation value to insights sales.
+const exportedTypeManifestDigest = "9f227aff897ddb28b5e4e6af52eed2bc25e636e54e1c8bc224c1531fb298355c"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
