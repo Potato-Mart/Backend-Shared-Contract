@@ -128,6 +128,7 @@ var v33ModelPackageManifest = map[string]string{
 	"contracts/common/security":                                      "record",
 	"contracts/common/security/security_enums":                       "enum",
 	"contracts/common/temporal":                                      "record",
+	"contracts/common/temporal/temporal_enums":                       "enum",
 	"contracts/customers/group":                                      "record",
 	"contracts/customers/group/group_enums":                          "enum",
 	"contracts/customers/preference":                                 "record",
@@ -348,7 +349,9 @@ var modelPackageManifest map[string]string
 // PackageSubstitutionReason leaf enum for cases assembled from loose units;
 // PackageSubstitutionSnapshot only gains the optional parts list.
 // V53.46 adds the OrderItemPromotionAllocation value to insights sales.
-const exportedTypeManifestDigest = "af8e4a8a662109fd6bc3e9139cb67ce1223523ba6142adc2a2aa996c2c043bcb"
+// V53.49 adds the Supply-owned DepotPickupHours value and the common
+// DayOfWeek leaf enum; Depot only gains optional pickup fields.
+const exportedTypeManifestDigest = "f6104842a658385a4603c79706d0b1e7f75bc2321cd35f731ea9dec8737c6cd2"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

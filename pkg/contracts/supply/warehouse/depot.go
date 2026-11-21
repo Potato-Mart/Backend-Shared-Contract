@@ -22,6 +22,11 @@ type Depot struct {
 	Phone       string                `json:"phone,omitempty"`
 	IsActive    bool                  `json:"is_active"`
 	LayoutID    string                `json:"layout_id,omitempty"`
+	// PickupHours is the optional weekly customer pickup schedule, at most
+	// one entry per day. A day with no entry has no published hours.
+	PickupHours []DepotPickupHours `json:"pickup_hours,omitempty"`
+	// CollectionInstructions is optional customer-facing pickup guidance.
+	CollectionInstructions string `json:"collection_instructions,omitempty"`
 
 	audit.AuditFields
 }
