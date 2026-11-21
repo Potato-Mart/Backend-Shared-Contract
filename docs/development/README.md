@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.48.0` | 2026-11-21 | Minor |
 | `v53.47.0` | 2026-11-20 | Minor |
 | `v53.46.0` | 2026-11-20 | Minor |
 | `v53.45.0` | 2026-11-20 | Minor |
@@ -115,6 +116,10 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.48.0 (2026-11-21)
+
+- Add optional quick-sale handoff evidence. Delivery slots and pickup must end before this RFC3339 deadline. Legacy records fall back to the selling-phase cutoff.
 
 ## v53.47.0 (2026-11-20)
 
