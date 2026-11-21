@@ -348,7 +348,7 @@ var modelPackageManifest map[string]string
 // PackageSubstitutionReason leaf enum for cases assembled from loose units;
 // PackageSubstitutionSnapshot only gains the optional parts list.
 // V53.46 adds the OrderItemPromotionAllocation value to insights sales.
-const exportedTypeManifestDigest = "9f227aff897ddb28b5e4e6af52eed2bc25e636e54e1c8bc224c1531fb298355c"
+const exportedTypeManifestDigest = "af8e4a8a662109fd6bc3e9139cb67ce1223523ba6142adc2a2aa996c2c043bcb"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
