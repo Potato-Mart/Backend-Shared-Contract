@@ -1,4 +1,4 @@
-// contract-release: v53.48.0
+// contract-release: v53.49.0
 module github.com/Potato-Mart/Backend-Shared-Contract/v53
 
 go 1.26.7

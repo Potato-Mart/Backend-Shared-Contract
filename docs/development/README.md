@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.49.0` | 2026-11-21 | Minor |
 | `v53.48.0` | 2026-11-21 | Minor |
 | `v53.47.0` | 2026-11-20 | Minor |
 | `v53.46.0` | 2026-11-20 | Minor |
@@ -116,6 +117,12 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.49.0 (2026-11-21)
+
+- Add optional depot pickup details. `Depot.pickup_hours` is a weekly list of `DepotPickupHours` (`day_of_week`, `opens`, `closes`, `closed`). Times are "HH:MM" in the depot timezone. A closed day has no times.
+- Add optional `Depot.collection_instructions` with customer-facing pickup guidance.
+- Add the common `DayOfWeek` enum (`MONDAY` to `SUNDAY`). Supply validates the schedule. Existing depots and readers are unaffected.
 
 ## v53.48.0 (2026-11-21)
 

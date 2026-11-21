@@ -25,6 +25,7 @@ var expectedEnumPackages = []string{
 	"contracts/common/measurement/measurement_enums",
 	"contracts/common/packaging/packaging_enums",
 	"contracts/common/security/security_enums",
+	"contracts/common/temporal/temporal_enums",
 	"contracts/customers/group/group_enums",
 	"contracts/customers/preference/preference_enums",
 	"contracts/customers/retail/retail_enums",
@@ -339,6 +340,7 @@ func TestCommonPackageDependencyGraph(t *testing.T) {
 		"contracts/common/security":                      {"contracts/common/audit", "contracts/common/metadata", "contracts/common/security/security_enums"},
 		"contracts/common/security/security_enums":       {},
 		"contracts/common/temporal":                      {},
+		"contracts/common/temporal/temporal_enums":       {},
 	}
 
 	pkgRoot := sharedContractPkgRoot(t)
