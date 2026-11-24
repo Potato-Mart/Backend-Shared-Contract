@@ -22,8 +22,14 @@ type Product struct {
 	Classification     ProductClassification            `json:"classification"`
 	PackageOptions     []ProductPackageOption           `json:"package_options"`
 	BarcodeAssignments []ProductBarcodeAssignment       `json:"barcode_assignments,omitempty"`
-	NetContent         *measurement.NetContent          `json:"net_content,omitempty"`
-	Supply             *classification.ProductSupply    `json:"supply,omitempty"`
+	// BarcodeExempt records that the product deliberately has no barcode.
+	// Supply refuses it while any barcode assignment carries a value and
+	// clears it when the first real barcode is added. Exempt products are
+	// labelled and scanned by SKU code. False on documents written before
+	// the flag existed.
+	BarcodeExempt bool                          `json:"barcode_exempt"`
+	NetContent    *measurement.NetContent       `json:"net_content,omitempty"`
+	Supply        *classification.ProductSupply `json:"supply,omitempty"`
 	// Revision is advanced by every successful Supply write to the product
 	// document and is the token admin clients echo back as expected_revision.
 	// Zero only appears on documents written before revisions were backfilled.

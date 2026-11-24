@@ -40,6 +40,7 @@ func TestGlobalProductHasSKUCodeAndAuthoritativeStorage(t *testing.T) {
 		"Classification":     {json: "classification", typeOf: reflect.TypeOf(product.ProductClassification{})},
 		"PackageOptions":     {json: "package_options", typeOf: reflect.TypeOf([]product.ProductPackageOption{})},
 		"BarcodeAssignments": {json: "barcode_assignments,omitempty", typeOf: reflect.TypeOf([]product.ProductBarcodeAssignment{})},
+		"BarcodeExempt":      {json: "barcode_exempt", typeOf: reflect.TypeOf(false)},
 		"NetContent":         {json: "net_content,omitempty", typeOf: reflect.TypeOf((*measurement.NetContent)(nil))},
 		"Supply":             {json: "supply,omitempty", typeOf: reflect.TypeOf((*classification.ProductSupply)(nil))},
 		"Revision":           {json: "revision", typeOf: reflect.TypeOf(int64(0))},
