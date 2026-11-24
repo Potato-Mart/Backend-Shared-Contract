@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.50.0` | 2026-11-24 | Minor |
 | `v53.49.0` | 2026-11-21 | Minor |
 | `v53.48.0` | 2026-11-21 | Minor |
 | `v53.47.0` | 2026-11-20 | Minor |
@@ -117,6 +118,12 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.50.0 (2026-11-24)
+
+- Add `Product.barcode_exempt`. It records that a product deliberately has no barcode. It is always present on the wire and is `false` on records written before this release.
+- Supply refuses the flag while any barcode assignment has a value (`BARCODE_EXEMPT_CONFLICT`, 409) and clears it when the first real barcode is added. Exempt products skip the EACH barcode minimum and are labelled and scanned by SKU code.
+- Additive. Readers that ignore the field are unaffected.
 
 ## v53.49.0 (2026-11-21)
 
