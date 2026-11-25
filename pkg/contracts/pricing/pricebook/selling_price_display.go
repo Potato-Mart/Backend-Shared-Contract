@@ -22,4 +22,11 @@ type SellingPriceDisplay struct {
 	UnitPricePerMeasure *SellingUnitPriceDisplay  `json:"unit_price_per_measure,omitempty"`
 	PromotionDisplays   []SellingPromotionDisplay `json:"promotions,omitempty"`
 	Offers              []SellingPriceOffer       `json:"offers,omitempty"`
+	// QuickSales lists the POS Quick sale prices that apply now, cheapest
+	// first. It is present only on retail POS displays at a store. When it is
+	// not empty, the first entry whose lot still has stock is the shelf-label
+	// price: it outranks EffectiveUnitPrice and every promotion, campaign and
+	// standing special above. Only a custom price bound to the label outranks
+	// it. With no entry left, the label shows the display above.
+	QuickSales []SellingQuickSaleDisplay `json:"quick_sales,omitempty"`
 }

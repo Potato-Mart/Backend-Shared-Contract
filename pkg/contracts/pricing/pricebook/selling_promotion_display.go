@@ -16,7 +16,10 @@ import (
 type SellingPromotionDisplay struct {
 	// PromotionID is the corresponding customer-visible storefront promotion.
 	// It is omitted when the display does not originate from that catalogue.
-	PromotionID             string                                        `json:"promotion_id,omitempty"`
+	PromotionID string `json:"promotion_id,omitempty"`
+	// Names are the promotion's approved localized names. They are omitted
+	// when none were authored or the display has no storefront promotion.
+	Names                   []localization.LocalizedName                  `json:"names,omitempty"`
 	DiscountKind            *pricebook_enums.SellingPromotionDiscountType `json:"discount_type,omitempty"`
 	DiscountValue           *SellingPromotionDiscountValue                `json:"discount_value,omitempty"`
 	Kind                    string                                        `json:"kind"`
