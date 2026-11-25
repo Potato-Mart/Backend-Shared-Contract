@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.52.0` | 2026-11-25 | Minor |
 | `v53.51.0` | 2026-11-25 | Minor |
 | `v53.50.0` | 2026-11-24 | Minor |
 | `v53.49.0` | 2026-11-21 | Minor |
@@ -119,6 +120,13 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.52.0 (2026-11-25)
+
+- Add `pricebook.SellingQuickSaleDisplay` and the optional `SellingPriceDisplay.quick_sales`. Pricing fills it only on retail POS displays at a store: every POS Quick sale offer that applies now to one package of the line's package option, list and scan-only offers alike, cheapest first. Each entry carries `offer_code`, `revision`, `lot_id`, `whole_lot`, `requires_lot_scan`, `price`, `regular_price` (the WAS price), `effective_percent_off`, `past_best_before`, `phase_ends_at`, `sell_until` and `timezone`.
+- Label precedence: the first entry whose lot still has stock is the shelf-label price. It outranks `effective_unit_price` and every promotion, campaign and standing special; only a custom price bound to the label outranks it. `phase_ends_at` is the exclusive end of the current POS phase, and the line's `valid_until` is no later than the earliest one. `sell_until` is the date the label prints: the lot's date mark before it, or the past-best-before cutoff after it.
+- Add the optional `SellingPromotionDisplay.names`, the promotion's approved localized names. `valid_until` already carries its end.
+- Additive. Both fields are omitted when empty, so stored records and readers that ignore them are unaffected. Consumer action: Pricing fills them; Supply ESL reads them; other services may bump without code changes.
 
 ## v53.51.0 (2026-11-25)
 

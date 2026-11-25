@@ -355,7 +355,9 @@ var modelPackageManifest map[string]string
 // V53.51 adds the Supply-owned StockLocationRole, ReceiptCorrectionReason and
 // FreightMode leaf enums; StockLocation, StockMovement, PurchaseReceiptItem
 // and Supplier only gain optional typed fields.
-const exportedTypeManifestDigest = "c8505bd3646b0ac422e9cd527bfd9733cfac72aff1f1bd69afb62e79daccb622"
+// V53.52 adds the Pricing-owned SellingQuickSaleDisplay value; the selling
+// price and promotion displays only gain optional fields.
+const exportedTypeManifestDigest = "94d36cc21248e8f885f5b43772648e7f9db1e0dd2ef38cbecf05b869af814a2b"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

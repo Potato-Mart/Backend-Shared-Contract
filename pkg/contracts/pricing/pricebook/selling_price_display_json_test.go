@@ -254,3 +254,35 @@ func assertSellingJSON(t *testing.T, value any, want string) []byte {
 	}
 	return payload
 }
+
+func TestSellingPriceDisplayQuickSalesAndPromotionNamesExactJSON(t *testing.T) {
+	ends := time.Date(2026, 11, 30, 13, 0, 0, 0, time.UTC)
+	mark := time.Date(2026, 11, 29, 13, 0, 0, 0, time.UTC)
+	regular := money.Money{AmountMinor: 500, Currency: "AUD"}
+	value := SellingPriceDisplay{
+		RegularUnitPrice: regular, EffectiveUnitPrice: regular,
+		PromotionDisplays: []SellingPromotionDisplay{{
+			PromotionID: "promotion-1", Kind: "product_discount", ValidUntil: &ends,
+			Names: []localization.LocalizedName{{Language: "en", Name: "Spring sale"}},
+		}},
+		QuickSales: []SellingQuickSaleDisplay{{
+			OfferCode: "qs_lot_1", Revision: 3, LotID: "LOT-1", WholeLot: true, RequiresLotScan: true,
+			Price: money.Money{AmountMinor: 250, Currency: "AUD"}, RegularPrice: regular, EffectivePercentOff: 50,
+			PhaseEndsAt: ends, SellUntil: mark, Timezone: "Australia/Melbourne",
+		}},
+	}
+	payload := assertSellingJSON(t, value, `{
+		"regular_unit_price":{"amount_minor":500,"currency":"AUD"},
+		"effective_unit_price":{"amount_minor":500,"currency":"AUD"},
+		"promotions":[{"promotion_id":"promotion-1","names":[{"language":"en","name":"Spring sale"}],"kind":"product_discount",
+			"conditional":false,"applied_to_effective_price":false,"valid_until":"2026-11-30T13:00:00Z"}],
+		"quick_sales":[{"offer_code":"qs_lot_1","revision":3,"lot_id":"LOT-1","whole_lot":true,"requires_lot_scan":true,
+			"price":{"amount_minor":250,"currency":"AUD"},"regular_price":{"amount_minor":500,"currency":"AUD"},
+			"effective_percent_off":50,"past_best_before":false,"phase_ends_at":"2026-11-30T13:00:00Z",
+			"sell_until":"2026-11-29T13:00:00Z","timezone":"Australia/Melbourne"}]
+	}`)
+	var decoded SellingPriceDisplay
+	if err := json.Unmarshal(payload, &decoded); err != nil || !reflect.DeepEqual(value, decoded) {
+		t.Fatalf("quick sale display round trip: %+v %v", decoded, err)
+	}
+}
