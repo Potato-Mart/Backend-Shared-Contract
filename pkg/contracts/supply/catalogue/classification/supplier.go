@@ -4,6 +4,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/audit"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/party"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/catalogue/classification/classification_enums"
 )
 
 // Supplier is the full supplier record. A supplier is an organisation, so it
@@ -16,5 +17,8 @@ type Supplier struct {
 	AvailableMarketCodes []string                     `json:"available_market_codes,omitempty"`
 	AvailableProducts    []SupplierAvailableProduct   `json:"available_products,omitempty"`
 	AvailablePromotions  []SupplierAvailablePromotion `json:"available_promotions,omitempty"`
+	// FreightMode is how the supplier's goods usually arrive. Empty means not
+	// set.
+	FreightMode classification_enums.FreightMode `json:"freight_mode,omitempty"`
 	audit.AuditFields
 }
