@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.51.0` | 2026-11-25 | Minor |
 | `v53.50.0` | 2026-11-24 | Minor |
 | `v53.49.0` | 2026-11-21 | Minor |
 | `v53.48.0` | 2026-11-21 | Minor |
@@ -118,6 +119,13 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.51.0 (2026-11-25)
+
+- Add `StockLocation.role` (`warehouse_enums.StockLocationRole`). The only value is `DISPLAY`, a customer-facing display location such as a frozen display `A7FD-xx`; empty means a normal location. A display location cannot be a product's location assignment or an ESL slot location. Stock behaviour is unaffected: display stock still counts, reserves and sells as before.
+- Add `purchase_enums.ReceiptCorrectionReason` (`DAMAGED`, `SHORT`, `MISCOUNT`, `OTHER`) and the optional `correction_reason` on `StockMovement` and `PurchaseReceiptItem`. It is set on movements and lines recorded by a receipt quantity correction; earlier corrections read as unspecified.
+- Add `classification_enums.FreightMode` (`SEA`, `AIR`, `LOCAL`, `MIXED`) and the optional `Supplier.freight_mode`. Empty means not set.
+- Additive. All new fields are omitted when empty, so stored records and readers that ignore them are unaffected. Consumer action: Supply adopts the fields; other services may bump without code changes.
 
 ## v53.50.0 (2026-11-24)
 

@@ -31,6 +31,11 @@ type StockLocation struct {
 	// CapacityCartons is the whole-case capacity of the location. Nil means
 	// unlimited; a set value is at least 1.
 	CapacityCartons *int `json:"capacity_cartons,omitempty"`
+	// Role is empty for a normal location. A DISPLAY location is a
+	// customer-facing display (for example a frozen display A7FD-xx); it
+	// cannot be a product's location assignment or an ESL slot location.
+	// Stock behaviour is unaffected.
+	Role warehouse_enums.StockLocationRole `json:"role,omitempty"`
 
 	audit.AuditFields
 }

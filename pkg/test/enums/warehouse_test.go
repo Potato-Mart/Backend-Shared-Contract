@@ -35,16 +35,33 @@ func TestWarehouseEnumsValidateKnownValues(t *testing.T) {
 		{name: "warehouseenum.StockAvailabilityDirection", valid: []stringEnum{warehouse_enums.StockAvailabilityOutOfStock, warehouse_enums.StockAvailabilityRestocked}, invalid: warehouse_enums.StockAvailabilityDirection("__invalid__")},
 		{name: "warehouseenum.InventoryDateMarkThreshold", valid: []stringEnum{warehouse_enums.InventoryDateMarkThresholdApproaching, warehouse_enums.InventoryDateMarkThresholdReached, warehouse_enums.InventoryDateMarkThresholdPassed}, invalid: warehouse_enums.InventoryDateMarkThreshold("__invalid__")},
 		{name: "warehouseenum.StockLocationPurpose", valid: []stringEnum{warehouse_enums.StockLocationPurposeExpiryHold, warehouse_enums.StockLocationPurposeStandard, warehouse_enums.StockLocationPurposeQualityHold, warehouse_enums.StockLocationPurposeOnlineOrderStaging}, invalid: warehouse_enums.StockLocationPurpose("__invalid__")},
+		{name: "warehouseenum.StockLocationRole", valid: []stringEnum{warehouse_enums.StockLocationRoleDisplay}, invalid: warehouse_enums.StockLocationRole("")},
 		{name: "warehouseenum.StockLocationHandlingMode", valid: []stringEnum{warehouse_enums.StockLocationHandlingEach, warehouse_enums.StockLocationHandlingCase, warehouse_enums.StockLocationHandlingMixed}, invalid: warehouse_enums.StockLocationHandlingMode("__invalid__")},
 		{name: "warehouseenum.StockLocationAccess", valid: []stringEnum{warehouse_enums.StockLocationAccessCustomerAccessible, warehouse_enums.StockLocationAccessStaffOnly}, invalid: warehouse_enums.StockLocationAccess("__invalid__")},
 		{name: "warehouseenum.StockLocationCollectionMode", valid: []stringEnum{warehouse_enums.StockLocationCollectionAllowList, warehouse_enums.StockLocationCollectionUnrestricted}, invalid: warehouse_enums.StockLocationCollectionMode("__invalid__")},
 		{name: "warehouseenum.StockLocationCollectionRole", valid: []stringEnum{warehouse_enums.StockLocationCollectionPrimary, warehouse_enums.StockLocationCollectionOverflow}, invalid: warehouse_enums.StockLocationCollectionRole("__invalid__")},
 		{name: "warehouseenum.StorageType", valid: []stringEnum{classification_enums.StorageAmbient, classification_enums.StorageChilled, classification_enums.StorageFrozen}, invalid: classification_enums.StorageType("DRY")},
+		{name: "classificationenum.FreightMode", valid: []stringEnum{classification_enums.FreightModeSea, classification_enums.FreightModeAir, classification_enums.FreightModeLocal, classification_enums.FreightModeMixed}, invalid: classification_enums.FreightMode("")},
 		{name: "warehouseenum.LocationStorageType", valid: []stringEnum{warehouse_enums.LocationStorageAmbient, warehouse_enums.LocationStorageChilled, warehouse_enums.LocationStorageFrozen, warehouse_enums.LocationStorageMixed}, invalid: warehouse_enums.LocationStorageType("DRY")},
 		{name: "warehouseenum.WMSDraftStatus", valid: []stringEnum{warehouse_enums.WMSDraftStatusDraft, warehouse_enums.WMSDraftStatusSubmitted, warehouse_enums.WMSDraftStatusCancelled}, invalid: warehouse_enums.WMSDraftStatus("__invalid__")},
 		{name: "warehouseenum.WMSDraftItemMoveStep", valid: []stringEnum{warehouse_enums.WMSDraftItemMoveStepPending, warehouse_enums.WMSDraftItemMoveStepMoved, warehouse_enums.WMSDraftItemMoveStepDone}, invalid: warehouse_enums.WMSDraftItemMoveStep("__invalid__")},
 		{name: "warehouseenum.WMSDraftType", valid: []stringEnum{warehouse_enums.WMSDraftTypeInbound, warehouse_enums.WMSDraftTypeOutbound}, invalid: warehouse_enums.WMSDraftType("__invalid__")},
 	})
+}
+
+// Supply, the admin portal and the PDA compare these by wire value.
+func TestDisplayRoleAndFreightModeWireValuesAreStable(t *testing.T) {
+	for value, want := range map[string]string{
+		warehouse_enums.StockLocationRoleDisplay.String(): "DISPLAY",
+		classification_enums.FreightModeSea.String():      "SEA",
+		classification_enums.FreightModeAir.String():      "AIR",
+		classification_enums.FreightModeLocal.String():    "LOCAL",
+		classification_enums.FreightModeMixed.String():    "MIXED",
+	} {
+		if value != want {
+			t.Errorf("wire value = %q, want %q", value, want)
+		}
+	}
 }
 
 // Supply compares a location's storage type with a product's by wire value,

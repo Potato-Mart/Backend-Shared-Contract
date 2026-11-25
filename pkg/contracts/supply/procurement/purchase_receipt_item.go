@@ -2,6 +2,7 @@ package procurement
 
 import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/packaging"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/procurement/purchase_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/warehouse"
 )
 
@@ -40,4 +41,7 @@ type PurchaseReceiptItem struct {
 	Reversals                []PurchaseReceiptItemReversal         `json:"reversals,omitempty"`
 	CorrectsReceiptItemID    string                                `json:"corrects_receipt_item_id,omitempty"`
 	CorrectedByReceiptItemID string                                `json:"corrected_by_receipt_item_id,omitempty"`
+	// CorrectionReason is set on a line recorded by a receipt quantity
+	// correction and is empty on ordinary lines.
+	CorrectionReason purchase_enums.ReceiptCorrectionReason `json:"correction_reason,omitempty"`
 }

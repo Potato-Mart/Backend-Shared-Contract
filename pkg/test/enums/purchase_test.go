@@ -16,6 +16,7 @@ func TestPurchaseEnumsValidateKnownValues(t *testing.T) {
 		{name: "purchaseenum.PurchaseOrderStatus", valid: []stringEnum{purchase_enums.PurchaseOrderStatusDraft, purchase_enums.PurchaseOrderStatusSubmitted, purchase_enums.PurchaseOrderStatusConfirmed, purchase_enums.PurchaseOrderStatusPartiallyReceived, purchase_enums.PurchaseOrderStatusReceived, purchase_enums.PurchaseOrderStatusCancelled, purchase_enums.PurchaseOrderStatusRefunded}, invalid: purchase_enums.PurchaseOrderStatus("__invalid__")},
 		{name: "purchaseenum.PurchaseReceiptStatus", valid: []stringEnum{purchase_enums.PurchaseReceiptStatusDraft, purchase_enums.PurchaseReceiptStatusConfirmed, purchase_enums.PurchaseReceiptStatusReversed, purchase_enums.PurchaseReceiptStatusPartiallyReversed}, invalid: purchase_enums.PurchaseReceiptStatus("__invalid__")},
 		{name: "purchaseenum.PurchaseOrderItemReplacementReason", valid: []stringEnum{purchase_enums.PurchaseOrderItemReplacementReasonWrongProductOrdered, purchase_enums.PurchaseOrderItemReplacementReasonWrongProductReceived, purchase_enums.PurchaseOrderItemReplacementReasonSupplierSubstitution, purchase_enums.PurchaseOrderItemReplacementReasonOther}, invalid: purchase_enums.PurchaseOrderItemReplacementReason("__invalid__")},
+		{name: "purchaseenum.ReceiptCorrectionReason", valid: []stringEnum{purchase_enums.ReceiptCorrectionReasonDamaged, purchase_enums.ReceiptCorrectionReasonShort, purchase_enums.ReceiptCorrectionReasonMiscount, purchase_enums.ReceiptCorrectionReasonOther}, invalid: purchase_enums.ReceiptCorrectionReason("")},
 	})
 }
 
@@ -26,6 +27,10 @@ func TestPurchaseReversalAndReplacementWireValuesAreStable(t *testing.T) {
 		purchase_enums.PurchaseOrderItemReplacementReasonWrongProductReceived.String(): "WRONG_PRODUCT_RECEIVED",
 		purchase_enums.PurchaseOrderItemReplacementReasonSupplierSubstitution.String(): "SUPPLIER_SUBSTITUTION",
 		purchase_enums.PurchaseOrderItemReplacementReasonOther.String():                "OTHER",
+		purchase_enums.ReceiptCorrectionReasonDamaged.String():                         "DAMAGED",
+		purchase_enums.ReceiptCorrectionReasonShort.String():                           "SHORT",
+		purchase_enums.ReceiptCorrectionReasonMiscount.String():                        "MISCOUNT",
+		purchase_enums.ReceiptCorrectionReasonOther.String():                           "OTHER",
 	} {
 		if value != want {
 			t.Errorf("purchase wire value = %q, want %q", value, want)

@@ -5,6 +5,7 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/packaging"
 	security "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/security"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/procurement/purchase_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/supply/warehouse/warehouse_enums"
 )
 
@@ -37,6 +38,10 @@ type StockMovement struct {
 	Note                             string                                `json:"note,omitempty"`
 	PerformedBy                      string                                `json:"performed_by,omitempty"`
 	OccurredAt                       time.Time                             `json:"occurred_at"`
+	// CorrectionReason is set on a movement recorded by a receipt quantity
+	// correction. It is empty on every other movement and on corrections
+	// recorded before the reason existed.
+	CorrectionReason purchase_enums.ReceiptCorrectionReason `json:"correction_reason,omitempty"`
 
 	security.DataProtectionFields
 }

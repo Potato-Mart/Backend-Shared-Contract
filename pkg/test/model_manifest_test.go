@@ -352,7 +352,10 @@ var modelPackageManifest map[string]string
 // V53.49 adds the Supply-owned DepotPickupHours value and the common
 // DayOfWeek leaf enum; Depot only gains optional pickup fields.
 // V53.50 adds no exported type; Product only gains the barcode_exempt flag.
-const exportedTypeManifestDigest = "f6104842a658385a4603c79706d0b1e7f75bc2321cd35f731ea9dec8737c6cd2"
+// V53.51 adds the Supply-owned StockLocationRole, ReceiptCorrectionReason and
+// FreightMode leaf enums; StockLocation, StockMovement, PurchaseReceiptItem
+// and Supplier only gain optional typed fields.
+const exportedTypeManifestDigest = "c8505bd3646b0ac422e9cd527bfd9733cfac72aff1f1bd69afb62e79daccb622"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
