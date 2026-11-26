@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.53.0` | 2026-11-26 | Minor |
 | `v53.52.0` | 2026-11-25 | Minor |
 | `v53.51.0` | 2026-11-25 | Minor |
 | `v53.50.0` | 2026-11-24 | Minor |
@@ -120,6 +121,14 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.53.0 (2026-11-26)
+
+- Add `shipping_enums.DeliveryTimeBand` with `standard`, `late_night` and `early_morning`. A delivery window is `late_night` when it overlaps local 21:00–24:00, otherwise `early_morning` when it overlaps local 00:00–07:00, otherwise `standard`. Overlap is strict, so a window ending exactly at 21:00 or starting exactly at 07:00 is `standard`. The band is evaluated in the slot's own IANA timezone.
+- Add the optional `DeliverySlot.time_band` and `DeliverySlot.requires_time_acknowledgement`. Orders sets them on each offered slot; the flag means the customer is asked to confirm a late-night or early-morning window.
+- Add the optional `DeliverySelection.time_band` and `DeliverySelection.time_acknowledged_at`, the UTC instant the customer confirmed the window. `OutboundShipment.delivery_selection` carries both unchanged into fulfilment.
+- Meaning change for `CustomerTierProgress`: `next_tier`, `remaining_qualifying_spend`, `progress_basis_points` and `is_max_tier` are relative to the customer's effective tier, the earned or the assigned tier, whichever ranks higher. `progress_basis_points` measures qualifying spend from $0 toward the next tier's threshold. The wire shape is unchanged.
+- Additive. Every new field is omitted when empty, so stored records and readers that ignore them are unaffected. Consumer action: Orders populates `time_band` and `requires_time_acknowledgement` and records the acknowledgement on the selection; Pricing computes tier progress against the effective tier; other services may bump without code changes.
 
 ## v53.52.0 (2026-11-25)
 
