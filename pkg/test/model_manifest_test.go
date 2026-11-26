@@ -357,7 +357,9 @@ var modelPackageManifest map[string]string
 // and Supplier only gain optional typed fields.
 // V53.52 adds the Pricing-owned SellingQuickSaleDisplay value; the selling
 // price and promotion displays only gain optional fields.
-const exportedTypeManifestDigest = "94d36cc21248e8f885f5b43772648e7f9db1e0dd2ef38cbecf05b869af814a2b"
+// V53.53 adds the Orders-owned DeliveryTimeBand leaf enum; DeliverySlot and
+// DeliverySelection only gain optional time-band and acknowledgement fields.
+const exportedTypeManifestDigest = "37e9e3596c3ee2dac4caad399270a67c3df86f02683fd82dcad2b0ace0307fa8"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
