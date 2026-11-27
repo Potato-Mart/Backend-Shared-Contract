@@ -40,6 +40,7 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 
 | Version | Release date | Type |
 | --- | --- | --- |
+| `v53.54.0` | 2026-11-27 | Minor |
 | `v53.53.0` | 2026-11-26 | Minor |
 | `v53.52.0` | 2026-11-25 | Minor |
 | `v53.51.0` | 2026-11-25 | Minor |
@@ -121,6 +122,14 @@ This reference covers the catalogue, inventory, order and analytics payload set 
 | `v43.0.0` | 2026-10-06 | Major |
 | `v42.0.1` | 2026-10-04 | Patch |
 | `v42.0.0` | 2026-10-02 | Major |
+
+## v53.54.0 (2026-11-27)
+
+- Add `payments.GiftCardRefundPart` (`benefit_reservation_id`, `gift_card_refund_amount` as `{amount_minor, currency}`) and the optional `RefundCompletedEvent.gift_card_refund_parts`, one part per gift card benefit reservation a refund restored. Each part has a non-empty reservation id and a positive amount, all parts in one event share a currency, and no reservation appears twice. The contract stays model-only, so Payments enforces these rules when it publishes and consumers reject an event that breaks them.
+- When `gift_card_refund_parts` is present it is authoritative. The existing `benefit_reservation_id` and `gift_card_refund_amount` mirror its first part, so a reader that only knows the single fields restores at most the first reservation and never more than was refunded to it. Events without parts keep their current meaning.
+- `payment_allocations` now sums to `amount` less the sum of `gift_card_refund_parts` when parts are present, otherwise less `gift_card_refund_amount` as before. The `refund.completed` event version is unchanged.
+- Add `membership_enums.TierDisplayColour` with the tokens `bronze`, `silver`, `gold`, `platinum`, `black` and `diamond`, and the optional `TierProgressTier.display_colour`. It is a colour token for the tier chip, never a hex value; each client maps the token to its own palette.
+- Additive. Every new field is omitted when empty, so stored records and readers that ignore them are unaffected. Consumer action: Payments publishes `gift_card_refund_parts` and mirrors the first part in the single fields; Pricing reads the parts first and falls back to the single fields for older events, and fills `display_colour` on tier progress; other services may bump without code changes.
 
 ## v53.53.0 (2026-11-26)
 

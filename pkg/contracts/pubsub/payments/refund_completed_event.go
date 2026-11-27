@@ -23,8 +23,20 @@ type RefundCompletedEvent struct {
 	Items                []analytics.RefundItemFact `json:"items,omitempty"`
 	RetailCustomerNumber string                     `json:"retail_customer_number,omitempty"`
 	OrganisationAccessID string                     `json:"organisation_access_id,omitempty"`
-	BenefitReservationID string                     `json:"benefit_reservation_id,omitempty"`
-	GiftCardRefundAmount *money.Money               `json:"gift_card_refund_amount,omitempty"`
+	// BenefitReservationID and GiftCardRefundAmount are the single-reservation
+	// gift card restoration that events before v53.54.0 carry. When
+	// GiftCardRefundParts is present it is authoritative, and these two fields
+	// mirror its first part. Consumers that read the
+	// parts must ignore these fields when parts are present.
+	BenefitReservationID string       `json:"benefit_reservation_id,omitempty"`
+	GiftCardRefundAmount *money.Money `json:"gift_card_refund_amount,omitempty"`
+	// GiftCardRefundParts splits the money put back on gift cards used to pay
+	// by benefit reservation, one part per reservation the refund restored.
+	// Each part has a non-empty reservation id and a positive amount, all
+	// parts share one currency, and no reservation appears twice. Omitted
+	// when the refund restored no gift card money or Payments recorded only
+	// the single fields above.
+	GiftCardRefundParts []GiftCardRefundPart `json:"gift_card_refund_parts,omitempty"`
 	// QualifyingSpendReversal retains the released gross earned-point clawback
 	// evidence. Never reinterpret it as the NET tier-refund amount.
 	QualifyingSpendReversal *money.Money `json:"qualifying_spend_reversal,omitempty"`
@@ -38,9 +50,11 @@ type RefundCompletedEvent struct {
 	// PaymentAllocations splits the refund across the order's payments, one
 	// row per payment the refund returned money through, for example each
 	// part of a POS split tender. Money put back on gift cards used to pay
-	// stays in GiftCardRefundAmount and is not listed, so the rows sum to
-	// Amount less GiftCardRefundAmount (zero when absent). PaymentID keeps
-	// its existing meaning. Omitted when Payments did not record the split.
+	// stays in the gift card restoration fields and is not listed, so the rows
+	// sum to Amount less the gift card restoration: the sum of
+	// GiftCardRefundParts when present, otherwise GiftCardRefundAmount (zero
+	// when absent). PaymentID keeps its existing meaning. Omitted when
+	// Payments did not record the split.
 	PaymentAllocations []RefundPaymentAllocation `json:"payment_allocations,omitempty"`
 	// GiftCardReversals lists the sold gift cards this refund reversed, one
 	// per refunded gift-card line. It is omitted when the refund covered no
