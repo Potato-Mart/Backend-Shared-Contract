@@ -359,7 +359,10 @@ var modelPackageManifest map[string]string
 // price and promotion displays only gain optional fields.
 // V53.53 adds the Orders-owned DeliveryTimeBand leaf enum; DeliverySlot and
 // DeliverySelection only gain optional time-band and acknowledgement fields.
-const exportedTypeManifestDigest = "37e9e3596c3ee2dac4caad399270a67c3df86f02683fd82dcad2b0ace0307fa8"
+// V53.54 adds the Payments-owned GiftCardRefundPart record and the
+// Pricing-owned TierDisplayColour leaf enum; RefundCompletedEvent and
+// TierProgressTier only gain optional fields.
+const exportedTypeManifestDigest = "177721758810678eab6ac2e418e9d0ea47300958982db046c6174b16f50643cd"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))
