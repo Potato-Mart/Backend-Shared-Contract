@@ -26,7 +26,7 @@ type RefundCompletedEvent struct {
 	// BenefitReservationID and GiftCardRefundAmount are the single-reservation
 	// gift card restoration that events before v53.54.0 carry. When
 	// GiftCardRefundParts is present it is authoritative, and these two fields
-	// either mirror its first part or are omitted. Consumers that read the
+	// mirror its first part. Consumers that read the
 	// parts must ignore these fields when parts are present.
 	BenefitReservationID string       `json:"benefit_reservation_id,omitempty"`
 	GiftCardRefundAmount *money.Money `json:"gift_card_refund_amount,omitempty"`
