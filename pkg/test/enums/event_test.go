@@ -24,6 +24,7 @@ func TestInventoryAndCommerceEventTypes(t *testing.T) {
 				event_enums.EventTypeRefundCompleted,
 				event_enums.EventTypeRefundFailed,
 				event_enums.EventTypeRefundAlternativeOffered,
+				event_enums.EventTypeRefundAlternativeAnswered,
 				event_enums.EventTypeRefundRequestClosed,
 				event_enums.EventTypePaymentPartRecorded,
 				event_enums.EventTypeInventoryLotReceived,
@@ -75,6 +76,9 @@ func TestInventoryAndCommerceEventTypes(t *testing.T) {
 	}
 	if got := event_enums.EventTypeRefundRequestClosed.String(); got != "refund.request_closed" {
 		t.Fatalf("refund request closed event type = %q", got)
+	}
+	if got := event_enums.EventTypeRefundAlternativeAnswered.String(); got != "refund.alternative_answered" {
+		t.Fatalf("refund alternative answered event type = %q", got)
 	}
 	if got := event_enums.EventTopicRefundEvents.String(); got != "refund-events" || !event_enums.EventTopicRefundEvents.IsValid() {
 		t.Fatalf("refund topic = %q", got)

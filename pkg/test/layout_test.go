@@ -34,6 +34,7 @@ var expectedEnumPackages = []string{
 	"contracts/identity/account/account_enums",
 	"contracts/identity/authorisation/role_enums",
 	"contracts/insights/analytics/analytics_enums",
+	"contracts/insights/ads/ads_enums",
 	"contracts/supply/forecasting/marketing_enums",
 	"contracts/marketing/audience/audience_enums",
 	"contracts/marketing/campaign/campaign_enums",
