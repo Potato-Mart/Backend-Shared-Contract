@@ -5,6 +5,7 @@ import (
 
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/insights/ads"
 	analytics "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/insights/sales"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/pricing/membership"
 )
@@ -69,4 +70,14 @@ type RefundCompletedEvent struct {
 	CountryCode geography.CountryCode `json:"country_code,omitempty"`
 	CompletedAt time.Time             `json:"completed_at"`
 	RequestID   string                `json:"request_id,omitempty"`
+	// AdConversionWithdrawal is the reversal evidence an advertising consumer
+	// needs to withdraw or restate a purchase it already reported for this
+	// order. It is deliberately not Amount: a refund amount includes tax and
+	// shipping, while a conversion is withdrawn on the same basis the purchase
+	// was reported, net of tax and discount and excluding shipping. Full
+	// mirrors FullOrderRefund so a full refund retracts the conversion and a
+	// partial refund only lowers its value. It is absent when the order was
+	// never attributed to an ad, so there is no conversion to withdraw;
+	// absence is never a zero amount.
+	AdConversionWithdrawal *ads.AdConversionWithdrawal `json:"ad_conversion_withdrawal,omitempty"`
 }

@@ -20,6 +20,12 @@ const (
 	// EventTypeRefundAlternativeOffered announces a staff alternative offer on
 	// a pending refund request, before any refund is executed.
 	EventTypeRefundAlternativeOffered EventType = "refund.alternative_offered"
+	// EventTypeRefundAlternativeAnswered announces, on refund-events, that
+	// staff recorded the customer's answer to an alternative offer on a
+	// pending refund request. Its payload is
+	// payments.RefundAlternativeAnsweredEvent. It is published before any
+	// refund is executed and never announces money movement.
+	EventTypeRefundAlternativeAnswered EventType = "refund.alternative_answered"
 	// EventTypeRefundRequestClosed announces, on refund-events, that a pending
 	// refund request was rejected or cancelled without any refund being
 	// executed. Its payload is payments.RefundRequestClosedEvent.
@@ -84,6 +90,7 @@ func (t EventType) IsValid() bool {
 		EventTypePaymentCaptured, EventTypePaymentFailed, EventTypeInvoiceIssued,
 		EventTypeReceiptGenerated,
 		EventTypeRefundRequested, EventTypeRefundCompleted, EventTypeRefundFailed, EventTypeRefundAlternativeOffered,
+		EventTypeRefundAlternativeAnswered,
 		EventTypeRefundRequestClosed, EventTypePaymentPartRecorded,
 		EventTypeInventoryLotReceived, EventTypeInventoryStockBucketChanged,
 		EventTypeInventoryPackageConverted, EventTypeInventoryQualityAssessed,

@@ -147,6 +147,8 @@ var v33ModelPackageManifest = map[string]string{
 	"contracts/insights/analytics/analytics_enums":                   "enum",
 	"contracts/insights/customer":                                    "record",
 	"contracts/insights/sales":                                       "record",
+	"contracts/insights/ads":                                         "record",
+	"contracts/insights/ads/ads_enums":                               "enum",
 	"contracts/marketing/audience/audience_enums":                    "enum",
 	"contracts/marketing/audience":                                   "record",
 	"contracts/marketing/campaign":                                   "record",
@@ -362,7 +364,20 @@ var modelPackageManifest map[string]string
 // V53.54 adds the Payments-owned GiftCardRefundPart record and the
 // Pricing-owned TierDisplayColour leaf enum; RefundCompletedEvent and
 // TierProgressTier only gain optional fields.
-const exportedTypeManifestDigest = "177721758810678eab6ac2e418e9d0ea47300958982db046c6174b16f50643cd"
+// V53.55 adds the paid-advertising surface: the Insights-owned
+// contracts/insights/ads package (performance rows, buckets and totals, sync
+// state, connection and account, budget, bidding, targeting summary,
+// schedule, change set and change record, tracking settings with its
+// attribution policy and guardrails, health check, page post, draft,
+// placement, creative, copy and landing, entity ref, attributed order and its
+// summary, conversion withdrawal and delivery estimate) with its
+// ads_enums leaf package, the Orders-owned AdClick, AdClickSnapshot,
+// AdConsent and AdAttribution records, and the Payments-owned
+// RefundAlternativeAnsweredEvent payload with the RefundAlternativeDecision
+// leaf enum; Order, the order.paid, order.cancelled and refund.completed
+// payloads only gain optional fields, and the event type enum only gains
+// refund.alternative_answered.
+const exportedTypeManifestDigest = "5801148155517d3f6be87da21a2fa345af52ac2898623baac99edd7a4c9d6850"
 
 func TestExportedTypesMatchModelManifest(t *testing.T) {
 	modelPackageManifest = make(map[string]string, len(v33ModelPackageManifest))

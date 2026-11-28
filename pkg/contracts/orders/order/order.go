@@ -137,6 +137,13 @@ type Order struct {
 	InternalNote         string                           `json:"internal_note,omitempty"`
 	Tags                 []string                         `json:"tags,omitempty"`
 
+	// AdAttribution is the read-only paid-advertising origin of the order,
+	// derived at checkout from the client's ad click and never written by a
+	// client afterwards. It is absent for an order that did not come from an
+	// ad, which is not the same as an unknown origin, and it carries no
+	// personal data.
+	AdAttribution *AdAttribution `json:"ad_attribution,omitempty"`
+
 	// ── Lifecycle timestamps ──────────────────────────────────────────
 	ConfirmedAt      *time.Time `json:"confirmed_at,omitempty"`
 	PaidAt           *time.Time `json:"paid_at,omitempty"`

@@ -25,6 +25,7 @@ func TestDomainOwnershipPackagesArePopulated(t *testing.T) {
 		"contracts/notification/core", "contracts/notification/email", "contracts/notification/sms", "contracts/notification/push", "contracts/notification/preference", "contracts/notification/delivery",
 		"contracts/notification/template", "contracts/notification/template/template_enums",
 		"contracts/insights/analytics", "contracts/insights/sales", "contracts/insights/customer",
+		"contracts/insights/ads", "contracts/insights/ads/ads_enums",
 		"contracts/marketing/campaign", "contracts/marketing/audience", "contracts/marketing/message",
 		"contracts/supply/catalogue/classification", "contracts/supply/catalogue/product", "contracts/supply/catalogue/listing", "contracts/supply/catalogue/review", "contracts/supply/catalogue/wish", "contracts/supply/catalogue/favourite", "contracts/supply/catalogue/selection", "contracts/supply/catalogue/selection/selection_enums",
 		"contracts/supply/inventory", "contracts/supply/warehouse", "contracts/supply/procurement", "contracts/supply/compliance", "contracts/supply/fulfilment", "contracts/supply/forecasting",

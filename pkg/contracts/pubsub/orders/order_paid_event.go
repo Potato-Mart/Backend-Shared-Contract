@@ -4,6 +4,7 @@ import (
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/commerce/commerce_enums"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/geography"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/common/money"
+	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/insights/ads/ads_enums"
 	analytics "github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/insights/sales"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/orders/order"
 	"github.com/Potato-Mart/Backend-Shared-Contract/v53/pkg/contracts/payments/payment/payment_enums"
@@ -66,4 +67,40 @@ type OrderPaidEvent struct {
 	// points redemptions are not listed. Omitted when the order was not
 	// split.
 	Tenders []OrderPaidTender `json:"tenders,omitempty"`
+
+	// AdAttribution is the order's read-only paid-advertising origin, copied
+	// from the order. It is absent for an order that did not come from an ad,
+	// which is not the same as an unknown origin. It carries no personal data.
+	AdAttribution *order.AdAttribution `json:"ad_attribution,omitempty"`
+	// Revenue is the attributed revenue of this order: the merchandise value
+	// net of tax and net of discount, excluding shipping. It is deliberately
+	// not AmountPaid, which is settlement evidence, and not Subtotal, which is
+	// before discount. The same figure is the purchase value reported back to
+	// an advertising platform, so every consumer uses one number. Absence is
+	// missing evidence, never a zero revenue: a consumer that needs it must
+	// skip the order rather than infer it from the other amounts.
+	Revenue *money.Money `json:"revenue,omitempty"`
+	// IsFirstPaidOrder is true when this is the customer's first paid order,
+	// which is what makes it a new customer for advertising reporting. False
+	// and absent are not distinguishable on the wire, so a consumer that
+	// counts new customers must treat absence as "not established" rather
+	// than as a returning customer.
+	IsFirstPaidOrder bool `json:"is_first_paid_order,omitempty"`
+	// SourcePlatform is the client the order was placed from: the website or
+	// one of the apps. It decides which device rules a server-side conversion
+	// must honour.
+	SourcePlatform ads_enums.AdSourcePlatform `json:"source_platform,omitempty"`
+	// HashedEmail, HashedPhone and HashedExternalID are normalised SHA-256
+	// digests, and nothing else. A raw email address, phone number, name or
+	// address must never appear in this event, and a consumer that finds one
+	// must reject the event rather than forward it. The digests are present
+	// only when the customer granted ad_user_data consent, and only for a
+	// source platform whose device rules permit it; absence is a withheld
+	// consent, so a consumer must send no contact data at all for that order
+	// rather than falling back to another identifier. They exist for
+	// server-side advertising conversions and must never be copied into a
+	// read API, a report or a durable projection.
+	HashedEmail      string `json:"hashed_email,omitempty"`
+	HashedPhone      string `json:"hashed_phone,omitempty"`
+	HashedExternalID string `json:"hashed_external_id,omitempty"`
 }
